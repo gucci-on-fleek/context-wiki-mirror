@@ -345,7 +345,8 @@ async def process_page(
         "title": page_info["displaytitle"],
         "date": page_info["touched"].split("T", maxsplit=1)[0],
         "body": page_html,
-        "canonical": page_info["canonicalurl"],
+        # Use an invalid scheme to avoid early link rewriting
+        "canonical": page_info["canonicalurl"].replace("https", "invalid"),
     })
 
     # Parse the HTML
@@ -359,8 +360,16 @@ async def process_page(
         for header in headers[1:]:
             header.decompose()
 
+    # Make all links point here
+    for link in parsed.find_all(attrs={"href": True}):
+        href = cast(str, link.get("href", ""))
+        if href.startswith(WIKI_URL):
+            link["href"] = "/" + href.removeprefix(WIKI_URL)
+        elif href.startswith("invalid"):
+            link["href"] = href.replace("invalid", "https")
+
     # Download images
-    for img in parsed.find_all("img"):
+    for img in parsed.find_all(name="img"):
         img_src = cast(str, img.get("src", ""))
         if img_src.startswith("/") and not img_src.startswith("//"):
             task_group.create_task(
