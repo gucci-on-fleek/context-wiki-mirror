@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Understanding how fonts work in ConTeXt - Old Content&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Understanding_how_fonts_work_in_ConTeXt_-_Old_Content" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Understanding how fonts work in ConTeXt - Old Content
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2579&diff=30264">2020-08-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Consider reading:
+</p>
+    <ul>
+     <li>
+      <a class="external free" href="http://context.aanhet.net/svn/contextman/context-reference/en/co-fonts.pdf" rel="nofollow">
+       http://context.aanhet.net/svn/contextman/context-reference/en/co-fonts.pdf
+      </a>
+      - Chapter on fonts
+     </li>
+     <li>
+      <a href="Old:_A_Beginner's_Guide_to_Using_Fonts_in_Mark_IV.html" title="Old: A Beginner's Guide to Using Fonts in Mark IV">
+       Old: A Beginner's Guide to Using Fonts in Mark IV
+      </a>
+      .  The idea is that the page says
+      <i>
+       how
+      </i>
+      to easily use fonts (or rather typescripts) in Mark IV, so that you just take a ready-to-use recipe from there and paste it into your document.
+     </li>
+    </ul>
+    <p>Most of the following material comes from the answers I got on the mailing list and/or the documentation (mfonts.pdf).  Since crediting people for each and every answer would be cumbersome, I'd like to thank here all of you that helped me understand ConTeXt (especially Hans, of course).
+</p>
+    <h2>
+     <span id="How_to_typeset_in,_say,_Palatino">
+     </span>
+     <span class="mw-headline" id="How_to_typeset_in.2C_say.2C_Palatino">
+      How to typeset in, say, Palatino
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-gyr<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>qx<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>palatino,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Hello world, I'm Palatino!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/fe87a825f87145cc5ece5842d46d3932.webp" width="874">
+     </li>
+    </ul>
+    <p><tt><a class="new" href="index.php?title=Command/usetypescriptfile&action=edit&redlink=1.html" title="Command/usetypescriptfile (page does not exist)">\usetypescriptfile</a></tt> loads a given file (<a class="extiw" href="http://source.contextgarden.net/type-gyr.tex" title="source:type-gyr.tex">type-gyr.tex</a> in this case).  This file usually contains definitions of <i>typescripts</i>.  The core typescript files (such as <a class="extiw" href="http://source.contextgarden.net/type-tmf.tex" title="source:type-tmf.tex">type-tmf.tex</a>, <a class="extiw" href="http://source.contextgarden.net/type-one.tex" title="source:type-one.tex">type-one.tex</a> in pdTeX or <a class="extiw" href="http://source.contextgarden.net/type-otf.tex" title="source:type-otf.tex">type-otf.tex</a> in LuaTeX/XeTeX, ...) are already preloaded, so you would usually need this only to load your own definitions. <code>\usetypescriptfile[type-gyr]</code> will soon become obsolete (TeX Gyre will be the default).
+</p>
+    <p><tt><a href="Command/usetypescript.html" title="Command/usetypescript">\usetypescript</a></tt> kind of "selects" (?) the specified typescript from that file.  It takes up to three parametres and their r&ocirc;les are still cryptic to me...
+</p>
+    <h2>
+     <span class="mw-headline" id="Defining_typescripts">
+      Defining typescripts
+     </span>
+    </h2>
+    <p>One of the keys for defining typescripts is clever usage of the <tt><a href="Command/definefontsynonym.html" title="Command/definefontsynonym">\definefontsynonym</a></tt> command.  It takes 2 or three parameters.  Example from mfonts.pdf:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>Serif<span class="brx">]</span><span class="brx">[</span>Times-Roman<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>Times-Roman<span class="brx">]</span><span class="brx">[</span>tir<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>texnansi<span class="brx">]</span></pre>
+    <p>The first case - with two arguments - makes <code>Serif</code> kind of an "alias" (?) for <code>Times-Roman</code>.  Both names are completely independent of name of the font file.  This is clever, since instead of fiddling with font file names one can say <code>Times-Roman</code> and just don't care where it resides on tbe disk.  Or even better: one can say <code>Serif</code> and don't care whether the final version of the document will use Times, Palatino or Latin Modern.
+</p>
+    <p>The second one makes <code>Times-Roman</code> an "alias" (?) for font stored in the file called <code>tir</code> (probably with some extension?).  The third argument specifies the encoding (it might be qx, for instance, or something else) and possibly another options, like <code>features=smallcaps</code> (for opentype fonts).  Encoding is used by pdfTeX only - XeTeX and LuaTeX both use Unicode (Mojca - thanks for this point!).  Other possibilities include <code>mapping</code> and <code>handling</code>, but don't ask me about these;).
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.017 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 53/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 326/2097152 bytes
+Template argument size: 94/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1290/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    7.743      1 -total
+ 97.58%    7.556      3 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2579-1!canonical and timestamp 20260109212440 and revision id 30264
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Understanding_how_fonts_work_in_ConTeXt_-_Old_Content">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

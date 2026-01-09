@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Extension:ConTeXtXML&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Extension:ConTeXtXML" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Extension:ConTeXtXML
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5509&diff=41690">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#An_extension_for_editing_.2FCommand_subpages">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         An extension for editing /Command subpages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Building_on_wikitext">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Building on wikitext
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Building_on_Article">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Building on Article
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#And_then_the_Hooks">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         And then the Hooks
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#ArticleFromTitle">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           ArticleFromTitle
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#ContentHandlerDefaultModelFor">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           ContentHandlerDefaultModelFor
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#ArticleAfterFetchContentObject">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           ArticleAfterFetchContentObject
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#EditFormPreloadText">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           EditFormPreloadText
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Generating_the_wikitext_code_for_page_views_and_previews">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Generating the wikitext code for page views and previews
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Implementation_notes">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Implementation notes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Command_disk_files">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           Command disk files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#XML_parser">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           XML parser
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#About_those_extension_tags">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           About those extension tags
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="An_extension_for_editing_/Command_subpages">
+     </span>
+     <span class="mw-headline" id="An_extension_for_editing_.2FCommand_subpages">
+      An extension for editing
+      <code>/Command</code>
+      subpages
+     </span>
+    </h2>
+    <p>The ConTeXtXML extension is a new wiki feature specifically designed to edit the ConTeXt command reference pages (the ones that live under the <code>/Command/</code> URL.
+</p>
+    <p>It does this by intercepting the creation of new wiki pages below <code>/Command/</code>, and using a ContentHandler extension to maintain those pages. The text model of those pages is <code>contextxml</code>, which is a special XML format developed for documenting ConTeXt commands that is based in the interface XML files by Wolfgang Schuster.
+</p>
+    <p>For details of the XML format and the subtree structure below <code>/Command/</code>, see the pages <a href="Command.html" title="Command">Command</a> and <a href="Help:Command.html" title="Help:Command">Help:Command</a>. This page documents some features of the wiki extension itself.
+</p>
+    <h2>
+     <span class="mw-headline" id="Building_on_wikitext">
+      Building on
+      <code>wikitext</code>
+     </span>
+    </h2>
+    <p>The core of the extension is made up of two connected php classes:
+</p>
+    <ul>
+     <li>
+      <code>ConTeXtXMLContentHandler</code>
+      , which extends
+      <code>WikitextContentHandler</code>
+     </li>
+     <li>
+      <code>ConTeXtXMLContent</code>
+      , which extends
+      <code>WikitextContent</code>
+     </li>
+    </ul>
+    <p>Together they ensure that even though the declared page format is <code>CONTENT_FORMAT_XML</code> (which expands to the mime-type <code>text/xml</code>) and the page model is <code>contextxml</code> instead of <code>wikitext</code>, it remains possible to use wiki code. The extension achieves this by using a preprocessor on the XML data that converts it to wiki code that can then be used by the normal mediawiki page viewing and parser code. At the same time, it keeps the XML format available for edits to take place on, so that any documentation text that is added by the user(s) can be easily extracted and exported for other uses outside of the wiki.
+</p>
+    <p>It turns out that for this to work, some tweaks have to be made. Either I have not understood the mediawiki documentation well, or there are issues with extending <code>WikitextContent</code>, or perhaps even both. Anyway:
+</p>
+    <ul>
+     <li>
+      The
+      <code>content_models</code>
+      mediawiki SQL database table needed an extra row with the values
+      <code>4</code>
+      ,
+      <code>contextxml</code>
+      .  Added manually as I could not figure out how to do this automatically at extension registration time.
+     </li>
+     <li>
+      <code>WikitextContent</code>
+      does not like being subclassed, so some functions from the
+      <code>parent::</code>
+      needed to be copied wholesale instead of just wrapping a bit of code around the parent implementation.
+     </li>
+    </ul>
+    <p>The <code>ConTeXtXMLContent</code> also runs various checks on the XML before allowing the user to save the page. It uses a hand-written XML parser because it not only verifies the XML well-formedness, it also performs various checks on the textual content, as well as making sure that only documentation is added, and that nothing is removed from the main XML database information.
+</p>
+    <h2>
+     <span class="mw-headline" id="Building_on_Article">
+      Building on
+      <code>Article</code>
+     </span>
+    </h2>
+    <p>When a user loads an existing page, that page is normally of class <code>Article</code> (except for some special cases). The <code>Article</code> class sets the page content model to <code>wikitext</code>, which makes it use the standard <code>WikitextContent</code> and <code>WikitextContenthandler</code>. Because that would not work for the ConTeXtXML pages, there is a third class:
+</p>
+    <ul>
+     <li>
+      <code>CmdPage</code>
+      , which extends
+      <code>Article</code>
+     </li>
+    </ul>
+    <p>This class is really small. It only exists are a coatrack for using <code>ConTeXtXMLContent</code>. It may not even be really needed in the current implementation, but it could prove useful for future further extensions.
+</p>
+    <h2>
+     <span class="mw-headline" id="And_then_the_Hooks">
+      And then the
+      <code>Hooks</code>
+     </span>
+    </h2>
+    <p>The extension uses a set of hooks to link into the mediawiki processing:
+</p>
+    <h3>
+     <span class="mw-headline" id="ArticleFromTitle">
+      <code>ArticleFromTitle</code>
+     </span>
+    </h3>
+    <p>Creates a <code>CmdPage</code> if the wiki page title starts with <code>/Command</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="ContentHandlerDefaultModelFor">
+      <code>ContentHandlerDefaultModelFor</code>
+     </span>
+    </h3>
+    <p>Sets the content model to <code>contextxml</code>  if the wiki page title starts with <code>/Command</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="ArticleAfterFetchContentObject">
+      <code>ArticleAfterFetchContentObject</code>
+     </span>
+    </h3>
+    <p>On load, this checks whether the page content on the designated harddisk location has changed. If yes, it will replace the text of the mediawiki revision with the content of the file on the harddisk. This is so that there is an easy interface for integrating updated versions of the interface xml files from Wolfgang.
+</p>
+    <h3>
+     <span class="mw-headline" id="EditFormPreloadText">
+      <code>EditFormPreloadText</code>
+     </span>
+    </h3>
+    <p>This fills the edit area for newly created <code>/Command</code> pages from the file on the harddisk
+</p>
+    <h2>
+     <span class="mw-headline" id="Generating_the_wikitext_code_for_page_views_and_previews">
+      Generating the wikitext code for page views and previews
+     </span>
+    </h2>
+    <p>All the above is written in php. But since I am a complete noob in php and rather at home in Lua, I decided to write the conversion from XML to wiki format as an <code>mtxrun</code> script. The script is called <code>mtx-wikipage.lua</code>, and it converts our special XML format into wiki code.
+</p>
+    <p>I call it an <code>mtxrun</code> script, but really it only takes an option for the input file (in the case of section editing, this is a temporary file generated by php) and an optional output file (useful for debugging). Besides that, it is almost pure lua. It uses an integrated tiny expat-style XML parser and a few handwritten xml tree processing functions to create wiki code.
+</p>
+    <p>The penalty for calling an external program from php is relatively small, because 1) the processed page content is fairly small. 2) the internal caching of mediawiki makes it so that the code is only called when a page is actively being edited and 3) starting <code>luametatex</code> as a Lua interpreter only is surprisingly fast.
+</p>
+    <p>The only unsolved problem with this subsystem is that it needs an intermediate two-line shell script that does nothing except adjust the PATH environment variable, just so that <code>mtxrun</code> can run without complaints about unfound paths and configuration files. (mtxrun's warning messages would have to stripped off the <code>mtx-wikipage.lua</code> output otherwise)
+</p>
+    <h2>
+     <span class="mw-headline" id="Implementation_notes">
+      Implementation notes
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Command_disk_files">
+      Command disk files
+     </span>
+    </h3>
+    <p>The extension has three types of data files on the filesystem:
+</p>
+    <ul>
+     <li>
+      XML files for command definitions
+     </li>
+     <li>
+      Verification tables for command definitions
+     </li>
+     <li>
+      Wiki text files for instance pages
+     </li>
+    </ul>
+    <p>Generally, the file names follow the logic of the wiki page title, except with the prefix <code>cmd-</code> instead of <code>/Command</code>.
+</p>
+    <p>The file extension for the XML files is <code>.xml</code>, the file extension for the verification table lua dump is <code>-test.lua</code>, the file extension for instance pages (redirects) is <code>.wiki</code>
+</p>
+    <p>However, in order to appease case-preserving and case-sensitive file systems, all uppercase letters in the filename are prefixed with a <code>^</code> character. A simple example: <code>Command/WEEKDAY</code> is stored on disk as <code>cmd-^W^E^E^K^D^A^Y.xml</code>, and its verification table is stored in <code>cmd-^W^E^E^K^D^A^Y-test.lua</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="XML_parser">
+      XML parser
+     </span>
+    </h3>
+    <p>The extension uses a hardwritten simple XML parser in pure Lua. The parser is expat-style and the implementation is based on string.find() and string.sub(). The advantage of this approach is that it can handle bad XML input by throwing an appropriate (and understandable) error. Neither the Lpeg-based Lua parser from the 13th ConTeXt meeting nor the ConTeXt built-in parser allow for that. Both those parsers assume well-formed XML as input.
+</p>
+    <p>A tailored parser also allowed for easy extension to deal with the CDATA issue mentioned below.
+</p>
+    <p>But the main motivation for a private dedicated parser written in Lua is that we want to be able to not only check the well-formedness of the XML, but also its adherence to a set of extra rules:
+</p>
+    <ol>
+     <li>
+      The documentation should not modify the argument structure of the command&rsquo;s formal specification, only add explanations to it. Theoretically, each of the 3900+ formal specifications has its own private XML Schema.
+     </li>
+     <li>
+      The documentation should be easily parseable by an external system, meaning that use of wiki code and HTML tags need to be governed.
+     </li>
+    </ol>
+    <p>These additional rules made using the DOM-based parser in php unwieldy, for me. I am sure a good php programmer could implement these extra checks, but not me. At least not in a reasonable amout of time. But I knew how to tackle both requirements using Lua, and could write an implementation quite quickly and effortlessly.
+</p>
+    <p>The first point is handled like this: 
+</p>
+    <ul>
+     <li>
+      When a fresh set of &lsquo;virgin&rsquo; XML files is created from
+      <code>context-en.xml</code>
+      , each separate file is parsed using a set of functions that create a lua table representing the &lsquo;virginal&rsquo; parse tree of the XML file. This Lua table is dumped to disk and distributed along with the XML file.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      When a wiki user presses the &lsquo;Save&rsquo; button in the page editor, their edited XML is parsed using a slightly different set of functions from the ones for viewing. These functions in this set skip all documentation content while building the parse tree. The two lua tables representing the parse trees are then compared. They should be identical. If not, an error is raised and the save action is aborted with a user-visible error message.
+     </li>
+    </ul>
+    <p>The second point is taken care of during that same XML parse step of the user page revision. It uses a combination of a tag lookup table and string text matching to make sure the user followed the rules (as explained in <a href="Help:Command.html" title="Help:Command">Help:Command</a>).
+</p>
+    <h3>
+     <span class="mw-headline" id="About_those_extension_tags">
+      About those extension tags
+     </span>
+    </h3>
+    <p>The special tags <code>&lt;texcode&gt;</code>, <code>&lt;xmlcode&gt;</code>, and <code>&lt;context&gt;</code> on our wiki are handled by an extension (<tt>context</tt>) written a long time ago by Patrick Gundlach. That extension converts the parsed XML output from mediawiki into HTML code that looks 'right'. In normal wiki pages this works, because the mediawiki parser is quite forgiving (more like a HTML browser than a XML parser) and does some recovery attempts itself when a user types in something that is not quite well-formed HTML/XML.
+</p>
+    <p>For example, in a normal wiki page you do not need to properly quote the attributes of <code>&lt;context&gt;</code>. And the structure within <code>&lt;xmlcode&gt;</code> does not have to be properly nested.
+</p>
+    <p>But it also sometimes backfires. If you use a XML tag name inside a <code>&lt;context source="yes"&gt;</code> call or within <code>&lt;texcode&gt;</code>, it will not be displayed in the verbatim display section of the page (but it will be seen by ConTeXt while processing the <code>&lt;context&gt;</code>).  
+</p>
+    <p>To solve this question between 'is it data?' and 'is it markup?' in a standalone XML file, you would wrap a CDATA section around things like the content of <code>&lt;xmlcode&gt;</code>. But unfortunately that is something that either the mediawiki parser or the <code>context</code> or the HTML browser does not understand (I don't know which is the exact problem).
+</p>
+    <p>For now, within the ConTeXtXML XML parser,I  decided to treat the content of <code>&lt;texcode&gt;</code>, <code>&lt;xmlcode&gt;</code>, and <code>&lt;context&gt;</code> 'as if' they are SGML elements with data model CDATA. That means that the generated XML files on disk that make use of this feature are not actually well-formed, for example this content of <code>&lt;xmlcode&gt;</code>:
+</p>
+    <pre>&lt;xmlcode&gt;
+&lt;document&gt;
+This &lt;highlight detail="important"&gt;you&lt;/highlight&gt; need to know.
+&lt;/document&gt;
+&lt;/xmlcode&gt;
+</pre>
+    <p>should actually be this:
+</p>
+    <pre>&lt;xmlcode&gt;&lt;![CDATA[
+&lt;document&gt;
+This &lt;highlight detail="important"&gt;you&lt;/highlight&gt; need to know.
+&lt;/document&gt;
+]]&gt;&lt;/xmlcode&gt;
+</pre>
+    <p>but then it could not be displayed on the wiki properly, or (with some internal patching by ConTeXtXML) there would be a constant difference between the XML version on disk and the wiki database version of a page (resulting in endless 'This revision is outdated' messages). So, I think this is the best solution for now.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212413
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.016 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 87/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 540/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5509-1!canonical and timestamp 20260109212413 and revision id 41690
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Extension:ConTeXtXML">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

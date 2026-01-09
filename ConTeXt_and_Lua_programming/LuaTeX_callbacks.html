@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/LuaTeX callbacks&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/LuaTeX_callbacks" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/LuaTeX callbacks
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4573&diff=40707">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The <b>callback</b> system from LuaTeX has been disabled.
+Instead, Context defines <i>actions</i> that must be registered through an
+offical mechanism.
+Then they can be toggled on and off at will, as long as it makes sense.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#File_reading_callbacks_.2F_open_read_file">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         File reading callbacks / open_read_file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Register_Post-Run_Functions">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Register Post-Run Functions
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Further_Information">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Further Information
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p>This page is dedicated to collecting all available information on how
+to achieve in Context when you would resort to callbacks to do the same
+in plain LuaTeX.
+</p>
+    <h2>
+     <span id="File_reading_callbacks_/_open_read_file">
+     </span>
+     <span class="mw-headline" id="File_reading_callbacks_.2F_open_read_file">
+      File reading callbacks /
+      <code>open_read_file</code>
+     </span>
+    </h2>
+    <p>The functionality provided by the <code>open_read_file</code> callback
+can be accessed through a string filter that is hooked into the
+<code>textfileactions</code> processor (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/data-tex.lua" rel="nofollow">data-tex.lua</a>, cf. <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/luat-fio.lua" rel="nofollow">luat-fio.lua</a>)
+</p>
+    <p>Hans demonstrated the canonical way on the mailing list
+<a class="external autonumber" href="http://archive.contextgarden.net/message/20121002.080504.10fba6de.en.html" rel="nofollow">[1]</a>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+
+  function document.MyCharacterMess<span class="brx">(</span>str,filename<span class="brx">)</span>
+    if file.nameonly<span class="brx">(</span>filename<span class="brx">)</span> <span class="brx">=</span><span class="brx">=</span> "ward" then
+      str <span class="brx">=</span> table.concat<span class="brx">(</span>string.totable<span class="brx">(</span>str,"."<span class="brx">)</span>, " + "<span class="brx">)</span>
+    end
+    return str
+  end
+
+  local textfileactions <span class="brx">=</span> resolvers.openers.helpers.textfileactions
+  utilities.sequencers.appendaction<span class="brx">(</span>textfileactions,"system","document.MyCharacterMess"<span class="brx">)</span>
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="documentcs">\input</span></span> ward
+  <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Register_Post-Run_Functions">
+      Register Post-Run Functions
+     </span>
+    </h2>
+    <p>In <a href="ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a>, it is possible to register a callback function that gets executed at the end of a run.  Like so:
+</p>
+    <pre>id, err = callback.register('stop_run', new_stop_run_function)
+</pre>
+    <p>But ConTeXt doesn't allow <code>stop_run</code> callbacks to be registered.  If you attempt to, <code>err</code> will be set to "callback 'stop_run' is frozen (actions performed at the end of a run)".
+</p>
+    <p>Instead, ConTeXt provides two methods for executing actions at the end of a run, depending on the purpose of the action.
+</p>
+    <p>For actions whose primary purpose is to display a message or report some statistic, use:
+</p>
+    <pre>statistics.register("banner",function() return "text" end)
+</pre>
+    <p>The function passed in should return either a string to be reported, or false (or nil) which will not show the statistic.  (The latter makes sense if there there ends up being nothing useful to report.)
+</p>
+    <p>For actions whose primary purpose is to perform some post-run processing, use:
+</p>
+    <pre>luatex.registerstopactions(yourfunction)
+</pre>
+    <h2>
+     <span class="mw-headline" id="Further_Information">
+      Further Information
+     </span>
+    </h2>
+    <ul>
+     <li>
+      An
+      <a class="external text" href="http://tex.stackexchange.com/questions/11960/how-to-register-a-callback-in-context" rel="nofollow">
+       informative Thread
+      </a>
+      , initiated by Patrick
+     </li>
+     <li>
+      Some related user reports
+      <a class="external text" href="http://archive.contextgarden.net/message/20100219.070449.3ef91a45.en.html" rel="nofollow">
+       on
+      </a>
+      <a class="external text" href="http://archive.contextgarden.net/message/20100408.182612.5fa89eef.en.html" rel="nofollow">
+       the
+      </a>
+      <a class="external text" href="http://archive.contextgarden.net/message/20101017.140616.e9262376.en.html" rel="nofollow">
+       mailing
+      </a>
+      <a class="external text" href="http://archive.contextgarden.net/message/20120625.133813.e3875200.en.html" rel="nofollow">
+       list
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212407
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.021 seconds
+Preprocessor visited node count: 46/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 164/2097152 bytes
+Template argument size: 48/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1325/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    3.835      1 -total
+ 96.90%    3.716      2 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4573-1!canonical and timestamp 20260109212407 and revision id 40707
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/LuaTeX_callbacks">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

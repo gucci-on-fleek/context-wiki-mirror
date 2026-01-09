@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Expansion_Control" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2152&diff=42441">2025-05-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Scratch_Variables.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Scratch Variables">Scratch Variables</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Handling_Arguments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments">Handling Arguments</a> &gt;
+</p>
+    <h3>
+     <span class="mw-headline" id="Expansion_control_macro_shortcuts">
+      Expansion control macro shortcuts
+     </span>
+    </h3>
+    <p>When in unprotected mode, to be entered with <code>\unprotect</code>, one can use <code>\@NX</code> as equivalent of <code>\noexpand</code>, and <code>\@EA</code> as equivalent of <code>\expandafter</code>. <code>\@EAEA</code> expands to two expandafters, <code>\@EAEAEA</code> to three, and <code>\@EAEAEAEAEA</code> expands to <code>\@EA\@EAEAEA\@EA</code>.  At first sight, these macros are simply shortcuts that are a bit easier to type and read, but there is a bit more to it.  Here is an example where <code>\@EA\@EAEAEA\@EA</code> is not the same as five \expandafters in a row:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\complexdoblank</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\flushnotes</span></span>
+   <span class="cs">\ifmmode</span>
+     <span class="cs">\@EA</span><span class="cs">\nocomplexdoblank</span>
+   <span class="cs">\else</span>
+     <span class="cs">\ifopelkaar</span>
+       <span class="cs">\ifinpagebody</span>
+         <span class="cs">\@EA</span><span class="cs">\@EAEAEA</span><span class="cs">\@EA</span><span class="cs">\docomplexdoblank</span>
+       <span class="cs">\else</span>
+         <span class="cs">\@EA</span><span class="cs">\@EAEAEA</span><span class="cs">\@EA</span><span class="cs">\nocomplexdoblank</span>
+       <span class="cs">\fi</span>
+     <span class="cs">\else</span>
+       <span class="cs">\@EAEAEA</span><span class="cs">\docomplexdoblank</span>
+     <span class="cs">\fi</span>
+   <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <p>The two commands <code>\expandoneargafter</code> and <code>\expandtwoargsafter</code> make macros more readable by hiding a lot of <code>\expandafter</code>'s. They first expand the arguments that follow the command, then the command.
+</p>
+    <pre class="tex"><span class="cs">\expandoneargafter</span> <span class="cs">\command</span><span class="br">{</span><span class="cs">\abc</span><span class="br">}</span>
+<span class="cs">\expandtwoargsafter</span><span class="cs">\command</span><span class="br">{</span><span class="cs">\abc</span><span class="br">}</span><span class="br">{</span><span class="cs">\def</span><span class="br">}</span>
+<span class="cs">\fullexpandoneargafter</span> <span class="cs">\command</span><span class="br">{</span><span class="cs">\abc</span><span class="br">}</span>
+<span class="cs">\fullexpandtwoargsafter</span><span class="cs">\command</span><span class="br">{</span><span class="cs">\abc</span><span class="br">}</span><span class="br">{</span><span class="cs">\def</span><span class="br">}</span>
+</pre>
+    <p>These commands expect the arguments to be macros, the <code>\full...</code> versions do a <i>deep expansion</i>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Expanding_all_arguments">
+      Expanding all arguments
+     </span>
+    </h3>
+    <p>Sometimes we pass macros as arguments to commands that don't expand them before interpretation. Such commands can be enclosed by <code>\expanded</code>, like:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs">\setupsomething</span><span class="brx">[</span><span class="cs">\alfa</span><span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>Such situations occur for instance when <code>\alfa</code> is a commalist or when data stored in macros is fed to indexing or list generation commands. If needed, one could use <code>\noexpand</code> inside the argument, but some very often occuring problems with  expansion (like accents) are intercepted by a somewhat smarter version with the same basic functionality:
+</p>
+    <pre class="tex"><span class="cs">\safeexpanded</span><span class="br">{</span><span class="cs"><span class="documentcs">\bookmark</span></span><span class="br">{</span><span class="cs">\alfa</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>The <code>\safe...</code> form is actually so useful that there are <i>safe</i> versions of <code>\edef</code> and <code>\xdef</code> available: <code>\safeedef</code> and <code>\safexdef</code> (only usable for definitions that do not need arguments).
+</p>
+    <h3>
+     <span class="mw-headline" id="Preventing_expansion">
+      Preventing expansion
+     </span>
+    </h3>
+    <p>When expansion of a macro gives problems we can precede it by <code>\unexpanded</code>, like so:
+</p>
+    <pre class="tex"><span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\somecommand</span><span class="br">{</span>... ... ...<span class="br">}</span>
+</pre>
+    <p>This will prevent the macro from being expanded in places where no typesetting occurs, like when strings are written to the tuo file.
+</p>
+    <p>Expansion problems can get quite complex. There are some other internal macros that can help harnassing it, but it is fairly unlikely that you will need them. If you believe you do, read the <a class="extiw" href="http://source.contextgarden.net/syst-gen.mkii" title="source:syst-gen.mkii"> syst-gen.mkii</a> (<a class="extiw" href="http://source.contextgarden.net/syst-aux.mkiv" title="source:syst-aux.mkiv">syst-aux.mkiv</a> for MkIV) source code.
+</p>
+    <p>For further discussion on loops and expansion, see <a href="Loops_and_Recursion.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion">Loops and Recursion</a> as well as this <a class="external text" href="http://randomdeterminism.wordpress.com/2009/03/05/tex-programming-the-past-the-present-and-the-future/" rel="nofollow">blog post</a>.
+</p>
+    <p>&lt; <b>Prev:</b> <a href="Scratch_Variables.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Scratch Variables">Scratch Variables</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Handling_Arguments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments">Handling Arguments</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004015
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.021 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2472/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2152-1!canonical and timestamp 20260110004014 and revision id 42441
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Expansion_Control">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

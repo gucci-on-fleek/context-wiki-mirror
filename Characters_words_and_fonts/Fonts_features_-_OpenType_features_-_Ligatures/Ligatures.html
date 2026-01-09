@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   https://wiki.contextgarden.net/Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/https://wiki.contextgarden.net/Characters_words_and_fonts/Fonts_features_-_OpenType_features_-_Ligatures/Ligatures" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    https://wiki.contextgarden.net/Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4973&diff=37485">2025-01-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Traditional_TeX_methods_to_break_ligatures">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Traditional TeX methods to break ligatures
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Enabling_Ligatures_in_fonts">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Enabling Ligatures in fonts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Single_places">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Single places
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Replacements">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Replacements
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Blocking">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Blocking
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Word_suppression">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Word suppression
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>Ligatures are combinations of letters that use different glyph shapes to avoid clashing of parts like i-dots and f-arcs. Many fonts contain at least fi and fl ligatures, well-furnished fonts have also ft, ffl, ffi, fft, fb, ffb, fh, ffh and maybe some traditional ones like st, sp, ct, ch and combinations with long s &ndash; German &szlig; was originally a long-s + end-s ligature (even if it looks like s+z and is called szlig).
+</p>
+    <p>While the use of ligatures is a feature of good typography, there are places where they don&rsquo;t belong, namely at syllable seams where hyphenation can or should take place.
+</p>
+    <p>Some typical German examples are Auf-lage, auf-laden, auf-fallen, Zupf-instrument, Schiff-fahrt. English examples would be chief-ly, shelf-ful, elf-like, wolf-trap, clothes-pin.
+</p>
+    <h2>
+     <span class="mw-headline" id="Traditional_TeX_methods_to_break_ligatures">
+      Traditional TeX methods to break ligatures
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Auf\/lage &ndash; breaks the ligature, but also kills hyphenation and kerning
+     </li>
+     <li>
+      Auf{}lage &ndash; worked in pdfTeX (MkII), but not in modern TeX engines
+     </li>
+     <li>
+      For LaTeX, there&rsquo;s the
+      <a class="external text" href="https://www.ctan.org/pkg/selnolig" rel="nofollow">
+       selnolig
+      </a>
+      package (English and German).
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Enabling_Ligatures_in_fonts">
+      Enabling Ligatures in fonts
+     </span>
+    </h2>
+    <p>Ligatures in OpenType fonts are defined via "features" that you can/must enable. Usual ligature features are liga and tlig, but some fonts my have others for more/exotic ligatures.
+Here&rsquo;s an example for a good set of default features:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>mode<span class="brx">=</span>node,kern<span class="brx">=</span>yes,
+  liga<span class="brx">=</span>yes,tlig<span class="brx">=</span>yes,
+  ccmp<span class="brx">=</span>yes,language<span class="brx">=</span>dflt,
+  protrusion<span class="brx">=</span>quality,
+  expansion<span class="brx">=</span>quality<span class="brx">]</span>
+</pre>
+    <p>The other way round &ndash; if you don&rsquo;t enable ligatures in your font features, you won&rsquo;t get any; this might be desirable for mono width (typewriter) fonts.
+</p>
+    <h2>
+     <span class="mw-headline" id="Single_places">
+      Single places
+     </span>
+    </h2>
+    <p>If you only want to fix a few occurrences, you can use <tt><a class="new" href="../../index.php?title=Command/noligature&action=edit&redlink=1.html" title="Command/noligature (page does not exist)">\noligature</a></tt>. Compare:
+</p>
+    <pre class="tex">Auflage Zupfinstrument
+Au<span class="cs">\noligature</span><span class="br">{</span>fl<span class="br">}</span>age Zup<span class="cs">\noligature</span><span class="br">{</span>fi<span class="br">}</span>nstrument
+</pre>
+    <h2>
+     <span class="mw-headline" id="Replacements">
+      Replacements
+     </span>
+    </h2>
+    <p>ConTeXt has a method of replacing words that you can use for ligature exception dictionaries:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="brx">[</span>mode<span class="brx">=</span>node,liga<span class="brx">=</span>yes,kern<span class="brx">=</span>yes,tlig<span class="brx">=</span>yes,
+ccmp<span class="brx">=</span>yes,language<span class="brx">=</span>dflt,
+protrusion<span class="brx">=</span>quality,
+expansion<span class="brx">=</span>quality<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\replaceword</span></span><span class="brx">[</span>eg<span class="brx">]</span><span class="brx">[</span>Auflage<span class="brx">]</span><span class="brx">[</span>Au<span class="br">{</span>fl<span class="br">}</span>age<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\replaceword</span></span><span class="brx">[</span>eg<span class="brx">]</span><span class="brx">[</span>Zupfinstrument<span class="brx">]</span><span class="brx">[</span>Zup<span class="br">{</span>fi<span class="br">}</span>nstrument<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Auflage Zupfinstrument
+
+<span class="cs"><span class="stylecs">\setreplacements</span></span><span class="brx">[</span>eg<span class="brx">]</span>
+Auflage Zupfinstrument
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Much better.
+The first parameter os <tt><a href="../../Command/replaceword.html" title="Command/replaceword">\replaceword</a></tt> is a set (collection) keycode, i.e. you can define different sets of replacements and activate them with <tt><a class="new" href="../../index.php?title=Command/setreplacements&action=edit&redlink=1.html" title="Command/setreplacements (page does not exist)">\setreplacements</a></tt>.
+</p>
+    <p><a class="external text" href="http://wiki.contextgarden.net/images/b/be/nolig-german-wordlist.tex" rel="nofollow">Here&rsquo;s</a> a list of German ligature exceptions, derived from <a class="external text" href="https://www.ctan.org/pkg/selnolig" rel="nofollow">selnolig</a> LaTeX package. Just <tt><a href="../../Command/input.html" title="Command/input">\input</a></tt> it in your environment.
+</p>
+    <p>In current versions (after 2017-09-28) you may also define several exceptions at once, like
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\replaceword</span></span> <span class="brx">[</span>eg<span class="brx">]</span> <span class="brx">[</span>Au<span class="br">{</span>fl<span class="br">}</span>age Schiff<span class="br">{</span>f<span class="br">}</span>ahrt Zup<span class="br">{</span>fi<span class="br">}</span>nstrument<span class="brx">]</span>
+</pre>
+    <p>Find more details in the source: <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lang-rep.mkiv" rel="nofollow">lang-rep.mkiv</a> 
+</p>
+    <h2>
+     <span class="mw-headline" id="Blocking">
+      Blocking
+     </span>
+    </h2>
+    <p>You can also define blocking of ligatures as a font feature:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>fi,ff<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>fl<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>au:fl:age<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default:nolig<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>blockligatures<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>Serif*default:nolig<span class="brx">]</span> <span class="comment">% no ligatures</span>
+fi ff fl Auflage Zupfinstrument
+
+<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>Serif*default<span class="brx">]</span> <span class="comment">% yes ligatures</span>
+fi ff fl Auflage Zupfinstrument
+</pre>
+    <p>While general blocking (<tt><a class="new" href="../../index.php?title=Command/blockligatures&action=edit&redlink=1.html" title="Command/blockligatures (page does not exist)">\blockligatures</a></tt>[fi,fl]) works, the exception handling (<tt><a class="new" href="../../index.php?title=Command/blockligatures&action=edit&redlink=1.html" title="Command/blockligatures (page does not exist)">\blockligatures</a></tt>[au:fl:age]) might depend on a version unpublished as of this writing (i.e. after 2017-09-28).
+</p>
+    <h2>
+     <span class="mw-headline" id="Word_suppression">
+      Word suppression
+     </span>
+    </h2>
+    <p>In English, one principle suggests not using specific ligatures in certain words because <em>ligatures should not cross morpheme boundaries</em>. For instance, the <em>fi</em> ligature in wolfish is to be suppressed because the <em>f</em> and <em>i</em> belong to distinct morphemes (<em>wolf</em> and <em>ish</em>, in contrast to <em>fish</em>, where <em>fi</em> is a single morpheme). The following code shows how to apply this rule to prevent unwanted ligatures:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuplanguage</span></span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>goodies<span class="brx">=</span><span class="br">{</span>lang-en.llg<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  wolfish huffily puffily
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Other languages will need a corresponding ligature suppression word list.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212442
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.029 seconds
+Real time usage: 0.052 seconds
+Preprocessor visited node count: 128/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 636/2097152 bytes
+Template argument size: 164/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4233/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   26.104      1 -total
+ 31.38%    8.192      6 Template:cmd
+ 27.99%    7.307      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4973-1!canonical and timestamp 20260109212442 and revision id 37485
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/https://wiki.contextgarden.net/Characters_words_and_fonts/Fonts_features_-_OpenType_features_-_Ligatures/Ligatures">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

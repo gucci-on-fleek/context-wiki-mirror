@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Sharing graphics&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Sharing_graphics" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Sharing graphics
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2739&diff=41958">2025-01-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Some lucky people will be able to produce all their documents in <a href="Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaPost and MetaFun</a> and ConTeXt and never have to worry about the ugly world of MS Word, PowerPoint and Visio. Unfortunately, most of us will, at some point, have to share our graphics with colleagues who are unenlightened.
+</p>
+    <p>This page includes methods of sharing graphics/figures with co-workers who do not use ConTeXt.
+This includes importing to and exporting from ConTeXt.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Exporting_MetaPost_drawings_as_PDF_files">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Exporting MetaPost drawings as PDF files
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Importing_MetaPost_drawings_into_MS_Word_or_PowerPoint">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Importing MetaPost drawings into MS Word or PowerPoint
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Converting_to_EPS">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Converting to EPS
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Converting_to_Visio_via_SVG">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Converting to Visio via SVG
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Converting_from_SVG.2FPDF.2FPS_to_MetaPost">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Converting from SVG/PDF/PS to MetaPost
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Exporting_MetaPost_drawings_as_PDF_files">
+      Exporting MetaPost drawings as PDF files
+     </span>
+    </h2>
+    <p>PDF can be generated from MetaPost code using <a class="external text" href="http://www.pragma-ade.nl/general/sources/mptopdf.pdf" rel="nofollow">MPtoPDF</a> or <code>texexec --mptex</code>. But where a drawing uses ConTeXt to generate formatted text or labels, it is necessary to generate a document which contains the graphic.
+</p>
+    <p>This can be achieved, with the page cropped to the size of the graphic, using the following construct:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+ <span class="cs"><span class="documentcs">\startMPpage</span></span>
+  draw fullcircle scaled 10cm&nbsp;;
+ <span class="cs">\stopMPPage</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>See also <tt><a class="mw-redirect" href="../Command/_startfittingpage.html" title="Command/startMPpage">\startMPpage</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Importing_MetaPost_drawings_into_MS_Word_or_PowerPoint">
+      Importing MetaPost drawings into MS Word or PowerPoint
+     </span>
+    </h2>
+    <p>MS Word can import pictures in many graphics formats, but not PDF. Two of the available options are:
+</p>
+    <ul>
+     <li>
+      Use encapsulated postscript (EPS). This provides graphics which print perfectly (on a PS printer) but which look blocky on screen, so are unsuitable for PowerPoint presentations.
+     </li>
+     <li>
+      Use scalable vector graphics (SVG) as an intermediate format between PDF and the MS Visio tool.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Converting_to_EPS">
+      Converting to EPS
+     </span>
+    </h3>
+    <p>MetaPost drawings can be converted to encapsulated postscript as follows:
+</p>
+    <ul>
+     <li>
+      Create a PDF drawing (see "Exporting MetaPost drawing as PDF files" above).
+     </li>
+     <li>
+      From the command line, convert to EPS using pdftops:
+     </li>
+    </ul>
+    <p><code>
+pdftops -eps -pagecrop myfile.pdf
+</code>
+</p>
+    <ul>
+     <li>
+      Import the EPS file as a picture into Word.
+     </li>
+    </ul>
+    <p>Note that the preview on-screen in Word is of poor quality, but when printed it should have the full quality of the original.
+</p>
+    <h3>
+     <span class="mw-headline" id="Converting_to_Visio_via_SVG">
+      Converting to Visio via SVG
+     </span>
+    </h3>
+    <p>Visio is another Microsoft product whose .VSD files can be imported directly into Word or PowerPoint, giving good reproduction on screen and (usually) in print. Luckily, Visio will import SVG files. The steps to achieve this are:
+</p>
+    <ul>
+     <li>
+      Create a SVG file directly by running metapost 1.2 with
+      <tt>
+       -soutputformat="svg"
+      </tt>
+     </li>
+    </ul>
+    <p>or
+</p>
+    <ul>
+     <li>
+      Create an SVG file by conversion via
+      <ul>
+       <li>
+        MP to PDF (see above).
+       </li>
+       <li>
+        <a class="external text" href="http://www.tlhiv.org/MetaPost/tools/mptosvg" rel="nofollow">
+         MPtoSVG
+        </a>
+        to convert to SVG.
+       </li>
+      </ul>
+     </li>
+     <li>
+      Load SVG into Visio.
+     </li>
+     <li>
+      Save as VSD file from Visio.
+     </li>
+     <li>
+      Import VSD into Word or PowerPoint.
+     </li>
+    </ul>
+    <p>Phew!
+</p>
+    <h2>
+     <span id="Converting_from_SVG/PDF/PS_to_MetaPost">
+     </span>
+     <span class="mw-headline" id="Converting_from_SVG.2FPDF.2FPS_to_MetaPost">
+      Converting from SVG/PDF/PS to MetaPost
+     </span>
+    </h2>
+    <p><a class="external text" href="https://tex.stackexchange.com/questions/731996/any-utility-to-convert-from-svg-pdf-ps-to-mp-metapost" rel="nofollow">tex.stackexchange.com source</a>
+</p>
+    <p>ConTeXt can include and convert SVG graphics to MetaPost. When you add <code>\enabletrackers[metapost.svg.result]</code> at the start of the document you get the generated MetaPost code in the terminal, e.g.
+</p>
+    <pre>\enabletrackers[metapost.svg.result]
+
+% https://www.freecodecamp.org/news/svg-tutorial-learn-to-code-images/
+
+\startbuffer[svgtest]
+&lt;svg width="200" height="200" viewBox="-100 -100 200 200"&gt;
+  &lt;polygon points="0,0 80,120 -80,120" fill="#234236" /&gt;
+  &lt;polygon points="0,-40 60,60 -60,60" fill="#0C5C4C" /&gt;
+  &lt;polygon points="0,-80 40,0 -40,0" fill="#38755B" /&gt;
+  &lt;rect x="-20" y="120" width="40" height="30" fill="brown" /&gt;
+&lt;/svg&gt;
+\stopbuffer
+
+\starttext
+
+\includesvgbuffer[svgtest]
+
+\stoptext
+</pre>
+    <p>shows the following listing in the terminal (and log file)
+</p>
+    <pre>metapost        &gt; svg &gt; result graphic:
+    draw image (
+      fill (((0,0)--(80,-120)--(-80,-120)--cycle)&&cycle)
+        withcolor svgcolor(0.137,0.259,0.212)
+      ;
+      fill (((0,40)--(60,-60)--(-60,-60)--cycle)&&cycle)
+        withcolor svgcolor(0.047,0.361,0.298)
+      ;
+      fill (((0,80)--(40,0)--(-40,0)--cycle)&&cycle)
+        withcolor svgcolor(0.22,0.459,0.357)
+      ;
+      fill (unitsquare xyscaled (40,30) shifted (-20,-150))
+        withcolor svgcolor(0.647,0.165,0.165)
+      ;
+    currentpicture&nbsp;:= currentpicture shifted (100,-100);
+    clip currentpicture to (unitsquare xyscaled (200,-200));
+    )&nbsp;;
+</pre>
+    <p>Be aware ConTeXt uses its own MetaFun extension when it generates the converted MetaPost code.
+</p>
+    <p>Let's check by pasting this MetaFun code in an input file:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startMPcode</span></span>
+draw image <span class="brx">(</span>
+  fill <span class="brx">(</span><span class="brx">(</span><span class="brx">(</span>0,0<span class="brx">)</span>--<span class="brx">(</span>80,-120<span class="brx">)</span>--<span class="brx">(</span>-80,-120<span class="brx">)</span>--cycle<span class="brx">)</span>&&cycle<span class="brx">)</span>
+    withcolor svgcolor<span class="brx">(</span>0.137,0.259,0.212<span class="brx">)</span>
+  ;
+  fill <span class="brx">(</span><span class="brx">(</span><span class="brx">(</span>0,40<span class="brx">)</span>--<span class="brx">(</span>60,-60<span class="brx">)</span>--<span class="brx">(</span>-60,-60<span class="brx">)</span>--cycle<span class="brx">)</span>&&cycle<span class="brx">)</span>
+    withcolor svgcolor<span class="brx">(</span>0.047,0.361,0.298<span class="brx">)</span>
+  ;
+  fill <span class="brx">(</span><span class="brx">(</span><span class="brx">(</span>0,80<span class="brx">)</span>--<span class="brx">(</span>40,0<span class="brx">)</span>--<span class="brx">(</span>-40,0<span class="brx">)</span>--cycle<span class="brx">)</span>&&cycle<span class="brx">)</span>
+    withcolor svgcolor<span class="brx">(</span>0.22,0.459,0.357<span class="brx">)</span>
+  ;
+  fill <span class="brx">(</span>unitsquare xyscaled <span class="brx">(</span>40,30<span class="brx">)</span> shifted <span class="brx">(</span>-20,-150<span class="brx">)</span><span class="brx">)</span>
+    withcolor svgcolor<span class="brx">(</span>0.647,0.165,0.165<span class="brx">)</span>
+  ;
+currentpicture&nbsp;:<span class="brx">=</span> currentpicture shifted <span class="brx">(</span>100,-100<span class="brx">)</span>;
+clip currentpicture to <span class="brx">(</span>unitsquare xyscaled <span class="brx">(</span>200,-200<span class="brx">)</span><span class="brx">)</span>;
+<span class="brx">)</span>&nbsp;;
+<span class="cs"><span class="documentcs">\stopMPcode</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../wikiteximage/c214018260d569c9cbf66bba4b2788a5.webp" width="438">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212418
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.100 seconds
+Preprocessor visited node count: 42/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 90/2097152 bytes
+Template argument size: 22/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3909/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.685      1 Template:cmd
+100.00%   16.685      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2739-1!canonical and timestamp 20260109212418 and revision id 41958
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Sharing_graphics">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Color/Defining new colors&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Color/Defining_new_colors" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Color/Defining new colors
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7344&diff=39479">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Defining_colors_and_supported_color_models">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Defining colors and supported color models
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Defining_group_of_colors">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Defining group of colors
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Transparency">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Transparency
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Defining_transparent_colors">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Defining transparent colors
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Transparency_modes">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Transparency modes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Transparent_images">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Transparent images
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Rendering">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Rendering
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Cloning_existing_colors">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Cloning existing colors
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Adapting_existing_colors">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Adapting existing colors
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Defining_colors_and_supported_color_models">
+      Defining colors and supported color models
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://en.wikipedia.org/wiki/CMYK_color_model" rel="nofollow">
+       CMYK
+      </a>
+      , typically used for printing
+     </li>
+     <li>
+      <a class="external text" href="https://en.wikipedia.org/wiki/RGB_color_model" rel="nofollow">
+       RGB
+      </a>
+      ,
+      <a class="external text" href="https://en.wikipedia.org/wiki/HSL_and_HSV" rel="nofollow">
+       HSV/HSL
+      </a>
+      and
+      <a class="external text" href="https://en.wikipedia.org/wiki/HWB_color_model" rel="nofollow">
+       HWB
+      </a>
+      , typically used for screen display,
+     </li>
+     <li>
+      <a class="external text" href="https://en.wikipedia.org/wiki/Transparency_(graphic)" rel="nofollow">
+       Transparency
+      </a>
+      on wikipedia.
+     </li>
+     <li>
+      <a href="Spot_colors.html" title="Color/Spot colors">
+       Spot colors
+      </a>
+      typically used for offset printing (
+      <a class="external text" href="https://en.wikipedia.org/wiki/Spot_color" rel="nofollow">
+       Spot colors
+      </a>
+      on wikipedia).
+     </li>
+    </ul>
+    <p>New colors may be defined in the following ways
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Syntax (and Example)
+       </th>
+       <th>
+        Explanation
+       </th>
+      </tr>
+      <tr>
+       <td style="width:20%;">RGB color model
+</td>
+       <td style="width:40%;"><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>..., g<span class="brx">=</span>..., b<span class="brx">=</span>...<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>0.75, g<span class="brx">=</span>1, b<span class="brx">=</span>0<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The values for <code>r</code>, <code>g</code>, and <code>b</code> are floating point number between <code>0</code> and <code>1</code>.
+</td>
+      </tr>
+      <tr>
+       <td>CMYK color model
+</td>
+       <td><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>c<span class="brx">=</span>.., m<span class="brx">=</span>.., y<span class="brx">=</span>.., k<span class="brx">=</span>..<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="brx">[</span>c<span class="brx">=</span>0.25, m<span class="brx">=</span>0, y<span class="brx">=</span>1, k<span class="brx">=</span>0<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The values for <code>c</code>, <code>m</code>, <code>y</code> and <code>k</code> are floating point number between <code>0</code> and <code>1</code>.
+</td>
+      </tr>
+      <tr>
+       <td>HSV/HSL color model
+</td>
+       <td><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>.., s<span class="brx">=</span>.., v<span class="brx">=</span>..<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>75, s<span class="brx">=</span>1, v<span class="brx">=</span>1<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The value for <code>h</code> (hue) is between <code>0</code> and <code>360</code>; the values for <code>s</code> (saturation), <code>v</code> (value/brightness) are floating point numbers between <code>0</code> and <code>1</code>.
+</td>
+      </tr>
+      <tr>
+       <td>HWB color model
+</td>
+       <td><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>.., w<span class="brx">=</span>.., b<span class="brx">=</span>..<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>something<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>75, w<span class="brx">=</span>0.5, b<span class="brx">=</span>.1<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>something<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The value for <code>h</code> (hue) is between <code>0</code> and <code>360</code>; the values for <code>w</code> (whiteness), <code>b</code> (blackness) are floating point numbers between <code>0</code> and <code>1</code>. This mostly unknown color model is also used in CSS3/SVG.
+</td>
+      </tr>
+      <tr>
+       <td>Hex
+</td>
+       <td><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>...<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>BFFF00<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>lime<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The value for <code>x</code> is a three-byte hexadecimal number where the bytes represent the red, green, and blue values. This follows the HTML and CSS style of defining colors.
+</td>
+      </tr>
+      <tr>
+       <td>Gray scale
+</td>
+       <td><pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>s<span class="brx">=</span>...<span class="brx">]</span></pre>
+<p>For example,
+</p>
+<pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>screen<span class="brx">]</span><span class="brx">[</span>s<span class="brx">=</span>0.5<span class="brx">]</span> 
+This is <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>screen<span class="brx">]</span><span class="br">{</span>a new color<span class="br">}</span>
+that we defined</pre>
+</td>
+       <td>The value for <code>s</code> is a floating point number between <code>0</code> and <code>1</code>, representing the grayness value (1 represents white, 0 represents black).
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Defining_group_of_colors">
+      Defining group of colors
+     </span>
+    </h3>
+    <p>See <tt><a href="../Command/definecolorgroup.html" title="Command/definecolorgroup">\definecolorgroup</a></tt> and <tt><a href="../Command/showcolorgroup.html" title="Command/showcolorgroup">\showcolorgroup</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Transparency">
+      Transparency
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Defining_transparent_colors">
+      Defining transparent colors
+     </span>
+    </h3>
+    <p>You can define <b>transparent</b> colors through setting <tt>t</tt> and <tt>a</tt>, e.g. <tt>t=0.5,a=1</tt>, where the first is the opacity and the latter the transparency mode (there are 17).
+</p>
+    <p>Beware, some PDF viewers and printshops can't handle transparencies in PDF!
+</p>
+    <p>In the following example by Hans Hagen the yellow blocks have been added to demonstrate the order in which the blocks are drawn on the page; the first yellow block is behind the transparent red and blue blocks, while the second is in front of them.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>transparentred<span class="brx">]</span>  <span class="brx">[</span>r<span class="brx">=</span>1,t<span class="brx">=</span>.5,a<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>transparentblue<span class="brx">]</span> <span class="brx">[</span>b<span class="brx">=</span>1,t<span class="brx">=</span>.5,a<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>solidyellow<span class="brx">]</span>  <span class="brx">[</span>y<span class="brx">=</span>1,t<span class="brx">=</span>1,a<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+This is some sample text that goes behind the rectangles<span class="cs">\hskip</span>-8cm
+<span class="cs"><span class="documentcs">\blackrule</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>2cm,height<span class="brx">=</span>1cm,depth<span class="brx">=</span>1cm,
+   color<span class="brx">=</span>solidyellow<span class="brx">]</span><span class="cs">\hskip</span>-0.67cm
+<span class="cs"><span class="documentcs">\blackrule</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>2cm,height<span class="brx">=</span>2cm,
+   color<span class="brx">=</span>transparentred<span class="brx">]</span><span class="cs">\hskip</span>-0.67cm
+<span class="cs"><span class="documentcs">\blackrule</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>2cm,height<span class="brx">=</span>1cm,
+   depth<span class="brx">=</span>1cm,color<span class="brx">=</span>transparentblue<span class="brx">]</span><span class="cs">\hskip</span>-0.67cm
+<span class="cs"><span class="documentcs">\blackrule</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>2cm,height<span class="brx">=</span>2cm,
+   color<span class="brx">=</span>solidyellow<span class="brx">]</span><span class="cs">\hskip</span>2cm.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/81819cb0c25bac2705701a64583d8e60.webp" width="620">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Transparency_modes">
+      Transparency modes
+     </span>
+    </h3>
+    <p>There are different algorithms for "mixing" transparent colors with their background, maybe you know them from the layer settings in Photoshop.
+</p>
+    <ul>
+     <li>
+      0 none
+     </li>
+     <li>
+      1 normal
+     </li>
+     <li>
+      2 multiply
+     </li>
+     <li>
+      3 screen
+     </li>
+     <li>
+      4 overlay
+     </li>
+     <li>
+      5 softlight
+     </li>
+     <li>
+      6 hardlight
+     </li>
+     <li>
+      7 colordodge
+     </li>
+     <li>
+      8 colorburn
+     </li>
+     <li>
+      9 darken
+     </li>
+     <li>
+      10 lighten
+     </li>
+     <li>
+      11 difference
+     </li>
+     <li>
+      12 exclusion
+     </li>
+     <li>
+      13 hue
+     </li>
+     <li>
+      14 saturation
+     </li>
+     <li>
+      15 color
+     </li>
+     <li>
+      16 luminosity
+     </li>
+    </ul>
+    <p>They are defined in <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/mkiv/lpdf-col.lua" rel="nofollow">mkiv/lpdf-col.lua</a> and demonstrated in the <a class="external text" href="http://www.pragma-ade.nl/general/manuals/colors-mkiv.pdf" rel="nofollow">color manual</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Transparent_images">
+      Transparent images
+     </span>
+    </h3>
+    <p>Since October 2016, you can also make external figures and every other element transparent using <tt><a href="../Command/definetransparency.html" title="Command/definetransparency">\definetransparency</a></tt> and <tt><a href="../Command/starttransparent.html" title="Command/starttransparent">\starttransparent</a></tt>.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definetransparency</span></span>
+  <span class="brx">[</span>tnormal<span class="brx">]</span>    
+  <span class="brx">[</span>a<span class="brx">=</span>normal,t<span class="brx">=</span>.5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetransparency</span></span>
+  <span class="brx">[</span>tmultiply<span class="brx">]</span>  
+  <span class="brx">[</span>a<span class="brx">=</span>multiply,t<span class="brx">=</span>.5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetransparency</span></span>
+  <span class="brx">[</span>tdifference<span class="brx">]</span>
+  <span class="brx">[</span>a<span class="brx">=</span>difference,t<span class="brx">=</span>.5<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>10cm,align<span class="brx">=</span>normal,foregroundcolor<span class="brx">=</span>red<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="br">}</span><span class="br">}</span>
+<span class="br">{</span><span class="cs"><span class="stylecs">\starttransparent</span></span><span class="brx">[</span>tnormal<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>9cm<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\stoptransparent</span></span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>10cm,align<span class="brx">=</span>normal,foregroundcolor<span class="brx">=</span>red<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="br">}</span><span class="br">}</span>
+<span class="br">{</span><span class="cs"><span class="stylecs">\starttransparent</span></span><span class="brx">[</span>tmultiply<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>9cm<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\stoptransparent</span></span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>10cm,align<span class="brx">=</span>normal,foregroundcolor<span class="brx">=</span>red<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="br">}</span><span class="br">}</span>
+<span class="br">{</span><span class="cs"><span class="stylecs">\starttransparent</span></span><span class="brx">[</span>tdifference<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>9cm<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\stoptransparent</span></span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1166" src="../wikiteximage/5856b4131c64fae2c963bd3932e25f14.webp" width="593">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Rendering">
+      Rendering
+     </span>
+    </h3>
+    <p>Acrobat Reader might not render transparency using RGB in a PDF that is displayed on a monitor. If the colours do not appear correctly, add the following code:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>pagecolormodel<span class="brx">=</span>auto<span class="brx">]</span>
+</pre>
+    <p>In Acrobat, when transparency is used, a different route is followed (at least in the past) when rendering. Rendering colorspaces might be adapted to the output medium so it's a combination of colorspace, monitor/paper, calibration, knockout/overprint, transparency groups, assumptions, and so forth.
+</p>
+    <h2>
+     <span class="mw-headline" id="Cloning_existing_colors">
+      Cloning existing colors
+     </span>
+    </h2>
+    <p>You can <i>clone</i> an existing color using
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>new-color<span class="brx">]</span><span class="brx">[</span>old-color<span class="brx">]</span></pre>
+    <p>For example
+</p>
+    <table>
+     <tbody>
+      <tr>
+       <td width="45%"><pre class="tex"><span class="cs"><span class="systemcs">\usecolors</span></span><span class="brx">[</span>xwi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>highlight<span class="brx">]</span><span class="brx">[</span>yellow<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+    <span class="brx">[</span>important<span class="brx">]</span>
+    <span class="brx">[</span>location<span class="brx">=</span>low, frame<span class="brx">=</span>off, 
+     background<span class="brx">=</span>color, backgroundcolor<span class="brx">=</span>highlight<span class="brx">]</span>
+
+This is an <span class="cs">\important</span><span class="br">{</span>important<span class="br">}</span>word.
+
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>highlight<span class="brx">]</span><span class="brx">[</span>lavenderblush<span class="brx">]</span>
+This is a <span class="cs">\important</span><span class="br">{</span>important<span class="br">}</span>word.
+</pre>
+</td>
+       <td width="10%">
+</td>
+       <td width="45%"><ul class="demo"><li class="rendering"><img height="42" src="../wikiteximage/6a4d338cf4d4fdd15fa71d63ba606908.webp" width="210"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Adapting_existing_colors">
+      Adapting existing colors
+     </span>
+    </h2>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b>  add details about this <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212216
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.058 seconds
+Real time usage: 0.080 seconds
+Preprocessor visited node count: 182/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 845/2097152 bytes
+Template argument size: 185/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12973/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   40.858      1 -total
+ 21.77%    8.897      1 Template:todo
+ 11.45%    4.677      4 Template:cmd
+  9.13%    3.730      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7344-1!canonical and timestamp 20260109212216 and revision id 39479
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Color/Defining_new_colors">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

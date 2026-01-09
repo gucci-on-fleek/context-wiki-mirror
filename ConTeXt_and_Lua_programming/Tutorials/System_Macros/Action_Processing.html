@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Action Processing&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Action_Processing" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Action Processing
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2156&diff=40367">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Loops_and_Recursion.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion">Loops & Recursion</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Comma_Separated_Lists.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists">Comma Separated Lists</a> &gt;
+</p>
+    <p>ConTeXt makes extensive use of a sort of case or switch command. Depending of the presence of one or more provided items, some actions is taken. These macros can be nested without problems.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processaction</span></span>           <span class="brx">[</span>x<span class="brx">]</span>     <span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,b<span class="brx">=</span>&gt;<span class="cs">\b</span>,c<span class="brx">=</span>&gt;<span class="cs">\c</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\processfirstactioninset</span></span> <span class="brx">[</span>x,y,z<span class="brx">]</span> <span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,b<span class="brx">=</span>&gt;<span class="cs">\b</span>,c<span class="brx">=</span>&gt;<span class="cs">\c</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\processallactionsinset</span></span>  <span class="brx">[</span>x,y,z<span class="brx">]</span> <span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,b<span class="brx">=</span>&gt;<span class="cs">\b</span>,c<span class="brx">=</span>&gt;<span class="cs">\c</span><span class="brx">]</span>
+</pre>
+    <p>This macro is most often used in the <code>key-value</code> parser, like in this (simplified) example, where the user has said width=small or something similar:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processaction</span></span>
+    <span class="brx">[</span><span class="cs">\TESTwidth</span><span class="brx">]</span> <span class="comment">% should expand to 'small'</span>
+    <span class="brx">[</span>small<span class="brx">=</span>&gt;<span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>small was chosen<span class="br">}</span>,
+     medium<span class="brx">=</span>&gt;<span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>medium was chosen<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>You can supply both a <code>default</code> action and an action to be undertaken when an <code>unknown</code> value is met:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processallactionsinset</span></span>
+    <span class="brx">[</span>x,y,z<span class="brx">]</span>
+    <span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,
+     b<span class="brx">=</span>&gt;<span class="cs">\b</span>,
+     c<span class="brx">=</span>&gt;<span class="cs">\c</span>,
+     default<span class="brx">=</span>&gt;<span class="cs">\default</span>,
+     unknown<span class="brx">=</span>&gt;<span class="cs"><span class="documentcs">\unknown</span></span><span class="br">{</span>... <span class="cs"><span class="systemcs">\commalistelement</span></span> ...<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>If the first argument is empty, this macro scans the list for the keyword <code>default</code> and executes the related action, if present. If the first argument is not empty but also not in the list, the action related to <code>unknown</code> is executed. Both keywords must be at the end of list <code>#2</code>. Afterwards, the actually found keyword is available in <code>\commalistelement</code>.
+</p>
+    <p>Sometimes an action needs to be undertaken that depends only on the first character of something (for instance, checking if some string represents a number or not). This macro get this character and puts it in <code>\firstcharacter</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getfirstcharacter</span></span> <span class="br">{</span>string<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Problems_with_expansion">
+      Problems with expansion
+     </span>
+    </h2>
+    <p>Be aware that <code>\processaction</code> is not fully expandable. This means that the following won't work.
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\MyMacro</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\processaction</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,b<span class="brx">=</span>&gt;<span class="cs">\b</span><span class="brx">]</span><span class="br">}</span>
+<span class="cs">\edef</span><span class="cs">\x</span><span class="br">{</span><span class="cs">\MyMacro</span><span class="br">{</span>a<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>A solution in MkIV proposed by Taco on [<a class="external text" href="http://archive.contextgarden.net/message/20100513.073030.d6d1fa3a.en.html" rel="nofollow">2010-05-13</a>] is to define <code>\MyMacro</code> as follows
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\MyMacro</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\directlua</span><span class="br">{</span>
+    local known <span class="brx">=</span> <span class="br">{</span>a <span class="brx">=</span> '<span class="cs">\a</span>', b <span class="brx">=</span> '<span class="cs">\b</span>'<span class="br">}</span>
+    tex.sprint<span class="brx">(</span>known<span class="brx">[</span>'<span class="brx">#</span>1'<span class="brx">]</span> or '<span class="cs">\a</span>'<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>Another way that should work in MkII too:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span><span class="brx">[</span>MyMacro:<span class="brx">]</span><span class="brx">[</span>a<span class="brx">=</span><span class="cs">\a</span>,b<span class="brx">=</span><span class="cs">\b</span><span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\MyMacro</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\doifdefinedelse</span></span><span class="br">{</span>MyMacro:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>MyMacro:<span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="cs">\a</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p><br>
+&lt; <b>Prev:</b> <a href="Loops_and_Recursion.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion">Loops & Recusion</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Comma_Separated_Lists.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists">Comma Separated Lists</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.044 seconds
+Real time usage: 0.131 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4749/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2156-1!canonical and timestamp 20260109212409 and revision id 40367
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Action_Processing">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

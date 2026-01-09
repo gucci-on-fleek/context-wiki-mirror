@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Handling_Arguments" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2153&diff=40373">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Expansion_Control.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control">Expansion Control</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Definitions_and_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments">Definitions & Assignments</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Gobbling_arguments">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Gobbling arguments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Selecting_arguments">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Selecting arguments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Optional_delimited_arguments">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Optional delimited arguments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Optional_delimited_arguments_with_key-value_sets">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Optional delimited arguments with key-value sets
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Optional_braced_arguments">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Optional braced arguments
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Gobbling_arguments">
+      Gobbling arguments
+     </span>
+    </h2>
+    <p>Controlling arguments is the backbone of macro processing, so naturally there are predefined macros to help you using them. The first set of macros does nothing, except that they get rid of a number of arguments, up to ten arguments altogether. This type of macro is especially useful when you don't really need the user supplied argument(s) to your macro. Their names are <code>\gobbleoneargument</code> up to <code>\gobbletenarguments</code>.
+</p>
+    <p>For example, assume you need a macro that would be called like this:
+</p>
+    <pre class="tex"><span class="cs">\checkoddpage</span><span class="br">{</span>this page is odd<span class="br">}</span>
+</pre>
+    <p>The 'best' definition for that macro is this:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\checkoddpage</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\ifodd</span><span class="cs">\pageno</span>
+    <span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\message</span></span>
+  <span class="cs">\else</span>
+    <span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\gobbleoneargument</span></span>
+  <span class="cs">\fi</span>
+<span class="br">}</span>
+</pre>
+    <p>The 'simplistic' alternative macro definition:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\checkoddpage</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\ifodd</span><span class="cs">\pageno</span>
+    <span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+  <span class="cs">\fi</span>
+<span class="br">}</span>
+</pre>
+    <p>actually runs slower, since the argument is scanned twice: once by <code>\checkoddpage</code>, and once by <code>\message</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Selecting_arguments">
+      Selecting arguments
+     </span>
+    </h2>
+    <p>The next list consists of macros that are trivial, but quite important in some applications. The list of the definitions is like this:
+</p>
+    <pre class="tex"><span class="cs">\long</span><span class="cs">\def</span><span class="cs"><span class="systemcs">\firstofoneargument</span></span>     <span class="brx">#</span>1<span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs"><span class="systemcs">\firstoftwoarguments</span></span>    <span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs"><span class="systemcs">\secondoftwoarguments</span></span>   <span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>
+...
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs"><span class="systemcs">\fifthoffivearguments</span></span>  <span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="brx">#</span>4<span class="brx">#</span>5<span class="br">{</span><span class="brx">#</span>5<span class="br">}</span>
+</pre>
+    <p>The need for these commands appears when you have to strip braces from a (saved) argument. For instance, when you have a list with 'subelements', the list expansion tends to look like this:
+</p>
+    <pre class="tex"><span class="br">{</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>0<span class="br">}</span>,<span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>,<span class="br">{</span>1<span class="br">}</span><span class="br">{</span>0<span class="br">}</span>,<span class="br">{</span>1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>(A two by two matrix, stored as a commalist). Imagine that you want to grab the row numbers and do something with it. This definition:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\doprocessrow</span><span class="brx">#</span>1<span class="br">{</span>... what i really want to do ...<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\processrow</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\firstoftwoarguments</span></span><span class="cs">\doprocessrow</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>0<span class="br">}</span>,<span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>,<span class="br">{</span>1<span class="br">}</span><span class="br">{</span>0<span class="br">}</span>,<span class="br">{</span>1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span><span class="brx">]</span><span class="cs">\processrow</span>
+</pre>
+    <p>does the trick.
+</p>
+    <h2>
+     <span class="mw-headline" id="Optional_delimited_arguments">
+      Optional delimited arguments
+     </span>
+    </h2>
+    <p>When working with delimited arguments, spaces and lineendings can interfere. The next set of macros uses TeX's internal scanner for grabbing everything between arguments. Forgive me the funny names.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dosingleargument</span></span><span class="cs">\command</span>     <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dodoubleargument</span></span><span class="cs">\command</span>     <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dotripleargument</span></span><span class="cs">\command</span>     <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\doquadrupleargument</span></span><span class="cs">\command</span>  <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\doquintupleargument</span></span><span class="cs">\command</span>  <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>5<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dosixtupleargument</span></span><span class="cs">\command</span>   <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>5<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>6<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\doseventupleargument</span></span><span class="cs">\command</span> <span class="brx">=</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>5<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>6<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>7<span class="brx">]</span>
+</pre>
+    <p>These macros are used in the following way:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\docommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span>... <span class="brx">#</span>1 ... <span class="brx">#</span>2 ...<span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\command</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleargument</span></span><span class="cs">\docommand</span><span class="br">}</span>
+</pre>
+    <p>So <code>\dodoubleargument</code> leads to:
+</p>
+    <pre class="tex"><span class="cs">\docommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+<span class="cs">\docommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs">\docommand</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+</pre>
+    <p>The macros above insure that the resulting call always has the correct number of bracket pairs, even if the user did not supply all of the options. In this case, a number of trailing bracket pairs are empty. A set of related <code>\if</code> booleans is initialized to give you access to the number of user-supplied parameters.
+</p>
+    <h2>
+     <span class="mw-headline" id="Optional_delimited_arguments_with_key-value_sets">
+      Optional delimited arguments with key-value sets
+     </span>
+    </h2>
+    <p>These maybe too mysterious macros enable us to handle more than one setup at once.
+</p>
+    <pre class="tex"><span class="cs">\dosingleargumentwithset</span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dodoubleargumentwithset</span></span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dotripleargumentwithset</span></span> <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dodoubleemptywithset</span></span>    <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dotripleemptywithset</span></span>    <span class="cs">\command</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span>
+</pre>
+    <p>The first macro calls <code>\command[##1]</code> for each string in the set <code>#1</code>. The second one calls for <code>\command[##1][#2]</code> and the third, well one may guess. These commands support constructions like:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\dodefinesomething</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\getparameters</span></span><span class="brx">[</span><span class="protectedcs">\??xx</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\definesomething</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleargumentwithset</span></span><span class="cs">\dodefinesomething</span><span class="br">}</span>
+</pre>
+    <p>Which accepts calls like:
+</p>
+    <pre class="tex"><span class="cs">\definesomething</span><span class="brx">[</span>alfa,beta,...<span class="brx">]</span><span class="brx">[</span>variable<span class="brx">=</span>...,...<span class="brx">]</span>
+</pre>
+    <p>Now a whole bunch of variables like <code>\@@xxalfavariable</code> and <code>\@@xxbetavariable</code> is defined.
+</p>
+    <h2>
+     <span class="mw-headline" id="Optional_braced_arguments">
+      Optional braced arguments
+     </span>
+    </h2>
+    <p>We've already seen some commands that take care of optional arguments between <code>[]</code>.
+</p>
+    <p>The next two commands handle the ones with <code>{}</code>. They are called as:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dosinglegroupempty</span></span>    <span class="cs">\IneedONEargument</span>
+<span class="cs"><span class="systemcs">\dodoublegroupempty</span></span>    <span class="cs">\IneedTWOarguments</span>
+<span class="cs"><span class="systemcs">\dotriplegroupempty</span></span>    <span class="cs">\IneedTHREEarguments</span>
+<span class="cs"><span class="systemcs">\doquadruplegroupempty</span></span> <span class="cs">\IneedFOURarguments</span>
+<span class="cs"><span class="systemcs">\doquintuplegroupempty</span></span> <span class="cs">\IneedFIVEarguments</span>
+</pre>
+    <p>where <code>\IneedONEargument</code> takes one and the others two and three arguments, et cetera.
+</p>
+    <p>These macros were first needed in ppchTeX. At first glance, the functionality sounds trivial. But in fact, it is not. Consider this expanded input:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs"><span class="documentcs">\test</span></span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\dosinglegroupempty</span></span><span class="cs"><span class="documentcs">\test</span></span> <span class="br">{</span>a<span class="br">}</span>Text
+<span class="cs"><span class="systemcs">\dosinglegroupempty</span></span><span class="cs"><span class="documentcs">\test</span></span> Text
+</pre>
+    <p>In the last line, <code>#1</code> will <b>not</b> print the letter <code>T</code>, as would be 'normal' TeX behaviour. These macros can explictly take care of spaces, which means that the next definition and calls are valid:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dotriplegroupempty</span></span><span class="cs"><span class="documentcs">\test</span></span> <span class="br">{</span>a<span class="br">}</span> <span class="br">{</span>b<span class="br">}</span> <span class="br">{</span>c<span class="br">}</span>
+<span class="cs"><span class="systemcs">\dotriplegroupempty</span></span><span class="cs"><span class="documentcs">\test</span></span> <span class="br">{</span>a<span class="br">}</span> <span class="br">{</span>b<span class="br">}</span>
+<span class="cs"><span class="systemcs">\dotriplegroupempty</span></span><span class="cs"><span class="documentcs">\test</span></span>
+<span class="br">{</span>a<span class="br">}</span>
+<span class="br">{</span>b<span class="br">}</span>
+</pre>
+    <p>And alike.
+</p>
+    <p>Just as their <code>[]</code>, they also set the <code>\ifXXXXargument</code> switches.
+</p>
+    <p><br>
+&lt; <b>Prev:</b> <a href="Expansion_Control.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control">Expansion Control</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Definitions_and_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments">Definitions & Assignments</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.064 seconds
+Real time usage: 0.103 seconds
+Preprocessor visited node count: 87/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12978/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2153-1!canonical and timestamp 20260109212409 and revision id 40373
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Handling_Arguments">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   References notes and floats/Visual debugging&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/References_notes_and_floats/Visual_debugging" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    References notes and floats/Visual debugging
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4908&diff=41463">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="For_reference_and_bookmarks">
+      For reference and bookmarks
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/tracebookmarks&action=edit&redlink=1.html" title="Command/tracebookmarks (page does not exist)">
+        \tracebookmarks
+       </a>
+      </tt>
+      &nbsp;:&nbsp;?
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/tracelinenotes&action=edit&redlink=1.html" title="Command/tracelinenotes (page does not exist)">
+        \tracelinenotes
+       </a>
+      </tt>
+      &nbsp;:&nbsp;?
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/tracereferences&action=edit&redlink=1.html" title="Command/tracereferences (page does not exist)">
+        \tracereferences
+       </a>
+      </tt>
+      &nbsp;:&nbsp;?
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/tracelabels&action=edit&redlink=1.html" title="Command/tracelabels (page does not exist)">
+        \tracelabels
+       </a>
+      </tt>
+      &nbsp;:&nbsp;?
+     </li>
+    </ul>
+    <h2>
+     <span id="\showreferences">
+     </span>
+     <span class="mw-headline" id=".5Cshowreferences">
+      <tt>
+       <a class="new" href="../index.php?title=Command/showreferences&action=edit&redlink=1.html" title="Command/showreferences (page does not exist)">
+        \showreferences
+       </a>
+      </tt>
+     </span>
+    </h2>
+    <p>When writing a long document with many cross references, at the stage of proof reading, it comes handy if one could visualize what are the names given to various nodes (in ConTeXt parlance &laquo;&nbsp;nodes.destinations&nbsp;&raquo;) and also to visualize what destinations are invoked in the text (in ConTeXt they are named &laquo;&nbsp;nodes.references&nbsp;&raquo;). 
+</p>
+    <p>There is a command named 
+</p>
+    <pre class="tex"><span class="cs">\showreferences</span>
+</pre>
+    <p>which just does this: it prints in small fonts, to the left of each such node the name of the destination, or the name of the reference  used at that point. Let us show it in action in the following (not so minimal) example (to be typeset with mkiv):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>10pt,palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useMPlibrary</span></span><span class="brx">[</span>dum<span class="brx">]</span>
+
+<span class="comment">%\usemodule[references-show]</span>
+
+<span class="comment">%\enabletrackers[nodes.references,nodes.destinations]</span>
+
+<span class="cs">\showreferences</span>
+
+<span class="comment">%\enabletrackers[nodes.references.show]</span>
+
+<span class="comment">%\enabletrackers[nodes.references]</span>
+
+<span class="comment">%\enabletrackers[nodes.destinations.show]</span>
+
+<span class="comment">%\enabletrackers[nodes.destinations]</span>
+
+<span class="comment">%\enabletrackers[nodes.references.show=2.5]</span>
+<span class="comment">%\enabletrackers[nodes.destinations.show=1]</span>
+
+<span class="cs"><span class="stylecs">\definereferenceformat</span></span><span class="brx">[</span>eqref<span class="brx">]</span><span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,right<span class="brx">=</span><span class="brx">)</span><span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\setupformulas</span></span><span class="brx">[</span>location<span class="brx">=</span>right<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span>Some references,reference<span class="brx">=</span>ch:New<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Some facts,reference<span class="brx">=</span>sec:First<span class="brx">]</span>
+We have
+<span class="cs"><span class="documentcs">\placeformula</span></span><span class="brx">[</span>eq:Square<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startformula</span></span>
+a^2 + 2ab + b^2 <span class="brx">=</span> <span class="brx">(</span>a + b<span class="brx">)</span>^2,
+<span class="cs"><span class="documentcs">\stopformula</span></span>
+for $a,b<span class="cs"><span class="documentcs">\in</span></span> <span class="br">{</span><span class="cs">\Bbb</span> C<span class="br">}</span>$. Also,
+<span class="cs"><span class="documentcs">\placeformula</span></span>
+<span class="cs"><span class="documentcs">\startformula</span></span>
+<span class="cs"><span class="documentcs">\startalign</span></span>
+<span class="cs">\NC</span> <span class="cs">\alpha</span>^2 -2<span class="cs">\alpha</span><span class="cs">\beta</span> + <span class="cs">\beta</span>^2 <span class="cs">\NC</span> <span class="brx">=</span> <span class="brx">(</span><span class="cs">\alpha</span> - <span class="cs">\beta</span><span class="brx">)</span>^2. <span class="cs">\NR</span><span class="brx">[</span>eq:Identity<span class="brx">]</span>
+<span class="cs">\NC</span> ||x||^2 + ||y||^2 <span class="cs">\NC</span><span class="brx">=</span> <span class="brx">(</span>x+y|x+y<span class="brx">)</span> <span class="cs">\NR</span><span class="brx">[</span>eq:Pythagore<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopalign</span></span>
+<span class="cs"><span class="documentcs">\stopformula</span></span>  
+Note that <span class="cs">\eqref</span><span class="brx">[</span>eq:Square<span class="brx">]</span> is true whenever we have $ab <span class="brx">=</span> ba$ for $b,a <span class="cs"><span class="documentcs">\in</span></span> <span class="br">{</span><span class="cs">\Bbb</span> A<span class="br">}</span>$. This is not the case when $<span class="br">{</span><span class="cs">\Bbb</span> A<span class="br">}</span>$ is the ring of the matrices.
+It is clear that <span class="cs">\eqref</span><span class="brx">[</span>eq:Identity<span class="brx">]</span> is a consequence of <span class="cs">\eqref</span><span class="brx">[</span>eq:Square<span class="brx">]</span>.
+
+
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>n<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\item</span></span><span class="brx">[</span>it:1<span class="brx">]</span>
+Testing items to see where are the reference points and names.
+
+<span class="cs"><span class="documentcs">\startitem</span></span><span class="brx">[</span>it:2<span class="brx">]</span>
+Testing items for show reference
+<span class="cs"><span class="documentcs">\stopitem</span></span>
+
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+See <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>item<span class="br">}</span><span class="brx">[</span>it:2<span class="brx">]</span> in <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:First<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>reference<span class="brx">=</span>fig:1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>dummy<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+
+See <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>figure<span class="br">}</span><span class="brx">[</span>fig:1<span class="brx">]</span>, and then have a look at <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:Testing<span class="brx">]</span> of <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>ch:New<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Testing <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\showreferences</span><span class="br">}</span>,reference<span class="brx">=</span>sec:Testing<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth.tex
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <p>When typeset, with mkiv, this gives all the informations used for cross referencing.
+</p>
+    <p>There is also a module, which is invoked by saying:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>references-show<span class="brx">]</span>
+</pre>
+    <p>which does somewhat more: not only the command \showreferences is activated, but on the top right corner of each page, a short list of all the references on that page is printed.
+</p>
+    <p>Actually, due to the fact that some of the informations is written between lines, depending on the bodyfont used in the document, one may need to fine tune more or less the position of the small prints: you can play with the following commands
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.references.show<span class="brx">=</span>2.5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.destinations.show<span class="brx">=</span>1<span class="brx">]</span>
+</pre>
+    <p>by changing the numerical values according to your needs (remember nodes.destinations means the point where you have given a name to a certain object, and nodes.references corresponds to the point at which you refer to those objects).
+</p>
+    <p>Another useful information is that the command
+</p>
+    <pre class="tex"><span class="cs">\showreferences</span>
+</pre>
+    <p>is an alias for the following command
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.references.show,nodes.destinations.show<span class="brx">]</span>
+</pre>
+    <p>and you may enable only the tracking of either of the nodes, for instance by saying
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.destinations.show<span class="brx">]</span>
+</pre>
+    <p>you can visualize only the destinations nodes, or you may say
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.references.show<span class="brx">]</span>
+</pre>
+    <p>to see only where the references are invoked.
+</p>
+    <p>Finally, there is a command
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.references,nodes.destinations<span class="brx">]</span>
+</pre>
+    <p>which allows to visualize the objects which are destination or reference nodes (again, the above command can be split in two).
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212434
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.034 seconds
+Real time usage: 0.063 seconds
+Preprocessor visited node count: 90/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 502/2097152 bytes
+Template argument size: 136/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8107/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.977      1 -total
+ 94.66%    6.604      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4908-1!canonical and timestamp 20260109212434 and revision id 41463
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/References_notes_and_floats/Visual_debugging">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

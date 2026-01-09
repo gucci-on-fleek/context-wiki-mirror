@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   How TeX reads input&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/How_TeX_reads_input" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    How TeX reads input
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1846&diff=28739">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Including the contents of another file with TeX is done with
+<code>\input</code>. But you have to be careful: TeX appends a character
+with the current value of <code>\endlinechar</code> to each line of an
+inputed file, and that character is later converted to a space. That means,
+that the following 2 examples give the same results:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo -n X &gt;temp.tex<span class="br">}</span>
+X<span class="cs"><span class="documentcs">\input</span></span> temp X
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo X &gt;temp.tex<span class="br">}</span>
+X<span class="cs"><span class="documentcs">\input</span></span> temp X
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>There are at least 5 solutions, to get rid of the space before the last X:
+</p>
+    <ul>
+     <li>
+      Setting
+      <code>\endlinechar</code>
+      to -1 temporarily:
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo X &gt;temp.tex<span class="br">}</span>
+X<span class="br">{</span><span class="cs">\endlinechar</span><span class="brx">=</span>-1 <span class="cs"><span class="documentcs">\input</span></span> temp <span class="br">}</span>X
+</pre>
+    <ul>
+     <li>
+      Writing a percent sign to the end of the line:
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo X<span class="cs"><span class="documentcs">\letterpercent</span></span> &gt;temp.tex<span class="br">}</span>
+X<span class="cs"><span class="documentcs">\input</span></span> temp X
+</pre>
+    <ul>
+     <li>
+      Ending the written line with
+      <code>\relax</code>
+      (or a similar space-gobbling command):
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\immediate</span><span class="cs">\write</span>18
+     <span class="br">{</span>echo X<span class="cs"><span class="documentcs">\letterbackslash</span></span><span class="cs"><span class="documentcs">\letterbackslash</span></span> relax &gt;temp.tex<span class="br">}</span>
+X<span class="cs"><span class="documentcs">\input</span></span> temp X
+</pre>
+    <ul>
+     <li>
+      Changing the catcode of the current
+      <code>\endlinechar</code>
+      to 9 (ignored) also works:
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo X &gt;temp.tex<span class="br">}</span>
+X<span class="br">{</span><span class="cs">\catcode</span>`\^^M<span class="brx">=</span>9 <span class="cs"><span class="documentcs">\input</span></span> temp <span class="br">}</span>X
+</pre>
+    <ul>
+     <li>
+      Ignoring and removing the space:
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\immediate</span><span class="cs">\write</span>18<span class="br">{</span>echo X &gt;temp.tex<span class="br">}</span>
+X<span class="cs">\ignorespaces</span> <span class="cs"><span class="documentcs">\input</span></span> temp<span class="cs">\relax</span> <span class="cs"><span class="systemcs">\removeunwantedspaces</span></span> X
+</pre>
+    <h2>
+     <span class="mw-headline" id="Piping">
+      Piping
+     </span>
+    </h2>
+    <p><i>From <a href="User:Taco.html" title="User:Taco">Taco</a>'s post on the mailing list:</i>
+</p>
+    <p>Latest pdfTeX allows piping:
+</p>
+    <pre>\input "|ruby ./myscript.rb \vartest XXXXXXXXX"
+</pre>
+    <p>the magic trick is the | symbol. With the current tex:
+</p>
+    <pre class="tex"><span class="cs">\writ</span>18<span class="br">{</span>ruby ./myscript.rb <span class="cs">\vartest</span> XXXXXXXXX &gt; whatever.tex<span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> whatever <span class="comment">% or something using \openin ...</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212419
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.018 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 41/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2781/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1846-1!canonical and timestamp 20260109212419 and revision id 28739
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/How_TeX_reads_input">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

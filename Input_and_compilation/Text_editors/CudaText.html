@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/CudaText&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/CudaText" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/CudaText
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6684&diff=41699">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Homepage.2C_Download.2C_Installation.2C_Start">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Homepage, Download, Installation, Start
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Integrating_ConTeXt">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Integrating
+         <i>
+          ConTeXt
+         </i>
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Further_reading">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Further reading
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p><i>CudaText</i> (pronounced "<b>TSuda</b>Text" from the Slavic word <i>cuda</i> = miracles) is a freeware open-source text editor for Windows, MacOS, Linux and other Unix(-like) operating systems. It can be extended by lexers, plugins, etc. through its Addons Manager and by user additions. It is written in Object Pascal and depends on the Python engine which is included in the Windows version.
+</p>
+    <p><a class="image" href="../../File:cudatext01.jpg" title="Main view of CudaText with ConTeXt input"><img alt="Main view of CudaText with ConTeXt input" decoding="async" height="600" src="../../images/thumb/b/b0/cudatext01.webp" width="780"></a>
+</p>
+    <h2>
+     <span id="Homepage,_Download,_Installation,_Start">
+     </span>
+     <span class="mw-headline" id="Homepage.2C_Download.2C_Installation.2C_Start">
+      Homepage, Download, Installation, Start
+     </span>
+    </h2>
+    <p>You can find the homepage on GitHub here: <a class="external text" href="https://cudatext.github.io" rel="nofollow">https://cudatext.github.io</a>
+</p>
+    <p>To go directly to the download page on SourceForge visit: <a class="external text" href="https://sourceforge.net/projects/cudatext/files/release/" rel="nofollow">https://sourceforge.net/projects/cudatext</a>
+</p>
+    <p>To install simply extract the content of the downloaded file to a folder and location of your choice.
+</p>
+    <p>Afterwards use <code>cudatext.exe</code> from the extracted main directory to start CudaText.
+</p>
+    <h2>
+     <span class="mw-headline" id="Integrating_ConTeXt">
+      Integrating
+      <i>
+       ConTeXt
+      </i>
+     </span>
+    </h2>
+    <p>Within CudaText use the Menu Bar to navigate to <code>Plugins -&gt; Addons Manager -&gt; Install...</code>
+</p>
+    <p>Use the search field of the pop-up window to find and install <code>lexer: LaTeX</code> by double-clicking, then confirming and afterwards closing the notification window. This add-on is of the type lexer and is used for syntax highlighting of LaTeX files. But it works for TeX or ConTeXt files as well.
+</p>
+    <p>The same way find and install <code>plugin: Runner</code>. This add-on is of the type plugin and is used to run commands from within CudaText such as the ConTeXt PDF build commands.
+</p>
+    <p>After installing the two add-ons close CudaText.
+</p>
+    <p>Within the CudaText main folder navigate to <code>data \ buildsystems</code> and create a text file. Rename it to <code>ConTeXt.sublime-build</code> and make sure the file suffix to be <code>*.sublime-build</code> which is the standard for build commands for both Sublime Text editor as well as CudaText's Runner plug-in.
+</p>
+    <p>Open the blank <code>ConTeXt.sublime-build</code> and save it after adding the following lines:
+</p>
+    <pre> {
+   "file_patterns": ["*.tex"],
+   "working_dir": "$file_path",
+   "shell_cmd": "context --autopdf \"${file}\"",
+ }
+</pre>
+    <p>Now the basic setup is finished and CudaText can be used to highlight and build ConTeXt files. For the latter open a ConTeXt source file or create a new one with CudaText. When finished use the Menu Bar to navigate to <code>Plugins -&gt; Runner -&gt; Build</code>. Now the console should show ConTeXt output while the finished PDF should pop up within your default PDF viewer, according to the build command defined within <code>ConTeXt.sublime-build</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Further_reading">
+      Further reading
+     </span>
+    </h2>
+    <p>The guide above merely shows the very basic steps to get CudaText up and running with ConTeXt. Further content that helps getting the most out of this combination is planned to be added in the future.
+</p>
+    <p>Useful links:
+</p>
+    <p>The official Wiki: <a class="external text" href="https://wiki.freepascal.org/CudaText" rel="nofollow">https://wiki.freepascal.org/CudaText</a>
+</p>
+    <p>The official forum: <a class="external text" href="https://synwrite.sourceforge.net/forums/" rel="nofollow">https://synwrite.sourceforge.net/forums/</a>
+</p>
+    <p>Runner plug-in readme: <a class="external text" href="https://github.com/halfbrained/cuda_runner/tree/main/readme" rel="nofollow">https://github.com/halfbrained/cuda_runner/tree/main/readme</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212426
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.017 seconds
+Real time usage: 0.042 seconds
+Preprocessor visited node count: 12/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6684-1!canonical and timestamp 20260109212426 and revision id 41699
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/CudaText">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

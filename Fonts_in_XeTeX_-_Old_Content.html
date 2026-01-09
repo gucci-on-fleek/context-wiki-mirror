@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Fonts in XeTeX - Old Content&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Fonts_in_XeTeX_-_Old_Content" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Fonts in XeTeX - Old Content
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=882&diff=27802">2020-06-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a> &gt;
+</p>
+    <p>Fonts get special treatment in <a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a>. By supporting a rich, within-TeX means of font specification, one avoids the usual difficulties associated with the TeX font mess: no dealing with map files, encodings, Karl Berry naming schemes, tfms, or virtual fonts. This page describes the various typescripts introduced with <a class="extiw" href="http://source.contextgarden.net/type-otf.tex" title="source:type-otf.tex">type-otf.tex</a> (shared with LuaTeX, up-to-date) and <a class="extiw" href="http://source.contextgarden.net/type-xtx.tex" title="source:type-xtx.tex">type-xtx.tex</a> (XeTeX specific - might need a revision).
+</p>
+    <p><font color="red">Note that typescripts were slightly broken after version 2007.01.xx and before 2007.09.28. Please update.
+Also, on Mac, old fonts that store their code in the resource fork (Postscript Type 1, Postscript Type 3) don't seem to work with xdvipdfmx. Using xdv2pdf instead of xdvipdfmx is possible with some tweaking.</font>
+</p>
+    <p><b>NB:</b> Major changes that need updates both on wiki and in type-xtx: 
+</p>
+    <ul>
+     <li>
+      <code>encoding=uc</code>
+      is made obsolete: no font encoding specification is needed any mode since only Unicode font encoding is supported anyway
+     </li>
+     <li>
+      <code>features=default</code>
+      will set tex-text option, but note that that file is not present in minimals yet
+     </li>
+     <li>
+      <code>[name:\typescripttwo\xetexcolon mapping=tex-text][encoding=uc]</code>
+      should be replaced by
+      <code>[name:\typescripttwo][features=default]</code>
+     </li>
+     <li>
+      some others ...
+     </li>
+    </ul>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Quick_start">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Quick start
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Compatibility_Typescripts">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Compatibility Typescripts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Wildcard_typescripts">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Wildcard typescripts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Other_typescripts">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Other typescripts
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Non-Apple_fonts">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Non-Apple fonts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Usage">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Usage
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Creating_your_own_typescripts">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Creating your own typescripts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Other_font_specifications">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Other font specifications
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Accessing_glyphs_from_OpenType_fonts_by_name">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Accessing glyphs from OpenType fonts by name
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Using_PostScript_fonts">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Using PostScript fonts
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Quick_start">
+      Quick start
+     </span>
+    </h2>
+    <p>If you want to start using some of the fonts installed in your system (e.g. Serapion Pro), start with the following snippet:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>Serapion<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Xserif<span class="brx">]</span><span class="brx">[</span>Serapion Pro<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>Serapion, 12pt<span class="brx">]</span>
+</pre>
+    <p>In this case the document will be set in 12pt Serapion Pro typeface. If you want to start fiddling with the fonts a bit more, read on about the typescripts.
+</p>
+    <h2>
+     <span class="mw-headline" id="Compatibility_Typescripts">
+      Compatibility Typescripts
+     </span>
+    </h2>
+    <p>The first class of typescript enables one to use familiar typescripts, such as times, palatino, postscript, and the like, from <tt>type-exa</tt>. The following typescripts are defined for the <tt>uc</tt> encoding:
+</p>
+    <dl>
+     <dt>
+      times&nbsp;
+     </dt>
+     <dd>
+      <i>
+       Times Roman
+      </i>
+      - no slanted, no small caps
+     </dd>
+     <dt>
+      palatino&nbsp;
+     </dt>
+     <dd>
+      <i>
+       Book Antiqua
+      </i>
+      - (Apple's Palatino clone) no slanted, no small caps
+     </dd>
+     <dt>
+      helvetica&nbsp;
+     </dt>
+     <dd>
+      <i>
+       Helvetica Neue
+      </i>
+      - Apple's default Helvetica doesn't offer an oblique, so Helvetica Neue is substituted
+     </dd>
+     <dt>
+      courier&nbsp;
+     </dt>
+     <dd>
+      <i>
+       Courier
+      </i>
+      - No italics or oblique. None of Apple's default monospaced fonts ship with an oblique, so this typescript is necessarily limited.
+     </dd>
+     <dt>
+      lucida&nbsp;
+     </dt>
+     <dd>
+      <i>
+       Lucida Bright, Sans, Typewriter, Calligraphy, Handwriting,
+      </i>
+      and
+      <i>
+       Fax
+      </i>
+      are all provided with Microsoft's Office 2004. For those with that software and those fonts, these typescripts are provided to take advantage of the predefined ones in ConTeXt. Keep in mind that the lucida math fonts are still for-pay only.
+     </dd>
+    </dl>
+    <p>You can simply invoke these typescripts with the familiar calls, except that they have the <tt>uc</tt> encoding:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>times<span class="brx">]</span>
+</pre>
+    <p>Please note that there is absolutely no attempt to retain font metrics, so this will almost certainly re-flow legacy documents. The following typescripts/typefaces from <tt>type-exa</tt> are thus available:
+</p>
+    <ul>
+     <li>
+      postscript
+     </li>
+     <li>
+      times
+     </li>
+     <li>
+      palatino
+     </li>
+     <li>
+      lucida (if you have the fonts)
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Wildcard_typescripts">
+      Wildcard typescripts
+     </span>
+    </h2>
+    <p>XeTeX offers some nice features in terms of automatically finding related fonts in a family, namely the italic, bold, and bolditalic alternatives. To take advantage of that, there's a set of wildcard typescripts that take an arbitrary Macintosh font name as input, and provide as many of the alternatives it can find. To set these typescripts (and the calling conventions) apart from the familiar ones, the typescripts are identified with <tt>Xserif</tt>, <tt>Xsans</tt>, and <tt>Xmono</tt>. As they use some specific XeTeX features, they all use the <tt>uc</tt> encoding.
+</p>
+    <p>To call the typescripts, it's most convenient to define a typeface that uses these features. The named font slot should contain the display name of the Regular alternative (not the family name) of the font in question. The typefaces are callable with four, five, or six arguments:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>myface<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Xserif<span class="brx">]</span><span class="brx">[</span>Baskerville<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>myface<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>Xmono<span class="brx">]</span> <span class="brx">[</span>Courier<span class="brx">]</span>       <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>myface<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>Xsans<span class="brx">]</span> <span class="brx">[</span>Optima Regular<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>.87<span class="brx">]</span>
+</pre>
+    <p>As you can see, you can activate relative scaling of face sizes. The above definitions look very much like any other typeface definition, except that the serif/sans/mono identifier is preceded with X, and that there is no underlying "Optima Regular" typescript defined anywhere. The rest is typescript and XeTeX magic.
+</p>
+    <h2>
+     <span class="mw-headline" id="Other_typescripts">
+      Other typescripts
+     </span>
+    </h2>
+    <p>Typescript usage is best done by creating your own typeface and using it. There are no pre-defined combinations, only tools for making your own combinations. As you can use arbitrary fonts "on-the-fly" with the above wildcard typescripts, I see pre-built typescripts for Apple fonts as being more stifling to the designer than anything else!
+</p>
+    <dl>
+     <dt>
+      hoefler&nbsp;
+     </dt>
+     <dd>
+      Rich serif AAT font from Apple. There are many features in the font, not yet exploited by the basic typescript.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>hoefler<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <dl>
+     <dt>
+      lucidagrande&nbsp;
+     </dt>
+     <dd>
+      Very extensive Unicode and language support in this sans serif AAT font from Apple. Only Regular and Bold weights are available.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>lucidagrande<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <dl>
+     <dt>
+      gillsans & gillsanslt&nbsp;
+     </dt>
+     <dd>
+      Although there are not many features in this classic humanist sans, it is available at three different font weights.
+      <i>
+       gillsans
+      </i>
+      offers regular and bold, and
+      <i>
+       gillsanslt
+      </i>
+      offers light as the
+      <tt>
+       \tf
+      </tt>
+      variant and regular as the
+      <tt>
+       \bf
+      </tt>
+      weight.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>gillsanslt<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <dl>
+     <dt>
+      optima&nbsp;
+     </dt>
+     <dd>
+      Nothing special in this typescript, except that it defines an
+      <i>
+       OptimaBlack
+      </i>
+      synonym for your use.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>optima<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <dl>
+     <dt>
+      zapfino & applechancery&nbsp;
+     </dt>
+     <dd>
+      These rich AAT fonts are defined as 'handwriting' and 'calligraphy' fonts, respectively. By using them as 'serif' fonts, however, you can use other variants through the
+      <tt>
+       \it
+      </tt>
+      ,
+      <tt>
+       \bf
+      </tt>
+      , etc. alternatives.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>hw<span class="brx">]</span><span class="brx">[</span>handwriting<span class="brx">]</span><span class="brx">[</span>zapfino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span> <span class="comment">% or</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span>      <span class="brx">[</span>zapfino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Non-Apple_fonts">
+      Non-Apple fonts
+     </span>
+    </h3>
+    <p>A couple of typescripts to get you started with non-Apple fonts:
+</p>
+    <dl>
+     <dt>
+      timesnewroman & arial&nbsp;
+     </dt>
+     <dd>
+      MS Office 2004 updates these fonts with quite impressive Unicode coverage.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MS<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>timesnewroman<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MS<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span> <span class="brx">[</span>arial<span class="brx">]</span>        <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <dl>
+     <dt>
+      gentium&nbsp;
+     </dt>
+     <dd>
+      SIL also produce a very attractive Unicode font,
+      <a class="external text" href="http://scripts.sil.org/gentium" rel="nofollow">
+       Gentium
+      </a>
+      , that is available in both regular and italic varieties.
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>MyFace<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>gentium<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Usage">
+      Usage
+     </span>
+    </h3>
+    <p>Once you define your own typeface combination, you invoke it with the name you gave it (the first parameter in <tt>\definetypeface</tt>), in <tt>\setupbodyfont</tt> or <tt>\switchtobodyfont</tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>MyFace, 11pt<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Creating_your_own_typescripts">
+      Creating your own typescripts
+     </span>
+    </h2>
+    <p>Let's take a look at the components of a new typescript:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>didot<span class="brx">]</span><span class="brx">[</span>uc<span class="brx">]</span>
+</pre>
+    <p>The family (serif), typescript name (didot), and encoding (uc) are established.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>DidotRegular<span class="brx">]</span><span class="brx">[</span>'Didot:mapping<span class="brx">=</span>tex-text'<span class="brx">]</span>   <span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <p>The first font synonym has a font-specific name (DidotRegular), and then a quoted font specification. The font name (<i>Didot</i>, which is the display name of the regular alternative of the font) is followed by a colon and then a feature (mapping=tex-text). This particular feature enables TeX-like markup with fonts that don't necessarily have features for understanding such things as '<tt>---</tt>'. The final argument tells ConTeXt that this is a Unicode font, and that it should convert named glyphs to Unicode values (as defined in <tt>enco-uc</tt>).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>DidotItalic<span class="brx">]</span> <span class="brx">[</span>'Didot/I:mapping<span class="brx">=</span>tex-text'<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>DidotBold<span class="brx">]</span>   <span class="brx">[</span>'Didot/B:mapping<span class="brx">=</span>tex-text'<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+</pre>
+    <p>The next two font synonyms use a XeTeX feature as a shortcut: <tt>Didot/I</tt> and <tt>Didot/B</tt> are abbreviations for <i>Didot Italic</i> and <i>Didot Bold</i>, respectively. 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>DidotCaps<span class="brx">]</span>   <span class="brx">[</span>'Didot:mapping<span class="brx">=</span>tex-text;
+         Letter Case<span class="brx">=</span>Small Capitals;Ligatures<span class="brx">=</span>!Common Ligatures'<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <p>Didot Caps require a few more features to be added, separated by a semicolon (or comma). The exclamation mark in <tt>!Common Ligatures</tt> is there to suppress that feature, which is turned on by default.
+</p>
+    <p>The 'name' typescript, which maps from the font-specific names to ConTeXt-wide names  then follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>didot<span class="brx">]</span><span class="brx">[</span>name<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>Serif<span class="brx">]</span>           <span class="brx">[</span>DidotRegular<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifItalic<span class="brx">]</span>     <span class="brx">[</span>DidotItalic<span class="brx">]</span> 
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifBold<span class="brx">]</span>       <span class="brx">[</span>DidotBold<span class="brx">]</span>   
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifCaps<span class="brx">]</span>       <span class="brx">[</span>DidotCaps<span class="brx">]</span>   
+</pre>
+    <p>...four of the usual typescripts are named above, but you need:
+</p>
+    <pre class="tex"> <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifSlanted<span class="brx">]</span>    <span class="brx">[</span>DidotItalic<span class="brx">]</span> 
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span> <span class="brx">[</span>DidotBold<span class="brx">]</span>   
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>SerifBoldSlanted<span class="brx">]</span><span class="brx">[</span>DidotBold<span class="brx">]</span>   
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <p>...three further synonyms acting as fallbacks for the typescript to be complete.
+</p>
+    <h2>
+     <span class="mw-headline" id="Other_font_specifications">
+      Other font specifications
+     </span>
+    </h2>
+    <p>Don't forget that you can use one-off font definitions for special uses with <tt>\definedfont</tt>, <tt>\startfont</tt>/<tt>\stopfont</tt> and the like:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>"Hoefler Text:mapping<span class="brx">=</span>tex-text;Style Options<span class="brx">=</span>Engraved Text;
+              Letter Case<span class="brx">=</span>All Capitals;color<span class="brx">=</span>229966" at 24pt<span class="brx">]</span>
+Big Title
+</pre>
+    <p><a class="image" href="File:HoeflerTitling.jpg"><img alt="HoeflerTitling.jpg" decoding="async" height="80" src="images/b/b9/HoeflerTitling.webp" width="449"></a>
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>optima<span class="brx">]</span><span class="brx">[</span>all<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startfont</span></span><span class="brx">[</span>OptimaBlack sa 2<span class="brx">]</span>
+Fat title
+<span class="cs"><span class="documentcs">\stopfont</span></span>
+</pre>
+    <p><a class="image" href="File:OptimaBlack.jpg"><img alt="OptimaBlack.jpg" decoding="async" height="90" src="images/2/24/OptimaBlack.webp" width="329"></a>
+</p>
+    <p>--<a href="User:Adam.html" title="User:Adam">Adam</a> 02:39, 26 Nov 2004 (CET)
+</p>
+    <h2>
+     <span class="mw-headline" id="Accessing_glyphs_from_OpenType_fonts_by_name">
+      Accessing glyphs from OpenType fonts by name
+     </span>
+    </h2>
+    <p><code>\XeTeXglyphindex</code> returns the index of a named glyph from (an OpenType) font.
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\getglyph</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\XeTeXglyph</span><span class="cs">\XeTeXglyphindex</span> "<span class="brx">#</span>1"<span class="br">}</span> <span class="comment">% getglyph is already taken in ConTeXt!!!</span>
+
+<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>'Antykwa Torunska'<span class="brx">]</span>
+
+I <span class="cs">\getglyph</span><span class="br">{</span>heart<span class="br">}</span> this feature!
+</pre>
+    <p><i>(An image will be put here as soon as XeTeX will be enabled on contextgarden.)</i>
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_PostScript_fonts">
+      Using PostScript fonts
+     </span>
+    </h2>
+    <p>Note: It's <b>not</b> possible to use oldfashioned Mac resource fork fonts (where you have a "suitcase" with screen fonts) with ConTeXt!
+</p>
+    <p>This example uses PostScript fonts installed in the texmf tree:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span>	<span class="brx">[</span>sans<span class="brx">]</span>	<span class="brx">[</span>urw-grotesk<span class="brx">]</span>
+	<span class="comment">%			PostScript name				file name		instead of an encoding</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>URWGroteskT-LighNarr<span class="brx">]</span>		<span class="brx">[</span>file:u004242t<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>URWGroteskT-MediNarr<span class="brx">]</span>		<span class="brx">[</span>file:u004244t<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>URWGroteskT-LighNarrObli<span class="brx">]</span>	<span class="brx">[</span>file:u004262t<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>URWGroteskT-MediNarrObli<span class="brx">]</span>	<span class="brx">[</span>file:u004264t<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span>	<span class="brx">[</span>sans<span class="brx">]</span>	<span class="brx">[</span>urw-grotesk<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>Sans<span class="brx">]</span>			<span class="brx">[</span>URWGroteskT-LighNarr<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>SansItalic<span class="brx">]</span>		<span class="brx">[</span>URWGroteskT-LighNarrObli<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>SansBold<span class="brx">]</span>		<span class="brx">[</span>URWGroteskT-MediNarr<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>SansBoldItalic<span class="brx">]</span>	<span class="brx">[</span>URWGroteskT-MediNarrObli<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>SansSlanted<span class="brx">]</span>		<span class="brx">[</span>SansItalic<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>SansBoldSlanted<span class="brx">]</span>	<span class="brx">[</span>SansBoldItalic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span>	<span class="brx">[</span>my<span class="brx">]</span>	<span class="brx">[</span>urw-grotesk<span class="brx">]</span>
+<span class="comment">%	\definetypeface	[urw-grotesk]	[rm]	[serif]	[schola]	[default]</span>
+	<span class="cs"><span class="stylecs">\definetypeface</span></span>	<span class="brx">[</span>urw-grotesk<span class="brx">]</span>	<span class="brx">[</span>ss<span class="brx">]</span>	<span class="brx">[</span>sans<span class="brx">]</span>	<span class="brx">[</span>urw-grotesk<span class="brx">]</span>	<span class="brx">[</span>default<span class="brx">]</span>	<span class="brx">[</span>encoding<span class="brx">=</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\usetypescript</span></span>		<span class="brx">[</span>my<span class="brx">]</span><span class="brx">[</span>urw-grotesk<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>		<span class="brx">[</span>urw-grotesk,ss,8pt<span class="brx">]</span>
+
+</pre>
+    <p>If you'd like to use active (OS-installed) fonts, replace "file:filename" with "name:public name" like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>Eco-Regular<span class="brx">]</span>		<span class="brx">[</span>name:Eco101Roman<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>Eco-Bold<span class="brx">]</span> 		<span class="brx">[</span>name:Eco301Bold<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>Eco-Italic<span class="brx">]</span> 		<span class="brx">[</span>name:Eco102Italic<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span>	<span class="brx">[</span>Eco-BoldItalic<span class="brx">]</span>	<span class="brx">[</span>name:Eco302BoldItalic<span class="brx">]</span>	<span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span> 
+</pre>
+    <p>(Sample from [<a class="external text" href="http://archive.contextgarden.net/message/20080120.125423.babb9aea.en.html" rel="nofollow">this thread</a>].)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212414
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.076 seconds
+Real time usage: 0.099 seconds
+Preprocessor visited node count: 144/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 16874/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:882-1!canonical and timestamp 20260109212414 and revision id 27802
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Fonts_in_XeTeX_-_Old_Content">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

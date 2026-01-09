@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Visual debugging&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Visual_debugging" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Visual debugging
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7173&diff=42353">2025-03-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Basic_information">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Basic information
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#.5Cshowbodyfont_:_actual_bodyfont_family_with_all_variants">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         \showbodyfont&nbsp;: actual bodyfont family with all variants
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#.5Cshowbodyfontenvironment_:_draws_a_table_that_shows_which_point_sizes_match_the_relative_sizes">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         \showbodyfontenvironment&nbsp;: draws a table that shows which point sizes match the relative sizes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#.5Cshowsymbolset.5Bsymbolset_name.5D_:_shows_all_the_symbols_within_a_given_symbol_set">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         \showsymbolset[
+         <i>
+          symbolset name
+         </i>
+         ]&nbsp;:  shows all the symbols within a given symbol set
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#.5CShowCompleteFont_and_.5Cshowmathcharacters">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         \ShowCompleteFont and \showmathcharacters
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#.5Cshowstruts_:_display_struts_.28invisible_placeholders_for_proper_minimum_line_heights.29">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         \showstruts&nbsp;: display struts (invisible placeholders for proper minimum line heights)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#.5Cshowfontstrip_:_the_current_typeface_combination.2C_with_roman.2C_sans.2C_math.2C_and_teletype_families_visualised.2C_with_x-heights_and_m_widths.">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         \showfontstrip&nbsp;: the current typeface combination, with roman, sans, math, and teletype families visualised, with x-heights and m widths.
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#.5Ctracedfontname.7BFont_Name.7D_:_Chain_of_synonyms_for_the_given_font_name">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         \tracedfontname
+         <i>
+          {Font Name}
+         </i>
+         &nbsp;: Chain of synonyms for the given font name
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Basic_information">
+      Basic information
+     </span>
+    </h2>
+    <p>Source <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/font-var.mkvi?search=fontface#l49" rel="nofollow">font-var.mkvi</a>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% fontclass       % modern dejavu</span>
+<span class="comment">% fontbody        % ... 10pt 11pt 12pt ...</span>
+<span class="comment">% fontstyle       % rm ss tt mm hw cg ...</span>
+<span class="comment">% fontalternative&nbsp;% tf bf sl it bs bi sc ...</span>
+<span class="comment">% fontsize        % a b c d ...</span>
+<span class="comment">% fontface        % 0=normal 1=text 2=script 3=scriptscript 4=x 5=xx (math are temporary)</span>
+
+class:       <span class="cs"><span class="systemcs">\fontclass</span></span><span class="cs">\par</span>
+body&nbsp;:       <span class="cs"><span class="systemcs">\fontbody</span></span><span class="cs">\par</span>
+style:       <span class="cs"><span class="systemcs">\fontstyle</span></span><span class="cs">\par</span>
+alternative: <span class="cs"><span class="systemcs">\fontalternative</span></span><span class="cs">\par</span>
+size:        <span class="cs"><span class="systemcs">\fontsize</span></span><span class="cs">\par</span>
+face:        <span class="cs"><span class="systemcs">\fontface</span></span><span class="cs">\par</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="115" src="../wikiteximage/1fec1fd2df4bee23c2ef9a8ffca0ca86.webp" width="104">
+     </li>
+    </ul>
+    <h2>
+     <span id="\showbodyfont_:_actual_bodyfont_family_with_all_variants">
+     </span>
+     <span class="mw-headline" id=".5Cshowbodyfont_:_actual_bodyfont_family_with_all_variants">
+      <tt>
+       <a href="../Command/showbodyfont.html" title="Command/showbodyfont">
+        \showbodyfont
+       </a>
+      </tt>
+      &nbsp;: actual bodyfont family with all variants
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\showbodyfont</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="241" src="../wikiteximage/bc25dadf9b9db7b5d09e31b09d285963.webp" width="624">
+     </li>
+    </ul>
+    <h2>
+     <span id="\showbodyfontenvironment_:_draws_a_table_that_shows_which_point_sizes_match_the_relative_sizes">
+     </span>
+     <span class="mw-headline" id=".5Cshowbodyfontenvironment_:_draws_a_table_that_shows_which_point_sizes_match_the_relative_sizes">
+      <tt>
+       <a href="../Command/showbodyfontenvironment.html" title="Command/showbodyfontenvironment">
+        \showbodyfontenvironment
+       </a>
+      </tt>
+      &nbsp;: draws a table that shows which point sizes match the relative sizes
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\showbodyfontenvironment</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="353" src="../wikiteximage/030b5b917fc2cda85a4625ac5f269b29.webp" width="624">
+     </li>
+    </ul>
+    <h2>
+     <span id="\showsymbolset[symbolset_name]_:_shows_all_the_symbols_within_a_given_symbol_set">
+     </span>
+     <span class="mw-headline" id=".5Cshowsymbolset.5Bsymbolset_name.5D_:_shows_all_the_symbols_within_a_given_symbol_set">
+      <tt>
+       <a href="../Command/showsymbolset.html" title="Command/showsymbolset">
+        \showsymbolset
+       </a>
+      </tt>
+      [
+      <i>
+       symbolset name
+      </i>
+      ]&nbsp;:  shows all the symbols within a given symbol set
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\showsymbolset</span></span><span class="brx">[</span>navigation 1<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="424" src="../wikiteximage/926aeb3aa35c453b6065ab2a51a572d6.webp" width="191">
+     </li>
+    </ul>
+    <h2>
+     <span id="\ShowCompleteFont_and_\showmathcharacters">
+     </span>
+     <span class="mw-headline" id=".5CShowCompleteFont_and_.5Cshowmathcharacters">
+      <tt>
+       <a class="new" href="../index.php?title=Command/ShowCompleteFont&action=edit&redlink=1.html" title="Command/ShowCompleteFont (page does not exist)">
+        \ShowCompleteFont
+       </a>
+      </tt>
+      and
+      <tt>
+       <a class="new" href="../index.php?title=Command/showmathcharacters&action=edit&redlink=1.html" title="Command/showmathcharacters (page does not exist)">
+        \showmathcharacters
+       </a>
+      </tt>
+     </span>
+    </h2>
+    <p><tt><a class="new" href="../index.php?title=Command/ShowCompleteFont&action=edit&redlink=1.html" title="Command/ShowCompleteFont (page does not exist)">\ShowCompleteFont</a></tt> from module <code>fnt-10</code>&nbsp;: list of available chars of actual bodyfont encoding (for MkII, <tt><a href="../Command/showcharacters.html" title="Command/showcharacters">\showcharacters</a></tt> lists the available chars of actual bodyfont encoding )
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>fnt-10<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\ShowCompleteFont</span><span class="br">{</span>name:texgyrepagella<span class="br">}</span><span class="br">{</span>8pt<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/c2ec1283117142c61cddbe1239a03874.webp" width="874">
+     </li>
+    </ul>
+    <p>Then you can use <tt><a href="../Command/utfchar.html" title="Command/utfchar">\utfchar</a></tt> and/or <tt><a href="../Command/fontchar.html" title="Command/fontchar">\fontchar</a></tt>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>name:modern*default at 50pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\utfchar</span></span><span class="br">{</span>0x02660<span class="br">}</span> or
+<span class="cs"><span class="documentcs">\utfchar</span></span><span class="br">{</span>"02660<span class="br">}</span> or
+<span class="cs"><span class="documentcs">\utfchar</span></span><span class="br">{</span>"2660<span class="br">}</span> or
+<span class="cs"><span class="stylecs">\fontchar</span></span><span class="br">{</span>spade<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="183" src="../wikiteximage/d7d42b46bad900c3ebbeb607a6b3560e.webp" width="568">
+     </li>
+    </ul>
+    <p><tt><a class="new" href="../index.php?title=Command/showmathcharacters&action=edit&redlink=1.html" title="Command/showmathcharacters (page does not exist)">\showmathcharacters</a></tt> from module <code>math-characters</code>&nbsp;: list of all the available math (non-alphabetical) characters available in math, now including all the AMS characters.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>math-characters<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\showmathfontcharacters</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/d125bbc3cf07f1bac3aeea0254796f70.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span id="\showstruts_:_display_struts_(invisible_placeholders_for_proper_minimum_line_heights)">
+     </span>
+     <span class="mw-headline" id=".5Cshowstruts_:_display_struts_.28invisible_placeholders_for_proper_minimum_line_heights.29">
+      <tt>
+       <a href="../Command/showstruts.html" title="Command/showstruts">
+        \showstruts
+       </a>
+      </tt>
+      &nbsp;: display struts (invisible placeholders for proper minimum line heights)
+     </span>
+    </h2>
+    <p><i>(Make a better, slightly more complex example.)</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off,align<span class="brx">=</span>normal<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\showstruts</span></span>
+This will display <span class="cs"><span class="stylecs">\strut</span></span> struts.<span class="cs"><span class="documentcs">\crlf</span></span>
+A frame with strut <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>strut<span class="brx">=</span>yes<span class="brx">]</span><span class="br">{</span>xxx<span class="br">}</span> and frame without <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>strut<span class="brx">=</span>no<span class="brx">]</span><span class="br">{</span>xxx<span class="br">}</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="58" src="../wikiteximage/913727e16d12008733d24e2dd5a258bf.webp" width="313">
+     </li>
+    </ul>
+    <h2>
+     <span id="\showfontstrip_:_the_current_typeface_combination,_with_roman,_sans,_math,_and_teletype_families_visualised,_with_x-heights_and_m_widths.">
+     </span>
+     <span class="mw-headline" id=".5Cshowfontstrip_:_the_current_typeface_combination.2C_with_roman.2C_sans.2C_math.2C_and_teletype_families_visualised.2C_with_x-heights_and_m_widths.">
+      <tt>
+       <a href="../Command/showfontstrip.html" title="Command/showfontstrip">
+        \showfontstrip
+       </a>
+      </tt>
+      &nbsp;: the current typeface combination, with roman, sans, math, and teletype families visualised, with x-heights and m widths.
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\showfontstrip</span></span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="150" src="../wikiteximage/6eb62e93a7b15e7e117df862f79aba35.webp" width="588">
+     </li>
+    </ul>
+    <h2>
+     <span id="\tracedfontname{Font_Name}_:_Chain_of_synonyms_for_the_given_font_name">
+     </span>
+     <span class="mw-headline" id=".5Ctracedfontname.7BFont_Name.7D_:_Chain_of_synonyms_for_the_given_font_name">
+      <tt>
+       <a class="new" href="../index.php?title=Command/tracedfontname&action=edit&redlink=1.html" title="Command/tracedfontname (page does not exist)">
+        \tracedfontname
+       </a>
+      </tt>
+      <i>
+       {Font Name}
+      </i>
+      &nbsp;: Chain of synonyms for the given font name
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella,7pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="systemcs">\tracedfontname</span></span><span class="br">{</span>Bold<span class="br">}</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="26" src="../wikiteximage/ebd3e0c31eaf0542bd72308ba12bf848.webp" width="385">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212216
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.039 seconds
+Real time usage: 0.109 seconds
+Preprocessor visited node count: 211/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1326/2097152 bytes
+Template argument size: 364/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7078/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   44.546      1 -total
+ 23.09%   10.285     13 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7173-1!canonical and timestamp 20260109212216 and revision id 42353
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Visual_debugging">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TeXfont - Old Content&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TeXfont_-_Old_Content" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TeXfont - Old Content
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=940&diff=41563">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Manual">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Manual
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Known_problems">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Known problems
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#texfont_fails_with_syntax_error">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           texfont fails with syntax error
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#texfont_fails_on_overlong_AFM_lines">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           texfont fails on overlong AFM lines
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#problems_under_Windows">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           problems under Windows
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#System_requirements">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         System requirements
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Manual">
+      Manual
+     </span>
+    </h2>
+    <p>The manual for TeXfont: <a class="external text" href="http://www.pragma-ade.nl/general/manuals/mtexfont.pdf" rel="nofollow">mtexfont.pdf</a>
+</p>
+    <p>Many guides to its application are available on the <a href="Documentation/This_Way_-_My_Way#MyWay.html" title="Documentation/This Way - My Way">My Way</a> page.
+</p>
+    <h2>
+     <span class="mw-headline" id="Known_problems">
+      Known problems
+     </span>
+    </h2>
+    <p>The problems may result from misbehaviour of programs called by TeXfont or from TeXfont itself.
+</p>
+    <h3>
+     <span class="mw-headline" id="texfont_fails_with_syntax_error">
+      texfont fails with syntax error
+     </span>
+    </h3>
+    <p>(Tested on: TeXFont version 2.2.1; afm2tfm version 8.1 (dvips(k) 5.94b); Windows XP)
+</p>
+    <p>If you are installing a Type 1 font (.pfb and .afm files) using <tt>texfont</tt>, and you come up against an error message like this:
+</p>
+    <pre>; expected:&nbsp;! syntax error
+CC Aacute 2; PCC A 0 0; PCC acute 182 150;
+
+                 ^
+</pre>
+    <p>then you have probably run into a bug in your version of <tt>afm2tfm</tt>, which is a program called by the <tt>texfont</tt> script. This happened to me with Monotype's <i>Century Gothic</i> font family. You have 3 options: 
+</p>
+    <ol>
+     <li>
+      get a fixed version of afm2tfm (
+      <b>
+       NB
+      </b>
+      I don't know if this exists yet);
+     </li>
+     <li>
+      edit the AFM files to work around the problem.
+     </li>
+     <li>
+      install [
+      <a class="external text" href="http://tex.aanhet.net/afm2pl/" rel="nofollow">
+       afm2pl
+      </a>
+      ] and use texfont's
+      <tt>
+       --afmpl
+      </tt>
+      switch
+     </li>
+    </ol>
+    <p>To take the second option, open a copy of each <tt>.afm</tt> file in a text editor and find the section headed <tt>StartComposites</tt>. Delete this entire section, up to and including the line <tt>EndComposites</tt>
+</p>
+    <p>After you have done this to all the <tt>.afm</tt> files, <tt>afm2tfm</tt> should work and texfont should complete successfully.
+</p>
+    <h3>
+     <span class="mw-headline" id="texfont_fails_on_overlong_AFM_lines">
+      texfont fails on overlong AFM lines
+     </span>
+    </h3>
+    <p>afm2tfm chokes on lines in AFM files that are longer than 256 characters; these shouldn't occur, but e.g. Linotype's lawyers forced endless copyright notices in their AFM files.
+Just delete the lines starting with <tt>Comment Copyright</tt>, and you're done. 
+You also choose option <b>3.</b> above because afm2pl will ignore the excess info without choking.
+(Maybe newer versions of afm2tfm fix this also.)
+</p>
+    <h3>
+     <span class="mw-headline" id="problems_under_Windows">
+      problems under Windows
+     </span>
+    </h3>
+    <p><a class="external text" href="http://www.lcdf.org/type/" rel="nofollow">LCDF Typetools</a> have some problems under windows. For some unknown reason (most probably because kpsewhich didn't find adobe glyph list), I had to move <code>glyphlist.txt</code> to <code>C:\usr\local\share\lcdf-typetools\glyphlist.txt</code>. There were some other problems as well.
+</p>
+    <h2>
+     <span class="mw-headline" id="System_requirements">
+      System requirements
+     </span>
+    </h2>
+    <p>In order to install an <a class="new" href="index.php?title=OpenType&action=edit&redlink=1" title="OpenType (page does not exist)">OpenType</a> font, you will also need <a class="external text" href="http://www.lcdf.org/type/" rel="nofollow">LCDF Typetools</a>.
+</p>
+    <p>(There are probably more programs that need to be installed, but most of them are already shipped with standard TeX distributions.)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212437
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.010 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 24/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 102/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:940-1!canonical and timestamp 20260109212437 and revision id 41563
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TeXfont_-_Old_Content">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Makeup&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Makeup" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Makeup
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3319&diff=42311">2025-12-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Description">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Description
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#As_divider_.28title.29_pages">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         As divider (title) pages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Horizontal_and_vertical_aligment">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Horizontal and vertical aligment
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Text_in_margin">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Text in margin
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#See_Also">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         See Also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Description">
+      Description
+     </span>
+    </h2>
+    <p>A makeup is a single page with a special layout, allowing for custom and temporary header and footer sections.
+</p>
+    <p>Makeups don&rsquo;t rely on the current page layout style, and they typically include covers, colophons or similar ones.
+</p>
+    <p>In any case, it is important not to forget that makeup contents will never split in pages. All makeup contents must fit on a single page.
+</p>
+    <p>There are predefined makeups: <code>standard</code>, <code>page</code>, <code>text</code> and <code>middle</code>. Of course, you can define as many as you may need.
+</p>
+    <p>By default, makeups have the following properties:
+</p>
+    <ol>
+     <li>
+      They aren&rsquo;t numbered in the final document (
+      <code>pagestate=start</code>
+      changes this).
+     </li>
+     <li>
+      In double-sided documents, they are always on an odd page (right page) with the next page empty (
+      <code>page=yes</code>
+      and
+      <code>doublesided=no</code>
+      change each of these defaults).
+     </li>
+     <li>
+      They don&rsquo;t include header or footers (use either
+      <code>headerstate=start</code>
+      or
+      <code>footerstate=start</code>
+      to change it).
+     </li>
+     <li>
+      They are left aligned (use the
+      <code>align</code>
+      option key [and
+      <tt>
+       <a class="new" href="../index.php?title=Command/dontleavehmode&action=edit&redlink=1.html" title="Command/dontleavehmode (page does not exist)">
+        \dontleavehmode
+       </a>
+      </tt>
+      with
+      <tt>
+       <a href="../Command/externalfigure.html" title="Command/externalfigure">
+        \externalfigure
+       </a>
+      </tt>
+      ]).
+     </li>
+    </ol>
+    <p>All makeups have an associated layout. So you may use <tt><a href="../Command/setuplayout.html" title="Command/setuplayout">\setuplayout</a></tt> to tweak it (besides configuring the makeup itself).
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>There are a few ways to invoke a custom makeup (and to compare it with the other predefined makeups):
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>208mm,height<span class="brx">=</span>222mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>4,ny<span class="brx">=</span>3<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>9pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided, page<span class="brx">=</span>,<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupmakeup</span></span><span class="brx">[</span>pagestate<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span>
+This is a <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>custom<span class="br">}</span><span class="cs">\par</span> title page 
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>text<span class="brx">]</span>
+This is a <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>text<span class="br">}</span><span class="cs">\par</span> title page 
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>middle<span class="brx">]</span>
+This is a <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>middle<span class="br">}</span><span class="cs">\par</span> title page 
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>standard<span class="brx">]</span>
+This is a <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>standard<span class="br">}</span><span class="cs">\par</span> title page 
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>page<span class="brx">]</span>
+This is a <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>page<span class="br">}</span><span class="cs">\par</span> title page 
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1311" src="../wikiteximage/438ffb590e1bac588b2af7e9501beb78.webp" width="1228">
+     </li>
+    </ul>
+    <h2>
+     <span id="As_divider_(title)_pages">
+     </span>
+     <span class="mw-headline" id="As_divider_.28title.29_pages">
+      As divider (title) pages
+     </span>
+    </h2>
+    <p>This may be easily extended to having multiple divider (title) pages:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>208mm,height<span class="brx">=</span>148mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>4,ny<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>9pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span>
+This is a divider page.
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span>
+This is a second divider page.
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> ward
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span>
+This is a divider title page.
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/145f30c7cf34e4021ead06346186e778.webp" width="1228">
+     </li>
+    </ul>
+    <p>Another way to start a previously defined <code>makeup</code> is to put it into the <code>\start</code> invocation, i.e.,  \start&lt;<i>name</i>&gt;makeup.  In the above case we can simply refer to the <i>custom</i> <code>makeup</code> with <code>\startcustommakeup</code>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startcustommakeup</span>
+This is a title page.
+<span class="cs">\stopcustommakeup</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>And then extend to others:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>208mm,height<span class="brx">=</span>148mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>4,ny<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>9pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>customone<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="comment">% See note below on Vertical Alignment</span>
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>customtwo<span class="brx">]</span><span class="brx">[</span>bottom<span class="brx">=</span>,<span class="brx">]</span>
+ 
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startcustomonemakeup</span>
+This is a title/divider page using customone.
+<span class="cs">\stopcustomonemakeup</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> ward
+
+<span class="cs">\startcustomtwomakeup</span>
+This is a title/divider page using customtwo.
+<span class="cs">\stopcustomtwomakeup</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/ebb337e954081053d93e9b30c8cb7946.webp" width="1228">
+     </li>
+    </ul>
+    <p>By default, makeups lack both header and footers. They are vertically centered and horizontally aligned to the left..
+</p>
+    <h2>
+     <span class="mw-headline" id="Horizontal_and_vertical_aligment">
+      Horizontal and vertical aligment
+     </span>
+    </h2>
+    <p>Makeups are centered vertically by default.
+</p>
+    <p>The way to align them vertically to the top or to the bottom is the following:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>208mm,height<span class="brx">=</span>74mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>4,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>9pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span><span class="brx">[</span>top<span class="brx">=</span>,<span class="brx">]</span>
+This is vertically aligned to the top.
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span><span class="brx">[</span>bottom<span class="brx">=</span>,<span class="brx">]</span>
+This is vertically aligned to the bottom.
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span>
+This is the default: vertically centered.
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>flushright<span class="brx">]</span> 
+<span class="comment">% align here is used to set text flush to the right</span>
+<span class="cs">\startcustommakeup</span>
+This is a title page.
+<span class="cs">\stopcustommakeup</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/2e3c52e5e1617d51b920cb41b13133ca.webp" width="1228">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Text_in_margin">
+      Text in margin
+     </span>
+    </h2>
+    <p>You have to add <code>[scope=local]</code> for <tt><a class="mw-redirect" href="../Command/_margindata.html" title="Command/inmargin">\inmargin</a></tt> like commands:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>104mm,height<span class="brx">=</span>148mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>2,ny<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>9pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided, page<span class="brx">=</span>,<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupmakeup</span></span><span class="brx">[</span>pagestate<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>custom<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>middle<span class="brx">]</span>
+This is a FIRST <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>middle<span class="br">}</span><span class="cs">\par</span> 
+title page<span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>darkcyan<span class="brx">]</span><span class="br">{</span>KO<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\startmakeup</span></span><span class="brx">[</span>middle<span class="brx">]</span>
+This is a SECOND <span class="cs">\par</span> <span class="cs"><span class="documentcs">\mono</span></span><span class="br">{</span>middle<span class="br">}</span><span class="cs">\par</span> 
+title page<span class="cs"><span class="documentcs">\inmargin</span></span><span class="brx">[</span>scope<span class="brx">=</span>local<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>darkred<span class="brx">]</span><span class="br">{</span>OK<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/48b6789a5a7e7d03cf14346e9a7c3752.webp" width="614">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="See_Also">
+      See Also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Makeup/Standardmakeup_background.html" title="Document layout and layers/Makeup/Standardmakeup background">
+       Standardmakeup background
+      </a>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupmakeup.html" title="Command/setupmakeup">
+        \setupmakeup
+       </a>
+      </tt>
+     </li>
+     <li>
+      <a class="external free" href="http://wiki.contextgarden.net/Command/setupmakeup" rel="nofollow">
+       http://wiki.contextgarden.net/Command/setupmakeup
+      </a>
+     </li>
+     <li>
+      <a class="external free" href="http://www.ntg.nl/pipermail/ntg-context/2010/049662.html" rel="nofollow">
+       http://www.ntg.nl/pipermail/ntg-context/2010/049662.html
+      </a>
+     </li>
+     <li>
+      <a class="external free" href="http://www.ntg.nl/pipermail/ntg-context/2010/051896.html" rel="nofollow">
+       http://www.ntg.nl/pipermail/ntg-context/2010/051896.html
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212411
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.080 seconds
+Real time usage: 0.153 seconds
+Preprocessor visited node count: 105/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 462/2097152 bytes
+Template argument size: 116/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15054/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  105.895      1 -total
+ 10.13%   10.729      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3319-1!canonical and timestamp 20260109212411 and revision id 42311
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Makeup">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

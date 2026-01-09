@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Question marks in bibliography entries&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Question_marks_in_bibliography_entries" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Question marks in bibliography entries
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3517&diff=41517">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Some publications have a title which ends in a question mark (a.k.a. interrogation mark or interrogation point). This becomes a problem when typesetting a bibliography, since a full stop is added after the title, resulting in something like:
+</p>
+    <p>Livermore, R., Hillenbrand, C.-D., Meredith, M. and Eagles, G. (2007). Drake Passage and Cenozoic climate: An open and shut case?. <i>Geochemistry, Geophysics, Geosystems</i>, 8(1), Q01005.
+</p>
+    <p>Note the ugly &lsquo;?.&rsquo; conjunction at the end of the title.
+</p>
+    <p>A solution was suggested <a class="external text" href="http://www.tug.org/pipermail/texhax/2009-November/013714.html" rel="nofollow">on the texhax mailing list</a>; at least one of the suggested hacks appears to work with ConTeXt. It requires the modification of the bibliography entries, and the definition of a new command. Below is a working example.
+</p>
+    <p>The BibTeX file, test.bib:
+</p>
+    <pre class="tex">@article<span class="br">{</span>art1,
+  title <span class="brx">=</span> <span class="br">{</span><span class="br">{</span>Is this a question?<span class="cs">\killstop</span><span class="br">}</span><span class="br">}</span>,
+  author <span class="brx">=</span> <span class="br">{</span>Author, A.<span class="br">}</span>,
+  pages <span class="brx">=</span> <span class="br">{</span>1--2<span class="br">}</span>,
+  journal <span class="brx">=</span> <span class="br">{</span>Journa
+<span class="brx">[</span><span class="brx">[</span>Category:Fonts<span class="brx">]</span><span class="brx">]</span>l of Something<span class="br">}</span>,
+  volume <span class="brx">=</span> <span class="br">{</span>1<span class="br">}</span>,
+  number <span class="brx">=</span> <span class="br">{</span>2<span class="br">}</span>,
+  year <span class="brx">=</span> <span class="br">{</span>2000<span class="br">}</span>
+<span class="br">}</span>
+</pre>
+    <p>The document itself, test.tex:
+</p>
+    <pre class="tex"><span class="comment">% bibtex hack starts here</span>
+<span class="cs">\def</span><span class="cs">\gobblestop</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\killstop</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\aftergroup</span><span class="cs">\gobblestop</span>
+  <span class="br">}</span>
+<span class="comment">% bibtex hack stops here</span>
+
+<span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span><span class="br">{</span>test<span class="br">}</span>,sort<span class="brx">=</span>author<span class="brx">]</span>
+<span class="cs">\setuppublications</span><span class="brx">[</span>sorttype<span class="brx">=</span>bbl,refcommand<span class="brx">=</span>authoryear<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>art1<span class="brx">]</span>
+<span class="cs">\placepublications</span><span class="brx">[</span>criterium<span class="brx">=</span>text<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Notes:
+</p>
+    <ul>
+     <li>
+      I successfully tested this example with ConTeXt MkIV version 2011.10.01 (and I with MkIV 2019.07.04 beta).
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Define the \killstop command before \starttext. The environment file is a good place for it, if you are using one.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Note the modifications necessary to the BibTeX entry itself: an extra pair of braces, and insertion of \killstop at the end.
+     </li>
+    </ul>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> broken&nbsp;? <i>(See: <a href="Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212433
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.031 seconds
+Real time usage: 0.047 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 298/2097152 bytes
+Template argument size: 8/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2422/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.984      1 Template:todo
+100.00%   16.984      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3517-1!canonical and timestamp 20260109212433 and revision id 41517
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Question_marks_in_bibliography_entries">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

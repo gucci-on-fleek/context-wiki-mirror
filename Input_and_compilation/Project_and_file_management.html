@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Project and file management&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Project_and_file_management" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Project and file management
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=720&diff=42287">2025-02-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#File_and_directory_setup">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         File and directory setup
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Naming_conventions">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Naming conventions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Example_files">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Example files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Subdirectories">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Subdirectories
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#Environment">
+            <span class="tocnumber">
+             2.3.1
+            </span>
+            <span class="toctext">
+             Environment
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#Product">
+            <span class="tocnumber">
+             2.3.2
+            </span>
+            <span class="toctext">
+             Product
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Command_behaviour">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Command behaviour
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#See_also">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>ConTeXt knows no document classes (as LaTeX does). You can define your <a href="../Document_layout_and_layers/Tutorials.html" title="Document layout and layers/Tutorials">document layout</a> yourself. 
+</p>
+    <dl>
+     <dd>
+      <i>
+       <b>
+        Note
+       </b>
+       : the project structure explained on this page is not the only way to handle complex documents. If you are working on a project with a single output file, it may be simpler to use
+       <tt>
+        <a href="../Command/startdocument.html" title="Command/startdocument">
+         \startdocument
+        </a>
+       </tt>
+       (perhaps in combination with
+       <tt>
+        <a href="../Command/usemodule.html" title="Command/usemodule">
+         \usemodule
+        </a>
+       </tt>
+       or
+       <tt>
+        <a href="../Command/environment.html" title="Command/environment">
+         \environment
+        </a>
+       </tt>
+       and
+       <tt>
+        <a href="../Command/startcomponent.html" title="Command/startcomponent">
+         \startcomponent
+        </a>
+       </tt>
+       as explained below) and ignore the elaborate project and product setups.
+      </i>
+     </dd>
+    </dl>
+    <p><br>
+If you use the same layout for several related products, it may make sense to use the project support in ConTeXt. You then save your layout settings as an <b>environment</b> file, and you can reuse various document parts in multiple products.
+</p>
+    <p>How to split up a large project, say a collection of books, in several handy parts? &ndash; Use ConTeXt's project management facilities.
+</p>
+    <ul>
+     <li>
+      a
+      <b>
+       project
+      </b>
+      links one or more
+      <b>
+       products
+      </b>
+      to their environment
+     </li>
+     <li>
+      a
+      <b>
+       product
+      </b>
+      contains several
+      <b>
+       component
+      </b>
+      s
+     </li>
+     <li>
+      an
+      <b>
+       environment
+      </b>
+      defines the common layout (etc.) of a project
+     </li>
+    </ul>
+    <p>The environment could also contain <a href="Conditional_processing_with_Modes.html" title="Input and compilation/Conditional processing with Modes">different versions (with Modes)</a> of the layout, e.g. print and screen (like Pragma's manuals) or final and correction etc.
+</p>
+    <p>Example 1: Magazine
+</p>
+    <ul>
+     <li>
+      project: magazine
+     </li>
+     <li>
+      product: one volume of the magazine
+     </li>
+     <li>
+      component: a single article
+     </li>
+    </ul>
+    <p>Example 2: Book
+</p>
+    <ul>
+     <li>
+      project: a series of books
+     </li>
+     <li>
+      product: one book
+     </li>
+     <li>
+      component: part or chapter
+     </li>
+    </ul>
+    <p><a class="image" href="../File:Project-structure.png"><img alt="Project-structure.png" decoding="async" height="204" src="../images/5/5c/Project-structure.webp" width="720"></a>
+</p>
+    <p>If you tex (compile) one single component (e.g. a chapter of a book) or product (e.g. one volume of a magazine), the environment file of the project is used.
+</p>
+    <p>In addition, you have to keep in mind that when compiling a product or component file, ConTeXt goes "up" to the project file and compiles everything it finds in there that is not a <tt><a href="../Command/product.html" title="Command/product">\product</a></tt> (e.g. table of content, sectioning commands, text, <tt><a href="../Command/component.html" title="Command/component">\component</a></tt> etc.). So all the things on project level have to be put inside a <tt><a href="../Command/product.html" title="Command/product">\product</a></tt>, otherwise they will show up in the individual components (or products), too. That also makes it problematic to use <tt><a href="../Command/component.html" title="Command/component">\component</a></tt> directly inside a project file, i.e. you <b>have</b> to use <tt><a href="../Command/product.html" title="Command/product">\product</a></tt>, you can't skip it.
+</p>
+    <p>While you can compile ("tex") products and single components, the project is not intended for compiling; trying might lead to infinite inclusion loops and the error message "TeX capacity exceeded".
+</p>
+    <h2>
+     <span class="mw-headline" id="File_and_directory_setup">
+      File and directory setup
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Naming_conventions">
+      Naming conventions
+     </span>
+    </h3>
+    <p><a href="../User:Hraban.html" title="User:Hraban">Hraban</a> uses and suggests the following naming conventions
+</p>
+    <ul>
+     <li>
+      project_foo
+     </li>
+     <li>
+      prd_foo
+     </li>
+     <li>
+      c_foo
+     </li>
+     <li>
+      env_foo
+     </li>
+    </ul>
+    <p>There's a Python script <tt>contextproject.py</tt> at Hraban's <a class="external text" href="http://codeberg.org/fiee/context-tools/" rel="nofollow">Codeberg repository</a> to help creating the files (.ini files can be used for initial content). This functionality would be nice to be integrated in any editor supporting ConTeXt...
+</p>
+    <h3>
+     <span class="mw-headline" id="Example_files">
+      Example files
+     </span>
+    </h3>
+    <p><b>Project</b>
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startproject</span></span> project_mymag
+<span class="cs"><span class="documentcs">\environment</span></span> env_mymag <span class="comment">% only mentioned here!</span>
+
+<span class="cs"><span class="documentcs">\product</span></span> prd_year2004-01
+<span class="cs"><span class="documentcs">\product</span></span> prd_year2004-02
+<span class="cs"><span class="documentcs">\product</span></span> prd_year2004-03
+<span class="cs"><span class="documentcs">\product</span></span> prd_year2004-04
+
+<span class="cs"><span class="documentcs">\stopproject</span></span>
+</pre>
+    <p><b>Environment</b>
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startenvironment</span></span> env_mymag
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>...<span class="brx">]</span>
+<span class="comment">% all setups...</span>
+
+<span class="cs"><span class="documentcs">\stopenvironment</span></span>
+</pre>
+    <p><b>Product</b>
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startproduct</span></span> prd_year2004-01
+<span class="cs"><span class="documentcs">\project</span></span> project_mymag
+
+<span class="cs"><span class="documentcs">\component</span></span> c_editorial
+<span class="cs"><span class="documentcs">\component</span></span> c_article01
+<span class="cs"><span class="documentcs">\component</span></span> c_article_by_me
+<span class="comment">% ...</span>
+
+<span class="cs"><span class="documentcs">\stopproduct</span></span>
+</pre>
+    <p><b>Component</b>
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcomponent</span></span> c_editorial
+<span class="cs"><span class="documentcs">\product</span></span> prd_year2004-01 <span class="comment">% but you can use it in other products anyway</span>
+
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Editorial<span class="br">}</span>
+
+Dear reader...
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Subdirectories">
+      Subdirectories
+     </span>
+    </h3>
+    <p>If you keep all files in one directory, it tends to get confusing. Here&rsquo;s a structured example where we keep all parts of one product together:
+</p>
+    <pre> env_mymag.tex
+ project_mymag.tex
+ 2011-01/prd_issue2011-01.tex
+ 2011-02/prd_issue2011-02.tex
+ 2011-03/prd_issue2011-03.tex
+ ...
+ 2011-03/c_editorial.tex
+ 2011-03/c_article1.tex
+ ...
+ 2011-03/img/author1.jpg
+ ...
+ general_img/logo.pdf
+ ...
+</pre>
+    <p>With directories, the 'c_' prefix becomes obsolete.
+</p>
+    <h5>
+     <span class="mw-headline" id="Environment">
+      Environment
+     </span>
+    </h5>
+    <p><tt><a href="../Command/usepath.html" title="Command/usepath">\usepath</a></tt> is useful.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startenvironment</span></span> env_mymag
+<span class="cs"><span class="documentcs">\project</span></span> project_mymag
+
+...
+
+<span class="comment">% where \product and \component look for TeX input files</span>
+<span class="cs"><span class="stylecs">\usepath</span></span><span class="brx">[</span><span class="br">{</span>2011-01,2011-02,2011-03<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% where to look for images</span>
+<span class="cs"><span class="stylecs">\doifmodeelse</span></span><span class="br">{</span>*product<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>directory<span class="brx">=</span><span class="br">{</span>../general_img<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>directory<span class="brx">=</span><span class="br">{</span>../general_img, img<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+...
+<span class="cs"><span class="documentcs">\stopenvironment</span></span>
+</pre>
+    <p>can also be used like&nbsp;:
+</p>
+    <pre class="tex">  <span class="cs"><span class="stylecs">\usepath</span></span> <span class="brx">[</span>environments,articles<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\usepath</span></span> <span class="brx">[</span>../environments,../articles<span class="brx">]</span>
+</pre>
+    <h5>
+     <span class="mw-headline" id="Product">
+      Product
+     </span>
+    </h5>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startproduct</span></span> prd_issue2011-01
+<span class="cs"><span class="documentcs">\project</span></span> project_mymag
+<span class="cs"><span class="documentcs">\environment</span></span> env_mymag
+
+<span class="cs"><span class="documentcs">\component</span></span> c_editorial
+<span class="cs"><span class="documentcs">\component</span></span> c_article1
+...
+
+<span class="cs"><span class="documentcs">\stopproduct</span></span>
+</pre>
+    <p>ConTeXt automatically looks into parent directories.
+</p>
+    <h2>
+     <span class="mw-headline" id="Command_behaviour">
+      Command behaviour
+     </span>
+    </h2>
+    <p>Within a <code>\start...\stop...</code> environment, project, product, and environment definition files are loaded only once, while component files are loaded at every mention. In addition, certain loading commands are ignored inside certain environments -- for example, it makes no sense to load a <code>\component</code> inside a <code>\startenvironment</code> block. The table below gives an overview.
+</p>
+    <table>
+     <tbody>
+      <tr>
+       <td></td>
+       <td><tt><a href="../Command/project.html" title="Command/project">\project</a></tt></td>
+       <td><tt><a href="../Command/environment.html" title="Command/environment">\environment</a></tt></td>
+       <td><tt><a href="../Command/product.html" title="Command/product">\product</a></tt></td>
+       <td><tt><a href="../Command/component.html" title="Command/component">\component</a></tt>
+</td>
+      </tr>
+      <tr>
+       <td><tt><a href="../Command/starttext.html" title="Command/starttext">\starttext</a></tt></td>
+       <td>&mdash;</td>
+       <td>once</td>
+       <td>&mdash;</td>
+       <td>at every mention
+</td>
+      </tr>
+      <tr>
+       <td><tt><a href="../Command/startproject.html" title="Command/startproject">\startproject</a></tt></td>
+       <td>&mdash;</td>
+       <td>once</td>
+       <td>once</td>
+       <td>&mdash;
+</td>
+      </tr>
+      <tr>
+       <td><tt><a href="../Command/startenvironment.html" title="Command/startenvironment">\startenvironment</a></tt></td>
+       <td>&mdash;</td>
+       <td>once</td>
+       <td>&mdash;</td>
+       <td>&mdash;
+</td>
+      </tr>
+      <tr>
+       <td><tt><a href="../Command/startproduct.html" title="Command/startproduct">\startproduct</a></tt></td>
+       <td>once</td>
+       <td>once</td>
+       <td>&mdash;</td>
+       <td>at every mention
+</td>
+      </tr>
+      <tr>
+       <td><tt><a href="../Command/startcomponent.html" title="Command/startcomponent">\startcomponent</a></tt></td>
+       <td>once</td>
+       <td>once</td>
+       <td>&mdash;</td>
+       <td>at every mention
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <p>Hans Hagen (2011) <a class="external text" href="https://pragma-ade.nl/general/magazines/mag-1101.pdf" rel="nofollow">Project Structure</a>, ConTeXt magazine #1101.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.078 seconds
+Real time usage: 0.162 seconds
+Preprocessor visited node count: 293/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1634/2097152 bytes
+Template argument size: 380/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4086/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   65.137      1 -total
+ 38.43%   25.031     19 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:720-1!canonical and timestamp 20260109212423 and revision id 42287
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Project_and_file_management">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

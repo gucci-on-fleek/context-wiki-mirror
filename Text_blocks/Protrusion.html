@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Protrusion&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Protrusion" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Protrusion
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1833&diff=42380">2025-10-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#nohanging_nohz">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         nohanging nohz
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#hanging_nohz">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         hanging nohz
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#hanging_hz">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         hanging hz
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#MkIV">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         MkIV
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Caption_alignment_and_protrusion">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Caption alignment and protrusion
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#MkII">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         MkII
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Demo">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Demo
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Details">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           Details
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Use_with_Latin_Modern">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           Use with Latin Modern
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Hz_adjustments">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           Hz adjustments
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <p>Character protrusion is a somewhat subtle advanced typographic effect in which some characters (often punctuation) are moved partially or fully into the margin in order to give it an optically smoother appearance. In ConTeXt, this is achieved via the font mechanisms within pdfTeX and LuaTeX. Much of the difficult work is done in some presets by Hans, but there are a few tricks needed in order to activate the feature.
+</p>
+    <p>This feature is also commonly called "Handling" after the font handling feature that enables it, and "Hanging" after what hyphens do into the margin. The microtype LaTeX package also includes a protrusion feature, and may be known by that name to a certain audience.
+</p>
+    <p>There are some differences between enabling character protrusion and the related font expansion feature between
+MkII and MkIV, so the following discusses both separately.
+</p>
+    <p>Protrusion and expansion are integrated into the font feature subsystem that is also used for OpenType features. Unless you are creating a totally new typescript, the easiest way to enable protrusion is to redefine
+the already existing 'default' font feature with <tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt> and, <b>AFTER that</b>, to load the font as usual with <tt><a href="../Command/setupbodyfont.html" title="Command/setupbodyfont">\setupbodyfont</a></tt>.
+</p>
+    <p>The setup of the behavior is defined with <tt><a href="../Command/setupalign.html" title="Command/setupalign">\setupalign</a></tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>protrusion<span class="brx">=</span>quality,
+   expansion<span class="brx">=</span>quality<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hz,hanging<span class="brx">]</span>
+</pre>
+    <p>The values for the protrusion and expansion keys are defined in <a class="extiw" href="http://source.contextgarden.net/font-ext.lua" title="source:font-ext.lua"> font-ext.lua</a>. 
+</p>
+    <table border="1" cellspacing="0">
+     <tbody>
+      <tr>
+       <td rowspan="4"><i>protrusion</i>
+</td>
+       <td><b>pure</b>
+</td>
+       <td>full protrusion of only selected punctuation
+</td>
+      </tr>
+      <tr>
+       <td><b>punctuation</b>
+</td>
+       <td>partial protrusion of punctuation and some asymmetrical letters
+</td>
+      </tr>
+      <tr>
+       <td><b>alpha</b>
+</td>
+       <td>variable correction of character widths
+</td>
+      </tr>
+      <tr>
+       <td><b>quality</b>
+</td>
+       <td>combination of <b>punctuation</b> and <b>alpha</b>
+</td>
+      </tr>
+      <tr>
+       <td rowspan="2"><i>expansion</i>
+</td>
+       <td><b>default</b>
+</td>
+       <td>variable glyph expansions for plain ascii text (alphabetics + numerals)
+</td>
+      </tr>
+      <tr>
+       <td><b>quality</b>
+</td>
+       <td>same as <b>default</b>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>In ConTeXt <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/LMTX.html" title="ConTeXt and Lua programming/ConTeXt Development/LMTX">LMTX</a> it's possible to disable protrusion locally with <tt><a class="new" href="../index.php?title=Command/noprotrusion&action=edit&redlink=1.html" title="Command/noprotrusion (page does not exist)">\noprotrusion</a></tt>, e.g.:
+</p>
+    <pre class="tex"><span class="br">{</span><span class="cs">\noprotrusion</span> <span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>protrusion disabled here.<span class="br">}</span><span class="br">}</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="nohanging_nohz">
+      nohanging nohz
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>text<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>      <span class="comment">% HERE</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>protrusion<span class="brx">=</span>quality,
+   expansion<span class="brx">=</span>quality<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span>
+  <span class="brx">[</span>tolerant,hyphenated,justified,
+   nohanging,nohz<span class="brx">]</span>      <span class="comment">% HERE</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../wikiteximage/26f1cd6e39c977130e0e9799ffc4e892.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="hanging_nohz">
+      hanging nohz
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>text<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>      <span class="comment">% HERE</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>protrusion<span class="brx">=</span>quality,
+   expansion<span class="brx">=</span>quality<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span>
+  <span class="brx">[</span>tolerant,hyphenated,justified,
+   hanging,nohz<span class="brx">]</span>      <span class="comment">% HERE</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../wikiteximage/756149b3083fd06ebaf1a290e29072a1.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="hanging_hz">
+      hanging hz
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>text<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>      <span class="comment">% HERE</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>protrusion<span class="brx">=</span>quality,
+   expansion<span class="brx">=</span>quality<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span>
+  <span class="brx">[</span>tolerant,hyphenated,justified,
+   hanging,hz<span class="brx">]</span>      <span class="comment">% HERE</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../wikiteximage/10d527d89b052c1b9f3b745bc93cac05.webp" width="438">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="MkIV">
+      MkIV
+     </span>
+    </h2>
+    <p>Just like in MkII, a reset trick is needed to get proper output from latin-modern fonts:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>expansion<span class="brx">=</span>quality,protrusion<span class="brx">=</span>quality<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>modern-base<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>reset,modern<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hz,hanging<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showframe</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>However in the current version (at least the beta 2011.02.25) there is no need to reset the bodyfont as loading is delayed till starttext anyway.
+</p>
+    <h3>
+     <span class="mw-headline" id="Caption_alignment_and_protrusion">
+      Caption alignment and protrusion
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>protrusion<span class="brx">=</span>quality<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>10pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcaptions</span></span> <span class="brx">[</span>width<span class="brx">=</span>.8tw<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span> <span class="brx">[</span>hanging<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupexternalfigures</span></span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,global,default<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showboxes</span></span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span>
+<span class="cs"><span class="documentcs">\startplacefloat</span></span>
+  <span class="brx">[</span>figure<span class="brx">]</span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="cs"><span class="documentcs">\samplefile</span></span> <span class="br">{</span>tufte<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0.4tw<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopplacefloat</span></span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\getbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\samplefile</span></span> <span class="br">{</span>tufte<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupcaptions</span></span> <span class="brx">[</span>align<span class="brx">=</span><span class="br">{</span>hanging<span class="br">}</span><span class="brx">]</span>  <span class="comment">% HERE</span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1754" src="../wikiteximage/933e62cacbefe793096838fa9c190620.webp" width="1240">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="MkII">
+      MkII
+     </span>
+    </h2>
+    <p>Font handling is documented in the <a class="extiw" href="http://articles.contextgarden.net/article/89" title="article:89">Fonts in ConTeXt</a> manual.
+</p>
+    <h3>
+     <span class="mw-headline" id="Demo">
+      Demo
+     </span>
+    </h3>
+    <p>The simplest way to illustrate it is with a quick demo:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>postscript<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>adobekb<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>hanging<span class="brx">]</span><span class="brx">[</span>normal<span class="brx">]</span>  <span class="comment">% this creates the 'handling' synonyms</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hanging<span class="brx">]</span>                    <span class="comment">% this actually triggers the feature</span>
+</pre>
+    <p>The first two lines switch the font (see below for Latin Modern), and the second two lines actually activate the feature. 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>postscript<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Switch the font that we setup, and show an example with lots of punctuation. The illustration has <b>normal</b> hanging enabled:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>postscript<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>adobekb<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>hanging<span class="brx">]</span><span class="brx">[</span>normal<span class="brx">]</span>  <span class="comment">% this creates the 'handling' synonyms</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hanging<span class="brx">]</span>                    <span class="comment">% this actually triggers the feature</span>
+<span class="cs"><span class="stylecs">\setuptolerance</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>postscript<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startframedtext</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>270pt,rightframe<span class="brx">=</span>on,frame<span class="brx">=</span>off,
+   align<span class="brx">=</span>hanging,offset<span class="brx">=</span>none,framecolor<span class="brx">=</span>middlegray<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte 
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="208" src="../wikiteximage/4c4d2b6c769ba7d8d186827ed2ef3745.webp" width="624">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Details">
+      Details
+     </span>
+    </h3>
+    <p>The <tt><a href="../Command/usetypescript.html" title="Command/usetypescript">\usetypescript</a></tt> command has three arguments. The definitions that we use are in <a class="extiw" href="http://source.contextgarden.net/type-exa.tex" title="source:type-exa.tex"> type-exa.tex</a>, and reference the low-level definitions in <a class="extiw" href="http://source.contextgarden.net/hand-def.tex" title="source:hand-def.tex"> hand-def.tex</a>. There are different possible values for each argument, which, by convention, are:
+</p>
+    <pre>\usetypescript [<i>family</i>] [<i>trigger</i>] [<i>type</i>]
+</pre>
+    <table border="1" cellspacing="0">
+     <tbody>
+      <tr>
+       <td><i>family</i>
+</td>
+       <td colspan="2"><b>serif</b>, <b>sans</b>, and/or <b>mono</b>
+</td>
+      </tr>
+      <tr>
+       <td><i>trigger</i>
+</td>
+       <td colspan="2"><b>handling</b> or <b>hanging</b> for protrusion; <b>handling</b> or <b>hz</b> for font expansion
+</td>
+      </tr>
+      <tr>
+       <td rowspan="5"><i>type</i>
+</td>
+       <td><b>pure</b>
+</td>
+       <td>full protrusion of only selected punctuation
+</td>
+      </tr>
+      <tr>
+       <td><b>normal</b>
+</td>
+       <td>partial protrusion of punctuation and some asymmetrical letters
+</td>
+      </tr>
+      <tr>
+       <td><b>hz</b>
+</td>
+       <td>variable correction of character widths
+</td>
+      </tr>
+      <tr>
+       <td><b>quality</b>
+</td>
+       <td>combination of <b>hz</b> and <b>pure</b>
+</td>
+      </tr>
+      <tr>
+       <td><b>highquality</b>
+</td>
+       <td>combination of <b>hz</b> and <b>normal</b>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Use_with_Latin_Modern">
+      Use with Latin Modern
+     </span>
+    </h3>
+    <p>Because ConTeXt pre-loads its default Latin Modern font, it is a little tricky to get it to work right. Here is one solution, where you setup the hanging, load an alternative latin-modern typescript, and then reset the defaults:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif,sans,mono<span class="brx">]</span><span class="brx">[</span>hanging<span class="brx">]</span><span class="brx">[</span>pure<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hanging<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>modern-base<span class="brx">]</span><span class="brx">[</span>texnansi<span class="brx">]</span>  <span class="comment">% a simplified latin-modern typescript</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>reset<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>modern<span class="brx">]</span>
+</pre>
+    <p>The illustration has <b>pure</b> hanging enabled:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>hanging<span class="brx">]</span><span class="brx">[</span>pure<span class="brx">]</span>  <span class="comment">% this creates the 'handling' synonyms</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hanging<span class="brx">]</span>                    <span class="comment">% this actually triggers the feature</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>modern-base<span class="brx">]</span><span class="brx">[</span>texnansi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>reset<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>modern<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startframedtext</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>270pt,rightframe<span class="brx">=</span>on,frame<span class="brx">=</span>off,
+   align<span class="brx">=</span>hanging,offset<span class="brx">=</span>none,framecolor<span class="brx">=</span>middlegray<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte 
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="200" src="../wikiteximage/ec80cdb4de7381b80f2f4645671e15a1.webp" width="624">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Hz_adjustments">
+      Hz adjustments
+     </span>
+    </h3>
+    <p>For more radical effects, where you need to fit to a fixed, narrow measure, you can enable Hz-style font adjustments, wherein individual characters are adjusted by miniscule amounts as necessary. These are enabled by the <b>hz</b>, <b>quality</b>, and <b>highquality</b> options listed above. Usage is with such lines as:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>hz<span class="brx">]</span><span class="brx">[</span>quality<span class="brx">]</span>  <span class="comment">% this creates the 'handling' synonyms</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hanging,hz<span class="brx">]</span>        <span class="comment">% this turns on the hanging and hz features</span>
+</pre>
+    <p>The example shows how slight font expansion improves the fitting to the margin without changing the tolerance on the inter-word spacing. The left passage is with <i>hanging</i> alone enabled, and the right is with <i>hanging</i> and <i>hz</i> both enabled. It's not for everyone, as the process can distort letter shapes.
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/d300ca2c883b3ee47e42e8c9f76379f2.webp" width="55">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212439
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.073 seconds
+Real time usage: 0.117 seconds
+Preprocessor visited node count: 161/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 490/2097152 bytes
+Template argument size: 130/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15498/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   47.333      1 -total
+ 20.62%    9.758      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1833-1!canonical and timestamp 20260109212439 and revision id 42380
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Protrusion">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

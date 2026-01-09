@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Getting Started with XML and ConTeXt using TEXML&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Getting_Started_with_XML_and_ConTeXt_using_TEXML" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Getting Started with XML and ConTeXt using TEXML
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=946&diff=30286">2020-08-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Goal">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Goal
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#What_You_Should_Know">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           What You Should Know
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Converting_From_XML">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Converting From XML
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Simple_Document_in_ConTeXt_and_in_TeXML">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Simple Document in ConTeXt and in TeXML
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Commands">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Commands
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Other_Preliminaries">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Other Preliminaries
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Example_Documents">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Example Documents
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#To_Do">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         To Do
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Goal">
+      Goal
+     </span>
+    </h2>
+    <p>This document is for XML authors who want to use open source
+software to produce high quality PDF documents--right now.
+</p>
+    <p>One and one half years ago I gave up using LaTeX to format my XML
+documents. I had found--or so I thought--a much superior solution
+in the Formatting Object language, or FO. FO would allow me to
+create high quality PDF documents in XML and unicode instead of
+the cumbersome and unfamiliar syntax of TeX. It would
+allowed me to convert from an XML tree to an XML tree, exactly
+what an XML author wants. The FO language was established in the
+same manner as HTML and therefore represented the power and
+acceptance of open source software. The open source tool called
+FOP, which did the actual conversion from the abstract language
+to PDF, could already do much of what I wanted for my small
+needs, such as create simple tables and format paragraphs.
+</p>
+    <p>One and one half years passed, however, and nothing changed with
+the development of FOP. While I could produce basic documents, I
+still couldn't perform other basic formatting needs, such as
+controlling widow paragraphs or centering a table. Since the
+developers of FOP have made no changes to their software in all
+this time, I came to the conclusion that I would be stuck with
+limitations if I continued to use FO and FOP to convert my
+documents.
+</p>
+    <p>Thus I turned back to TeX, knowing I would face almost none of
+these limitations. I could produce beautiful documents right now,
+without having to wait for an open source FO converter that
+actually implemented all the standards. ConTeXt seemed the most
+advanced form of TeX, allowing me to format in the most direct
+manner without having to rely on many different macros (or
+outside libraries), so I choose it.
+</p>
+    <p>If you are an XML author who wants to convert your documents to
+PDF via XSLT, you will find this document useful. I try to first
+describe how to do something in FO before explaining how I would
+do it in ConTeXt, but even if you do not know any FO you should
+find the hints about formatting useful.
+</p>
+    <h3>
+     <span class="mw-headline" id="What_You_Should_Know">
+      What You Should Know
+     </span>
+    </h3>
+    <p>This document assumes that you already have ConTeXt installed
+and know how to use it. If neither is true, take a little bit
+of time and visit the ConTeXt website to get familiar with how to
+run ConTeXt on your system. At the minimum, you should know the
+commands to issue to convert the ConTeXt examples here to PDF. You
+don't need to know more than that to get started, though of
+course the more you learn, the clearer this document will be.
+</p>
+    <h2>
+     <span class="mw-headline" id="Converting_From_XML">
+      Converting From XML
+     </span>
+    </h2>
+    <p>Being text-based, ConTeXt does not always lend itself well to a direct
+conversion from an XML tree. If an innocent blank line from an
+XML document finds its way into a ConTeXt document, we end up
+with an extra paragraph division. One way around this problem is
+to use ConTeXt's native XML mapping, which you can read about on
+the ConTeXt home page. I find this mapping scheme too
+complicated, which is why I advocate using
+<a class="external free" href="http://getfo.sourceforge.net/texml/index.html" rel="nofollow">http://getfo.sourceforge.net/texml/index.html</a> TeXML. TeXML is a
+python utility that converts its own special form of XML into
+ConTeXt. That means you can use XSLT to convert from one XML tree
+to another and then let the python utility do the dirty work of
+handling whitespace.
+</p>
+    <p>TeXML uses a very simple XML language. Basically, it represents
+ConTeXt commands in XML and does little more. One could look at a
+TeXML document and immediately know what the author meant to
+express in ConTeXt. In converting an XML document such as TEI to
+TeXML, one is coming as close as possible to actually converting
+to ConTeXt itself, without having to worry about white space, and
+while having the comfort of still working with an XML tree. If
+you use TeXML to convert, you really won't have to learn a new
+XML language, since TeXML consists of very few elements. Instead,
+you will still think in terms of ConTeXt.
+</p>
+    <h3>
+     <span class="mw-headline" id="Simple_Document_in_ConTeXt_and_in_TeXML">
+      Simple Document in ConTeXt and in TeXML
+     </span>
+    </h3>
+    <p>Here is the simplest ConTeXt document:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+hello world
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>On my system, I issue the command:
+</p>
+    <pre class="tex">texexec <span class="brx">[</span>document_name<span class="brx">]</span> 
+</pre>
+    <p>to produce a formatted document. Along with many other documents,
+this command prodices a document with the extension ".dvi", which
+I can view with the xdvi software. Follow the instructions to
+produce other types of output.
+</p>
+    <p>In TeXML, this simple document looks like:
+</p>
+    <pre>&lt;?xml version="1.0"?&gt;
+&lt;TeXML&gt;
+  &lt;env name="text"&gt;
+    Hello World
+  &lt;/env&gt;
+&lt;/TeXML&gt;
+</pre>
+    <p>I need to first convert this document to ConTeXt and then issue
+the same exact commands I used above. It is a two step process.
+In order to convert the XML to ConTeXt, I issue the command:
+</p>
+    <pre>texml -e utf8 -c [infile.xml] [outfile.tex]
+</pre>
+    <p>The "-e" option along with its argument of "utf8" tells TeXML to
+produce a document that is encoded in utf8. The "-c" option tells
+TeXML to produce ConTeXt output rather than LaTeX. Make sure you
+include both options.
+</p>
+    <p>Although ConTeXt and XML documents use different
+structures, they do share the main text environment. 
+Like all environments in ConTeXt, this one starts
+with a backslash followed by the word "start", and then followed
+by the name of the environment without a space. We end this
+environment in the same way, replacing "start" with "stop."
+</p>
+    <p>In TeXML, we enclose environments with the
+</p>
+    <pre class="tex">env
+</pre>
+    <p>element. The mandatory "name" attribute defines the environment's
+name.
+</p>
+    <h3>
+     <span class="mw-headline" id="Commands">
+      Commands
+     </span>
+    </h3>
+    <p>Aside from environments, we also have commands in ConTeXt.
+Through commands we control the text formatting in ConTeXt.
+Commands start with a backslash and can be followed by setups,
+which are placed in brackets, and by the "scope or range of the
+command," which are placed in curly brackets.
+</p>
+    <p>For example, to create a simple document with just one box,
+inside of which were the lines "that's it," we write:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>2cm,height<span class="brx">=</span>1cm<span class="brx">]</span><span class="br">{</span>that's it<span class="br">}</span> 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>In TeXML, this looks like:
+</p>
+    <pre>&lt;?xml version="1.0"?&gt;
+&lt;TeXML&gt;
+  &lt;env name="text"&gt;
+    &lt;TeXML&gt;
+        &lt;cmd name="framed"&gt;
+           &lt;opt&gt;width=2cm, height=1cm&lt;/opt&gt;
+           &lt;parm&gt;that's it&lt;/parm&gt;
+        }}
+    &lt;/TeXML&gt;
+  &lt;/env&gt;
+&lt;/TeXML&gt;
+</pre>
+    <h2>
+     <span class="mw-headline" id="Other_Preliminaries">
+      Other Preliminaries
+     </span>
+    </h2>
+    <p>In order to makes sure that that our unicoded XML documents get
+converted properly, we want to put the following line at the top
+of all our documents:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span>
+</pre>
+    <p>Apparently, this allows ConTeXt to handle both utf8 and utf16.
+</p>
+    <p>In addition, we want to disable as many of ConTeXt's automatic
+modes as possible, since we will generate things like titles and
+sections ourselves. ConTeXt automatically places a number on each
+page, and starts a new number with each part. To turn this
+feature off, place this line somewhere at the top of your
+document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop, way<span class="brx">=</span>bytext<span class="brx">]</span>
+</pre>
+    <p>We might alter this command in some ways later.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_Documents">
+      Example Documents
+     </span>
+    </h2>
+    <p>Here are two very simple documents, one in plain old ConTeXt, and
+one in TeXML.
+</p>
+    <p><br>
+<code>Simple_page.tex</code>
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Wie sch&ouml;n!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>and <code>Simple_page.texml</code>
+</p>
+    <pre>&lt;?xml version="1.0"?&gt;
+&lt;TeXML&gt;
+&lt;!--
+Attributes nl1 and nl2 can be used to force a new line before (nl1) or after (nl2) TeX command.
+--&gt;
+ &lt;cmd name="setuppagenumbering"&gt;
+  &lt;opt&gt;state=stop, way=bytext&lt;/opt&gt;
+ }}
+ &lt;cmd name="enableregime" nl1="1"&gt;
+  &lt;opt&gt;utf&lt;/opt&gt;
+ }}
+ &lt;env name="text"&gt;
+  Wie sch&Atilde;&para;n!
+ &lt;/env&gt;
+&lt;/TeXML&gt;
+</pre>
+    <h2>
+     <span class="mw-headline" id="To_Do">
+      To Do
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Include more documentation about TeXML.
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.016 seconds
+Real time usage: 0.056 seconds
+Preprocessor visited node count: 78/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2394/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:946-1!canonical and timestamp 20260109212415 and revision id 30286
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Getting_Started_with_XML_and_ConTeXt_using_TEXML">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

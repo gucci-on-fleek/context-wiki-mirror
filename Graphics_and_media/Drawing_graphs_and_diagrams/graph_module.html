@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Drawing graphs and diagrams/graph module&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/graph_module" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Drawing graphs and diagrams/graph module
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2668&diff=41397">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>MPgraph is a plotting package based on <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaPost and MetaFun</a>.
+</p>
+    <p>An alternative package is <a href="Pgfplot.html" title="Graphics and media/Drawing graphs and diagrams/Pgfplot">Pgfplot</a> using <a href="TikZ.html" title="Graphics and media/Drawing graphs and diagrams/TikZ">TikZ</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> update or provides .dat files to have a MWE <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>(Data on low-temperature thermal expansion coefficients downloaded from <a class="external autonumber" href="http://cryogenics.nist.gov/" rel="nofollow">[1]</a>) (and more specifically <a class="external text" href="https://trc.nist.gov/cryogenics/materials/RegeneratorMaterials/Regenerator%20Materials%20rev%2009-22-06.htm" rel="nofollow">on this page</a> but there is a need to reshape the .dat files).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>graph<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>graph::nist<span class="br">}</span>
+color orange;
+orange <span class="brx">=</span> <span class="brx">(</span>1,.5,0<span class="brx">)</span>;
+input graph
+draw begingraph<span class="brx">(</span>16cm,12cm<span class="brx">)</span>;
+        setrange<span class="brx">(</span>0,whatever,300,whatever<span class="brx">)</span>;
+        glabel.bot<span class="brx">(</span>btex $T$ <span class="brx">(</span>K<span class="brx">)</span> etex, OUT<span class="brx">)</span>;
+        glabel.lft<span class="brx">(</span>btex $<span class="brx">(</span>L-L_<span class="br">{</span>293<span class="br">}</span><span class="brx">)</span>/L_<span class="br">{</span>293<span class="br">}</span>$ etex rotated 90, OUT<span class="brx">)</span>;
+        glabel.top<span class="brx">(</span>btex http://cryogenics.nist.gov/ etex, OUT<span class="brx">)</span>;
+        gdraw "sapphire.dat" withcolor red;
+        glabel.urt<span class="brx">(</span>btex sapphire etex, 0<span class="brx">)</span>;
+        gdraw "Be.dat" withcolor green;
+        glabel.urt<span class="brx">(</span>btex Be etex, 0<span class="brx">)</span>;
+        gdraw "BeCu.dat" withcolor blue;
+        glabel.urt<span class="brx">(</span>btex BeCu etex, 0<span class="brx">)</span>;
+        gdraw "SS304.dat" withcolor cyan;
+        glabel.urt<span class="brx">(</span>btex SS304 etex, 0<span class="brx">)</span>;
+        gdraw "Al6061-T6.dat" withcolor magenta;
+        glabel.urt<span class="brx">(</span>btex Al6061-T6 etex, 0<span class="brx">)</span>;
+        gdraw "nylon.dat" withcolor orange;
+        glabel.urt<span class="brx">(</span>btex nylon etex, 0<span class="brx">)</span>;
+        endgraph;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+<span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>graph::nist<span class="br">}</span>
+</pre>
+    <p><a class="image" href="../../File:MPgraph_example.png"><img alt="MPgraph example.png" decoding="async" height="543" src="../../images/5/53/MPgraph_example.webp" width="720"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="extiw" href="http://source.contextgarden.net/m-graph.mkiv" title="source:m-graph.mkiv">
+       m-graph
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004023
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 333/2097152 bytes
+Template argument size: 43/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2402/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    9.336      1 Template:todo
+100.00%    9.336      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2668-1!canonical and timestamp 20260110004023 and revision id 41397
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/graph_module">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

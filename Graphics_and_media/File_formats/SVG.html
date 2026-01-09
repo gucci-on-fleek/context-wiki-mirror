@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/File formats/SVG&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/File_formats/SVG" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/File formats/SVG
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2603&diff=41339">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Graphics_and_media.html" title="Graphics and media">Graphics and media</a> | <a href="../Tutorials/Using_graphics.html" title="Graphics and media/Tutorials/Using graphics">Using graphics</a> | <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">Graphical programming with MetaPost and MetaFun</a> | <a href="../File_formats.html" title="Graphics and media/File formats">File formats</a> | <a class="new" href="../../index.php?title=Inkscape&action=edit&redlink=1" title="Inkscape (page does not exist)">Inkscape</a> &gt;
+</p>
+    <p>SVG (Scalable Vector Graphics, a <a href="../../Input_and_compilation/XML_source.html" title="Input and compilation/XML source">XML</a> based format) can be converted to the PDF format at runtime by ConTeXt MkIV (LuaTeX), provided you have Inkscape installed as below.
+</p>
+    <p>Supported vector graphics formats of MkII/MKIV are <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaPost and MetaFun</a>).
+</p>
+    <p>There is a workaround, though, using Inkscape to convert SVG to PDF. Inkscape must be installed and callable (i.e. in your PATH):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span>local,directory<span class="brx">=</span>.,conversion<span class="brx">=</span>pdf<span class="brx">]</span> <span class="comment">% lowres,prefix=lowres/]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>svg/sample.svg<span class="brx">]</span><span class="brx">[</span>frame<span class="brx">=</span>on<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#ConTeXt_and_Inkscape">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         ConTeXt and Inkscape
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#LMTX_and_SVG">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         LMTX and SVG
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Text_Rendering">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Text Rendering
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#General_information_on_SVG:">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         General information on SVG:
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Specs_and_References">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Specs and References
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Tutorials_and_Examples">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Tutorials and Examples
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Community">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Community
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Libraries_and_Tools">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           Libraries and Tools
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="ConTeXt_and_Inkscape">
+      ConTeXt and Inkscape
+     </span>
+    </h2>
+    <p>Inkscape changed its command line interface in version 1.0.
+As a consequence, if you use an old version of ConTeXt and you have Inkscape 1.0 or newer installed, the conversion from SVG to PDF fails.
+</p>
+    <p>Newer versions of ConTeXt (since May 7th, 2020) will detect Inkscape's version and manage to convert SVG to PDF anyway.
+But it's a temporary workaround, until version 1.0 of Inkscape gets widespread, because version detection has a performance cost.
+</p>
+    <h2>
+     <span class="mw-headline" id="LMTX_and_SVG">
+      LMTX and SVG
+     </span>
+    </h2>
+    <p>LMTX uses MetaPost (MetaFun) to process SVG directly; a third-party tool, such as Inkscape, is no longer needed. Using MetaPost to process SVG opens many opportunities. It's a work in progress and not every SVG feature is supported. If you encounter issues, send a question to the mailing list.
+</p>
+    <p>See the LMTX distribution documentation, svg-lmtx.pdf and luametafun.pdf, for more details.
+</p>
+    <h3>
+     <span class="mw-headline" id="Text_Rendering">
+      Text Rendering
+     </span>
+    </h3>
+    <p>Pixel-perfect rendering of SVG text elements may not align as desired in all cases. To work around any layout issues, convert the text to a path. This can be accomplished in Inkscape as follows:
+</p>
+    <ol>
+     <li>
+      Open the SVG file.
+     </li>
+     <li>
+      Select all text elements.
+     </li>
+     <li>
+      Click
+      <b>
+       Path &gt; Object to Path
+      </b>
+      .
+     </li>
+     <li>
+      Save the SVG file.
+     </li>
+    </ol>
+    <p>Rebuild the document again, the text elements will now be placed correctly.
+</p>
+    <h2>
+     <span class="mw-headline" id="General_information_on_SVG:">
+      General information on SVG:
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Specs_and_References">
+      Specs and References
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.w3.org/Graphics/SVG/" rel="nofollow">
+       SVG Standard Specs
+      </a>
+      (by W3C)
+     </li>
+     <li>
+      <a class="external text" href="http://www.zvon.org/xxl/svgReference/Output/index.html" rel="nofollow">
+       SVG 1.1 reference
+      </a>
+      (by Systinet)
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Tutorials_and_Examples">
+      Tutorials and Examples
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.adobe.com/svg/basics/getstarted.html" rel="nofollow">
+       Basic SVG: Getting started
+      </a>
+      (by Adobe)
+     </li>
+     <li>
+      <a class="external text" href="http://svglbc.datenverdrahten.de/" rel="nofollow">
+       SVG - learning by coding
+      </a>
+      (by Thomas Meinike)
+     </li>
+     <li>
+      <a class="external text" href="http://www.scale-a-vector.de/home-e.htm" rel="nofollow">
+       Scale a Vector
+      </a>
+      (by Petra Kukofka; also in German)
+     </li>
+     <li>
+      <a class="external text" href="http://learnsvg.com/" rel="nofollow">
+       Learn SVG
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://support.adobe.com/devsup/devsup.nsf/svgkb.htm?OpenView&Start=1&Count=500&Expand=12#12" rel="nofollow">
+       SVG Developer Knowledgebase
+      </a>
+      (by Adobe)
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Community">
+      Community
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://web.archive.org/web/20100212202713/http://wiki.svg.org/Main_Page" rel="nofollow">
+       SVG Wiki
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://web.archive.org/web/20100208221439/http://www.svg.org/SVG.org" rel="nofollow">
+       community
+      </a>
+     </li>
+    </ul>
+    <p>Note: The original links no longer work so the above are from the Wayback Machine. It may be better to remove this section completely.
+</p>
+    <h3>
+     <span class="mw-headline" id="Libraries_and_Tools">
+      Libraries and Tools
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="http://inkscape.org/" rel="nofollow">
+       Inkscape vector graphics editor
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://xmlgraphics.apache.org/batik/" rel="nofollow">
+       Batik Java SVG Toolkit
+      </a>
+      (by Apache)
+     </li>
+     <li>
+      <a class="external text" href="http://cairographics.org" rel="nofollow">
+       Cairo graphics library
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://jan.kollhof.net/wiki/projects/svg" rel="nofollow">
+       samples and tools
+      </a>
+      (by Jan Kollhof)
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212418
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.022 seconds
+Preprocessor visited node count: 36/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 680/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2603-1!canonical and timestamp 20260109212418 and revision id 41339
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/File_formats/SVG">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

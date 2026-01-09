@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Introduction/From LaTeX to ConTeXt/KOMA-scrartcl Type Area&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/KOMA-scrartcl_Type_Area" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Introduction/From LaTeX to ConTeXt/KOMA-scrartcl Type Area
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=750&diff=42207">2025-02-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="LaTeX">
+      LaTeX
+     </span>
+    </h2>
+    <p>The <tt>typearea</tt> style from the KOMA package (used per default in the KOMA classes) does some fairly sophisticated calculations to determine an optimal page layout, with the text width set in terms of average characters-per-line, and the text height and location set to provide pleasing proportions based on that and the paper proportions.  A sample document (with a framebox to show the text area) is simply:
+</p>
+    <pre class="tex"><span class="cs">\documentclass</span><span class="br">{</span>article<span class="br">}</span>
+<span class="cs">\usepackage</span><span class="brx">[</span>DIVcalc,twoside<span class="brx">]</span><span class="br">{</span>typearea<span class="br">}</span>
+<span class="cs">\begin</span><span class="br">{</span>document<span class="br">}</span>
+<span class="cs">\noindent</span><span class="cs">\framebox</span><span class="br">{</span><span class="cs">\rule</span><span class="br">{</span>0pt<span class="br">}</span><span class="br">{</span><span class="cs">\textheight</span><span class="br">}</span><span class="cs">\rule</span><span class="br">{</span><span class="cs">\textwidth</span><span class="br">}</span><span class="br">{</span>0pt<span class="br">}</span><span class="br">}</span>
+<span class="cs">\end</span><span class="br">{</span>document<span class="br">}</span>
+</pre>
+    <p>or
+</p>
+    <pre class="tex"><span class="cs">\documentclass</span><span class="brx">[</span>DIVcalc,twoside<span class="brx">]</span><span class="br">{</span>scrartcl<span class="br">}</span>
+<span class="cs">\begin</span><span class="br">{</span>document<span class="br">}</span>
+<span class="cs">\noindent</span><span class="cs">\framebox</span><span class="br">{</span><span class="cs">\rule</span><span class="br">{</span>0pt<span class="br">}</span><span class="br">{</span><span class="cs">\textheight</span><span class="br">}</span><span class="cs">\rule</span><span class="br">{</span><span class="cs">\textwidth</span><span class="br">}</span><span class="br">{</span>0pt<span class="br">}</span><span class="br">}</span>
+<span class="cs">\end</span><span class="br">{</span>document<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="ConTeXt">
+      ConTeXt
+     </span>
+    </h2>
+    <p>The following code duplicates the <tt>scrartcl</tt> calculations to set the text area and produces a similar sample document, again with a framed box to show the text area.  Note that, because this depends on <tt><a class="new" href="../../index.php?title=Command/lineheight&action=edit&redlink=1.html" title="Command/lineheight (page does not exist)">\lineheight</a></tt> and sets the text area width based on a measurement of a typeset alphabet, it should be applied <i>after</i> any font setup.
+</p>
+    <pre class="tex"><span class="comment">% Set binding correction value (mode=BCOR turns it on).</span>
+<span class="cs"><span class="stylecs">\doifmodeelse</span></span><span class="br">{</span>BCOR<span class="br">}</span><span class="br">{</span><span class="cs">\def</span><span class="cs">\bindingcorr</span><span class="br">{</span>3mm<span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="cs">\def</span><span class="cs">\bindingcorr</span><span class="br">{</span>0pt<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Set visible page width.</span>
+<span class="cs">\newdimen</span><span class="cs">\PageWidth</span>
+<span class="cs">\PageWidth</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\paperwidth</span>-<span class="cs">\bindingcorr</span><span class="brx">)</span>
+
+<span class="comment">% Determine the paper aspect ratio.</span>
+<span class="cs">\edef</span><span class="cs">\Ratio</span><span class="br">{</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span>2<span class="cs">\paperheight</span>/<span class="brx">(</span><span class="cs">\PageWidth</span>/32768<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Set the textarea width to 2.6 alphabets.</span>
+<span class="cs">\setbox</span><span class="cs">\scratchbox</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>26<span class="br">}</span><span class="br">{</span><span class="cs"><span class="stylecs">\character</span></span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\newdimen</span><span class="cs">\Width</span> <span class="cs">\Width</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span>2.6<span class="cs">\wd</span><span class="cs">\scratchbox</span><span class="brx">)</span>
+
+<span class="comment">% Set the textarea height proportional to the width.</span>
+<span class="cs">\newdimen</span><span class="cs">\Height</span> <span class="cs">\Height</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\Ratio</span><span class="cs">\Width</span><span class="brx">)</span>
+
+<span class="comment">% Set the margin/gutter widths to be equal on a full spread.</span>
+<span class="cs">\newdimen</span><span class="cs">\Back</span>
+<span class="cs"><span class="stylecs">\doifmodeelse</span></span><span class="br">{</span>oneside<span class="br">}</span>
+    <span class="br">{</span><span class="cs">\Back</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\PageWidth</span> - <span class="cs">\Width</span><span class="brx">)</span> / 2<span class="brx">)</span> + <span class="cs">\bindingcorr</span><span class="brx">)</span><span class="br">}</span>
+    <span class="br">{</span><span class="cs">\Back</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\PageWidth</span> - <span class="cs">\Width</span><span class="brx">)</span> / 3<span class="brx">)</span> + <span class="cs">\bindingcorr</span><span class="brx">)</span><span class="br">}</span>
+
+<span class="comment">% Set the top and bottom margins in a 1:2 ratio, ignoring headers.</span>
+<span class="cs">\edef</span><span class="cs">\Top</span><span class="br">{</span><span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperheight</span> - <span class="cs">\Height</span><span class="brx">)</span> / 3 - 3<span class="cs">\lineheight</span><span class="brx">)</span><span class="br">}</span>
+
+<span class="comment">% Redefine \Height to include header and footer space.</span>
+<span class="cs">\Height</span><span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\Height</span> + 8<span class="cs">\lineheight</span><span class="brx">)</span>
+
+<span class="comment">% Set up the page layout using the calculated parameters.</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+     backspace<span class="brx">=</span><span class="cs">\the</span><span class="cs">\Back</span>,
+     height<span class="brx">=</span><span class="cs">\the</span><span class="cs">\Height</span>,
+     width<span class="brx">=</span><span class="cs">\the</span><span class="cs">\Width</span>,
+     header<span class="brx">=</span>2<span class="cs">\lineheight</span>,
+     headerdistance<span class="brx">=</span><span class="cs">\lineheight</span>,
+     footer<span class="brx">=</span>2<span class="cs">\lineheight</span>,
+     footerdistance<span class="brx">=</span>3<span class="cs">\lineheight</span>,
+     topspace<span class="brx">=</span><span class="cs">\Top</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span>,height<span class="brx">=</span><span class="cs">\textheight</span><span class="brx">]</span><span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This can be processed with a <code>-mode=BCOR</code> option on <code>texexec</code> to activate the binding correction, or with a <code>-mode=oneside</code> option to activate the single-sided page layout rather than the (default) double-sided version.
+</p>
+    <p>The module t-typearea.tex is available from <a class="external free" href="http://pmrb.free.fr/work/OS/ConTeXt/" rel="nofollow">http://pmrb.free.fr/work/OS/ConTeXt/</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212429
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.035 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 86/2097152 bytes
+Template argument size: 20/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7481/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    4.218      1 Template:cmd
+100.00%    4.218      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:750-1!canonical and timestamp 20260109212429 and revision id 42207
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/KOMA-scrartcl_Type_Area">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

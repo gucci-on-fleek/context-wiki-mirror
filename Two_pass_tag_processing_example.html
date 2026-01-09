@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Two pass tag processing example&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Two_pass_tag_processing_example" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Two pass tag processing example
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=934&diff=3303">2005-09-22</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Two_pass_XML_tag_processing_example">
+      Two pass XML tag processing example
+     </span>
+    </h2>
+    <p>Imagine the next XML structure:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">float</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">figure file="hacker.jpg" context="width=3cm" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">figure file="cow.pdf" context="width=.5ctx-var-textwidth;" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">caption</span><span class="br">&gt;</span>Cow and hacker.<span class="br">&lt;</span><span class="name">/caption</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/float</span><span class="br">&gt;</span>
+</pre>
+    <p>There can be arbitrary number of figures inside a &lt;float&gt; tag. All figures share a single caption. It is desired to typeset them using \placefigure and several \externalfigure. See also relative width specification for th second figure (.5\textwidth).
+</p>
+    <p>Solution is by two pass &lt;float&gt; processing (saving via \defineXMLenvironmentsave and flushes via \XMLflush) with different caption and figure definitions:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\defineXMLentity</span><span class="brx">[</span>ctx-var-textwidth<span class="brx">]</span> <span class="br">{</span><span class="cs">\textwidth</span><span class="br">}</span>
+
+<span class="cs">\defineXMLenvironmentsave</span>
+  <span class="brx">[</span>float<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\bgroup</span>
+   <span class="cs">\defineXMLsave</span><span class="brx">[</span>caption<span class="brx">]</span><span class="comment">%</span>
+   <span class="cs">\defineXMLignore</span><span class="brx">[</span>figure<span class="brx">]</span><span class="br">}</span>
+  <span class="br">{</span><span class="cs">\XMLflush</span><span class="br">{</span>float<span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\defineXMLignore</span>
+     <span class="brx">[</span>caption<span class="brx">]</span>
+   <span class="cs">\defineXMLcommand</span>
+     <span class="brx">[</span>figure<span class="brx">]</span>
+     <span class="brx">[</span>file<span class="brx">=</span>dummy,context<span class="brx">=</span><span class="brx">]</span>
+     <span class="br">{</span><span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span>
+       <span class="brx">[</span><span class="cs">\XMLflush</span><span class="br">{</span>dir-fig<span class="br">}</span><span class="cs">\XMLop</span><span class="br">{</span>file<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="cs">\XMLop</span><span class="br">{</span>context<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+      <span class="cs">\kern</span>1em
+      <span class="cs">\ignorespaces</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="documentcs">\placefigure</span></span>
+     <span class="br">{</span><span class="cs">\XMLflush</span><span class="br">{</span>caption<span class="br">}</span><span class="br">}</span>
+     <span class="br">{</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs">\ignorespaces</span><span class="cs">\XMLflush</span><span class="br">{</span>float<span class="br">}</span><span class="cs"><span class="systemcs">\removeunwantedspaces</span></span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\egroup</span><span class="br">}</span>
+
+<span class="cs">\startXMLdata</span>
+</pre>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">float</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">figure file="cow.pdf" context="width=.5ctx-var-textwidth;" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">figure file="hacker.jpg" context="width=3cm" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">caption</span><span class="br">&gt;</span>Cow and hacker.<span class="br">&lt;</span><span class="name">/caption</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/float</span><span class="br">&gt;</span>
+</pre>
+    <pre class="tex"><span class="cs">\stopXMLdata</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 14/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4120/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:934-1!canonical and timestamp 20260109212440 and revision id 3303
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Two_pass_tag_processing_example">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

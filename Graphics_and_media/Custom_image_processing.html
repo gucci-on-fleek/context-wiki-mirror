@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Custom image processing&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Custom_image_processing" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Custom image processing
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7402&diff=41666">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The following example changes the width of images based on file name extensions:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>
+  location<span class="brx">=</span><span class="br">{</span>local,global,default<span class="br">}</span>,
+  width<span class="brx">=</span><span class="cs">\textwidth</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineexternalfigure</span></span><span class="brx">[</span>svg<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>1cm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineexternalfigure</span></span><span class="brx">[</span>jpg<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>2cm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineexternalfigure</span></span><span class="brx">[</span>png<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>4cm<span class="brx">]</span>
+
+<span class="comment">% Won't be applied because there's no process action.</span>
+<span class="comment">% Default (\textwidth) is used, as defined above.</span>
+<span class="cs"><span class="stylecs">\defineexternalfigure</span></span><span class="brx">[</span>pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>6cm<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\starttexdefinition</span></span> includegraphics <span class="brx">#</span>1
+  <span class="cs"><span class="systemcs">\splitfilename</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+
+  <span class="cs"><span class="systemcs">\processaction</span></span><span class="brx">[</span><span class="cs"><span class="systemcs">\splitofftype</span></span><span class="brx">]</span><span class="brx">[</span>
+    jpg<span class="brx">=</span>&gt;<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>jpg<span class="brx">]</span><span class="br">}</span>,
+    png<span class="brx">=</span>&gt;<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>png<span class="brx">]</span><span class="br">}</span>,
+    svg<span class="brx">=</span>&gt;<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>svg<span class="brx">]</span><span class="brx">[</span>conversion<span class="brx">=</span>mp<span class="brx">]</span><span class="br">}</span>,
+    default<span class="brx">=</span>&gt;<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">}</span>,
+    unknown<span class="brx">=</span>&gt;<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">}</span>
+  <span class="brx">]</span>
+<span class="cs"><span class="systemcs">\stoptexdefinition</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs">\includegraphics</span><span class="br">{</span>kitten.jpg<span class="br">}</span>
+  <span class="cs">\includegraphics</span><span class="br">{</span>mill.png<span class="br">}</span>
+  <span class="cs">\includegraphics</span><span class="br">{</span>cow.pdf<span class="br">}</span>
+  <span class="cs">\includegraphics</span><span class="br">{</span>tiger.svg<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>It's also possible to use <tt><a class="new" href="../index.php?title=Command/setfigureconversion&action=edit&redlink=1.html" title="Command/setfigureconversion (page does not exist)">\setfigureconversion</a></tt> to instruct ConTeXt to use MetaPost when rendering SVG files. Such as:
+</p>
+    <pre class="tex"><span class="cs">\setfigureconversion</span><span class="brx">[</span>svg<span class="brx">]</span><span class="brx">[</span>mp<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+   <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>kitten.jpg<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>2cm<span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>mill.png<span class="brx">]</span>  <span class="brx">[</span>width<span class="brx">=</span>4cm<span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.pdf<span class="brx">]</span>   <span class="brx">[</span>width<span class="brx">=</span>6cm<span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>tiger.svg<span class="brx">]</span> <span class="brx">[</span>width<span class="brx">=</span>1cm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212417
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.026 seconds
+Real time usage: 0.057 seconds
+Preprocessor visited node count: 17/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 122/2097152 bytes
+Template argument size: 38/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5127/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    9.051      1 Template:cmd
+100.00%    9.051      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7402-1!canonical and timestamp 20260109212417 and revision id 41666
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Custom_image_processing">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

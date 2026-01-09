@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Introduction/From LaTeX to ConTeXt/Article Abstracts&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/Article_Abstracts" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Introduction/From LaTeX to ConTeXt/Article Abstracts
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1094&diff=42471">2025-08-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../From_LaTeX_to_ConTeXt.html" title="Introduction/From LaTeX to ConTeXt">From LaTeX to ConTeXt</a> | <a href="Document_Titles.html" title="Introduction/From LaTeX to ConTeXt/Document Titles">Document Titles</a> &gt;
+</p>
+    <h2>
+     <span class="mw-headline" id="LaTeX">
+      LaTeX
+     </span>
+    </h2>
+    <p>Much as with <a href="Document_Titles.html" title="Introduction/From LaTeX to ConTeXt/Document Titles">Document Titles</a>, the standard LaTeX article and report classes define an <code>abstract</code> environment to typeset an abstract in a way that distinguishes it from the rest of the text.  In a single-column article, it is set somewhat narrower than the main text, with the word "Abstract" centered above it.
+</p>
+    <pre class="tex"><span class="cs">\documentclass</span><span class="br">{</span>article<span class="br">}</span>
+<span class="cs">\begin</span><span class="br">{</span>document<span class="br">}</span>
+  <span class="cs">\begin</span><span class="br">{</span>abstract<span class="br">}</span>
+    This is the abstract of the paper.
+  <span class="cs">\end</span><span class="br">{</span>abstract<span class="br">}</span>
+<span class="cs">\end</span><span class="br">{</span>document<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="ConTeXt:_A_simple_solution">
+      ConTeXt: A simple solution
+     </span>
+    </h2>
+    <p>The simplest way of producing an abstract in a ConTeXt document is to specify the formatting directly.  The code from LaTeX's <code>classes.dtx</code> is nearly trivial, and is quite easy to replicate in ConTeXt idioms.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\bf</span> Abstract<span class="br">}</span>
+<span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>2*middle<span class="brx">]</span>
+This is the document's abstract.  It contains enough text for two lines, but no more.
+<span class="cs"><span class="documentcs">\stopnarrower</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+
+This is the main text of the document.  Like the abstract, it contains enough text
+for two lines, to show the margins.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/799879317c67b896245d5c591e7fd51d.webp" width="874">
+     </li>
+    </ul>
+    <p>In the two-column document classes, LaTeX's <code>abstract</code> environment does nothing beyond putting a <code>\section*{Abstract}</code> in front of the abstract's text.  This can be easily replicated in ConTeXt with <code>\subject{Abstract}</code>.  (See <a class="new" href="../../index.php?title=Input_and_compilation/From_LaTeX_to_ConTeXt/Unnumbered_Sections&action=edit&redlink=1.html" title="Input and compilation/From LaTeX to ConTeXt/Unnumbered Sections (page does not exist)">Unnumbered Sections</a>.)
+</p>
+    <h2>
+     <span class="mw-headline" id="ConTeXt:_A_more_reusable_solution">
+      ConTeXt: A more reusable solution
+     </span>
+    </h2>
+    <p>As with <a href="Document_Titles.html" title="Introduction/From LaTeX to ConTeXt/Document Titles">Document Titles</a>, to replicate the spirit of the LaTeX environment, we might want to separate the document formatting commands from the actual text of the abstract.  
+The low-level Context command <tt><a href="../../Command/definestartstop.html" title="Command/definestartstop">\definestartstop</a></tt> defines a pair of 
+<tt><a class="new" href="../../index.php?title=Command/start&action=edit&redlink=1.html" title="Command/start (page does not exist)">\start</a></tt> - <tt><a class="new" href="../../index.php?title=Command/stop&action=edit&redlink=1.html" title="Command/stop (page does not exist)">\stop</a></tt> commands, so we can define an 
+<code>abstract</code> environment using the following commands:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definestartstop</span></span>
+  <span class="brx">[</span>abstract<span class="brx">]</span>
+  <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\bf</span> Abstract<span class="br">}</span>
+           <span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>2*middle<span class="brx">]</span><span class="br">}</span>,
+   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stopnarrower</span></span>
+          <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>This code can be placed in the document header, or can be placed in a module file to be loaded in a number of documents.  It could also be enhanced by <tt><a class="new" href="../../index.php?title=Command/if&action=edit&redlink=1.html" title="Command/if (page does not exist)">\if</a></tt> statements to distinguish between the one-column and two-column cases, as LaTeX does.  In any case, once these commands are defined, they can be used in the obvious manner.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startabstract</span>
+This is the document's abstract.  It contains enough text for two lines, but no more.
+<span class="cs">\stopabstract</span>
+
+This is the main text of the document.  Like the abstract, it contains enough text
+for two lines, to show the margins.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This, of course, produces exactly the same result as the previous illustration.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212429
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.021 seconds
+Real time usage: 0.037 seconds
+Preprocessor visited node count: 74/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 288/2097152 bytes
+Template argument size: 52/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2801/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    8.785      1 -total
+ 57.77%    5.075      4 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1094-1!canonical and timestamp 20260109212429 and revision id 42471
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/Article_Abstracts">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Presentations/Macros for presentation with steps&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Macros_for_presentation_with_steps" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Presentations/Macros for presentation with steps
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=872&diff=38041">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>These macros were written by Otared Kavian:
+[<a class="external autonumber" href="http://archive.contextgarden.net/message/20041103.083500.43ac3121.html" rel="nofollow">[1]</a>]
+</p>
+    <p>Please see the [<a class="external text" href="http://mhd.selfip.info/tex/" rel="nofollow">Raw steps module</a>] on the author's side (this page hasn't been updated yet).
+</p>
+    <h2>
+     <span class="mw-headline" id="Commands">
+      Commands
+     </span>
+    </h2>
+    <table>
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td>\SlideWithSteps{<i>n</i>}{... slide content ...}</td>
+       <td><i>n</i> - the overall number of steps on this slide</td>
+      </tr>
+      <tr>
+       <td>\Step{<i>n</i>}{... content ...}</td>
+       <td>content appears on step <i>n</i></td>
+      </tr>
+      <tr>
+       <td>\StepBefore{<i>n</i>}{... content ...}</td>
+       <td>content disappears on step <i>n</i></td>
+      </tr>
+      <tr>
+       <td>\OnlyStep{<i>n</i>}{... content ...}</td>
+       <td>content appears on step <i>n</i> only</td>
+      </tr>
+      <tr>
+       <td>\StepBetween[<i>n</i>,<i>m</i>]{... content ...}</td>
+       <td>content appears between steps <i>n</i> and <i>m</i> only</td>
+      </tr>
+      <tr>
+       <th>
+        Other Commands
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td>\the\StepCounter</td>
+       <td>step number</td>
+      </tr>
+      <tr>
+       <td>\SteppingSlidetrue</td>
+       <td>for screen presentations</td>
+      </tr>
+      <tr>
+       <td>\SteppingSlidefalse</td>
+       <td>for printed material (full content on one page)</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>See the following example as a reference.
+</p>
+    <h2>
+     <span class="mw-headline" id="Code">
+      Code
+     </span>
+    </h2>
+    <pre class="tex">
+
+<span class="comment">%%%%%%%%%%%% begin test-step-ok.tex</span>
+<span class="comment">%%K test-step-ok.tex</span>
+
+<span class="comment">%%K Here we use the plain \TeX\ command \phantom{} in order to have</span>
+<span class="comment">%%K some material appear step by step.</span>
+<span class="comment">%%K The structure is quite simple, but since I am not very</span>
+<span class="comment">%%K familiar with ConTeXt, I cannot write elegant code as does</span>
+<span class="comment">%%K Hans Hagen...</span>
+<span class="comment">%%K</span>
+<span class="comment">%%K An advantage is that the code can be used also in</span>
+<span class="comment">%%K plain TeX, in LaTeX and other macro-packages.</span>
+<span class="comment">%%K</span>
+
+<span class="cs">\newif</span><span class="cs">\ifSteppingSlide</span>
+<span class="cs">\SteppingSlidetrue</span>   <span class="comment">%%K this is when you want a step by step presentation</span>
+<span class="comment">%\SteppingSlidefalse&nbsp;%%K this is when you want to print the slides</span>
+<span class="comment">%</span>
+<span class="cs">\newcount</span><span class="cs">\StepsCounter</span>
+<span class="cs">\StepsCounter</span><span class="brx">=</span>0
+<span class="comment">%</span>
+<span class="cs">\newcount</span><span class="cs">\NumberOfSteps</span>
+<span class="cs">\NumberOfSteps</span><span class="brx">=</span>10
+<span class="comment">%</span>
+<span class="cs">\newcount</span><span class="cs">\BeforeStepNumber</span>
+<span class="cs">\BeforeStepNumber</span><span class="brx">=</span>0
+<span class="comment">%</span>
+<span class="comment">%%K StepBetween[number1,number2]{material} will make "material"</span>
+<span class="comment">%%K appear between steps "number1" and "number2"</span>
+<span class="cs">\def</span><span class="cs">\StepBetween</span><span class="brx">[</span><span class="brx">#</span>1,<span class="brx">#</span>2<span class="brx">]</span><span class="brx">#</span>3<span class="br">{</span><span class="comment">%</span>
+<span class="cs">\ifSteppingSlide</span>
+ <span class="cs">\ifnum</span><span class="brx">#</span>1&gt;<span class="cs">\StepsCounter</span> <span class="cs"><span class="stylecs">\phantom</span></span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>
+  <span class="cs">\else</span>
+    <span class="cs">\ifnum</span><span class="brx">#</span>2&lt;<span class="cs">\StepsCounter</span> <span class="cs"><span class="stylecs">\phantom</span></span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>
+      <span class="cs">\else</span> <span class="cs">\relax</span> <span class="brx">#</span>3
+     <span class="cs">\fi</span>
+  <span class="cs">\fi</span>
+  <span class="cs">\else</span> <span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>
+<span class="cs">\fi</span><span class="br">}</span>
+<span class="comment">%</span>
+<span class="comment">%%K Step{number1}{material} will make "material"</span>
+<span class="comment">%%K appear beginning with step "number1" until "NumberOfSteps"</span>
+<span class="cs">\def</span><span class="cs">\Step</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\StepBetween</span><span class="brx">[</span><span class="brx">#</span>1,<span class="cs">\NumberOfSteps</span><span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="comment">%</span>
+<span class="comment">%%K OnlyStep{number1}{material} will make "material"</span>
+<span class="comment">%%K appear only on step "number1"</span>
+<span class="cs">\def</span><span class="cs">\OnlyStep</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\StepBetween</span><span class="brx">[</span><span class="brx">#</span>1,<span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="comment">%</span>
+<span class="comment">%%K StepBefore{number1}{material} will make "material"</span>
+<span class="comment">%%K appear only on all steps before "number1"</span>
+<span class="cs">\def</span><span class="cs">\StepBefore</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span>
+<span class="cs">\global</span><span class="cs">\BeforeStepNumber</span><span class="brx">=</span><span class="brx">#</span>1
+<span class="cs">\StepBetween</span><span class="brx">[</span>0,<span class="cs">\BeforeStepNumber</span><span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="comment">%</span>
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\SlideWithSteps</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span>
+<span class="cs">\ifSteppingSlide</span>
+<span class="cs">\global</span><span class="cs">\StepsCounter</span><span class="brx">=</span>0
+<span class="cs">\global</span><span class="cs">\NumberOfSteps</span><span class="brx">=</span><span class="brx">#</span>1
+<span class="cs">\MakeSteps</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>
+<span class="cs">\else</span> <span class="brx">#</span>2
+<span class="cs">\fi</span><span class="br">}</span>
+<span class="comment">%</span>
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\MakeSteps</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\loop</span> <span class="brx">#</span>1
+<span class="cs">\ifnum</span><span class="cs">\StepsCounter</span>&lt;<span class="cs">\NumberOfSteps</span>
+<span class="cs">\global</span><span class="cs">\advance</span><span class="cs">\StepsCounter</span> by 1<span class="cs">\vfill</span><span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs">\repeat</span>
+<span class="cs">\vfill</span><span class="cs"><span class="documentcs">\page</span></span><span class="br">}</span>
+<span class="comment">%</span>
+
+
+<span class="comment">%%K This is the end of the macros</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% \endinput</span>
+
+<span class="comment">%%K Here is a sample of how you can use these macros</span>
+<span class="comment">%%K</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startitemize</span></span>
+
+<span class="cs">\SlideWithSteps</span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span>
+<span class="cs"><span class="documentcs">\item</span></span> Consider the following nonlinear equation:
+$$<span class="cs">\Step</span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span><span class="br">{</span><span class="cs">\partial</span> u <span class="cs"><span class="documentcs">\over</span></span> <span class="cs">\partial</span> t<span class="br">}</span><span class="br">}</span> <span class="cs">\Step</span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>-<span class="cs">\Delta</span> u + |u|^<span class="br">{</span>p-1<span class="br">}</span>u<span class="br">}</span> <span class="cs">\Step</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span><span class="brx">=</span><span class="br">}</span> <span class="cs">\Step</span><span class="br">{</span>3<span class="br">}</span><span class="br">{</span>f<span class="br">}</span> <span class="cs">\Step</span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>+<span class="br">{</span><span class="cs">\rm</span> div<span class="br">}</span><span class="brx">(</span>g<span class="brx">)</span><span class="br">}</span> <span class="cs">\Step</span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span>+|<span class="cs">\nabla</span> u|<span class="br">{</span><span class="cs">\Step</span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span>^2<span class="br">}</span><span class="br">}</span><span class="br">}</span>$$
+<span class="cs">\StepBetween</span><span class="brx">[</span>3,5<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This line appears only between steps 3 and 5<span class="br">}</span>
+<span class="cs">\Step</span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> The equation may be parabolic.<span class="br">}</span>
+<span class="cs">\StepBefore</span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This line appears only before step 4.<span class="br">}</span>
+<span class="cs">\OnlyStep</span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This line appears only at step 4.<span class="br">}</span>
+<span class="cs">\vfill</span> <span class="brx">(</span>Here you see step number <span class="cs">\the</span><span class="cs">\StepsCounter</span><span class="brx">)</span>
+<span class="br">}</span> <span class="comment">% end of \SlideWithSteps</span>
+
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+<span class="cs"><span class="documentcs">\page</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212411
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.043 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9642/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:872-1!canonical and timestamp 20260109212411 and revision id 38041
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Macros_for_presentation_with_steps">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

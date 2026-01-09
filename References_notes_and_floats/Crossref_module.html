@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   References notes and floats/Crossref module&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/References_notes_and_floats/Crossref_module" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    References notes and floats/Crossref module
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4593&diff=38443">2025-01-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>(This module is currently not in die distribution. Until it is, you can download it from <a class="external text" href="http://zenlima.com/context/t-crossref-0.9.3.zip" rel="nofollow">here</a>).
+</p>
+    <p>Cross references in a (academic) text are either internal (linking to an other point inside the same document) or external (linking to a entity of the bibliography that points to a different document). 
+</p>
+    <p>Here are some concrete examples of cross references:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        "Classic" style
+       </th>
+       <th>
+        "New" style
+        <br>
+        (&uarr; = external link - &nearrow; = internal link)
+       </th>
+      </tr>
+      <tr>
+       <td>[XYZ]
+</td>
+       <td>(&uarr;XYZ) and <br>if directly addressed &uarr;XYZ
+</td>
+      </tr>
+      <tr>
+       <td>[XYZ, p. 23]
+</td>
+       <td>(&uarr;XYZ, p. 23) <br>&uarr;XYZ, p. 23,
+</td>
+      </tr>
+      <tr>
+       <td>[XYZ, p. 22] and [ABC, p. 22-45]
+</td>
+       <td>(&uarr;XYZ, p. 22, and &uarr;ABC, p. 22-45)
+</td>
+      </tr>
+      <tr>
+       <td>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td>Abbildung 2.2
+</td>
+       <td>&nearrow;Abbildung 2.2
+</td>
+      </tr>
+      <tr>
+       <td>Abbildung 2.2 auf Seite 23
+</td>
+       <td>&nearrow;Abbildung 2.2 auf Seite 23
+</td>
+      </tr>
+      <tr>
+       <td>(Absatz 2.4.9/12 auf Seite 23 bis 2.4.2/10 auf Seite 25)
+</td>
+       <td>(&nearrow;Absatz 2.4.9/12 auf Seite 23 bis &nearrow;Absatz 2.4.2/10 auf Seite 25)
+</td>
+      </tr>
+      <tr>
+       <td>(siehe Abs. 3/21)
+</td>
+       <td>(siehe &nearrow;Absatz 3/21)
+</td>
+      </tr>
+      <tr>
+       <td>(siehe Abs&auml;tze 3.1/35 und 3.1/38)
+</td>
+       <td>(siehe Abs&auml;tze &nearrow;3.1/35 und &nearrow;3.1/38)
+</td>
+      </tr>
+      <tr>
+       <td>
+</td>
+       <td>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>This cross references have following structure in common:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        left
+       </th>
+       <th>
+        refprefix
+       </th>
+       <th>
+        label
+       </th>
+       <th>
+        ref
+       </th>
+       <th>
+        detail
+       </th>
+       <th>
+        refsuffix
+       </th>
+       <th>
+        right
+       </th>
+      </tr>
+      <tr valign="top">
+       <td>( <br> (siehe <br> Abs&auml;tze <br> und <br> bis
+</td>
+       <td>&uarr; <br> &nearrow; <br> [
+</td>
+       <td>Abbildung<br>Absatz<br>Abs.
+</td>
+       <td>XYZ<br>2.2<br>2.2 auf Seite 23<br>2.4.9/12 auf Seite 23<br>2.4.2/10 auf Seite 25<br>3/21
+</td>
+       <td>, p. 23
+</td>
+       <td>]
+</td>
+       <td>)
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Referencing">
+      Referencing
+     </span>
+    </h2>
+    <p>For cross reference the method \crossref is created. It has follow syntax:
+</p>
+    <pre>\crossref[#2]
+\crossref[#1][#2]
+
+#1	type	   	= *internal external none
+	left		= ..text..
+	right    	= ..text..
+	label		= ..text..
+	detail 		= ..text..
+
+#2	&lt;reference&gt;
+</pre>
+    <p>Here a simple usage example: 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>red<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>green<span class="brx">]</span><span class="brx">[</span>g<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>blue<span class="brx">]</span><span class="brx">[</span>b<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,style<span class="brx">=</span>normal,color<span class="brx">=</span>red,contrastcolor<span class="brx">=</span>red<span class="brx">]</span>
+<span class="comment">% color and contrastcolor must be the the final color of the refref area in crossref</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span><span class="brx">[</span>refColor<span class="brx">=</span>green,reffixColor<span class="brx">=</span>blue,refrefColor<span class="brx">=</span>red<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref1<span class="brx">]</span><span class="br">{</span>1.1/3<span class="br">}</span>
+
+Should be: 1.1/3 and is: <span class="cs">\crossref</span><span class="brx">[</span>ref1<span class="brx">]</span>
+
+Should be: <span class="brx">(</span>Abs. 1.1/3<span class="brx">)</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>internal,left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,label<span class="brx">=</span>Abs.,right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
+
+Should be: <span class="brx">[</span>Zen12, p 23<span class="brx">]</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external,detail<span class="brx">=</span><span class="br">{</span>p. 23<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
+
+Should be: <span class="brx">(</span>nach <span class="brx">[</span>Zen12, S. 32-33<span class="brx">]</span> und weitere<span class="brx">)</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external, left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>nach <span class="br">}</span>, right<span class="brx">=</span><span class="br">{</span> und weitere<span class="brx">)</span><span class="br">}</span>,detail<span class="brx">=</span><span class="br">{</span>S. 32-33<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref2<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span> Biblio blabla fasel
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Settings">
+      Settings
+     </span>
+    </h2>
+    <p>Often references (or links) are printed in a different color than the normal text. In pararef the colors can be set via three paramters:
+</p>
+    <ul>
+     <li>
+      <code>refColor</code>
+      for the entire reference text,
+     </li>
+     <li>
+      <code>reffixColor</code>
+      for the color of the prefix and suffix if different from
+      <code>refColor</code>
+     </li>
+     <li>
+      <code>refrefColor</code>
+      for the detail, ref itself and ref details if different from
+      <code>refColor</code>
+     </li>
+    </ul>
+    <p>They are defined as parameters of the <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/ruid=1253027735/action=view/id=67" rel="nofollow">module</a>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span><span class="brx">[</span>refColor<span class="brx">=</span>...,reffixColor<span class="brx">=</span>...,refrefColor<span class="brx">=</span>...<span class="brx">]</span>
+...
+</pre>
+    <p>The brackets and text part for <code>\crossref</code> can also be adjusted or extended with other languages:
+</p>
+    <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalPrefix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalPrefix<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalSuffix<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>refDetailDivider<span class="brx">=</span><span class="br">{</span><span class="cs">\textcomma</span><span class="cs"><span class="stylecs">\space</span></span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> na stran&ecaron; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span> <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> auf Seite <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> on page <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&iecy; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&ocy;&rcy;&iukcy;&ncy;&tscy;&iukcy; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+</pre>
+    <p>If you want to change the "classic" style of referencing to the "new" style you only need to add:
+</p>
+    <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalPrefix<span class="brx">=</span><span class="br">{</span>&nearrow;<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalPrefix<span class="brx">=</span><span class="br">{</span>&uarr;<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212433
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.024 seconds
+Real time usage: 0.038 seconds
+Preprocessor visited node count: 24/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8263/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4593-1!canonical and timestamp 20260109212433 and revision id 38443
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/References_notes_and_floats/Crossref_module">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

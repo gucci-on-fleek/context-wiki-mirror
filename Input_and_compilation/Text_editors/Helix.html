@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/Helix&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/Helix" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/Helix
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6990&diff=38538">2025-01-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Tree-Sitter_Support">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Tree-Sitter Support
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Language_Server_Protocol_Support">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Language Server Protocol Support
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Example_Configuration">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Example Configuration
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Configuring_languages.toml">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Configuring languages.toml
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Adding_Queries">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Adding Queries
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p><a class="external text" href="https://helix-editor.com/" rel="nofollow">Helix</a> is a modal, character-based text editor.
+</p>
+    <p>Helix does not natively provide an editing environment for ConTeXt, but does provide excellent support for Tree-Sitter parsers and Language Server Protocol servers, which can provide a good deal of support for editing ConTeXt source files.
+</p>
+    <h2>
+     <span class="mw-headline" id="Tree-Sitter_Support">
+      Tree-Sitter Support
+     </span>
+    </h2>
+    <p>Helix can be configured to use the <a class="external text" href="https://github.com/pmazaitis/tree-sitter-context" rel="nofollow">ConTeXt Tree-Sitter</a> parser.
+</p>
+    <p>Helix provides documentation for adding a tree-sitter grammar here: <a class="external text" href="https://docs.helix-editor.com/guides/adding_languages.html" rel="nofollow">https://docs.helix-editor.com/guides/adding_languages.html</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Language_Server_Protocol_Support">
+      Language Server Protocol Support
+     </span>
+    </h2>
+    <p>Helix can support Language Server Protocol servers.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_Configuration">
+      Example Configuration
+     </span>
+    </h2>
+    <p>This minimal example configuration enables:
+</p>
+    <ul>
+     <li>
+      Syntax highlighting for ConTeXt markup
+     </li>
+     <li>
+      Injections for Lua code code environments, and various typing environments
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Configuring_languages.toml">
+      Configuring languages.toml
+     </span>
+    </h3>
+    <p>In the Helix configuration directory (usually <code>~/.config/helix</code>), create or edit the file <code>languages.toml</code> to include the following:
+</p>
+    <pre>[[language]]
+name = "context"
+scope = "source.context"
+file-types = ["lmtx", "ctx"] 
+
+[[grammar]]
+name = "context"
+[source]
+git = "https://github.com/pmazaitis/tree-sitter-context"
+rev = "4522ee13d58373f79d163df2baef80ea66908a8e"
+</pre>
+    <p>Notes:
+</p>
+    <ul>
+     <li>
+      In testing, including
+      <code>"tex"</code>
+      in the filetypes list will disable ConTeXt highlighting (a conflict with LaTeX support?).
+     </li>
+     <li>
+      The
+      <code>rev</code>
+      field points to a specific git commit in the referenced GitHub repository. This reference will need to be updated manually (to either a long hash or a tag) to take advantage of newer versions of the tree-sitter parser.
+     </li>
+    </ul>
+    <p>More configuration options are detailed in the <a class="external text" href="https://docs.helix-editor.com/languages.html" rel="nofollow">Helix languages.toml documentation</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Adding_Queries">
+      Adding Queries
+     </span>
+    </h3>
+    <p>For Helix to make use of Tree-Sitter, we must also supply query files to teach Helix what to do with the parser output.
+</p>
+    <p>Query files are stored in a subfolder of the Helix configuration directory (usually <code>~/.config/helix/runtime/queries/context</code>, for queries relating to the <code>context</code> langauge).
+</p>
+    <p>A sample query file for syntax highlighting:
+</p>
+    <pre>; ~/.config/helix/runtime/queries/context/highlights.scm
+;
+; highlights.scm for tree-sitter-context
+
+(text) @user.text
+(title_setting (value (value_brace_group (value_brace_group_text) @user.text)))
+
+(command_name) @command.name
+
+(settings_block) @command.set
+(option_block) @command.set
+
+(line_comment) @comment
+
+(escaped) @escaped
+
+(inline_math) @math
+</pre>
+    <p>A sample query file for handling injections:
+</p>
+    <pre>; ~/.config/helix/runtime/queries/context/injections.scm
+;
+; injections.scm for tree-sitter-context
+
+((code_lua_body) @injection.content
+ (#set! injection.language "lua"))
+
+((typing_html_body) @injection.content
+ (#set! injection.language "html"))
+
+((typing_css_body) @injection.content
+  (#set! injection.language "css"))
+
+((typing_lua_body) @injection.content
+   (#set! injection.language "lua"))
+
+((typing_xml_body) @injection.content
+    (#set! injection.language "xml"))
+
+((typing_parsedxml_body) @injection.content
+    (#set! injection.language "xml"))
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212426
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.013 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1179/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6990-1!canonical and timestamp 20260109212426 and revision id 38538
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/Helix">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

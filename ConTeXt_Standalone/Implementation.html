@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt Standalone/Implementation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_Standalone/Implementation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt Standalone/Implementation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2521&diff=22701">2014-12-13</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../ConTeXt_Standalone.html" title="ConTeXt Standalone">ConTeXt Standalone</a> | <a href="Structure.html" title="ConTeXt Standalone/Structure">ConTeXt Standalone/Structure</a> &gt;
+</p>
+    <p><br>
+Binaries can now be built from
+</p>
+    <pre> svn co <a class="external free" href="http://svn.contextgarden.net/suite/build-binaries" rel="nofollow">http://svn.contextgarden.net/suite/build-binaries</a>
+</pre>
+    <p>It might take some time to propagate the changes and auto-update this page&nbsp;:)
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Binary_sources">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Binary sources
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#MetaPost">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           MetaPost
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#LuaTeX">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           LuaTeX
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#W32TeX">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           W32TeX
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#TeX_Live_2012">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           TeX Live 2012
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Others_.28not_used_any_more.29">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Others (not used any more)
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#pdfTeX">
+            <span class="tocnumber">
+             1.5.1
+            </span>
+            <span class="toctext">
+             pdfTeX
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#XeTeX">
+            <span class="tocnumber">
+             1.5.2
+            </span>
+            <span class="toctext">
+             XeTeX
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#rsync">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         rsync
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Cross-compiling_on_Mac_OS_X">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Cross-compiling on Mac OS X
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Compiling_TeX_Live_binaries">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Compiling TeX Live binaries
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Non-Polish_Fonts">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Non-Polish Fonts
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#List_of_fonts_in_the_old_minimals">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           List of fonts in the old minimals
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-14">
+           <a href="#already_there">
+            <span class="tocnumber">
+             5.1.1
+            </span>
+            <span class="toctext">
+             already there
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-15">
+           <a href="#temporary_there">
+            <span class="tocnumber">
+             5.1.2
+            </span>
+            <span class="toctext">
+             temporary there
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-16">
+           <a href="#superseeded_by_TeX_Gyre">
+            <span class="tocnumber">
+             5.1.3
+            </span>
+            <span class="toctext">
+             superseeded by TeX Gyre
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-17">
+           <a href="#may_be_removed">
+            <span class="tocnumber">
+             5.1.4
+            </span>
+            <span class="toctext">
+             may be removed
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-18">
+           <a href="#sort_them_first">
+            <span class="tocnumber">
+             5.1.5
+            </span>
+            <span class="toctext">
+             sort them first
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#Math_support_needed">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           Math support needed
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#Different_.28check.29">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           Different (check)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#Building_plain_formats_.28to_be_done.29">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           Building plain formats (to be done)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Binary_sources">
+      Binary sources
+     </span>
+    </h2>
+    <p>We take binaries from the following sources:
+</p>
+    <h3>
+     <span class="mw-headline" id="MetaPost">
+      MetaPost
+     </span>
+    </h3>
+    <ul>
+     <li>
+      SVN:
+      <a class="external free" href="https://foundry.supelec.fr/svn/metapost" rel="nofollow">
+       https://foundry.supelec.fr/svn/metapost
+      </a>
+     </li>
+     <li>
+      ViewVC:
+      <a class="external free" href="https://foundry.supelec.fr/scm/viewvc.php/?root=metapost" rel="nofollow">
+       https://foundry.supelec.fr/scm/viewvc.php/?root=metapost
+      </a>
+     </li>
+     <li>
+      files:
+      <a class="external free" href="http://foundry.supelec.fr/gf/project/metapost/frs/" rel="nofollow">
+       http://foundry.supelec.fr/gf/project/metapost/frs/
+      </a>
+     </li>
+    </ul>
+    <p><code>tags/XXX</code>
+</p>
+    <h3>
+     <span class="mw-headline" id="LuaTeX">
+      LuaTeX
+     </span>
+    </h3>
+    <ul>
+     <li>
+      SVN:
+      <a class="external free" href="https://foundry.supelec.fr/svn/luatex" rel="nofollow">
+       https://foundry.supelec.fr/svn/luatex
+      </a>
+     </li>
+     <li>
+      ViewVC:
+      <a class="external free" href="https://foundry.supelec.fr/scm/viewvc.php/?root=luatex" rel="nofollow">
+       https://foundry.supelec.fr/scm/viewvc.php/?root=luatex
+      </a>
+     </li>
+     <li>
+      Files:
+      <a class="external free" href="http://foundry.supelec.fr/gf/project/luatex/frs/" rel="nofollow">
+       http://foundry.supelec.fr/gf/project/luatex/frs/
+      </a>
+     </li>
+    </ul>
+    <p><code>tags/beta-XXX</code>
+</p>
+    <h3>
+     <span class="mw-headline" id="W32TeX">
+      W32TeX
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external free" href="http://w32tex.org" rel="nofollow">
+       http://w32tex.org
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="TeX_Live_2012">
+      TeX Live 2012
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external free" href="http://www.tug.org/texlive/svn/" rel="nofollow">
+       http://www.tug.org/texlive/svn/
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span id="Others_(not_used_any_more)">
+     </span>
+     <span class="mw-headline" id="Others_.28not_used_any_more.29">
+      Others (not used any more)
+     </span>
+    </h3>
+    <p>We also used to compile pdfTeX and XeTeX, but stopped doing so as there was no need to use a version newer than what's in TeX Live.
+</p>
+    <h4>
+     <span class="mw-headline" id="pdfTeX">
+      pdfTeX
+     </span>
+    </h4>
+    <ul>
+     <li>
+      SVN:
+      <a class="external free" href="http://foundry.supelec.fr/svn/pdftex" rel="nofollow">
+       http://foundry.supelec.fr/svn/pdftex
+      </a>
+     </li>
+     <li>
+      VieVC:
+      <a class="external free" href="http://foundry.supelec.fr/gf/project/pdftex/scmsvn/" rel="nofollow">
+       http://foundry.supelec.fr/gf/project/pdftex/scmsvn/
+      </a>
+     </li>
+    </ul>
+    <p><code>branches/stable/source</code>
+</p>
+    <h4>
+     <span class="mw-headline" id="XeTeX">
+      XeTeX
+     </span>
+    </h4>
+    <ul>
+     <li>
+      GIT:
+      <a class="external free" href="git://git.code.sf.net/p/xetex/code" rel="nofollow">
+       git://git.code.sf.net/p/xetex/code
+      </a>
+     </li>
+     <li>
+      Gitweb:
+      <a class="external free" href="http://xetex.git.sourceforge.net/" rel="nofollow">
+       http://xetex.git.sourceforge.net/
+      </a>
+     </li>
+    </ul>
+    <p><code>master</code>
+</p>
+    <h2>
+     <span class="mw-headline" id="rsync">
+      rsync
+     </span>
+    </h2>
+    <p>Rsync on Windows behaves a bit weird. We fetched binaries from
+</p>
+    <ul>
+     <li>
+      <a class="external free" href="http://www.itefix.no/cwrsync/" rel="nofollow">
+       http://www.itefix.no/cwrsync/
+      </a>
+     </li>
+    </ul>
+    <p>One needs to set
+</p>
+    <pre>set CYGWIN=noNTsec
+</pre>
+    <p>before syncing binaries or
+</p>
+    <pre>chmod 777 tex/texmf-win/bin/*
+</pre>
+    <p>after that, else binaries won't work.
+</p>
+    <p>From rsync bundle one needs to have at least
+</p>
+    <pre>chmod.exe
+cygiconv-2.dll # for chmod
+cygintl-3.dll  # for chmod
+cygwin1.dll
+rsync.exe
+</pre>
+    <p>to be able to use rsync from the garden properly. I have no idea what happens if cygwin is in PATH, but it is asking for problems.
+</p>
+    <h2>
+     <span class="mw-headline" id="Cross-compiling_on_Mac_OS_X">
+      Cross-compiling on Mac OS X
+     </span>
+    </h2>
+    <p>In order to cross-compile for PPC on a Intel Mac, you need to give the compiler and the linker the following additional  switches:
+</p>
+    <pre>-arch ppc
+</pre>
+    <p>So all you have to do is set <code>CFLAGS</code> and <code>LDFLAGS</code> before you run <code>configure</code> (as well as <code>CXXFLAGS</code>, if applicable). Of course it may be that some Makefiles don't honor these variables and override them with something of their own, and this is the major inconvience you will have to deal with (this is actually what the Makefile for lua does; here you would have to set something like <code>MYCFLAGS</code> or <code>XCFLAGS</code> in addition).
+</p>
+    <p>Obviously, you can also use a similar instruction to cross-compile the other way round (build for Intel on a PPC host); it's called <code>-arch i386</code>; and if you give both at the same time, it results with a so-called <i>universal</i> binary (the size of which being approximately the sum of the size of both individual binaries). <a href="../User:Arthur.html" title="User:Arthur">Arthur</a> 17:20, 30 September 2007 (CEST)
+</p>
+    <p>For pdfTeX it's enough to say
+</p>
+    <pre>CFLAGS="-arch ppc" LDFLAGS="-arch ppc" CXXFLAGS="-arch ppc" ./build.sh
+</pre>
+    <p>XeTeX supports the syntax
+</p>
+    <pre>./build-xetex "-arch ppc"
+</pre>
+    <p>for cross-compiling.
+</p>
+    <p>It is also adviced to use
+</p>
+    <pre>gcc_select
+</pre>
+    <p>and select gcc 3.3 to be more backward compatible, as well as setting
+</p>
+    <pre>export MACOSX_DEPLOYMENT_TARGET=10.3
+</pre>
+    <h2>
+     <span class="mw-headline" id="Compiling_TeX_Live_binaries">
+      Compiling TeX Live binaries
+     </span>
+    </h2>
+    <p>To compile 64-bit binaries on 10.6 or later:
+</p>
+    <pre> ./Build --disable-xdvipdfmx --disable-xetex --disable-xdv2pdf
+</pre>
+    <p>To select the latest compiler on Lion:
+</p>
+    <pre> CC=clang OBJC=clang CXX=clang++ ./Build &lt;options&gt;
+</pre>
+    <p>If we want to compile for 10.6 on 10.7 we additionally need:
+</p>
+    <pre>export MACOSX_DEPLOYMENT_TARGET=10.6
+# or add -mmacosx-version-min=10.6 to CFLAGS
+# most of the time optional; usually not needed, but one never knows
+export MYCFLAGS='-isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.6.sdk'
+export CC=llvm-gcc-4.2; export CFLAGS=$MYCFLAGS
+export OBJC=llvm-gcc-4.2; export OBJCFLAGS=$MYCFLAGS
+export CXX=llvm-g++-4.2; export CXXFLAGS=$MYCFLAGS
+./Build &lt;options&gt;
+</pre>
+    <p>To compile ppc and i386 binaries for Tiger on 10.6:
+</p>
+    <pre>export ARCH=i386
+export MACOSX_DEPLOYMENT_TARGET=10.4
+export MYCFLAGS='-arch $ARCH -isysroot /Developer/SDKs/MacOSX10.4u.sdk'
+export LDFLAGS='-arch $ARCH'
+export CC=gcc-4.0; export CFLAGS=$MYCFLAGS
+export OBJC=gcc-4.0; export OBJCFLAGS=$MYCFLAGS
+export CXX=g++-4.0; export CXXFLAGS=$MYCFLAGS
+</pre>
+    <p>Or alternatively:
+</p>
+    <pre>export MACOSX_DEPLOYMENT_TARGET=10.4
+export MYCFLAGS='-isysroot /Developer/SDKs/MacOSX10.4u.sdk'
+export CC=i686-apple-darwin10-gcc-4.0.1; export CFLAGS=$MYCFLAGS
+export OBJC=i686-apple-darwin10-gcc-4.0.1; export OBJCFLAGS=$MYCFLAGS
+export CXX=i686-apple-darwin10-g++-4.0.1; export CXXFLAGS=$MYCFLAGS
+</pre>
+    <pre>export MACOSX_DEPLOYMENT_TARGET=10.4
+export MYCFLAGS='-isysroot /Developer/SDKs/MacOSX10.4u.sdk'
+export CC=powerpc-apple-darwin10-gcc-4.0.1; export CFLAGS=$MYCFLAGS
+export OBJC=powerpc-apple-darwin10-gcc-4.0.1; export OBJCFLAGS=$MYCFLAGS
+export CXX=powerpc-apple-darwin10-g++-4.0.1; export CXXFLAGS=$MYCFLAGS
+</pre>
+    <h2>
+     <span class="mw-headline" id="List_of_fonts_in_the_old_minimals">
+      List of fonts in the old minimals
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="already_there">
+      already there
+     </span>
+    </h3>
+    <ul>
+     <li>
+      bluesky
+      <ul>
+       <li>
+        ams
+       </li>
+      </ul>
+     </li>
+     <li>
+      hoekwater
+      <ul>
+       <li>
+        context/contnav (is it needed? it's in ConTeXt already)
+       </li>
+       <li>
+        mflogo
+       </li>
+       <li>
+        misc/manfnt
+       </li>
+      </ul>
+     </li>
+     <li>
+      public
+      <ul>
+       <li>
+        marvosym
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="temporary_there">
+      temporary there
+     </span>
+    </h3>
+    <p><i>These fonts will be removed once there will be TeX Gyre math available.</i>
+</p>
+    <ul>
+     <li>
+      urw
+      <ul>
+       <li>
+        helvetic
+       </li>
+       <li>
+        palatino
+       </li>
+       <li>
+        times
+       </li>
+      </ul>
+     </li>
+     <li>
+      public
+      <ul>
+       <li>
+        pxfonts
+       </li>
+       <li>
+        txfonts
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="superseeded_by_TeX_Gyre">
+      superseeded by TeX Gyre
+     </span>
+    </h3>
+    <ul>
+     <li>
+      urw
+      <ul>
+       <li>
+        avantgar (Adobe AvantGarde) -&gt; Adventor
+       </li>
+       <li>
+        bookman -&gt; Bonum
+       </li>
+       <li>
+        courier -&gt; Cursor
+       </li>
+       <li>
+        helvetic -&gt; Heros
+       </li>
+       <li>
+        ncntrsbk (Adobe New Century Schoolbook) -&gt; Schola
+       </li>
+       <li>
+        palatino -&gt; Pagella
+       </li>
+       <li>
+        times -&gt; Termes
+       </li>
+       <li>
+        zapfchan -&gt; Chorus
+       </li>
+      </ul>
+     </li>
+     <li>
+      public
+      <ul>
+       <li>
+        qfonts
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="may_be_removed">
+      may be removed
+     </span>
+    </h3>
+    <ul>
+     <li>
+      bluesky
+      <ul>
+       <li>
+        cm
+       </li>
+      </ul>
+     </li>
+     <li>
+      public
+      <ul>
+       <li>
+        cs
+       </li>
+       <li>
+        pl
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="sort_them_first">
+      sort them first
+     </span>
+    </h3>
+    <ul>
+     <li>
+      adobe/utopia
+     </li>
+     <li>
+      bitstream/charter
+     </li>
+     <li>
+      bluesky
+      <ul>
+       <li>
+        ams - check
+       </li>
+       <li>
+        latex-fonts -?
+       </li>
+      </ul>
+     </li>
+     <li>
+      public
+      <ul>
+       <li>
+        antp -?
+       </li>
+       <li>
+        cb
+       </li>
+       <li>
+        cm-super
+       </li>
+       <li>
+        eulervm
+       </li>
+       <li>
+        fourier
+       </li>
+      </ul>
+     </li>
+     <li>
+      urw
+      <ul>
+       <li>
+        symbol
+       </li>
+       <li>
+        utopia
+       </li>
+       <li>
+        zapfding
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Math_support_needed">
+      Math support needed
+     </span>
+    </h2>
+    <p><a class="external free" href="http://www.ctan.org/tex-archive/info/Free_Math_Font_Survey/en/survey.html" rel="nofollow">http://www.ctan.org/tex-archive/info/Free_Math_Font_Survey/en/survey.html</a>
+</p>
+    <ul>
+     <li>
+      Helvetica
+     </li>
+     <li>
+      Times: tx (see type-enc) or belleek or symbol math or omega math
+     </li>
+     <li>
+      Palatino: px (or Pazo) or euler
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Bookman: kerkis (check)
+     </li>
+     <li>
+      Schoolbook: millenial/fourerenc
+     </li>
+    </ul>
+    <ul>
+     <li>
+      cmbright
+     </li>
+     <li>
+      Concrete and Euler or Concrete Math
+     </li>
+    </ul>
+    <p>forget-me-not (how to generate map files for XeTeX):
+</p>
+    <pre>ctxtools --dpx --force --maproot=/usr/local/gwTeX/texmf.pkgs/fonts/map/dvips/tex-gyre
+</pre>
+    <h2>
+     <span id="Different_(check)">
+     </span>
+     <span class="mw-headline" id="Different_.28check.29">
+      Different (check)
+     </span>
+    </h2>
+    <ul>
+     <li>
+      wcm for syrillic
+     </li>
+     <li>
+      la/lb/lc rb1000 etc.
+     </li>
+     <li>
+      lhr
+     </li>
+     <li>
+      cbgreek
+     </li>
+    </ul>
+    <ul>
+     <li>
+      computer concrete (AMS) - see type-enc
+     </li>
+     <li>
+      euler (AMS)
+     </li>
+     <li>
+      AMS symbols
+     </li>
+     <li>
+      fourier
+     </li>
+    </ul>
+    <ul>
+     <li>
+      \definefontsynonym [RalfSmithFormalScript] [rsfs10]
+     </li>
+     <li>
+      \definefontsynonym [MartinVogel]           [fmvr8x]
+     </li>
+    </ul>
+    <h2>
+     <span id="Building_plain_formats_(to_be_done)">
+     </span>
+     <span class="mw-headline" id="Building_plain_formats_.28to_be_done.29">
+      Building plain formats (to be done)
+     </span>
+    </h2>
+    <p><i>This text will disapear from page, but until we put some additional files to the distribution, here are some notes for me.</i>
+</p>
+    <p>There are no CMR fonts in the distribution (more or less on purpose), but you can use LM replacement instead.
+</p>
+    <pre>% pdftex.ini
+\pdfoutput=1
+\pdfcompresslevel=9
+\pdfdecimaldigits=3
+\pdfpagewidth=210 true mm
+\pdfpageheight=297 true mm
+\pdfhorigin=1 true in
+\pdfvorigin=1 true in
+\pdfpkresolution=600
+
+\input plain
+\dump
+\endinput
+</pre>
+    <pre>pdftex -ini pdftex.ini
+</pre>
+    <p>One needs to use:
+</p>
+    <pre>\pdfmapfile{+lm-rep-cmtext.map}
+</pre>
+    <p><b>Bold text</b>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212405
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.044 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 66/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2521-1!canonical and timestamp 20260109212405 and revision id 22701
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_Standalone/Implementation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

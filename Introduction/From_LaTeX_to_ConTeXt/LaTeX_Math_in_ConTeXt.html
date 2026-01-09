@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Introduction/From LaTeX to ConTeXt/LaTeX Math in ConTeXt&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/LaTeX_Math_in_ConTeXt" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Introduction/From LaTeX to ConTeXt/LaTeX Math in ConTeXt
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=801&diff=42208">2025-02-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Main_Page.html" title="Main Page">Main Page</a> | <a href="../../Mathematics.html" title="Mathematics">Mathematics</a> | <a href="../../Math_with_newmat.html" title="Math with newmat">Math with newmat</a> | <a href="../../Math_with_amsl.html" title="Math with amsl">Math with amsl</a> &gt;
+</p>
+    <p>One of the barriers to using ConTeXt is that the equation syntax is quite different from LaTeX equation syntax.  As a result, one cannot copy equations from LaTeX documents (whether existing documents, or articles for journals that request LaTeX submissions) into ConTeXt documents, or vice versa.  Without some solution to this, producing a set of ConTeXt slides to go with a LaTeX article would require completely rewriting all of the equations.
+</p>
+    <p>Thus, the intent of this page is to document some methods for importing LaTeX equations into ConTeXt documents.  Eventually, they will end up in a third-party ConTeXt package (<i>or such is my intent --Brooks Moses</i>), but for now they are simply given here in full.
+</p>
+    <h2>
+     <span class="mw-headline" id="LaTeX_Environments">
+      LaTeX Environments
+     </span>
+    </h2>
+    <p>To start with, there is the problem that ConTeXt uses <tt>\startenv ... \stopenv</tt> pairs to define environments, whereas LaTeX uses <tt>\begin{env} ... \end{env}</tt> pairs.  The relative merits of these can be argued, but the fact remains that if one is importing LaTeX documents into ConTeXt, it is simpler to leave the environments in the LaTeX form.  The following small set of definitions does an automatic translation.
+</p>
+    <pre class="tex"><span class="comment">% Commands to translate LaTeX environment calls</span>
+<span class="comment">% into the appropriate ConTeXt macros.</span>
+
+<span class="comment">% The \end of a \begin,\end pair is problematic, since \stoptext</span>
+<span class="comment">% depends on TeX's \end.  We fix that as follows, using the </span>
+<span class="comment">% \everystoptext hook.  (Note that some versions of ConTeXt</span>
+<span class="comment">% have already redefined \end, but this should all work out.</span>
+
+<span class="cs"><span class="systemcs">\unprotect</span></span>
+<span class="cs">\let</span><span class="cs">\@@end</span><span class="brx">=</span><span class="cs">\end</span>
+<span class="cs"><span class="systemcs">\appendtoks</span></span>
+  <span class="cs">\let</span><span class="cs">\end</span><span class="brx">=</span><span class="cs">\@@end</span>
+<span class="cs">\to</span> <span class="cs">\everystoptext</span>
+<span class="cs">\protect</span>
+
+<span class="comment">% With that out of the way, the actual trans-</span>
+<span class="comment">% lation macros are straightforward.</span>
+
+<span class="cs">\def</span><span class="cs">\begin</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+   <span class="cs">\csname</span> start<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="br">}</span>
+ <span class="cs">\def</span><span class="cs">\end</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+   <span class="cs">\csname</span> stop<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="br">}</span>
+</pre>
+    <p>Thus, a command such as <tt>\begin{array}</tt> in a LaTeX equation will simply call <tt><a class="new" href="../../index.php?title=Command/startarray&action=edit&redlink=1.html" title="Command/startarray (page does not exist)">\startarray</a></tt>, and we can define all of the remaining compatibility macros as <tt>\start ... \stop</tt> pairs without needing to translate the equations manually to match.  However, this does not work with all ConTeXt environments; a few of them require the literal string <tt>\stopenvironment</tt> at the end of the environment.
+</p>
+    <p>With that framework in mind, we can start duplicating some of the basic LaTeX equation environments.  To start with, the <tt>equation</tt> environment itself, along with the <tt>equation*</tt> environment from AMSmath.
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\startequation</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\placeformula</span></span>
+  <span class="cs"><span class="documentcs">\startformula</span></span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\stopequation</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\stopformula</span></span><span class="br">}</span>
+
+<span class="cs">\expandafter</span><span class="cs">\def</span><span class="cs">\csname</span> startequation*<span class="cs">\endcsname</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\placeformula</span></span><span class="brx">[</span>-<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startformula</span></span><span class="br">}</span>
+<span class="cs">\expandafter</span><span class="cs">\def</span><span class="cs">\csname</span> stopequation*<span class="cs">\endcsname</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\stopformula</span></span><span class="br">}</span>
+</pre>
+    <p>The <tt>array</tt> environment is a notably more complicated construction.  Luckily, it's already been duplicated in Giuseppe Bilotta's <a href="../../Math_with_amsl.html" title="Math with amsl">amsl</a> module, so we don't have to rewrite it.  (The spacing is somewhat tighter than LaTeX's <tt>array</tt>, though.)  Using that simply requires the following line at the head of the ConTeXt document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>amsl<span class="brx">]</span>
+</pre>
+    <p>Once the package is loaded, you'll be able to use <tt>\startarray ... \stoparray</tt> in pretty much the same way as <tt>\begin{array} ... \end{array}</tt> was used in LaTeX.
+</p>
+    <p>The <a href="../../Math_with_amsl.html" title="Math with amsl">amsl</a> module also defines equivalents for AMSmath's <tt>align</tt> and <tt>gather</tt> macros (which provide an improved version of the <tt>eqnarray</tt> functionality, and you should translate your LaTeX eqnarrays to use them anyway!), but unfortunately they are examples of the rare ConTeXt macros that do not work with our <tt>\begin{} ... \end{}</tt> translation, at least in the version current as of 2004/08/02.  The following versions do work, however:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs"><span class="documentcs">\startalign</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\startformula</span></span>
+  <span class="cs">\let</span><span class="cs">\\</span><span class="cs">\cr</span>
+  <span class="cs">\null</span><span class="cs">\vcenter</span><span class="cs">\bgroup</span>
+  <span class="cs">\openup</span><span class="cs">\jot</span> <span class="br">{</span><span class="cs">\mathsurround</span><span class="brx">=</span>0pt<span class="br">}</span><span class="comment">%</span>
+  <span class="cs">\everycr</span><span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="cs">\tabskip</span><span class="brx">=</span>4pt plus1fil<span class="comment">%</span>
+  <span class="cs">\halign</span> to <span class="cs">\displaywidth</span><span class="cs">\bgroup</span>
+      <span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\hfil</span>$<span class="cs">\displaystyle</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="comment">%</span>
+      <span class="cs">\tabskip</span><span class="brx">=</span>0pt &$<span class="cs">\displaystyle</span><span class="br">{</span><span class="br">{</span><span class="br">}</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="cs">\hfil</span><span class="comment">%</span>
+      <span class="cs">\tabskip</span><span class="brx">=</span>4pt plus1fil &&<span class="cs">\hfil</span>$<span class="cs">\displaystyle</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="comment">%</span>
+      <span class="cs">\tabskip</span><span class="brx">=</span>0pt &$<span class="cs">\displaystyle</span><span class="br">{</span><span class="br">{</span><span class="br">}</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="cs">\hfil</span><span class="comment">%</span>
+      <span class="cs">\tabskip</span><span class="brx">=</span>4pt plus1fil <span class="cs">\crcr</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs"><span class="documentcs">\stopalign</span></span><span class="br">{</span><span class="cs">\crcr</span><span class="cs">\crcr</span><span class="cs">\egroup</span><span class="cs">\egroup</span><span class="cs"><span class="documentcs">\stopformula</span></span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\startgather</span><span class="br">{</span><span class="cs"><span class="documentcs">\startformula</span></span>
+  <span class="cs">\let</span><span class="cs">\\</span><span class="cs">\cr</span>
+  <span class="cs">\null</span>\,<span class="cs">\vcenter</span><span class="cs">\bgroup</span>
+  <span class="cs">\openup</span><span class="cs">\jot</span> <span class="br">{</span><span class="cs">\mathsurround</span><span class="brx">=</span>0pt<span class="br">}</span><span class="comment">%</span>
+  <span class="cs">\ialign</span><span class="cs">\bgroup</span>
+      <span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\hfil</span>$<span class="cs">\displaystyle</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="cs">\hfil</span>
+      <span class="cs">\crcr</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\stopgather</span><span class="br">{</span><span class="cs">\crcr</span><span class="cs">\crcr</span><span class="cs">\egroup</span><span class="cs">\egroup</span>\,<span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\stopformula</span></span><span class="br">}</span>
+</pre>
+    <p>These do have the problem of these environments not introducing equation numbers (which they should do for proper compatibility); that should hopefully be addressed in future versions.
+</p>
+    <p>We can also define a duplicate of AMSmath's <tt>split</tt> environment similarly, as
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\startsplit</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\let</span><span class="cs">\\</span><span class="cs">\cr</span>
+  <span class="cs">\null</span>\,<span class="cs">\vcenter</span><span class="cs">\bgroup</span>
+  <span class="cs">\openup</span><span class="cs">\jot</span> <span class="br">{</span><span class="cs">\mathsurround</span><span class="brx">=</span>0pt<span class="br">}</span><span class="comment">%</span>
+  <span class="cs">\ialign</span><span class="cs">\bgroup</span>
+     <span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\hfil</span>$<span class="cs">\displaystyle</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="comment">%</span>
+     &$<span class="cs">\displaystyle</span><span class="br">{</span><span class="br">{</span><span class="br">}</span><span class="brx">#</span><span class="brx">#</span><span class="br">}</span>$<span class="cs">\hfil</span>
+     <span class="cs">\crcr</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\stopsplit</span><span class="br">{</span><span class="cs">\crcr</span><span class="cs">\egroup</span><span class="cs">\egroup</span>\,<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Other_LaTeX_Commands">
+      Other LaTeX Commands
+     </span>
+    </h2>
+    <p>There are a number of commands such as <tt><a class="mw-redirect" href="../../Command/_fraction.html" title="Command/frac">\frac</a></tt> that are provided in LaTeX but not in the ConTeXt core.  Many of these are provided by the <a href="../../Math_with_newmat.html" title="Math with newmat">newmat</a> module; those are documented there.
+</p>
+    <hr>
+    <p><i>(And here I shall stop; there is of course much more to say.  --Brooks Moses)</i>
+</p>
+    <hr>
+    <p>I should also add: there's a set of code for bold math (text and symbols) in <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2004/005314.html" rel="nofollow">this message to the ConTeXt mailing list</a> and <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2004/005315.html" rel="nofollow">its followup here</a>.  This matter is also discussed, perhaps more thoroughly, in <a class="extiw" href="http://www.pragma-ade.nl/general/magazines/mag-0005.pdf" title="magazine:0005">ConTeXt Magazine issue #5</a>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212429
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.045 seconds
+Real time usage: 0.078 seconds
+Preprocessor visited node count: 59/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 148/2097152 bytes
+Template argument size: 28/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8268/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   51.663      1 -total
+  8.31%    4.291      2 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:801-1!canonical and timestamp 20260109212429 and revision id 42208
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/LaTeX_Math_in_ConTeXt">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

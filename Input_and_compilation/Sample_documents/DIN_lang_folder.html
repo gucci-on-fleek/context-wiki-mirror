@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/DIN lang folder&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/DIN_lang_folder" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/DIN lang folder
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5019&diff=38823">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is a template to print DIN lang folders. 
+</p>
+    <pre>%% This is a template for a Din lang Folder.
+%% The folded page of such a flyer is shorter (97mm) than the other pages (100mm)
+
+%% This measure shows how much shorter the folded page is.
+\definemeasure
+    [shortfold]
+    [3mm]
+
+%% The bleed measure is necessary if you have colored page backgrounds 
+%% or images in the bleed.
+%% Different print shops need different bleeds.
+\definemeasure
+    [bleed]
+    [1mm]
+
+%% This is the pagesize of the final PDF.
+%% The bleed size is added two times to width and height.
+\definepapersize
+    [A4-flyer]
+    [width=\dimexpr297mm+2\measured{bleed}\relax,
+     height=\dimexpr210mm+2\measured{bleed}\relax]
+
+%% The size of a normal page.
+\definepapersize
+    [flyer-page]
+    [width=100mm,
+     height=210mm]
+
+%% The size of the folded page.
+\definepapersize
+    [flyer-page-small]
+    [width=\dimexpr100mm-\measure{shortfold}\relax,
+     height=210mm]
+
+%% Imposition: With the following two commands we arrange the six pages
+%% on the final PDF print sheet.
+
+%% The flyerpages are imposed on the printed sheet.
+\setuppapersize
+    [flyer-page]
+    [A4-flyer]
+
+%% The pages are arranged as a tryptichon.
+\setuparranging
+    [TRYPTICHON]
+
+%% Because of the shorter folded page and the bleed the pages has
+%% to be shifted horizontally on the printed sheet.
+%% The values are calculated here.
+\definepageshift
+    [flyer]
+    [horizontal]
+    [\dimexpr\measure{bleed}-\measured{shortfold}\relax,
+    \measure{bleed},
+     \measure{bleed},
+     \dimexpr2\measured{shortfold}+\measured{bleed}\relax,
+     \measure{bleed},
+    \dimexpr\measure{bleed}-\measured{shortfold}\relax
+    ]
+
+
+%% The vertical pageshift is simple.
+\definepageshift
+    [flyer]
+    [vertical]
+    [\measure{bleed}]
+
+\setuppageshift
+    [paper]
+    [flyer]
+
+%% We define some measures to construct the page layout.
+\definemeasure
+    [small]
+    [3mm]
+
+\definemeasure
+    [big]
+    [\measure{small}*2]
+
+%% Each page has a slightly different page layout.
+%% The named layouts (1. bracket) inherit values from other layouts
+%% which are assigned in the second bracket.
+\definelayout
+    [first]
+    [page]
+    [page=flyer-page,
+     topspace=2\measured{big},
+     backspace=2\measured{small},
+     width=\dimexpr\paperwidth-4\measured{small}\relax,
+     height=\dimexpr\paperheight-4\measured{big}\relax]
+
+\definelayout
+    [second]
+    [first]
+    [topspace=2\measured{big},
+     backspace=2\measured{small},
+     width=\dimexpr\paperwidth-2\measured{big}\relax]
+
+\definelayout
+    [thirdandfourth]
+    [second]
+    [backspace=\measure{big},
+     width=\dimexpr\paperwidth-2\measured{big}\relax]
+
+\definelayout
+    [fifthandsixth]
+    [first]
+    [backspace=\measure{big},
+     width=\dimexpr\paperwidth-2\measured{big}\relax]
+
+%% We assign the layouts to the pages.
+\definelayout [1] [first]
+\definelayout [2] [second]
+\definelayout [3] [thirdandfourth]
+\definelayout [4] [thirdandfourth]
+\definelayout [5] [fifthandsixth]
+\definelayout [6] [fifthandsixth]
+
+
+%% Some setups
+\setupmakeup [doublesided=no]
+\setupbodyfont  [mainface,10pt]
+\setuptolerance [verytolerant]
+
+
+%% We want to see page and layout borders.
+%% COMMENT THIS OUT BEFORE YOU PRINT!
+\showframe
+
+
+\starttext
+    \starttitle[title={First page},marking{ }]
+    \input lorem
+  \stoptitle 
+  \starttitle[title={Second page},marking{ }]
+    \input lorem
+
+  \stoptitle 
+  \starttitle[title={Third page},marking{ }]
+    \input lorem
+
+  \stoptitle
+
+  \starttitle[title={Fourth page},marking{ }]
+    \setuppapersize [flyer-page-small] [A4-flyer]
+    \input lorem
+
+  \stoptitle
+
+  \starttitle[title={Fifth page},marking{ }]
+    \input lorem
+
+  \stoptitle
+
+  \starttitle[title={Sixth page},marking{ }]
+  \setuppapersize [flyer-page] [A4-flyer]
+    \input lorem
+
+  \stoptitle
+
+\stoptext
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212424
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.011 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5019-1!canonical and timestamp 20260109212424 and revision id 38823
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/DIN_lang_folder">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

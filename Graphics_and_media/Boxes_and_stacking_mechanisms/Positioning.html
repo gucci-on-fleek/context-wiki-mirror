@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Boxes and stacking mechanisms/Positioning&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Positioning" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Boxes and stacking mechanisms/Positioning
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7425&diff=42063">2025-02-01</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#How_to_identify_and_use_the_position_of_content_on_the_page">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         How to identify and use the position of content on the page
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#LuaMetaFun_version">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           LuaMetaFun version
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#How_to_draw_links_between_words_on_the_page">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         How to draw links between words on the page
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#The_drawing_of_the_arrow_can_be_slightly_improved">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           The drawing of the arrow can be slightly improved
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Generalise_to_several_pairs_of_words">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Generalise to several pairs of words
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Anchors_within_frames">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Anchors within frames
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#With_matrices_-_example_1">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           With matrices - example 1
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#With_matrices_-_example_2">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           With matrices - example 2
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#See_also">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="How_to_identify_and_use_the_position_of_content_on_the_page">
+      How to identify and use the position of content on the page
+     </span>
+    </h2>
+    <p>Here are first commands (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/anch-pos.mkiv" rel="nofollow">anch-pos.mkiv</a>):
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/xypos&action=edit&redlink=1.html" title="Command/xypos (page does not exist)">
+        \xypos
+       </a>
+      </tt>
+      simple position with no dimensions
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/hpos&action=edit&redlink=1.html" title="Command/hpos (page does not exist)">
+        \hpos
+       </a>
+      </tt>
+      position and characteristics of a
+      <tt>
+       <a class="new" href="../../index.php?title=Command/hbox&action=edit&redlink=1.html" title="Command/hbox (page does not exist)">
+        \hbox
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/vpos&action=edit&redlink=1.html" title="Command/vpos (page does not exist)">
+        \vpos
+       </a>
+      </tt>
+      position and characteristics of a
+      <tt>
+       <a class="new" href="../../index.php?title=Command/vbox&action=edit&redlink=1.html" title="Command/vbox (page does not exist)">
+        \vbox
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/bpos&action=edit&redlink=1.html" title="Command/bpos (page does not exist)">
+        \bpos
+       </a>
+      </tt>
+      begin point in a line
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/epos&action=edit&redlink=1.html" title="Command/epos (page does not exist)">
+        \epos
+       </a>
+      </tt>
+      end point in a line
+     </li>
+    </ul>
+    <p>Here is an example where 
+</p>
+    <ul>
+     <li>
+      in the text we locate a segment of text on the content with
+      <tt>
+       <a class="new" href="../../index.php?title=Command/hpos&action=edit&redlink=1.html" title="Command/hpos (page does not exist)">
+        \hpos
+       </a>
+       {locA}{&hellip;
+      </tt>
+      },
+      <code>locA</code>
+      being the chosen label
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">
+        \startuseMPgraphic
+       </a>
+      </tt>
+      is used to prepare a graphic to be used as an overlay of the page. In this graphic, we use several ConTeXt's commands
+      <ul>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPll&action=edit&redlink=1.html" title="Command/MPll (page does not exist)">
+          \MPll
+         </a>
+         {locA
+        </tt>
+        } to access to the Lower Left corner of the segment of text. We also use
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPlr&action=edit&redlink=1.html" title="Command/MPlr (page does not exist)">
+          \MPlr
+         </a>
+         {locA
+        </tt>
+        }
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPur&action=edit&redlink=1.html" title="Command/MPur (page does not exist)">
+          \MPur
+         </a>
+         {locA
+        </tt>
+        }
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPul&action=edit&redlink=1.html" title="Command/MPul (page does not exist)">
+          \MPul
+         </a>
+         {locA
+        </tt>
+        } to draw the complete box.
+       </li>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPx&action=edit&redlink=1.html" title="Command/MPx (page does not exist)">
+          \MPx
+         </a>
+         {locA
+        </tt>
+        } and
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPx&action=edit&redlink=1.html" title="Command/MPx (page does not exist)">
+          \MPx
+         </a>
+         {locA
+        </tt>
+        } to locate the baseline entry point
+       </li>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPd&action=edit&redlink=1.html" title="Command/MPd (page does not exist)">
+          \MPd
+         </a>
+         {locA
+        </tt>
+        } and
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPh&action=edit&redlink=1.html" title="Command/MPh (page does not exist)">
+          \MPh
+         </a>
+         {locA
+        </tt>
+        } to also locate the point the depth below the entry point, and the point the height above the entry point (depth means depth of the segment of text, and height means height of the segment of text).
+       </li>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/MPw&action=edit&redlink=1.html" title="Command/MPw (page does not exist)">
+          \MPw
+         </a>
+         {locA
+        </tt>
+        } provides the width of the segment of text.
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>48pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+draw
+  <span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span>locA<span class="br">}</span> --
+  <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span>locA<span class="br">}</span> -- cycle
+  withpen pencircle scaled 5pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+draw
+  <span class="brx">(</span><span class="cs"><span class="systemcs">\MPx</span></span><span class="br">{</span>locA<span class="br">}</span>,<span class="cs"><span class="systemcs">\MPy</span></span><span class="br">{</span>locA<span class="br">}</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor red&nbsp;;
+
+draw
+  <span class="brx">(</span><span class="cs"><span class="systemcs">\MPx</span></span><span class="br">{</span>locA<span class="br">}</span>,<span class="cs"><span class="systemcs">\MPy</span></span><span class="br">{</span>locA<span class="br">}</span> - <span class="cs"><span class="systemcs">\MPd</span></span><span class="br">{</span>locA<span class="br">}</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor green;
+
+draw
+  <span class="brx">(</span><span class="cs"><span class="systemcs">\MPx</span></span><span class="br">{</span>locA<span class="br">}</span>,<span class="cs"><span class="systemcs">\MPy</span></span><span class="br">{</span>locA<span class="br">}</span> + <span class="cs"><span class="systemcs">\MPh</span></span><span class="br">{</span>locA<span class="br">}</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor green;
+
+
+draw
+  <span class="brx">(</span><span class="cs"><span class="systemcs">\MPx</span></span><span class="br">{</span>locA<span class="br">}</span> + <span class="cs"><span class="systemcs">\MPw</span></span><span class="br">{</span>locA<span class="br">}</span>,<span class="cs"><span class="systemcs">\MPy</span></span><span class="br">{</span>locA<span class="br">}</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor magenta&nbsp;;
+
+StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyPage<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>OLMyPage<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+a <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locA<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/6e6bf32e613e024e85749c0040fa4f47.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="LuaMetaFun_version">
+      LuaMetaFun version
+     </span>
+    </h3>
+    <p>With MetaPost commands
+</p>
+    <ul>
+     <li>
+      positionbox("label")
+     </li>
+     <li>
+      positionxy("label")
+     </li>
+     <li>
+      positionwhd("label")  associated with
+      <ul>
+       <li>
+        dppart
+       </li>
+       <li>
+        htpart
+       </li>
+       <li>
+        wdpart (but issue currently)
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <p>And you can also replace <code>\hpos{locA}</code> by a <code>region=locA</code> parameter.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>48pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+draw
+  positionbox<span class="brx">(</span>"locA"<span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+draw
+  positionxy<span class="brx">(</span>"locA"<span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor red&nbsp;;
+
+draw
+  <span class="brx">(</span>positionx<span class="brx">(</span>"locA"<span class="brx">)</span>, positiony<span class="brx">(</span>"locA"<span class="brx">)</span> - <span class="brx">(</span>dppart positionwhd<span class="brx">(</span>"locA"<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor green;
+
+draw
+  <span class="brx">(</span>positionx<span class="brx">(</span>"locA"<span class="brx">)</span>, positiony<span class="brx">(</span>"locA"<span class="brx">)</span> + <span class="brx">(</span>htpart positionwhd<span class="brx">(</span>"locA"<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+  withpen pencircle scaled 5pt
+  withcolor green;
+
+StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyPage<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,OLMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+a
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>region<span class="brx">=</span>locA,
+   offset<span class="brx">=</span>overlay,
+   frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span><span class="br">}</span>.
+<span class="comment">% a \hpos{locA}{\TeX}.</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/710f86a2c5e8a1c48283ff200f9813f2.webp" width="438">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="How_to_draw_links_between_words_on_the_page">
+      How to draw links between words on the page
+     </span>
+    </h2>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>16pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+
+path pa, pb;
+pa&nbsp;:<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span>locA<span class="br">}</span> --
+       <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span>locA<span class="br">}</span> -- cycle<span class="brx">)</span>
+      enlarged 2pt;
+pb&nbsp;:<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span>locB<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span>locB<span class="br">}</span> --
+       <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span>locB<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span>locB<span class="br">}</span> -- cycle<span class="brx">)</span>
+      enlarged 2pt;
+
+draw pa
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+draw pb
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+drawdblarrow <span class="brx">(</span>center pa<span class="brx">)</span> .. <span class="brx">(</span>center pb<span class="brx">)</span>
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,red<span class="brx">)</span>;
+
+StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyPage<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span> 
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,OLMyPage<span class="br">}</span><span class="brx">]</span>
+  <span class="comment">% HERE overlay over the foreground.</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locA<span class="br">}</span><span class="br">{</span><span class="cs">\LUA</span><span class="br">}</span> word can be linked,
+thanks to the <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>hpos<span class="br">}</span> command,
+to the <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locB<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span><span class="br">}</span> word!
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/5aa622bb8af969bfdc7d9d33da1ea11b.webp" width="307">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="The_drawing_of_the_arrow_can_be_slightly_improved">
+      The drawing of the arrow can be slightly improved
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>16pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+
+path pa, pb, pab;
+pa  :<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span>locA<span class="br">}</span> --
+        <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span>locA<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span>locA<span class="br">}</span> -- cycle<span class="brx">)</span>
+       enlarged 2pt;
+pb  :<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span>locB<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span>locB<span class="br">}</span> --
+        <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span>locB<span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span>locB<span class="br">}</span> -- cycle<span class="brx">)</span>
+       enlarged 2pt;
+pab&nbsp;:<span class="brx">=</span> <span class="brx">(</span>center pa<span class="brx">)</span><span class="br">{</span>dir<span class="brx">(</span>-80<span class="brx">)</span><span class="br">}</span> ..
+       <span class="brx">(</span>center pb<span class="brx">)</span><span class="br">{</span>dir<span class="brx">(</span>-155<span class="brx">)</span><span class="br">}</span>;
+
+draw pa
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+draw pb
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+pab&nbsp;:<span class="brx">=</span> pab cutbefore <span class="brx">(</span>pab intersectionpoint pa<span class="brx">)</span>&nbsp;;
+pab&nbsp;:<span class="brx">=</span> pab cutafter  <span class="brx">(</span>pab intersectionpoint pb<span class="brx">)</span>&nbsp;;
+
+drawdblarrow pab
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,red<span class="brx">)</span>;
+
+StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyPage<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,OLMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locA<span class="br">}</span><span class="br">{</span><span class="cs">\LUA</span><span class="br">}</span> word can be linked,
+thanks to the <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>hpos<span class="br">}</span> command,
+to the <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locB<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span><span class="br">}</span> word!
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/60860a6597975b4f894c489d89dfbdf8.webp" width="307">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Generalise_to_several_pairs_of_words">
+      Generalise to several pairs of words
+     </span>
+    </h3>
+    <ul>
+     <li>
+      MetaPost side
+      <ul>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/startMPpositiongraphic&action=edit&redlink=1.html" title="Command/startMPpositiongraphic (page does not exist)">
+          \startMPpositiongraphic
+         </a>
+        </tt>
+        (you don't need StartPage)
+       </li>
+       <li>
+        <tt>
+         <a href="../../Command/MPvar.html" title="Command/MPvar">
+          \MPvar
+         </a>
+        </tt>
+        to access the parameters of the
+        <tt>
+         <a class="new" href="../../index.php?title=Command/setMPpositiongraphic&action=edit&redlink=1.html" title="Command/setMPpositiongraphic (page does not exist)">
+          \setMPpositiongraphic
+         </a>
+        </tt>
+        command
+       </li>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/setMPpositiongraphic&action=edit&redlink=1.html" title="Command/setMPpositiongraphic (page does not exist)">
+          \setMPpositiongraphic
+         </a>
+        </tt>
+        to pass the parameters to
+        <tt>
+         <a class="new" href="../../index.php?title=Command/startMPpositiongraphic&action=edit&redlink=1.html" title="Command/startMPpositiongraphic (page does not exist)">
+          \startMPpositiongraphic
+         </a>
+        </tt>
+       </li>
+      </ul>
+     </li>
+     <li>
+      Overlay side
+      <ul>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/startpositionoverlay&action=edit&redlink=1.html" title="Command/startpositionoverlay (page does not exist)">
+          \startpositionoverlay
+         </a>
+        </tt>
+       </li>
+       <li>
+        <tt>
+         <a class="new" href="../../index.php?title=Command/positionoverlay&action=edit&redlink=1.html" title="Command/positionoverlay (page does not exist)">
+          \positionoverlay
+         </a>
+        </tt>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>16pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startMPpositiongraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+
+path pa, pb, pab;
+pa  :<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>from<span class="br">}</span><span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>from<span class="br">}</span><span class="br">}</span> --
+        <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>from<span class="br">}</span><span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>from<span class="br">}</span><span class="br">}</span> -- cycle<span class="brx">)</span>
+       enlarged 2pt;
+pb  :<span class="brx">=</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\MPll</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>to<span class="br">}</span><span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPlr</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>to<span class="br">}</span><span class="br">}</span> --
+        <span class="cs"><span class="systemcs">\MPur</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>to<span class="br">}</span><span class="br">}</span> -- <span class="cs"><span class="systemcs">\MPul</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>to<span class="br">}</span><span class="br">}</span> -- cycle<span class="brx">)</span>
+       enlarged 2pt;
+pab&nbsp;:<span class="brx">=</span> <span class="brx">(</span>center pa<span class="brx">)</span><span class="br">{</span>dir<span class="brx">(</span>-80<span class="brx">)</span><span class="br">}</span> ..
+       <span class="brx">(</span>center pb<span class="brx">)</span><span class="br">{</span>dir<span class="brx">(</span>-155<span class="brx">)</span><span class="br">}</span>;
+
+draw pa
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+draw pb
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,blue<span class="brx">)</span>;
+
+pab&nbsp;:<span class="brx">=</span> pab cutbefore <span class="brx">(</span>pab intersectionpoint pa<span class="brx">)</span>&nbsp;;
+pab&nbsp;:<span class="brx">=</span> pab cutafter  <span class="brx">(</span>pab intersectionpoint pb<span class="brx">)</span>&nbsp;;
+
+drawdblarrow pab
+  withpen pencircle scaled 3pt
+  withcolor transparent<span class="brx">(</span>1,0.5,red<span class="brx">)</span>;
+
+StopPage&nbsp;;
+<span class="cs"><span class="systemcs">\stopMPpositiongraphic</span></span>
+
+<span class="cs"><span class="systemcs">\startpositionoverlay</span></span><span class="br">{</span>POLarrows<span class="br">}</span>
+<span class="cs"><span class="systemcs">\setMPpositiongraphic</span></span><span class="br">{</span>locA<span class="br">}</span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="br">{</span>to<span class="brx">=</span>locB<span class="br">}</span>
+<span class="cs"><span class="systemcs">\setMPpositiongraphic</span></span><span class="br">{</span>locC<span class="br">}</span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="br">{</span>to<span class="brx">=</span>locD<span class="br">}</span>
+<span class="cs"><span class="systemcs">\stoppositionoverlay</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>OLMyPage<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="systemcs">\positionoverlay</span></span><span class="br">{</span>POLarrows<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,OLMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locA<span class="br">}</span><span class="br">{</span><span class="cs">\LUA</span><span class="br">}</span> <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locC<span class="br">}</span><span class="br">{</span>word<span class="br">}</span> can be linked,
+thanks to the <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>hpos<span class="br">}</span> command,
+to <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locB<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span><span class="br">}</span> <span class="cs"><span class="systemcs">\hpos</span></span><span class="br">{</span>locD<span class="br">}</span><span class="br">{</span>word<span class="br">}</span>!
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/20e6ed79044b8a6c647cce8069ab4711.webp" width="307">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Anchors_within_frames">
+      Anchors within frames
+     </span>
+    </h2>
+    <p>Anchors allows to work with positioning of specif points within a frame. You can use anchors with the following commands:
+</p>
+    <ul>
+     <li>
+      in the content:
+      <tt>
+       <a class="new" href="../../index.php?title=Command/markanchor&action=edit&redlink=1.html" title="Command/markanchor (page does not exist)">
+        \markanchor
+       </a>
+       {label}{numberA}{numberB
+      </tt>
+      }. You can just use numberA numberB as zero, but it can be useful, for one same label, to also have two figures to refer to others anchors with the same label but with different 2D positions).
+     </li>
+     <li>
+      in MetaPost:
+      <code>anchorxy("label", numberA, numberB)</code>
+      .
+     </li>
+     <li>
+      for the frame using the MetaPost graphic as an overlay:
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+       [synchronize=yes,background={&hellip;}]
+      </tt>
+      , synchronize being needed to update the positions of the anchors at each run.
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>30pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPpoints<span class="br">}</span>
+pickup pencircle scaled 5pt&nbsp;;
+color mycolor; mycolor&nbsp;:<span class="brx">=</span> magenta  ;
+draw anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span>
+     withcolor mycolor withtransparency <span class="brx">(</span>1,.6<span class="brx">)</span>;
+draw anchorxy<span class="brx">(</span>"one", 0, 2<span class="brx">)</span>
+     withcolor mycolor withtransparency <span class="brx">(</span>1,.6<span class="brx">)</span>;
+draw anchorxy<span class="brx">(</span>"one", 0, 3<span class="brx">)</span>
+     withcolor mycolor withtransparency <span class="brx">(</span>1,.6<span class="brx">)</span>;
+draw anchorxy<span class="brx">(</span>"two", 0, 1<span class="brx">)</span>
+     withcolor mycolor withtransparency <span class="brx">(</span>1,.6<span class="brx">)</span>;
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MParrows<span class="br">}</span>
+pickup pencircle scaled 1.5pt&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span> <span class="br">{</span>dir -45<span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"one", 0, 2<span class="brx">)</span>
+    withcolor "darkred" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span> <span class="br">{</span>down<span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"one", 0, 3<span class="brx">)</span>
+    withcolor "darkgreen" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span> <span class="br">{</span>up<span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"two", 0, 1<span class="brx">)</span>
+    withcolor "darkblue" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span> <span class="brx">[</span>OLback<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPpoints<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span> <span class="brx">[</span>OLfront<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MParrows<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupframed</span></span>
+  <span class="brx">[</span>offset<span class="brx">=</span>0pt,
+   strut<span class="brx">=</span>yes,
+   location<span class="brx">=</span>top,
+   frame<span class="brx">=</span>off<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+a, <span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>b, c, d, e.<span class="br">}</span>
+
+a, <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>synchronize<span class="brx">=</span>yes,
+           background<span class="brx">=</span><span class="br">{</span>OLback,foreground,OLfront<span class="br">}</span><span class="brx">]</span>
+   <span class="br">{</span>b<span class="cs">\markanchor</span><span class="br">{</span>one<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>,
+    c<span class="cs">\markanchor</span><span class="br">{</span>one<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>,
+    d<span class="cs">\markanchor</span><span class="br">{</span>one<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>3<span class="br">}</span>,
+    e<span class="cs">\markanchor</span><span class="br">{</span>two<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>.<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/7a6842fc75889a2eda8498227902e127.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="With_matrices_-_example_1">
+      With matrices - example 1
+     </span>
+    </h3>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>12pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>whatever-1<span class="br">}</span>
+fill OverlayBox withcolor "lightgray"&nbsp;;
+drawdot anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span>
+    withpen pencircle scaled 1mm
+    withcolor "red"&nbsp;;
+drawdot anchorxy<span class="brx">(</span>"one", 0, 2<span class="brx">)</span>
+    withpen pencircle scaled 1mm
+    withcolor "red"&nbsp;;
+drawdot anchorxy<span class="brx">(</span>"two", 0, 1<span class="brx">)</span>
+    withpen pencircle scaled 1mm
+    withcolor "red"&nbsp;;
+drawdot anchorxy<span class="brx">(</span>"two", 0, 2<span class="brx">)</span>
+    withpen pencircle scaled 1mm
+    withcolor "red"&nbsp;;
+drawdot anchorxy<span class="brx">(</span>"three", 0, 1<span class="brx">)</span>
+    withpen pencircle scaled 1mm
+    withcolor "red"&nbsp;;
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>whatever-2<span class="br">}</span>
+pair a&nbsp;; a&nbsp;:<span class="brx">=</span> anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span>&nbsp;;
+pair b&nbsp;; b&nbsp;:<span class="brx">=</span> anchorxy<span class="brx">(</span>"one", 0, 2<span class="brx">)</span>&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"one", 0, 1<span class="brx">)</span> <span class="br">{</span> right <span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"one", 0, 2<span class="brx">)</span>
+    withcolor "blue" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"two", 0, 1<span class="brx">)</span> <span class="br">{</span> down <span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"two", 0, 2<span class="brx">)</span>
+    withcolor "blue" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+drawarrow
+    anchorxy<span class="brx">(</span>"two", 0, 1<span class="brx">)</span> <span class="br">{</span> dir 30 <span class="br">}</span> ..
+    anchorxy<span class="brx">(</span>"three", 0, 1<span class="brx">)</span>
+    withcolor "blue" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>whatever-1<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>whatever-1<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>whatever-2<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>whatever-2<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+   <span class="brx">[</span>synchronize<span class="brx">=</span>yes,
+    align<span class="brx">=</span>normal,
+    offset<span class="brx">=</span>10pt,
+    frame<span class="brx">=</span>off,
+    background<span class="brx">=</span><span class="br">{</span>whatever-1,foreground,whatever-2<span class="br">}</span><span class="brx">]</span>
+   <span class="br">{</span><span class="cs"><span class="documentcs">\startmathmatrix</span></span>
+       <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>two<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>a <span class="cs">\NC</span> b                         <span class="cs">\NC</span> c                       <span class="cs">\NR</span>
+       <span class="cs">\NC</span> a                       <span class="cs">\NC</span> b                         <span class="cs">\NC</span> c                       <span class="cs">\NR</span>
+       <span class="cs">\NC</span> a                       <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>one<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>b   <span class="cs">\NC</span> c                       <span class="cs">\NR</span>
+       <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>one<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>a <span class="cs">\NC</span> b                         <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>two<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>c <span class="cs">\NR</span>
+       <span class="cs">\NC</span> a                       <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>three<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>b <span class="cs">\NC</span> c                       <span class="cs">\NR</span>
+   <span class="cs"><span class="documentcs">\stopmathmatrix</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>whatever-3<span class="br">}</span>
+     pair a&nbsp;; a&nbsp;:<span class="brx">=</span> anchorxy<span class="brx">(</span>"a", 0, 1<span class="brx">)</span>&nbsp;;
+     pair b&nbsp;; b&nbsp;:<span class="brx">=</span> anchorxy<span class="brx">(</span>"a", 0, 2<span class="brx">)</span>&nbsp;;
+     draw boundingbox <span class="brx">(</span>a--b<span class="brx">)</span>
+         leftenlarged .25EmWidth
+         rightenlarged EmWidth
+         topenlarged StrutHeight
+         bottomenlarged .5StrutDepth
+         withcolor "blue" withtransparency <span class="brx">(</span>1,.75<span class="brx">)</span>&nbsp;;
+     setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>whatever-3<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>whatever-3<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+   <span class="brx">[</span>synchronize<span class="brx">=</span>yes,
+    align<span class="brx">=</span>normal,
+    offset<span class="brx">=</span>10pt,
+    frame<span class="brx">=</span>off,
+    background<span class="brx">=</span>whatever-3<span class="brx">]</span>
+   <span class="br">{</span><span class="cs"><span class="documentcs">\startmathmatrix</span></span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span>                     a <span class="cs">\NC</span>                       b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span>                     a <span class="cs">\NC</span>                       b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>a<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>a <span class="cs">\NC</span>                       b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span>                     a <span class="cs">\NC</span> <span class="cs">\markanchor</span><span class="br">{</span>a<span class="br">}</span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>  b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span>                     a <span class="cs">\NC</span>                       b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+       <span class="cs">\NC</span> a <span class="cs">\NC</span>                     a <span class="cs">\NC</span>                       b <span class="cs">\NC</span> c<span class="cs">\NR</span>
+   <span class="cs"><span class="documentcs">\stopmathmatrix</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/26fde27de8ad798e1952c5688b743a91.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="With_matrices_-_example_2">
+      With matrices - example 2
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>13pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>whatever-5<span class="br">}</span>
+fill OverlayBox withcolor "lightgray"&nbsp;;
+draw matrixbox <span class="brx">(</span>1, 1<span class="brx">)</span> <span class="brx">(</span>2, 1<span class="brx">)</span>
+     withpen pencircle scaled 1pt withcolor "blue"&nbsp;;
+draw matrixbox <span class="brx">(</span>2, 2<span class="brx">)</span> <span class="brx">(</span>4, 4<span class="brx">)</span>
+     withpen pencircle scaled 1pt withcolor "red"&nbsp;;
+draw anchorxy<span class="brx">(</span>"matrix", 3, 4<span class="brx">)</span>
+     withpen pencircle scaled 4pt withcolor "green";
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>whatever-5<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>whatever-5<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>synchronize<span class="brx">=</span>background,
+   align<span class="brx">=</span>normal,
+   frame<span class="brx">=</span>off,
+   background<span class="brx">=</span>whatever-5<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\setmathmatrixanchoring</span><span class="brx">[</span>both<span class="brx">]</span><span class="comment">% left|right|both|yes</span>
+<span class="comment">%   {\setmathmatrixanchoring[right]% left|right|both|yes</span>
+   <span class="cs"><span class="documentcs">\startmathmatrix</span></span>
+      <span class="cs">\NC</span> a1 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a2 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a3 <span class="cs">\NC</span> a^2 <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a4 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b_2 <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a5 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a6 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+  <span class="cs"><span class="documentcs">\stopmathmatrix</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>whatever-5<span class="br">}</span>
+fill OverlayBox withcolor "darkgray"&nbsp;;
+draw matrixbox <span class="brx">(</span>1, 1<span class="brx">)</span> <span class="brx">(</span>2, 1<span class="brx">)</span>
+     enlarged OverlayOffset
+     shifted paired<span class="brx">(</span>OverlayOffset<span class="brx">)</span>
+     withpen pencircle scaled 1pt withcolor "blue"&nbsp;;
+draw matrixbox <span class="brx">(</span>2, 2<span class="brx">)</span> <span class="brx">(</span>4, 4<span class="brx">)</span>
+     enlarged OverlayOffset
+     shifted paired<span class="brx">(</span>OverlayOffset<span class="brx">)</span>
+     withpen pencircle scaled 1pt withcolor "red"&nbsp;;
+draw anchorxy<span class="brx">(</span>"matrix", 3, 4<span class="brx">)</span>
+     withpen pencircle scaled 4pt withcolor "green";
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>synchronize<span class="brx">=</span>background,
+   align<span class="brx">=</span>normal,
+   frame<span class="brx">=</span>off,
+   background<span class="brx">=</span>whatever-5,
+   backgroundoffset<span class="brx">=</span>.5ex,
+   foregroundcolor<span class="brx">=</span>white<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\setmathmatrixanchoring</span><span class="brx">[</span>yes<span class="brx">]</span><span class="comment">% left|right|both|yes</span>
+   <span class="cs"><span class="documentcs">\startmathmatrix</span></span>
+      <span class="cs">\NC</span> a1 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a2 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a3 <span class="cs">\NC</span> a^2 <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a4 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b_2 <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a5 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+      <span class="cs">\NC</span> a6 <span class="cs">\NC</span> a   <span class="cs">\NC</span> b   <span class="cs">\NC</span> c<span class="cs">\NR</span>
+  <span class="cs"><span class="documentcs">\stopmathmatrix</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/bc38a345d338ded07d9dad44fc2a4569.webp" width="438">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/general/manuals/metafun-p.pdf#page=154" rel="nofollow">
+       MetaFun
+      </a>
+      reference manual,
+      <i>
+       5. Positional graphics
+      </i>
+      .
+     </li>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/general/manuals/luametafun.pdf#page=132" rel="nofollow">
+       LuaMetaFun
+      </a>
+      reference manual,
+      <i>
+       23.8.3 Positions
+      </i>
+      .
+     </li>
+     <li>
+      <a class="external text" href="https://mailman.ntg.nl/archives/list/ntg-context@ntg.nl/thread/WFZNYRZUGTHHAETGN4DYASG62RAUEARK/#SCIIGUSGWFSJZPTNHVGI4KIXTE3MXOTG%7Csource" rel="nofollow">
+       on ntg-context@ntg.nl
+      </a>
+      <i>
+       new upload
+      </i>
+      May 2021.
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.159 seconds
+Real time usage: 0.372 seconds
+Preprocessor visited node count: 422/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 2436/2097152 bytes
+Template argument size: 581/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 42486/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  188.930      1 -total
+  7.65%   14.458     27 Template:cmd
+  4.57%    8.627      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7425-1!canonical and timestamp 20260109212415 and revision id 42063
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Positioning">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Languages/Gaelic&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Languages/Gaelic" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Languages/Gaelic
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7488&diff=42654">2026-01-07</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>There&rsquo;s preliminary support for Irish Gaelic (<tt>ga</tt>) in ConTeXt. 
+</p>
+    <p>We have hyphenation patterns (the same as LaTeX, as of 2026-01-07) and fall back to English typographic settings.
+Translated labels or a setup for Scottish/Manx Gaelic are still missing.
+Please inquire on the mailing list if you need it and can offer expertise.
+</p>
+    <p>Otherwise you just need a suitable font that has insular characters and (combining) dot accents.
+</p>
+    <p>Here are some resources:
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="https://www3.smo.uhi.ac.uk/oduibhin/mearchlar/fonts.htm" rel="nofollow">
+       Some basics and about requirements in fonts
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://www.djmurphy.net/blog/clo-gaelach/" rel="nofollow">
+       How to use OpenType features to convert from h-lenition to dot accents
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://www.gaelchlo.com/clonna2.html" rel="nofollow">
+       Gaelic fonts
+      </a>
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% needs the Gadelica fonts installed</span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>ga<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gadelica<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setup</span></span><span class="brx">[</span>font:fallback:serif<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>       <span class="brx">[</span>file:gadelica<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span> <span class="brx">[</span>file:gadelicacursiva<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>   <span class="brx">[</span>file:gadelicagravis<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>gadelica<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gadelica<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>gadelica<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">%{\tf Gadelica}</span>
+<span class="comment">%{\it Gadelica Cursiva}</span>
+<span class="comment">%{\bf Gadelica Gravis}</span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span>
+Ba &gdot;n&aacute;&cdot; m&eacute; ag si&uacute;l le ciuṁais na haḃann,
+Ar ḃ&aacute;insea&cdot; &uacute;r &rsquo;s an dr&uacute;&cdot;t go trom,
+In aice na gcoillte i gcoim an tsl&eacute;iḃe,
+Gan ṁairg gan ṁoill ar ṡoilse an lae.
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>Do scr&iacute;oḃas go mion&cdot;ruinn ar a l&aacute;n d&aacute;r gc&uacute;rsa&iacute; a d&rsquo;ḟonn go
+mbeaḋ cuiṁne i mball &eacute;igin orṫu, agus do ṫugas iarra&cdot;t ar
+ṁeon na ndaoine do ḃ&iacute; im ṫimpeall do &cdot;ur s&iacute;os &cdot;uin go mbeaḋ
+a dtuairisc &rsquo;&aacute;r ndiaiḋ, mar n&aacute; beiḋ &aacute;r leiṫ&eacute;id&iacute; ar&iacute;s ann.<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span> 
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212421
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3010/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7488-1!canonical and timestamp 20260109212421 and revision id 42654
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Languages/Gaelic">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

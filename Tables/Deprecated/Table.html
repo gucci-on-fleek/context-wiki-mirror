@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Tables/Deprecated/Table&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Tables/Deprecated/Table" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Tables/Deprecated/Table
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=726&diff=42394">2025-04-23</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Tables.html" title="Tables">Tables</a> | <a href="../Tabulate.html" title="Tables/Tabulate">Tables/Tabulate</a> &gt;
+</p>
+    <p>This is ConTeXt's oldest table module. It uses the same formatting as <a href="../Tabulate.html" title="Tables/Tabulate">Tables/Tabulate</a> (see <a href="../Overview_of_table_environments_features.html" title="Tables/Overview of table environments features">Tables/Overview of table environments features</a>).
+</p>
+    <p>This mode is based on Michael Wichura's TaBlE package for Plain TeX. The official manual for it is commercial (18 USD), see <a class="external text" href="http://www.pctex.com/books.html" rel="nofollow">PCTeX</a> -- but note that the TaBlE manual only talks about the original syntax, which does not use <tt><a class="new" href="../../index.php?title=Command/NC&action=edit&redlink=1.html" title="Command/NC (page does not exist)">\NC</a></tt>, <tt><a class="new" href="../../index.php?title=Command/HL&action=edit&redlink=1.html" title="Command/HL (page does not exist)">\HL</a></tt>, cum suis.
+</p>
+    <p>The only ConTeXt docs are in <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/ms-cb-en.pdf" title="manual:ms-cb-en.pdf">ConTeXt - an excursion</a>. There are also two introductory articles in TUGboat <a class="external text" href="http://tug.org/TUGboat/Articles/tb28-3/tb90mahajan.pdf" rel="nofollow">ConTeXt basics for users: Table macros</a> <a class="external text" href="http://www.tug.org/TUGboat/Articles/tb29-1/tb91mahajan.pdf" rel="nofollow">Table macros II</a> by Aditya Mahajan (2007 and 2008).
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Basic_Commands">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Basic Commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Column_Definition">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Column Definition
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Column_definition_examples">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Column definition examples
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Column_Spans">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Column Spans
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Row_Spans">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Row Spans
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Table_as_Floating_Object">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Table as Floating Object
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Background_Colors">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Background Colors
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Fit_Table_Width">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Fit Table Width
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Booktabs">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Booktabs
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Basic_Commands">
+      Basic Commands
+     </span>
+    </h2>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|l|l|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> Command	<span class="cs">\VL</span> Meaning	<span class="cs">\SR</span> <span class="comment">% or \NC\AR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>NC<span class="br">}</span>	<span class="cs">\VL</span> next column	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>HL<span class="br">}</span>	<span class="cs">\VL</span> horizontal line	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>VL<span class="br">}</span>	<span class="cs">\VL</span> vertical line	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>NR<span class="br">}</span>	<span class="cs">\VL</span> next row	<span class="cs">\LR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>SR<span class="br">}</span>	<span class="cs">\VL</span> single row	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>FR<span class="br">}</span>	<span class="cs">\VL</span> first row	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>MR<span class="br">}</span>	<span class="cs">\VL</span> middle row	<span class="cs">\AR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>LR<span class="br">}</span>	<span class="cs">\VL</span> last row <span class="cs">\LR</span> <span class="comment">% or \NC\AR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>AR<span class="br">}</span>	<span class="cs">\VL</span> automatic row	<span class="cs">\SR</span> <span class="comment">% or \NC\AR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="331" src="../../wikiteximage/a8a0249e55ce2eb6d11c0a90574eaa33.webp" width="229"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <ul>
+     <li>
+      To get vertical lines (rules), use
+      <tt>
+       <a class="new" href="../../index.php?title=Command/VL&action=edit&redlink=1.html" title="Command/VL (page does not exist)">
+        \VL
+       </a>
+      </tt>
+      instead of
+      <tt>
+       <a class="new" href="../../index.php?title=Command/NC&action=edit&redlink=1.html" title="Command/NC (page does not exist)">
+        \NC
+       </a>
+      </tt>
+      .
+     </li>
+     <li>
+      Better use
+      <tt>
+       <a class="new" href="../../index.php?title=Command/SR&action=edit&redlink=1.html" title="Command/SR (page does not exist)">
+        \SR
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/FR&action=edit&redlink=1.html" title="Command/FR (page does not exist)">
+        \FR
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/MR&action=edit&redlink=1.html" title="Command/MR (page does not exist)">
+        \MR
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/LR&action=edit&redlink=1.html" title="Command/LR (page does not exist)">
+        \LR
+       </a>
+      </tt>
+      instead of
+      <tt>
+       <a class="new" href="../../index.php?title=Command/NR&action=edit&redlink=1.html" title="Command/NR (page does not exist)">
+        \NR
+       </a>
+      </tt>
+      .
+     </li>
+     <li>
+      You can also use
+      <tt>
+       <a class="new" href="../../index.php?title=Command/AR&action=edit&redlink=1.html" title="Command/AR (page does not exist)">
+        \AR
+       </a>
+      </tt>
+      instead of
+      <tt>
+       <a class="new" href="../../index.php?title=Command/SR&action=edit&redlink=1.html" title="Command/SR (page does not exist)">
+        \SR
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/FR&action=edit&redlink=1.html" title="Command/FR (page does not exist)">
+        \FR
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/MR&action=edit&redlink=1.html" title="Command/MR (page does not exist)">
+        \MR
+       </a>
+      </tt>
+      and
+      <tt>
+       <a class="new" href="../../index.php?title=Command/LR&action=edit&redlink=1.html" title="Command/LR (page does not exist)">
+        \LR
+       </a>
+      </tt>
+      (AR means "automatic row").
+     </li>
+     <li>
+      You can leave out the
+      <tt>
+       <a class="new" href="../../index.php?title=Command/NC&action=edit&redlink=1.html" title="Command/NC (page does not exist)">
+        \NC
+       </a>
+      </tt>
+      before the "row" command, but not if you use
+      <tt>
+       <a class="new" href="../../index.php?title=Command/AR&action=edit&redlink=1.html" title="Command/AR (page does not exist)">
+        \AR
+       </a>
+      </tt>
+      in a last or single row (see example).
+     </li>
+     <li>
+      You can influence the table with
+      <tt>
+       <a href="../../Command/setuptables.html" title="Command/setuptables">
+        \setuptables
+       </a>
+      </tt>
+      .
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Column_Definition">
+      Column Definition
+     </span>
+    </h2>
+    <p>The table is defined by the template enclosed in square brackets after <tt><a href="../../Command/starttable.html" title="Command/starttable">\starttable</a></tt>. The template has the form
+<br>
+<tt>|keys for the first column|keys for the second column|...|keys for the last column|</tt>.
+<br>
+Please note that each column is surrounded by <tt>|</tt> signs. These are necessary. The formatting keys for each column can be a choice of
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Key
+       </th>
+       <th>
+        Meaning
+       </th>
+      </tr>
+      <tr>
+       <th colspan="2">
+        Primitive Keys
+       </th>
+      </tr>
+      <tr>
+       <td><code>a{<em>tokens</em>}</code>
+</td>
+       <td>Adds <code><em>tokens</em></code> <em>after</em> the column content
+</td>
+      </tr>
+      <tr>
+       <td><code>b{<em>tokens</em>}</code>
+</td>
+       <td>Adds <code><em>tokens</em></code> <em>before</em> the column content
+</td>
+      </tr>
+      <tr>
+       <td><code>\{</code>
+</td>
+       <td>Enclose the column in braces (grouping)
+</td>
+      </tr>
+      <tr>
+       <td><code>*{<em>n</em>}{<em>keys</em>}</code>
+</td>
+       <td>Equivalent to repeating the formatting keys <code><i>keys</i></code> <code><i>n</i></code> times
+</td>
+      </tr>
+      <tr>
+       <th colspan="2">
+        Positioning Keys
+       </th>
+      </tr>
+      <tr>
+       <td><code>\LeftGlue</code>
+</td>
+       <td>Specifies the left glue to be used before the column
+</td>
+      </tr>
+      <tr>
+       <td><code>\RightGlue</code>
+</td>
+       <td>Specifies the right glue to be used after the column
+</td>
+      </tr>
+      <tr>
+       <td><code>l</code>
+</td>
+       <td>left-aligned column
+</td>
+      </tr>
+      <tr>
+       <td><code>c</code>
+</td>
+       <td>centered column
+</td>
+      </tr>
+      <tr>
+       <td><code>r</code>
+</td>
+       <td>right-aligned column
+</td>
+      </tr>
+      <tr>
+       <td><code>p(<em>width</em>)</code>
+</td>
+       <td>Set each cell as a paragraph
+</td>
+      </tr>
+      <tr>
+       <td><code>s(<em>width</em>)</code>
+</td>
+       <td>Specify the inter-column width
+</td>
+      </tr>
+      <tr>
+       <td><code>w</code>
+</td>
+       <td>Set minimum column width
+</td>
+      </tr>
+      <tr>
+       <td><code>k</code>
+</td>
+       <td>Insert a kern both left and right of the column
+</td>
+      </tr>
+      <tr>
+       <td><code>i</code>
+</td>
+       <td>Add a kern to the left of the column
+</td>
+      </tr>
+      <tr>
+       <td><code>j</code>
+</td>
+       <td>Add a kern to the right of the column
+</td>
+      </tr>
+      <tr>
+       <th colspan="2">
+        Numeric and Math Item Keys
+       </th>
+      </tr>
+      <tr>
+       <td><code>n</code>
+</td>
+       <td>Numeric item not in math mode
+</td>
+      </tr>
+      <tr>
+       <td><code>N</code>
+</td>
+       <td>Numeric item in math mode
+</td>
+      </tr>
+      <tr>
+       <td><code>m</code>
+</td>
+       <td>Each cell is in (inline) math mode. Equivalent to <code>b$ a$</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>M</code>
+</td>
+       <td>Each cell is in display math mode. Equivalent to <code>\{b{$\displaystyle}a$}</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\m</code>
+</td>
+       <td>Equivalent to 1 <code>l b{{}}m</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\M</code>
+</td>
+       <td>Equivalent to 1 <code>l b{{}}M</code>
+</td>
+      </tr>
+      <tr>
+       <th colspan="2">
+        Style Keys
+       </th>
+      </tr>
+      <tr>
+       <td><code>f\<em>command</em></code>
+</td>
+       <td>Set font according to following <code><em>command</em></code>
+</td>
+      </tr>
+      <tr>
+       <td><code>B</code>
+</td>
+       <td>Bold. Equivalent to <code>f\bf</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>I</code>
+</td>
+       <td>Italic. Equivalent to <code>f\it</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>S</code>
+</td>
+       <td>Slanted. Equivalent to <code>f\sl</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>R</code>
+</td>
+       <td>Roman. Equivalent to <code>f\rm</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>T</code>
+</td>
+       <td>Teletype. Equivalent to <code>f\tt</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>C</code>
+</td>
+       <td>Color. Use it in combination with <code>\{</code> (e.g. <code>\{C{<em>red</em>}</code>)
+</td>
+      </tr>
+      <tr>
+       <th colspan="2">
+        Tabskip Keys
+       </th>
+      </tr>
+      <tr>
+       <td><code>s</code>
+</td>
+       <td>Set the tabskip to the right of this column and of all following columns up to the next <code>s</code> or <code>o</code> key
+</td>
+      </tr>
+      <tr>
+       <td><code>o</code>
+</td>
+       <td>Set the tabskip to the right of this column only
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Column_definition_examples">
+      Column definition examples
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <code>|l|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a left aligned column, as wide as necessary
+     </dd>
+     <dt>
+      <code>|lw(2cm)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a left aligned column of at least 2 cm width
+     </dd>
+     <dt>
+      <code>|p(2cm)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a centered(!) paragraph of 2 cm width
+     </dd>
+     <dt>
+      <code>|lp(.5\textwidth)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a left aligned paragraph of specified width
+     </dd>
+     <dt>
+      <code>|rp(.5\textwidth)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a right aligned paragraph of specified width
+     </dd>
+     <dt>
+      <code>|cp(.5\textwidth)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a center aligned paragraph of specified width
+     </dd>
+     <dt>
+      <code>|xp(.5\textwidth)|</code>
+      &nbsp;
+     </dt>
+     <dd>
+      a justified paragraph of specified width
+     </dd>
+    </dl>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> add more examples of column definitions <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Column_Spans">
+      Column Spans
+     </span>
+    </h2>
+    <p>It's possible to create columnspans (i.e., cells that span more than one column) with the command <tt><a class="new" href="../../index.php?title=Command/use&action=edit&redlink=1.html" title="Command/use (page does not exist)">\use</a>{<i>N</i></tt>} where <i>N</i> is the number of columns spanned by the cell. It's often necessary to use <tt><a class="new" href="../../index.php?title=Command/ReFormat&action=edit&redlink=1.html" title="Command/ReFormat (page does not exist)">\ReFormat</a>[<i>new keys</i>]{</tt>} to reformat this specific cell according to the <i>new keys</i>.
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>s<span class="brx">(</span>0pt<span class="brx">)</span>|ls<span class="brx">(</span>10pt<span class="brx">)</span>|rs<span class="brx">(</span>0pt<span class="brx">)</span>|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs">\use</span><span class="br">{</span>2<span class="br">}</span><span class="cs">\ReFormat</span><span class="brx">[</span>cB<span class="brx">]</span><span class="br">{</span>Spanning head<span class="br">}</span> <span class="cs">\SR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs">\Use</span><span class="br">{</span>2<span class="br">}</span><span class="brx">[</span>cB<span class="brx">]</span><span class="br">{</span>Spanning head<span class="br">}</span> <span class="cs">\SR</span> <span class="comment">% slightly shorted</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> left text	<span class="cs">\VL</span> right column text         <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\NC</span> new row     <span class="cs">\VL</span> new row                   <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\NC</span> left text	<span class="cs">\VL</span> <span class="cs">\ReFormat</span><span class="brx">[</span>l<span class="brx">]</span><span class="br">{</span>reformatted<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs">\use</span><span class="br">{</span>2<span class="br">}</span>Spanning entry <span class="cs">\SR</span> 
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="175" src="../../wikiteximage/4a2beddc3cb10c8f55f5652e63c8d643.webp" width="211"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p><br>
+(<tt><a class="new" href="../../index.php?title=Command/ReFormat&action=edit&redlink=1.html" title="Command/ReFormat (page does not exist)">\ReFormat</a></tt> can be abbreviated <tt><a class="new" href="../../index.php?title=Command/REF&action=edit&redlink=1.html" title="Command/REF (page does not exist)">\REF</a></tt> for brevity.)
+</p>
+    <h2>
+     <span class="mw-headline" id="Row_Spans">
+      Row Spans
+     </span>
+    </h2>
+    <p>It's also possible to create rowspans (i.e. cells that span more than one row) with the command <tt><a class="new" href="../../index.php?title=Command/Raise&action=edit&redlink=1.html" title="Command/Raise (page does not exist)">\Raise</a>(<i>dimen</i>){<i>content</i></tt>} or <tt><a class="new" href="../../index.php?title=Command/Lower&action=edit&redlink=1.html" title="Command/Lower (page does not exist)">\Lower</a>(<i>dimen</i>){content</tt>} that raise or lower <i>content</i> by <i>dimen</i>.
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|c|c|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\VL</span> <span class="cs">\Lower</span><span class="brx">(</span>.75<span class="cs">\lineheight</span><span class="brx">)</span><span class="br">{</span>a<span class="br">}</span> <span class="cs">\VL</span> b <span class="cs">\VL</span> <span class="cs">\AR</span>
+<span class="cs">\DC</span> <span class="cs">\DL</span><span class="brx">[</span>1<span class="brx">]</span> <span class="cs">\DR</span>
+<span class="cs">\VL</span> <span class="cs">\VL</span> c <span class="cs">\VL</span> <span class="cs">\AR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="67" src="../../wikiteximage/394eab379a6391b152bcf83d71762129.webp" width="72"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>(<tt><a class="new" href="../../index.php?title=Command/Lower&action=edit&redlink=1.html" title="Command/Lower (page does not exist)">\Lower</a>(.5\lineheight){a</tt>} can be abbreviated <tt><a class="new" href="../../index.php?title=Command/LOW&action=edit&redlink=1.html" title="Command/LOW (page does not exist)">\LOW</a>{a</tt>} for brevity.)
+</p>
+    <p>In the above example, <tt><a class="new" href="../../index.php?title=Command/DC&action=edit&redlink=1.html" title="Command/DC (page does not exist)">\DC</a></tt> is a "division column", which puts empty space in its corresponding column.
+<tt><a class="new" href="../../index.php?title=Command/DL&action=edit&redlink=1.html" title="Command/DL (page does not exist)">\DL</a></tt>[N] is a "division line", which draws a line (rule) for N columns; if N is one, "[N]" can be omitted.
+Such "division rows" are terminated with <tt><a class="new" href="../../index.php?title=Command/DR&action=edit&redlink=1.html" title="Command/DR (page does not exist)">\DR</a></tt>, which also adjusts the upper and lower spacing.
+</p>
+    <p>An alternative means of spanning rows by a tall object makes use of a bit of TeX magic
+<tt><a class="new" href="../../index.php?title=Command/smash&action=edit&redlink=1.html" title="Command/smash (page does not exist)">\smash</a>{tall object</tt>} (note that, notwithstanding the "M" key, without <tt><a class="new" href="../../index.php?title=Command/displaystyle&action=edit&redlink=1.html" title="Command/displaystyle (page does not exist)">\displaystyle</a></tt> the <tt><a class="new" href="../../index.php?title=Command/sum&action=edit&redlink=1.html" title="Command/sum (page does not exist)">\sum</a></tt> is set in <tt><a class="new" href="../../index.php?title=Command/textstyle&action=edit&redlink=1.html" title="Command/textstyle (page does not exist)">\textstyle</a></tt> because of the <tt><a class="new" href="../../index.php?title=Command/smash&action=edit&redlink=1.html" title="Command/smash (page does not exist)">\smash</a></tt>, at least as of time of writing):
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|M|c|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\VL</span> <span class="cs">\VL</span> a <span class="cs">\VL</span> <span class="cs">\AR</span>
+<span class="cs">\DC</span> <span class="cs">\DL</span><span class="brx">[</span>1<span class="brx">]</span> <span class="cs">\DR</span>
+<span class="cs">\VL</span> <span class="cs"><span class="documentcs">\smash</span></span><span class="br">{</span><span class="cs">\displaystyle</span><span class="cs">\sum_</span>0^N<span class="br">}</span> <span class="cs">\VL</span> b <span class="cs">\VL</span> <span class="cs">\AR</span>
+<span class="cs">\DC</span> <span class="cs">\DL</span><span class="brx">[</span>1<span class="brx">]</span> <span class="cs">\DR</span>
+<span class="cs">\VL</span> <span class="cs">\VL</span> c <span class="cs">\VL</span> <span class="cs">\AR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="98" src="../../wikiteximage/f379be7a89748875725932834255c57f.webp" width="88"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>For those trying to un-deprecate themselves, a similar table (code donated by Hans) can be created using ConTeXt's "natural tables" as follows:
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="documentcs">\bTABLE</span></span><span class="brx">[</span>offset<span class="brx">=</span>.5ex<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>ny<span class="brx">=</span>3,align<span class="brx">=</span>lohi<span class="brx">]</span> <span class="cs">\dm</span> <span class="br">{</span><span class="cs">\sum_</span>0^N<span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> a <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span>                                           <span class="cs"><span class="documentcs">\bTD</span></span> b <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span>                                           <span class="cs"><span class="documentcs">\bTD</span></span> c <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+<span class="cs">\eTABLE</span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="89" src="../../wikiteximage/8da2b5c44f45bce5feb786886d15990f.webp" width="54"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Table_as_Floating_Object">
+      Table as Floating Object
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placetable</span></span><span class="brx">[</span>here<span class="brx">]</span><span class="brx">[</span>tab:sample<span class="brx">]</span><span class="br">{</span>sample table<span class="br">}</span><span class="br">{</span>
+<span class="cs"><span class="documentcs">\starttable</span></span> ...
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+<span class="br">}</span>
+</pre>
+    <ul>
+     <li>
+      See
+      <a href="../../Document_layout_and_layers/Floating_objects.html" title="Document layout and layers/Floating objects">
+       Floating objects
+      </a>
+      in general.
+     </li>
+     <li>
+      If you need information about
+      <tt>
+       <a class="mw-redirect" href="../../Command/_placefloat.html" title="Command/placetable">
+        \placetable
+       </a>
+      </tt>
+      look after
+      <tt>
+       <a href="../../Command/placefloat.html" title="Command/placefloat">
+        \placefloat
+       </a>
+      </tt>
+      in the manual or texshow!
+     </li>
+     <li>
+      If you do not want a caption for your table, to get rid of it altogether you have to add "none" to settings and then leave the braces empty; if you only leave the braces empty, your table will still be numbered ("Table 1" etc.).
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placetable</span></span><span class="brx">[</span>here,none<span class="brx">]</span><span class="brx">[</span>tab:sample<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>
+<span class="cs"><span class="documentcs">\starttable</span></span> ...
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Background_Colors">
+      Background Colors
+     </span>
+    </h2>
+    <p>Note: Adding color to tables using the <code>\CL</code> and <code>\BL</code> commands appears to be deprecated in MKIV; see: <a class="external free" href="http://wiki.contextgarden.net/Tabulate" rel="nofollow">http://wiki.contextgarden.net/Tabulate</a>
+</p>
+    <p>A very nice application in table are background colors for rows/cells (a feature that doesn't work in <a class="new" href="../../index.php?title=Tabulate&action=edit&redlink=1" title="Tabulate (page does not exist)">Tabulate</a>):
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|l|l|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\BL</span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\SR</span>
+<span class="cs">\NC</span> Command	<span class="cs">\NC</span> Meaning	<span class="cs">\NC</span><span class="cs">\SR</span>
+<span class="cs">\HL</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>NC<span class="br">}</span>	<span class="cs">\NC</span> next column	<span class="cs">\NC</span><span class="cs">\FR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>NR<span class="br">}</span>	<span class="cs">\NC</span> next row	<span class="cs">\NC</span><span class="cs">\LR</span>
+<span class="cs">\HL</span>
+<span class="cs">\CL</span><span class="brx">[</span>green<span class="brx">]</span><span class="cs">\SR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>AR<span class="br">}</span>	<span class="cs">\NC</span> automatic row<span class="cs">\NC</span><span class="cs">\SR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="180" src="../../wikiteximage/bd7bbb0d3e3434431383423ae14713df.webp" width="279"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The commands work something like this:  first, you say what background colour you want for the next row
+and then you typeset the row.  Observe: the line with the colour-command and the row it is supposed
+to colour should end in the same command (i.e. both \SR, \LR, \FR, ...).  If they don't, the background
+won't cover the whole cell.
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/BL&action=edit&redlink=1.html" title="Command/BL (page does not exist)">
+        \BL
+       </a>
+      </tt>
+      makes a gray background: the optional argument tells BL how many cells it should color
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/CL&action=edit&redlink=1.html" title="Command/CL (page does not exist)">
+        \CL
+       </a>
+      </tt>
+      makes a colored row
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Fit_Table_Width">
+      Fit Table Width
+     </span>
+    </h2>
+    <p>Hans posted a solution to the list for fitting a wide table (with paragraphs and vertical lines) to the page width. The key to his solution is the <code>.45\textwidth</code> settings when setting each cell as a paragraph.
+</p>
+    <pre class="tex"><span class="cs">\SetTableToWidth</span><span class="br">{</span><span class="cs">\textwidth</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|p<span class="brx">(</span>.45<span class="cs">\textwidth</span><span class="brx">)</span>|p<span class="brx">(</span>.45<span class="cs">\textwidth</span><span class="brx">)</span>|<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\VL</span> foo foo foo foo foo foo <span class="cs">\VL</span> bar bar bar bar bar bar <span class="cs">\VL</span><span class="cs">\AR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+    <p>Since the table module has been under <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2010/055004.html" rel="nofollow">reconstruction</a> this approach works only for MKII. In MKIV one can use 
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|l|l|<span class="brx">]</span><span class="brx">[</span>textwidth<span class="brx">=</span>max<span class="brx">]</span>
+<span class="cs">\HL</span>
+<span class="cs">\VL</span> foo foo foo foo foo foo <span class="cs">\VL</span> bar bar bar bar bar bar <span class="cs">\VL</span><span class="cs">\AR</span>
+<span class="cs">\HL</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+    <p>to change the width of the current table only.
+</p>
+    <p><code>\setuptables[textwidth=...]</code> will affect the behavior of every table.
+</p>
+    <h2>
+     <span class="mw-headline" id="Booktabs">
+      Booktabs
+     </span>
+    </h2>
+    <p>Latex has an excellent package called booktabs for typesetting tables. The main features of that package is that you can have top, mid, and bottom rules of different thickness. It is possible to achieve similar effects using table. For example, to match the default settings of booktabs (well almost, this gives a top and bottom rules of 0.09em while booktabs sets it to 0.08em).
+</p>
+    <table>
+     <tbody>
+      <tr valign="top">
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\setuptables</span></span><span class="brx">[</span>rulethickness<span class="brx">=</span>0.03em<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>s0|l|i2l|i2r|<span class="brx">]</span>
+  <span class="cs">\HL</span><span class="brx">[</span>3<span class="brx">]</span>
+  <span class="cs">\NC</span> <span class="cs">\Use</span>2<span class="brx">[</span>c<span class="brx">]</span><span class="br">{</span>Item<span class="br">}</span>             <span class="cs">\NC</span>            <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\DL</span><span class="brx">[</span>2<span class="brx">]</span>                         <span class="cs">\DC</span>                <span class="cs">\DR</span>
+  <span class="cs">\NC</span> Animal    <span class="cs">\NC</span> Description  <span class="cs">\NC</span> Price <span class="brx">(</span>\$<span class="brx">)</span> <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\HL</span><span class="brx">[</span>2<span class="brx">]</span>
+  <span class="cs">\NC</span> Gnat      <span class="cs">\NC</span> per gram     <span class="cs">\NC</span> 13.65      <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\NC</span>           <span class="cs">\NC</span> each         <span class="cs">\NC</span>  0.01      <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\NC</span> Gnu       <span class="cs">\NC</span> stuffed      <span class="cs">\NC</span> 92.50      <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\NC</span> Emu       <span class="cs">\NC</span> stuffed      <span class="cs">\NC</span> 33.33      <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\NC</span> Armadillo <span class="cs">\NC</span> frozen       <span class="cs">\NC</span>  8.99      <span class="cs">\NC</span> <span class="cs">\AR</span>
+  <span class="cs">\HL</span><span class="brx">[</span>3<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+</pre>
+</td>
+       <td>
+<ul class="demo"><li class="rendering"><img height="192" src="../../wikiteximage/78741ad33bae442e16fabc586348dd86.webp" width="255"></li></ul>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212436
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.149 seconds
+Real time usage: 0.261 seconds
+Preprocessor visited node count: 615/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 2939/2097152 bytes
+Template argument size: 470/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 14315/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  164.655      1 -total
+  5.76%    9.484     38 Template:cmd
+  5.46%    8.998      1 Template:todo
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:726-1!canonical and timestamp 20260109212436 and revision id 42394
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Tables/Deprecated/Table">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Makeup/Standardmakeup background&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Makeup/Standardmakeup_background" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Makeup/Standardmakeup background
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4663&diff=41611">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="How_to_place_an_image_on_a_defined_makeup_or_standardmakeup_page.">
+      How to place an image on a defined makeup or standardmakeup page.
+     </span>
+    </h2>
+    <p>First define the layer.
+</p>
+    <pre> \definelayer
+     [MyLayer]
+     [
+         position=no,
+         repeat=no,
+         width=\paperwidth,
+         height=\paperheight,
+     ]
+</pre>
+    <p>Then set the layer with \setlayer or \setlayerframed (depending on your needs).
+</p>
+    <pre> \setlayer
+     [MyLayer]
+     [x=0cm,y=3cm]
+     {\externalfigure[figure.pdf]}
+</pre>
+    <p>Define your custom makeup or the standardmakeup to use your defined layer as its background 
+</p>
+    <p>Custom:
+</p>
+    <pre> \definemakeup
+     [title]
+     [
+         doublesided=no,
+         page=right,
+         headerstade=empty,
+         footerstate=empty,
+         before=\setups{title:setups},
+     ]
+ 
+ \startsetups title:setups
+     \setupbackgrounds[page][background=MyLayer]
+ \stopsetups
+</pre>
+    <p>Or standard:
+</p>
+    <pre> \definemakeup
+     [standard]
+     [
+         doublesided=no,
+         page=right,
+         headerstate=empty,
+         footerstate=empty,
+         before=\setups{standard:setups},
+     ]
+ 
+ \startsetups standard:setups
+     \setupbackgrounds[page][background=MyLayer]
+ \stopsetups
+</pre>
+    <p>Then in your document you can use it like this:
+</p>
+    <pre> \starttext
+ 
+ \startfrontmatter
+     \starttitlemakeup  % -- (or \startstandardmakeup)
+         \title{Your Title Here}
+     \stoptitlemakeup
+ \stopfrontmatter
+ 
+ \startbodymatter
+     \chapter{Body of document}
+     \input knuth
+ \stopbodymatter
+ 
+ \stoptext
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125245
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 2/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4663-1!canonical and timestamp 20260109125245 and revision id 41611
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Makeup/Standardmakeup_background">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

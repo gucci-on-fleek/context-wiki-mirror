@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Custom Configuration&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Custom_Configuration" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Custom Configuration
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4840&diff=40140">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a class="new" href="index.php?title=Installation_hints&action=edit&redlink=1" title="Installation hints (page does not exist)">Installation hints</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Default_Variables">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Default Variables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Custom_Variables">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Custom Variables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Environment_Variables">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Environment Variables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Security_Concerns">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Security Concerns
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#File_Priority">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         File Priority
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>This page describes how to configure and persist changes to default settings, including directory paths. For the purposes of this wiki page, it is assumed that ConTeXt is installed at:
+</p>
+    <pre> /opt/context
+</pre>
+    <h2>
+     <span class="mw-headline" id="Default_Variables">
+      Default Variables
+     </span>
+    </h2>
+    <p>The file <tt>/opt/context/tex/texmf/web2c/texmfcnf.lua</tt> contains a number of variables, including:
+</p>
+    <pre> TEXMFCACHE
+ TEXMFOS
+ TEXMFCONTEXT
+</pre>
+    <p>Do not change this file as upgrading ConTeXt overwrites these files. To customize <tt>texmf.cnf</tt>, change the variables as noted in the following section.
+</p>
+    <h2>
+     <span class="mw-headline" id="Custom_Variables">
+      Custom Variables
+     </span>
+    </h2>
+    <p>Modify a variable as follows:
+</p>
+    <ol>
+     <li>
+      Change to the location of
+      <tt>
+       setuptex
+      </tt>
+      (e.g.,
+      <tt>
+       /opt/context/tex/
+      </tt>
+      ).
+     </li>
+     <li>
+      Create a new file called
+      <tt>
+       texmfcnf.lua
+      </tt>
+      (or
+      <tt>
+       texmf.cnf
+      </tt>
+      ).
+     </li>
+     <li>
+      Set only the required variables.
+     </li>
+    </ol>
+    <p>For example, to change the cache directory, use:
+</p>
+    <pre> return {
+   content = {
+     variables = {
+       TEXMFCACHE = "/var/cache/context/texmf-cache",
+     },
+   },
+ }
+</pre>
+    <p>Save the file.
+</p>
+    <p>The allowed locations for <tt>texmfcnf.lua</tt> are determined by the variable <code>TEXMFCNF</code> set in
+<tt>texk/kpathsea/texmf.cnf</tt> in the LuaTeX source code.
+</p>
+    <p>Most options in <tt>texmf.cnf</tt> of modern TeX distributions also work with ConTeXt.
+</p>
+    <h2>
+     <span class="mw-headline" id="Environment_Variables">
+      Environment Variables
+     </span>
+    </h2>
+    <p>By default, ConTeXt creates a directory named <tt>luatex-cache</tt> in the user's home directory. One way to change the cache location includes:
+</p>
+    <pre>export TEXMFCACHE=/tmp
+mtxrun --generate
+context filename.tex
+</pre>
+    <p>Another way is to run the <tt>context</tt> executable indirectly via <tt>mtxrun</tt>, as follows:
+</p>
+    <pre>export TEXMFCACHE=/tmp
+mtxrun --autogenerate --script mtx-context filename.tex
+</pre>
+    <p>Running ConTeXt in either of these ways will create <tt>luatex-cache</tt> inside the <tt>/tmp</tt> directory, rather than the user's home directory.
+</p>
+    <h2>
+     <span class="mw-headline" id="Security_Concerns">
+      Security Concerns
+     </span>
+    </h2>
+    <p>ConTeXt requires enabling the <code>write18</code> function to run <a href="Graphics_and_media/Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaPost and MetaFun</a> and other tools. This implies that malicious TeX code can run any program with user rights. The function is <i>disabled</i> by default. This can be enabled by changing the setting inside <tt>texmf.cnf</tt>:
+</p>
+    <pre> shell_escape = t
+</pre>
+    <p>For MikTeX users, the counterpart to <tt>texmf.cnf</tt> was <tt>miktex.ini</tt>, now the config is <a class="external text" href="http://docs.miktex.org/2.9/manual/runtimeparams.html" rel="nofollow">stored separately for each program</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="File_Priority">
+      File Priority
+     </span>
+    </h2>
+    <p>The <tt>texmf.cnf</tt> files are read in the following order:
+</p>
+    <ol>
+     <li>
+      /opt/context/bin/x86_64-linux/texmf.cnf
+     </li>
+     <li>
+      /opt/context/bin/texmf.cnf
+     </li>
+     <li>
+      /opt/context/texmf.cnf
+     </li>
+     <li>
+      /opt/context/texmf/web2c/texmf.cnf
+     </li>
+    </ol>
+    <p>Variables set in a particular file are <i>not</i> overwritten by files that are read later.
+</p>
+    <p>The first configuration file listed is useful for system dependent configuration. On
+multi-platform installations you could create a file <tt>/opt/context/bin/win32/texmf.cnf</tt> on the server that contains:
+</p>
+    <pre>OSFONTDIR = $SystemRoot/Fonts
+</pre>
+    <p>and this only affects Windows clients, even if the third file contains the line:
+</p>
+    <pre>OSFONTDIR = /usr/share/fonts/
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212410
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.025 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 20/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4840-1!canonical and timestamp 20260109212410 and revision id 40140
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Custom_Configuration">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Drawing graphs and diagrams/TikZ&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/TikZ" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Drawing graphs and diagrams/TikZ
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2667&diff=41836">2025-01-20</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Input_and_compilation/Modules.html" title="Input and compilation/Modules">Modules</a> | <a href="../../Graphics_and_media.html" title="Graphics and media">Graphics and media</a> &gt;                                                                                          
+</p>
+    <p><a class="external text" href="http://pgf.sourceforge.net/" rel="nofollow">TikZ/pgf</a> is a portable graphics package developed for LaTeX,
+also supporting ConTeXt. It is a possible alternative to <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">Graphical programming with MetaPost and MetaFun</a>.      
+</p>
+    <p>TikZ is included as a (third party) module for ConTeXt.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Example">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Placing_TikZ_graphics">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Placing TikZ graphics
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Example_for_commutative_diagrams">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Example for commutative diagrams
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Tips_for_converting_LaTeX_TikZ_diagrams_to_ConTeXt">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Tips for converting LaTeX TikZ diagrams to ConTeXt
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#See_also">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <p>From the TikZ/pgf <a class="external text" href="http://dl.contextgarden.net/modules/t-tikz/doc/generic/pgf/pgfmanual.pdf" rel="nofollow">manual</a>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>darkgreen<span class="brx">]</span><span class="brx">[</span>g<span class="brx">=</span>.5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>tikz<span class="brx">]</span>         
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\starttikzpicture</span><span class="brx">[</span>      scale<span class="brx">=</span>3,line cap<span class="brx">=</span>round
+                        axes/.style<span class="brx">=</span>,         
+                        important line/.style<span class="brx">=</span><span class="br">{</span>very thick<span class="br">}</span>,
+                        information text/.style<span class="brx">=</span><span class="br">{</span>rounded corners,fill<span class="brx">=</span>red!10,inner sep<span class="brx">=</span>1ex<span class="br">}</span> <span class="brx">]</span>
+
+        <span class="cs">\draw</span><span class="brx">[</span>help lines,step<span class="brx">=</span>0.5cm<span class="brx">]</span> <span class="brx">(</span>-1.4,-1.4<span class="brx">)</span> grid <span class="brx">(</span>1.4,1.4<span class="brx">)</span>;
+        <span class="cs">\draw</span> <span class="brx">(</span>0,0<span class="brx">)</span> circle <span class="brx">(</span>1cm<span class="brx">)</span>;                               
+                <span class="cs">\draw</span><span class="brx">[</span>-&gt;<span class="brx">]</span> <span class="brx">(</span>-1.5,0<span class="brx">)</span> -- <span class="brx">(</span>1.5,0<span class="brx">)</span> node<span class="brx">[</span>right<span class="brx">]</span> <span class="br">{</span>$x$<span class="br">}</span> coordinate<span class="brx">(</span>x axis<span class="brx">)</span>;
+                <span class="cs">\draw</span><span class="brx">[</span>-&gt;<span class="brx">]</span> <span class="brx">(</span>0,-1.5<span class="brx">)</span> -- <span class="brx">(</span>0,1.5<span class="brx">)</span> node<span class="brx">[</span>above<span class="brx">]</span> <span class="br">{</span>$y$<span class="br">}</span> coordinate<span class="brx">(</span>y axis<span class="brx">)</span>;
+                <span class="cs">\foreach</span> <span class="cs">\x</span>/<span class="cs">\xtext</span> in <span class="br">{</span>-1, -.5/-<span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>, 1<span class="br">}</span>                    
+                        <span class="cs">\draw</span><span class="brx">[</span>xshift<span class="brx">=</span><span class="cs">\x</span> cm<span class="brx">]</span> <span class="brx">(</span>0pt,1pt<span class="brx">)</span> -- <span class="brx">(</span>0pt,-1pt<span class="brx">)</span>                
+                                node<span class="brx">[</span>below,fill<span class="brx">=</span>white<span class="brx">]</span> <span class="br">{</span>$<span class="cs">\xtext</span>$<span class="br">}</span>;
+                <span class="cs">\foreach</span> <span class="cs">\y</span>/<span class="cs">\ytext</span> in <span class="br">{</span>-1, -.5/-<span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>, .5/<span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>2<span class="br">}</span>, 1<span class="br">}</span>
+                        <span class="cs">\draw</span><span class="brx">[</span>yshift<span class="brx">=</span><span class="cs">\y</span> cm<span class="brx">]</span> <span class="brx">(</span>1pt,0pt<span class="brx">)</span> -- <span class="brx">(</span>-1pt,0pt<span class="brx">)</span>
+                                node<span class="brx">[</span>left,fill<span class="brx">=</span>white<span class="brx">]</span> <span class="br">{</span>$<span class="cs">\ytext</span>$<span class="br">}</span>;
+        <span class="cs">\filldraw</span><span class="brx">[</span>fill<span class="brx">=</span>green!20,draw<span class="brx">=</span>green!50!black<span class="brx">]</span> <span class="brx">(</span>0,0<span class="brx">)</span> -- <span class="brx">(</span>3mm,0pt<span class="brx">)</span> arc<span class="brx">(</span>0:30:3mm<span class="brx">)</span>;
+        <span class="cs">\draw</span> <span class="brx">(</span>15:2mm<span class="brx">)</span> node<span class="brx">[</span>green!50!black<span class="brx">]</span> <span class="br">{</span>$<span class="cs">\alpha</span>$<span class="br">}</span>;
+        <span class="cs">\draw</span><span class="brx">[</span>important line,red<span class="brx">]</span>
+                <span class="brx">(</span>30:1cm<span class="brx">)</span> -- node<span class="brx">[</span>left<span class="brx">=</span>1pt,fill<span class="brx">=</span>white<span class="brx">]</span> <span class="br">{</span>$<span class="cs">\sin</span> <span class="cs">\alpha</span>$<span class="br">}</span> <span class="brx">(</span>30:1cm |- x axis<span class="brx">)</span>;
+        <span class="cs">\draw</span><span class="brx">[</span>important line,blue<span class="brx">]</span>
+                <span class="brx">(</span>30:1cm |- x axis<span class="brx">)</span> -- node<span class="brx">[</span>below<span class="brx">=</span>2pt,fill<span class="brx">=</span>white<span class="brx">]</span> <span class="br">{</span>$<span class="cs">\cos</span> <span class="cs">\alpha</span>$<span class="br">}</span> <span class="brx">(</span>0,0<span class="brx">)</span>;
+        <span class="cs">\draw</span><span class="brx">[</span>important line,orange!80!black<span class="brx">]</span> <span class="brx">(</span>1,0<span class="brx">)</span> -- node<span class="brx">[</span>right<span class="brx">=</span>1pt,fill<span class="brx">=</span>white<span class="brx">]</span> <span class="br">{</span>
+                $<span class="cs">\displaystyle</span> <span class="cs">\tan</span> <span class="cs">\alpha</span> <span class="cs">\black</span> <span class="brx">=</span>
+                <span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span><span class="br">{</span><span class="cs">\red</span> <span class="cs">\sin</span> <span class="cs">\alpha</span><span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="cs">\blue</span> <span class="cs">\cos</span> <span class="cs">\alpha</span><span class="br">}</span>$<span class="br">}</span>
+                <span class="brx">(</span>intersection of 0,0--30:1cm and 1,0--1,1<span class="brx">)</span> coordinate <span class="brx">(</span>t<span class="brx">)</span>;
+        <span class="cs">\draw</span> <span class="brx">(</span>0,0<span class="brx">)</span> -- <span class="brx">(</span>t<span class="brx">)</span>;
+        <span class="cs">\draw</span><span class="brx">[</span>xshift<span class="brx">=</span>1.85cm<span class="brx">]</span>
+                node<span class="brx">[</span>right,text width<span class="brx">=</span>6cm,information text<span class="brx">]</span>
+                <span class="br">{</span>
+                        The <span class="br">{</span><span class="cs">\darkgreen</span> angle $<span class="cs">\alpha</span>$<span class="br">}</span> is $30^<span class="cs">\circ</span>$ in the
+                        example <span class="brx">(</span>$<span class="cs">\pi</span>/6$ in radians<span class="brx">)</span>. The <span class="br">{</span><span class="cs">\red</span> sine of
+                        $<span class="cs">\alpha</span>$<span class="br">}</span>, which is the height of the red line, is
+                        <span class="cs"><span class="documentcs">\startformula</span></span>
+                        <span class="br">{</span><span class="cs">\red</span> <span class="cs">\sin</span> <span class="cs">\alpha</span><span class="br">}</span> <span class="brx">=</span> 1/2.
+                        <span class="cs"><span class="documentcs">\stopformula</span></span>
+                        By the Theorem of Pythagoras ...
+                <span class="br">}</span>;
+<span class="cs">\stoptikzpicture</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:TikZ_example.png"><img alt="TikZ example.png" decoding="async" height="376" src="../../images/1/1a/TikZ_example.webp" width="646"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Placing_TikZ_graphics">
+      Placing TikZ graphics
+     </span>
+    </h2>
+    <p>You should wrap TikZ graphics inside \hbox when placing them, for example:
+</p>
+    <pre class="tex">
+
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>here<span class="brx">]</span><span class="brx">[</span>fig:myfig<span class="brx">]</span><span class="br">{</span>My figure.<span class="br">}</span><span class="br">{</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs">\starttikzpicture</span>
+	<span class="cs">\draw</span> <span class="brx">(</span>0, 0<span class="brx">)</span> circle <span class="brx">(</span>3cm<span class="brx">)</span>;
+<span class="cs">\stoptikzpicture</span><span class="br">}</span><span class="br">}</span>
+
+</pre>
+    <p>Otherwise, positioning will not work (figure will not be centered). See <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2007/023177.html" rel="nofollow">this post</a> by Aditya Mahajan for explanation.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_for_commutative_diagrams">
+      Example for commutative diagrams
+     </span>
+    </h2>
+    <p>Hans &Aring;berg wrote to the mailing list on 2016-10-06:
+</p>
+    <p>There is a tikz-cd package at CTAN: <a class="external free" href="https://www.ctan.org/tex-archive/graphics/pgf/contrib/tikz-cd?lang=en" rel="nofollow">https://www.ctan.org/tex-archive/graphics/pgf/contrib/tikz-cd?lang=en</a>
+</p>
+    <p>In order to use it, download the the file <code>tikzlibrarycd.code.tex</code> and put it in <code>CONTEXT_HOME/tex/texmf-modules/tex/generic/pgf/libraries/</code>. Then run
+</p>
+    <pre>mtxrun --generate
+context --make
+</pre>
+    <p>You should now be able to use tikz-cd.
+</p>
+    <p>Makes sure to follow the translation rules in the manual for ConTeXt. In addition to that, it seems that you have to replace the apostrophe with "below".
+</p>
+    <p>The first few examples in the manual, which compiled with latest ConTeXt:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>tikz<span class="brx">]</span>
+<span class="cs">\usetikzlibrary</span><span class="brx">[</span>cd<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\starttikzcd</span>
+ A <span class="cs">\arrow</span><span class="br">{</span>rd<span class="br">}</span> <span class="cs">\arrow</span><span class="br">{</span>r<span class="br">}</span><span class="br">{</span>𝜑<span class="br">}</span> <span class="cs">\NC</span> B <span class="cs">\NR</span>
+                                <span class="cs">\NC</span> C
+<span class="cs">\stoptikzcd</span>
+
+<span class="cs">\starttikzcd</span>
+ A <span class="cs">\arrow</span><span class="brx">[</span>r, "<span class="cs">\phi</span>"<span class="brx">]</span> <span class="cs">\arrow</span><span class="brx">[</span>d, red<span class="brx">]</span>
+   <span class="cs">\NC</span> B <span class="cs">\arrow</span><span class="brx">[</span>d, "<span class="cs">\psi</span>" red<span class="brx">]</span> <span class="cs">\NR</span>
+ C <span class="cs">\arrow</span><span class="brx">[</span>r, red, "<span class="cs">\eta</span>" blue<span class="brx">]</span>
+ <span class="cs">\NC</span> D
+<span class="cs">\stoptikzcd</span>
+
+<span class="cs">\starttikzcd</span>
+ A <span class="cs">\arrow</span><span class="brx">[</span>r, "<span class="cs">\phi</span>" near start, "<span class="cs">\psi</span>" below, "<span class="cs">\eta</span>" near end<span class="brx">]</span> <span class="cs">\NC</span> B
+<span class="cs">\stoptikzcd</span>
+
+<span class="cs">\starttikzcd</span>
+ T
+ <span class="cs">\arrow</span><span class="brx">[</span>drr, bend left, "x"<span class="brx">]</span>
+ <span class="cs">\arrow</span><span class="brx">[</span>ddr, bend right, "y"<span class="brx">]</span>
+ <span class="cs">\arrow</span><span class="brx">[</span>dr, dotted, "<span class="br">{</span><span class="brx">(</span>x,y<span class="brx">)</span><span class="br">}</span>" description<span class="brx">]</span> <span class="cs">\NC</span> <span class="cs">\NC</span> <span class="cs">\NR</span>
+   <span class="cs">\NC</span> X <span class="cs">\times_Z</span> Y <span class="cs">\arrow</span><span class="brx">[</span>r, "p"<span class="brx">]</span> <span class="cs">\arrow</span><span class="brx">[</span>d, "q"<span class="brx">]</span>
+   <span class="cs">\NC</span> X <span class="cs">\arrow</span><span class="brx">[</span>d, "f"<span class="brx">]</span> <span class="cs">\NR</span>
+ <span class="cs">\NC</span> Y <span class="cs">\arrow</span><span class="brx">[</span>r, "g"<span class="brx">]</span> <span class="cs">\NC</span> Z
+<span class="cs">\stoptikzcd</span>
+
+<span class="cs">\starttikzcd</span><span class="brx">[</span>column sep<span class="brx">=</span>tiny<span class="brx">]</span>
+ <span class="cs">\NC</span> <span class="cs">\pi_</span>1<span class="brx">(</span>U_1<span class="brx">)</span> <span class="cs">\ar</span><span class="brx">[</span>dr<span class="brx">]</span> <span class="cs">\ar</span><span class="brx">[</span>drr, "j_1", bend left<span class="brx">=</span>20<span class="brx">]</span>
+   <span class="cs">\NC</span>
+     <span class="cs">\NC</span><span class="brx">[</span>1.5em<span class="brx">]</span> <span class="cs">\NR</span>
+ <span class="cs">\pi_</span>1<span class="brx">(</span>U_1<span class="cs"><span class="stylecs">\cap</span></span> U_2<span class="brx">)</span> <span class="cs">\ar</span><span class="brx">[</span>ur, "i_1"<span class="brx">]</span> <span class="cs">\ar</span><span class="brx">[</span>dr, "i_2" below<span class="brx">]</span>
+   <span class="cs">\NC</span>
+     <span class="cs">\NC</span> <span class="cs">\pi_</span>1<span class="brx">(</span>U_1<span class="brx">)</span> <span class="cs">\ast_</span><span class="br">{</span> <span class="cs">\pi_</span>1<span class="brx">(</span>U_1<span class="cs"><span class="stylecs">\cap</span></span> U_2<span class="brx">)</span><span class="br">}</span> <span class="cs">\pi_</span>1<span class="brx">(</span>U_2<span class="brx">)</span> <span class="cs">\ar</span><span class="brx">[</span>r, dashed, "<span class="cs">\simeq</span>"<span class="brx">]</span>
+       <span class="cs">\NC</span> <span class="cs">\pi_</span>1<span class="brx">(</span>X<span class="brx">)</span> <span class="cs">\NR</span>
+ <span class="cs">\NC</span> <span class="cs">\pi_</span>1<span class="brx">(</span>U_2<span class="brx">)</span> <span class="cs">\ar</span><span class="brx">[</span>ur<span class="brx">]</span><span class="cs">\ar</span><span class="brx">[</span>urr, "j_2" below, bend right<span class="brx">=</span>20<span class="brx">]</span>
+   <span class="cs">\NC</span>
+     <span class="cs">\NC</span>
+<span class="cs">\stoptikzcd</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Tips_for_converting_LaTeX_TikZ_diagrams_to_ConTeXt">
+      Tips for converting LaTeX TikZ diagrams to ConTeXt
+     </span>
+    </h2>
+    <p>TikZ has a vibrant and productive community, thanks to whom numerous examples an be found on the web. Most of them, however are written for LaTeX and must be slightly adapted to work with ConTeXt. Here we list a few tips to do the conversion:
+</p>
+    <ul>
+     <li>
+      Replace
+      <code>\usepackage{tikz}</code>
+      with
+      <code>\usemodule[tikz]</code>
+      and
+      <code>\usepackage{pgfplots}</code>
+      with
+      <code>\usemodule[pgfplots]</code>
+      .
+     </li>
+     <li>
+      Replace all instances of
+      <code>\begin{XXX}</code>
+      (where
+      <code>XXX</code>
+      is e.g.
+      <code>tikzpicture</code>
+      ,
+      <code>scope</code>
+      , ...) with
+      <code>\startXXX</code>
+      .
+     </li>
+     <li>
+      Replace all instances of
+      <code>\end{XXX}</code>
+      with
+      <code>\stopXXX</code>
+      .
+     </li>
+     <li>
+      Modify calls to
+      <code>\definecolor</code>
+      to match the ConTeXt syntax (see
+      <tt>
+       <a href="../../Command/definecolor.html" title="Command/definecolor">
+        \definecolor
+       </a>
+      </tt>
+      ).
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <p><a class="external text" href="http://archive.contextgarden.net/message/20080219.024326.0e45446b.pt.html" rel="nofollow">Discussion</a> on the ConTeXt user's list.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212417
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.061 seconds
+Real time usage: 0.130 seconds
+Preprocessor visited node count: 51/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 90/2097152 bytes
+Template argument size: 22/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 14229/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.503      1 Template:cmd
+100.00%    5.503      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2667-1!canonical and timestamp 20260109212417 and revision id 41836
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/TikZ">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

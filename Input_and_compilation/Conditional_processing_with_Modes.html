@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Conditional processing with Modes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Conditional_processing_with_Modes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Conditional processing with Modes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=721&diff=42467">2025-08-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Very often, you want to generate multiple versions of the same document:
+one version for printing and one for viewing on the screen, one version for
+students and one version for the instructor, and so on. You can do this in a
+simple but naive way: create different files set up for the different versions and
+<code>\input</code> the common material, or create some new conditional flags using
+<code>\newif</code> and set them appropriately for conditional processing. Or you
+could use <em>modes</em>&mdash;the ConTeXt way of doing conditional processing.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Setting_modes">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Setting modes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Pre-defining_modes">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Pre-defining modes
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Conditional_processing_based_on_modes">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Conditional processing based on modes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Checking_for_multiple_modes_.28or.2Fand_statements_for_modes.29">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Checking for multiple modes (or/and statements for modes)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Checking_multiple_modes_in_parallel_.28case_statement_for_modes.29">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Checking multiple modes in parallel (case statement for modes)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Checking_modes_in_Lua">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Checking modes in Lua
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#System_modes">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         System modes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Specific_Examples">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Specific Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Different_fonts">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Different fonts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Running_external_commands_once">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           Running external commands once
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>A mode is similar to a conditional flag, but with a few advantages: new modes
+need not be explicitly defined (no need for something like <code>\newif</code>),
+multiple modes can be simultaneously enabled or disabled, and the status of multiple
+modes can be checked easily. Moreover, modes can be set from a command line
+switch. As a result, multiple versions of a document can be generated without changing the source file.
+</p>
+    <p>The name or identifier of a mode can be any combination of letters, digits, or
+spaces. Names starting with <code>*</code> are reserved for system modes. 
+</p>
+    <h2>
+     <span class="mw-headline" id="Setting_modes">
+      Setting modes
+     </span>
+    </h2>
+    <p>ConTeXt has three commands for setting modes:
+</p>
+    <ul>
+     <li>
+      <code><tt><a class="new" href="../index.php?title=Command/enablemode&action=edit&redlink=1.html" title="Command/enablemode (page does not exist)">\enablemode </a></tt>[...]</code>
+     </li>
+     <li>
+      <code><tt><a class="new" href="../index.php?title=Command/disablemode&action=edit&redlink=1.html" title="Command/disablemode (page does not exist)">\disablemode</a></tt>[...]</code>
+     </li>
+     <li>
+      <code><tt><a class="new" href="../index.php?title=Command/preventmode&action=edit&redlink=1.html" title="Command/preventmode (page does not exist)">\preventmode</a></tt>[...]</code>
+     </li>
+    </ul>
+    <p>The names are self-descriptive. <tt><a class="new" href="../index.php?title=Command/enablemode&action=edit&redlink=1.html" title="Command/enablemode (page does not exist)">\enablemode</a></tt> activates a mode,
+<tt><a class="new" href="../index.php?title=Command/disablemode&action=edit&redlink=1.html" title="Command/disablemode (page does not exist)">\disablemode</a></tt> deactivates a mode, and <tt><a class="new" href="../index.php?title=Command/preventmode&action=edit&redlink=1.html" title="Command/preventmode (page does not exist)">\preventmode</a></tt> permanently
+deactivates a mode. All three commands take a list of modes as an argument. For
+example, to active modes named <code>screen</code> and <code>solution</code>
+use:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enablemode</span></span><span class="brx">[</span>screen,solution<span class="brx">]</span>
+</pre>
+    <p>Modes can also be activated by a command line switch <code>--mode</code> to
+<code>context</code>. For example, another way to activate the <code>screen</code> and
+<code>solution</code> modes, to run ConTeXt using one of:
+</p>
+    <pre> context --mode=screen,solution ...
+</pre>
+    <h3>
+     <span class="mw-headline" id="Pre-defining_modes">
+      Pre-defining modes
+     </span>
+    </h3>
+    <p>Normally, the overhead for testing modes is negligible, but it can add up if
+modes are tested multiple times in a document (for example, as part of a
+macro). To speed up the processing, a mode can be <i>define</i>d before being
+used:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definemode</span></span><span class="brx">[</span>...<span class="brx">]</span><span class="brx">[</span>...<span class="brx">]</span>
+</pre>
+    <p>The first argument is a list of modes; the second argument may be <code>yes</code>, <code>no</code>, or <code>keep</code>. For example,
+</p>
+    <ul>
+     <li>
+      <code>\definemode[screen][yes]</code>
+      defines a mode and enables it;
+     </li>
+     <li>
+      <code>\definemode[screen][no]</code>
+      defines a mode and disables it;
+     </li>
+     <li>
+      <code>\definemode[screen][keep]</code>
+      defines a mode and keeps its previous status.
+     </li>
+    </ul>
+    <p>Typically, it is better to use <code>\definemode[...][keep]</code> so that the modes may be enabled or disabled from command line as well.
+</p>
+    <h2>
+     <span class="mw-headline" id="Conditional_processing_based_on_modes">
+      Conditional processing based on modes
+     </span>
+    </h2>
+    <p>You may want to process or ignore a chunk of code if a particular mode is enabled
+or disabled. Such a chunk of code is specified using <code>\startmode</code> and
+<code>\startnotmode</code> environments. Their use is best explained by an example.
+</p>
+    <p>Suppose you want to change the paper size of a document depending on whether it
+is for print or screen. This can be done in multiple ways. You could set
+the default paper size for print and change it in screen mode:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>letter<span class="brx">]</span><span class="brx">[</span>letter<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>screen<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>S6<span class="brx">]</span><span class="brx">[</span>S6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+</pre>
+    <p>(S6 is one of the screen-optimized paper sizes in ConTeXt; the paper size has a
+4:3 aspect ratio and a width equal to the width of A4 paper.)
+</p>
+    <p>Alternatively, you could set a default paper size for the screen and change it
+if screen mode is not enabled:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>S6<span class="brx">]</span><span class="brx">[</span>S6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\startnotmode</span></span><span class="brx">[</span>screen<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>letter<span class="brx">]</span><span class="brx">[</span>letter<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopnotmode</span></span>
+</pre>
+    <p><code>\startmode</code> (and <code>\startnotmode</code>) checks the value of the mode <b>at the time it is executed</b>. This is important when you are setting the modes using <code>\enablemode</code> or <code>\disablemode</code>. For example,
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enablemode</span></span><span class="brx">[</span>foo<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>foo<span class="brx">]</span>
+...
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+</pre>
+    <p>the contents of the mode environment are executed because <code>foo</code> is enabled when <code>\startmode</code> is encountered. However, in
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>foo<span class="brx">]</span>
+...
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+<span class="cs"><span class="stylecs">\enablemode</span></span><span class="brx">[</span>foo<span class="brx">]</span>
+</pre>
+    <p>the contents of the mode environment are not executed because <code>foo</code> is not enabled when <code>\startmode</code> is encountered. 
+</p>
+    <h3>
+     <span id="Checking_for_multiple_modes_(or/and_statements_for_modes)">
+     </span>
+     <span class="mw-headline" id="Checking_for_multiple_modes_.28or.2Fand_statements_for_modes.29">
+      Checking for multiple modes (
+      <code>or</code>
+      /
+      <code>and</code>
+      statements for modes)
+     </span>
+    </h3>
+    <p><code>\startmode</code> and <code>\startnotmode</code> can check for multiple modes,
+by giving a list of modes as their arguments.  <code>\startmode</code>
+processes its contents (everything until the next
+<code>\stopmode</code>, thus <code>\startmode</code> cannot be
+nested.)  if any of the modes are enabled, otherwise (i.e., when all
+the modes are disabled) <code>\startmode</code> ignores its
+contents. The opposite is <code>\startnotmode</code>: it processes its
+contents (everything until the next <code>\stopnotmode</code>) if any of the
+modes are disabled, otherwise&mdash;when all the modes are enabled&mdash;the contents are ignored.
+</p>
+    <p><code>\startmode</code> and <code>\startnotmode</code> are "<em>or</em>" environments. They
+process their contents if any of the modes satisfy the required condition. Their
+"<em>and</em>" counterparts are also available: <code>\startallmodes</code> and <code>\startnotallmodes</code>
+process their contents only if all the given modes satisfy the required
+condition. For example, suppose you want to enable interaction (e.g., hyperlinks)
+only when both <code>screen</code> and <code>solution</code> modes are enabled. Then you can
+use:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startallmodes</span></span><span class="brx">[</span>screen,solution<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopallmodes</span></span>
+</pre>
+    <p>To summarize, the four start-stop environments for checking modes are:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>mode1, mode2, ...<span class="brx">]</span>
+  <span class="comment">% Processed if any of the modes is enabled</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="cs"><span class="stylecs">\startnotmode</span></span><span class="brx">[</span>mode1, mode2, ...<span class="brx">]</span>
+  <span class="comment">% Processed if any of the modes is disabled</span>
+<span class="cs"><span class="stylecs">\stopnotmode</span></span>
+
+<span class="cs"><span class="stylecs">\startallmodes</span></span><span class="brx">[</span>mode1, mode2, ...<span class="brx">]</span>
+  <span class="comment">% Processed if all the modes are enabled</span>
+<span class="cs"><span class="stylecs">\stopallmodes</span></span>
+
+<span class="cs"><span class="stylecs">\startnotallmodes</span></span><span class="brx">[</span>mode1, mode2, ...<span class="brx">]</span>
+  <span class="comment">% Processed if all the modes are disabled</span>
+<span class="cs"><span class="stylecs">\stopnotallmodes</span></span>
+</pre>
+    <p>These environments have <code>\doif...</code> alternatives that are useful for short
+setups.  Also, they can be nested.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\doifmode</span></span>        <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if any mode is enabled<span class="br">}</span>
+<span class="cs"><span class="stylecs">\doifnotmode</span></span>     <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if any mode is disabled<span class="br">}</span>
+<span class="cs"><span class="stylecs">\doifallmodes</span></span>    <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if all modes are enabled<span class="br">}</span>
+<span class="cs"><span class="stylecs">\doifnotallmodes</span></span> <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if all modes are disabled<span class="br">}</span>
+</pre>
+    <p>The logic for determining when the content is processed is exactly the same as
+for the <code>start</code>-<code>stop</code> commands.
+</p>
+    <p>These <code>\doif</code> commands each have a variant to process alternative code if
+the conditions are not satisfied (like the <code>\else</code> branch of <code>\if</code>).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\doifmodeelse</span></span>        <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if any mode is enabled<span class="br">}</span>    <span class="br">{</span>else this is processed<span class="br">}</span> 
+<span class="cs"><span class="stylecs">\doifallmodeselse</span></span>    <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if all modes are enabled<span class="br">}</span>  <span class="br">{</span>else this is processed<span class="br">}</span> 
+<span class="cs">\doifnotallmodeselse</span> <span class="br">{</span>mode1, mode2, ...<span class="br">}</span> <span class="br">{</span>Processed if all modes are disabled<span class="br">}</span> <span class="br">{</span>else this is processed<span class="br">}</span>
+</pre>
+    <p>Note that there is no command <code>\doifnotmodeelse</code> because there is no need for it; <code>\doifmodeelse</code> may be used for the same effect (with the <code>if</code> and <code>else</code> branches switched).
+</p>
+    <h3>
+     <span id="Checking_multiple_modes_in_parallel_(case_statement_for_modes)">
+     </span>
+     <span class="mw-headline" id="Checking_multiple_modes_in_parallel_.28case_statement_for_modes.29">
+      Checking multiple modes in parallel (
+      <code>case</code>
+      statement for modes)
+     </span>
+    </h3>
+    <p>In addition to the above <em>"or"</em> and <em>"and"</em> environment which check modes is sequence, you can also check multiple modes in parallel. The syntax for such a <em>"case"</em> environment is as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmodeset</span></span>
+    <span class="comment">% NOTE: Empty lines are not allowed here!</span>
+    <span class="brx">[</span>mode1, mode2, ...<span class="brx">]</span>     <span class="br">{</span>Processed if either mode is enabled<span class="br">}</span>
+    <span class="brx">[</span>mode3, mode4, ...<span class="brx">]</span>     <span class="br">{</span>Processed if either mode is enabled<span class="br">}</span>
+    <span class="brx">[</span>default<span class="brx">]</span>               <span class="br">{</span>Processed if none of the above modes match<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopmodeset</span></span>
+</pre>
+    <p>The same mode can be referenced multiple times, and <b>all</b> matching branches are executed. 
+The <tt><a class="new" href="../index.php?title=Command/startmodeset&action=edit&redlink=1.html" title="Command/startmodeset (page does not exist)">\startmodeset</a></tt> ... <tt><a class="new" href="../index.php?title=Command/stopmodeset&action=edit&redlink=1.html" title="Command/stopmodeset (page does not exist)">\stopmodeset</a></tt> environments can be nested. So, you can use 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmodeset</span></span>
+    <span class="brx">[</span>mode1, mode2<span class="brx">]</span> <span class="br">{</span>
+        Processed when either mode1 or mode2 is enabled
+    <span class="br">}</span> 
+    <span class="brx">[</span>mode3<span class="brx">]</span> <span class="br">{</span>
+        <span class="cs"><span class="stylecs">\startmodeset</span></span>
+            <span class="brx">[</span>mode1<span class="brx">]</span>     <span class="br">{</span>Processed when mode1 and mode3 are enabled<span class="br">}</span>
+            <span class="brx">[</span>mode2<span class="brx">]</span>     <span class="br">{</span>Processed when mode2 and mode3 are enabled<span class="br">}</span>
+            <span class="brx">[</span>default<span class="brx">]</span>   <span class="br">{</span>Processed when mode3 is enabled and mode1 and mode2 are disabled<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\stopmodeset</span></span>
+    <span class="br">}</span>
+    <span class="brx">[</span>default<span class="brx">]</span> <span class="br">{</span>
+        Processed when mode1, mode2, and mode3 are disabled.:
+    <span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopmodeset</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Checking_modes_in_Lua">
+      Checking modes in Lua
+     </span>
+    </h3>
+    <p>The state of any mode is accessible at the Lua end as <code>tex.modes</code> table. Specifically,
+</p>
+    <pre class="tex">tex.modes<span class="brx">[</span>"screen"<span class="brx">]</span>
+</pre>
+    <p>returns <code>true</code> if mode <code>screen</code> is enabled and <code>false</code> otherwise. Thus, specific combinations of modes can be checked using boolean expressions. For example
+</p>
+    <pre class="tex">if <span class="brx">(</span>tex.modes<span class="brx">[</span>"mode1"<span class="brx">]</span> and tex.modes<span class="brx">[</span>"mode2"<span class="brx">]</span><span class="brx">)</span> then
+ ...
+end
+</pre>
+    <p>checks if both <code>mode1</code> and <code>mode2</code> are enabled.
+</p>
+    <h2>
+     <span class="mw-headline" id="System_modes">
+      System modes
+     </span>
+    </h2>
+    <p>Besides allowing user-definable modes, ConTeXt provides some system
+modes. These modes start with a <code>*</code> character. Here 
+only the more commonly used system modes are explained; see the ConTeXt <a class="external text" href="https://www.pragma-ade.nl/general/manuals/mmodes.pdf" rel="nofollow">modes manual</a>
+for a complete list.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*mkii</b>
+</td>
+       <td>Enabled when running <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_II.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark II">Mark II</a>
+</td>
+      </tr>
+      <tr>
+       <td><b>*mkiv</b>
+</td>
+       <td>Enabled when running <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">Mark IV</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Perhaps the most useful system modes are <code>*mkii</code> and <code>*mkiv</code> which
+determine whether MKII or MKIV is being used. These modes are handy when you
+want different setups for MKII and MKIV.
+</p>
+    <p>Other modes are useful for very specific situations. Some of these are described
+below.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*first</b>
+</td>
+       <td>Enabled during the first compile run
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>A document must be run multiple times to get the cross referencing,
+table of contents, etc.
+right. However, sometimes you need to do some external processing (e.g., graphic
+conversion) that only needs to be done once. In such cases, the
+<code>*first</code> mode is handy&mdash;it is active only on the first run of the
+document.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*export</b>
+</td>
+       <td>Enabled when <code>\setupbackend[export=yes]</code> is set
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>You may want to use different images for XML [Export]. The <code>*export</code> mode is useful in such cases. 
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*project</b>
+</td>
+       <td>Enabled when inside <code>\startproject</code> ... <code>\stopproject</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>*component</b>
+</td>
+       <td>Enabled when inside <code>\startcomponent</code>...<code>\stopcomponent</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>*environment</b>
+</td>
+       <td>Enabled when inside <code>\startenvironment</code> ... <code>\stopenvironment</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>*text</b>
+</td>
+       <td>Enabled when inside <code>\starttext</code> ... <code>\stoptext</code>.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>You can use the project-product-component structure for managing large projects
+like a book series. See <a href="Project_and_file_management.html" title="Input and compilation/Project and file management">Project and file management</a>
+for details of this approach. A product or its components may be compiled
+separately, and you may want to do something different when a product is
+compiled or when a component is compiled. To do so, you need to check for
+modes <code>*project</code>, <code>*product</code>, <code>*component</code>, and
+<code>*environment</code>; these modes are set when the corresponding structure file
+is processed. For example, the <code>*product</code> mode is set whenever a
+product file is read; more specifically, when <code>\startproduct</code> is
+encountered. Similarly, a mode <code>*text</code> is enabled when
+<code>\starttext</code> is encountered, and likewise for the others.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*frontpart</b>
+</td>
+       <td>Enabled when inside <code>\startfrontmatter</code> ... <code>\stopfrontmatter</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>*bodypart</b>
+</td>
+       <td>Enabled when inside <code>\startbodymatter</code> ... <code>\stopbodymatter</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>*backpart</b>
+</td>
+       <td>Enabled when inside <code>\startbackmatter</code> ... <code>\stopbackmatter</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>A large document is typically broken down into different section blocks:
+frontmatter, bodymatter, appendices, and backmatter. Internally, these section
+blocks are referred to as <code>frontpart</code>, <code>bodypart</code>, <code>appendix</code>, and
+<code>backpart</code>. Each section block sets a system mode with the same name. So,
+if you want macros that work differently in different section blocks, you can
+check for modes <code>*frontpart</code>, <code>*bodypart</code>, and so on.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*list</b>
+</td>
+       <td>Enabled inside a list entry
+</td>
+      </tr>
+      <tr>
+       <td><b>*marking</b>
+</td>
+       <td>Enabled inside a marking
+</td>
+      </tr>
+      <tr>
+       <td><b>*register</b>
+</td>
+       <td>Enabled inside a register
+</td>
+      </tr>
+      <tr>
+       <td><b>*chapter</b>, <b>*section</b>, etc.
+</td>
+       <td>Enabled inside the corresponding section head.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Sometimes you want a macro to behave differently if it is part of a section head, a section number, a list, a marking, or a register. For section heads, you can check for modes <code>*chapter</code>, <code>*section</code>, <code>*subsection</code>, etc. Similarly, <code>*list</code> is enabled inside a list, <code>*marking</code> is enabled inside a marking, and <code>*register</code> is enabled inside a register.
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*en-us</b>, <b>*nl</b>, etc.
+</td>
+       <td>Enabled when the current <code>\language</code> is <code>en-us</code>, <code>nl</code>, etc.
+</td>
+      </tr>
+      <tr>
+       <td><b>**en-us</b>, <b>**nl</b>, etc.
+</td>
+       <td>Enabled when the <code>\mainlanguage</code> is <code>en-us</code>, <code>nl</code>, etc.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>ConTeXt provides support for multiple languages. Languages are recognized by
+their IETF language tags, like <code>en-us</code> for US
+English, <code>en-gb</code>
+for British English, <code>nl</code> for Dutch, <code>de</code> for German, etc. A document
+has a main language, set with the command <code>\mainlanguage[...]</code>,
+that is used for
+translated labels like <em>chapter</em> and <em>figure</em>. You can also switch the
+current language using <code>\language[...]</code> to change the hyphenation rules.
+Whenever a language is chosen, its identifier is set as a mode. The mode for the main
+language starts with two <code>*</code>. For example, when the main language
+is US
+English and the current language is Dutch, the modes <code>**en-us</code> and
+<code>*nl</code> are set (notice the extra <code>*</code> in <code>**en-us</code>). 
+</p>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*figure</b>
+</td>
+       <td>Enabled when a graphic is found
+</td>
+      </tr>
+      <tr>
+       <td><b>*interaction</b>
+</td>
+       <td>Enabled when interaction is enabled
+</td>
+      </tr>
+      <tr>
+       <td><b>*grid</b>
+</td>
+       <td>Enabled when grid typesetting is enabled
+</td>
+      </tr>
+      <tr>
+       <td><b>*singlesided</b>
+</td>
+       <td>Enabled when singlesided layout is enabled
+</td>
+      </tr>
+      <tr>
+       <td><b>*doublesided</b>
+</td>
+       <td>Enabled when doublesided layout is enabled
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <table cellpadding="5" style="border-collapse: collapse;border-width: 1px; border-style: solid;">
+     <tbody>
+      <tr>
+       <td><b>*pdf</b>
+</td>
+       <td>Enabled when the main output is pdf
+</td>
+      </tr>
+      <tr>
+       <td><b>*dvi</b>
+</td>
+       <td>Enabled when the main output is dvi
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Other system modes: <code>*figure</code> is set when a graphic is found,
+<code>*interaction</code> is set when interaction is enabled, <code>*grid</code>
+is set when grid typesetting is enabled, and <code>*pdf</code> and <code>*dvi</code> 
+are set when the output is PDF or DVI. Others
+are too esoteric to describe here. If you are interested, see the 
+modes manual mentioned earlier.
+</p>
+    <h2>
+     <span class="mw-headline" id="Specific_Examples">
+      Specific Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Different_fonts">
+      Different fonts
+     </span>
+    </h3>
+    <p>Suppose you want to generate two versions of a document, one with times font and one with palatino. One way to do this is as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>palatino<span class="brx">]</span>
+   <span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>palatino,12pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>times<span class="brx">]</span>
+   <span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>postscript,12pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>and run with one of the following:
+</p>
+    <pre> context --mode=palatino filename
+ context --mode=times    filename
+</pre>
+    <h3>
+     <span class="mw-headline" id="Running_external_commands_once">
+      Running external commands once
+     </span>
+    </h3>
+    <p>Suppose you want to run some external program, say to generate a figure. Unfortunately, the program only generates postscript figure. So you want to convert it to pdf. This can be done as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>*first<span class="brx">]</span>
+   <span class="comment">% external program which creates a file fig-1.ps</span>
+   <span class="cs">\executesystemcommand</span><span class="br">{</span>some_external_program ...<span class="br">}</span>
+   <span class="comment">% convert PS into PDF</span>
+   <span class="cs">\executesystemcommand</span><span class="br">{</span>pstopdf fig-1.ps<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="comment">% include the resulting PDF</span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>fig-1<span class="brx">]</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260110073602
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.060 seconds
+Real time usage: 1.128 seconds
+Preprocessor visited node count: 210/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 720/2097152 bytes
+Template argument size: 176/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9515/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  185.365      1 -total
+ 21.25%   39.396      8 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:721-1!canonical and timestamp 20260110073601 and revision id 42467
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Conditional_processing_with_Modes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

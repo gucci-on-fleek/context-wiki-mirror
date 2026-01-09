@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Loops_and_Recursion" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2238&diff=42444">2025-05-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Branches_and_Decisions.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions">Branches & Decisions</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Action_Processing.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Action Processing">Action Processing</a> &gt;
+</p>
+    <p>TeX does not offer us powerful for-loop mechanisms. On
+the other hand its recursion engine is quite unique. We
+therefore identify the for-looping macros by this method.
+The most simple alternative is the one that only needs a
+number.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#.5Cdorecurse">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         \dorecurse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#.5Cdoloopoverlist">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         \doloopoverlist
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#.5Cdostepwiserecurse">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         \dostepwiserecurse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#.5Cdoloop_.5Cexitloop">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         \doloop \exitloop
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Recursion_and_expansion">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Recursion and expansion
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h3>
+     <span id="\dorecurse">
+     </span>
+     <span class="mw-headline" id=".5Cdorecurse">
+      <tt>
+       <a href="../../../Command/dorecurse.html" title="Command/dorecurse">
+        \dorecurse
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dorecurse</span></span> <span class="br">{</span>n<span class="br">}</span> <span class="br">{</span>whatever we want<span class="br">}</span>
+</pre>
+    <p>This macro can be nested without problems and therefore be
+used in situations where Plain TeX's <code>\loop</code> macro
+ungracefully fails. The current value of the counter is
+stored in <code>\recurselevel</code>, and is available 
+for use anywhere within the second parenthesis 
+where <code>whatever we want</code> text is found.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\dorecurse</span></span> <span class="comment">% outer loop</span>
+  <span class="br">{</span>10<span class="br">}</span>
+  <span class="br">{</span>
+  <span class="cs"><span class="systemcs">\setevalue</span></span><span class="br">{</span>outerlevel<span class="br">}</span><span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span> <span class="comment">% save the outer value in a variable</span>
+  <span class="cs"><span class="systemcs">\recurselevel</span></span>:                        <span class="comment">% outer value</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span>                         <span class="comment">% inner loop</span>
+       <span class="br">{</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>outerlevel<span class="br">}</span><span class="br">}</span>          <span class="comment">% outer value</span>
+       <span class="br">{</span><span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span> <span class="br">}</span>               <span class="comment">% inner value</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span>                         <span class="comment">% inner loop</span>
+       <span class="br">{</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>outerlevel<span class="br">}</span><span class="br">}</span>          <span class="comment">% outer value</span>
+       <span class="br">{</span><span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span> <span class="br">}</span>               <span class="comment">% inner value</span>
+   <span class="cs">\endgraf</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="194" src="../../../wikiteximage/93700c43d891bd1f7a1b6411321ee17b.webp" width="324">
+     </li>
+    </ul>
+    <p>In this example the first and second
+<code>\recurselevel</code> concern the outer loop, while the third
+and fourth ones concern the inner loop. The depth of the
+nesting is available for inspection in <code>\recursedepth</code>.
+</p>
+    <p>Both <code>\recurselevel</code> and <code>\recursedepth</code> are
+macros. The real counters are hidden from the user because
+we don't want any interference.
+</p>
+    <h3>
+     <span id="\doloopoverlist">
+     </span>
+     <span class="mw-headline" id=".5Cdoloopoverlist">
+      <tt>
+       <a class="new" href="../../../index.php?title=Command/doloopoverlist&action=edit&redlink=1.html" title="Command/doloopoverlist (page does not exist)">
+        \doloopoverlist
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doloopoverlist</span></span> <span class="br">{</span>a, b, c<span class="br">}</span> <span class="br">{</span>current letter is: &ldquo;<span class="cs"><span class="systemcs">\recursestring</span></span>&rdquo;<span class="cs">\par</span><span class="br">}</span>
+</pre>
+    <p>As the command name reads, it loops over the list values.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\doloopoverlist</span></span>
+  <span class="br">{</span>a, b, c<span class="br">}</span>
+  <span class="br">{</span>current letter is: &ldquo;<span class="cs"><span class="systemcs">\recursestring</span></span>&rdquo;<span class="cs">\par</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="54" src="../../../wikiteximage/227c8299937274fef32f95ceb3941042.webp" width="152">
+     </li>
+    </ul>
+    <p><tt><a class="new" href="../../../index.php?title=Command/recursestring&action=edit&redlink=1.html" title="Command/recursestring (page does not exist)">\recursestring</a></tt> is used instead of <tt><a href="../../../Command/recurselevel.html" title="Command/recurselevel">\recurselevel</a></tt>.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\doloopoverlist</span></span><span class="br">{</span><span class="cs">\tf</span>,<span class="cs">\ss</span>,<span class="cs">\tt</span><span class="br">}</span>
+  <span class="br">{</span><span class="cs">\bgroup</span><span class="cs"><span class="systemcs">\recursestring</span></span><span class="cs"><span class="systemcs">\doloopoverlist</span></span><span class="br">{</span><span class="cs">\rm</span>,<span class="cs">\it</span>,<span class="cs">\bf</span>,<span class="cs">\bi</span>,<span class="cs">\sc</span><span class="br">}</span>
+    <span class="br">{</span><span class="cs">\bgroup</span><span class="cs"><span class="systemcs">\recursestring</span></span> a̱ḇc̱  a̲b̲c̲<span class="cs"><span class="stylecs">\quad</span></span><span class="cs">\egroup</span><span class="br">}</span><span class="cs">\egroup</span><span class="cs">\par</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="57" src="../../../wikiteximage/68fc3e609662accefdaa5eb161101e3b.webp" width="324">
+     </li>
+    </ul>
+    <p>It also allows commands, as contained in the previous code snippet.
+</p>
+    <h3>
+     <span id="\dostepwiserecurse">
+     </span>
+     <span class="mw-headline" id=".5Cdostepwiserecurse">
+      <tt>
+       <a href="../../../Command/dostepwiserecurse.html" title="Command/dostepwiserecurse">
+        \dostepwiserecurse
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <p>The simple command <code>\dorecurse</code> is
+a special case of the more general:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dostepwiserecurse</span></span> <span class="br">{</span>from<span class="br">}</span> <span class="br">{</span>to<span class="br">}</span> <span class="br">{</span>step<span class="br">}</span> <span class="br">{</span>action<span class="br">}</span>
+</pre>
+    <p>This commands accepts positive and negative steps. Illegal
+values are handled as well as possible and the macro accepts
+numbers and counters.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\dostepwiserecurse</span></span>  <span class="br">{</span>1<span class="br">}</span> <span class="br">{</span>10<span class="br">}</span>  <span class="br">{</span>2<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span> <span class="br">{</span>10<span class="br">}</span>  <span class="br">{</span>1<span class="br">}</span> <span class="br">{</span>-2<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doloop_\exitloop">
+     </span>
+     <span class="mw-headline" id=".5Cdoloop_.5Cexitloop">
+      <tt>
+       <a href="../../../Command/doloop.html" title="Command/doloop">
+        \doloop
+       </a>
+      </tt>
+      <tt>
+       <a href="../../../Command/exitloop.html" title="Command/exitloop">
+        \exitloop
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <p>Sometimes loops are not determined by counters, but by
+(a combinations of) conditions. We therefore implement a
+straightforward loop, which can only be left when we
+explicitly exit it. Nesting is supported. First we present
+a more extensive alternative.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doloop</span></span>
+  <span class="br">{</span>Some kind of typesetting punishment <span class="cs">\par</span>
+   <span class="cs">\ifnum</span><span class="cs">\pageno</span>&gt;100 <span class="cs"><span class="systemcs">\exitloop</span></span> <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <p>When needed, one can call for <code>\recurselevel</code> and
+<code>\recursedepth</code>.
+</p>
+    <p>The loop is executed at least once, so beware of situations
+like:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doloop</span></span> <span class="br">{</span><span class="cs"><span class="systemcs">\exitloop</span></span> some commands<span class="br">}</span>
+</pre>
+    <p>It's just a matter of putting the text into the <code>\if</code>
+statement that should be there anyway, like in:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doloop</span></span> <span class="br">{</span><span class="cs">\ifwhatever</span> <span class="cs"><span class="systemcs">\exitloop</span></span> <span class="cs">\else</span> some commands<span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <p>You can also quit a loop immediately, by using <code>
+\exitloopnow</code> instead. Beware, this is more sensitive
+for conditional errors.
+</p>
+    <h3>
+     <span class="mw-headline" id="Recursion_and_expansion">
+      Recursion and expansion
+     </span>
+    </h3>
+    <p>Using recursion to build tables requires some particular attention:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span><span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\eTD</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\eTR</span>
+<span class="cs">\eTABLE</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="28" src="../../../wikiteximage/362b6ecabeac0ab094f75e8db7fda3f2.webp" width="110">
+     </li>
+    </ul>
+    <p>Multi-dimensional tables offer another illustration:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span>
+	<span class="cs"><span class="documentcs">\bTR</span></span>
+	<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="brx">#</span>1,<span class="brx">#</span><span class="brx">#</span>1 <span class="cs">\eTD</span><span class="br">}</span>
+	<span class="cs">\eTR</span>
+<span class="br">}</span>
+<span class="cs">\eTABLE</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="205" src="../../../wikiteximage/7902992fb793083fe70020f0db166993.webp" width="134">
+     </li>
+    </ul>
+    <p>Alternatively, (mkiv only?)
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\bTABLE</span></span>
+    <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span>
+        <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\currentTABLErow</span>,<span class="cs">\currentTABLEcolumn</span> <span class="cs">\eTD</span><span class="br">}</span>
+    <span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs">\eTABLE</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="205" src="../../../wikiteximage/26f380ca3258091b029bceb6f2481c16.webp" width="134">
+     </li>
+    </ul>
+    <p>For further discussion on loops and expansion, see <a href="Expansion_Control.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control">Expansion control</a> as well as this <a class="external text" href="http://randomdeterminism.wordpress.com/2009/03/05/tex-programming-the-past-the-present-and-the-future/" rel="nofollow">blog post</a>.
+</p>
+    <p>&lt; <b>Prev:</b> <a href="Branches_and_Decisions.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions">Branches & Decisions</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Action_Processing.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Action Processing">Action Processing</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.045 seconds
+Real time usage: 0.088 seconds
+Preprocessor visited node count: 151/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 638/2097152 bytes
+Template argument size: 158/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8587/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   26.743      1 -total
+ 20.96%    5.606      7 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2238-1!canonical and timestamp 20260109212409 and revision id 42444
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Loops_and_Recursion">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

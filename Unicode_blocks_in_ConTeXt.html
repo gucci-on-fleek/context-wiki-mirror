@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Unicode blocks in ConTeXt&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Unicode_blocks_in_ConTeXt" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Unicode blocks in ConTeXt
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4977&diff=28771">2023-04-22</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>A <b>Unicode block</b> is an interval of code points which represent characters that are semantically related to each other.  For example, there is a Unicode block for characters from the Devanagari script which is used by several Indian languages.  Another Unicode block corresponds to characters which denote mathematical operators, such as those that indicate the union and the intersection of sets.
+</p>
+    <p>ConTeXt has special names for all Unicode blocks.  These names can be used to specify ranges of code points in the setups of several commands.
+</p>
+    <p>This article uses some basic terms, such as <i>character</i>, <i>code point</i>, and <i>assigned code point</i>, from the Unicode Standard<sup class="reference" id="cite_ref-Unicode_1-0"><a href="#cite_note-Unicode-1">[1]</a></sup>.  For brief descriptions of these terms, see the Unicode glossary<sup class="reference" id="cite_ref-Unicode-glossary_2-0"><a href="#cite_note-Unicode-glossary-2">[2]</a></sup>.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Unicode_blocks">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Unicode blocks
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#ConTeXt_names_of_Unicode_blocks">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         ConTeXt names of Unicode blocks
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#An_example_usage_of_Unicode_blocks_in_ConTeXt">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         An example usage of Unicode blocks in ConTeXt
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Another_example">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Another example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#See_also">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#References">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Unicode_blocks">
+      Unicode blocks
+     </span>
+    </h2>
+    <p>A Unicode block, or, simply, a block, is any of the subsets of the Unicode code space that are listed in the file <code>Blocks.txt</code><sup class="reference" id="cite_ref-Blocks_3-0"><a href="#cite_note-Blocks-3">[3]</a></sup> of the Unicode Character Database.  The Unicode code space is the set of all code points, that is, the set of all integers from 0 to the integer whose hexadecimal representation is 10FFF.
+</p>
+    <p>The main properties of blocks are described in the Unicode Standard<sup class="reference" id="cite_ref-Unicode_1-1"><a href="#cite_note-Unicode-1">[1]</a></sup> (Section 3.4, paragraph D10b).  Every block is an interval of code points, and distinct blocks are disjoint from each other. In particular, the blocks form a partition of a subset of the Unicode code space.
+</p>
+    <p>A block starts at a code point that is a multiple of 16.  The number of code points in each block is also a multiple of 16.  Thus, the hexadecimal representation of the first code point in a block is of the form <i>pqrs</i>0, and that of the last code point in it is of the form <i>tuvw</i>F, where <i>p</i>, <i>q</i>, <i>r</i>, <i>s</i>, <i>t</i>, <i>u</i>, <i>v</i>, and <i>w</i>, are hexadecimal digits.
+</p>
+    <p>The Unicode Standard gives every block a unique name that describes the common semantic nature of its code points.  These names are case insensitive, and the hyphens, spaces, and underscores, in them are insignificant.  For example, one can refer to the block whose Unicode name is <code>Myanmar Extended-A</code> as <code>myanmarextendeda</code>, <code>MyanmarExtendedA</code>, or <code>myanmar_extended_a</code>.  ConTeXt chooses the first of these alternative styles for the names of blocks, as described below.
+</p>
+    <p>The number of code points in a block varies.  Some, such as the block named <code>Syriac Supplement</code>, have just 16 code points, and some others, such as the block named <code>CJK Unified Ideographs Extension B</code> with 42720 elements, have thousands of code points.
+</p>
+    <p>Every assigned code point belongs to some block, but there are blocks which contain unassigned code points too; for example, the block named <code>Telugu</code> contains the unassigned code point 0C50.  On the other hand, there are some code points, necessarily unassigned, which do not belong to any block; the code point 0870 is one such.  Thus, the set of all assigned code points is a proper subset of the union of all the blocks, and the union of all the blocks is a proper subset of the Unicode code space.
+</p>
+    <h2>
+     <span class="mw-headline" id="ConTeXt_names_of_Unicode_blocks">
+      ConTeXt names of Unicode blocks
+     </span>
+    </h2>
+    <p>ConTeXt has its own names for all the Unicode blocks.  Most of them are obtained by converting the Unicode name of the block to the lower case, and removing the hyphens and spaces in the name.  The article entitled <a href="List_of_Unicode_blocks.html" title="List of Unicode blocks">List of Unicode blocks</a> contains a table of Unicode blocks, their ConTeXt names, and links to more information about them.
+</p>
+    <h2>
+     <span class="mw-headline" id="An_example_usage_of_Unicode_blocks_in_ConTeXt">
+      An example usage of Unicode blocks in ConTeXt
+     </span>
+    </h2>
+    <p>A typical use of Unicode blocks is in the definition of <b>fallback</b> fonts to provide glyphs for certain characters. Sometimes, when writing a document in ConTeXt, one needs to typeset special symbols that are not available in the base font of the document.  In such a situation, one can specify a fallback font to provide these missing symbols.
+</p>
+    <p>For example, in the following document, the base font <a href="TeX_Gyre_-_Old_Content.html" title="TeX Gyre - Old Content">TeX Gyre Pagella</a> does not have the glyphs for Cyrillic characters, whose code points are in the Unicode block <code>Cyrillic</code>.  The document uses the <tt><a href="Command/definefallbackfamily.html" title="Command/definefallbackfamily">\definefallbackfamily</a></tt> command to get the glyphs for this block from the <code>DejaVu Serif</code> font.  The ConTeXt name of the block is supplied as the value of the key <code>range</code> in the last setup of the command.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definefallbackfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>DejaVu Serif<span class="brx">]</span> <span class="brx">[</span>range<span class="brx">=</span>cyrillic<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfamily</span></span>     <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>TeX Gyre Pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>        <span class="brx">[</span>mainface<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span>
+&rsquo;Twas brillig, and the slithy toves
+Did gyre and gimble in the wabe;
+All mimsy were the borogoves,
+And the mome raths outgrabe.
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\rightaligned</span></span> <span class="br">{</span>&mdash; Lewis Caroll, Jabberwocky<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span>
+&Vcy;&acy;&rcy;&kcy;&acy;&lcy;&ocy;&scy;&softcy;. &KHcy;&lcy;&icy;&vcy;&kcy;&icy;&iecy; &shcy;&ocy;&rcy;&softcy;&kcy;&icy;
+&Pcy;&ycy;&rcy;&yacy;&lcy;&icy;&scy;&softcy; &pcy;&ocy; &ncy;&acy;&vcy;&iecy;,
+&Icy; &khcy;&rcy;&yucy;&kcy;&ocy;&tcy;&acy;&lcy;&icy; &zcy;&iecy;&lcy;&yucy;&kcy;&icy;,
+&Kcy;&acy;&kcy; &mcy;&yucy;&mcy;&zcy;&icy;&kcy;&icy; &vcy; &mcy;&ocy;&vcy;&iecy;. 
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\rightaligned</span></span> <span class="br">{</span>&mdash; &Dcy;&icy;&ncy;&acy; &Gcy;&rcy;&icy;&gcy;&ocy;&rcy;&softcy;&iecy;&vcy;&ncy;&acy; &Ocy;&rcy;&lcy;&ocy;&vcy;&scy;&kcy;&acy;&yacy;, &Bcy;&acy;&rcy;&mcy;&acy;&gcy;&lcy;&ocy;&tcy;<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>Here is an image showing the relevant part of the PDF file obtained by running context on a file containing this document:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/3551de8dee3e9f8bacbc2ef2d89ec4b3.webp" width="874">
+     </li>
+    </ul>
+    <p>The verses in the above example are from the Wikipedia article on the poem <i>Jabberwocky</i><sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup> by Lewis Carroll.
+</p>
+    <h2>
+     <span class="mw-headline" id="Another_example">
+      Another example
+     </span>
+    </h2>
+    <p>A different application of fallback fonts arises when one wants to replace the existing glyphs for some characters in the base font with glyphs for those characters from another font.  This situation is different from the one in the previous example.  There, the base font did not contain glyphs for the characters of interest, and the fallback font provided the missing glyphs.  Here, the base font does contain glyphs for the characters in question, but, perhaps due to aesthetic reaosons, the author of the document, wants to replace those glyphs with glyphs from another font.  In such a case, the latter font can be specified as a fallback font.
+</p>
+    <p>For example, the following document uses the <a href="TeX_Gyre_-_Old_Content.html" title="TeX Gyre - Old Content"><code>pagella</code></a> typescript to provide the base font, and uses the <code>STIX General Regular</code> font for mathematical script letters, which lie in the Unicode block <code>Mathematical Alphanumeric Symbols</code>.  Instead of <tt><a href="Command/definefallbackfamily.html" title="Command/definefallbackfamily">\definefallbackfamily</a></tt> which was used in the previous example, this document uses the command <tt><a href="Command/definefontfallback.html" title="Command/definefontfallback">\definefontfallback</a></tt>.  The ConTeXt name of the block is supplied as the third setup of this command.  The last setup <code>force=yes</code> ensures that the glyphs of the relevant characters are replaced from the fallback font, overriding the glyphs that may exist in the base font for these characters.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span>      <span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfallback</span></span> <span class="brx">[</span>mathscript<span class="brx">]</span> <span class="brx">[</span>STIXGeneralRegular<span class="brx">]</span> <span class="brx">[</span>mathematicalalphanumericsymbols<span class="brx">]</span> <span class="brx">[</span>force<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span>  <span class="brx">[</span>MathRoman<span class="brx">]</span>  <span class="brx">[</span>pagella<span class="brx">]</span>            <span class="brx">[</span>fallbacks<span class="brx">=</span>mathscript<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>      <span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Look at this bestiary of mathematical script letters:
+
+<span class="cs"><span class="documentcs">\startformula</span></span>
+&Ascr;, &Cscr;, &Dscr;, &Gscr;, &Jscr;, &Kscr;, &Oscr;, &Pscr;, &Qscr;, &Sscr;, &Tscr;, &Uscr;, &Vscr;, &Wscr;, &Xscr;, &Yscr;, &Zscr;
+<span class="cs"><span class="documentcs">\stopformula</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Here is an image showing the relevant part of the PDF file obtained by running <code>context</code> on a file containing this document:
+</p>
+    <p><a class="image" href="File:unicode-blocks-in-context-example.png"><img alt="unicode-blocks-in-context-example.png" decoding="async" height="105" src="images/4/43/unicode-blocks-in-context-example.webp" width="625"></a>
+</p>
+    <p>The log file resulting from that run of <code>context</code> says
+</p>
+    <pre>system &gt; 13: filename=/usr/share/fonts/opentype/stix/STIXGeneral-Regular.otf ...
+</pre>
+    <p>so <code>context</code> is indeed, and as expected, taking some of the glyphs from the fallback font, which, in this case, is provided by the local operating system.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="List_of_Unicode_blocks.html" title="List of Unicode blocks">
+       List of Unicode blocks
+      </a>
+     </li>
+    </ul>
+    <ul>
+     <li>
+      <tt>
+       <a href="Command/definefontfallback.html" title="Command/definefontfallback">
+        \definefontfallback
+       </a>
+      </tt>
+      &mdash; manual page with more information on the ConTeXt names of blocks, and their usage.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/char-ini.lua" rel="nofollow">
+       char-ini.lua
+      </a>
+      &mdash; source file containing the definitions of the ConTeXt names of Unicode blocks.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-Unicode-1">
+       <span class="mw-cite-backlink">
+        &uarr;
+        <sup>
+         <a href="#cite_ref-Unicode_1-0">
+          1.0
+         </a>
+        </sup>
+        <sup>
+         <a href="#cite_ref-Unicode_1-1">
+          1.1
+         </a>
+        </sup>
+       </span>
+       <span class="reference-text">
+        The Unicode Consortium,
+        <i>
+         The Unicode Standard
+        </i>
+        , Version 10.0.0, The Unicode Consortium, Mountain View, CA, USA, 2016,
+        <a class="external free" href="http://www.unicode.org/versions/Unicode10.0.0/" rel="nofollow">
+         http://www.unicode.org/versions/Unicode10.0.0/
+        </a>
+        , Retrieved 2017-11-03.
+       </span>
+      </li>
+      <li id="cite_note-Unicode-glossary-2">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-Unicode-glossary_2-0">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        The Unicode Consortium,
+        <i>
+         Glossary
+        </i>
+        ,
+        <a class="external free" href="http://www.unicode.org/glossary/" rel="nofollow">
+         http://www.unicode.org/glossary/
+        </a>
+        , Retrieved 2017-11-03.
+       </span>
+      </li>
+      <li id="cite_note-Blocks-3">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-Blocks_3-0">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        The Unicode Consortium,
+        <i>
+         Blocks.txt
+        </i>
+        ,
+        <a class="external free" href="ftp://www.unicode.org/Public/UNIDATA/Blocks.txt" rel="nofollow">
+         ftp://www.unicode.org/Public/UNIDATA/Blocks.txt
+        </a>
+        , Retrieved 2017-11-03.
+       </span>
+      </li>
+      <li id="cite_note-4">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-4">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        Wikipedia contributors,
+        <i>
+         Jabberwocky
+        </i>
+        , Wikipedia: The Free Encyclopaedia, 2017-11-03, 07:58 UTC,
+        <a class="external free" href="https://en.wikipedia.org/w/index.php?title=Jabberwocky&oldid=808507152" rel="nofollow">
+         https://en.wikipedia.org/w/index.php?title=Jabberwocky&oldid=808507152
+        </a>
+        , Retrieved 2017-11-03.
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212441
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.047 seconds
+Real time usage: 0.059 seconds
+Preprocessor visited node count: 252/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1054/2097152 bytes
+Template argument size: 426/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5835/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   25.790      1 -total
+ 20.62%    5.318      4 Template:cmd
+ 18.64%    4.808     18 Template:code
+ 13.82%    3.563      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4977-1!canonical and timestamp 20260109212441 and revision id 28771
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Unicode_blocks_in_ConTeXt">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

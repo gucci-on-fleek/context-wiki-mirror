@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/RefTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/RefTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/RefTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2181&diff=38536">2025-01-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#What_is_reftex.3F">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         What is reftex?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Customizations_for_ConTeXt">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Customizations for ConTeXt
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Bibliography_Files">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Bibliography Files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Crossreferences">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Crossreferences
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Citations">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Citations
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Using_Reftex">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Using Reftex
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="What_is_reftex?">
+     </span>
+     <span class="mw-headline" id="What_is_reftex.3F">
+      What is reftex?
+     </span>
+    </h2>
+    <p><a class="external text" href="http://staff.science.uva.nl/~dominik/Tools/reftex/" rel="nofollow">Reftex</a> comes bundled with newer versions of emacs. It allows you to manage citations, indexes, references, etc. It integrates nicely with <a href="AUCTeX.html" title="Input and compilation/Text editors/AUCTeX">AUCTeX</a>. It is mainly targeted at LaTeX users, but since it is highly customizable, it can easily be adapted for use with ConTeXt.
+</p>
+    <h2>
+     <span class="mw-headline" id="Customizations_for_ConTeXt">
+      Customizations for ConTeXt
+     </span>
+    </h2>
+    <p>If you use reftex regularly with ConTeXt, you may want to customize a few variables which make your work a lot easier:
+</p>
+    <h3>
+     <span class="mw-headline" id="Bibliography_Files">
+      Bibliography Files
+     </span>
+    </h3>
+    <p>Reftex automatically parses bib-files referenced in the main document, but it expects to be told which files are referenced with the LaTeX commands <tt>\bibliography</tt> or <tt>\nobibliography.</tt>
+</p>
+    <p>You have two possibilities to make it recognize the bibliographies as specified by Taco's bib module:
+</p>
+    <p>(1) You can define a macro that will fool reftex:
+</p>
+    <pre class="tex"> def<span class="cs">\bibliography</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span><span class="brx">[</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span><span class="br">}</span></pre>
+    <p>(2) More elegant: you can add the ConTeXt command to the reftex customization. Call <tt>M-x customize-variable [RET] reftex-bibliography-commands</tt>. In the customization buffer, add the string <tt>setupbibtex\[database=</tt> to the  list of commands. 
+</p>
+    <h3>
+     <span class="mw-headline" id="Crossreferences">
+      Crossreferences
+     </span>
+    </h3>
+    <p>If you have lots of <tt>\pagereference</tt> commands in your file, you want reftex to manage them for you. Again, you have to add the proper command to its customization. I have this line in my <tt>.emacs</tt>:
+</p>
+    <pre>(setq reftex-label-alist '(("\\pagereference[*]" ?a nil "~\\at[%s]" nil nil)))
+</pre>
+    <p>This will include all pagereferences in the reftex list; if you choose one of them at the reftex prompt, it will insert <tt>\at~[]</tt> into your file and place the cursor inside the brackets. 
+</p>
+    <h3>
+     <span class="mw-headline" id="Citations">
+      Citations
+     </span>
+    </h3>
+    <p>You want the <tt>\cite</tt> command to follow ConTeXt syntax and use square brackets, so run <tt>M-x customize-variable [RET] reftex-cite-format</tt> and change the string to <tt>\cite[%t]</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_Reftex">
+      Using Reftex
+     </span>
+    </h2>
+    <p>Just a few very basic hints --- you have to try it yourself; there are just too many commands to mention:
+</p>
+    <p><tt>C-c (</tt> presents you with a buffer for inserting references, including the different sections and all pagereferences (if you have customized like described above). 
+</p>
+    <p><tt>C-c &lt;</tt> lets you insert <tt>\index{}</tt> commands; it offers tab-completion for all index references already present in the document.
+</p>
+    <p><tt>C-c [</tt> lets you insert <tt>cite[]</tt> references.  You can type a string or regexp to search for in you bib file, and reftex will open a new buffer with all entries that match the string/regexp. 
+</p>
+    <p>All of this is very convenient and saves you from making typos in these tedious tags. I only wish I had known about it earlier!
+</p>
+    <p><a href="../../User:Thomas.html" title="User:Thomas">Thomas</a> 17:34, 17 September 2006 (CEST)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212426
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.024 seconds
+Real time usage: 0.047 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 456/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2181-1!canonical and timestamp 20260109212426 and revision id 38536
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/RefTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

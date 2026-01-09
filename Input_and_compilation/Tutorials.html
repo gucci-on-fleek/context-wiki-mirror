@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Tutorials&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Tutorials" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Tutorials
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7159&diff=40911">2025-02-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><i>Focuses on organizing the overall content and defining the structure of the document. Includes sections, headings, paragraphs, and content hierarchy to ensure a logical flow.</i>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#The_input_file">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         The input file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Process_the_input_file">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Process the input file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Special_characters">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Special characters
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Remarks_about_whitespace_after_a_command">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Remarks about whitespace after a command
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Setup_area">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Setup area
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Minimal_customization">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Minimal customization
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Words.2C_lines.2C_paragraphs">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Words, lines, paragraphs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Next_steps">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Next steps
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="The_input_file">
+      The input file
+     </span>
+    </h2>
+    <p>Let's assume you want to create a simple textbook. It has some structure and contains a title page, a few chapters, sections, and subsections. Of course, there is a table of contents.
+</p>
+    <p>ConTeXt can create such a document automatically if you offer the right input by means of a text file. So first, you have to create an input file. An input file consists of a name and an extension, usually <code>.tex</code>. If you create a file with the name <code>mybook.tex</code>, you will find no difficulties in running ConTeXt. Note that spaces in the filename are not allowed.
+</p>
+    <p>An input file could look like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span>From Hasselt to America<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span>by<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span>J. Jonker and C. van Marle<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+
+<span class="cs"><span class="documentcs">\placecontent</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span>Introduction<span class="brx">]</span>
+... ties between Hasselt and America ...
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>The Rensselaer family<span class="br">}</span>, reference<span class="brx">=</span>rensselaer<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\startsection</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>The first born<span class="br">}</span><span class="brx">]</span>
+  ... was born in the year ...
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+
+  <span class="cs"><span class="documentcs">\startsection</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>The early years<span class="br">}</span><span class="brx">]</span>
+  ... in those days Hasselt was ...
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+
+  <span class="cs"><span class="documentcs">\startsection</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Living and workin in America<span class="br">}</span><span class="brx">]</span>
+  ... life in America was ...
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>The Lansing family<span class="br">}</span>, reference<span class="brx">=</span>lansing<span class="brx">]</span>
+... the Lansing family was also ...
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>The Cuyler family<span class="br">}</span>, reference<span class="brx">=</span>cuyler<span class="brx">]</span>
+... much later Tydeman Cuyler ...
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>You can use any text editor. 
+</p>
+    <p><video controls height="225" src="https://wiki.contextgarden.net/images/1/18/context_tutorial_001.webm" style="max-width: 100%; max-height: 100%; width: 300px; height: 225px;" width="300"><a href="../File:context_tutorial_001.webm">https://wiki.contextgarden.net/File:context_tutorial_001.webm</a></video>
+</p>
+    <p>The input file contains <b>the text you want to typeset</b> and <b>the ConTeXt commands</b>. A ConTeXt command begins with a backslash <code>\</code>. With the command <tt><a href="../Command/starttext.html" title="Command/starttext">\starttext</a></tt>, you indicate the beginning of your text.
+</p>
+    <p>A command is sometimes followed by an argument, which is enclosed by curly braces <code>{}</code>. The command <code>\midaligned{From Hasselt to America}</code> that you see in the example will have its effect on <i>From Hasselt to America</i>. The actions may be:
+</p>
+    <ul>
+     <li>
+      start a new line
+     </li>
+     <li>
+      place the text in argument in the middle of the page
+     </li>
+    </ul>
+    <p>Sometimes you will see two brackets <code>[]</code> directly after the command. These brackets are used to feed specific options to the command.  The command <code>\startchapter [title={The Cuyler family}, reference=cuyler]</code> that you see in the example will create a chapter entitled <i>The Cuyler family</i>, and labelled <i>cuyler</i> for references. Its actions will also affect the design, typography, and structure. The actions may be:
+</p>
+    <ul>
+     <li>
+      start a new page for this chapter
+     </li>
+     <li>
+      increase the chapter number by one
+     </li>
+     <li>
+      place the chapter number in front of the chapter title
+     </li>
+     <li>
+      reserve some vertical space
+     </li>
+     <li>
+      use a big font
+     </li>
+     <li>
+      put the chapter title (and page number) in the table of contents
+     </li>
+     <li>
+      label this chapter for potential future reference.
+     </li>
+    </ul>
+    <p>The commands in your input file can take <a href="../ConTeXt_and_Lua_programming#Commands_and_Arguments.html" title="ConTeXt and Lua programming"> different forms</a>, but let's move on.
+</p>
+    <h2>
+     <span class="mw-headline" id="Process_the_input_file">
+      Process the input file
+     </span>
+    </h2>
+    <p>We assume that you have installed and initiated <b>ConTeXt LMTX</b> correctly so that you can run it from the command line in your working directory. You can refer to the <a class="mw-redirect" href="../Introduction/Installation.html" title="Input and compilation/Installation">  <b>ConTeXt</b> installation procedure </a>.
+</p>
+    <p>If you want to process the <b>mybook.tex</b> input file, you should type at the command line prompt:
+</p>
+    <pre>context mybook.tex
+</pre>
+    <p>The extension <code>.tex</code> is not needed. See the <a href="Executable_scripts_and_auxiliary_files/context_script.html" title="Input and compilation/Executable scripts and auxiliary files/context script">context script</a> for more information on the <code>context</code> command.
+</p>
+    <p>After pressing Enter, processing will be started. ConTeXt will show processing information on your screen. During the processing of your input file,'ConTeXt will also inform you of what it is doing with your document. For example, it will show page numbers and information about processing steps. Furthermore, it gives warnings. These are of a typographical order and tell you when line breaking is not successful. All information on processing is stored in a <code>log</code> file that can be used for reviewing warnings and errors, as well as the respective line numbers where they occur in your file.
+</p>
+    <p>If processing is successful, the command line prompt will return, and ConTeXt will produce the file <code>mybook.pdf</code>. The abbreviation <b>PDF</b> stands for Portable Document Format. This is a platform-independent format for printing and viewing with a PDF reader.
+</p>
+    <p>If you have process the above example file with ConTeXt, you would obtain a very simple document with a title page, a few numbered chapters and section headers, and a table of contents (because of <tt><a class="mw-redirect" href="../Command/_placecombinedlist.html" title="Command/placecontent">\placecontent</a></tt>). Here is a representation (scale can be different from your version). 
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/191abcdc9c1f8b824dfbc3e4954c5612.webp" width="1240">
+     </li>
+    </ul>
+    <p>When you use a configurable text editor, you can also run ConTeXt from that editor. More information on that topic can be found in the <a href="Text_editors.html" title="Input and compilation/Text editors"> Text Editors page</a>. You may want to start with <a href="Text_editors/TeXworks.html" title="Input and compilation/Text editors/TeXworks">TeXworks</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Special_characters">
+      Special characters
+     </span>
+    </h2>
+    <p>You have seen that ConTeXt commands are preceded by a <code>\</code> (backslash). This means that <code>\</code> has a special meaning to <b>ConTeXt</b>. Aside from <code>\</code>, there are other <a href="../Special_characters.html" title="Special characters">Special characters</a> that need special attention when you want to use them 
+</p>
+    <pre>\&nbsp;% { } ~ $ _ ^ | # 
+</pre>
+    <p>A short focus a the <code>%</code> character. All text between <code>\starttext...\stoptext</code> will be processed while running ConTeXt. Sometimes however you may have text fragments you don&rsquo;t want to be processed or you want to comment on your ConTeXt input file. If you preceed your text with the percentage sign <code>%</code> it will not be processed.
+</p>
+    <h3>
+     <span class="mw-headline" id="Remarks_about_whitespace_after_a_command">
+      Remarks about whitespace after a command
+     </span>
+    </h3>
+    <p>Because you will necessarily meet this case where you have to pay attention to what happen to the whitespace just after a command: sometimes you will want to ensure that there is a white space, then you want to use <tt><a class="new" href="../index.php?title=Command/⌴&action=edit&redlink=1.html" title="Command/⌴ (page does not exist)">\⌴</a></tt> (backslash followed by a whitespace) or the <code>~</code> character:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">A sentence about <span class="cs"><span class="documentcs">\ConTeXt</span></span>  and <span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span>without<span class="br">}</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span><span class="br">}</span> plus white character.
+
+A sentence about <span class="cs"><span class="documentcs">\ConTeXt</span></span>\ and <span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span>with<span class="br">}</span>    <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span><span class="br">}</span> plus white character.
+
+A sentence about <span class="cs"><span class="documentcs">\ConTeXt</span></span> ~and <span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span>with<span class="br">}</span>    <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>~<span class="br">}</span> before and.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="58" src="../wikiteximage/6d601fe24612b90583f6199ee54484ce.webp" width="469">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Setup_area">
+      Setup area
+     </span>
+    </h2>
+    <p>Every document is started with <tt><a href="../Command/starttext.html" title="Command/starttext">\starttext</a></tt> and closed with <tt><a class="new" href="../index.php?title=Command/stoptext&action=edit&redlink=1.html" title="Command/stoptext (page does not exist)">\stoptext</a></tt> (or with the variant <tt><a href="../Command/startdocument.html" title="Command/startdocument">\startdocument</a></tt> and <tt><a class="new" href="../index.php?title=Command/stopdocument&action=edit&redlink=1.html" title="Command/stopdocument (page does not exist)">\stopdocument</a></tt>). All textual input is placed between these two commands and ConTeXt will only process that information.
+</p>
+    <p>Before <tt><a href="../Command/starttext.html" title="Command/starttext">\starttext</a></tt>, there can be some commands but no content. These commands are here to configure / customize / set up the typesetting information and rules. As a consequence, the area before <tt><a href="../Command/starttext.html" title="Command/starttext">\starttext</a></tt> is called setup area (or preamble).
+</p>
+    <h2>
+     <span class="mw-headline" id="Minimal_customization">
+      Minimal customization
+     </span>
+    </h2>
+    <p>There are three things you'll probably want to customize systematically&nbsp;:
+</p>
+    <ul>
+     <li>
+      the size of the page, with
+      <tt>
+       <a href="../Command/setuppapersize.html" title="Command/setuppapersize">
+        \setuppapersize
+       </a>
+      </tt>
+     </li>
+     <li>
+      the font and its size, with
+      <tt>
+       <a href="../Command/setupbodyfont.html" title="Command/setupbodyfont">
+        \setupbodyfont
+       </a>
+      </tt>
+     </li>
+     <li>
+      the language in which your document is written, with
+      <tt>
+       <a href="../Command/mainlanguage.html" title="Command/mainlanguage">
+        \mainlanguage
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% This is the setup area of the document</span>
+<span class="comment">% the percent characters allowsConTeXt to treat these 2 lines as comments</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span>               <span class="comment">% it will be not typeset</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella,12pt<span class="brx">]</span>      <span class="comment">% but the commands here are taken into account</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>fr<span class="brx">]</span>                 <span class="comment">% for the typesetting of the actual content</span>
+
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+This is a one line document.      <span class="comment">% your content</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><tt><a href="../Command/mainlanguage.html" title="Command/mainlanguage">\mainlanguage</a></tt>, with the <a href="Languages#Language_tags.html" title="Input and compilation/Languages">language tag</a> you wish to use for the document content, takes care of:
+</p>
+    <ul>
+     <li>
+      defining the language of auto-generated language elements, like the title of the table of contents or the appendix, the labels,
+     </li>
+     <li>
+      defining the hyphenation rules
+     </li>
+     <li>
+      defining the quotation marks and the spacing rules.
+     </li>
+    </ul>
+    <p>See below:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% Default is \mainlanguage[en]</span>
+<span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>English quotes<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>width<span class="brx">=</span>6cm,height<span class="brx">=</span>1cm,color<span class="brx">=</span>red<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+
+<span class="br">{</span><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>nl<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>Dutch quotes<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>width<span class="brx">=</span>6cm,height<span class="brx">=</span>1cm,color<span class="brx">=</span>green<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span><span class="br">}</span>
+
+<span class="br">{</span><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>fr<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>French quotes<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>width<span class="brx">=</span>6cm,height<span class="brx">=</span>1cm,color<span class="brx">=</span>blue<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="324" src="../wikiteximage/f63fd5f258570cdaade8b62bca2fff11.webp" width="624">
+     </li>
+    </ul>
+    <h2>
+     <span id="Words,_lines,_paragraphs">
+     </span>
+     <span class="mw-headline" id="Words.2C_lines.2C_paragraphs">
+      Words, lines, paragraphs
+     </span>
+    </h2>
+    <p>For ConTeXt, there's no difference between a space, several consecutive spaces and a line break: all 3 cases are interpreted as a single space between words.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">For ConTeXt, there's no difference between a space, several     consecutive          spaces 
+and a line break:
+all 3 cases
+are interpreted 
+as 
+   a 
+     single 
+            space
+                  between 
+                          words.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="37" src="../wikiteximage/00d059fce5a59c0a1099a461d253a951.webp" width="620">
+     </li>
+    </ul>
+    <p><br>
+Similarly, there's no difference between one or more consecutive blank lines: the 2 cases are interpreted as a single paragraph break. The <tt><a class="new" href="../index.php?title=Command/par&action=edit&redlink=1.html" title="Command/par (page does not exist)">\par</a></tt> command is used to explicitly insert such a paragraph break.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">Similarly, there's no difference 
+between one or more consecutive blank lines.
+
+The 2 cases are interpreted as a single paragraph break.
+
+
+The <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>par<span class="br">}</span> command is used to explicitly insert a paragraph break.
+
+The <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>par<span class="br">}</span> command <span class="cs">\par</span> is used to explicitly insert a paragraph break.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="97" src="../wikiteximage/af323aef267f99200b4cb1a3cea3ad04.webp" width="553">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Next_steps">
+      Next steps
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Document_structure_and_headlines/Tutorials.html" title="Document structure and headlines/Tutorials">
+       Tutorial about document structure and headlines
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212429
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.064 seconds
+Real time usage: 1.726 seconds
+Preprocessor visited node count: 245/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1216/2097152 bytes
+Template argument size: 286/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9380/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   45.556      1 -total
+ 24.75%   11.273     14 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7159-1!canonical and timestamp 20260109212427 and revision id 40911
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Tutorials">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Module writing/Module template&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing/Module_template" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Module writing/Module template
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2775&diff=40857">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The following can be used as a template when writing modules:
+</p>
+    <pre>%D \module
+%D   [     file=&lt;filename&gt;,&nbsp;% e.g. t-xxx
+%D      version=&lt;module version&gt;,&nbsp;% e.g. 20xx.xx.xx
+%D        title=&lt;module title&gt;,&nbsp;% e.g. \CONTEXT\ User Module
+%D     subtitle=&lt;module subtitle&gt;,&nbsp;% short description
+%D       author=&lt;author&gt;,&nbsp;% name(s)
+%D        email=&lt;author email&gt;,
+%D         date=&lt;date&gt;,&nbsp;% e.g. \currentdate
+%D    copyright=&lt;copyright&gt;,&nbsp;% e.g. &lt;author&gt;
+%D      license=&lt;license&gt;]&nbsp;% e.g. 'Public Domain' or 'GNU GPL 2.0'
+
+%C copyright/license information
+
+% begin info
+%
+% title   : &lt;a short title to explain the module&gt;
+% comment&nbsp;: &lt;a longer description which explains the purpose of the module&gt;
+% status  : &lt;current status of the module&gt;
+%
+% end info
+
+\unprotect
+
+% module code
+
+\protect
+
+\continueifinputfile {&lt;filename&gt;}
+
+% usage examples
+
+\endinput
+</pre>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Preamble">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Preamble
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Info_block">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Info block
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Examples">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Create_docs">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Create docs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Private_area">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Private area
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Sources">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Sources
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Preamble">
+      Preamble
+     </span>
+    </h2>
+    <p>Mandatory entries
+</p>
+    <ul>
+     <li>
+      title
+     </li>
+     <li>
+      subtitle
+     </li>
+     <li>
+      author
+     </li>
+    </ul>
+    <p>Optional entries
+</p>
+    <ul>
+     <li>
+      file
+     </li>
+     <li>
+      version
+     </li>
+     <li>
+      copyright
+     </li>
+     <li>
+      license
+     </li>
+     <li>
+      email
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Info_block">
+      Info block
+     </span>
+    </h2>
+    <p>In addition to the preamble it&rsquo;s suggested to add an information block which gives a short
+description about the module and its status. It is used with <code>context --showmodules</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>Besides using the documentation mechanism and creating a separate document to explain the
+module, it is possible to add code at the end of the file after which is ignored when the module is loaded
+with <tt><a href="../../Command/usemodule.html" title="Command/usemodule">\usemodule</a></tt>.
+</p>
+    <p>The argument of <tt><a href="../../Command/continueifinputfile.html" title="Command/continueifinputfile">\continueifinputfile</a></tt> takes the filename of the module. Content after that is processed when you process the module itself with <code>context</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Create_docs">
+      Create docs
+     </span>
+    </h2>
+    <p>To create a PDF from the module with formatted output of the documentation:
+</p>
+    <pre> context --extra=module --result=... &lt;file&gt;
+</pre>
+    <p>It is recommended to specify a filename for the resulting PDF file because the default is <tt>context-extra.pdf</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Private_area">
+      Private area
+     </span>
+    </h2>
+    <p>To ensure that the module can&rsquo;t be changed by users and to enable the multilingual interface,
+ConTeXt permits special characters in command names between <tt><a href="../../Command/unprotect.html" title="Command/unprotect">\unprotect</a></tt> and <tt><a class="new" href="../../index.php?title=Command/protect&action=edit&redlink=1.html" title="Command/protect (page does not exist)">\protect</a></tt>.
+</p>
+    <p>Between these commands, you can use&nbsp;?,&nbsp;!, @ and _ as part of command names, e.g.
+</p>
+    <pre> \mymodule_start
+ \????mymodule
+ \c!location
+</pre>
+    <h2>
+     <span class="mw-headline" id="Sources">
+      Sources
+     </span>
+    </h2>
+    <p>Wolfgang Schuster in <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2010/047469.html" rel="nofollow">a message on ntg-context</a> and <a class="external text" href="https://meeting.contextgarden.net/2024/talks/wolfgang/module_howto.pdf" rel="nofollow">slides at context meeting 2024</a>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072911
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 71/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 360/2097152 bytes
+Template argument size: 88/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 873/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.215      1 -total
+ 96.00%    9.806      4 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2775-1!canonical and timestamp 20260110072911 and revision id 40857
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing/Module_template">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

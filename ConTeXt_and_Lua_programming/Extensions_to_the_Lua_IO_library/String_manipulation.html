@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library/String_manipulation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3337&diff=40585">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#l-string.lua">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         l-string.lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#string.esc.28string.29">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           string.esc(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#string.unquote.28string.29">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           string.unquote(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#string.quote.28string.29">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           string.quote(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#string.count.28string.2C_pattern.29">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           string.count(string, pattern)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#string.limit.28string.2C_max.2C_.5Btail.5D.29">
+          <span class="tocnumber">
+           2.5
+          </span>
+          <span class="toctext">
+           string.limit(string, max, [tail])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#string.strip.28string.29">
+          <span class="tocnumber">
+           2.6
+          </span>
+          <span class="toctext">
+           string.strip(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#string.is_empty.28string.29">
+          <span class="tocnumber">
+           2.7
+          </span>
+          <span class="toctext">
+           string.is_empty(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#string.enhance.28string.2C_pattern.2C_function.29">
+          <span class="tocnumber">
+           2.8
+          </span>
+          <span class="toctext">
+           string.enhance(string, pattern, function)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#string.characters.28string.29">
+          <span class="tocnumber">
+           2.9
+          </span>
+          <span class="toctext">
+           string.characters(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#string.bytes.28string.29">
+          <span class="tocnumber">
+           2.10
+          </span>
+          <span class="toctext">
+           string.bytes(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#string.lpadd.28string.2C_n.2C_character.29_.7C_string.rpadd.28string.2C_n.2C_character.29">
+          <span class="tocnumber">
+           2.11
+          </span>
+          <span class="toctext">
+           string.lpadd(string, n, character) | string.rpadd(string, n, character)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#string.escapedpattern.28string.29_.7C_string.partialescapedpattern.28string.29">
+          <span class="tocnumber">
+           2.12
+          </span>
+          <span class="toctext">
+           string.escapedpattern(string) | string.partialescapedpattern(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#string.tohash.28string.29">
+          <span class="tocnumber">
+           2.13
+          </span>
+          <span class="toctext">
+           string.tohash(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#string.totable.28string.29">
+          <span class="tocnumber">
+           2.14
+          </span>
+          <span class="toctext">
+           string.totable(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#string.tabtospace.28string.2C_.5Btabsize.5D.29">
+          <span class="tocnumber">
+           2.15
+          </span>
+          <span class="toctext">
+           string.tabtospace(string, [tabsize])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#string.compactlong.28string.29_.7C_utilities.strings.striplong.28string.29">
+          <span class="tocnumber">
+           2.16
+          </span>
+          <span class="toctext">
+           string.compactlong(string) | utilities.strings.striplong(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#string.topattern.28string.2C_lowercase.2C_strict.29">
+          <span class="tocnumber">
+           2.17
+          </span>
+          <span class="toctext">
+           string.topattern(string, lowercase, strict)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#l-lpeg.lua">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         l-lpeg.lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#Predefined_Patterns">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Predefined Patterns
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#lpeg.anywhere.28string.7Cpattern.29">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           lpeg.anywhere(string|pattern)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#lpeg.splitter.28delimiter.2C_function.29">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           lpeg.splitter(delimiter, function)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-24">
+         <a href="#string.splitlines.28string.29">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           string.splitlines(string)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#lpeg.splitat.28delimiter.2C_.5Bsingle.5D.29">
+          <span class="tocnumber">
+           3.5
+          </span>
+          <span class="toctext">
+           lpeg.splitat(delimiter, [single])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#string.split.28string.2C_separator.29_.7C_string.checkedsplit.28string.2C_separator.29">
+          <span class="tocnumber">
+           3.6
+          </span>
+          <span class="toctext">
+           string.split(string, separator) | string.checkedsplit(string, separator)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#lpeg.stripper.28string.7Cpattern.29_.7C_lpeg.keeper.28string.7Cpattern.29">
+          <span class="tocnumber">
+           3.7
+          </span>
+          <span class="toctext">
+           lpeg.stripper(string|pattern) | lpeg.keeper(string|pattern)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#lpeg.replacer.28table.29">
+          <span class="tocnumber">
+           3.8
+          </span>
+          <span class="toctext">
+           lpeg.replacer(table)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-29">
+         <a href="#lpeg.firstofsplit.28separator.29_.7C_lpeg.secondofsplit.28separator.29">
+          <span class="tocnumber">
+           3.9
+          </span>
+          <span class="toctext">
+           lpeg.firstofsplit(separator) | lpeg.secondofsplit(separator)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-30">
+       <a href="#util-prs.lua">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         util-prs.lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#utilities.parsers.settings_to_hash.28str.29">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           utilities.parsers.settings_to_hash(str)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#utilities.parsers.settings_to_array.28str.29">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           utilities.parsers.settings_to_array(str)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-33">
+         <a href="#utilities.parsers.settings_to_set.28str.29">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           utilities.parsers.settings_to_set(str)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#Other_function_in_utilities.parsers">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           Other function in utilities.parsers
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-35">
+       <a href="#LuaTeX">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         LuaTeX
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-36">
+         <a href="#string.explode.28string.2C_.5Bcharacter.5D.29">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           string.explode(string, [character])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#string.characters.28string.29_.7C_string.utfcharacters.28string.29">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           string.characters(string) | string.utfcharacters(string)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-38">
+       <a href="#Recipes">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Recipes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-39">
+         <a href="#Iterator:_words_.28string.2C_chr.29">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           Iterator: words (string, chr)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-40">
+       <a href="#String_formatter">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         String formatter
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>In comparison with other scripting languages the bare Lua string library
+lacks some very useful &ldquo;features&rdquo;.
+But before a texnician reimplements all the goodies that E knows from Eir
+favorite language, E should first have a look at the helper functions that
+ConTeXt already provides.
+The following section briefly introduces these extensions with regard to 
+string manipulation.
+</p>
+    <p>The function name and its arguments are given as heading, the content is split
+into, first, an example and, second, a short description of what the function
+does and its peculiarities if applicable.
+The examples are so designed that they should work when copy-pasted into an
+empty Lua file and processed with context.
+</p>
+    <h2>
+     <span class="mw-headline" id="l-string.lua">
+      l-string.lua
+     </span>
+    </h2>
+    <h3>
+     <span id="string.esc(string)">
+     </span>
+     <span class="mw-headline" id="string.esc.28string.29">
+      string.esc(string)
+     </span>
+    </h3>
+    <pre>print(string.esc([[^([\"\'])(.*)%1$","%2]]))
+</pre>
+    <p>Returns <tt>string</tt> with all occurrences of 
+<tt>%</tt>,
+<tt>.</tt>,
+<tt>+</tt>,
+<tt>-</tt>,
+<tt>*</tt>,
+<tt>^</tt>,
+<tt>$</tt>,
+<tt>[</tt>,
+<tt>]</tt>,
+<tt>(</tt>,
+<tt>)</tt>,
+<tt>{</tt>, and
+<tt>}</tt>
+escaped with the percent symbol.
+Cf.  <a href="#string.escapedpattern.28string.29_.7C_string.partialescapedpattern.28string.29">string.escapedpattern</a>.
+</p>
+    <h3>
+     <span id="string.unquote(string)">
+     </span>
+     <span class="mw-headline" id="string.unquote.28string.29">
+      string.unquote(string)
+     </span>
+    </h3>
+    <pre>print(string.unquote[["Do you see any quotes around here?"]])
+print(string.unquote[['Do you see any quotes around here?']])
+print(string.unquote[["Do you see any quotes around here?']]) -- Doesn't match
+print(string.unquote[[&ldquo;Do you see any quotes around here?&rdquo;]]) -- Doesn't match
+</pre>
+    <p>Returns <tt>string</tt> with surrounding quotes removed iff they are
+of the same kind (ascii single/double quote only).
+</p>
+    <h3>
+     <span id="string.quote(string)">
+     </span>
+     <span class="mw-headline" id="string.quote.28string.29">
+      string.quote(string)
+     </span>
+    </h3>
+    <p>Equivalent to <tt>string.format("%q", string)</tt>.
+</p>
+    <h3>
+     <span id="string.count(string,_pattern)">
+     </span>
+     <span class="mw-headline" id="string.count.28string.2C_pattern.29">
+      string.count(string, pattern)
+     </span>
+    </h3>
+    <pre>print(string.count("How many a's?", "a"))
+print(string.count("How many many's?", "many"))
+</pre>
+    <p>Returns the count of matches for <tt>pattern</tt> in <tt>string</tt>.
+</p>
+    <h3>
+     <span id="string.limit(string,_max,_[tail])">
+     </span>
+     <span class="mw-headline" id="string.limit.28string.2C_max.2C_.5Btail.5D.29">
+      string.limit(string, max, [tail])
+     </span>
+    </h3>
+    <pre>s = "This string is too long for our purpose."
+print(string.limit(s, 15))
+print(string.limit(s, 15, " &hellip;")) -- "&hellip;" seems to be three bytes long.
+</pre>
+    <p>Returns the string capped at position <tt>max</tt> (minus the byte
+count of <tt>tail</tt>) with <tt>tail</tt> appended. The optional <tt>tail</tt>
+defaults to <tt>"..."</tt>.
+</p>
+    <h3>
+     <span id="string.strip(string)">
+     </span>
+     <span class="mw-headline" id="string.strip.28string.29">
+      string.strip(string)
+     </span>
+    </h3>
+    <pre>print(string.strip([[ I once used to be surrounded by whitespace.                             
+    ]]))
+</pre>
+    <p>Yields <tt>string</tt> with leading and trailing whitespace (spaces, horizontal
+and vertical tabs, newlines) removed.
+</p>
+    <h3>
+     <span id="string.is_empty(string)">
+     </span>
+     <span class="mw-headline" id="string.is_empty.28string.29">
+      string.is_empty(string)
+     </span>
+    </h3>
+    <pre>print(string.is_empty([[]]))
+print(string.is_empty([[notempty]]))
+print(string.is_empty(9))
+</pre>
+    <p>Returns <tt>true</tt> if the argument is an empty string and
+<tt>false</tt> for nonempty strings and numbers.
+(Throws an error with functions, booleans or <tt>nil</tt>.)
+</p>
+    <h3>
+     <span id="string.enhance(string,_pattern,_function)">
+     </span>
+     <span class="mw-headline" id="string.enhance.28string.2C_pattern.2C_function.29">
+      string.enhance(string, pattern, function)
+     </span>
+    </h3>
+    <pre>s = "I'd like to file a complaint."
+f = function () 
+    return "have an argument!"
+end
+io.write(string.enhance(s, "file a complaint.", f))
+</pre>
+    <p>Returns the input string with <tt>function</tt> applied to all matches
+for <tt>pattern</tt>. 
+<i>Note</i>: <tt>string.enhance</tt> relies on <tt>gsub</tt> from the lua
+string library so unfortunately you can't pass it an LPEG as second
+argument.
+</p>
+    <h3>
+     <span id="string.characters(string)">
+     </span>
+     <span class="mw-headline" id="string.characters.28string.29">
+      string.characters(string)
+     </span>
+    </h3>
+    <pre>n = 0
+for chr in string.characters("Some bytes") do
+    n = n + 1
+    io.write(string.format("Nr. %2u is %s.\n", n, chr))
+end
+</pre>
+    <p>Returns an iterator over the ascii characters in <tt>string</tt>.
+<i>Note</i>: As this relies on the string library you should expect
+unwelcome results (e.g. invalid utf8 sequences) when using it for
+anything else than 7-bit ascii.
+</p>
+    <p>Cf.
+<a href="#string.characters.28string.29_.7C_string.utfcharacters.28string.29">string.utfcharacters</a>
+from LuaTeX.
+</p>
+    <h3>
+     <span id="string.bytes(string)">
+     </span>
+     <span class="mw-headline" id="string.bytes.28string.29">
+      string.bytes(string)
+     </span>
+    </h3>
+    <pre>n = 0
+for byte in string.bytes("Some bytes") do
+    n = n + 1
+    io.write(string.format("Nr. %2u is %3u.\n", n, byte))
+end
+</pre>
+    <p>The same as <tt>string.characters</tt> but returns bytes as base 10
+integers.
+</p>
+    <h3>
+     <span id="string.lpadd(string,_n,_character)_|_string.rpadd(string,_n,_character)">
+     </span>
+     <span class="mw-headline" id="string.lpadd.28string.2C_n.2C_character.29_.7C_string.rpadd.28string.2C_n.2C_character.29">
+      string.lpadd(string, n, character) | string.rpadd(string, n, character)
+     </span>
+    </h3>
+    <pre>s = "Some string."
+print(string.rpadd(s, 15, "r"))
+print(string.lpadd(s, 15, "l"))
+</pre>
+    <p>Adds as many times <tt>character</tt> as needed to the left or right
+respectively to get a string of length <tt>n</tt> from
+<tt>string</tt>. <i>Note</i>: <tt>character</tt> can in fact be a string
+of any length which can distort the result.
+</p>
+    <h3>
+     <span id="string.escapedpattern(string)_|_string.partialescapedpattern(string)">
+     </span>
+     <span class="mw-headline" id="string.escapedpattern.28string.29_.7C_string.partialescapedpattern.28string.29">
+      string.escapedpattern(string) | string.partialescapedpattern(string)
+     </span>
+    </h3>
+    <pre>print(string.escapedpattern("Some characters like *, + and ] need to be escaped for formatting."))
+print(string.partialescapedpattern("Some characters like *, + and ] need to be escaped for formatting."))
+</pre>
+    <p><tt>string.escapedpattern</tt> escapes all occurences of the characters
+<tt>-</tt>,
+<tt>.</tt>,
+<tt>+</tt>,
+<tt>*</tt>,
+<tt>%</tt>,
+<tt>(</tt>,
+<tt>)</tt>,
+<tt>[</tt>, and
+<tt>]</tt>
+using percent signs (<tt>%</tt>);
+<tt>string.partialescapedpattern</tt> only escapes 
+<tt>-</tt> and
+<tt>.</tt> using percent signs whereas
+<tt>?</tt> and
+<tt>*</tt> are prefixed with dots (<tt>.</tt>).
+The latter is used for pattern building, e.g. in <a class="extiw" href="http://source.contextgarden.net/trac-set.lua" title="source:trac-set.lua">trac-set.lua</a>.
+</p>
+    <h3>
+     <span id="string.tohash(string)">
+     </span>
+     <span class="mw-headline" id="string.tohash.28string.29">
+      string.tohash(string)
+     </span>
+    </h3>
+    <pre>t = string.tohash("Comma,or space,separated values")
+for k,v in pairs(t) do
+    print(k,v)
+end
+</pre>
+    <p>Returns a hashtable with every substring of <tt>string</tt>
+between spaces and commas as keys and <tt>true</tt> as values.
+</p>
+    <h3>
+     <span id="string.totable(string)">
+     </span>
+     <span class="mw-headline" id="string.totable.28string.29">
+      string.totable(string)
+     </span>
+    </h3>
+    <pre>t = string.totable("Insert your favorite string here!")
+for k,v in pairs(t) do
+    print(k,v)
+end
+</pre>
+    <p>Returns a list of ascii characters that constitute <tt>string</tt>.
+<i>Note</i>: As this relies on LPEG's character pattern it 
+<b>is guaranteed</b>
+to turn your multi-byte sequences into garbage!
+</p>
+    <h3>
+     <span id="string.tabtospace(string,_[tabsize])">
+     </span>
+     <span class="mw-headline" id="string.tabtospace.28string.2C_.5Btabsize.5D.29">
+      string.tabtospace(string, [tabsize])
+     </span>
+    </h3>
+    <pre>local t = {
+    "1234567123456712345671234567",
+    "a\tb\tc",
+    "aa\tbb\tcc",
+    "aaa\tbbb\tccc",
+    "aaaa\tbbbb\tcccc",
+    "aaaaa\tbbbbb\tccccc",
+    "aaaaaa\tbbbbbb\tcccccc",
+}
+for k,v in ipairs(t) do
+    print(string.tabtospace(t[k]))
+end
+</pre>
+    <p>(Modified example from <a class="extiw" href="http://source.contextgarden.net/l-string.lua" title="source:l-string.lua">the context sources</a>.)
+Replaces tabs with spaces depending on position. The optional argument
+<tt>tabsize</tt> defaults to <em>7</em>.
+</p>
+    <h3>
+     <span id="string.compactlong(string)_|_utilities.strings.striplong(string)">
+     </span>
+     <span class="mw-headline" id="string.compactlong.28string.29_.7C_utilities.strings.striplong.28string.29">
+      string.compactlong(string) | utilities.strings.striplong(string)
+     </span>
+    </h3>
+    <pre>s = [[
+This is 
+a fairly
+    long
+        string
+            with some
+                rather
+                    silly
+indents.]]
+
+print(string.compactlong(s))
+printutilities.strings.striplong(s))
+</pre>
+    <p><tt>string.compactlong</tt> removes newlines (dos and unix) and
+leading spaces from <tt>string</tt>.
+</p>
+    <p><tt>utilities.strings.striplong</tt> removes leading spaces and converts dos
+newlines to unix newlines.
+</p>
+    <h3>
+     <span id="string.topattern(string,_lowercase,_strict)">
+     </span>
+     <span class="mw-headline" id="string.topattern.28string.2C_lowercase.2C_strict.29">
+      string.topattern(string, lowercase, strict)
+     </span>
+    </h3>
+    <pre>print(string.topattern("Sudo make Me a Pattern from '*' and '-'!", false, false))
+print(string.topattern("Sudo make Me a Pattern from '*' and '-'!", true,  false))
+print(string.topattern("Sudo make Me a Pattern from '*' and '-'!", true,  true ))
+</pre>
+    <p>Returns a valid pattern from <tt>string</tt> that can be used with
+<tt>string.find</tt> et&nbsp;al.
+The return value is essentially the same as with
+<tt>string.escapedpattern</tt> plus two options:
+the boolean <tt>lowercase</tt> specifies whether the string is to be
+lowercased first,
+whereas <tt>strict</tt> results in a whole line pattern.
+</p>
+    <h2>
+     <span class="mw-headline" id="l-lpeg.lua">
+      l-lpeg.lua
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Predefined_Patterns">
+      Predefined Patterns
+     </span>
+    </h3>
+    <p>Dozens of the most common patterns including
+hexadecimal numbers, diverse whitespace and line endings, punctuation,
+and even an XML path parser etc. are already predefined.
+To get an impression about what they do you can check them with the
+followings snippet:
+</p>
+    <pre>function show_patterns (p, super)
+    for i,j in pairs(p) do
+        i = super and super..":"..i or i
+        print(string.rpadd("=== " .. i .. " ", 80, "="))
+        if type(j) == "userdata" then
+            j:print()
+        else -- descend into next level
+            show_patterns(j, i)
+        end 
+    end 
+end
+
+local p = lpeg.patterns
+
+show_patterns(p)
+</pre>
+    <h3>
+     <span id="lpeg.anywhere(string|pattern)">
+     </span>
+     <span class="mw-headline" id="lpeg.anywhere.28string.7Cpattern.29">
+      lpeg.anywhere(string|pattern)
+     </span>
+    </h3>
+    <pre>str = "Fetchez la vache!"
+print(lpeg.anywhere("a" ):match(str))
+print(lpeg.anywhere("la"):match(str))
+print(lpeg.anywhere("ac"):match(str))
+</pre>
+    <p>Returns a pattern that matches the first occurrence of
+<tt>string</tt>, returning the position of the last character in the
+matched sequence.
+Keep in mind that you can pass it patterns as well:
+</p>
+    <pre>print(lpeg.anywhere(lpeg.P"a"*lpeg.patterns.whitespace):match(str))
+</pre>
+    <h3>
+     <span id="lpeg.splitter(delimiter,_function)">
+     </span>
+     <span class="mw-headline" id="lpeg.splitter.28delimiter.2C_function.29">
+      lpeg.splitter(delimiter, function)
+     </span>
+    </h3>
+    <pre>wedge = function (str)
+    local dict = {
+        Romanes = "Romani",
+           evnt = "ite",
+          domvs = "domvm",
+    }
+    return dict[str] or ""
+end
+
+splitme = "Romanes evnt domvs"
+print(lpeg.splitter(" ", wedge):match(splitme))
+</pre>
+    <p>Returns a pattern that can be used to apply <tt>function</tt> to all
+substrings delimited by <tt>delimiter</tt> which can be a string or a
+pattern.
+</p>
+    <h3>
+     <span id="string.splitlines(string)">
+     </span>
+     <span class="mw-headline" id="string.splitlines.28string.29">
+      string.splitlines(string)
+     </span>
+    </h3>
+    <pre>str = [[
+Bravely bold Sir Robin rode forth from Camelot.
+He was not afraid to die, O brave Sir Robin!
+He was not at all afraid to be killed in nasty ways,
+Brave, brave, brave, brave Sir Robin!
+]]
+
+for n,line in ipairs(string.splitlines(str)) do
+    io.write(string.format("%u: %s\n", n, line))
+end
+</pre>
+    <p>Splits <tt>string</tt> into a list of lines where empty lines &ndash; i.e.
+consecutive <tt>\n</tt>'s &ndash; yield the empty string.
+</p>
+    <h3>
+     <span id="lpeg.splitat(delimiter,_[single])">
+     </span>
+     <span class="mw-headline" id="lpeg.splitat.28delimiter.2C_.5Bsingle.5D.29">
+      lpeg.splitat(delimiter, [single])
+     </span>
+    </h3>
+    <pre>str = [[
+Number twenty-three. The shin.
+Number twenty-four. Reginald Maudling's shin.
+Number twenty-five. The brain.
+Number twenty-six. Magaret Thatcher's brain.
+Number twenty-seven. More naughty bits.
+]]
+
+t = {lpeg.splitat("Number", false):match(str)}
+for n,element in pairs(t) do 
+    element = element == "" and element .. "\n" or element
+    io.write(n..": "..element) 
+end
+</pre>
+    <p>Returns a pattern that produces a list of substrings delimited by
+<tt>delimiter</tt> (which can be a pattern or a string).
+The optional boolean <tt>single</tt> determines whether the string
+should be split only at the first match.
+</p>
+    <h3>
+     <span id="string.split(string,_separator)_|_string.checkedsplit(string,_separator)">
+     </span>
+     <span class="mw-headline" id="string.split.28string.2C_separator.29_.7C_string.checkedsplit.28string.2C_separator.29">
+      string.split(string, separator) | string.checkedsplit(string, separator)
+     </span>
+    </h3>
+    <pre>theory = [[All brontosauruses are thin at one end, much much thicker in the middle, and then thin again at the far end.]]
+
+theorems = string.split(theory, lpeg.P", " * lpeg.P"and "^-1) 
+
+for n, element in ipairs(theorems) do
+    io.write (string.format("Theorem %u: %s\n", n, element))
+end
+</pre>
+    <p><tt>string.split</tt> returns, as you would expect, a list of
+substrings of <tt>string</tt> delimited by <tt>separator</tt>.
+Consecutive separators result in the empty string;
+its counterpart <tt>string.checkedsplit</tt> does not match these 
+sequences, returning <tt>nil</tt> instead.
+</p>
+    <p><i>Note</i>: The corresponding pattern generators are <tt>lpeg.split</tt>
+and <tt>lpeg.checkedsplit</tt>.
+</p>
+    <h3>
+     <span id="lpeg.stripper(string|pattern)_|_lpeg.keeper(string|pattern)">
+     </span>
+     <span class="mw-headline" id="lpeg.stripper.28string.7Cpattern.29_.7C_lpeg.keeper.28string.7Cpattern.29">
+      lpeg.stripper(string|pattern) | lpeg.keeper(string|pattern)
+     </span>
+    </h3>
+    <pre>str = "A dromedary has one hump and a camel has a refreshment car, buffet, and ticket collector."
+print(lpeg.stripper("aeiou")       :match(str))
+print(lpeg.stripper(lpeg.P"camel "):match(str))
+</pre>
+    <p><tt>lpeg.stripper</tt> returns a pattern that removes either, if the
+argument is a string, all occurrences of every character of that
+string or, if the argument is a pattern, all occurrences of that pattern.
+Its complement, <tt>lpeg.keeper</tt>, removes anything but the string
+or pattern respectively.
+<i>Note</i>: <tt>string.keeper</tt> does not seem to work as expected with
+patterns consisting of more than one byte, e.g. <tt>lpeg.P("camel")</tt>.
+</p>
+    <h3>
+     <span id="lpeg.replacer(table)">
+     </span>
+     <span class="mw-headline" id="lpeg.replacer.28table.29">
+      lpeg.replacer(table)
+     </span>
+    </h3>
+    <pre>str = "Luxury Yacht"
+
+rep = {
+    [1] = { "Luxury", "Throatwobbler"   },
+    [2] = { "Yacht",  "Mangrove"        },
+}
+
+print("My name is spelled &ldquo;" .. str .. "&rdquo;, but it's pronounced &ldquo;" .. lpeg.replacer(rep):match(str) .. "&rdquo;.")
+</pre>
+    <p>Accepts a list of pairs and returns a pattern that substitutes any
+first elements of a given pair by its second element.
+The latter can be a string, a hashtable, or a function (whatever fits
+with <tt>lpeg.Cs</tt>).
+</p>
+    <p><i>Note</i>: Choose the order of elements in <tt>table</tt> with care.
+Due to LPEG's matching the leftmost element of disjunction first
+it might turn out to be as crucial as in the following example:
+</p>
+    <pre>str = "aaababaaba"
+rep1 = {
+    { "a",  "x" },
+    { "aa", "y" },
+}
+
+rep2 = {
+    { "aa", "y" },
+    { "a",  "x" },
+}
+
+print(lpeg.replacer(rep1):match(str))
+print(lpeg.replacer(rep2):match(str))
+</pre>
+    <h3>
+     <span id="lpeg.firstofsplit(separator)_|_lpeg.secondofsplit(separator)">
+     </span>
+     <span class="mw-headline" id="lpeg.firstofsplit.28separator.29_.7C_lpeg.secondofsplit.28separator.29">
+      lpeg.firstofsplit(separator) | lpeg.secondofsplit(separator)
+     </span>
+    </h3>
+    <pre>str = "menu = spam, spam, spam, spam, spam, baked beans, spam, spam and spam"
+print(lpeg.firstofsplit (" = "):match(str))
+print(lpeg.secondofsplit(" = "):match(str))
+</pre>
+    <p><tt>lpeg.firstofsplit</tt> returns a pattern that matches the
+substring until the first occurrence of <tt>separator</tt>, its
+complement generated by <tt>lpeg.secondofsplit</tt> matches the whole
+rest after that regardless of any further occurrences of <tt>separator</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="util-prs.lua">
+      util-prs.lua
+     </span>
+    </h2>
+    <h3>
+     <span id="utilities.parsers.settings_to_hash(str)">
+     </span>
+     <span class="mw-headline" id="utilities.parsers.settings_to_hash.28str.29">
+      utilities.parsers.settings_to_hash(str)
+     </span>
+    </h3>
+    <pre>str = 'a=1, b=2, c=3'
+utilities.parsers.settings_to_hash(str)
+--&gt; { a = 1, b = 2, c = 3 }
+</pre>
+    <p><code>utilities.parsers.settings_to_array</code> takes a string of comma-separated key=value statements, and returns an associative array of <code>["key"] = value</code> entries. Very useful for parsing and accessing macro arguments at the Lua end.
+</p>
+    <h3>
+     <span id="utilities.parsers.settings_to_array(str)">
+     </span>
+     <span class="mw-headline" id="utilities.parsers.settings_to_array.28str.29">
+      utilities.parsers.settings_to_array(str)
+     </span>
+    </h3>
+    <pre>str = 'top, inmargin=2, top, {here,now}'
+utilities.parsers.settings_to_array(str)
+--&gt; { "top", "inmargin=2", "top", "here,now" }
+</pre>
+    <p><code>utilities.parsers.settings_to_array</code> takes a string of comma-separated keywords, and returns a array of those keywords in the order in which they appear. Duplicates are not filtered. <tt>Key=value</tt> strings are taken as a single keyword. Surrounding braces are removed
+</p>
+    <h3>
+     <span id="utilities.parsers.settings_to_set(str)">
+     </span>
+     <span class="mw-headline" id="utilities.parsers.settings_to_set.28str.29">
+      utilities.parsers.settings_to_set(str)
+     </span>
+    </h3>
+    <pre>str = 'top, inmargin=2, top, {here,now}'
+utilities.parsers.settings_to_set(str)
+--&gt; { ["top"]=true, ["inmargin=2"]=true, ["here,now"]=true }
+</pre>
+    <p><code>utilities.parsers.settings_to_array</code> takes a string of comma-separated keywords, and returns a array of those keywords in the order in which they appear, with duplicates removed.
+<tt>Key=value</tt> strings are taken as a single keyword. Surrounding braces are removed
+</p>
+    <h3>
+     <span class="mw-headline" id="Other_function_in_utilities.parsers">
+      Other function in utilities.parsers
+     </span>
+    </h3>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <td>utilities.parsers.add_settings_to_array
+</td>
+       <td>parse and write directly into table
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.arguments_to_table
+</td>
+       <td>parse arguments, return table
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.array_to_string(a,sep)
+</td>
+       <td>concatenates a with custom sep or comma
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.getparameters
+</td>
+       <td>write settings_to_hash to an array with a metatable. A metatable is a sort of parent: when a table is accessed, undefined values will be looked up in the metatable.
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.hash_to_string
+</td>
+       <td>turn a hash into a string, with optional strictness settings
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.simple_hash_to_string
+</td>
+       <td>concatenate the values of a hash
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.make_settings_to_hash_pattern
+</td>
+       <td>returns parser pattern for strict, tolerant, or normal arg-parsing
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.settings_to_hash_strict
+</td>
+       <td>like settings_to_hash with strict parsing
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.settings_to_hash_tolerant
+</td>
+       <td>like settings_to_hash with tolerant parsing
+</td>
+      </tr>
+      <tr>
+       <td>utilities.parsers.splitthousands
+</td>
+       <td>turns 12345678.44 into 12,345,678.44
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="LuaTeX">
+      LuaTeX
+     </span>
+    </h2>
+    <p>Some very useful functionality is already implemented at the lowest
+level.
+See the <a class="external text" href="http://www.luatex.org/svn/trunk/manual/luatexref-t.pdf" rel="nofollow">LuaTeX Reference</a> for further information.
+</p>
+    <h3>
+     <span id="string.explode(string,_[character])">
+     </span>
+     <span class="mw-headline" id="string.explode.28string.2C_.5Bcharacter.5D.29">
+      string.explode(string, [character])
+     </span>
+    </h3>
+    <pre>str = "Amongst our weaponry are such diverse elements as fear, surprise, ruthless efficiency, and an almost fanatical devotion to the Pope, and nice red uniforms."
+
+for _, elm in ipairs(string.explode(str, ",")) do
+    print(elm)
+end
+</pre>
+    <p>Returns a list of strings from <tt>string</tt> split at every
+occurrence of <tt>character</tt>. Adding <tt>"+"</tt> to <tt>character</tt> ignores consecutive occurrences (not
+producing the empty string). (default: <tt>" +"</tt>).
+<i>Note</i>: <tt>character</tt> should consist of only one-byte else only
+the first byte will be respected.
+</p>
+    <h3>
+     <span id="string.characters(string)_|_string.utfcharacters(string)">
+     </span>
+     <span class="mw-headline" id="string.characters.28string.29_.7C_string.utfcharacters.28string.29">
+      string.characters(string) | string.utfcharacters(string)
+     </span>
+    </h3>
+    <pre>alphabet = "abcdefghijklmnopqrstuvwxyz"
+alphabit = "&acy;&bcy;&vcy;&gcy;&dcy;&iecy;&zhcy;&zcy;&icy;&jcy;&kcy;&lcy;&mcy;&ncy;&ocy;&pcy;&rcy;&scy;&tcy;&ucy;&fcy;&khcy;&tscy;&chcy;&shcy;&shchcy;&hardcy;&ycy;&softcy;&ecy;&yucy;&yacy;"
+
+for char in alphabet:characters()    do io.write(char .. ",") end
+io.write("\n")
+for char in alphabit:utfcharacters() do io.write(char .. ",") end
+io.write("\n")
+</pre>
+    <p>These iterators can be used to walk over strings character by
+character. They are extremely fast in comparison with equivalent
+LPEG's. For instance, when hopping once through
+<a class="external text" href="http://az.lib.ru/t/tolstoj_lew_nikolaewich/text_0080.shtml" rel="nofollow">Anna Karenina</a>
+(about 3M of 2-byte utf8 characters) <tt>string.utfcharacters</tt>
+turned out to be almost twice as fast as an LPEG iterator.
+</p>
+    <h2>
+     <span class="mw-headline" id="Recipes">
+      Recipes
+     </span>
+    </h2>
+    <p>General: <a class="external text" href="http://lua-users.org/wiki/StringRecipes" rel="nofollow">string section of the Lua wiki</a>.
+</p>
+    <p>You have a useful function for string manipulation and want to share
+it? Do go on!
+</p>
+    <h3>
+     <span id="Iterator:_words_(string,_chr)">
+     </span>
+     <span class="mw-headline" id="Iterator:_words_.28string.2C_chr.29">
+      Iterator: words (string, chr)
+     </span>
+    </h3>
+    <pre>local function words (str, chr)
+    local C, Cp, P = lpeg.C, lpeg.Cp, lpeg.P
+
+    local chr = chr and P(chr) or P" "
+    local g = C((1 - chr)^1) * chr^1 * Cp()
+    local pos = 1
+
+    function iterator()
+        local word, newpos = g:match(str, pos)
+        pos = newpos
+        return word
+    end
+    return iterator
+end
+</pre>
+    <p>Iterates over substrings delimited by pattern <tt>chr</tt> 
+(defaults to space, ignores consecutive occurrences).
+</p>
+    <p>Usage:
+</p>
+    <pre>for char in words(text, " ") do
+    -- pass
+end
+</pre>
+    <p>Comparison with similar iterators (Empty loop; <tt>texlua</tt>
+v.&nbsp;beta-0.62.0-2010082314; <tt>text</tt> is the aforementioned Anna
+Karenina, 3MB&nbsp;UTF-8):
+</p>
+    <pre>ipairs(string.explode(text, " +"))&nbsp;: 0.262s
+unicode.utf8.gmatch(text,"%w+")    : 0.363s
+unicode.utf8.gmatch(text,"%S+")    : 0.384s
+words(text, " ")                   : 0.448s
+</pre>
+    <p>The results slightly differ depending on the treatment of consecutive spaces.
+<tt>words</tt> has the advantage that it allows for arbitrary patterns as
+delimiters.
+</p>
+    <h2>
+     <span class="mw-headline" id="String_formatter">
+      String formatter
+     </span>
+    </h2>
+    <p>The <code>context()</code> function uses its own formatter, of the form <code>context("something %Z something", object_formatted_by_Z)</code> Below is a table of the available formatting codes.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        result type
+       </th>
+       <th>
+        code
+       </th>
+       <th>
+        input type
+       </th>
+      </tr>
+      <tr>
+       <td>integer</td>
+       <td>%...i</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>integer</td>
+       <td>%...d</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>unsigned</td>
+       <td>%...u</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>utf character</td>
+       <td>%...c</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>hexadecimal</td>
+       <td>%...x</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>HEXADECIMAL</td>
+       <td>%...X</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>octal</td>
+       <td>%...o</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>string</td>
+       <td>%...s</td>
+       <td>string, number
+</td>
+      </tr>
+      <tr>
+       <td>float</td>
+       <td>%...f</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>exponential</td>
+       <td>%...e</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>exponential</td>
+       <td>%...E</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>autofloat</td>
+       <td>%...g</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>autofloat</td>
+       <td>%...G</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>force tostring</td>
+       <td>%...S</td>
+       <td>any
+</td>
+      </tr>
+      <tr>
+       <td>force tostring</td>
+       <td>%Q</td>
+       <td>any
+</td>
+      </tr>
+      <tr>
+       <td>force tonumber</td>
+       <td>%N</td>
+       <td>number (strips leading zeros)
+</td>
+      </tr>
+      <tr>
+       <td>signed number</td>
+       <td>%I</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>rounded number</td>
+       <td>%r</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>0xhexadecimal</td>
+       <td>%...h</td>
+       <td>character, number
+</td>
+      </tr>
+      <tr>
+       <td>0xHEXADECIMAL</td>
+       <td>%...H</td>
+       <td>character, number
+</td>
+      </tr>
+      <tr>
+       <td>U+hexadecimal</td>
+       <td>%...u</td>
+       <td>character, number
+</td>
+      </tr>
+      <tr>
+       <td>U+HEXADECIMAL</td>
+       <td>%...U</td>
+       <td>character, number
+</td>
+      </tr>
+      <tr>
+       <td>points</td>
+       <td>%p</td>
+       <td>number in scaled points (65536sp = 1pt)
+</td>
+      </tr>
+      <tr>
+       <td>basepoints</td>
+       <td>%b</td>
+       <td>number in scaled points
+</td>
+      </tr>
+      <tr>
+       <td>table concat</td>
+       <td>%...t</td>
+       <td>table
+</td>
+      </tr>
+      <tr>
+       <td>true or false</td>
+       <td>%l</td>
+       <td>boolean
+</td>
+      </tr>
+      <tr>
+       <td>TRUE or FALSE</td>
+       <td>%L</td>
+       <td>boolean
+</td>
+      </tr>
+      <tr>
+       <td><i>number</i> spaces</td>
+       <td>%...w</td>
+       <td>number
+</td>
+      </tr>
+      <tr>
+       <td>escaped XML</td>
+       <td>%!xml!</td>
+       <td>string
+</td>
+      </tr>
+      <tr>
+       <td>escaped TeX</td>
+       <td>%!tex!</td>
+       <td>string, number
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212407
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.039 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 323/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 172/2097152 bytes
+Template argument size: 120/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6743/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    4.595      1 -total
+ 87.08%    4.001      4 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3337-1!canonical and timestamp 20260109212407 and revision id 40585
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library/String_manipulation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

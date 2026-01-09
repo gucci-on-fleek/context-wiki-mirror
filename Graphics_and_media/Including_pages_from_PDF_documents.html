@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Including pages from PDF documents&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Including_pages_from_PDF_documents" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Including pages from PDF documents
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=989&diff=40492">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Insert_a_PDF_page_as_a_figure">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Insert a PDF page as a figure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Insert_PDF_page.28s.29_as_full-page_figures">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Insert PDF page(s) as full-page figures
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Merge_a_single_PDF_page_into_your_document">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Merge a single PDF page into your document
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Include_a_section_from_other_PDF_document">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Include a section from other PDF document
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Page_numbering_with_.5Cstartpagefigure">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Page numbering with \startpagefigure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Printing_Slides_from_a_presentation">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Printing Slides from a presentation
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Slicing_the_pages">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Slicing the pages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Adding_comments_to_pages">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Adding comments to pages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Reformatting_a_Single-Sided_pdf_for_Double-Sided_Printing">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Reformatting a Single-Sided pdf for Double-Sided Printing
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p><a class="external text" href="http://source.contextgarden.net/tex/context/base/page-imp.mkii" rel="nofollow">page-imp.mkii</a> and <a class="external text" href="http://source.contextgarden.net/tex/context/base/page-sel.mkiv" rel="nofollow">page-sel.mkiv</a> defines some handy macros for handling import of existing PDF documents.
+</p>
+    <h2>
+     <span class="mw-headline" id="Insert_a_PDF_page_as_a_figure">
+      Insert a PDF page as a figure
+     </span>
+    </h2>
+    <p>To insert a single page from a PDF document into your text as a figure, you can write
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>1,width<span class="brx">=</span>...<span class="brx">]</span>
+</pre>
+    <p>By default, the interactive elements of the included PDF file are discarded. To enable the interactive elements of the included PDF file, use
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>filename.pdf<span class="brx">]</span><span class="brx">[</span>interaction<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <h2>
+     <span id="Insert_PDF_page(s)_as_full-page_figures">
+     </span>
+     <span class="mw-headline" id="Insert_PDF_page.28s.29_as_full-page_figures">
+      Insert PDF page(s) as full-page figures
+     </span>
+    </h2>
+    <p>If you simply want to insert the first "n" number of pages from a PDF as full-page figures, use <tt><a href="../Command/copypages.html" title="Command/copypages">\copypages</a></tt>. For example, to insert the first 30 pages scaled down to 95%, you can write
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\copypages</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>30<span class="brx">]</span><span class="brx">[</span>scale<span class="brx">=</span>950<span class="brx">]</span>
+</pre>
+    <p>Insertion always starts from the first page. Your existing headers, footers, crop marks will be printed on each page.
+</p>
+    <p>If, in addition, you want to insert blank pages after specified pages use <tt><a href="../Command/insertpages.html" title="Command/insertpages">\insertpages</a></tt>. For example, to insert the first 30 pages of a PDF and add a blank page after the first and the third page, you can write
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\insertpages</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>1,3<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>30,width<span class="brx">=</span>18cm<span class="brx">]</span>
+</pre>
+    <p>If you do not want to start insertion from page 1 and you want to specify precisely, which pages or page-ranges to insert, then use <tt><a href="../Command/filterpages.html" title="Command/filterpages">\filterpages</a></tt>. For example, to insert pages 1, 3, 4, 5 and 6, you can write
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\filterpages</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>1,3,4:6<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>18cm<span class="brx">]</span>
+</pre>
+    <p>To insert even/odd pages up to page 30.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\filterpages</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>even<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>18cm<span class="brx">]</span> <span class="comment">% even/odd</span>
+</pre>
+    <p>(See also Taco's hack in <a href="../ConTeXt_and_Lua_programming/Processing_lists.html" title="ConTeXt and Lua programming/Processing lists">Processing Lists</a> for handling ranges of numbers or <a class="external text" href="http://archive.contextgarden.net/thread/20050704.222033.bbadb15a.en.html" rel="nofollow">this</a> thread in the mailing list.)
+</p>
+    <h2>
+     <span class="mw-headline" id="Merge_a_single_PDF_page_into_your_document">
+      Merge a single PDF page into your document
+     </span>
+    </h2>
+    <p>To insert a single page from a PDF document after the current page as a full page without adding any headers, footers, etc., use this:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>1,...<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+</pre>
+    <p>which is equal to
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startTEXpage</span></span>
+    <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>1,width<span class="brx">=</span>...<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+    <p>Optionally, you can also add some text to the bottom of the PDF page. For more info, see <tt><a href="../Command/startpagefigure.html" title="Command/startpagefigure">\startpagefigure</a></tt>.
+</p>
+    <p><b>Note</b> that with the latest CTX standalone beta as of <b>2017/05/27</b> (mkiv, LuaTeX) the way described seems not to work properly. In the output you might find the first page only, no matter which <code>page</code> argument (<code>page=2...n</code>) you use.
+The following workaround might provide useful in that case:
+</p>
+    <pre class="tex">  <span class="cs"><span class="documentcs">\startpagemakeup</span></span>
+    <span class="cs"><span class="documentcs">\filterpages</span></span><span class="brx">[</span>file<span class="brx">]</span><span class="brx">[</span>n<span class="brx">]</span> <span class="comment">% n in Natural</span>
+  <span class="cs"><span class="documentcs">\stoppagemakeup</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Include_a_section_from_other_PDF_document">
+      Include a section from other PDF document
+     </span>
+    </h2>
+    <p>It is possible to include a whole section (part, chapter, section...) from another PDF document generated, using the value of its reference key, such as the one generated from the following source:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>25<span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Chapter<span class="br">}</span>, reference<span class="brx">=</span><span class="br">{</span>c-<span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+      <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span>
+        <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="br">}</span>
+     <span class="cs"><span class="documentcs">\stopchapter</span></span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>In the document you want the section to be included, use a loop (<tt><a href="../Command/dostepwiserecurse.html" title="Command/dostepwiserecurse">\dostepwiserecurse</a></tt>) from the value you get from <tt><a class="new" href="../index.php?title=Command/firstsectionpage&action=edit&redlink=1.html" title="Command/firstsectionpage (page does not exist)">\firstsectionpage</a></tt> and from <tt><a class="new" href="../index.php?title=Command/lastsectionpage&action=edit&redlink=1.html" title="Command/lastsectionpage (page does not exist)">\lastsectionpage</a></tt>, such as in:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span> <span class="br">{</span><span class="cs">\firstsectionpage</span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>c-18<span class="brx">]</span><span class="br">}</span> <span class="br">{</span><span class="cs">\lastsectionpage</span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>c-18<span class="brx">]</span><span class="br">}</span> <span class="br">{</span>1<span class="br">}</span> <span class="br">{</span>
+  <span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>pagestate<span class="brx">=</span>start<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>x.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+ <span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The source PDF document (the one from which pages are included) needs also its <code>.tuc</code> file used to generate it. Which pages are related to which references are contained in this file.
+</p>
+    <h2>
+     <span id="Page_numbering_with_\startpagefigure">
+     </span>
+     <span class="mw-headline" id="Page_numbering_with_.5Cstartpagefigure">
+      Page numbering with
+      <tt>
+       <a href="../Command/startpagefigure.html" title="Command/startpagefigure">
+        \startpagefigure
+       </a>
+      </tt>
+     </span>
+    </h2>
+    <p>Experience shows that when you include a page from a PDF file using <tt><a href="../Command/startpagefigure.html" title="Command/startpagefigure">\startpagefigure</a></tt>, the page number of your document is not increased. The included PDF page is completely excluded from the page numbering process. This is annoying if you include a PDF page in the middle of your document, and expect your page numbers to be correct after the PDF page.
+</p>
+    <p>One solution is to use the commands <tt><a href="../Command/insertpages.html" title="Command/insertpages">\insertpages</a></tt>, <tt><a href="../Command/filterpages.html" title="Command/filterpages">\filterpages</a></tt>, and <tt><a href="../Command/copypages.html" title="Command/copypages">\copypages</a></tt>. They correctly increment the page numbers. But those commands include the PDF pages like additional "layers" on your page, so it means that your headers, footers, crop marks, etc. will be printed on top of or behind the included PDF pages. (Headers and footers will be printed behind, crop marks will be printed on top of the included PDF.)
+</p>
+    <p>Another solution is to fix the page number manually after using <tt><a href="../Command/startpagefigure.html" title="Command/startpagefigure">\startpagefigure</a></tt>.
+</p>
+    <p>Let's say we include 3 pages from a PDF like this:
+</p>
+    <pre class="tex"><span class="comment">% Several pages of text here</span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>4<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>11<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="comment">% Several pages of text here</span>
+</pre>
+    <p>Notice that <tt><a href="../Command/startpagefigure.html" title="Command/startpagefigure">\startpagefigure</a></tt> can include only 1 page at a time. After compiling the above file with ConTeXt, your page numbers will look like this:
+</p>
+    <pre class="tex">...
+Page 10
+Page 11
+Page 12
+include_this.pdf page 4
+include_this.pdf page 6
+include_this.pdf page 11
+Page 13
+Page 14
+...
+</pre>
+    <p>This behavior is also reflected in the command line output of ConTeXt. The value of <code>userpage</code> is the page number which will be printed in your header/footer. Continuing the above example:
+</p>
+    <pre class="tex">pages           &gt; flushing realpage 12, userpage 10
+pages           &gt; flushing realpage 13, userpage 11
+pages           &gt; flushing realpage 14, userpage 12
+ &lt;include_this.pdf&gt;
+pages           &gt; flushing realpage 15, userpage 13 &lt;-- include_this.pdf page 4
+pages           &gt; flushing realpage 16, userpage 13 &lt;-- include_this.pdf page 6
+pages           &gt; flushing realpage 17, userpage 13 &lt;-- include_this.pdf page 11
+pages           &gt; flushing realpage 18, userpage 13 &lt;-- First ConTeXt page after PDF pages
+pages           &gt; flushing realpage 19, userpage 14
+</pre>
+    <p>Therefore, you must "fix" your page number after you finish including PDF pages. You can either set it to a fixed number by saying:
+</p>
+    <pre class="tex"><span class="comment">% Several pages of text here</span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>4<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>11<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="systemcs">\setcounter</span></span> <span class="brx">[</span>userpage<span class="brx">]</span> <span class="brx">[</span>16<span class="brx">]</span>
+<span class="comment">% Several pages of text here</span>
+</pre>
+    <p>Or, which is even better, increment the page number by the number of included PDF pages:
+</p>
+    <pre class="tex"><span class="comment">% Several pages of text here</span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>4<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="documentcs">\startpagefigure</span></span><span class="brx">[</span>include_this.pdf<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>11<span class="brx">]</span><span class="cs"><span class="documentcs">\stoppagefigure</span></span>
+<span class="cs"><span class="systemcs">\setcounter</span></span> <span class="brx">[</span>userpage<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="stylecs">\pagenumber</span></span>+3<span class="brx">]</span>
+<span class="comment">% Several pages of text here</span>
+</pre>
+    <p>This way your command line output will be:
+</p>
+    <pre class="tex">pages           &gt; flushing realpage 12, userpage 10
+pages           &gt; flushing realpage 13, userpage 11
+pages           &gt; flushing realpage 14, userpage 12
+ &lt;include_this.pdf&gt;
+pages           &gt; flushing realpage 15, userpage 13 &lt;-- include_this.pdf page 4
+pages           &gt; flushing realpage 16, userpage 13 &lt;-- include_this.pdf page 6
+pages           &gt; flushing realpage 17, userpage 13 &lt;-- include_this.pdf page 11
+pages           &gt; flushing realpage 18, userpage 16 &lt;-- First ConTeXt page after PDF pages
+pages           &gt; flushing realpage 19, userpage 17
+</pre>
+    <p>This <tt><a href="../Command/setcounter.html" title="Command/setcounter">\setcounter</a></tt> command was tested and worked correctly with
+<code>ConTeXt  ver: 2013.10.01 20:08 MKIV beta</code>. Other commands like <code>\incrementnumber[page]</code> or <code>\page[+1]</code> or <code>\page[16]</code> did not help to solve this problem correctly.
+</p>
+    <h2>
+     <span class="mw-headline" id="Printing_Slides_from_a_presentation">
+      Printing Slides from a presentation
+     </span>
+    </h2>
+    <p>If you want to make a 2*3 matrix from all the slides in the document you can use the following example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span>
+  <span class="brx">[</span>A4<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span> <span class="comment">% or [A4,landscape][A4,landscape]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>header<span class="brx">=</span>0pt,footer<span class="brx">=</span>1cm,
+   backspace<span class="brx">=</span>1cm,topspace<span class="brx">=</span>1cm,
+   width<span class="brx">=</span>middle,height<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span>
+  <span class="brx">[</span>presentation---<span class="cs"><span class="documentcs">\currentdate</span></span><span class="cs"><span class="stylecs">\space</span></span>---<span class="cs"><span class="stylecs">\space</span></span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="documentcs">\combinepages</span></span><span class="brx">[</span>slides<span class="brx">]</span><span class="brx">[</span>nx<span class="brx">=</span>2,ny<span class="brx">=</span>3,frame<span class="brx">=</span>on<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Slicing_the_pages">
+      Slicing the pages
+     </span>
+    </h2>
+    <p>The opposite of combining the pages together is to slice them in pieces.
+</p>
+    <p>This will make 3*3 pages out of your document (well, it depends on proportions).
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+    <span class="cs"><span class="documentcs">\slicepages</span></span><span class="brx">[</span>slice1.pdf<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>3<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Adding_comments_to_pages">
+      Adding comments to pages
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagecomment</span></span><span class="brx">[</span>state<span class="brx">=</span>start,location<span class="brx">=</span>right<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startpagecomment</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoppagecomment</span></span>
+</pre>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> prepare a graphics for each example <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Reformatting_a_Single-Sided_pdf_for_Double-Sided_Printing">
+      Reformatting a Single-Sided pdf for Double-Sided Printing
+     </span>
+    </h2>
+    <p>Context can be used as a pdf postprocessor.
+</p>
+    <p>This example takes an original single-sided document and applies differing horizontal offsets to odd and even pages. This simultaneously
+</p>
+    <ul>
+     <li>
+      compensates for the fixed offset in the original, and
+     </li>
+     <li>
+      introduces a new alternating one as required for double-sided printing
+     </li>
+    </ul>
+    <p>It is useful for printing reference manuals downloaded from the web.
+</p>
+    <pre class="tex">
+
+<span class="comment">% replace "Manual" with the name of your original pdf</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\MySingleSidedDocument</span><span class="br">{</span>Manual<span class="br">}</span>
+
+<span class="comment">% can adjust topspace to move page etc</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span><span class="cs">\MySingleSidedDocument</span>,topspace<span class="brx">=</span>1cm,header<span class="brx">=</span>0cm,backspace<span class="brx">=</span>0cm<span class="brx">]</span>
+<span class="comment">% suppress page numbering</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\getfiguredimensions</span></span><span class="brx">[</span><span class="cs">\MySingleSidedDocument</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="cs"><span class="systemcs">\noffigurepages</span></span>
+  <span class="br">{</span><span class="cs">\hbox</span> to <span class="cs">\textwidth</span>
+     <span class="br">{</span><span class="cs">\ifodd</span><span class="cs"><span class="systemcs">\recurselevel</span></span>
+<span class="comment">%adjust number to set odd page horizontal position</span>
+        <span class="cs">\hskip</span>-0.1cm<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="cs">\MySingleSidedDocument</span><span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="brx">]</span><span class="cs">\hss</span>
+      <span class="cs">\else</span>
+<span class="comment">%adjust number to set even page horizontal position</span>
+        <span class="cs">\hskip</span>-1.8cm<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="cs">\MySingleSidedDocument</span><span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="brx">]</span><span class="cs">\hss</span>
+      <span class="cs">\fi</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212418
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.095 seconds
+Real time usage: 0.144 seconds
+Preprocessor visited node count: 319/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1795/2097152 bytes
+Template argument size: 425/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15211/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   55.719      1 -total
+ 27.89%   15.538      1 Template:todo
+ 11.67%    6.503     15 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:989-1!canonical and timestamp 20260109212418 and revision id 40492
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Including_pages_from_PDF_documents">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

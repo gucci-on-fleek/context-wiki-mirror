@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Apply shading to text&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Apply_shading_to_text" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Apply shading to text
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7068&diff=42306">2025-02-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>MetaPost provides shading functions making it easy to fill a path with linear or circular shading. 
+In this simple example, we show how they can be used in conjunction with the <code>outlinetext</code> function and <code>&&</code> path combination operator to fill text or equations with a color gradient.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>32pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour1<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>FF0000<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour2<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>880088<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour3<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>0000FF<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\ShadedText</span><span class="comment">%</span>
+    <span class="br">{</span><span class="comment">%</span>
+    <span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>shade_text<span class="br">}</span>
+        picture ot&nbsp;;
+        ot&nbsp;:<span class="brx">=</span> outlinetext<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span>&nbsp;;       <span class="comment">% Get the outpline of each cymbol</span>
+        path p&nbsp;;                        <span class="comment">% Define a new path</span>
+        p&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0,0<span class="brx">)</span> -- <span class="brx">(</span>0,0<span class="brx">)</span>;
+        for i within ot&nbsp;:               <span class="comment">% Loop over the symbol outlines</span>
+            p&nbsp;:<span class="brx">=</span> p && pathpart i&nbsp;;      <span class="comment">% Combine p with the new outline</span>
+        endfor
+        fill p && cycle                 <span class="comment">% Fill the path p...</span>
+            withshademethod "linear"    <span class="comment">% ... with a linear shading...</span>
+            withshadedirection <span class="brx">(</span>1.,0.<span class="brx">)</span>
+            withshadestep <span class="brx">(</span>             <span class="comment">% ... going from Colour1 to Colour2...</span>
+                withshadefraction .5
+                withshadecolors <span class="brx">(</span><span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour1<span class="br">}</span>, <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour2<span class="br">}</span><span class="brx">)</span>
+            <span class="brx">)</span>
+            withshadestep <span class="brx">(</span>
+                withshadefraction 1     <span class="comment">% ... then from Colour2 to Colour3</span>
+                withshadecolors <span class="brx">(</span><span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour2<span class="br">}</span>, <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour3<span class="br">}</span><span class="brx">)</span>
+            <span class="brx">)</span>&nbsp;;
+    <span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+    <span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>shade_text<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+    <span class="cs">\ShadedText</span><span class="br">{</span>test<span class="br">}</span>
+    <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>1em<span class="brx">]</span>
+    <span class="cs">\ShadedText</span><span class="br">{</span><span class="cs">\dm</span><span class="br">{</span><span class="cs">\sum_</span><span class="br">{</span>n<span class="brx">=</span>0<span class="br">}</span>^<span class="br">{</span><span class="cs">\infty</span><span class="br">}</span> 2^<span class="br">{</span>-n<span class="br">}</span> <span class="brx">=</span> 2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="280" src="../../wikiteximage/a9dfe494dd81651c0c76aca0f97441c2.webp" width="332">
+     </li>
+    </ul>
+    <p>A slightly simpler approach is to use <code>lmt_outline</code>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>32pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour1<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>FF0000<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour2<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>880088<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>Colour3<span class="brx">]</span><span class="brx">[</span>h<span class="brx">=</span>0000FF<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\ShadedText</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>shade_text<span class="br">}</span>
+    draw lmt_outline <span class="brx">[</span>
+        kind <span class="brx">=</span> "outline",
+        text <span class="brx">=</span> "<span class="brx">#</span>1",
+    <span class="brx">]</span>
+      withshademethod "linear"
+      withshadedirection <span class="brx">(</span>1.,0.<span class="brx">)</span>
+      withshadestep <span class="brx">(</span>
+          withshadefraction .5
+          withshadecolors <span class="brx">(</span><span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour1<span class="br">}</span>, <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour2<span class="br">}</span><span class="brx">)</span>
+      <span class="brx">)</span>
+      withshadestep <span class="brx">(</span>
+          withshadefraction 1
+          withshadecolors <span class="brx">(</span><span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour2<span class="br">}</span>, <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>Colour3<span class="br">}</span><span class="brx">)</span>
+      <span class="brx">)</span>&nbsp;;
+  <span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+  <span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>shade_text<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+  <span class="cs">\ShadedText</span><span class="br">{</span>test<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+  <span class="cs">\ShadedText</span><span class="br">{</span><span class="cs">\dm</span><span class="br">{</span><span class="cs">\sum_</span><span class="br">{</span>n<span class="brx">=</span>0<span class="br">}</span>^<span class="br">{</span><span class="cs">\infty</span><span class="br">}</span> 2^<span class="br">{</span>-n<span class="br">}</span> <span class="brx">=</span> 2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="276" src="../../wikiteximage/b594a4d73395a6622f1641f57e70193e.webp" width="331">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.080 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8282/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7068-1!canonical and timestamp 20260109212415 and revision id 42306
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Apply_shading_to_text">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

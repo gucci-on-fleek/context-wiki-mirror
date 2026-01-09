@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Posting on arxiv.org&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Posting_on_arxiv.org" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Posting on arxiv.org
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2436&diff=40982">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#What_is_arxiv.org">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         What is arxiv.org
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Why_should_ConTeXt_users_care_about_this_page.3F">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Why should ConTeXt users care about this page?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Quickstart">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Quickstart
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Why_PostScript.3F">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Why PostScript?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Prepare_the_PostScript">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Prepare the PostScript
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Prepare_the_upload_file">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Prepare the upload file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Upload.21">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Upload!
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Incorporate_the_date_and_preprint_number">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Incorporate the date and preprint number
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Check_that_all_is_well">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Check that all is well
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Makefile">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Makefile
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#References">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="What_is_arxiv.org">
+      What is arxiv.org
+     </span>
+    </h2>
+    <p><a class="external text" href="http://arxiv.org" rel="nofollow">arXiv.org</a> is a worldwide, open-access preprint server.  It is the primary means of scholarly communication in many subfields of physics. It also serves preprints in mathematics, computer science, quantitative biology, and some other subjects. Begun in 1991, by 2015, its preprint collection had more than one million articles<sup class="reference" id="cite_ref-arxiv-million_1-0"><a href="#cite_note-arxiv-million-1">[1]</a></sup>.
+</p>
+    <h2>
+     <span id="Why_should_ConTeXt_users_care_about_this_page?">
+     </span>
+     <span class="mw-headline" id="Why_should_ConTeXt_users_care_about_this_page.3F">
+      Why should ConTeXt users care about this page?
+     </span>
+    </h2>
+    <p><a class="external free" href="http://arxiv.org" rel="nofollow">http://arxiv.org</a> uses plain TeX or LaTeX as the preferred source format for
+submitting documents.  When you request PDF, PS, or DVI format, the
+system, which now (April 2007) runs a modified teTeX 3 distribution,
+generates it automatically from the source.
+</p>
+    <p>But the system does not run ConTeXt in the same automatic way.  So you
+have to generate the PS format yourself and submit that.  If that were
+the whole story, you'd be done.  However, you would like the benefit
+of arxiving, sorry archiving the source code that plain TeX or LaTeX
+users get.  So you need a way to submit the source code along with
+your PS file, in a way that the arxiv.org automatic system does not
+reject.
+</p>
+    <p>You can imagine that with 500,000 or so documents, with thousands
+added every month, that the submission process has to be as automatic
+as possible in order to keep the costs per article low.  And the low
+per-paper cost, one or two orders of magnitude lower than the cost of
+traditional journals, allows the system to provide the articles for
+free.
+</p>
+    <p>So this page describes how to submit your ConTeXt document along with
+its source.
+</p>
+    <h2>
+     <span class="mw-headline" id="Quickstart">
+      Quickstart
+     </span>
+    </h2>
+    <p>For the impatient, look at <a class="external free" href="http://www.arxiv.org/abs/0704.1854" rel="nofollow">http://www.arxiv.org/abs/0704.1854</a>
+containing a working example.  It is licensed under the GNU GPL
+free-software license, so you can use it as a basis for your own
+submission.
+</p>
+    <p>Otherwise, here are the details.
+</p>
+    <h2>
+     <span id="Why_PostScript?">
+     </span>
+     <span class="mw-headline" id="Why_PostScript.3F">
+      Why PostScript?
+     </span>
+    </h2>
+    <p>The arxiv.org system will accept a PDF file but only unaccompanied.
+So for now you cannot submit a PDF file along with the source.  
+Instead, you need to submit PS.  The PS-submission subsystem does
+accept other files, ideally placed in a subdirectory.
+</p>
+    <p>The admins say that this situation is an oddity in their system, but
+not one that they can fix easily or soon (except, I suppose, by making
+the PS submission be like the PDF one!).
+</p>
+    <h2>
+     <span class="mw-headline" id="Prepare_the_PostScript">
+      Prepare the PostScript
+     </span>
+    </h2>
+    <p>Write your document!  Let's say that it's called document.tex and uses
+two EPS figures generated from the MetaPost file fig.mp.  Generate
+document.ps using
+</p>
+    <pre>  mpost fig.mp
+  texexec --dvi --nobackend document.tex
+  dvips -Ppdf document.dvi -o document.ps
+</pre>
+    <p>The -o is to work around stupid dvips configurations that send the
+output to lpr by default.
+</p>
+    <p>The arxiv.org system will automatically generate PDF from the PS using
+ghostscript, so test that ps2pdf (a wrapper around ghostscript) on
+document.ps produces a working PDF file.
+</p>
+    <p>View document.ps to check that any TeX-generated labels in the
+MetaPost figures come out in the correct font.  If they look like
+Courier, then the font embedding isn't right.  The -Ppdf is to make
+sure that the correct fonts are embedded into the PS file, but if that
+didn't work, ask for help on the mailing list!
+</p>
+    <h2>
+     <span class="mw-headline" id="Prepare_the_upload_file">
+      Prepare the upload file
+     </span>
+    </h2>
+    <p>Make a directory src/ with document.tex and fig.mp.  Then make a .tgz
+file for uploading.  I usually call it arxiv.tgz.  It is produced from
+this file structure:
+</p>
+    <pre>    document.ps
+    src/
+      fig.mp
+      document.tex
+</pre>
+    <p>The command to produce the tgz file:
+</p>
+    <pre>   tar -czvf arxiv.tgz document.ps src/
+</pre>
+    <h2>
+     <span id="Upload!">
+     </span>
+     <span class="mw-headline" id="Upload.21">
+      Upload!
+     </span>
+    </h2>
+    <p>If all is well, upload arxiv.tgz as your submission using the usual
+arxiv.org submission or replacement procedure.  Ideally you'll do step
+4 an hour before the 4pm (US Eastern) weekday deadline, so that you
+get back in time the submission date and preprint number from
+arxiv.org for step 5.  Then you have time for the next steps.
+</p>
+    <h2>
+     <span class="mw-headline" id="Incorporate_the_date_and_preprint_number">
+      Incorporate the date and preprint number
+     </span>
+    </h2>
+    <p>Incorporate the preprint number (or URL) and submission date into your
+document and produce an arxiv stampline along the left margin on the first page.  Then remake
+document.ps and arxiv.tgz, and <b>replace</b> the previous submission
+with the new arxiv.tgz.  This stampline is most easily placed using <a class="new" href="../index.php?title=layers&action=edit&redlink=1" title="layers (page does not exist)">layers</a>, and
+the <a class="external free" href="http://www.arxiv.org/abs/0704.1854" rel="nofollow">http://www.arxiv.org/abs/0704.1854</a> document is an example.
+</p>
+    <p>For automatically processed source formats (plain TeX and LaTeX), you
+can avoid this incorporation step by using magic strings in the source
+file, and the automatic system will translate those into the preprint
+number and date.  However, we as ConTeXt users are (with these
+directions) faking the behavior of that system, so we get the info
+ourselves and incorporate it.
+</p>
+    <h2>
+     <span class="mw-headline" id="Check_that_all_is_well">
+      Check that all is well
+     </span>
+    </h2>
+    <p>Check that the PS and PDF look fine.  For example, check that the
+fonts in the MetaPost figures look right.
+</p>
+    <p>Then sit back and relax, knowing that you've contributed to the
+open-access commons.
+</p>
+    <h2>
+     <span class="mw-headline" id="Makefile">
+      Makefile
+     </span>
+    </h2>
+    <p>Generating document.ps and arxiv.tgz from the source files is a
+process best done by a computer.  And that is best done by a Makefile.
+See <a class="external free" href="http://www.inference.phy.cam.ac.uk/sanjoy/teaching/tex/" rel="nofollow">http://www.inference.phy.cam.ac.uk/sanjoy/teaching/tex/</a> for how to
+use the make program for documents.  And see
+<a class="external free" href="http://www.arxiv.org/abs/0704.1854" rel="nofollow">http://www.arxiv.org/abs/0704.1854</a> for a ConText document that uses a
+Makefile.
+</p>
+    <p>Good luck!
+</p>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-arxiv-million-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-arxiv-million_1-0">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        Gwen Glazer,
+        <i>
+         arXiv hits 1 million submissions
+        </i>
+        , Cornell University Library, Ithaca, NY, USA,
+        <a class="external free" href="https://www.library.cornell.edu/about/news/press-releases/arxiv-hits-1-million-submissions-0" rel="nofollow">
+         https://www.library.cornell.edu/about/news/press-releases/arxiv-hits-1-million-submissions-0
+        </a>
+        , 2015-01-12, Retrieved 2017-11-12.
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 62/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 943/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2436-1!canonical and timestamp 20260109212423 and revision id 40982
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Posting_on_arxiv.org">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

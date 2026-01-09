@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Floating objects&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Floating_objects" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Floating objects
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=764&diff=42435">2025-05-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Floats_and_columns">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Floats and columns
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Floats_on_empty_pages">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Floats on empty pages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Protruding_Floats_in_Double-Sided_Documents">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Protruding Floats in Double-Sided Documents
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Landscape_Floats_in_a_Portrait_Document">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Landscape Floats in a Portrait Document
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Floats_and_section_headings">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Floats and section headings
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Captions">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Captions
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Float_Combinations">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Float Combinations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Subfloats">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Subfloats
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Flushing_floats">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         Flushing floats
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Playing_with_side_floats_position">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         Playing with side floats position
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Basic_situation">
+          <span class="tocnumber">
+           12.1
+          </span>
+          <span class="toctext">
+           Basic situation
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#With_.5Cmovesidefloat">
+          <span class="tocnumber">
+           12.2
+          </span>
+          <span class="toctext">
+           With \movesidefloat
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>Floating Objects (floats) are placed (and numbered) automatically, with a configurable (and optional) caption. They are placed at an appropriate position determined by the TeX float placement algorithm. The algorithm has a number of options that can influence float placement.
+</p>
+    <p>Most options in the manual (such as <tt><a class="new" href="../index.php?title=Command/placeexternalfigure&action=edit&redlink=1.html" title="Command/placeexternalfigure (page does not exist)">\placeexternalfigure</a></tt>) are described using the generic <tt><a href="../Command/placefloat.html" title="Command/placefloat">\placefloat</a></tt>. Additionally, <tt><a class="mw-redirect" href="../Command/_placelistoffloats.html" title="Command/placelistoffigures">\placelistoffigures</a></tt> creates a list of the figures used in the document.
+</p>
+    <p>Floats include "graphic", "figure", "table", and "intermezzo". Additional floats can be defined using <tt><a href="../Command/definefloat.html" title="Command/definefloat">\definefloat</a></tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefloat</span></span><span class="brx">[</span>place<span class="brx">]</span><span class="brx">[</span>reference<span class="brx">]</span><span class="br">{</span>caption<span class="br">}</span><span class="br">{</span>some float<span class="br">}</span>
+</pre>
+    <p><b>place</b> is one or several (comma separated) of:
+</p>
+    <table>
+     <tbody>
+      <tr bgcolor="#AAAAAA">
+       <th>
+        preference
+       </th>
+       <th align="left">
+        result
+       </th>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>left</td>
+       <td>left of text</td>
+      </tr>
+      <tr>
+       <td>right</td>
+       <td>right of text</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>here</td>
+       <td>preferably here</td>
+      </tr>
+      <tr>
+       <td>top</td>
+       <td>at top of page</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>bottom</td>
+       <td>at bottom of page</td>
+      </tr>
+      <tr>
+       <td>inleft</td>
+       <td>in left margin</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>inright</td>
+       <td>in right margin</td>
+      </tr>
+      <tr>
+       <td>inmargin</td>
+       <td>in the margin (left or right)</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>margin</td>
+       <td>in the margin (margin float)</td>
+      </tr>
+      <tr>
+       <td>page</td>
+       <td>on a new (empty) page</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>opposite</td>
+       <td>on the left page</td>
+      </tr>
+      <tr>
+       <td>90</td>
+       <td>orientation (rotation angle), both caption and contents</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>always</td>
+       <td>precedence over stored floats</td>
+      </tr>
+      <tr>
+       <td>force</td>
+       <td>per se here</td>
+      </tr>
+      <tr bgcolor="#DDDDDD">
+       <td>split</td>
+       <td>(For TABLES only) split tables</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>(table copied from the manual)
+</p>
+    <p><tt><a class="mw-redirect" href="../Command/_placefloat.html" title="Command/placefigure">\placefigure</a></tt> and <tt><a class="mw-redirect" href="../Command/_placefloat.html" title="Command/placetable">\placetable</a></tt> also accept the same set of options, and allow to create floating figures and captions respectively.
+</p>
+    <p><b>reference</b>
+</p>
+    <p>If you don't need to refer to your float, you can leave this parameter out.
+</p>
+    <p><br>
+<tt><a href="../Command/setupfloatframed.html" title="Command/setupfloatframed">\setupfloatframed</a></tt> can also be quite valuable.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>I will explain the examples in terms of <tt><a class="mw-redirect" href="../Command/_placefloat.html" title="Command/placefigure">\placefigure</a></tt> but the same set of options are also valid for other floats.
+</p>
+    <ul>
+     <li>
+      If you do not want a caption
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>none<span class="brx">]</span> <span class="br">{</span><span class="br">}</span> <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <ul>
+     <li>
+      If you do not want the figure to be numbered (but still want the caption)
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span> <span class="brx">[</span>nonumber<span class="brx">]</span> <span class="br">{</span>caption<span class="br">}</span> <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <ul>
+     <li>
+      Suppose you want the figure to be placed on the right side of the page, a few lines into the paragraph, and want the rest of the paragraph to wrap around the figure
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span> <span class="brx">[</span>right,2*line<span class="brx">]</span> <span class="br">{</span>caption<span class="br">}</span> <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>or 
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span> <span class="brx">[</span>right,2*hang<span class="brx">]</span> <span class="br">{</span>caption<span class="br">}</span> <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>This does not work correctly at a page boundary. The <tt>line</tt> option leaves the space above the figures empty, while the <tt>hang</tt> option also wraps texts above the figure.
+</p>
+    <h2>
+     <span class="mw-headline" id="Floats_and_columns">
+      Floats and columns
+     </span>
+    </h2>
+    <p>This special case is discussed <a href="../Text_blocks/Environments/Columns#Floats_and_other_limitations_of_columns.html" title="Text blocks/Environments/Columns">here</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Floats_on_empty_pages">
+      Floats on empty pages
+     </span>
+    </h2>
+    <p>There&rsquo;s a way to switch off page headings at full page floats:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span>Cow,location<span class="brx">=</span><span class="br">{</span>page,high,header<span class="br">}</span><span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.pdf<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Protruding_Floats_in_Double-Sided_Documents">
+      Protruding Floats in Double-Sided Documents
+     </span>
+    </h2>
+    <p>If you have a double-sided document with wide outer margins then you might want your figures to protrude into the margin. In a double-sided document you need to tell ConTeXt to decide whether to make the figure protrude to the left or the right. This can be done as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>textmarginfigure<span class="brx">]</span><span class="brx">[</span>textmarginfigures<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>textmarginfigure<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>inner<span class="brx">]</span>
+<span class="cs">\placetextmarginfigure</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>The following code gives a full example that can be pasted into live ConTeXt:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span> <span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>location<span class="brx">=</span>middle,backspace<span class="brx">=</span>2pc, width<span class="brx">=</span>20pc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>textmarginfigure<span class="brx">]</span><span class="brx">[</span>textmarginfigures<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>textmarginfigure<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>inner<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs">\placetextmarginfigure</span><span class="brx">[</span>here<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>30pc<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs">\placetextmarginfigure</span><span class="brx">[</span>here<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>figurename<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>30pc<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Landscape_Floats_in_a_Portrait_Document">
+      Landscape Floats in a Portrait Document
+     </span>
+    </h2>
+    <p>Wide tables, for example, can be turned and most likely will need to be put on a separate page.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacetable</span></span> <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>page,90<span class="br">}</span>,title<span class="brx">=</span>Table caption<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\bTABLE</span></span> <span class="brx">[</span>textwidth<span class="brx">=</span><span class="cs">\textheight</span><span class="brx">]</span>
+        put a wide table here...
+    <span class="cs">\eTABLE</span>
+<span class="cs"><span class="documentcs">\stopplacetable</span></span>
+</pre>
+    <p>Both the table caption and the contents will be rotated, but not the page header and footer which remain "upright". Notice that one must set the TABLE textwidth to <tt><a class="new" href="../index.php?title=Command/textheight&action=edit&redlink=1.html" title="Command/textheight (page does not exist)">\textheight</a></tt> in order for the table macros to fit properly.
+</p>
+    <h2>
+     <span class="mw-headline" id="Floats_and_section_headings">
+      Floats and section headings
+     </span>
+    </h2>
+    <p>By default, section headings don't wrap &ldquo;around&rdquo; floating objects. Instead, they will be moved down as far as needed to appear below the float. This behaviour can be controlled using the <tt>aligntitle</tt> option of the <tt><a href="../Command/setupheads.html" title="Command/setupheads">\setupheads</a></tt> or <tt><a href="../Command/setuphead.html" title="Command/setuphead">\setuphead</a></tt> commands.
+</p>
+    <h2>
+     <span class="mw-headline" id="Captions">
+      Captions
+     </span>
+    </h2>
+    <p>To change the style of figure(table) captions, use <tt><a href="../Command/setupcaptions.html" title="Command/setupcaptions">\setupcaptions</a></tt>.
+</p>
+    <p>To use a different (e.g. abbreviated) caption in the list of floats, you can do:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A rather long caption<span class="br">}</span>,list<span class="brx">=</span><span class="br">{</span>A short caption<span class="br">}</span><span class="brx">]</span>
+This is the content of the actual figure
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+    <p>In MkII this was possible by:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineselector</span></span><span class="brx">[</span>caption<span class="brx">]</span><span class="brx">[</span>max<span class="brx">=</span>2,n<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setupselector</span></span><span class="brx">[</span>caption<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\completelistoffigures</span></span>
+<span class="cs"><span class="stylecs">\setupselector</span></span><span class="brx">[</span>caption<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\select</span></span><span class="br">{</span>caption<span class="br">}</span>
+ <span class="br">{</span>Short caption for list<span class="br">}</span>
+ <span class="br">{</span>A rather longer caption which will appear below the figure itself<span class="br">}</span><span class="br">}</span>
+ <span class="br">{</span>This is the content of the actual figure<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Float_Combinations">
+      Float Combinations
+     </span>
+    </h2>
+    <p>If you want to place floats besides each other or in a regular matrix,
+each with its own number and caption, you need a float combination:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>  <span class="comment">%% sample images</span>
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>location<span class="brx">=</span>none<span class="brx">]</span>     <span class="comment">% disable numbering of outer float</span>
+  <span class="cs"><span class="documentcs">\startfloatcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>2, ny<span class="brx">=</span>1<span class="brx">]</span> <span class="comment">% two columns, one row</span>
+    <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Left<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+    <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Right<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+  <span class="cs"><span class="documentcs">\stopfloatcombination</span></span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="166" src="../wikiteximage/89b461d00fec26020dd607a6f5254397.webp" width="624">
+     </li>
+    </ul>
+    <p>If you want only one number for the whole thing, you may use a regular combination within a float:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>  <span class="comment">%% sample images</span>
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>My combination<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>2, ny<span class="brx">=</span>1<span class="brx">]</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> Left                    <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> Right                   <span class="cs">\stopcaption</span>
+  <span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="192" src="../wikiteximage/c024466bf7f40195ca0cc80789d9691d.webp" width="624">
+     </li>
+    </ul>
+    <p><br>
+See also <tt><a href="../Command/startcombination.html" title="Command/startcombination">\startcombination</a></tt>, <tt><a href="../Command/startfloatcombination.html" title="Command/startfloatcombination">\startfloatcombination</a></tt> and <a href="../Graphics_and_media/Combinations.html" title="Graphics and media/Combinations">Combinations</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Subfloats">
+      Subfloats
+     </span>
+    </h2>
+    <p>Subfloatnumbering creates subfigures sharing a mutual figure prefix and an
+individual subfigure designator (e.g. figure 1a), figure 1b, etc.). The command <tt><a class="new" href="../index.php?title=Command/startsubfloatnumbering&action=edit&redlink=1.html" title="Command/startsubfloatnumbering (page does not exist)">\startsubfloatnumbering</a></tt> is used for this.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>  <span class="comment">%% sample images</span>
+
+<span class="cs">\startsubfloatnumbering</span>
+  <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Alpha<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\externalfigure</span></span>
+  <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+
+  <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Beta<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\externalfigure</span></span>
+  <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+<span class="cs">\stopsubfloatnumbering</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="328" src="../wikiteximage/89abf013dcabbc056e1e90b29ea9fe02.webp" width="624">
+     </li>
+    </ul>
+    <p>Subfloats can also be used with floatcombinations:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>  <span class="comment">%% sample images</span>
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>location<span class="brx">=</span>none<span class="brx">]</span>
+  <span class="cs">\startsubfloatnumbering</span>
+    <span class="cs"><span class="documentcs">\startfloatcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>2, ny<span class="brx">=</span>1<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Left,  reference<span class="brx">=</span>fig:left<span class="brx">]</span>  <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+      <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Right, reference<span class="brx">=</span>fig:right<span class="brx">]</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+    <span class="cs"><span class="documentcs">\stopfloatcombination</span></span>
+  <span class="cs">\stopsubfloatnumbering</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+
+See <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>figure<span class="br">}</span><span class="brx">[</span>fig:left<span class="brx">]</span> and <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>figure<span class="br">}</span><span class="brx">[</span>fig:right<span class="brx">]</span>.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="188" src="../wikiteximage/97e2186f2026e41f512dd65db30accd0.webp" width="624">
+     </li>
+    </ul>
+    <p><br>
+See also <tt><a href="../Command/startcombination.html" title="Command/startcombination">\startcombination</a></tt>, <tt><a href="../Command/startfloatcombination.html" title="Command/startfloatcombination">\startfloatcombination</a></tt>, <a href="../Graphics_and_media/Combinations.html" title="Graphics and media/Combinations">Combinations</a> and <tt><a class="new" href="../index.php?title=Command/startsubfloatcombination&action=edit&redlink=1.html" title="Command/startsubfloatcombination (page does not exist)">\startsubfloatcombination</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Flushing_floats">
+      Flushing floats
+     </span>
+    </h2>
+    <p>The command <tt><a class="new" href="../index.php?title=Command/placefloats&action=edit&redlink=1.html" title="Command/placefloats (page does not exist)">\placefloats</a></tt> outputs all pending floats.
+</p>
+    <h2>
+     <span class="mw-headline" id="Playing_with_side_floats_position">
+      Playing with side floats position
+     </span>
+    </h2>
+    <p>From <a class="external text" href="https://tex.stackexchange.com/questions/741467/place-a-quote-half-over-margin-in-context" rel="nofollow">tex.stackexchange.com "Place a quote half over margin" (2025)</a>
+</p>
+    <p>You can use <tt><a class="new" href="../index.php?title=Command/movesidefloat&action=edit&redlink=1.html" title="Command/movesidefloat (page does not exist)">\movesidefloat</a></tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Basic_situation">
+      Basic situation
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>grid<span class="brx">=</span>on<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showgrid</span></span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>Quote<span class="brx">]</span>
+  <span class="brx">[</span>align<span class="brx">=</span><span class="br">{</span>middle,lohi<span class="br">}</span>,
+   foregroundstyle<span class="brx">=</span>bold,
+   foregroundcolor<span class="brx">=</span>white,
+   background<span class="brx">=</span>color,
+   backgroundcolor<span class="brx">=</span>middlecyan,
+   width<span class="brx">=</span>6cm,
+   offset<span class="brx">=</span>.5cm,
+   <span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefloat</span></span>
+  <span class="brx">[</span>Quotefloat<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>tufte<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\startplacefloat</span></span>
+  <span class="brx">[</span>Quotefloat<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>right,none,2*hang<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>Quote<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>knuthmath<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\stopplacefloat</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>ward<span class="br">}</span><span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/7a8cfbbb9859891276a71b2fb459e5ab.webp" width="874">
+     </li>
+    </ul>
+    <h3>
+     <span id="With_\movesidefloat">
+     </span>
+     <span class="mw-headline" id="With_.5Cmovesidefloat">
+      With
+      <tt>
+       <a class="new" href="../index.php?title=Command/movesidefloat&action=edit&redlink=1.html" title="Command/movesidefloat (page does not exist)">
+        \movesidefloat
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>grid<span class="brx">=</span>on<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showgrid</span></span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>Quote<span class="brx">]</span>
+  <span class="brx">[</span>align<span class="brx">=</span><span class="br">{</span>middle,lohi<span class="br">}</span>,
+   foregroundstyle<span class="brx">=</span>bold,
+   foregroundcolor<span class="brx">=</span>white,
+   background<span class="brx">=</span>color,
+   backgroundcolor<span class="brx">=</span>middlecyan,
+   width<span class="brx">=</span>6cm,
+   offset<span class="brx">=</span>.5cm,
+   <span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefloat</span></span>
+  <span class="brx">[</span>Quotefloat<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>tufte<span class="br">}</span>
+
+<span class="cs">\movesidefloat</span><span class="brx">[</span>x<span class="brx">=</span>-3cm<span class="brx">]</span>   <span class="comment">%  &lt;== HERE HERE</span>
+<span class="cs"><span class="documentcs">\startplacefloat</span></span>
+  <span class="brx">[</span>Quotefloat<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>right,none,2*hang<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>Quote<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>knuthmath<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\stopplacefloat</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>ward<span class="br">}</span><span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/80fc82d25c89d7550bb9034e262a9932.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212410
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.113 seconds
+Real time usage: 0.181 seconds
+Preprocessor visited node count: 387/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 2186/2097152 bytes
+Template argument size: 610/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19264/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  119.060      1 -total
+ 13.45%   16.012     21 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:764-1!canonical and timestamp 20260109212410 and revision id 42435
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Floating_objects">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

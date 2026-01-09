@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Comma_Separated_Lists" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2157&diff=42513">2025-09-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Action_Processing.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Action Processing">Action Processing</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Key_Value_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments">Key-Value Assignments</a> &gt;
+</p>
+    <p>We've already seen some macros that take care of comma separated lists. Such list can be processed with
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span>string,string,...<span class="brx">]</span><span class="cs">\commando</span>
+</pre>
+    <p>The user supplied command <code>\commando</code> receives one argument: the string. This command  permits nesting and spaces after commas are skipped. Empty sets are no problem.
+</p>
+    <p>Empty arguments are not processed. Empty items (,,) however are treated.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\dosomething</span><span class="brx">#</span>1<span class="br">{</span><span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="br">}</span>
+1: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="cs">\hbox</span><span class="br">{</span>$a,b,c,d,e,f$<span class="br">}</span><span class="brx">]</span> <span class="cs">\dosomething</span> <span class="cs">\par</span>
+2: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="br">{</span>a,b,c,d,e,f<span class="br">}</span><span class="brx">]</span>        <span class="cs">\dosomething</span> <span class="cs">\par</span>
+3: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="br">{</span>a,b,c<span class="br">}</span>,d,e,f<span class="brx">]</span>        <span class="cs">\dosomething</span> <span class="cs">\par</span>
+4: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span>a,b,<span class="br">{</span>c,d,e<span class="br">}</span>,f<span class="brx">]</span>        <span class="cs">\dosomething</span> <span class="cs">\par</span>
+5: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span>a<span class="br">{</span>b,c<span class="br">}</span>,d,e,f<span class="brx">]</span>         <span class="cs">\dosomething</span> <span class="cs">\par</span>
+6: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="br">{</span>a,b<span class="br">}</span>c,d,e,f<span class="brx">]</span>         <span class="cs">\dosomething</span> <span class="cs">\par</span>
+7: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="brx">]</span>                     <span class="cs">\dosomething</span> <span class="cs">\par</span>
+8: <span class="cs"><span class="systemcs">\processcommalist</span></span> <span class="brx">[</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="brx">]</span>                  <span class="cs">\dosomething</span> <span class="cs">\par</span>
+</pre>
+      <p>And here is the result:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="159" src="../../../wikiteximage/80054197610fe656669ad544da6ac5f1.webp" width="148">
+     </li>
+    </ul>
+    <p>Quitting a commalist halfway can be done by using <code>\quitcommalist</code> within the execution macro.
+</p>
+    <p>When a list is saved in a macro, we can use a construction like:
+</p>
+    <pre class="tex"><span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\processcommalist</span></span><span class="cs">\expandafter</span><span class="brx">[</span><span class="cs">\list</span><span class="brx">]</span><span class="cs">\dosomething</span>
+</pre>
+    <p>Such solutions suit most situations, but we wanted a bit more.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span>string,<span class="cs">\stringset</span>,string<span class="brx">]</span><span class="cs">\dosomething</span>
+</pre>
+    <p>where <code>\stringset</code> is a predefined set, like:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\first</span><span class="br">{</span>zeroeth,first<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\second</span><span class="br">{</span>last<span class="br">}</span>
+<span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span><span class="cs">\first</span><span class="brx">]</span><span class="cs"><span class="systemcs">\message</span></span>
+<span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span><span class="cs">\first</span>,second,third<span class="brx">]</span><span class="cs"><span class="systemcs">\message</span></span>
+<span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span><span class="cs">\first</span>,between,<span class="cs">\second</span><span class="brx">]</span><span class="cs"><span class="systemcs">\message</span></span>
+</pre>
+    <p>Commands that are part of the list are expanded, so the use of this macro has its limititations.
+</p>
+    <p>The argument to <code>\dosomething</code> is not delimited. Because we often use <code>[]</code> as delimiters, we also have:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processcommalistwithparameters</span></span><span class="brx">[</span>string,string,...<span class="brx">]</span><span class="cs">\dosomething</span>
+</pre>
+    <p>where <code>\dosomething</code> looks like:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\dosomething</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span>... <span class="brx">#</span>1 ...<span class="br">}</span>
+</pre>
+    <p>Some of the commands mentioned earlier are effective but slow. When one is desperately in need of faster alternatives and when the conditions are predictable safe, the <code>\raw</code> alternatives come into focus. A major drawback is that they do not take <code>\c!constants</code> into account, simply because no expansion is done. (This is not a problem for <code>\rawprocesscommalist</code>), because this macro does not compare anything. Expandable macros are permitted as search string for <code>\rawdoifinsetelse</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\rawdoifinsetelse</span></span><span class="br">{</span>string<span class="br">}</span><span class="br">{</span>string,...<span class="br">}</span><span class="br">{</span>...<span class="br">}</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\rawprocesscommalist</span></span><span class="brx">[</span>string,string,...<span class="brx">]</span><span class="cs">\commando</span>
+<span class="cs"><span class="systemcs">\rawprocessaction</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>a<span class="brx">=</span>&gt;<span class="cs">\a</span>,b<span class="brx">=</span>&gt;<span class="cs">\b</span>,c<span class="brx">=</span>&gt;<span class="cs">\c</span><span class="brx">]</span>
+</pre>
+    <p>Spaces embedded in the list, for instance after commas, spoil the search process. The gain in speed depends on the length of the argument (the longer the argument, the less gain).
+</p>
+    <p>When we process the list <code>a,b,c,d,e</code>, the raw routine takes over 30% less time, when we feed 20+ character strings we gain about 20%.
+</p>
+    <p>It's possible to get an element from a commalist or a command representing a commalist.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getfromcommalist</span></span>    <span class="brx">[</span>string<span class="brx">]</span> <span class="brx">[</span>n<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\getfromcommacommand</span></span> <span class="brx">[</span>string,<span class="cs">\strings</span>,string,...<span class="brx">]</span> <span class="brx">[</span>n<span class="brx">]</span>
+</pre>
+    <p>The difference between the two of them is the same as the difference between <code>\processcomma...</code>. The found string is stored in <code>\commalistelement</code>.
+</p>
+    <p>Because 0, 1 and 2 are often asked for, the macros are optimized on those numbers.
+</p>
+    <p>We can calculate the size of a comma separated list by using:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getcommalistsize</span></span>    <span class="brx">[</span>string,string,...<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\getcommacommandsize</span></span> <span class="brx">[</span>string,<span class="cs">\strings</span>,string,...<span class="brx">]</span>
+</pre>
+    <p>Afterwards, the length is available in the macro <code>\commalistsize</code> (not a &lt;<i>counter</i>&gt;).
+</p>
+    <p>Watertight (and efficient) solutions are hard to find, due to the handling of braces during parameters passing and scanning. Nevertheless, the macros function quite well.
+</p>
+    <p>For low level (fast) purposes, we can also use the next alternative, which can handle up to 8 elements at most.
+</p>
+    <pre class="tex"><span class="cs">\dogetcommalistelement</span>1<span class="cs"><span class="documentcs">\from</span></span> a,b,c<span class="cs">\to</span><span class="cs"><span class="systemcs">\commalistelement</span></span>
+</pre>
+    <p>It's ugly, but it is very fast indeed. Keep in mind that this version does <b>not</b> strip leading spaces from the list items.
+</p>
+    <p>If you need to present a comma separated list of values (like an author list, for example) in a single line, with the option of changing the separator of the items and have a distinct separator for the last item of the list, you can use <tt><a href="../../../Command/commalistsentence.html" title="Command/commalistsentence">\commalistsentence</a></tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\commalistsentence</span></span><span class="brx">[</span>a,b,c<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\commalistsentence</span></span><span class="brx">[</span>a,b,c<span class="brx">]</span><span class="brx">[</span><span class="br">{</span> \& <span class="br">}</span>,<span class="br">{</span> and <span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\commalistsentence</span></span><span class="brx">[</span>a,b,c<span class="brx">]</span><span class="brx">[</span>+,-<span class="brx">]</span>
+</pre>
+    <p>More complex use of <tt><a class="new" href="../../../index.php?title=Command/processcommacommand&action=edit&redlink=1.html" title="Command/processcommacommand (page does not exist)">\processcommacommand</a></tt>, based on an example provided by Hans in the mailing list:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\starttexdefinition</span></span> AuthorFullName <span class="brx">#</span>1
+     <span class="cs">\edef</span><span class="cs">\currentauthor</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+     <span class="cs"><span class="systemcs">\doifsomething</span></span> <span class="br">{</span><span class="cs">\authorparameter</span><span class="br">{</span>first<span class="br">}</span><span class="br">}</span> <span class="br">{</span>
+         <span class="cs">\authorparameter</span><span class="br">{</span>first<span class="br">}</span>
+         <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="br">}</span>
+     <span class="cs"><span class="systemcs">\doifsomething</span></span> <span class="br">{</span><span class="cs">\authorparameter</span><span class="br">{</span>last<span class="br">}</span><span class="br">}</span> <span class="br">{</span>
+         <span class="cs">\authorparameter</span><span class="br">{</span>last<span class="br">}</span>
+     <span class="br">}</span>
+<span class="cs"><span class="systemcs">\stoptexdefinition</span></span>
+
+<span class="cs"><span class="systemcs">\starttexdefinition</span></span> AuthorListIndeed <span class="brx">#</span>1
+     <span class="cs">\advance</span><span class="cs">\scratchcountertwo</span><span class="cs">\plusone</span>
+     <span class="cs">\ifnum</span><span class="cs">\scratchcountertwo</span><span class="brx">=</span><span class="cs">\plusone</span>
+         <span class="comment">% nothing</span>
+     <span class="cs">\orelse</span><span class="cs">\ifnum</span><span class="cs">\scratchcountertwo</span><span class="brx">=</span><span class="cs">\scratchcounterone</span>
+         <span class="cs"><span class="stylecs">\space</span></span><span class="cs"><span class="documentcs">\letterampersand</span></span><span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs">\else</span>
+         ,<span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs">\fi</span>
+     <span class="cs">\AuthorFullName</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\stoptexdefinition</span></span>
+
+<span class="cs"><span class="systemcs">\starttexdefinition</span></span> AuthorList <span class="brx">#</span>1
+     <span class="cs"><span class="systemcs">\getcommacommandsize</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="comment">%</span>
+     <span class="cs">\scratchcounterone</span><span class="cs"><span class="systemcs">\commalistsize</span></span>
+     <span class="cs">\scratchcountertwo</span><span class="cs">\zerocount</span>
+     <span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs">\AuthorListIndeed</span>
+<span class="cs"><span class="systemcs">\stoptexdefinition</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="cs"><span class="systemcs">\definenamespace</span></span><span class="brx">[</span>authors<span class="brx">]</span><span class="brx">[</span>
+  type<span class="brx">=</span>module,
+  name<span class="brx">=</span>author,
+  command<span class="brx">=</span>yes,
+  parent<span class="brx">=</span>authors,
+<span class="brx">]</span>
+
+<span class="comment">% Role for each author. Call it with \authorparameter{role}</span>
+<span class="cs">\defineauthor</span><span class="brx">[</span>authors<span class="brx">]</span><span class="brx">[</span>role<span class="brx">=</span><span class="br">{</span>author<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% Each author inherits the common setting</span>
+<span class="cs">\defineauthor</span><span class="brx">[</span>andi<span class="brx">]</span><span class="brx">[</span>authors<span class="brx">]</span><span class="brx">[</span>first<span class="brx">=</span><span class="br">{</span>Andy<span class="br">}</span>, last<span class="brx">=</span><span class="br">{</span>Kaminski<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\defineauthor</span><span class="brx">[</span>soni<span class="brx">]</span><span class="brx">[</span>authors<span class="brx">]</span><span class="brx">[</span>first<span class="brx">=</span><span class="br">{</span>Sonia<span class="br">}</span>, last<span class="brx">=</span><span class="br">{</span>Mendoza<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\defineauthor</span><span class="brx">[</span>sofi<span class="brx">]</span><span class="brx">[</span>authors<span class="brx">]</span><span class="brx">[</span>first<span class="brx">=</span><span class="br">{</span>Sof&iacute;a<span class="br">}</span>, last<span class="brx">=</span><span class="br">{</span>Ravenport<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% This role is different from the one for each author</span>
+<span class="cs"><span class="documentcs">\startdocument</span></span><span class="brx">[</span>authors<span class="brx">=</span><span class="br">{</span>andi,soni,sofi<span class="br">}</span>,role<span class="brx">=</span><span class="br">{</span>authors<span class="br">}</span><span class="brx">]</span>
+
+1: <span class="cs">\AuthorList</span><span class="br">{</span><span class="cs"><span class="stylecs">\documentvariable</span></span><span class="br">{</span>authors<span class="br">}</span><span class="br">}</span>, <span class="cs"><span class="stylecs">\documentvariable</span></span><span class="br">{</span>role<span class="br">}</span>. <span class="cs"><span class="documentcs">\blank</span></span>
+
+2: <span class="cs">\AuthorList</span><span class="br">{</span>andi,soni,sofi<span class="br">}</span> <span class="cs"><span class="documentcs">\blank</span></span>
+
+3: <span class="cs">\AuthorList</span><span class="br">{</span>andi,soni<span class="br">}</span> <span class="cs"><span class="documentcs">\blank</span></span>
+
+4: <span class="cs">\AuthorList</span><span class="br">{</span>soni<span class="br">}</span> <span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs"><span class="documentcs">\stopdocument</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="135" src="../../../wikiteximage/f5c0c3a52e1c048154e519fa40f185c1.webp" width="467">
+     </li>
+    </ul>
+    <p><br>
+&lt; <b>Prev:</b> <a href="Action_Processing.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Action Processing">Action Processing</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Key_Value_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments">Key-Value Assignments</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.054 seconds
+Real time usage: 0.142 seconds
+Preprocessor visited node count: 60/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 236/2097152 bytes
+Template argument size: 72/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13818/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   11.649      1 -total
+ 81.40%    9.482      2 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2157-1!canonical and timestamp 20260109212409 and revision id 42513
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Comma_Separated_Lists">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/Paragraph numbering&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/Paragraph_numbering" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/Paragraph numbering
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=968&diff=41986">2025-01-30</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Standard_Paragraph_Numbering">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Standard Paragraph Numbering
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#The_.5CEveryPar_command">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         The \EveryPar command
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Paragraph_numbering_in_the_text">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Paragraph numbering in the text
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Paragraph_numbering_at_the_top">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Paragraph numbering at the top
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Combining_Section_Numbering_with_Paragraph_Numbering_and_Titles">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Combining Section Numbering with Paragraph Numbering and Titles
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Standard_Paragraph_Numbering">
+      Standard Paragraph Numbering
+     </span>
+    </h2>
+    <p>ConTeXt has a built-in mechanism for paragraph numbering, which places numbers in the margin.  This is accessed with <tt><a href="../../Command/setupparagraphnumbering.html" title="Command/setupparagraphnumbering">\setupparagraphnumbering</a></tt>. 
+</p>
+    <p>The mechanism numbers &lsquo;TeX paragraphs&rsquo;, so a formula or an itemization item will get its own number. For &lsquo;block of thought&rsquo; paragraphs that can contain multiple TeX paragraphs, see the 
+<a class="external text" href="http://modules.contextgarden.net/pararef" rel="nofollow">t-pararef</a> module described at <a href="Paragraph_referencing.html" title="Text blocks/Environments/Paragraph referencing">Paragraph referencing</a>.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Some text in an unnumbered paragraph before the paragraph numbering starts.
+
+<span class="cs"><span class="stylecs">\setupparagraphnumbering</span></span><span class="brx">[</span>
+  state<span class="brx">=</span>start,
+  style<span class="brx">=</span>italic,
+  distance<span class="brx">=</span>0pt<span class="brx">]</span>
+
+This is the first numbered paragraph; it's short.
+
+This is another numbered paragraph.  It's long enough to wrap around onto more than one line, so as to show that these are paragraph numbers and not line numbers.
+
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>packed<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\item</span></span> an
+    <span class="cs"><span class="documentcs">\item</span></span> itemization
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+A third numbered paragraph.
+<span class="cs"><span class="stylecs">\setupparagraphnumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+And, finally, an unnumbered paragraph after the paragraph numbering.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../../wikiteximage/538773b97d176f13f6cda4417aefa939.webp" width="620">
+     </li>
+    </ul>
+    <h2>
+     <span id="The_\EveryPar_command">
+     </span>
+     <span class="mw-headline" id="The_.5CEveryPar_command">
+      The
+      <tt>
+       <a href="../../Command/EveryPar.html" title="Command/EveryPar">
+        \EveryPar
+       </a>
+      </tt>
+      command
+     </span>
+    </h2>
+    <p>An alternate way of numbering paragraphs is to use the <tt><a href="../../Command/EveryPar.html" title="Command/EveryPar">\EveryPar</a></tt> command. It's a lower-level command than <tt><a href="../../Command/setupparagraphnumbering.html" title="Command/setupparagraphnumbering">\setupparagraphnumbering</a></tt>, but allows much more flexibility.
+</p>
+    <h3>
+     <span class="mw-headline" id="Paragraph_numbering_in_the_text">
+      Paragraph numbering in the text
+     </span>
+    </h3>
+    <p>One possible way of numbering paragraphs is to place the numbers in the running text, rather than in the margin. ConTeXt doesn't have a built-in way to do this, but it's not difficult to add a method using the <tt><a href="../../Command/EveryPar.html" title="Command/EveryPar">\EveryPar</a></tt> command. The following code was proposed by Taco on the mailing list.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>Paracount<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\Paragraphnumber</span><span class="comment">%</span>
+   <span class="br">{</span><span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>Paracount<span class="brx">]</span> 
+    <span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>Paracount<span class="brx">]</span>.~<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>ParagraphNumbers<span class="brx">]</span><span class="brx">[</span>
+  before<span class="brx">=</span><span class="cs"><span class="systemcs">\EveryPar</span></span><span class="br">{</span><span class="cs">\Paragraphnumber</span><span class="br">}</span>,
+  after<span class="brx">=</span><span class="cs"><span class="systemcs">\EveryPar</span></span><span class="br">{</span><span class="br">}</span>,
+  <span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Some text in an unnumbered paragraph before the paragraph numbering starts.
+
+<span class="cs">\startParagraphNumbers</span>
+This is the first numbered paragraph; it's short.
+
+This is another numbered paragraph. It's long enough to wrap around onto more than one line, so as to show that these are paragraph numbers and not line numbers.
+
+A third numbered paragraph.
+<span class="cs">\stopParagraphNumbers</span>
+
+And, finally, an unnumbered paragraph after the paragraph numbering.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../../wikiteximage/5add88df9bf0787c0fb9fb62937dba0b.webp" width="620">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Paragraph_numbering_at_the_top">
+      Paragraph numbering at the top
+     </span>
+    </h3>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+
+<span class="comment">% Create a new counter</span>
+<span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>parnum<span class="brx">]</span><span class="brx">[</span>way<span class="brx">=</span>bytext<span class="brx">]</span>
+
+<span class="comment">% Give the number some distance from the paragraph</span>
+<span class="cs">\def</span><span class="cs">\deepstrut</span><span class="br">{</span><span class="cs">\vrule</span> width 0pt depth 2ex<span class="br">}</span>
+
+<span class="comment">% Will be typeset on every paragraph</span>
+<span class="cs">\def</span><span class="cs">\NumberParagraph</span><span class="br">{</span>
+    <span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>parnum<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span>
+        <span class="cs">\bf</span>
+        <span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>parnum<span class="brx">]</span>.
+        <span class="cs">\deepstrut</span>
+    <span class="br">}</span>
+<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\EveryPar</span></span><span class="br">{</span><span class="cs">\NumberParagraph</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="331" src="../../wikiteximage/d53ecf07a08872b9ef8df53681e03842.webp" width="632">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Combining_Section_Numbering_with_Paragraph_Numbering_and_Titles">
+      Combining Section Numbering with Paragraph Numbering and Titles
+     </span>
+    </h2>
+    <p>Idris provided a modified version of an enumerated-paragraphs sample provided by Wolfgang. In the modified version, section numbering is combined with paragraph enumeration, with titles optional:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\defineseparatorset</span></span> <span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>.,<span class="brx">]</span> <span class="comment">% no second decimal for susubparagraphs</span>
+<span class="comment">% \defineseparatorset [ParagraphNumber][.,.]&nbsp;% second decimal for susubparagraphs</span>
+ 
+<span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>numberseparatorset<span class="brx">=</span>ParagraphNumber,criterium<span class="brx">=</span>all<span class="brx">]</span>
+ 
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\ParagraphNumber</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\bf</span> <span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\convertedcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>numbersegments<span class="brx">=</span>1<span class="brx">]</span><span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span><span class="br">}</span>
+ 
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\subParagraphNumber</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\bf</span> <span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\convertedcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>numbersegments<span class="brx">=</span>1:2<span class="brx">]</span><span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span><span class="br">}</span>
+ 
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\subsubParagraphNumber</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\bf</span> <span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>3<span class="brx">]</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\convertedcounter</span></span><span class="brx">[</span>ParagraphNumber<span class="brx">]</span><span class="brx">[</span>numbersegments<span class="brx">=</span>1:3<span class="brx">]</span><span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span><span class="br">}</span>
+   
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span>
+   <span class="brx">[</span>style<span class="brx">=</span><span class="cs">\bf</span>,
+    alternative<span class="brx">=</span>text,
+    criterium<span class="brx">=</span>all,
+    number<span class="brx">=</span>no,
+    textcommand<span class="brx">=</span><span class="cs">\ParagraphNumber</span>,
+    insidesection<span class="brx">=</span><span class="cs">\hskip</span>-0.49em<span class="brx">]</span> <span class="comment">% adjust space after title</span>
+    
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsection<span class="brx">]</span>
+   <span class="brx">[</span>style<span class="brx">=</span><span class="cs">\bf</span>,
+    alternative<span class="brx">=</span>text,
+    criterium<span class="brx">=</span>all,
+    number<span class="brx">=</span>no,
+    textcommand<span class="brx">=</span><span class="cs">\subParagraphNumber</span>,
+    insidesection<span class="brx">=</span><span class="cs">\hskip</span>-0.49em<span class="brx">]</span> <span class="comment">% adjust space after title</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsubsection<span class="brx">]</span>
+   <span class="brx">[</span>style<span class="brx">=</span><span class="cs">\bf</span>,
+    alternative<span class="brx">=</span>text,
+    criterium<span class="brx">=</span>all,
+    number<span class="brx">=</span>no,
+    textcommand<span class="brx">=</span><span class="cs">\subsubParagraphNumber</span>,
+    insidesection<span class="brx">=</span><span class="cs">\hskip</span>-0.49em<span class="brx">]</span> <span class="comment">% adjust space after title </span>
+ 
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>line<span class="brx">]</span>
+ 
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Text.<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\startsubsection</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\startsubsubsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Text.<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\stopsubsubsection</span></span>
+<span class="cs"><span class="documentcs">\stopsubsection</span></span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\startsubsubsection</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\stopsubsubsection</span></span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>The output from the previous code is:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/feb50f13fdcaabe2ac97b58c754ebf6e.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212438
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.044 seconds
+Real time usage: 0.143 seconds
+Preprocessor visited node count: 102/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 615/2097152 bytes
+Template argument size: 154/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 12062/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   30.176      1 -total
+ 30.99%    9.352      5 Template:cmd
+ 29.73%    8.971      1 Template:module
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:968-1!canonical and timestamp 20260109212438 and revision id 41986
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/Paragraph_numbering">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Collections of tips and tricks&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Collections_of_tips_and_tricks" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Collections of tips and tricks
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7338&diff=41638">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Define_your_own_sectioning_commands">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Define your own sectioning commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Section_variable">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Section variable
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Access_to_head_number">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Access to head number
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Generate_a_sorted_of_authors_from_headline_content">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Generate a sorted of authors from headline content
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Define_your_own_sectioning_commands">
+      Define your own sectioning commands
+     </span>
+    </h2>
+    <p>Of course you can define your own sectioning commands and probably want to adapt the default settings.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definehead</span></span><span class="brx">[</span>myheader<span class="brx">]</span><span class="brx">[</span>section<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>myheader<span class="brx">]</span>
+  <span class="brx">[</span>numberstyle<span class="brx">=</span>bold,
+   textstyle<span class="brx">=</span>cap,
+   before<span class="brx">=</span><span class="cs"><span class="documentcs">\hairline</span></span><span class="cs"><span class="documentcs">\blank</span></span>,
+   after<span class="brx">=</span><span class="cs">\nowhitespace</span><span class="cs"><span class="documentcs">\hairline</span></span>,
+   align<span class="brx">=</span><span class="br">{</span>flushleft, nothyphenated, verytolerant<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startmyheader</span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Hasselt makes headlines<span class="br">}</span>,
+   reference<span class="brx">=</span>hasselt-ref<span class="brx">]</span>
+Text.
+<span class="cs">\stopmyheader</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/693da6ce7bca7371fe5c95854fe3ed94.webp" width="307">
+     </li>
+    </ul>
+    <p>A new header <tt><a class="new" href="../index.php?title=Command/myheader&action=edit&redlink=1.html" title="Command/myheader (page does not exist)">\myheader</a></tt> is defined and it inherits the properties
+of <tt><a class="mw-redirect" href="../Command/_section.html" title="Command/section">\section</a></tt> (title, subject, whatever).
+You can define or setup several headers at once!
+</p>
+    <h2>
+     <span class="mw-headline" id="Section_variable">
+      Section variable
+     </span>
+    </h2>
+    <p>You can set custom variables per section, and retrieve them with the <tt><a class="new" href="../index.php?title=Command/structureuservariable&action=edit&redlink=1.html" title="Command/structureuservariable (page does not exist)">\structureuservariable</a></tt> command:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Foo<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>varlook<span class="brx">=</span><span class="br">{</span>you read Foo<span class="br">}</span><span class="brx">]</span>          <span class="comment">% extra brackets!</span>
+In this section it gives <span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span><span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>varlook<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Bar<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>varlook<span class="brx">=</span><span class="br">{</span>you read Bar<span class="br">}</span><span class="brx">]</span>          <span class="comment">% extra brackets!</span>
+In this section it gives <span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span><span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>varlook<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../wikiteximage/f6d4c3ae8689aeea897096e3adf9dcbf.webp" width="438">
+     </li>
+    </ul>
+    <p>Beware, if you want to reference these in your ToC setup, you need <tt><a class="new" href="../index.php?title=Command/structurelistuservariable&action=edit&redlink=1.html" title="Command/structurelistuservariable (page does not exist)">\structurelistuservariable</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Access_to_head_number">
+      Access to head number
+     </span>
+    </h2>
+    <p>To access the last head number in a document one can use: 
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>&hellip;<span class="brx">]</span><span class="brx">[</span>&hellip;<span class="brx">]</span></pre>
+    <p>The following example from the mailing list demonstrates how to use it.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\bfb</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tfa</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span> <span class="br">{</span>4<span class="br">}</span> <span class="br">{</span>
+  <span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Test <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|<span class="brx">]</span>
+    <span class="cs">\NC</span> first:   
+      <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>first<span class="brx">]</span> 
+    <span class="cs">\NC</span> current: 
+      <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>current<span class="brx">]</span> 
+    <span class="cs">\NC</span> last:    
+      <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>last<span class="brx">]</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+  <span class="cs"><span class="documentcs">\stoptabulate</span></span>
+
+  <span class="cs"><span class="systemcs">\dorecurse</span></span> <span class="br">{</span>3<span class="br">}</span> <span class="br">{</span>
+    <span class="cs"><span class="documentcs">\startsubsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Test <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|p<span class="brx">(</span>2cm<span class="brx">)</span>|<span class="brx">]</span>
+      <span class="cs">\NC</span> first:   
+        <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>first<span class="brx">]</span> 
+      <span class="cs">\NC</span> current:   
+        <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>current<span class="brx">]</span> 
+      <span class="cs">\NC</span> last:      
+        <span class="cs"><span class="systemcs">\someheadnumber</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>last<span class="brx">]</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+    <span class="cs"><span class="documentcs">\stoptabulate</span></span>
+    <span class="cs"><span class="documentcs">\stopsubsection</span></span>
+  <span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1754" src="../wikiteximage/4730427ecd85466977f791d4cb60caf0.webp" width="1240">
+     </li>
+    </ul>
+    <p>For using inside a Metapost-environment you can use the expandable version:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\somenamedheadnumber</span></span><span class="br">{</span>&hellip;<span class="br">}</span><span class="br">{</span>&hellip;<span class="br">}</span></pre>
+    <p>Willi's comment on 15-06-2011:
+Sinds Context 13 june 2011 the name  <tt><a class="new" href="../index.php?title=Command/somestructureheadnumber&action=edit&redlink=1.html" title="Command/somestructureheadnumber (page does not exist)">\somestructureheadnumber</a></tt> is replaced by <tt><a href="../Command/someheadnumber.html" title="Command/someheadnumber">\someheadnumber</a></tt>. This is in line with Hans' plans to get rid of the 'structure' part inside interface-names dealing with internal counters.
+</p>
+    <h2>
+     <span class="mw-headline" id="Generate_a_sorted_of_authors_from_headline_content">
+      Generate a sorted of authors from headline content
+     </span>
+    </h2>
+    <p>An example on how to generate a sorted list of all authors contributed to a conference proceeding.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> does no compile as of 2025.01.18 <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>title<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>no,command<span class="brx">=</span>,<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MyChapCMD</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>criterium<span class="brx">=</span>all,alternative<span class="brx">=</span>command,command<span class="brx">=</span><span class="cs">\MyChapListCMD</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definesorting</span></span><span class="brx">[</span>author<span class="brx">]</span><span class="brx">[</span>authors<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupsorting</span></span> <span class="brx">[</span>author<span class="brx">]</span><span class="brx">[</span>criterium<span class="brx">=</span>all,expansion<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapCMD</span>
+ <span class="br">{</span><span class="brx">#</span>1<span class="cs"><span class="stylecs">\enspace</span></span> <span class="brx">#</span>2
+   <span class="br">{</span><span class="cs"><span class="systemcs">\doifsomething</span></span>
+      <span class="br">{</span><span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>author<span class="br">}</span><span class="br">}</span>
+      <span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs">\author</span>
+        <span class="brx">[</span><span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>name<span class="br">}</span><span class="brx">]</span> <span class="comment">% -&gt; sorted by "name"-variable</span>
+        <span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span><span class="brx">[</span>width<span class="brx">=</span>broad<span class="brx">]</span>
+           <span class="cs"><span class="documentcs">\bTR</span></span>
+             <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>author<span class="br">}</span> <span class="cs">\eTD</span>
+             <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>city<span class="br">}</span>   <span class="cs">\eTD</span>
+             <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>date<span class="br">}</span>   <span class="cs">\eTD</span>
+             <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>email<span class="br">}</span>  <span class="cs">\eTD</span>
+             <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>note<span class="br">}</span>   <span class="cs">\eTD</span>
+           <span class="cs">\eTR</span>
+         <span class="cs">\eTABLE</span><span class="cs">\nointerlineskip</span><span class="br">}</span><span class="comment">%</span>
+         <span class="cs">\tfxx</span> <span class="brx">(</span><span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>author<span class="br">}</span>, <span class="cs"><span class="systemcs">\structureuservariable</span></span><span class="br">{</span>city<span class="br">}</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\MyChapListCMD</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2 <span class="brx">(</span><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span><span class="brx">)</span><span class="cs">\hfill</span>  <span class="brx">#</span>3<span class="cs"><span class="documentcs">\blank</span></span><span class="br">}</span>
+
+
+<span class="cs"><span class="documentcs">\starttext</span></span>  <span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>text<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttitle</span></span><span class="brx">[</span>title<span class="brx">=</span>Contents<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptitle</span></span>
+
+<span class="cs"><span class="documentcs">\starttitle</span></span><span class="brx">[</span>title<span class="brx">=</span>List of Authors in Alphabetical Order<span class="brx">]</span>
+  <span class="cs">\placelistofauthors</span>
+<span class="cs"><span class="documentcs">\stoptitle</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>Text by Ward<span class="brx">]</span>
+  <span class="brx">[</span>name<span class="brx">=</span>ward,
+   author<span class="brx">=</span>Peter D. Ward,
+   city<span class="brx">=</span>Washington,
+   email<span class="brx">=</span>ward@sample.com<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>Text by Zapf<span class="brx">]</span>
+  <span class="brx">[</span>name<span class="brx">=</span>zapf,
+   author<span class="brx">=</span>Hermann Zapf,
+   city<span class="brx">=</span>N&uuml;rnberg,
+   date<span class="brx">=</span>8. November 1918,
+   email<span class="brx">=</span>zapf@sample.de<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>Text by Bryson<span class="brx">]</span>
+  <span class="brx">[</span>name<span class="brx">=</span>bryson,
+   author<span class="brx">=</span>Bill Bryson,
+   city<span class="brx">=</span>Norfolk,
+   date<span class="brx">=</span><span class="br">{</span>December 8, 1951<span class="br">}</span>,
+   note<span class="brx">=</span>best-selling American author<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\input</span></span> Bryson
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>Text by Tufte<span class="brx">]</span>
+  <span class="brx">[</span>name<span class="brx">=</span>tufte,
+   author<span class="brx">=</span>Edward R. Tufte,
+   city<span class="brx">=</span>Kansas City,
+   date<span class="brx">=</span>1942,
+   note<span class="brx">=</span>has criticized the way Microsoft PowerPoint is typically used<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212412
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.070 seconds
+Real time usage: 0.228 seconds
+Preprocessor visited node count: 120/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 990/2097152 bytes
+Template argument size: 228/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 16800/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   74.318      1 -total
+ 30.17%   22.419      1 Template:todo
+ 18.83%   13.996      6 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7338-1!canonical and timestamp 20260109212412 and revision id 41638
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Collections_of_tips_and_tricks">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Midgard PC sheet&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Midgard_PC_sheet" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Midgard PC sheet
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4907&diff=38834">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is an never-completed character sheet for the German pen and paper fantasy roleplaying game (RPG) Midgard. It&rsquo;s an application of ConTeXt&rsquo;s interactive form capabilities. Probably some problems could have been solved better.
+</p>
+    <p>Even if it&rsquo;s from 2009, it works with MkIV (checked: 31. March 2015).
+</p>
+    <p>You can find the resulting PDF and sample form data (FDF) on <a class="external text" href="https://github.com/fiee/ConTeXt/tree/master/midgard" rel="nofollow">Github</a>.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span>		<span class="brx">[</span>de<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplefonts<span class="brx">]</span>
+<span class="comment">% Covington fonts by Apostrophe Labs (free), see e.g. </span>
+<span class="comment">% http://moorstation.org/typoasis/designers/lab/index.htm</span>
+<span class="cs">\setmainfont</span><span class="brx">[</span>Covington<span class="brx">]</span>
+<span class="cs">\setsansfont</span><span class="brx">[</span>Covington-Exp<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>		<span class="brx">[</span>rm, 7.5pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfontenvironment</span></span>	<span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>em<span class="brx">=</span>italic<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuptolerance</span></span>	    <span class="brx">[</span>verytolerant<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupindenting</span></span>		<span class="brx">[</span>0pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span>	    <span class="brx">[</span>A4,landscape<span class="brx">]</span><span class="brx">[</span>A4,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>		<span class="brx">[</span>location<span class="brx">=</span>singlesided, grid<span class="brx">=</span>no,
+                    topspace<span class="brx">=</span>0mm, backspace<span class="brx">=</span>6mm,
+                    header<span class="brx">=</span>5mm, height<span class="brx">=</span>205mm,
+                    footer<span class="brx">=</span>0mm, width<span class="brx">=</span>285mm,
+                    <span class="comment">%leftmargin=6mm,</span>
+                    rightmargin<span class="brx">=</span>6mm,
+                    leftmargindistance<span class="brx">=</span>0mm, rightmargindistance<span class="brx">=</span>0mm,
+                    headerdistance<span class="brx">=</span>0mm
+                    <span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span> <span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>	<span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span>		<span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>
+   <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Midgard Charakterbogen<span class="br">}</span>,
+    author<span class="brx">=</span><span class="br">{</span>Henning Hraban Ramm<span class="br">}</span>,
+    keyword<span class="brx">=</span><span class="br">{</span>Midgard Rollenspiel RPG Fantasy Character Sheet SpF<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%\tracefieldstrue&nbsp;% DEBUG, MkII only</span>
+
+<span class="comment">% define text fields</span>
+<span class="comment">% 1: Au&szlig;enrahmen</span>
+<span class="comment">% 2: Label</span>
+<span class="comment">% 3: Entry</span>
+<span class="comment">%\setupfields	[label,frame,horizontal]</span>
+<span class="comment">%			[frame=off, offset=0pt, height=10pt]</span>
+<span class="comment">%			[frame=off, offset=0pt, width=35mm, align=right, height=10pt]</span>
+<span class="comment">%			[frame=off, width=5mm, offset=0pt, height=10pt]</span>
+<span class="comment">%\setupfield		[fett][label, frame, horizontal]</span>
+<span class="comment">%			[]</span>
+<span class="comment">%			[style=\bf]</span>
+<span class="comment">%			[]</span>
+<span class="comment">%\setupfields	[line][frame=off, height=10pt, width=5mm]</span>
+<span class="comment">%\setupfield		[Grundwert][line][style=\bf]</span>
+
+<span class="cs"><span class="stylecs">\setupfields</span></span><span class="brx">[</span>option<span class="brx">=</span>printable<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidWert<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+		<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>6.5mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidBon<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+		<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>14mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+		<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>4.5mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidWide1<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+			<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>21mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidWide2<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+			<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>71mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfield</span></span>	<span class="brx">[</span>MidWide3<span class="brx">]</span><span class="brx">[</span>reset,horizontal<span class="brx">]</span>
+			<span class="brx">[</span>frame<span class="brx">=</span>off, height<span class="brx">=</span>11pt, width<span class="brx">=</span>114.5mm, offset<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="comment">% \DivFeld{Name}{Typ}</span>
+<span class="cs">\def</span><span class="cs">\DivFeld</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs">\eTD</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\Leerzeile</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span>�<span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\WertFeld</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="brx">#</span>1<span class="cs">\hfill</span><span class="brx">(</span><span class="brx">#</span>2<span class="brx">)</span><span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span>MidWert<span class="br">}</span><span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\GrundwertFeld</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="br">{</span><span class="cs">\ss</span><span class="cs">\bf</span> <span class="brx">#</span>1<span class="br">}</span><span class="cs">\hfill</span><span class="brx">(</span><span class="brx">#</span>2<span class="brx">)</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs">\bf</span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidWert<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="cs">\eTD</span><span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\BonusFeld</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\DivFeld</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>MidBon<span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\Sprache</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs">\DivFeld</span><span class="br">{</span>Sprache<span class="brx">#</span>1Name<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\DivFeld</span><span class="br">{</span>Sprache<span class="brx">#</span>1Sprechen<span class="br">}</span><span class="br">{</span>MidFert<span class="br">}</span><span class="cs">\DivFeld</span><span class="br">{</span>Sprache<span class="brx">#</span>1Schreiben<span class="br">}</span><span class="br">{</span>MidFert<span class="br">}</span><span class="cs">\eTR</span><span class="br">}</span>
+
+<span class="comment">% \SinnFeld[+8][Hoeren]{H&ouml;ren}</span>
+<span class="cs">\def</span><span class="cs">\SinnFeld</span><span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleempty</span></span><span class="cs">\doSinnFeld</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doSinnFeld</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">#</span>3<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>2<span class="brx">]</span> <span class="brx">#</span>3
+	<span class="cs"><span class="systemcs">\doifelsenothing</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\hfill</span> <span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="br">}</span>
+	<span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span>
+	<span class="cs"><span class="systemcs">\doifelsenothing</span></span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+	<span class="br">{</span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+	<span class="br">{</span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">}</span>
+	<span class="cs">\eTD</span><span class="cs">\eTR</span><span class="br">}</span>
+
+<span class="comment">% \SkillFeld[+8][Aergern]{&Auml;rgern}</span>
+<span class="cs">\def</span><span class="cs">\SkillFeld</span><span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleempty</span></span><span class="cs">\doSkillFeld</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doSkillFeld</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">#</span>3<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="brx">#</span>3
+	<span class="cs">\iffirstargument</span><span class="cs">\hfill</span> <span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="cs">\fi</span>
+	<span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span>
+	<span class="cs"><span class="systemcs">\doifelsenothing</span></span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span>
+		<span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span>
+	<span class="br">}</span><span class="br">{</span>
+		<span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+	<span class="br">}</span>
+	<span class="cs">\eTD</span><span class="cs">\eTR</span><span class="br">}</span>
+
+<span class="comment">% \SkillFeld[+8][Ueberleben]{&Uuml;berleben}{(Heimat)}</span>
+<span class="cs">\def</span><span class="cs">\SkillFeldHoch</span><span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleempty</span></span><span class="cs">\doSkillFeldHoch</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doSkillFeldHoch</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">#</span>3<span class="brx">#</span>4<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="brx">[</span>bottomframe<span class="brx">=</span>off<span class="brx">]</span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="brx">#</span>3 
+	<span class="cs">\iffirstargument</span><span class="cs">\hfill</span> <span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="cs">\fi</span>
+	<span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span>
+	<span class="cs"><span class="systemcs">\doifelsenothing</span></span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span>
+		<span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span>
+	<span class="br">}</span><span class="br">{</span>
+		<span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidFert<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span>
+	<span class="br">}</span>
+	<span class="cs">\eTD</span><span class="cs">\eTR</span>
+	<span class="cs"><span class="documentcs">\bTR</span></span><span class="brx">[</span>topframe<span class="brx">=</span>off<span class="brx">]</span>
+	<span class="cs"><span class="documentcs">\bTD</span></span> <span class="brx">#</span>4<span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs">\eTR</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\SkillFeldLeer</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs">\DivFeld</span><span class="br">{</span>Fertigkeit<span class="brx">#</span>1Name<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\DivFeld</span><span class="br">{</span>Fertigkeit<span class="brx">#</span>1Wert<span class="br">}</span><span class="br">{</span>MidFert<span class="br">}</span><span class="cs">\eTR</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupheader</span></span><span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>start, style<span class="brx">=</span><span class="br">{</span><span class="cs">\bfa</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>title<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="br">{</span><span class="cs">\ss</span><span class="cs">\bfd</span><span class="br">}</span>, align<span class="brx">=</span>center, page<span class="brx">=</span>no, before<span class="brx">=</span><span class="br">{</span><span class="br">}</span>, after<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span> <span class="comment">%\hw\bfd\sc</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subject<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="br">{</span><span class="cs">\ss</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcaptions</span></span><span class="brx">[</span>align<span class="brx">=</span>right, style<span class="brx">=</span><span class="br">{</span><span class="cs">\ss</span><span class="br">}</span>, location<span class="brx">=</span>top<span class="brx">]</span>
+<span class="cs">\setupcombinations</span><span class="brx">[</span>align<span class="brx">=</span>right, style<span class="brx">=</span><span class="br">{</span><span class="cs">\ss</span><span class="br">}</span>, location<span class="brx">=</span>high, width<span class="brx">=</span>fit<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>width<span class="brx">=</span>fit<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>row<span class="brx">]</span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>height<span class="brx">=</span>4.6mm<span class="brx">]</span>
+
+<span class="comment">% hw: plain=first / it=cond / sl=light / bd=exp</span>
+
+<span class="comment">%%% ENDE DEFINITIONEN</span>
+
+<span class="comment">%\title{Midgard Charakterblatt}</span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>midgard-kopf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span>,height<span class="brx">=</span>12mm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs">\hbox</span><span class="cs">\bgroup</span><span class="comment">%</span>
+<span class="comment">% LINKE SEITE</span>
+<span class="cs">\vbox</span><span class="cs">\bgroup</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>23mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>3,4<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>22mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>70.75mm<span class="brx">]</span>
+<span class="comment">%\setupTABLE[row][2][height=8mm]</span>
+<span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\bf</span> Name der Figur	<span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs">\bf</span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span>SpfName<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidWide2<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span>SpfName<span class="brx">]</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span> SpielerIn		<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Spieler<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Typ/Spezialisierung	<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Typ<span class="br">}</span><span class="br">{</span>MidWide2<span class="br">}</span>		<span class="cs"><span class="documentcs">\bTD</span></span> Grad			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Grad<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Heimat			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Heimat<span class="br">}</span><span class="br">{</span>MidWide2<span class="br">}</span>	<span class="cs"><span class="documentcs">\bTD</span></span> Geburtstag/Alter	<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Alter<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Glaube			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Glaube<span class="br">}</span><span class="br">{</span>MidWide2<span class="br">}</span>	<span class="cs"><span class="documentcs">\bTD</span></span> Gestalt			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Gestalt<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Stand			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Stand<span class="br">}</span><span class="br">{</span>MidWide2<span class="br">}</span>		<span class="cs"><span class="documentcs">\bTD</span></span> Gewicht/Gr&ouml;&szlig;e	<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Gewicht<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Berufe			<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>Berufe<span class="br">}</span><span class="br">{</span>MidWide2<span class="br">}</span>		<span class="cs"><span class="documentcs">\bTD</span></span> H&auml;ndigkeit		<span class="cs">\eTD</span><span class="cs">\DivFeld</span><span class="br">{</span>haendig<span class="br">}</span><span class="br">{</span>MidWide1<span class="br">}</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span> Merkmale		<span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>3<span class="brx">]</span><span class="cs"><span class="stylecs">\definefield</span></span><span class="brx">[</span>Merkmale<span class="brx">]</span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">[</span>MidWide3<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="cs"><span class="documentcs">\field</span></span><span class="brx">[</span>Merkmale<span class="brx">]</span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="comment">%\bTR\bTD Merkmale		\eTD	\bTD[nr=2,nc=3]	{\strut}\eTD\eTR</span>
+<span class="comment">%\bTR\bTD	{\strut}\eTD\eTR</span>
+<span class="cs">\eTABLE</span>
+<span class="cs"><span class="documentcs">\blank</span></span>
+<span class="comment">%</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>37mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>7mm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>3*2<span class="brx">]</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>St&auml;rke<span class="br">}</span><span class="br">{</span>St<span class="br">}</span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>Konstitution<span class="br">}</span><span class="br">{</span>Ko<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Aussehen<span class="br">}</span><span class="br">{</span>Au<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Selbstbeherrschung<span class="br">}</span><span class="br">{</span>Sb<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>G&ouml;ttliche Gnade<span class="br">}</span><span class="br">{</span>GG<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>Geschicklichkeit<span class="br">}</span><span class="br">{</span>Ge<span class="br">}</span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>Intelligenz<span class="br">}</span><span class="br">{</span>In<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>pers. Ausstrahlung<span class="br">}</span><span class="br">{</span>pA<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Willenskraft<span class="br">}</span><span class="br">{</span>Wk<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Schicksalsgunst<span class="br">}</span><span class="br">{</span>SG<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>Gewandtheit<span class="br">}</span><span class="br">{</span>Gw<span class="br">}</span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>Zaubertalent<span class="br">}</span><span class="br">{</span>Zt<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Bewegungsweite<span class="br">}</span><span class="br">{</span>B<span class="br">}</span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>AP-Maximum<span class="br">}</span><span class="br">{</span>APmax<span class="br">}</span>
+<span class="cs">\GrundwertFeld</span><span class="br">{</span>LP-Maximum<span class="br">}</span><span class="br">{</span>LPmax<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="comment">%\blank</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>2<span class="brx">]</span><span class="cs">\ss</span> Boni<span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Ausdauerbonus<span class="br">}</span><span class="br">{</span>AusB<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Schadensbonus<span class="br">}</span><span class="br">{</span>SchB<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Angriffsbonus<span class="br">}</span><span class="br">{</span>AnB<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Abwehrbonus<span class="br">}</span><span class="br">{</span>AbB<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Zauberbonus<span class="br">}</span><span class="br">{</span>ZauB<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Boni}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>2<span class="brx">]</span><span class="cs">\ss</span> Resistenzen<span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Geistesmagie<span class="br">}</span><span class="br">{</span>psyR<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>K&ouml;rpermagie<span class="br">}</span><span class="br">{</span>phsR<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Umgebungsmagie<span class="br">}</span><span class="br">{</span>phkR<span class="br">}</span>
+<span class="cs">\Leerzeile</span><span class="br">{</span>2<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Gifttoleranz<span class="br">}</span><span class="br">{</span>GiT<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Resistenzen}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>2<span class="brx">]</span><span class="cs">\ss</span> R&uuml;stung<span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>R&uuml;stungsklasse <span class="brx">(</span>--<span class="cs">\hfill</span> LP<span class="brx">)</span><span class="br">}</span><span class="br">{</span>RK<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Bewegungsweite i.R.<span class="br">}</span><span class="br">{</span>B iR<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Gewandtheit i.R.<span class="br">}</span><span class="br">{</span>Gw iR<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Angriffsbonus i.R.<span class="br">}</span><span class="br">{</span>AnB iR<span class="br">}</span>
+<span class="cs">\WertFeld</span><span class="br">{</span>Abwehrbonus i.R.<span class="br">}</span><span class="br">{</span>AbB iR<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{R&uuml;stung}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs">\egroup</span><span class="comment">% vbox</span>
+<span class="comment">% RECHTE SEITE</span>
+<span class="cs">\hfil</span><span class="comment">%</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>94mm<span class="brx">]</span> <span class="comment">%45mm</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>2,3,4,5,6,7,8<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>7mm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\bTABLE</span></span> <span class="comment">% Zauber</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="br">{</span><span class="cs">\ss</span> Zauber<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>AP<span class="br">}</span><span class="br">{</span>AP-Kosten<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span> Art <span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>Wz<span class="br">}</span><span class="br">{</span>Wirkungszeit<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>Zd<span class="br">}</span><span class="br">{</span>Zauberdauer<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>Wd<span class="br">}</span><span class="br">{</span>Wirkungsdauer<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>Wb<span class="br">}</span><span class="br">{</span>Wirkungsbereich<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="documentcs">\tooltip</span></span><span class="br">{</span>Rw<span class="br">}</span><span class="br">{</span>Reichweite<span class="br">}</span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>18<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>8<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="br">}</span><span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="brx">[</span>frame<span class="brx">=</span>off, align<span class="brx">=</span>low<span class="brx">]</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>8<span class="brx">]</span><span class="cs">\vfilll</span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\eTABLE</span><span class="comment">% Zauber</span>
+<span class="cs">\egroup</span><span class="comment">% hbox</span>
+
+<span class="cs">\vfilll</span>
+
+<span class="comment">% UNTEN</span>
+
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>25mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>2,3,4<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>5mm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>6*1<span class="brx">]</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="comment">%\dorecurse{8}{\bTR\bTD \strut \eTD	\bTD \strut \eTD	\bTD \strut \eTD\eTR}</span>
+<span class="comment">%\dorecurse{8}{\expandafter{\Sprache{\recurselevel}}}&nbsp;%%%%%%%%%%%%%%%%%%% Wie geht das??</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>3<span class="brx">]</span><span class="br">{</span><span class="cs">\ss</span> Sprachen<span class="br">}</span><span class="cs">\hfill</span><span class="br">{</span><span class="cs">\tfx</span> sprechen/schreiben<span class="br">}</span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\Sprache</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>2<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>3<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>4<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>5<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>6<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>7<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>8<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>9<span class="br">}</span>
+<span class="cs">\Sprache</span><span class="br">{</span>10<span class="br">}</span>
+<span class="comment">%\Leerzeile{3}</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>nc<span class="brx">=</span>3<span class="brx">]</span><span class="br">{</span><span class="cs">\ss</span> Sinne<span class="br">}</span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Sehen<span class="br">}</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="brx">[</span>Hoeren<span class="brx">]</span><span class="br">{</span>H&ouml;ren<span class="br">}</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Riechen<span class="br">}</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Schmecken<span class="br">}</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Tasten<span class="br">}</span>
+<span class="cs">\SinnFeld</span><span class="brx">[</span>+2<span class="brx">]</span><span class="brx">[</span>SechsterSinn<span class="brx">]</span><span class="br">{</span>6. Sinn<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{\tooltip{Sprachen}{sprechen/schreiben} \& Sinne}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+11<span class="brx">]</span><span class="brx">[</span>Abwehr<span class="brx">]</span><span class="br">{</span><span class="cs">\bf</span> Abwehr <span class="brx">(</span>+AbB<span class="brx">)</span><span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Akrobatik<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Balancieren<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Beredsamkeit<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Beschatten<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Erste Hilfe<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+4<span class="brx">]</span><span class="brx">[</span>Erzaehlen<span class="brx">]</span><span class="br">{</span>Erz&auml;hlen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Fallen entdecken<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+1<span class="brx">]</span><span class="br">{</span>Fallen stellen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Fallenmechanik<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Fangen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+1<span class="brx">]</span><span class="brx">[</span>Geheimmechanismen<span class="brx">]</span><span class="br">{</span>Geh.mech. &ouml;ffn.<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="brx">[</span>Gelaendelauf<span class="brx">]</span><span class="br">{</span>Gel&auml;ndelauf<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+5<span class="brx">]</span><span class="br">{</span>Kampftaktik<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Klettern<span class="br">}</span>
+<span class="cs">\SkillFeldHoch</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Landeskunde<span class="br">}</span><span class="br">{</span><span class="brx">(</span>Heimat<span class="brx">)</span><span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="brx">[</span>Menschenkenntnis<span class="brx">]</span><span class="br">{</span>Menschenkennt.<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Fertigkeiten}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0/+6<span class="brx">]</span><span class="br">{</span>Meucheln<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Naturkunde<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Pflanzenkunde<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+5<span class="brx">]</span><span class="br">{</span>Reiten<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Rudern<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Sagenkunde<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Schleichen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Schlitten fahren<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="brx">[</span>SchloesserOeffnen<span class="brx">]</span><span class="br">{</span>Schl&ouml;sser &ouml;ffnen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Schwimmen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+4<span class="brx">]</span><span class="br">{</span>Seilkunst<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+4<span class="brx">]</span><span class="br">{</span>Singen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Springen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Spuren lesen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Stehlen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Suchen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+8<span class="brx">]</span><span class="br">{</span>Tanzen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Tarnen<span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Fertigkeiten}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+9<span class="brx">]</span><span class="br">{</span>Tauchen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Tierkunde<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+Ko/10<span class="brx">]</span><span class="br">{</span>Trinken<span class="br">}</span>
+<span class="cs">\SkillFeldHoch</span><span class="brx">[</span>+6<span class="brx">]</span><span class="brx">[</span>Ueberleben<span class="brx">]</span><span class="br">{</span>&Uuml;berleben<span class="br">}</span><span class="br">{</span><span class="brx">(</span>Heimat<span class="brx">)</span><span class="br">}</span>
+<span class="comment">%\bTR[bottomframe=off]\bTD &Uuml;berleben\eTD\bTD +6\eTD\eTR</span>
+<span class="comment">%\bTR[topframe=off]\bTD (Heimat)\eTD\bTD\strut\eTD\eTR</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Verbergen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="brx">[</span>Verfuehren<span class="brx">]</span><span class="br">{</span>Verf&uuml;hren<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="brx">[</span>Verhoeren<span class="brx">]</span><span class="br">{</span>Verh&ouml;ren<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+5<span class="brx">]</span><span class="br">{</span>Verkleiden<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+3<span class="brx">]</span><span class="br">{</span>Wagen lenken<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+2<span class="brx">]</span><span class="br">{</span>Wahrnehmung<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+4<span class="brx">]</span><span class="br">{</span>Werfen<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+0<span class="brx">]</span><span class="br">{</span>Zauberkunde<span class="br">}</span>
+<span class="cs">\SkillFeld</span><span class="brx">[</span>+2<span class="brx">]</span><span class="brx">[</span>Zaubern<span class="brx">]</span><span class="br">{</span><span class="cs">\bf</span> Zaubern <span class="brx">(</span>+ZauB<span class="brx">)</span><span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>0<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>2<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>3<span class="br">}</span>
+<span class="comment">%\dorecurse{4}{\bTR\bTD\strut\eTD\bTD\strut\eTD\eTR}</span>
+<span class="comment">%\dorecurse{6}{\SkillFeld{?}}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Fertigkeiten}</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>4<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>5<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>6<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>7<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>8<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>9<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>10<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>11<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>12<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>13<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>14<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>15<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>16<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>17<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>18<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>19<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>20<span class="br">}</span>
+<span class="cs">\SkillFeldLeer</span><span class="br">{</span>21<span class="br">}</span>
+<span class="comment">%\dorecurse{18}{\bTR\bTD\strut\eTD\bTD\strut\eTD\eTR}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Fertigkeiten}</span>
+<span class="br">{</span><span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>column<span class="brx">]</span><span class="brx">[</span>3<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>10mm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\bTABLE</span></span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs">\ss</span> Waffenfertigkeit <span class="cs">\eTD</span>	<span class="cs"><span class="documentcs">\bTD</span></span> EW <span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="br">{</span><span class="cs">\tfx</span> Schaden<span class="br">}</span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span> Nah <span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs">\bf</span> Raufen<span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs">\eTR</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>16<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\bTR</span></span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs"><span class="documentcs">\bTD</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\eTD</span><span class="cs">\eTR</span><span class="br">}</span>
+<span class="cs">\eTABLE</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%{Waffenfertigkeiten}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>midgard-kopf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Aktuelles Abenteuer<span class="br">}</span>
+
+<span class="comment">%\startcolumns[n=2]</span>
+<span class="comment">%\showfields</span>
+<span class="comment">%\stopcolumns</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.171 seconds
+Real time usage: 0.455 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 58299/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4907-1!canonical and timestamp 20260109212425 and revision id 38834
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Midgard_PC_sheet">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

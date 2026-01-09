@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Fontfeaturefiles&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Fontfeaturefiles" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Fontfeaturefiles
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3340&diff=28722">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>(This page was written and tested under ConTeXt  ver: 2010.08.20 00:00 MKIV)
+</p>
+    <p>Recently there was the question how to modify a font at runtime.
+For OpenType fonts Khaled recalled an article he wrote in fontspec manual
+(section 11) about font feature files: you just load the feature file with featurefile=foo in your font features definition.
+</p>
+    <p>This is an example on how missing ligatures can be used:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>thetimes<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>mode<span class="brx">=</span>node,featurefile<span class="brx">=</span>times_fl.fea<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setups</span></span><span class="brx">[</span>font:fallback:serif<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>          <span class="brx">[</span>file:Times New Roman.ttf<span class="brx">]</span>            <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>      <span class="brx">[</span>file:Times New Roman Bold.ttf<span class="brx">]</span>       <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>    <span class="brx">[</span>file:Times New Roman Italic.ttf<span class="brx">]</span>     <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span><span class="brx">[</span>file:Times New Roman Bold Italic.ttf<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>TimesNR<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>TimesNR<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span>   <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>TheTimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>TheTimes<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span>   <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>TheTimes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>TheTimes, 10pt<span class="brx">]</span>
+ 
+<span class="cs"><span class="documentcs">\starttext</span></span>
+ 
+Hoffnung finden: fliegen
+ 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The feature file that is used "times_fl.fea" looks like this:
+</p>
+    <pre>lookup fligatures {
+  lookupflag 0;
+    sub \f \i by \fi;
+    sub \f \l by \fl;
+} fligatures;
+
+feature liga {
+  script DFLT;
+    language dflt;
+      lookup fligatures;
+  script latn;
+      language dflt;
+      lookup fligatures;
+} liga;
+</pre>
+    <p>This is another example showing how improved kerning can be added to the font via feature files:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>thetimes<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>mode<span class="brx">=</span>node,featurefile<span class="brx">=</span>times_kern.fea<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="brx">[</span>font:fallback:serif<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>          <span class="brx">[</span>file:Times New Roman.ttf<span class="brx">]</span>            <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>      <span class="brx">[</span>file:Times New Roman Bold.ttf<span class="brx">]</span>       <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>    <span class="brx">[</span>file:Times New Roman Italic.ttf<span class="brx">]</span>     <span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span><span class="brx">[</span>file:Times New Roman Bold Italic.ttf<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span>thetimes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+ 
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>TimesNR<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>TimesNR<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span>   <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+ 
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>TheTimes<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>TheTimes<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>TimesNR<span class="brx">]</span>   <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+ 
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>TheTimes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>TheTimes, 10pt<span class="brx">]</span>
+ 
+<span class="cs"><span class="documentcs">\starttext</span></span>
+ 
+&bdquo;W
+ 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The feature file that is used here "times_kern.fea" looks like this:
+</p>
+    <pre>lookup MyKerns {
+ lookupflag 0;
+    pos \quotedblbase \W -150;
+} MyKerns;
+
+feature kern {
+  script DFLT;
+    language dflt&nbsp;;
+    lookup MyKerns;
+  script latn;
+    language dflt&nbsp;;
+    lookup MyKerns;
+} kern;
+</pre>
+    <p><br>
+These font features are loaded in the font cache.
+</p>
+    <p>Thus, for experimenting and eg. changing the value "-150" one must clear the cache between two runs: mtxrun --script cache --erase
+</p>
+    <p>For example when running context minimal in Mac you just enter in Terminal:
+</p>
+    <pre>source /Users/YourName/context/tex/setuptex /Users/YourName/context/tex
+mtxrun --script cache --erase
+</pre>
+    <p><b>Update</b>
+</p>
+    <p>Today (1. Sept 2010.) Hans announced that with the next release this clearing isn't needed anymore: 
+</p>
+    <p>"when you change the file or the name (or remove it) the font will be recached".
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212414
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.037 seconds
+Real time usage: 0.109 seconds
+Preprocessor visited node count: 10/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7811/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3340-1!canonical and timestamp 20260109212414 and revision id 28722
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Fontfeaturefiles">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

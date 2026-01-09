@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Invoice 2&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Invoice_2" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Invoice 2
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3500&diff=38885">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../Sample_documents.html" title="Input and compilation/Sample documents">Sample documents</a> | <a class="new" href="../../index.php?title=Letter&action=edit&redlink=1" title="Letter (page does not exist)">Letter</a>
+</p>
+    <p>This is my invoice setup, it works with MkIV as of 2014-01.
+</p>
+    <p>It&rsquo;s an application of Wolfgang&rsquo;s letter module with a lot of tweaks that I could never think of on my own.
+</p>
+    <p>The code isn&rsquo;t pretty or modular or readily usable for you, but works for me and might get you over some hurds.
+</p>
+    <p>As you see, I need my invoices in Euros or Swiss Francs. And I need to charge some work by time and some by fixed amounts. If you need number of pieces etc., it should be easy to adapt.
+</p>
+    <p>Big thanks to Wolfgang and all the other helpful power users on NTG-ConTeXt!
+</p>
+    <h2>
+     <span class="mw-headline" id="Lua_functions">
+      Lua functions
+     </span>
+    </h2>
+    <p>File <code>invoicefunctions.tex</code>
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+
+userdata.invoice <span class="brx">=</span> <span class="br">{</span> amount <span class="brx">=</span> 0, hours <span class="brx">=</span> 0, perhour <span class="brx">=</span> 50, currency1 <span class="brx">=</span> "&euro;", currency2 <span class="brx">=</span> "SFr", exchangerate<span class="brx">=</span>1.22, items <span class="brx">=</span> <span class="br">{</span><span class="br">}</span> <span class="br">}</span>
+
+function userdata.RegisterTimeItem<span class="brx">(</span>text, hours<span class="brx">)</span>
+	if tex.systemmodes.trialtypesetting then return end
+	table.insert<span class="brx">(</span>userdata.invoice.items, <span class="br">{</span>text<span class="brx">=</span>text, hours<span class="brx">=</span>hours, amount<span class="brx">=</span>0<span class="br">}</span><span class="brx">)</span>
+	userdata.invoice.hours <span class="brx">=</span> userdata.invoice.hours + hours
+	userdata.invoice.amount <span class="brx">=</span> userdata.invoice.amount + hours * userdata.invoice.perhour
+end
+
+function userdata.RegisterAmountItem<span class="brx">(</span>text, amount<span class="brx">)</span>
+	if tex.systemmodes.trialtypesetting then return end
+	table.insert<span class="brx">(</span>userdata.invoice.items, <span class="br">{</span>text<span class="brx">=</span>text, hours<span class="brx">=</span>0, amount<span class="brx">=</span>amount<span class="br">}</span><span class="brx">)</span>
+	userdata.invoice.amount <span class="brx">=</span> userdata.invoice.amount + amount
+end
+
+function userdata.RegisterTextItem<span class="brx">(</span>text<span class="brx">)</span>
+	if tex.systemmodes.trialtypesetting then return end
+	table.insert<span class="brx">(</span>userdata.invoice.items, <span class="br">{</span>text<span class="brx">=</span>text, hours<span class="brx">=</span>0, amount<span class="brx">=</span>0<span class="br">}</span><span class="brx">)</span>
+end
+
+function userdata.numberformat<span class="brx">(</span>amount<span class="brx">)</span>
+	-- replace decimal point with comma <span class="brx">(</span><span class="brx">=</span> German format<span class="brx">)</span>
+	return string.gsub<span class="brx">(</span>string.format<span class="brx">(</span>"<span class="cs">\%</span>.2f", amount<span class="brx">)</span>, "<span class="comment">%.", ",")</span>
+end
+
+function userdata.InvoiceTimeLine<span class="brx">(</span>text, hours, printperhour<span class="brx">)</span>
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>hours<span class="brx">)</span> .. "<span class="cs">\\</span>,h"<span class="brx">)</span>
+	if printperhour then
+		context.NC<span class="brx">(</span>"&agrave; " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency1 .. "/h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>hours * userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency1<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceAmountLine<span class="brx">(</span>text, amount<span class="brx">)</span>
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>amount<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency1<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceTextLine<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceSumLine<span class="brx">(</span>text, printperhour<span class="brx">)</span>
+	context.HL<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span>"<span class="cs">\\</span>bf " .. text<span class="brx">)</span>
+	if userdata.invoice.hours &gt; 0 then
+		context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>userdata.invoice.hours<span class="brx">)</span> .. "<span class="cs">\\</span>,h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	if printperhour then
+		context.NC<span class="brx">(</span>"&agrave; " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency1 .. "/h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	context.NC<span class="brx">(</span>"<span class="cs">\\</span>bf " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.amount<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency1<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+	if userdata.invoice.currency1 ~<span class="brx">=</span> userdata.invoice.currency2 then
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+		context.NC<span class="brx">(</span>"<span class="brx">(</span>" .. userdata.numberformat<span class="brx">(</span>userdata.invoice.amount * userdata.invoice.exchangerate<span class="brx">)</span> .. "<span class="cs">\\</span>," .. userdata.invoice.currency2 .. "<span class="brx">)</span>"<span class="brx">)</span>
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+		context.NR<span class="brx">(</span><span class="brx">)</span>
+	end
+end
+
+function userdata.Invoice<span class="brx">(</span><span class="brx">)</span>
+	local amountsum, hoursum <span class="brx">=</span> 0,0
+	local printperhour
+	printperhour <span class="brx">=</span> <span class="brx">(</span>userdata.invoice.amount ~<span class="brx">=</span> <span class="brx">(</span>userdata.invoice.hours * userdata.invoice.perhour<span class="brx">)</span><span class="brx">)</span>
+	context.starttabulate<span class="brx">(</span><span class="br">{</span>"|lw<span class="brx">(</span>8cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>2cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>2cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>3cm<span class="brx">)</span>|"<span class="br">}</span><span class="brx">)</span>
+	for no, item in ipairs<span class="brx">(</span>userdata.invoice.items<span class="brx">)</span> do
+		if item.hours ~<span class="brx">=</span> 0 and item.amount <span class="brx">=</span><span class="brx">=</span> 0 then
+			userdata.InvoiceTimeLine<span class="brx">(</span>item.text, item.hours, printperhour<span class="brx">)</span>
+			hoursum <span class="brx">=</span> hoursum + item.hours
+			amountsum <span class="brx">=</span> amountsum + item.hours * userdata.invoice.perhour
+		elseif item.amount ~<span class="brx">=</span> 0 and item.hours <span class="brx">=</span><span class="brx">=</span> 0 then
+			userdata.InvoiceAmountLine<span class="brx">(</span>item.text, item.amount<span class="brx">)</span>
+			amountsum <span class="brx">=</span> amountsum + item.amount
+		else
+			userdata.InvoiceTextLine<span class="brx">(</span>item.text<span class="brx">)</span>
+		end
+	end
+	printperhour <span class="brx">=</span> <span class="brx">(</span>hoursum &gt; 0<span class="brx">)</span> and <span class="brx">(</span>amountsum <span class="brx">=</span><span class="brx">=</span> <span class="brx">(</span>hoursum * userdata.invoice.perhour<span class="brx">)</span><span class="brx">)</span>
+	--userdata.invoice.hours <span class="brx">=</span> hoursum
+	--userdata.invoice.amount <span class="brx">=</span> amountsum
+	userdata.InvoiceSumLine<span class="brx">(</span>"gesamt", printperhour<span class="brx">)</span>
+	context.stoptabulate<span class="brx">(</span><span class="brx">)</span>
+end
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Letter_setup">
+      Letter setup
+     </span>
+    </h2>
+    <p>File <code>invoicesetup.tex</code>
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>letter<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplanguage</span></span> <span class="brx">[</span>de<span class="brx">]</span> <span class="brx">[</span>date<span class="brx">=</span><span class="br">{</span>year, &ndash;, mm, &ndash;, dd<span class="br">}</span><span class="brx">]</span> <span class="comment">% ISO 8601 date</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>rm,10pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>3.0ex<span class="brx">]</span> <span class="comment">% default: 2.8ex</span>
+<span class="cs"><span class="stylecs">\setbreakpoints</span></span><span class="brx">[</span>compound<span class="brx">]</span> <span class="comment">% break at / and -</span>
+
+<span class="cs">\setupletteroptions</span>
+  <span class="brx">[</span>language<span class="brx">=</span>german, <span class="comment">% de</span>
+   bodyfont<span class="brx">=</span><span class="br">{</span>rm,10pt<span class="br">}</span>,
+   whitespace<span class="brx">=</span>1.5ex, <span class="comment">%3ex</span>
+   <span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>distance<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\MyCompany</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> MyCompany<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>logo<span class="brx">]</span><span class="brx">[</span>logo-head<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>schriftzug<span class="brx">]</span><span class="brx">[</span>logo-type<span class="brx">]</span>
+
+<span class="cs">\setupletter</span><span class="brx">[</span>
+	<span class="comment">% Sender address in envelope window</span>
+	backaddress<span class="brx">=</span><span class="br">{</span><span class="cs">\MyCompany</span>\ &middot; My Name &middot; Samplestr.\,11 &middot; CH-1234 Village<span class="br">}</span>
+<span class="brx">]</span>
+
+<span class="comment">% Define logo for the first page</span>
+<span class="cs">\defineletterelement</span><span class="brx">[</span>layer<span class="brx">]</span><span class="brx">[</span>head<span class="brx">]</span><span class="brx">[</span>fiee<span class="brx">]</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>background<span class="brx">=</span>logo,height<span class="brx">=</span>35mm,frame<span class="brx">=</span>off,align<span class="brx">=</span>right<span class="brx">]</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>schriftzug<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Other logo for subsequent (right) pages</span>
+<span class="cs">\defineletterelement</span><span class="brx">[</span>layer<span class="brx">]</span><span class="brx">[</span>nexthead<span class="brx">]</span><span class="brx">[</span>fiee<span class="brx">]</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>logo<span class="brx">]</span><span class="brx">[</span>height<span class="brx">=</span>2cm, width<span class="brx">=</span>6cm<span class="brx">]</span><span class="br">}</span>
+
+<span class="comment">% We put our logo in the head</span>
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>head,nexthead<span class="brx">]</span><span class="brx">[</span>
+	x<span class="brx">=</span>128mm,
+	y<span class="brx">=</span>15mm,
+	alternative<span class="brx">=</span>fiee,
+<span class="brx">]</span>
+
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>nexthead<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>right<span class="brx">]</span>
+
+<span class="cs">\setupletter</span><span class="brx">[</span>
+	name<span class="brx">=</span><span class="br">{</span>My Name<span class="br">}</span>,
+	street<span class="brx">=</span><span class="br">{</span>Samplestrasse 11<span class="br">}</span>,
+	city<span class="brx">=</span><span class="br">{</span>CH-1234 Village<span class="br">}</span>,
+	phone<span class="brx">=</span><span class="br">{</span>+41 11 23\,45\,67<span class="br">}</span>,
+	mobile<span class="brx">=</span><span class="br">{</span>+41 00 99\,88\,88\,88<span class="br">}</span>,
+	email<span class="brx">=</span><span class="br">{</span>me@mycompany.com<span class="br">}</span>,
+	web<span class="brx">=</span><span class="br">{</span>www.example.com<span class="br">}</span>,
+	skype<span class="brx">=</span><span class="br">{</span>example<span class="br">}</span>
+<span class="brx">]</span>
+
+<span class="comment">% center around the&nbsp;:</span>
+<span class="cs">\defineletterelement</span><span class="brx">[</span>layer<span class="brx">]</span><span class="brx">[</span>location<span class="brx">]</span><span class="brx">[</span>fiee<span class="brx">]</span><span class="comment">%</span>
+	<span class="br">{</span><span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>bodyfont<span class="brx">=</span>small<span class="brx">]</span>
+	<span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|Irw<span class="brx">(</span>5em<span class="brx">)</span>|Ip|<span class="brx">]</span>
+	<span class="cs">\NC</span> person 	<span class="cs">\NC</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>name<span class="br">}</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+	<span class="cs">\NC</span> address 		<span class="cs">\NC</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>street<span class="br">}</span><span class="cs">\\</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>city<span class="br">}</span><span class="cs">\NC</span><span class="cs">\NR</span>
+	<span class="cs">\NC</span> phone 	<span class="cs">\NC</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>phone<span class="br">}</span><span class="cs">\\</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>mobile<span class="br">}</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+	<span class="cs">\NC</span> internet 	<span class="cs">\NC</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>email<span class="br">}</span><span class="cs">\\</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>web<span class="br">}</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+	<span class="cs">\NC</span> skype 		<span class="cs">\NC</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>skype<span class="br">}</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs"><span class="documentcs">\stoptabulate</span></span><span class="br">}</span>
+
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>location<span class="brx">]</span>
+	<span class="brx">[</span>alternative<span class="brx">=</span>fiee,
+	x<span class="brx">=</span>152mm,
+	y<span class="brx">=</span>30mm
+	<span class="brx">]</span>
+
+<span class="comment">% Our own recipient setup without too much space before the address</span>
+<span class="cs">\defineletterelement</span><span class="brx">[</span>layer<span class="brx">]</span><span class="brx">[</span>address<span class="brx">]</span><span class="brx">[</span>fiee<span class="brx">]</span><span class="comment">%</span>
+	<span class="br">{</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>toname<span class="br">}</span><span class="cs">\\</span>
+	<span class="cs">\correspondenceparameter</span><span class="br">{</span>toaddress<span class="br">}</span>
+	<span class="cs">\par</span><span class="br">}</span>
+	
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>address<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>fiee<span class="brx">]</span>
+
+<span class="comment">% Subject and date on the same line, date below logo</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>letter:section:subject<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\bTABLE</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\bTR</span></span>
+      <span class="cs"><span class="documentcs">\bTD</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\dimexpr</span>169mm-<span class="cs">\backspace</span><span class="cs">\relax</span><span class="brx">]</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>subject<span class="br">}</span><span class="cs">\eTD</span>
+     <span class="cs"><span class="documentcs">\bTD</span></span><span class="br">{</span><span class="cs">\tf</span><span class="cs">\correspondenceparameter</span><span class="br">{</span>date<span class="br">}</span><span class="br">}</span><span class="cs">\eTD</span>
+    <span class="cs">\eTR</span>
+  <span class="cs">\eTABLE</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs">\setuplettersection</span><span class="brx">[</span>subject<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>setups<span class="brx">]</span>
+
+<span class="comment">% account information at the foot, below the logo</span>
+<span class="cs">\defineletterelement</span><span class="brx">[</span>layer<span class="brx">]</span><span class="brx">[</span>foot<span class="brx">]</span><span class="brx">[</span>fiee<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>bodyfont<span class="brx">=</span>small<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|Irw<span class="brx">(</span>39mm<span class="brx">)</span>|Ip|<span class="brx">]</span>
+		<span class="cs">\NC</span> accounts <span class="cs">\NC</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+		<span class="cs">\NC</span> account <span class="cs">\NC</span> 123\,456\,789<span class="cs">\\</span>Postbank, BLZ 360\,100\,00 <span class="cs">\NC</span><span class="cs">\NR</span>
+		<span class="cs">\NC</span> IBAN <span class="cs">\NC</span> DE00\,3601\,0000\,0123\,4567\,89 <span class="cs">\NC</span><span class="cs">\NR</span>
+		<span class="cs">\NC</span> BIC <span class="cs">\NC</span> PBNKDEFF <span class="cs">\NC</span><span class="cs">\NR</span>
+	<span class="cs"><span class="documentcs">\stoptabulate</span></span><span class="br">}</span>
+
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>foot<span class="brx">]</span><span class="brx">[</span>
+	preset<span class="brx">=</span>leftbottom,
+	x<span class="brx">=</span>127mm,
+	y<span class="brx">=</span>34mm,
+	alternative<span class="brx">=</span>fiee<span class="brx">]</span>
+
+<span class="comment">% switch off reference line</span>
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>reference<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+<span class="comment">% Move the text a bit up</span>
+<span class="cs">\setupletterlayout</span><span class="brx">[</span>firstpage<span class="brx">]</span><span class="brx">[</span>topspace<span class="brx">=</span>10cm<span class="brx">]</span>
+
+<span class="comment">% Adjust text start on subsequent pages</span>
+<span class="cs">\setupletterlayout</span><span class="brx">[</span>secondpage<span class="brx">]</span><span class="brx">[</span>topspace<span class="brx">=</span>3cm<span class="brx">]</span>
+
+<span class="comment">% Move marks to the paper rim (won't print on most printers)</span>
+<span class="cs">\setupletterlayer</span><span class="brx">[</span>topmark,botmark,cutmark<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>-2mm<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Invoice">
+      Invoice
+     </span>
+    </h2>
+    <p>File <code>invoice.tex</code>
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\input</span></span> invoicesetup.tex
+<span class="cs"><span class="documentcs">\input</span></span> invoicefunctions.tex
+
+<span class="cs">\setupletter</span><span class="brx">[</span>
+	<span class="comment">% Recipient</span>
+	toname<span class="brx">=</span><span class="br">{</span>Pragma ADE<span class="cs">\\</span>Mr.<span class="cs">\\</span>,Hans Hagen<span class="br">}</span>,toaddress<span class="brx">=</span><span class="br">{</span>Ridderstraat 27<span class="cs">\\</span>8061GH Hasselt NL<span class="br">}</span>,
+	<span class="comment">% here I keep commented all of my few customers</span>
+	subject<span class="brx">=</span><span class="br">{</span>Invoice No.\,99/2014<span class="br">}</span>
+	<span class="comment">%subject={Reminder on invoice No.\,1/2014}</span>
+<span class="brx">]</span>
+
+<span class="cs">\startletter</span>
+
+Special services in December 2013:
+
+<span class="br">{</span>
+<span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>distance<span class="brx">=</span>.25em<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+userdata.invoice.perhour <span class="brx">=</span> 111
+--userdata.invoice.currency1 <span class="brx">=</span> "SFr"
+
+userdata.RegisterTextItem<span class="brx">(</span>"Some project description"<span class="brx">)</span>
+
+userdata.RegisterAmountItem<span class="brx">(</span>"Data handling, flat-rate", 500<span class="brx">)</span>
+
+userdata.RegisterTimeItem<span class="brx">(</span>"Design of issue 1 of Some magazine", 42.5<span class="brx">)</span>
+
+userdata.Invoice<span class="brx">(</span><span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+<span class="br">}</span>
+
+Due on 1.\,1.<span class="cs">\2</span>014. Earlier is nicer.
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span>
+
+<span class="cs">\MyCompany</span>\ thanks for your order.
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span>
+Best regards,
+
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>signature<span class="brx">]</span>
+
+My Name
+
+<span class="cs">\stopletter</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.055 seconds
+Real time usage: 0.152 seconds
+Preprocessor visited node count: 24/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 24543/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3500-1!canonical and timestamp 20260109212424 and revision id 38885
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Invoice_2">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

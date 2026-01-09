@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Bibliography mkii&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Bibliography_mkii" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Bibliography mkii
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=780&diff=41523">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Please note that this information is relevant to mkii. If you are using mkiv, see <a href="References_notes_and_floats/Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">Bibliography</a>.
+</p>
+    <p>The <b>bib</b> module provides the <tt><a href="Command/cite.html" title="Command/cite">\cite</a></tt> and <tt><a class="new" href="index.php?title=Command/placepublications&action=edit&redlink=1.html" title="Command/placepublications (page does not exist)">\placepublications</a></tt> commands, in addition to some setup commands, for collecting and referencing bibliography. Single references can be supplied by special commands, or by using BibTeX databases.
+</p>
+    <p>As of <a class="new" href="index.php?title=Context_2005.01.13&action=edit&redlink=1" title="Context 2005.01.13 (page does not exist)">Context 2005.01.13</a>, this module is part of the standard distribution.  The current version is also on the
+<a class="extiw" href="http://modules.contextgarden.net/bib" title="modules:bib">modules:bib</a> page (Hans picks up the zip from that location as well, so the current version will always be in the modules part of the ConTeXt distribution).
+</p>
+    <p>The PDF manual can be found on the <a class="extiw" href="http://modules.contextgarden.net/bibman" title="modules:bibman"> bib module manual</a> page or in your ConTeXt installation.  For me (ConTeXt installed in my home directory), it's in <tt>~/texmf/doc/context/bib/bibmod-doc.pdf</tt>. <b>Read this manual, it is much more complete than this page!</b>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Example_of_use_with_bibtex">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Example of use with bibtex
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Changing_the_way_you_show_the_publication_list">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Changing the way you show the publication list
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Active_URLs">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Active URLs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Superscript_Citations">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Superscript Citations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Other_tips">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Other tips
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#What_can_I_do.2C_if_entries_are_not_shown.3F">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         What can I do, if entries are not shown?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Other_tips_and_links">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Other tips and links
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Example_of_use_with_bibtex">
+      Example of use with bibtex
+     </span>
+    </h2>
+    <p>Bibtex support is integrated in texexec you just have to set up the database name.
+</p>
+    <p>Assuming you have saved this bit of code as bibdemo.tex:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>bib<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>bibltx<span class="brx">]</span>
+<span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span>xampl<span class="brx">]</span>
+<span class="cs">\setuppublications</span><span class="brx">[</span>numbering<span class="brx">=</span>yes<span class="brx">]</span> <span class="comment">% Show reference numbers in the generated list.</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+As <span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>article-full<span class="brx">]</span> already indicated, bibtex is a <span class="cs"><span class="documentcs">\LaTeX</span></span>-centric program.
+<span class="cs">\completepublications</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Then you just have to run the following command:
+</p>
+    <pre>texexec bibdemo
+</pre>
+    <p>To get the typeset result. xampl.bib is a bibtex file example coming with the bibtex distribution (it should be on your harddisk somewhere already:  on my teTeX 3.0 system, <tt>/usr/share/texmf-tetex/bibtex/bib/base/xampl.bib</tt> is the location), in which the <tt>article-full</tt> key is referred.
+</p>
+    <p>The <code>\usemodule[bibltx]</code> line is needed because <tt>xampl.bib</tt> uses LaTeX commands and defines them using LaTeX syntax.  The <tt>bibltx</tt> module allows ConTeXt to understand some such constructions (which is enough for it to work with <tt>xampl.bib</tt>).
+</p>
+    <p>Note: Since Bibtex is added to the context core, no external module is necessary. It is sufficient to type for example (minimal):
+</p>
+    <pre class="tex"><span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span>bib<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\completepublications</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Changing_the_way_you_show_the_publication_list">
+      Changing the way you show the publication list
+     </span>
+    </h2>
+    <p>If you use bibtex and you want to change the way you show the publication list you might want to look at the following example, it will change the publication list showing the surname in uppercase. 
+</p>
+    <p>(Credits go to Taco Hoekwater)
+</p>
+    <pre class="tex"><span class="comment">%D Copied from \invertedshortauthor, with an extra \uppercase</span>
+<span class="comment">%D \type{#1} = firstnames</span>
+<span class="comment">%D \type{#2} = von</span>
+<span class="comment">%D \type{#3} = surname</span>
+<span class="comment">%D \type{#4} = inits</span>
+<span class="comment">%D \type{#5} = junior</span>
+
+<span class="cs"><span class="systemcs">\unprotect</span></span><span class="cs">\def</span><span class="cs">\UCauthor</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="brx">#</span>4<span class="brx">#</span>5<span class="comment">%</span>
+   <span class="br">{</span><span class="cs">\bibdoif</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span><span class="brx">#</span>2<span class="cs">\bibalternative</span><span class="protectedcs">\c!vonsep</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\uppercase</span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span><span class="cs">\bibalternative</span><span class="protectedcs">\c!surnamesep</span>    
+    <span class="cs">\bibdoif</span><span class="br">{</span><span class="brx">#</span>5<span class="br">}</span><span class="br">{</span><span class="brx">#</span>5<span class="cs">\bibalternative</span><span class="protectedcs">\c!juniorsep</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\bibdoif</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="br">{</span><span class="brx">#</span>4<span class="cs">\unskip</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\protect</span>
+</pre>
+    <p>After that, you can do:
+</p>
+    <pre class="tex"><span class="cs">\setuppublicationlist</span>
+    <span class="brx">[</span>artauthor<span class="brx">=</span><span class="cs">\UCauthor</span>,
+     editor<span class="brx">=</span><span class="cs">\UCauthor</span>,
+     author<span class="brx">=</span><span class="cs">\UCauthor</span><span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Active_URLs">
+      Active URLs
+     </span>
+    </h2>
+    <p>If you want active (clickable) URLs in the references, you need to do a few steps.  [Thanks to Tobias Burnus for the working minimal example, which I've modified only slightly.]
+</p>
+    <ul>
+     <li>
+      Use a patched
+      <code>t-bib.tex</code>
+      (until the next ConTeXt release sometime in May 2007 that will contain the patch).
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Use the
+      <code>url</code>
+      field in the
+      <code>bibtex</code>
+      entries.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Setup a publication layout (for those types of
+      <code>bibtex</code>
+      entries) that knows how to include a URL.
+     </li>
+    </ul>
+    <p>The minimal example is in <a href="File:Biburls.zip" title="File:Biburls.zip">File:Biburls.zip</a>, which includes the patched <code>t-bib.tex</code>.  But here are the details of steps 2 and 3.  A <code>bibtex</code> <code>book</code> entry using the <code>url</code> field looks like:
+</p>
+    <pre class="tex">@Book<span class="br">{</span>HPL2000,
+  editor <span class="brx">=</span>	 <span class="br">{</span>John D. Barnsford and Ann L. Brown and Rodney R. Cocking<span class="br">}</span>,
+  title <span class="brx">=</span> 	 <span class="br">{</span><span class="br">{</span>How people learn: Brain, mind, experience, and school<span class="br">}</span><span class="br">}</span>,
+  publisher <span class="brx">=</span> 	 <span class="br">{</span>National Academy Press<span class="br">}</span>,
+  year <span class="brx">=</span> 	 2000,
+  address <span class="brx">=</span>	 <span class="br">{</span>Washington, DC<span class="br">}</span>,
+  edition <span class="brx">=</span>	 <span class="br">{</span>expanded<span class="br">}</span>,
+  url <span class="brx">=</span>		 <span class="br">{</span>http://www.nap.edu/<span class="br">}</span>
+<span class="br">}</span>
+</pre>
+    <p>The modified <code>\setuppublicationlayout</code>, which goes into an environment file or in the preamble of the <code>.tex</code> file, includes lines to use the <code>url</code> field.  Since I use the <code>num</code> style for the publication list, with <code>\setuppublications[alternative=num]</code>, I take the <code>book</code> layout from the <code>bibl-num.tex</code> source file and modify it by adding two lines:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+<span class="comment">% copied from bibl-num.tex and added</span>
+<span class="comment">% \inserturl and \insertdoi</span>
+<span class="cs">\setuppublicationlayout</span><span class="brx">[</span>book<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+   <span class="cs">\insertauthors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span>. <span class="br">}</span><span class="br">{</span><span class="cs">\inserteditors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span>, editor<span class="comment">%</span>
+                         <span class="cs">\ifnum</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>editor@num<span class="br">}</span>&gt; 1 s<span class="cs">\fi</span>.<span class="comment">%</span>
+                             \ <span class="cs">\global</span><span class="cs">\editedbooktrue</span> 
+                     <span class="br">}</span><span class="br">{</span><span class="cs">\insertthekey</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span>. <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\inserttitle</span>
+        <span class="br">{</span><span class="cs">\bgroup</span><span class="cs">\it</span> <span class="br">}</span><span class="comment">%</span>
+        <span class="br">{</span>\/<span class="cs">\egroup</span> 
+         <span class="cs">\ifeditedbook</span>.<span class="comment">%</span>
+           <span class="cs">\global</span><span class="cs">\editedbookfalse</span>
+           <span class="cs">\insertvolume</span>
+                <span class="br">{</span> Number~<span class="br">}</span><span class="comment">%</span>
+                <span class="br">{</span><span class="cs">\insertseries</span>
+                    <span class="br">{</span> in~<span class="cs">\bgroup</span><span class="br">}</span><span class="comment">%</span>
+                    <span class="br">{</span><span class="cs">\egroup</span>. <span class="br">}</span><span class="comment">%</span>
+                    <span class="br">{</span><span class="cs">\insertcrossref</span><span class="br">{</span> in~<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>. <span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+                <span class="br">{</span><span class="cs">\insertseries</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span><span class="br">}</span> <span class="br">}</span><span class="comment">%</span>
+        <span class="cs">\else</span>
+       <span class="cs">\insertcrossref</span>
+        <span class="br">{</span><span class="cs">\insertchap</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+         <span class="cs"><span class="documentcs">\insertpages</span></span><span class="br">{</span>, pages <span class="br">}</span><span class="br">{</span>. <span class="br">}</span><span class="br">{</span>. <span class="br">}</span><span class="comment">%</span>
+         <span class="cs">\insertvolume</span><span class="br">{</span>Volume~<span class="br">}</span><span class="br">{</span> of~<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+         <span class="br">}</span><span class="comment">%</span>
+        <span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+        <span class="br">{</span><span class="cs">\insertvolume</span>
+                   <span class="br">{</span>, volume~<span class="br">}</span><span class="comment">%</span>
+                   <span class="br">{</span><span class="cs">\insertseries</span>
+                      <span class="br">{</span> of~<span class="cs">\bgroup</span><span class="cs">\it</span><span class="br">}</span><span class="comment">%</span>
+                      <span class="br">{</span><span class="cs">\egroup</span><span class="br">}</span>
+                      <span class="br">{</span><span class="br">}</span><span class="br">}</span>
+                   <span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+                   <span class="cs">\insertchap</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+                   <span class="cs"><span class="documentcs">\insertpages</span></span><span class="br">{</span>, pages <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="comment">%</span>
+                <span class="br">}</span><span class="comment">%</span>
+        <span class="cs">\fi</span><span class="br">}</span><span class="comment">%</span>
+        <span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\insertpublisher</span>
+    <span class="br">{</span> <span class="br">}</span><span class="comment">%</span>
+    <span class="br">{</span><span class="cs">\insertedition</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span> edition<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+     <span class="cs">\insertpubyear</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="br">{</span><span class="cs">\insertedition</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span> edition<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+     <span class="cs">\insertpubyear</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="documentcs">\insertpages</span></span><span class="br">{</span> <span class="br">}</span><span class="br">{</span>p.<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\insertdoi</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%added</span>
+   <span class="cs">\insertbiburl</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%added</span>
+   <span class="cs">\insertnote</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+<span class="cs">\protect</span>
+</pre>
+    <p>When running 'texexec', check the terminal output (or logfile) to ensure that texexec finds the modified t-bib.tex (which I have been keeping in the current directory) rather than the system-supplied t-bib.tex.  Once the patched t-bib.tex becomes the official release (Taco says sometime in May 2007), that step won't be necessary.
+</p>
+    <h2>
+     <span class="mw-headline" id="Superscript_Citations">
+      Superscript Citations
+     </span>
+    </h2>
+    <p>Cross-referenced citations can be raised in the text using the <tt><a class="new" href="index.php?title=Command/raisebox&action=edit&redlink=1.html" title="Command/raisebox (page does not exist)">\raisebox</a></tt> command:
+</p>
+    <pre> % Superscript citation cross-references.
+ \setupcite[num][
+   left=\raisebox{1ex}\hbox\bgroup\tfxx,
+   right=\egroup,
+ ]
+</pre>
+    <h2>
+     <span class="mw-headline" id="Other_tips">
+      Other tips
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="index.php?title=Command/placepublications&action=edit&redlink=1.html" title="Command/placepublications (page does not exist)">
+        \placepublications
+       </a>
+      </tt>
+      and
+      <tt>
+       <a class="new" href="index.php?title=Command/completepublications&action=edit&redlink=1.html" title="Command/completepublications (page does not exist)">
+        \completepublications
+       </a>
+      </tt>
+      default to producing a publication list for the citations that are local to the current sectioning level. If you find that your reference list is empty even though the citations look fine, you will probably need to add an option to the list command, like so:
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\placepublications</span><span class="brx">[</span>criterium<span class="brx">=</span>all<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      To refer directly to a reference number (called inline or online cite), you can do
+      <tt>
+       \cite[left=,right=][myRef]
+      </tt>
+      or simply define
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\onlinecite</span><span class="br">{</span><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>left<span class="brx">=</span>,right<span class="brx">=</span><span class="brx">]</span><span class="br">}</span>
+
+<span class="cs">\onlinecite</span><span class="brx">[</span>myRef<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      To add further information to a reference, such as a page number within a book, do
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>extras<span class="brx">=</span><span class="br">{</span>, page 275<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>your-book-reference<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      Bibtex supports mnemonics for months, for example
+     </li>
+    </ul>
+    <pre> month=jan,
+ month=feb,
+</pre>
+    <p>etc. This allows the style file to choose how to display months. By default, the bib module does not do any conversion of the months. This causes the months to turn up as digits. If you want months to come in words add
+</p>
+    <pre class="tex"><span class="cs">\setuppublications</span> <span class="brx">[</span>monthconversion<span class="brx">=</span>month<span class="brx">]</span> <span class="comment">%or month:mnem</span>
+</pre>
+    <ul>
+     <li>
+      Even though Bibtex is not encoding-aware at all, it does allows special (8-bit) characters. So there is no need for ugly constructs like \"a (for &auml;) or \'e (for &eacute;). The one exception is within author family names, because those are handled specially, both for sorting and for generating so-called 'short tags'. For the same reasons, one must also avoid using non-ascii characters in the bibtex citation reference labels.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Bibliography items whose title ends in a &lsquo;?&rsquo; (question mark, interrogation mark) can cause problems. See
+      <a href="Question_marks_in_bibliography_entries.html" title="Question marks in bibliography entries">
+       Question marks in bibliography entries
+      </a>
+      for details of how to work around this.
+     </li>
+    </ul>
+    <h2>
+     <span id="What_can_I_do,_if_entries_are_not_shown?">
+     </span>
+     <span class="mw-headline" id="What_can_I_do.2C_if_entries_are_not_shown.3F">
+      What can I do, if entries are not shown?
+     </span>
+    </h2>
+    <p>Check if a <code>jobname.bbl</code> - file is generated. If it is empty, try manually running
+</p>
+    <pre> bibtex &lt;filename&gt;
+</pre>
+    <p>In case of an error message like <code>I couldn't open style file cont-no.bst</code>, you can try
+</p>
+    <pre> mktexlsr
+</pre>
+    <p>in root terminal. Bibtex uses LS-R to find these files.
+</p>
+    <h2>
+     <span class="mw-headline" id="Other_tips_and_links">
+      Other tips and links
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="References_notes_and_floats/Simple_bibliography.html" title="References notes and floats/Simple bibliography">
+       Simple bibliography
+      </a>
+      or "simplebib": A simple bibliography module without any database (2012)
+     </li>
+     <li>
+      <a href="References_notes_and_floats/Sample_bib.html" title="References notes and floats/Sample bib">
+       sample bib file
+      </a>
+      (2010, Old Content)
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109124545
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.047 seconds
+Real time usage: 0.298 seconds
+Preprocessor visited node count: 143/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 494/2097152 bytes
+Template argument size: 132/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13095/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  123.981      1 -total
+ 13.76%   17.064      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:780-1!canonical and timestamp 20260109124545 and revision id 41523
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Bibliography_mkii">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

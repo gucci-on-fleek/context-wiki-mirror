@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Create barcodes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Create_barcodes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Create barcodes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6435&diff=41380">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Graphics_and_media.html" title="Graphics and media">Graphics and media</a>
+</p>
+    <p>How to create barcodes from within ConTeXt (MkIV/LMTX)?
+</p>
+    <h2>
+     <span class="mw-headline" id="Zint_module">
+      Zint module
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Download
+      <code>zint</code>
+      from
+      <a class="external free" href="https://www.zint.org.uk" rel="nofollow">
+       https://www.zint.org.uk
+      </a>
+      (Windows, Linux) or install it with
+      <a class="external text" href="https://brew.sh" rel="nofollow">
+       Homebrew
+      </a>
+      or
+      <a class="external text" href="https://www.macports.org/install.php" rel="nofollow">
+       MacPorts
+      </a>
+      (MacOS).
+     </li>
+     <li>
+      <b>
+       MkIV
+      </b>
+      : The
+      <code>zint</code>
+      executable must be in your
+      <code>PATH</code>
+      .
+     </li>
+     <li>
+      <b>
+       LMTX
+      </b>
+      : LuaMetaTeX uses the library. On Windows, that&rsquo;s
+      <code>libzint.dll</code>
+      , on Linux and MacOS
+      <code>libzint.so</code>
+      (on MacOS the actual file name is
+      <code>libzint.dylib</code>
+      , but LuaMetaTeX expects
+      <code>.so</code>
+      ).
+      <ul>
+       <li>
+        Find that file, it should be in
+        <code>/usr/local/lib</code>
+        (Linux, Homebrew) or
+        <code>/opt/local/lib</code>
+        (MacPorts).
+       </li>
+       <li>
+        Create the path
+        <code>$TEXROOT/tex/texmf-$ARCH/bin/lib/luametatex/zint</code>
+        .
+       </li>
+       <li>
+        Copy or symlink the library into it (on MacOS remember naming it
+        <code>libzint.so</code>
+        ).
+       </li>
+       <li>
+        Run
+        <code>mtxrun --generate</code>
+        to update the file database.
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>zint<span class="brx">]</span>
+<span class="cs">\barcode</span><span class="brx">[</span>alternative<span class="brx">=</span>isbnx, text<span class="brx">=</span>9783865419026, width<span class="brx">=</span>4cm<span class="brx">]</span>
+<span class="cs">\barcode</span><span class="brx">[</span>alternative<span class="brx">=</span>qrcode, text<span class="brx">=</span><span class="br">{</span>https://wiki.contextgarden.net<span class="br">}</span>, width<span class="brx">=</span>3cm<span class="brx">]</span>
+</pre>
+    <p>Zint can produce about 40 different code types (&ldquo;alternatives&ldquo;). Try the <a class="external text" href="https://www.zint.org.uk/manual/chapter/4" rel="nofollow">name</a> (but lowercase with spaces) or look into the <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/libs-imp-zint.lua" rel="nofollow">source</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Barcodes_module">
+      Barcodes module
+     </span>
+    </h2>
+    <p>The old module uses PStricks and is deprecated. (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/m-barcodes.mkiv" rel="nofollow">Source</a>)
+</p>
+    <h2>
+     <span class="mw-headline" id="barcode.lua">
+      barcode.lua
+     </span>
+    </h2>
+    <p>In 2012, <a href="../../User:Patrick_Gundlach.html" title="User:Patrick Gundlach">Patrick</a> published a small LuaTeX library on <a class="external text" href="https://tex.stackexchange.com/questions/50707/how-to-generate-ean-barcodes-with-tikz-or-metapost#50751" rel="nofollow">Stack Exchange</a>. It can only create EAN codes, but it has no dependencies and doesn&rsquo;t even use MetaPost.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\loadluafile</span></span><span class="brx">[</span>barcode<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\luabarcode</span><span class="br">{</span><span class="cs">\directlua</span><span class="br">{</span>generate_barcode_lua<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\luabarcode</span><span class="br">{</span>9783865419026<span class="br">}</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.027 seconds
+Real time usage: 0.064 seconds
+Preprocessor visited node count: 34/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 160/2097152 bytes
+Template argument size: 44/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1263/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   13.243      1 -total
+ 98.51%   13.046      2 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6435-1!canonical and timestamp 20260109212416 and revision id 41380
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Create_barcodes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

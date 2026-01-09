@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Flexi Face&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Flexi_Face" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Flexi Face
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=732&diff=30324">2020-08-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>FlexiFace is a system I've been playing with for a few months on and off. Basically, it's to get around the difficulty of creating typefaces for every combination of fonts. It combines typescripts based on just one parameter&mdash;x-height&mdash;because other parameters (e.g., italic slant, color/weight) are really hard to quantify, and are best left to the typographer's artistry.
+</p>
+    <p>Currently, I normalise all fonts to match with Computer Modern Roman's x-height, which is 5.16667 points for a font size of 12 pt. Seeing that that was a little small, I implemented a variation for larger-eyed fonts, where all fonts are normalised around an x-height of 6.0 pt for the same body font size. Following me yet? How about this:
+</p>
+    <dl>
+     <dd>
+      When you use
+      <tt>
+       [[Command/setupbodyfont[flex]|\setupbodyfont[flex]]]
+      </tt>
+      , you get the typescripts you called previously, accessible as
+      <tt>
+       rm
+      </tt>
+      ,
+      <tt>
+       ss
+      </tt>
+      , etc. (as appropriate), all relatively scaled so that their x-height matches up with that of CMR.
+     </dd>
+    </dl>
+    <p>Okay then, how about an example. Given the following in a typescript that gets loaded:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.83,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span> 
+</pre>
+    <p>You can use FlexiFace with the following in your source file:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>palatino,helvetica<span class="brx">]</span><span class="brx">[</span>texnansi<span class="brx">]</span><span class="comment">% or ec or 8r</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>flex,12pt,rm<span class="brx">]</span>
+</pre>
+    <p>...and you get Palatino (serif and math) with Helvetica, both scaled to a compatible x-height. That seems more complex than necessary, given a one-time use, but the power behind FlexiFace lies in the endless combinations, and that it's embedded in the natural <tt><a href="Command/usetypescript.html" title="Command/usetypescript">\usetypescript</a></tt> calls. Once it's set up, you only need to worry about calling one typeface/bodyfont.
+</p>
+    <p>Some side-effects to watch out for:
+</p>
+    <ul>
+     <li>
+      The typeface doesn't make
+      <tt>
+       rm
+      </tt>
+      the default, so watch out. It's best to put 'rm' (or your choice) into the
+      <tt>
+       <a href="Command/setupbodyfont.html" title="Command/setupbodyfont">
+        \setupbodyfont
+       </a>
+      </tt>
+      call, as above. (Hans points out that
+      <tt>
+       [[Command/{{{1}}}|\{{{1}}}]]
+      </tt>
+      is just as effective, and it's probably better in a local config file.)
+     </li>
+     <li>
+      An x-height to match CMR is a bit small for most fonts&mdash;and it can distort the actual size of the font&mdash;so either be aware of this global rescaling (e.g., the &ldquo;12pt&rdquo; Palatino above actually comes out at 10.92pt after scaling) or use the
+      <tt>
+       flex2
+      </tt>
+      alternative.
+     </li>
+     <li>
+      This system depends on a &ldquo;correct&rdquo; ConTeXt font installation&mdash;it doesn't manage any magic if you haven't run TeXfont or use the berry typescripts.
+     </li>
+    </ul>
+    <p>The below typescript includes most of the TeXLive fonts supported in ConTeXt's distribution, and the <a class="external text" href="http://www.ramm.ch/fiee/texnique/?menu=0-1-4" rel="nofollow">type-microsoft and type-bitstream-vera</a> provided by <a href="User:Hraban.html" title="User:Hraban">Hraban</a>. I've kept some of my local extensions just in case they're useful to others as examples.
+</p>
+    <p>Here's my current (May/June 2004) <a class="external text" href="http://homepage.mac.com/atl/tex/type-flex.tex" rel="nofollow">type-flex</a>:
+</p>
+    <small>
+     <pre class="tex"><span class="comment">% Flexible typefaces</span>
+<span class="comment">% 2004.04.18 Adam Lindsay</span>
+<span class="comment">% All flex typefaces are normalised to match with CMR 12pt's x-height: 5.1666667pt</span>
+<span class="comment">% This may be too low.</span>
+<span class="comment">% for this reason, I introduced flex2, where fonts are scaled to an x-height of 6.0pt (with a bodyfont of 12pt)</span>
+<span class="comment">% This may be too high</span>
+
+<span class="comment">% default TeXLive fonts</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.057,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.057,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>palatinoserif<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.057,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>palatinomath<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.91,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>palatino<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.057,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.83,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.967,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>courier<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>courier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>courier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>schoolbook<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>schoolbook<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.896,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>schoolbook<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.04,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.937,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.088,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span>times<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.96<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span>times<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.115<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>timesserif<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.937,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.088,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>timesmath<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span>times<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.96<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span>times<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.115<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>charter<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>charter<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.8850,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>charter<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.028,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>bookman<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>bookman<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.879,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>bookman<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.02,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>antykwa-torunska<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,pl0,pl1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>antykwa-torunska<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.845,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>antykwa-torunska<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.98,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>antykwa-poltawskiego<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,pl0,pl1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>antykwa-poltawskiego<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.969,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>antykwa-poltawskiego<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.125,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>cm-mono<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>computer-modern<span class="brx">]</span><span class="brx">[</span>computer-modern<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>computer-modern<span class="brx">]</span><span class="brx">[</span>computer-modern<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>euler<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>euler<span class="brx">]</span><span class="brx">[</span>euler<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.95<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>euler<span class="brx">]</span><span class="brx">[</span>euler<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.09,encoding<span class="brx">=</span>math<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>concrete<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default,pl0<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr10<span class="brx">]</span> <span class="brx">[</span>pcr10<span class="brx">]</span><span class="comment">% [encoding=pl0]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccti10<span class="brx">]</span> <span class="brx">[</span>pcti10<span class="brx">]</span> <span class="comment">%[encoding=pl0]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccsl10<span class="brx">]</span> <span class="brx">[</span>pcsl10<span class="brx">]</span> <span class="comment">%[encoding=pl0]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>cccsc10<span class="brx">]</span> <span class="brx">[</span>pccsc10<span class="brx">]</span><span class="comment">% [encoding=pl0]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr9<span class="brx">]</span><span class="brx">[</span>pcr9<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr8<span class="brx">]</span><span class="brx">[</span>pcr8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr7<span class="brx">]</span><span class="brx">[</span>pcr7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr6<span class="brx">]</span><span class="brx">[</span>pcr6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>ccr5<span class="brx">]</span><span class="brx">[</span>pcr5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>concrete<span class="brx">]</span><span class="brx">[</span>concrete<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.939,encoding<span class="brx">=</span>pl0<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>concrete<span class="brx">]</span><span class="brx">[</span>concrete<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.091,encoding<span class="brx">=</span>pl0<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>simple<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>simple<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>simple<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>latin-modern<span class="brx">]</span><span class="brx">[</span>default,texnansi,ec,8r<span class="brx">]</span> <span class="comment">% modern,modern-base are also defined, but not called properly</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>ss<span class="brx">]</span> <span class="brx">[</span>sans<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>tt<span class="brx">]</span> <span class="brx">[</span>mono<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>ss<span class="brx">]</span> <span class="brx">[</span>sans<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>tt<span class="brx">]</span> <span class="brx">[</span>mono<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>flex2<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span> <span class="brx">[</span>computer-modern<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% TeXLive, but not normally installed:</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>avantgarde<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>avantgarde<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.80,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>avantgarde<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.92,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>utopia<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>utopia<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.882,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>utopia<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.025,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>fourier<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs">\loadmapfile</span><span class="brx">[</span>fourier<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>fourier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.945,encoding<span class="brx">=</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>fourier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.097,encoding<span class="brx">=</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% atl local: type-loc</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>chaparral,chaparrallt<span class="brx">]</span><span class="brx">[</span>texnansi<span class="brx">]</span>   <span class="comment">%,ec,8r,default]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span>texnansi,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span>texnansi,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>gillsans,gillsanslt<span class="brx">]</span><span class="brx">[</span>texnansi<span class="brx">]</span>  <span class="comment">% ,ec,8r,default]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.94,encoding<span class="brx">=</span>texnansi,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptone</span></span><span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.092,encoding<span class="brx">=</span>texnansi,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>eureka<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>eureka<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.06,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>eureka<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.243,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% fiee: type-bitstream-vera</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>vera,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>vera,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>verasans<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>veramono<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>vera<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>veraserif<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>vera,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.821,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>vera,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.953,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+
+<span class="comment">%% fiee: type-microsoft</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>mstimes<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>mstimes<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.977,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>mstimes<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.135,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>georgia<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>georgia<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.916,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>georgia<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.064,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>arial<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>arial<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.862,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>arial<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>trebuchet<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>trebuchet<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.85,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>trebuchet<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.99,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>verdana<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>verdana<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.804,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>verdana<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.938,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>mscourier<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>mscourier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.036,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>mscourier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.21,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>andale<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>andale,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.843,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>andale,fallback<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.989,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>comic<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>hw<span class="brx">]</span><span class="brx">[</span>handwriting<span class="brx">]</span><span class="brx">[</span>comic<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.845,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>hw<span class="brx">]</span><span class="brx">[</span>handwriting<span class="brx">]</span><span class="brx">[</span>comic<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+
+
+<span class="comment">% for PDF built-in fonts:</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>adobekb<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.957,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.823,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>courier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.111,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>helvetica<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.956,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>courier<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.1612,encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% measurements made using the java Lucida on MacOSX:</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>texnansi,ec,8r,default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.803<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.803<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.803<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.932<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.932<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>flex2<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>lucida<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>0.932<span class="brx">]</span><span class="comment">%,encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs">\endinput</span>
+</pre>
+    </small>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212414
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.137 seconds
+Real time usage: 0.306 seconds
+Preprocessor visited node count: 50/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 392/2097152 bytes
+Template argument size: 90/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 69224/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   19.986      1 -total
+ 38.74%    7.742      4 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:732-1!canonical and timestamp 20260109212414 and revision id 30324
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Flexi_Face">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

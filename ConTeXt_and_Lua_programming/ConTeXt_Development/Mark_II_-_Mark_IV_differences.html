@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/ConTeXt Development/Mark II - Mark IV differences&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_II_-_Mark_IV_differences" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/ConTeXt Development/Mark II - Mark IV differences
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2749&diff=41048">2025-12-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>In <a href="Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">Mark IV</a>, much has changed. Most of the changes are not noticeable at the source document level, but there are in fact a few important differences. This page attempts to list the intentional as well as the unavoidable incompatibilities between Mark IV and Mark II (but not bugs). 
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Command_line">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Command line
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Parameter_processing">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Parameter processing
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Paragraph_formatting">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Paragraph formatting
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Actual_font_usage">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Actual font usage
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Interword_spacing">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Interword spacing
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Line_spacing">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Line spacing
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Languages_and_Regimes">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Languages and Regimes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Fonts_and_Typescripts">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Fonts and Typescripts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Metapost">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Metapost
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Indices_and_sorting">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Indices and sorting
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Images">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Images
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Logos">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Logos
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Itemizations">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Itemizations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Nomarking.2FSelect">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         Nomarking/Select
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Table_of_Contents">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         Table of Contents
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#Grid_typesetting">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         Grid typesetting
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#External_figures">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         External figures
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-18">
+       <a href="#Frames">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         Frames
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#Trialtypesetting">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         Trialtypesetting
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#Programming_internals">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         Programming internals
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#Sectioning">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         Sectioning
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Command_line">
+      Command line
+     </span>
+    </h2>
+    <p>You start Mark IV with the <b>context</b> command, and Mark II with <b>texexec</b>. The two programs are not the same, and even though they have mostly the same command line, there are some differences. Mostly, this is because <b>context</b> is still lacking a number of options of texexec like for example --passon (those will probably be implemented at some point in the future), but it also parses the command line differently. You must remember to always give the full name of the options, and then the effects should be almost unnoticeable.
+</p>
+    <h2>
+     <span class="mw-headline" id="Parameter_processing">
+      Parameter processing
+     </span>
+    </h2>
+    <p>Mark IV delegates an ever growing amount of the key-value processing to lua, and as a result you should always provide 'expanded' numbers in Mark IV:
+</p>
+    <pre> \setuplayout[width=\the\hsize]&nbsp;% not just \hsize
+ \definetypeface [joke] [ss] [sans] [joke] [default] [rscale=0.9]&nbsp;% not just .9
+</pre>
+    <p>The underlying reason is that the scanning via lua does not have the special behaviour of TeX itself.
+</p>
+    <h2>
+     <span class="mw-headline" id="Paragraph_formatting">
+      Paragraph formatting
+     </span>
+    </h2>
+    <p>Mark IV extends the <tt><a href="../../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt> to make full use of the lua opentype engine by adding 
+<b>mode=node</b>, and various opentype tags features that you want on or off. In the distribution, there is only one case of this:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>arabic<span class="brx">]</span>
+  <span class="brx">[</span>mode<span class="brx">=</span>node,language<span class="brx">=</span>dflt,script<span class="brx">=</span>arab,ccmp<span class="brx">=</span>yes,
+   init<span class="brx">=</span>yes,medi<span class="brx">=</span>yes,fina<span class="brx">=</span>yes,isol<span class="brx">=</span>yes,
+   liga<span class="brx">=</span>yes,dlig<span class="brx">=</span>yes,rlig<span class="brx">=</span>yes,clig<span class="brx">=</span>yes,calt<span class="brx">=</span>yes,
+   mark<span class="brx">=</span>yes,mkmk<span class="brx">=</span>yes,kern<span class="brx">=</span>yes,curs<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p>It should come as no surprise that such a <b>mode=node</b> generates different effects, but even with a traditional font setup there are incompatibilies unless you use tfm-only fonts, because the metric information of fonts used in Mark IV 
+(afm, ttf, otf) are often subtly different from the tfm metrics used by Mark II.
+</p>
+    <h3>
+     <span class="mw-headline" id="Actual_font_usage">
+      Actual font usage
+     </span>
+    </h3>
+    <p>If you have a font in both OpenType and traditional Type 1, then Mark IV  will typically use one version and Mark II the other. There is no guarantee that both sets have the same metrics.
+</p>
+    <p>This is related to open type fonts metrics not having the limitations of traditional tfm metrics (and the fact that internally luatex has some limitations removed)
+</p>
+    <h3>
+     <span class="mw-headline" id="Interword_spacing">
+      Interword spacing
+     </span>
+    </h3>
+    <p>TFM-based (Type 1) fonts, especially those generated by afmtotfm, tend to use heuristics to decide on the width of the interword space instead of looking at the actual value inside the font. In Mark IV, it is much more likely that the actual value from the font is used, because Mark IV prefers the actual AFM files over any existing TFM files. As this affects interword spacing, linebreaks in Mark IV can be quite different from the ones in Mark II.
+</p>
+    <h3>
+     <span class="mw-headline" id="Line_spacing">
+      Line spacing
+     </span>
+    </h3>
+    <p>TFM-based fonts often have to round heights and depths to allow for restrictions in the TFM format. This affects individual glyphs but more importantly, it can change the value of '1ex'. This can affect line spacing, because ConTeXt by default uses the value '2.8ex' for the setting of \baselineskip.
+</p>
+    <h2>
+     <span class="mw-headline" id="Languages_and_Regimes">
+      Languages and Regimes
+     </span>
+    </h2>
+    <p>Mark IV needs your input to be in UTF-8. Legacy documents using 8bit encodings have to be converted to utf-8 before they are usable.
+</p>
+    <p>Linebreaks can be different because full-blown UTF-8 hyphenation patterns are used.
+</p>
+    <p>Even strange symbols can be directly used in your source code, your code may become more human readable. You can use this <a href="../../Characters_words_and_fonts/Emoji_and_symbols/utf8.html" title="Characters words and fonts/Emoji and symbols/utf8">handy utf-8 list</a> or use program like <a class="external text" href="http://live.gnome.org/Gucharmap" rel="nofollow">Gucharmap</a> or <a class="external text" href="http://utils.kde.org/projects/kcharselect/" rel="nofollow">kcharselect</a> for copy/pasting some characters. If you're using Linux, you can also use ~/.XCompose file.
+</p>
+    <p><br>
+HH: regimes still work so unless something is broken other encodings also should work but going utf8 is definitely wise
+</p>
+    <h2>
+     <span class="mw-headline" id="Fonts_and_Typescripts">
+      Fonts and Typescripts
+     </span>
+    </h2>
+    <p>Typescripts in Mark IV never specify any encoding at all (Unicode is mandatory).
+</p>
+    <h2>
+     <span class="mw-headline" id="Metapost">
+      Metapost
+     </span>
+    </h2>
+    <p>All inline metapost code in your document is executed in a large continuous run.
+</p>
+    <p>This means there are two things you have to watch out for:
+</p>
+    <ol>
+     <li>
+      You should load the MP packages you need in
+      <tt>
+       <a href="../../Command/startMPinclusions.html" title="Command/startMPinclusions">
+        \startMPinclusions
+       </a>
+      </tt>
+      ..
+      <tt>
+       <a class="new" href="../../index.php?title=Command/stopMPinclusions&action=edit&redlink=1.html" title="Command/stopMPinclusions (page does not exist)">
+        \stopMPinclusions
+       </a>
+      </tt>
+      ; not inside a graphic.
+     </li>
+     <li>
+      You have to make sure that you do not re-state equations that were already solved in a previous graphic.
+     </li>
+    </ol>
+    <p>These are in fact the exact same rules that you have to adhere to in MkII if <tt><a class="new" href="../../index.php?title=Command/runMPgraphicsfalse&action=edit&redlink=1.html" title="Command/runMPgraphicsfalse (page does not exist)">\runMPgraphicsfalse</a></tt> is active.
+</p>
+    <p><br>
+Another difference is the way text is handled in MkIV. In particular, color (<code>withcolor</code>)
+is not applied to metapost text. For example,
+</p>
+    <pre class="tex">draw thelabel<span class="brx">(</span>decimal i, <span class="brx">(</span>i, 0<span class="brx">)</span> scaled 1cm<span class="brx">)</span> withcolor red&nbsp;;
+</pre>
+    <p>currently does <b>not</b> work in MkIV. However,
+</p>
+    <pre class="tex">label<span class="brx">(</span>textext<span class="brx">(</span>"<span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>red<span class="brx">]</span>"& decimal i<span class="brx">)</span>, <span class="brx">(</span>i, 0<span class="brx">)</span> scaled 1cm<span class="brx">)</span>&nbsp;;
+</pre>
+    <p>does work. This second solution works both in MkIV and in MkII.
+(Note that <code>\color[red]</code> can be abbreviated <code>\red</code>.)
+</p>
+    <h2>
+     <span class="mw-headline" id="Indices_and_sorting">
+      Indices and sorting
+     </span>
+    </h2>
+    <p>Sort orders can be different because of changes to the sort order lists.
+</p>
+    <h2>
+     <span class="mw-headline" id="Images">
+      Images
+     </span>
+    </h2>
+    <p>The official way of placing image in in MkIV:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>middle,none<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>...<span class="br">}</span>
+</pre>
+    <p>The MkII way was
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>middle<span class="brx">]</span><span class="br">{</span>none<span class="br">}</span><span class="br">{</span>...<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Logos">
+      Logos
+     </span>
+    </h2>
+    <p>The logo commands (<tt><a href="../../Command/definelogo.html" title="Command/definelogo">\definelogo</a></tt> c.s.) do not exist in MkIV; use layers instead.
+</p>
+    <h2>
+     <span class="mw-headline" id="Itemizations">
+      Itemizations
+     </span>
+    </h2>
+    <p><i>Bare</i> <tt><a href="../../Command/item.html" title="Command/item">\item</a></tt> paragraphs (without enclosing list) are not allowed.
+</p>
+    <h2>
+     <span id="Nomarking/Select">
+     </span>
+     <span class="mw-headline" id="Nomarking.2FSelect">
+      Nomarking/Select
+     </span>
+    </h2>
+    <p><tt><a href="../../Command/nomarking.html" title="Command/nomarking">\nomarking</a></tt> is currently broken and will likely be removed from MkIV; use <tt><a class="new" href="../../index.php?title=Command/select&action=edit&redlink=1.html" title="Command/select (page does not exist)">\select</a></tt> instead:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineselector</span></span> <span class="brx">[</span>caption<span class="brx">]</span> <span class="brx">[</span>max<span class="brx">=</span>2,n<span class="brx">=</span>2<span class="brx">]</span> <span class="comment">% alternate {short}{long} caption</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\placefigure</span></span>
+        <span class="br">{</span><span class="cs"><span class="documentcs">\select</span></span><span class="br">{</span>caption<span class="br">}</span>
+                <span class="br">{</span>A cow<span class="br">}</span>
+                <span class="br">{</span>This image represents a typical black and white milk cow.
+                 In many regions of the world, cows may look quite different.<span class="br">}</span>
+        <span class="br">}</span>
+        <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupselector</span></span> <span class="brx">[</span>caption<span class="brx">]</span> <span class="brx">[</span>n<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\completelistoffigures</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Table_of_Contents">
+      Table of Contents
+     </span>
+    </h2>
+    <p>If you want to modify <a href="../../Document_structure_and_headlines/Table_of_contents.html" title="Document structure and headlines/Table of contents">TOC</a> you may find that <code>level</code> parameter has recently(02/2010) and probably for ever no effect in <a href="Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">Mark IV</a>. You may use <tt><a href="../../Command/placelist.html" title="Command/placelist">\placelist</a></tt>[chapter,section] instead of <tt><a href="../../Command/setupcombinedlist.html" title="Command/setupcombinedlist">\setupcombinedlist</a></tt>[content][level=2].
+</p>
+    <h2>
+     <span class="mw-headline" id="Grid_typesetting">
+      Grid typesetting
+     </span>
+    </h2>
+    <p>The implementation in MkIV is completely new, and various details have changed. The most important difference seems to be that the new grid by default is less tolerant for superscripts, but it can be made so by using <tt><a href="../../Command/setuplayout.html" title="Command/setuplayout">\setuplayout</a></tt>[grid=tolerant].
+</p>
+    <h2>
+     <span class="mw-headline" id="External_figures">
+      External figures
+     </span>
+    </h2>
+    <p>There was a change in the default path search for external figures, but I don't know the exact details off-hand.
+IIRC, the main problem is that texmf tree images are now found before local images. To change this ordering,
+use the <tt>location</tt> key to <tt><a href="../../Command/setupexternalfigures.html" title="Command/setupexternalfigures">\setupexternalfigures</a></tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,global,default<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p><tt>local</tt>: current directory + <tt>..</tt> + <tt>../..</tt>
+</p>
+    <p><tt>global</tt>: paths set with <tt>directory=...</tt>
+</p>
+    <p><tt>default</tt>: texmf tree
+</p>
+    <h2>
+     <span class="mw-headline" id="Frames">
+      Frames
+     </span>
+    </h2>
+    <p>The macro <tt>\setuplocalframed</tt> is no longer defined in Mark IV (08.2010).
+You can use the <tt>\getparameters</tt> macro as adequate substitute.
+</p>
+    <h2>
+     <span class="mw-headline" id="Trialtypesetting">
+      Trialtypesetting
+     </span>
+    </h2>
+    <p>
+The macros for (de)activating trial typesetting (<tt>\trialtypesettingtrue</tt> and <tt>\trialtypesettingfalse</tt>) have been changed. They are no longer part of a <tt>\newif</tt> statement. The new names are </p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\settrialtypesetting</span></span></pre>
+    <p> for activation and </p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\resettrialtypesetting</span></span></pre>
+    <p> for deactivation.
+</p>
+    <h2>
+     <span class="mw-headline" id="Programming_internals">
+      Programming internals
+     </span>
+    </h2>
+    <p>== <tt>read*file</tt>
+</p>
+    <p>Commands like <tt>\readlocfile</tt> no longer default to a <tt>.tex</tt> extension, explicit file extensions are now required.
+</p>
+    <h2>
+     <span class="mw-headline" id="Sectioning">
+      Sectioning
+     </span>
+    </h2>
+    <p>In MkIV, after <tt>\setuphead[section][placehead=no]</tt> there may still be some output on the page, because MkIV stores the reference target(s) to the section in an invisible box on the current page. Use <tt>\setuphead[section][placehead=hidden]</tt> if that interferes with the rest of your typesetting.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212406
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.059 seconds
+Real time usage: 0.072 seconds
+Preprocessor visited node count: 257/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1168/2097152 bytes
+Template argument size: 308/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3773/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.584      1 -total
+ 45.41%    6.622     12 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2749-1!canonical and timestamp 20260109212406 and revision id 41048
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_II_-_Mark_IV_differences">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

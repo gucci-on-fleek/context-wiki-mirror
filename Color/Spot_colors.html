@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Color/Spot colors&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Color/Spot_colors" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Color/Spot colors
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4916&diff=39427">2025-01-11</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Spot_Colors">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Spot Colors
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Using_the_.27e.27_key_to_.5Cdefinespotcolor_to_specify_a_spot_colour_name_with_spaces">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Using the 'e' key to \definespotcolor to specify a spot colour name with spaces
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Multitones">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Multitones
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Colorizing_Grayscale_Pictures">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Colorizing Grayscale Pictures
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Spot_Colors">
+      Spot Colors
+     </span>
+    </h2>
+    <p>To produce a file ready for a clean PDF separation process at your print house, start with:
+</p>
+    <p><tt><a href="../Command/setupcolors.html" title="Command/setupcolors">\setupcolors</a></tt><tt>[rgb=no,cmyk=yes,spot=yes,state=start,overprint=yes]</tt>
+</p>
+    <p>which will set things up for spot colors with CMYK allowed. The last setting ensures that black overprinting your spot colour tints will not knock out the colour - this is important for some types of commercial printing.
+</p>
+    <p>Then define your basic spot colour. Note that the name cannot contain spaces or numbers (but we come to that later):
+</p>
+    <p><tt><a href="../Command/definecolor.html" title="Command/definecolor">\definecolor</a></tt><tt>[PantoneTwoNineFour][c=1,m=.56,y=0,k=.18]</tt>
+</p>
+    <p>Now you can define the tints of this ink that you are actually going to use in your document. Let's say you'll have a 100% for headings:
+</p>
+    <p><tt><a href="../Command/definespotcolor.html" title="Command/definespotcolor">\definespotcolor</a></tt><tt>[MyBlue][PantoneTwoNineFour][p=1]</tt>
+</p>
+    <p>And then a 20% tint for nice display boxes:
+</p>
+    <p><tt><a href="../Command/definespotcolor.html" title="Command/definespotcolor">\definespotcolor</a></tt><tt>[MyBlueTint][PantoneTwoNineFour][p=.2]</tt>
+</p>
+    <p>And now you can happily use these named colours:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+   <span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>MyBlue<span class="brx">]</span><span class="br">{</span>Interesting<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>If you are including graphics made by an external program, you might want to match the colour name used in the graphic with the colour name in your <b>ConTeXt</b> set-up so that only one colour space is used in the final file. Unfortunately Pantone names and others tend to have spaces and numbers in them, so you need to do some extra work.
+</p>
+    <h3>
+     <span id="Using_the_'e'_key_to_\definespotcolor_to_specify_a_spot_colour_name_with_spaces">
+     </span>
+     <span class="mw-headline" id="Using_the_.27e.27_key_to_.5Cdefinespotcolor_to_specify_a_spot_colour_name_with_spaces">
+      Using the 'e' key to \definespotcolor to specify a spot colour name with spaces
+     </span>
+    </h3>
+    <p>You can use the 'e' key when defining your spot colours in order to specify the precise colour names to be used by your ConTeXt set-up in the output file. For example:
+</p>
+    <pre class="tex"><span class="comment">% set up the cmyk fallbacks</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+   <span class="brx">[</span>PantoneThreeZeroEight<span class="brx">]</span>
+   <span class="brx">[</span>c<span class="brx">=</span>1,m<span class="brx">=</span>.05,y<span class="brx">=</span>0,k<span class="brx">=</span>.47<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+   <span class="brx">[</span>PantoneTwoNineEight<span class="brx">]</span>
+   <span class="brx">[</span>c<span class="brx">=</span>.69,m<span class="brx">=</span>.07,y<span class="brx">=</span>0,k<span class="brx">=</span>0<span class="brx">]</span>
+
+<span class="comment">% Define tints of spot colours to be used in document for colouring text</span>
+<span class="cs"><span class="stylecs">\definespotcolor</span></span>
+   <span class="brx">[</span>DarkBlue<span class="brx">]</span>
+   <span class="brx">[</span>PantoneThreeZeroEight<span class="brx">]</span>
+   <span class="brx">[</span>p<span class="brx">=</span>1,e<span class="brx">=</span>PANTONE 308 CV<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definespotcolor</span></span>
+   <span class="brx">[</span>LightBlue<span class="brx">]</span>
+   <span class="brx">[</span>PantoneTwoNineEight<span class="brx">]</span>
+   <span class="brx">[</span>p<span class="brx">=</span>1,e<span class="brx">=</span>PANTONE 298 CV<span class="brx">]</span>
+</pre>
+    <p><br>
+Any text between a <tt><a href="../Command/startcolor.html" title="Command/startcolor">\startcolor</a>[DarkBlue]</tt> and <tt><a class="new" href="../index.php?title=Command/stopcolor&action=edit&redlink=1.html" title="Command/stopcolor (page does not exist)">\stopcolor</a></tt> should now be assigned to the correct spot colour channel - Pantone 308 CV - on output.  More importantly if  you include an external figure containing areas of this colour then your text and those parts of the graphic which have the same colour should now appear together in the 'Pantone 308 CV' colour channel on colour separation. 
+</p>
+    <p>For example, if your original graphic is an EPS file containing the following lines:
+</p>
+    <pre>%%DocumentCustomColors: (PANTONE 298 CV)
+%%+ (PANTONE 308 CV)
+%%CMYKCustomColor: 0.69 0.07 0 0 (PANTONE 298 CV)
+%%+ 1 0.05 0 0.47 (PANTONE 308 CV)
+</pre>
+    <p>and you convert this to a PDF using <tt>ps2pdf</tt> for inclusion in your <b>ConTeXt</b> document your PDF graphic will then contain something like:
+</p>
+    <pre><code>
+8 0 obj
+[/Separation
+/PANTONE#20308#20CV
+/DeviceCMYK
+9 0 R]endobj
+10 0 obj
+[/Separation
+/PANTONE#20298#20CV
+/DeviceCMYK
+11 0 R]endobj
+</code>
+</pre>
+    <p>Note how the space characters in the colour name are now encoded as '#20', but the colour names are essentially identical between the original EPS graphic, the new PDF graphic and your text.
+</p>
+    <p>A good way of testing colour separation if you don't have access to expensive pre-flight PDF validation tools is to use the following GhostScript command:
+</p>
+    <pre>gs \
+  -dBATCH \
+  -dNOPAUSE \
+  -sDEVICE=tiffsep \
+  -dDOINTERPOLATE \
+  -dTextAlphaBits=4 \
+  -dGraphicsAlphaBits=4 \
+  -sOutputFile=output.tif \
+  -r120 \
+  -MaxSeparations=8 \
+  input.pdf
+</pre>
+    <p>This renders a PDF file <tt>input.pdf</tt> as a set of TIFF files:
+</p>
+    <pre>  output.tif              - Composite including CMYK approximations to spot colours
+  output.tif.Black.tif    - K channel
+  output.tif.Cyan.tif     - C channel
+  output.tif.Magenta.tif  - M channel
+  output.tif.Yellow.tif   - Y channel
+  output.tif.s0.tif       - Pantone 308 CV
+  output.tif.s1.tif       - Pantone 298 CV
+</pre>
+    <h2>
+     <span class="mw-headline" id="Multitones">
+      Multitones
+     </span>
+    </h2>
+    <p>Hans posted this example about spot and multitone colors on the mailinglist (2012-05-07).
+</p>
+    <pre>It is important to define the colorants as spot colors first (<tt><a href="../Command/definespotcolor.html" title="Command/definespotcolor">\definespotcolor</a></tt>).
+</pre>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span>         <span class="brx">[</span>xcyan<span class="brx">]</span>   <span class="brx">[</span>c<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span>         <span class="brx">[</span>xmagenta<span class="brx">]</span><span class="brx">[</span>m<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span>         <span class="brx">[</span>xyellow<span class="brx">]</span> <span class="brx">[</span>y<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definespotcolor</span></span>     <span class="brx">[</span>scyan<span class="brx">]</span>   <span class="brx">[</span>xcyan<span class="brx">]</span>   <span class="brx">[</span>p<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definespotcolor</span></span>     <span class="brx">[</span>smagenta<span class="brx">]</span><span class="brx">[</span>xmagenta<span class="brx">]</span><span class="brx">[</span>p<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definespotcolor</span></span>     <span class="brx">[</span>syellow<span class="brx">]</span> <span class="brx">[</span>xyellow<span class="brx">]</span> <span class="brx">[</span>p<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definemultitonecolor</span></span><span class="brx">[</span>scombi<span class="brx">]</span> <span class="brx">[</span>xcyan<span class="brx">=</span>.2,xmagenta<span class="brx">=</span>.4,xyellow<span class="brx">=</span>.6<span class="brx">]</span><span class="brx">[</span>c<span class="brx">=</span>.2,m<span class="brx">=</span>.4,y<span class="brx">=</span>.6<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+    <span class="cs">\hbox</span> <span class="cs">\bgroup</span>
+        <span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>color<span class="brx">=</span>scyan,   width<span class="brx">=</span>1cm,height<span class="brx">=</span>1cm,depth<span class="brx">=</span>0cm<span class="brx">]</span><span class="comment">%</span>
+        <span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>color<span class="brx">=</span>smagenta,width<span class="brx">=</span>1cm,height<span class="brx">=</span>1cm,depth<span class="brx">=</span>0cm<span class="brx">]</span><span class="comment">%</span>
+        <span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>color<span class="brx">=</span>syellow, width<span class="brx">=</span>1cm,height<span class="brx">=</span>1cm,depth<span class="brx">=</span>0cm<span class="brx">]</span><span class="comment">%</span>
+        <span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>color<span class="brx">=</span>scombi,  width<span class="brx">=</span>1cm,height<span class="brx">=</span>1cm,depth<span class="brx">=</span>0cm<span class="brx">]</span><span class="comment">%</span>
+    <span class="cs">\egroup</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+    <p>(The CMYK color spec is the fall back color used on screen; one can preview separations in full Acrobat 7.)
+</p>
+    <h2>
+     <span class="mw-headline" id="Colorizing_Grayscale_Pictures">
+      Colorizing Grayscale Pictures
+     </span>
+    </h2>
+    <p>Another sample by Hans (mailing list 2005-11-16) demonstrates a lot of different possibilities:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>header<span class="brx">=</span>0pt,footer<span class="brx">=</span>0pt,width<span class="brx">=</span>middle,height<span class="brx">=</span>middle,backspace<span class="brx">=</span>1cm,topspace<span class="brx">=</span>1cm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>blue<span class="brx">]</span>   <span class="brx">[</span>c<span class="brx">=</span>1, m<span class="brx">=</span>.38, y<span class="brx">=</span>0, k<span class="brx">=</span>.64<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>yellow<span class="brx">]</span> <span class="brx">[</span>c<span class="brx">=</span>0, m<span class="brx">=</span>.28, y<span class="brx">=</span>1, k<span class="brx">=</span>.06<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definespotcolor</span></span> <span class="brx">[</span>blue-100<span class="brx">]</span>   <span class="brx">[</span>blue<span class="brx">]</span>   <span class="brx">[</span>p<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definespotcolor</span></span> <span class="brx">[</span>yellow-100<span class="brx">]</span> <span class="brx">[</span>yellow<span class="brx">]</span> <span class="brx">[</span>p<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definemultitonecolor</span></span> <span class="brx">[</span>combicolor<span class="brx">]</span>   <span class="brx">[</span>blue<span class="brx">=</span>.12, yellow<span class="brx">=</span>.28<span class="brx">]</span> <span class="brx">[</span>c<span class="brx">=</span>.1, m<span class="brx">=</span>.1, y<span class="brx">=</span>.3, k<span class="brx">=</span>.1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definemultitonecolor</span></span> <span class="brx">[</span>combicolor-b<span class="brx">]</span> <span class="brx">[</span>blue<span class="brx">=</span>1<span class="brx">]</span>   <span class="brx">[</span>c<span class="brx">=</span>1, m<span class="brx">=</span>.38, y<span class="brx">=</span>0, k<span class="brx">=</span>.64<span class="brx">]</span> <span class="comment">% force multitone</span>
+<span class="cs"><span class="stylecs">\definemultitonecolor</span></span> <span class="brx">[</span>combicolor-y<span class="brx">]</span> <span class="brx">[</span>yellow<span class="brx">=</span>1<span class="brx">]</span> <span class="brx">[</span>c<span class="brx">=</span>0, m<span class="brx">=</span>.28, y<span class="brx">=</span>1, k<span class="brx">=</span>.06<span class="brx">]</span> <span class="comment">% force multitone</span>
+
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>mill.png<span class="brx">]</span>     <span class="brx">[</span>object<span class="brx">=</span>no, width<span class="brx">=</span>.2<span class="cs">\textwidth</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>hacker-bw.jpg<span class="brx">]</span><span class="brx">[</span>object<span class="brx">=</span>no, width<span class="brx">=</span>.2<span class="cs">\textwidth</span><span class="brx">]</span>
+
+<span class="cs">\startbaselinecorrection</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>4*1<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="br">}</span>                                <span class="br">{</span>no color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>indexed duotone<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor-b<span class="brx">]</span><span class="br">}</span> <span class="br">{</span>spot color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor-y<span class="brx">]</span><span class="br">}</span> <span class="br">{</span>spot color<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs">\stopbaselinecorrection</span>
+
+<span class="cs">\startbaselinecorrection</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>4*1<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="br">}</span>                     <span class="br">{</span>no color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>indexed duotone<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor-b<span class="brx">]</span><span class="br">}</span> <span class="br">{</span>spot color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor-y<span class="brx">]</span><span class="br">}</span> <span class="br">{</span>spot color<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs">\stopbaselinecorrection</span>
+
+<span class="cs">\startbaselinecorrection</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>4*1<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="br">}</span>                     <span class="br">{</span>no color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>indexed duotone<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>blue-100<span class="brx">]</span><span class="br">}</span>     <span class="br">{</span>spot color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-a<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>yellow-100<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>spot color<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs">\stopbaselinecorrection</span>
+
+<span class="cs">\startbaselinecorrection</span>
+<span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>4*1<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="br">}</span>                     <span class="br">{</span>no color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>combicolor<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>indexed duotone<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>blue-100<span class="brx">]</span><span class="br">}</span>     <span class="br">{</span>spot color<span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>demo-b<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>yellow-100<span class="brx">]</span><span class="br">}</span>   <span class="br">{</span>spot color<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs">\stopbaselinecorrection</span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\getbuffer</span></span> <span class="cs"><span class="documentcs">\typebuffer</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260110073248
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.044 seconds
+Real time usage: 0.331 seconds
+Preprocessor visited node count: 118/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 686/2097152 bytes
+Template argument size: 182/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15575/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   69.079      1 -total
+ 38.05%   26.282      7 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4916-1!canonical and timestamp 20260110073247 and revision id 39427
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Color/Spot_colors">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

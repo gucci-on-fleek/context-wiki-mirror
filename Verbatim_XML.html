@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Verbatim XML&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Verbatim_XML" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Verbatim XML
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4905&diff=28867">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Processing elements in XML that should be typeset verbatim (for example code snippets) is a tricky matter, since during XML processing, the catcode table is a different one.
+</p>
+    <p>Hans came up with a <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2015/080914.html" rel="nofollow">quick but powerful</a> solution, that demonstrates two important things:
+</p>
+    <ul>
+     <li>
+      Processing a buffer from XML content in Lua
+     </li>
+     <li>
+      Temporarily (re)setting the catcode table to allow buffers to work.
+     </li>
+    </ul>
+    <p>This can come in handy in more situations.
+</p>
+    <p>First, define a xml function to process the xml element manually. (In this example, vimtyping is used to format a JSON buffer)
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    function xml.functions.processJSON<span class="brx">(</span>t<span class="brx">)</span>
+        buffers.assign<span class="brx">(</span>"foo","<span class="cs">\\</span>startJSON<span class="cs">\n</span>" .. tostring<span class="brx">(</span>xml.text<span class="brx">(</span>t<span class="brx">)</span><span class="brx">)</span> .. "<span class="cs">\n</span><span class="cs">\\</span>stopJSON"<span class="brx">)</span>
+        context.getbuffer <span class="br">{</span> "foo" <span class="br">}</span>
+    end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>The actual XML setup to process the <code>&lt;json&gt;...&lt;/json&gt;</code> element looks as follows. This also handles the catcode table manipulation.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:json
+    <span class="cs"><span class="systemcs">\pushcatcodetable</span></span>
+    <span class="cs"><span class="systemcs">\setcatcodetable</span></span><span class="cs">\ctxcatcodes</span>
+    <span class="cs">\xmlfunction</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>processJSON<span class="br">}</span>
+    <span class="cs">\popcatcodetable</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212441
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.011 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 29/2097152 bytes
+Template argument size: 16/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1259/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    3.581      1 Template:code
+100.00%    3.581      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4905-1!canonical and timestamp 20260109212441 and revision id 28867
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Verbatim_XML">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

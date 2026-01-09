@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Euro symbol animation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Euro_symbol_animation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Euro symbol animation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=856&diff=38866">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../Sample_documents.html" title="Input and compilation/Sample documents">Sample documents</a>
+</p>
+    <p>Since the PDF specification allows JavaScript embedded in Documents, we can create simple animation in JavaScript. The Metafun Handbook has an example. This is slightly modified to demonstrate how the new european currency symbol is created.
+</p>
+    <p>Let us start with some general declarations:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupoutput</span></span><span class="brx">[</span>pdftex<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,openaction<span class="brx">=</span><span class="brx">]</span>
+<span class="comment">%\setupinteraction[state=start,openaction=ResetForm]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4,landscape<span class="brx">]</span><span class="brx">[</span>A4,landscape<span class="brx">]</span>
+</pre>
+    <p>The JavaScript implementation varies among  different Acrobat Reader version, so you might need some other initialization then above. I am not going to explain all the metapost stuff here, for a description see <a class="external text" href="http://www.ntg.nl/maps/pdf/27_7.pdf" rel="nofollow">my article</a> in the <a class="external text" href="http://www.ntg.nl/maps.html" rel="nofollow">MAPS</a>. I start with some global variables:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>a<span class="brx">]</span>
+path unitcircle; unitcircle:<span class="brx">=</span>fullcircle scaled 2;
+
+path inner, outer; <span class="comment">% the big circle: inner and outer part</span>
+path hbar;         <span class="comment">% horizontal bar</span>
+path a<span class="brx">[</span><span class="brx">]</span>;          <span class="comment">% aux paths for intersections</span>
+path clippath;     <span class="comment">% path for clipping </span>
+pair topbarleft, bottombarleft; 
+pair o<span class="brx">[</span><span class="brx">]</span>;          <span class="comment">% official points&nbsp;:-)</span>
+pair c<span class="brx">[</span><span class="brx">]</span>;          <span class="comment">% clip points</span>
+path bb;           <span class="comment">% max. bounding box of the picture</span>
+picture cp;        <span class="comment">%currentpicture for clipping</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% calculate points</span>
+
+u&nbsp;:<span class="brx">=</span>1cm;
+radius:<span class="brx">=</span>5.5u;
+topbarlength&nbsp;:<span class="brx">=</span> 10u;
+thickness:<span class="brx">=</span>1u;
+
+
+
+<span class="comment">% for the size of the picture, first draw everything, remember the</span>
+<span class="comment">% size and use it.</span>
+def calculate_bb <span class="brx">=</span>
+ draw_circle;
+ draw_tophbar;
+ draw_bottomhbar;
+ bb:<span class="brx">=</span>boundingbox currentpicture;
+ cp:<span class="brx">=</span> currentpicture;
+ currentpicture&nbsp;:<span class="brx">=</span> nullpicture;
+enddef&nbsp;; 
+
+def setbb <span class="brx">=</span>
+    setbounds currentpicture to bb;
+enddef;
+
+<span class="comment">% these are the ``official'' points</span>
+o1 <span class="brx">=</span> <span class="brx">(</span>0 ,-radius-.5thickness<span class="brx">)</span>;    
+o2 <span class="brx">=</span> dir  40 * <span class="brx">(</span>radius-.5thickness<span class="brx">)</span>;
+o3 <span class="brx">=</span> dir -40 * <span class="brx">(</span>radius-.5thickness<span class="brx">)</span>;
+
+<span class="comment">% the very strange angle at the ends of the two vertical bars and the</span>
+<span class="comment">% upper right edge of the C </span>
+alpha&nbsp;:<span class="brx">=</span> angle <span class="brx">(</span>o2-o1<span class="brx">)</span>;
+
+a1&nbsp;:<span class="brx">=</span> o1 -- o2;      <span class="comment">% the right slant</span>
+a2&nbsp;:<span class="brx">=</span> origin -- o3;  <span class="comment">% the lower 40deg. angle</span>
+
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% the bars</span>
+hbar&nbsp;:<span class="brx">=</span> unitsquare xscaled topbarlength yscaled thickness
+               slanted <span class="brx">(</span>1/tand <span class="brx">(</span>alpha<span class="brx">)</span><span class="brx">)</span>;
+
+<span class="comment">% top bar lrcorner:</span>
+c3&nbsp;:<span class="brx">=</span> <span class="brx">(</span><span class="brx">(</span>-infinity,0.5u<span class="brx">)</span> -- <span class="brx">(</span>infinity , 0.5u<span class="brx">)</span><span class="brx">)</span> intersectionpoint a1; 
+
+topbarleft    :<span class="brx">=</span> <span class="brx">(</span>xpart c3 - topbarlength , 0.5u<span class="brx">)</span>;
+bottombarleft&nbsp;:<span class="brx">=</span> <span class="brx">(</span>xpart c3 - topbarlength ,-1.5u<span class="brx">)</span>;
+
+def draw_circle <span class="brx">=</span>
+   pickup pencircle scaled thickness;
+   draw unitcircle scaled radius;
+enddef;
+
+def draw_tophbar <span class="brx">=</span>
+  pickup pencircle scaled 1pt;
+  fill hbar shifted topbarleft;
+enddef;
+
+def draw_bottomhbar <span class="brx">=</span>
+  pickup pencircle scaled 1pt;
+  fill hbar shifted bottombarleft;
+enddef;
+
+calculate_bb;
+
+<span class="comment">% clip the right part</span>
+c2&nbsp;:<span class="brx">=</span> a1  intersectionpoint a2;
+c4&nbsp;:<span class="brx">=</span> o2 + dir alpha *2u;
+c6&nbsp;:<span class="brx">=</span> <span class="brx">(</span>xpart  o3, ypart lrcorner cp<span class="brx">)</span>;
+
+outer&nbsp;:<span class="brx">=</span> unitcircle scaled <span class="brx">(</span>radius+.5thickness<span class="brx">)</span>;
+c1&nbsp;:<span class="brx">=</span> <span class="brx">(</span>o1--c4<span class="brx">)</span> intersectionpoint outer;
+
+
+clippath&nbsp;:<span class="brx">=</span> llcorner cp -- c6 -- o3 -- c2 -- c1 -- 
+          <span class="brx">(</span>xpart c1,ypart urcorner cp<span class="brx">)</span> -- ulcorner cp -- cycle&nbsp;;
+
+def draw_dot expr p <span class="brx">=</span> 
+  draw p withpen pencircle scaled 3pt&nbsp;; 
+enddef&nbsp;; 
+
+def stand_out <span class="brx">=</span> 
+  drawoptions<span class="brx">(</span>withcolor .625red<span class="brx">)</span>&nbsp;; 
+enddef&nbsp;;
+
+def draw_clippath <span class="brx">=</span>
+   pickup pencircle scaled 2pt;
+   draw clippath;
+enddef;
+
+def clipright <span class="brx">=</span>
+  clip currentpicture to clippath;
+enddef;
+
+def draw_lines <span class="brx">=</span>
+  draw a1 dashed evenly withcolor .7white withpen pencircle scaled 1pt;
+  draw origin -- o2 dashed evenly withcolor .7white 
+        withpen pencircle scaled 1pt;
+  draw origin -- o1 dashed evenly withcolor .7white 
+        withpen pencircle scaled 1pt;
+  draw a2  dashed evenly withcolor .7white withpen pencircle scaled 1pt;
+enddef;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+</pre>
+    <p>I now define the animation steps:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>1<span class="brx">]</span>
+stand_out; draw_circle; draw_lines; setbb;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>2<span class="brx">]</span>
+draw_circle; stand_out; draw_tophbar; draw_lines; setbb;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>3<span class="brx">]</span>
+draw_circle; draw_tophbar; stand_out; draw_bottomhbar; draw_lines; setbb;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>4<span class="brx">]</span>
+draw_circle; draw_tophbar; draw_bottomhbar; stand_out; draw_clippath;
+draw_lines; setbb;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>5<span class="brx">]</span>
+draw_circle; draw_tophbar; draw_bottomhbar; clipright; setbb;
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+</pre>
+    <p>The whole animation is done in <tt>\definefieldstack</tt>.  
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step 1<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\processMPbuffer</span></span><span class="brx">[</span>a,1<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step 2<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\processMPbuffer</span></span><span class="brx">[</span>a,2<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step 3<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\processMPbuffer</span></span><span class="brx">[</span>a,3<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step 4<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\processMPbuffer</span></span><span class="brx">[</span>a,4<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step 5<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\processMPbuffer</span></span><span class="brx">[</span>a,5<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefieldstack</span></span> 
+   <span class="brx">[</span>euroconstruction<span class="brx">]</span> 
+   <span class="brx">[</span>step 1,step 2,step 3,step 4,step 5<span class="brx">]</span> 
+   <span class="brx">[</span>frame<span class="brx">=</span>on,offset<span class="brx">=</span>3pt,framecolor<span class="brx">=</span>darkyellow,rulethickness<span class="brx">=</span>1pt<span class="brx">]</span>
+
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\placefigure</span></span> <span class="brx">[</span>here<span class="brx">]</span><span class="brx">[</span>fig:steps<span class="brx">]</span> 
+      <span class="br">{</span>Just click <span class="cs"><span class="documentcs">\goto</span></span> <span class="br">{</span>here<span class="br">}</span> <span class="brx">[</span>JS<span class="brx">(</span>Walk_Field<span class="br">{</span>euroconstruction<span class="br">}</span><span class="brx">)</span><span class="brx">]</span> 
+      to walk through the construction! <span class="cs"><span class="documentcs">\goto</span></span><span class="br">{</span><span class="brx">(</span>restart<span class="brx">)</span><span class="br">}</span><span class="brx">[</span>JS<span class="brx">(</span>Set_Field<span class="br">{</span>euroconstruction,1<span class="br">}</span><span class="brx">)</span><span class="brx">]</span><span class="br">}</span>    
+        <span class="br">{</span><span class="cs"><span class="documentcs">\fieldstack</span></span><span class="brx">[</span>euroconstruction<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>That's it. You can also download the source and the resulting pdf at <a class="external free" href="http://dl.contextgarden.net/examples/euro-anim/" rel="nofollow">http://dl.contextgarden.net/examples/euro-anim/</a> .
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212424
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.090 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11026/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:856-1!canonical and timestamp 20260109212424 and revision id 38866
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Euro_symbol_animation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

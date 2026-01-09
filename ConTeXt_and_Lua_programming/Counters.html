@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Counters&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Counters" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Counters
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1939&diff=40486">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>ConTeXt provides a higher layer of API to access various counters. For example, to set the page number to a certain value use <tt><a href="../Command/setcounter.html" title="Command/setcounter">\setcounter</a></tt>:
+</p>
+    <pre class="tex"> <span class="cs"><span class="systemcs">\setcounter</span></span><span class="brx">[</span>userpage<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span>
+</pre>
+    <p>Other useful commands for working with counters are
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/resetcounter&action=edit&redlink=1.html" title="Command/resetcounter (page does not exist)">
+        \resetcounter
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/incrementcounter.html" title="Command/incrementcounter">
+        \incrementcounter
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/decrementcounter.html" title="Command/decrementcounter">
+        \decrementcounter
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/savecounter&action=edit&redlink=1.html" title="Command/savecounter (page does not exist)">
+        \savecounter
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/restorecounter&action=edit&redlink=1.html" title="Command/restorecounter (page does not exist)">
+        \restorecounter
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/rawcountervalue.html" title="Command/rawcountervalue">
+        \rawcountervalue
+       </a>
+      </tt>
+      (not \getcounter)
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupheadnumber.html" title="Command/setupheadnumber">
+        \setupheadnumber
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Names_of_Commonly_Used_Counters">
+      Names of Commonly Used Counters
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <code>userpage</code>
+      for visible pagenumbers
+     </li>
+     <li>
+      <code>page</code>
+      for internal pagenumbers
+     </li>
+     <li>
+      <code>formula</code>
+      for formula numbers
+     </li>
+     <li>
+      <code>table</code>
+      for table numbers
+     </li>
+     <li>
+      <code>figure</code>
+      for figure numbers
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Testing_the_Value_of_a_Counter">
+      Testing the Value of a Counter
+     </span>
+    </h2>
+    <p>If you need to test the value of a counter, use \rawcountervalue (the is no \getcounter):
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\definecounter</span></span> <span class="brx">[</span>mynumber<span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\setcounter</span></span> <span class="brx">[</span>mynumber<span class="brx">]</span> <span class="brx">[</span>42<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\doifelse</span></span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>mynumber<span class="brx">]</span><span class="br">}</span>
+  <span class="br">{</span>42<span class="br">}</span>
+  <span class="br">{</span>First test is OK<span class="br">}</span>
+  <span class="br">{</span>Failed<span class="br">}</span>
+</pre>
+      <p>results in:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="16" src="../wikiteximage/16f7b88215cc90893b8e19da5d1578c8.webp" width="118">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Coupling_Counters">
+      Coupling Counters
+     </span>
+    </h2>
+    <p>Two counters can be coupled by
+</p>
+    <pre class="tex"> <span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>one<span class="brx">]</span>
+ <span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>two<span class="brx">]</span><span class="brx">[</span>one<span class="brx">]</span>
+</pre>
+    <p>For example
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>one<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>two<span class="brx">]</span><span class="brx">[</span>one<span class="brx">]</span>
+
+Default value of counter one:
+<span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>one<span class="brx">]</span>
+
+We increment counter two
+<span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>two<span class="brx">]</span>
+
+New value of counter one:
+<span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>one<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="56" src="../wikiteximage/c01218088442b3191fc47321919a6016.webp" width="228">
+     </li>
+    </ul>
+    <p>By default counters are reset with each new chapter. To have a counter which isn&rsquo;t reset you need <code>way=bytext</code>, and to remove the chapter number from the \getcounter result you have to add <code>prefix=no</code>.
+</p>
+    <p>Example definition:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>examplecounter<span class="brx">]</span><span class="brx">[</span>way<span class="brx">=</span>bytext,prefix<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212407
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 124/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 804/2097152 bytes
+Template argument size: 218/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2760/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   11.405      1 -total
+ 79.71%    9.091      8 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1939-1!canonical and timestamp 20260109212407 and revision id 40486
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Counters">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

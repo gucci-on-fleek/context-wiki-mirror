@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Pseudo Small Caps&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Pseudo_Small_Caps" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Pseudo Small Caps
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1002&diff=41408">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Your font has no Small Caps variant? Do you need Small Caps switching depending on the \it, \bf, \bi, \tt, \ss, ...&nbsp;? Here is the recipe for generating and installing Pseudo Small Caps (small letters are scaled down versions of capitals - typographicaly not clear solution but if the font has no real Small Caps...). The example is done on Latin Modern family but can be applied to another Type1 font. 
+</p>
+    <p>1. Pseudo Small Caps generation. <a class="external text" href="http://typokvitek.com/tex/context/pseudocaps/make-pseudocaps.txt" rel="nofollow">All commands (txt)</a><br>
+</p>
+    <pre class="tex">texfont --fontroot<span class="brx">=</span>X:\ --en<span class="brx">=</span>ec --ve<span class="brx">=</span>public --co<span class="brx">=</span>lm --source<span class="brx">=</span>auto --ca<span class="brx">=</span>0.8 lmbx10
+</pre>
+    <p>2. Typescript definitions. <a class="external text" href="http://typokvitek.com/tex/context/pseudocaps/type-lm-var.tex" rel="nofollow">Complete type script</a> (copy URL to browser?!)
+</p>
+    <dl>
+     <dd>
+      a) Metric file correspondencies:
+      <br>
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>all<span class="brx">]</span> <span class="brx">[</span>latin-modern,computer-modern<span class="brx">]</span> <span class="brx">[</span>texnansi,ec,qx,pl0,il2,t5<span class="brx">]</span>
+...
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>cmtcsc10<span class="brx">]</span>  <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-lmtcsc10<span class="brx">]</span>  <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+...
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>cmcscbx10<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-lmbx10-capitalized-800<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <dl>
+     <dd>
+      b) Making \Var[SmallCaps] in Serif, Sans, and Mono:
+      <br>
+     </dd>
+    </dl>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+  ...
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegular<span class="brx">]</span>                      <span class="brx">[</span>ComputerModern<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>                         <span class="brx">[</span>ComputerModern-Bold<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>                       <span class="brx">[</span>ComputerModern-Italic<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span>                   <span class="brx">[</span>ComputerModern-BoldItalic<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegularCaps<span class="brx">]</span>	                 <span class="brx">[</span>ComputerModern-Caps<span class="brx">]</span>
+
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifSmallCaps<span class="brx">]</span>	                 <span class="brx">[</span>ComputerModern-Caps<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalicSmallCaps<span class="brx">]</span>              <span class="brx">[</span>cmcsci10<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldSmallCaps<span class="brx">]</span>                <span class="brx">[</span>cmcscbx10<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalicSmallCaps<span class="brx">]</span>          <span class="brx">[</span>cmcscbxi10<span class="brx">]</span>
+
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegular<span class="brx">]</span>                      <span class="brx">[</span>Serif<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegularSmallCaps<span class="brx">]</span>             <span class="brx">[</span>SerifSmallCaps<span class="brx">]</span>
+
+  <span class="cs">\definefontvariant</span> <span class="brx">[</span>Serif<span class="brx">]</span> <span class="brx">[</span>SmallCaps<span class="brx">]</span> <span class="brx">[</span>SmallCaps<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sans<span class="brx">]</span> <span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+  ...
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>mono<span class="brx">]</span> <span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+  ...
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <p>3. Usage. <a class="external text" href="http://typokvitek.com/tex/context/pseudocaps/smallcaps.pdf" rel="nofollow">PDF</a> <a class="external text" href="http://typokvitek.com/tex/context/pseudocaps/smallcaps.tex" rel="nofollow">Source</a> (copy URL to browser?!)
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-lm-var<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>all<span class="brx">]</span><span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>computer-modern,latin-modern<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>modern<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>10pt,rm<span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\sc</span><span class="br">{</span><span class="cs">\Var</span><span class="brx">[</span>SmallCaps<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="br">{</span>    Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\it</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\bf</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\bi</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+
+<span class="br">{</span><span class="cs">\ss</span>
+<span class="br">{</span>    Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\it</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\bf</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">}</span>
+
+<span class="br">{</span><span class="cs">\tt</span> <span class="comment">% Note: pseudo caps breaks monospacing!</span>
+<span class="br">{</span>    Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">{</span><span class="cs">\it</span> Ahoj <span class="cs">\sc</span> Ahoj<span class="br">}</span><span class="cs">\par</span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212433
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.026 seconds
+Real time usage: 0.048 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8592/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1002-1!canonical and timestamp 20260109212433 and revision id 41408
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Pseudo_Small_Caps">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

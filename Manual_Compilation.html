@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Manual Compilation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Manual_Compilation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Manual Compilation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6989&diff=42469">2025-08-17</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This guide is only tried and tested on GNU/ Linux, but should (hopefully) work on the other platforms. It is adjusted to some of the heuristics that context standalone uses. Words in brackets (i.e. <code>{word}</code>) have to be substituted by your username or similar unique identifier.
+Note that this is NOT a system wide install, but if you are reading this guide you probably know how to generalize this.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Preparations">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Preparations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Fetch_the_files">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Fetch the files
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Compile">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Compile
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Install_the_Binary">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Install the Binary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Finish_the_install">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Finish the install
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Updates">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Updates
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Preparations">
+      Preparations
+     </span>
+    </h2>
+    <ol>
+     <li>
+      Create install directory (recommended name:
+      <code>tex</code>
+      ):
+      <code>mkdir /home/{user}/tex</code>
+     </li>
+     <li>
+      Create the directory that houses the binaries:
+      <code>mkdir -p /home/{user}/tex/texmf-linux-64/bin</code>
+     </li>
+     <li>
+      Add
+      <code>/home/{user}/tex/texmf-linux-x64/bin</code>
+      to your
+      <code>PATH</code>
+      . This depends on the specific shell you are using, for bash use the
+      <code>.bashrc</code>
+      . Make sure the open a new shell (or logout and login again) for the change to take effect.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="Fetch_the_files">
+      Fetch the files
+     </span>
+    </h2>
+    <ol>
+     <li>
+      Clone the context archive from
+      <a class="external text" href="https://github.com:contextgarden/context.git" rel="nofollow">
+       github
+      </a>
+      into the
+      <code>texmf-context</code>
+      folder i.e.
+      <code>git clone git@github.com:contextgarden/context.git /home/{user}/tex/texmf-context</code>
+     </li>
+     <li>
+      Clone the font files into the
+      <code>fonts</code>
+      folder from
+      <a class="external text" href="https://github.com:contextgarden/context-distribution-fonts.git" rel="nofollow">
+       github
+      </a>
+      <code>git clone git@github.com:contextgarden/context-distribution-fonts.git /home/{user}/tex/texmf/</code>
+     </li>
+     <li>
+      In order for the configuration to work:
+      <code>cp /home/{user}/tex/texmf-context/web2c/contextcnf.lua /home/{user}/tex/texmf-context/web2c/texmfcnf.lua</code>
+      . Check out
+      <code>/home/{user}/tex/texmf-context/web2c/readme.txt</code>
+      to see why this is neccesary.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="Compile">
+      Compile
+     </span>
+    </h2>
+    <p>Execute <code>build.sh --native</code> in <code>texmf-context/source/luametatex</code>. The <code>luametatex</code> binary will appear in the <code>build/native/</code> folder. You may need to <code>chmod +x ./build.sh</code> to make the build script executable.
+</p>
+    <h2>
+     <span class="mw-headline" id="Install_the_Binary">
+      Install the Binary
+     </span>
+    </h2>
+    <ol>
+     <li>
+      Copy the
+      <code>luametatex</code>
+      binary to
+      <code>/home/{user}/tex/texmf-linux-64/bin</code>
+     </li>
+     <li>
+      Symlink
+      <code>context</code>
+      and
+      <code>mtxrun</code>
+      to this binary:
+      <ul>
+       <li>
+        <code>ln -s /home/{user}/tex/texmf-linux-64/bin/luametatex /home/{user}/tex/texmf-linux-64/bin/mtxrun</code>
+        and
+       </li>
+       <li>
+        <code>ln -s /home/{user}/tex/texmf-linux-64/bin/luametatex /home/{user}/tex/texmf-linux-64/bin/context</code>
+        .
+       </li>
+      </ul>
+     </li>
+     <li>
+      Copy the
+      <code>context.lua</code>
+      and
+      <code>mtxrun.lua</code>
+      files from
+      <code>/home/{user}/tex/texmf-context/scripts/context/lua/</code>
+      into the
+      <code>/home/{user}/tex/texmf-linux-x64/bin</code>
+      directory. Make sure they are executable (i.e.
+      <code>chmod +x /home/{user}/tex/texmf-linux-x64/bin/mtxrun.lua</code>
+      )
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="Finish_the_install">
+      Finish the install
+     </span>
+    </h2>
+    <p>Run <code>mtxrun --generate</code>. After that try to compile a test document to make sure it works.
+</p>
+    <h2>
+     <span class="mw-headline" id="Updates">
+      Updates
+     </span>
+    </h2>
+    <p>For newer ConTeXt versions go through the above steps. Take care to empty the build directory before compiling anything to remove/ empty the old build directory:<code>rm /home/{user}/tex/texmf-context/source/luametatex/build -R</code>. Otherwise you might get weird bugs when running context.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212431
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.018 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6989-1!canonical and timestamp 20260109212430 and revision id 42469
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Manual_Compilation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

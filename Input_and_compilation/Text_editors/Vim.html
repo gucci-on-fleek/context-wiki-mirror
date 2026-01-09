@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/Vim&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/Vim" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/Vim
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1012&diff=38579">2025-01-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><a class="external free" href="https://www.vim.org/" rel="nofollow">https://www.vim.org/</a>
+</p>
+    <p>This page is about editing ConTeXt source in Vim, gVim, MacVim, and other Vim clones.
+The page describes the scripts available in Vim v8.0.0055 or later. If you are using Vim 7, see
+<i>Using the scripts with an older Vim</i> below.
+</p>
+    <p><b>If you feel that something is missing, please contribute!</b>
+</p>
+    <p>Information about providing feedback is in the header of the scripts.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Using_ConTeXt_in_Vim">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Using ConTeXt in Vim
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Asciicast">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Asciicast
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Typesetting">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Typesetting
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Setting_a_custom_typesetting_engine">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Setting a custom typesetting engine
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Working_with_large_projects">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Working with large projects
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Updating_the_syntax_files">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Updating the syntax files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Editing_features">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           Editing features
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Integration_with_MetaPost">
+          <span class="tocnumber">
+           1.7
+          </span>
+          <span class="toctext">
+           Integration with MetaPost
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Integration_with_other_languages">
+          <span class="tocnumber">
+           1.8
+          </span>
+          <span class="toctext">
+           Integration with other languages
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Using_the_scripts_with_an_older_Vim">
+          <span class="tocnumber">
+           1.9
+          </span>
+          <span class="toctext">
+           Using the scripts with an older Vim
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#TODO">
+          <span class="tocnumber">
+           1.10
+          </span>
+          <span class="toctext">
+           TODO
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Filetype_detection">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Filetype detection
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Spell_checking">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Spell checking
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Powerful_key_mappings">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Powerful key mappings
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#Clean_up_auxiliary_files">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Clean up auxiliary files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#Snippets">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Snippets
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#Buffer-local_Insert-mode_macros_to_speed_up_editing">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           Buffer-local Insert-mode macros to speed up editing
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Key_mappings_borrowed_from_SciTE">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           Key mappings borrowed from SciTE
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#Quickfix_mappings">
+          <span class="tocnumber">
+           4.5
+          </span>
+          <span class="toctext">
+           Quickfix mappings
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#Makefiles">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Makefiles
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#Other_useful_Vim_plugins">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Other useful Vim plugins
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#Autocompletion">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           Autocompletion
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#UltiSnips">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           UltiSnips
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-24">
+         <a href="#Outline_of_a_document">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           Outline of a document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#Using_LaTeX-Suite">
+          <span class="tocnumber">
+           6.4
+          </span>
+          <span class="toctext">
+           Using LaTeX-Suite
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Using_ConTeXt_in_Vim">
+      Using ConTeXt in Vim
+     </span>
+    </h2>
+    <p>Nikolai Weibull was the first one who wrote <tt>context.vim</tt> files and submitted them to the official Vim repository.
+They are part of the official Vim 7, and were expanded and improved in Vim 8. Starting with Vim 9.0.0218, the scripts supporting ConTeXt in Vim have been rewritten in Vim 9 script (the new Vim's scripting language). For the complete documentation, see <tt>:help ft-context</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Asciicast">
+      Asciicast
+     </span>
+    </h3>
+    <p><a class="image" href="../../File:context-in-vim.png"><img alt="context-in-vim.png" decoding="async" height="324" src="../../images/a/ae/context-in-vim.webp" width="598"></a>
+</p>
+    <p>This asciicast<a class="external autonumber" href="https://asciinema.org/a/91111" rel="nofollow">[1]</a> gives you a taste of ConTeXt editing in Vim.
+</p>
+    <h3>
+     <span class="mw-headline" id="Typesetting">
+      Typesetting
+     </span>
+    </h3>
+    <p>The recommended way to typeset a ConTeXt document is to use the <tt>:ConTeXt</tt> command. Just type:
+</p>
+    <pre>:ConTeXt&nbsp;%
+</pre>
+    <p>to compile the document in the current buffer.
+Typesetting happens in the background,
+so you may continue working on your document. If there are errors, the quickfix window will open automatically
+to show the errors (one per line). The cursor will stay in the main document, so your typing workflow will not
+be disrupted. You may use standard quickfix commands to jump between errors: <tt>:cfirst</tt>, <tt>:cprev</tt>,
+<tt>:cnext</tt>, etc&hellip; (see <tt>:help quickfix</tt>). See below for useful mappings for these commands.
+</p>
+    <p>If your document is typeset without errors, <tt>Success!</tt> is printed at the bottom of the screen.
+</p>
+    <p>The <tt>:ConTeXt</tt> command accepts an optional path, in case you want to typeset a document different
+from the current one (useful for big projects).
+</p>
+    <p>You may check the status of your ConTeXt jobs with <tt>:ConTeXtJobStatus</tt>, and you may stop all
+running jobs with <tt>:ConTeXtStopJobs</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Setting_a_custom_typesetting_engine">
+      Setting a custom typesetting engine
+     </span>
+    </h3>
+    <p>The <tt>:ConTeXt</tt> command invokes the <tt>mtxrun</tt> script that is found in <tt>$PATH</tt>. For more fine grained control over the command and its environment, you may invoke <code>context.Typeset()</code> directly (or <code>context#Typeset()</code> from legacy Vim script). For instance, if you have installed a version of ConTeXt in <tt>$HOME/context</tt> (where <tt>$HOME</tt> is the path to your home directory), you may define a function to use it similar to the following (you may put the following code in <tt>~/.vim/after/ftplugin/context.vim</tt>, creating the file and the directories if they do not exist):
+</p>
+    <pre>import autoload 'context.vim'
+</pre>
+    <pre>def MyConTeXt()
+  const env = {'PATH': printf("%s/context/tex/texmf-&lt;os&gt;-&lt;arch&gt;/bin:%s", $HOME, $PATH)}
+  context.Typeset("%", env)
+enddef
+</pre>
+    <p>and perhaps use it with a mapping:
+</p>
+    <pre>nnoremap &lt;silent&gt;&lt;buffer&gt;&lt;leader&gt;t &lt;scriptcmd&gt;MyConTeXt()&lt;cr&gt;
+</pre>
+    <p><tt>context.Typeset()</tt> accepts a third optional argument to specify a custom
+typesetting command. That must be a function that takes a path and returns the
+command as a List. For example:
+</p>
+    <pre>def ConTeXtCustomCommand(path: string): list&lt;string&gt;
+  return ['mtxrun', '--script', 'context', '--nonstopmode', path]
+enddef
+</pre>
+    <pre>context.ConTeXtTypeset("%", v:none, ConTeXtCustomCommand)
+</pre>
+    <h3>
+     <span class="mw-headline" id="Working_with_large_projects">
+      Working with large projects
+     </span>
+    </h3>
+    <p>Large projects are often organized as a root document and various chapter
+files. When editing a chapter file, it is convenient to invoke <tt>:ConTeXt</tt>
+directly on it, rather than having to switch to the root file. A &ldquo;magic line&rdquo;
+can be added at the beginning of each chapter file, which specifies the
+relative path to the root file. For instance:
+</p>
+    <pre>% !TEX root = ../MyRoot.tex
+</pre>
+    <p>Vim searches for the magic line in the first ten lines of the current buffer:
+if the magic line is found, the document specified by that line is typeset rather than the
+one in the current buffer. The root document does not have to be opened in
+Vim.
+</p>
+    <h3>
+     <span class="mw-headline" id="Updating_the_syntax_files">
+      Updating the syntax files
+     </span>
+    </h3>
+    <p>Vim includes syntax files generated by <tt>mtxrun</tt>. If you want to use more up-to-date files, overriding those distributed with Vim, you may proceed as follows. Assuming your Vim configuration lives in <tt>~/.vim</tt>, you may type:
+</p>
+    <pre>mkdir -p ~/.vim/syntax/shared
+cd ~/.vim/syntax/shared
+mtxrun --script interface --vim
+</pre>
+    <p>The last command will create the following syntax files:
+</p>
+    <ul>
+     <li>
+      <tt>
+       context-data-context.vim
+      </tt>
+      ;
+     </li>
+     <li>
+      <tt>
+       context-data-interfaces.vim
+      </tt>
+      ;
+     </li>
+     <li>
+      <tt>
+       context-data-metafun.vim
+      </tt>
+      ;
+     </li>
+     <li>
+      <tt>
+       context-data-tex.vim
+      </tt>
+      .
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Editing_features">
+      Editing features
+     </span>
+    </h3>
+    <p>You may use the following commands to quickly jump to different parts of your document:
+</p>
+    <ul>
+     <li>
+      <tt>
+       [[
+      </tt>
+      : jump to the previous start of subject, section, chapter, part, component, or product;
+     </li>
+     <li>
+      <tt>
+       ]]
+      </tt>
+      : jump to the next start of subject, section, chapter, part, component, or product;
+     </li>
+     <li>
+      <tt>
+       []
+      </tt>
+      : jump to the previous end of section, chapter, etc&hellip;;
+     </li>
+     <li>
+      <tt>
+       ][
+      </tt>
+      : jump to the next end of section, chapter, etc&hellip;;
+     </li>
+     <li>
+      <tt>
+       [{
+      </tt>
+      : jump to the previous
+      <tt>
+       \start&hellip;
+      </tt>
+      or
+      <tt>
+       \setup&hellip;
+      </tt>
+      command;
+     </li>
+     <li>
+      <tt>
+       ]}
+      </tt>
+      : jump to the next
+      <tt>
+       \stop&hellip;
+      </tt>
+      or
+      <tt>
+       \setup&hellip;
+      </tt>
+      command;
+     </li>
+    </ul>
+    <p>Each of the above accepts an optional count. For example, you may type <tt>3[{</tt> to jump
+three <tt>\start&hellip;</tt> commands before.
+</p>
+    <p>You may use the following ConTeXt-specific text objects, to be used in Visual or Operator-pending mode
+(see <tt>:help text-objects</tt>):
+</p>
+    <ul>
+     <li>
+      <tt>
+       i$
+      </tt>
+      : inside
+      <tt>
+       $&hellip;$
+      </tt>
+      (dollars excluded);
+     </li>
+     <li>
+      <tt>
+       a$
+      </tt>
+      : around
+      <tt>
+       $&hellip;$
+      </tt>
+      (dollars included);
+     </li>
+     <li>
+      <tt>
+       tp
+      </tt>
+      : a ConTeXt paragraph.
+     </li>
+    </ul>
+    <p>So, for example, you may copy (&ldquo;yank&rdquo; in Vim's jargon) a paragraph by typing <tt>ytp</tt> (&ldquo;yank a TeX
+paragraph&ldquo;), delete it with <tt>dtp</tt>, select it with <tt>vtp</tt>, reflow it with <tt>gqtp</tt>, etc&hellip;
+Similarly, you may yank a formula with <tt>vi$</tt> (or <tt>va$</tt>), and delete it, select it, etc&hellip;, in a
+similar fashion.
+</p>
+    <p>If you have enabled the <tt>matchit</tt> plugin included in Vim (see <tt>:help matchit</tt>), you may also
+type <tt>%</tt> to jump between matching <tt>\start&hellip;</tt> and <tt>\stop&hellip;</tt> commands, or between
+matching parentheses.
+</p>
+    <p>You may jump to a different file by positioning the cursor over the file name and typing <tt>gf</tt> (<tt>:help gf</tt>).
+For example, if you have the following in your document:
+</p>
+    <pre>\component my_component
+</pre>
+    <p>putting the cursor over <tt>my_component</tt> and pressing <tt>gf</tt> will open <tt>my_component.tex</tt>.
+</p>
+    <p>Similarly, you may use <tt>[&lt;c-i&gt;</tt> (this is square bracket followed by ctrl-i)
+to jump to the definition of the word under the cursor (even if it is in a different
+file), or <tt>[i</tt> to display the (first line of the) definition under the status line. For these and similar commands,
+see <tt>:help include-search</tt>.
+</p>
+    <p>Vim searches for files in the locations specified by the <tt>path</tt> option. You may
+need to adjust the value of <tt>path</tt> for the above to work (see <tt>:help 'path'</tt>).
+</p>
+    <h3>
+     <span class="mw-headline" id="Integration_with_MetaPost">
+      Integration with MetaPost
+     </span>
+    </h3>
+    <p>Vim offers excellent support for editing METAFONT and MetaPost documents (<tt>mf</tt> and <tt>mp</tt> filetypes).
+See <tt>:help ft-metapost</tt> for the details.
+Most of the features of such filetypes work also inside ConTeXt's MetaPost environments,
+such as <tt>\startMPpage&hellip; \stopMPpage</tt>.
+</p>
+    <p>In particular, Vim automatically highlights and indents MetaPost and MetaFun code inside a ConTeXt document.
+Besides, when you are inside a MetaPost environment, you may press CTRL-X followed by CTRL-O
+to complete a MetaPost/MetaFun keyword (see below for a list of several autocompletion plugins to streamline this).
+This works out of the box: no configuration is required. Watch the asciicast above for a demo.
+</p>
+    <h3>
+     <span class="mw-headline" id="Integration_with_other_languages">
+      Integration with other languages
+     </span>
+    </h3>
+    <p>Lua syntax highlighting is used inside <tt>\directlua{}</tt> and <tt>\ctxlua{}</tt> commands,
+and inside <tt>\startluacode&hellip; \stopluacode</tt>. XML highlighting is used inside <tt>\startXML&hellip; \stopXML</tt>.
+</p>
+    <p>You may embed other filetypes. Just define <tt>g:context_include</tt> (or <tt>b:context_include</tt> for
+buffer-specific settings). For example, if you want to highlight C++ code inside, say, <tt>\startCPP&hellip; \stopCPP</tt>,
+define:
+</p>
+    <pre>let g:context_include = { 'cpp'&nbsp;: 'CPP' }
+</pre>
+    <p>The key is the name of the filetype and the corresponding value is name of the command.
+</p>
+    <h3>
+     <span class="mw-headline" id="Using_the_scripts_with_an_older_Vim">
+      Using the scripts with an older Vim
+     </span>
+    </h3>
+    <p>If you are using an older Vim, you may copy the following scripts from Vim's distribution 
+(<a class="external free" href="https://github.com/vim/vim" rel="nofollow">https://github.com/vim/vim</a>) into corresponding
+folders in your <tt>.vim</tt> folder (so, for example <tt>runtime/ftplugin/context.vim</tt> must be copied into
+<tt>~/.vim/ftplugin/context.vim</tt>):
+</p>
+    <pre>runtime/autoload/context.vim
+runtime/autoload/contextcomplete.vim
+runtime/compiler/context.vim
+runtime/ftplugin/{context,mf,mp}.vim
+runtime/indent/{context,mf,mp}.vim
+runtime/syntax/{context,mf,mp}.vim
+</pre>
+    <p><b>Note:</b> the runtime scripts in Vim 9.0.0218 or later are written in Vim 9 script (the new scripting language embedded in Vim) and there is no guarantee that they will work with older versions of Vim!
+</p>
+    <p>If you get the following error when you open a ConTeXt or MetaPost document:
+</p>
+    <pre>E410: Invalid :syntax subcommand: iskeyword
+</pre>
+    <p>edit the syntax files and remove the <tt>syn iskeyword</tt> or <tt>syntax iskeyword</tt> line.
+Instead, put a corresponding command in <tt>~/.vim/after/ftplugin/context.vim</tt>:
+</p>
+    <pre>setlocal iskeyword=@,48-57,a-z,A-Z,192-255
+</pre>
+    <p>and in <tt>~/.vim/after/ftplugin/mp.vim</tt> for MetaPost:
+</p>
+    <pre>setlocal iskeyword=@,_
+</pre>
+    <p>Everything should work, at least with Vim 7.4.
+</p>
+    <h3>
+     <span class="mw-headline" id="TODO">
+      TODO
+     </span>
+    </h3>
+    <ul>
+     <li>
+      Some essential math support.
+     </li>
+     <li>
+      Proper URL highlighting ('%' doesn't start a comment, ...) [request by VnPenguin].
+     </li>
+     <li>
+      Perhaps borrow something from
+      <a class="external free" href="https://github.com/lervag/vimtex" rel="nofollow">
+       https://github.com/lervag/vimtex
+      </a>
+      or
+      <a class="external free" href="http://vim-latex.sourceforge.net/" rel="nofollow">
+       http://vim-latex.sourceforge.net/
+      </a>
+      ?
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Filetype_detection">
+      Filetype detection
+     </span>
+    </h2>
+    <p>TeX (Plain TeX), LaTex and ConTeXt all use the <tt>.tex</tt> extension for files, which makes it difficult to detect the filetype based on the extension. From Vim 7 onwards, Vim does some intelligent checking to see it the file is <tt>plaintex</tt> or <tt>latex</tt> or <tt>context</tt>.
+</p>
+    <p>If the first line of a <tt>*.tex</tt> file has the form 
+</p>
+    <pre>%&&lt;format&gt;
+</pre>
+    <p>then this determines the file type:  <tt>plaintex</tt> (for Plain TeX), <tt>context</tt> (for
+ConTeXt), or <tt>tex</tt> (for LaTeX).  Otherwise, the file is searched for keywords to
+choose <tt>context</tt> or <tt>tex</tt>.  If no keywords are found, it defaults to <tt>plaintex</tt>.
+You can change the default by defining the variable <tt>g:tex_flavor</tt> to the format
+(not the file type) you use most.  Use one of these: 
+</p>
+    <pre>let g:tex_flavor = "plain"
+let g:tex_flavor = "context"
+let g:tex_flavor = "latex"
+</pre>
+    <p>Currently no other formats are recognized.
+</p>
+    <ul>
+     <li>
+      If you use ConTeXt most of the time, but occasionally use LaTeX or Plain TeX, you can add the following to your
+      <tt>
+       vimrc
+      </tt>
+     </li>
+    </ul>
+    <pre>let g:tex_flavor = "context"
+</pre>
+    <ul>
+     <li>
+      If you only use ConTeXt, you can add the following lines to
+      <tt>
+       filetype.vim
+      </tt>
+      :
+     </li>
+    </ul>
+    <pre>" ConTeXt
+augroup filetypedetect
+	au! BufRead,BufNewFile *.tex		setfiletype context
+augroup END
+</pre>
+    <p>so the next time you open a <tt>*.tex</tt> file, Vim will always recognize it as a ConTeXt document.
+</p>
+    <h2>
+     <span class="mw-headline" id="Spell_checking">
+      Spell checking
+     </span>
+    </h2>
+    <p>Vim 7 or later has a built-in spell checker. To enable it or disable it, use:
+</p>
+    <pre>:set spell
+</pre>
+    <p>or
+</p>
+    <pre>:set nospell
+</pre>
+    <p>respectively.
+To set the language to be used for spell checking, set the <tt>spelllang</tt> option accordingly. For example:
+</p>
+    <pre>:set spelllang=en_us
+</pre>
+    <p>Use lowercase letters (<tt>en_us</tt>, not <tt>en_US</tt>). When you set <tt>spelllang</tt>, Vim offers to
+download the language data into your <tt>.vim</tt> folder, if such language is not available.
+You can put the above settings in your <tt>vimrc</tt> if you like.
+</p>
+    <h2>
+     <span class="mw-headline" id="Powerful_key_mappings">
+      Powerful key mappings
+     </span>
+    </h2>
+    <p>In the following, <tt>&lt;leader&gt;</tt> denotes your &ldquo;leader&rdquo; (<tt>:help mapleader</tt>), that is,
+the prefix for user-defined mappings.
+By default, the leader is the backslash character, but that may be changed by the user.
+For example, to use a comma as a leader, put this in your <tt>vimrc</tt>:
+</p>
+    <pre>map &lt;leader&gt; ,
+</pre>
+    <p>Rather than overriding the default leader, you may define an alternative key. The <tt>&lt;space&gt;</tt> is a good
+choice, because by default it has the same function as the <tt>&lt;right&gt;</tt> key, and it is comfortable to type:
+</p>
+    <pre>map &lt;space&gt; &lt;leader&gt;  " Use &lt;space&gt; as an alternative leader (backslash can still be used)
+</pre>
+    <h3>
+     <span class="mw-headline" id="Clean_up_auxiliary_files">
+      Clean up auxiliary files
+     </span>
+    </h3>
+    <p>The following function can be used to clean up temporary files:
+</p>
+    <pre>fun! ConTeXtClean()
+  let l:currdir = expand("%:p:h")
+  let l:tmpdirs = ['out'] " Temporary directories
+  let l:suffixes = ['aux', 'bbl', 'blg', 'fls', 'log', 'tuc'] " Suffixes of temporary files
+  for ff in glob(l:currdir . '/*.{' . join(l:suffixes, ',') . '}', 1, 1)
+    call delete(ff)
+  endfor
+  for dd in l:tmpdirs
+    let l:subdir = l:currdir . '/' . dd
+    if isdirectory(l:subdir)
+      for ff in glob(l:subdir . '/*.{' . join(l:suffixes, ',') . '}', 1, 1)
+        call delete(ff)
+      endfor
+    endif
+    call delete(l:subdir) " Delete directory (only if empty)
+  endfor
+  echomsg "Aux files removed"
+endf
+</pre>
+    <p>Customize <tt>l:tmpdirs</tt> and <tt>l:suffixes</tt> to suit your needs.
+In Windows systems, you may have to replace each slash with a backslash, too.
+</p>
+    <p>The following mapping allows you to remove auxiliary files by pressing <tt>\tc</tt>:
+</p>
+    <pre>nnoremap &lt;silent&gt;&lt;buffer&gt; &lt;leader&gt;tc&nbsp;:&lt;c-u&gt;call ConTeXtClean()&lt;cr&gt;
+</pre>
+    <h3>
+     <span class="mw-headline" id="Snippets">
+      Snippets
+     </span>
+    </h3>
+    <p>Vim allows you to define abbreviations for frequently used pieces of text (see <tt>:help abbreviations</tt>).
+Here are a few examples:
+</p>
+    <pre>fun! Eatchar(pat)  " See :help abbreviations
+   let c = nr2char(getchar(0))
+   return (c =~ a:pat)&nbsp;? ''&nbsp;: c
+endfun
+
+iab &lt;buffer&gt; ch- \startchapter[title={&lt;c-o&gt;ma}]&lt;cr&gt;&lt;c-o&gt;mb&lt;cr&gt;\stopchapter&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; s- \startsection[title={&lt;c-o&gt;ma}]&lt;cr&gt;&lt;c-o&gt;mb&lt;cr&gt;\stopsection&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; ss- \startsubsection[title={&lt;c-o&gt;ma}]&lt;cr&gt;&lt;c-o&gt;mb&lt;cr&gt;\stopsubsection&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; sss- \startsubsubsection[title={&lt;c-o&gt;ma}]&lt;cr&gt;&lt;c-o&gt;mb&lt;cr&gt;\stopsubsubsection&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; slide- \startslide[title={&lt;c-o&gt;ma}]&lt;cr&gt;&lt;c-o&gt;mb&lt;cr&gt;\stopslide&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; fig- \startplacefigure&lt;cr&gt;&lt;tab&gt;\externalfigure[&lt;c-o&gt;ma]%&lt;cr&gt;[]&lt;c-o&gt;mb&lt;cr&gt;&lt;c-d&gt;\stopplacefigure&lt;esc&gt;`a`b&lt;c-o&gt;a&lt;c-r&gt;=Eatchar('\s')&lt;cr&gt;
+iab &lt;buffer&gt; item- \startitemize&lt;cr&gt;&lt;cr&gt;\stopitemize&lt;up&gt;&lt;tab&gt;\item
+iab &lt;buffer&gt; enum- \startitemize[n]&lt;cr&gt;&lt;cr&gt;\stopitemize&lt;up&gt;&lt;tab&gt;\item
+iab &lt;buffer&gt; i- \item
+</pre>
+    <p>Type the abbreviation followed by Space to expand the snippet, then continue typing normally.
+</p>
+    <p>Inside the definition of an abbreviation, marks may be set (see <tt>:h m</tt>), which allow you to jump between the different
+parts of a snippet with TAB (CTRL-i) and CTRL-O (in Normal mode) after the abbreviation is expanded (see <tt>:h jump-motions</tt>).
+For example, after typing <tt>ch- </tt>, the cursor will be at the title's position. If you press <tt>&lt;esc&gt;&lt;tab&gt;</tt> (or
+<tt>&lt;c-o&gt;&lt;tab&gt;</tt> if you want to stay in Insert mode after the jump), you will jump between <tt>\startchapter</tt>
+and <tt>\stopchapter</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Buffer-local_Insert-mode_macros_to_speed_up_editing">
+      Buffer-local Insert-mode macros to speed up editing
+     </span>
+    </h3>
+    <p>(By <a href="../../User:David_antos.html" title="User:David antos">D.A.</a> 19:52, 8 Jul 2005 (CEST))
+</p>
+    <ul>
+     <li>
+      I have remapped &lt;leader&gt; to comma (one hardly ever use commas just before a letter)
+     </li>
+     <li>
+      two types of mappings: stand-alone and changing the previous word
+     </li>
+     <li>
+      usage of mappings that change the previous word: type the name of the macro and ,ta (for tag, use your leader character instead of the comma); it created \start-\stop block of the macro
+     </li>
+     <li>
+      put the code into
+      <code>.vim/after/plugin/context.vim</code>
+     </li>
+    </ul>
+    <pre>let maplocalleader = mapleader
+
+" Make start-stop block out of the previous word
+imap &lt;buffer&gt; &lt;LocalLeader&gt;ta \start&lt;Cr&gt;\stop&lt;Cr&gt;&lt;Esc&gt;4bhdiw$pj$pO
+imap &lt;buffer&gt; &lt;LocalLeader&gt;tb \begin&lt;Cr&gt;\end&lt;Cr&gt;&lt;Esc&gt;4bhdiw$pj$pO
+
+" Itemize
+imap &lt;buffer&gt; &lt;LocalLeader&gt;it \startitemize&lt;Cr&gt;\stopitemize&lt;Esc&gt;O\item&lt;Space&gt;
+imap &lt;buffer&gt; &lt;LocalLeader&gt;en \startitemize[n]&lt;Cr&gt;\stopitemize&lt;Esc&gt;O\item&lt;Space&gt;
+imap &lt;buffer&gt; &lt;LocalLeader&gt;i&lt;Return&gt; \item&lt;Space&gt;
+
+" Font switching and emphasize
+imap &lt;buffer&gt; &lt;LocalLeader&gt;em {\em }&lt;Left&gt;
+imap &lt;buffer&gt; &lt;LocalLeader&gt;sc {\sc }&lt;Left&gt;
+
+" Define... and setup...
+imap &lt;buffer&gt; &lt;LocalLeader&gt;de \define
+imap &lt;buffer&gt; &lt;LocalLeader&gt;se \setup
+
+" Typing and type
+imap &lt;buffer&gt; &lt;LocalLeader&gt;ty \type{}&lt;Left&gt;
+imap &lt;buffer&gt; &lt;LocalLeader&gt;typ typing&lt;LocalLeader&gt;ta
+
+" Quote and quotation
+imap &lt;buffer&gt; &lt;LocalLeader&gt;" \quotation{}&lt;Left&gt;
+imap &lt;buffer&gt; &lt;LocalLeader&gt;' \quote{}&lt;Left&gt;
+</pre>
+    <h3>
+     <span class="mw-headline" id="Key_mappings_borrowed_from_SciTE">
+      Key mappings borrowed from SciTE
+     </span>
+    </h3>
+    <p>If you use the stand-alone distribution for Windows/Linux.
+You can reset the key mapping to speed ConTeXt compiling.
+</p>
+    <p>Just add the following code to your <tt>_vimrc</tt> (or <tt>.vimrc</tt> file under Linux) file:
+</p>
+    <pre>"run setup and complie, then open the result pdf file
+ map &lt;F5&gt; &lt;Esc&gt;&lt;Esc&gt;:sil&nbsp;! "D:\context\tex\setuptex.bat && texmfstart texexec.pl --autopdf --pdf '%'"&lt;CR&gt;&lt;CR&gt;
+
+"view the corresponding pdf file
+map &lt;F6&gt; &lt;Esc&gt;&lt;Esc&gt;:sil&nbsp;! D:\"Program Files"\Adobe\Acrobat\Acrobat.exe&nbsp;%:p:r.pdf&lt;CR&gt;&lt;CR&gt;
+
+"run setup and make purge
+map &lt;F7&gt; &lt;Esc&gt;&lt;Esc&gt;:sil&nbsp;! "D:\context\tex\setuptex.bat && texmfstart texutil.pl --purge"&lt;CR&gt;&lt;CR&gt;
+
+"run setup and make list of the current file
+map &lt;F8&gt; &lt;Esc&gt;&lt;Esc&gt;:sil&nbsp;! "D:\context\tex\setuptex.bat && texmfstart texexec.pl --autopdf --pdf --list --result=%:p:r_list&nbsp;%"&lt;CR&gt;&lt;CR&gt;
+</pre>
+    <h3>
+     <span class="mw-headline" id="Quickfix_mappings">
+      Quickfix mappings
+     </span>
+    </h3>
+    <p>It is useful to define mappings for quickfix commands, to be able to navigate among ConTeXt errors.
+For example:
+</p>
+    <pre> nnoremap &lt;silent&gt; ]q&nbsp;:&lt;c-u&gt;&lt;c-r&gt;=v:count1&lt;cr&gt;cnext&lt;cr&gt;zz
+ nnoremap &lt;silent&gt; [q&nbsp;:&lt;c-u&gt;&lt;c-r&gt;=v:count1&lt;cr&gt;cprevious&lt;cr&gt;zz
+ nnoremap &lt;silent&gt; ]Q&nbsp;:&lt;c-u&gt;clast&lt;cr&gt;zz
+ nnoremap &lt;silent&gt; [Q&nbsp;:&lt;c-u&gt;cfirst&lt;cr&gt;zz
+</pre>
+    <p>Or install Tim Pope's <i>unimpaired</i> plugin.
+</p>
+    <h2>
+     <span class="mw-headline" id="Makefiles">
+      Makefiles
+     </span>
+    </h2>
+    <p>For your ConTeXt document, you can prepare a Makefile like this one (Contributed by <a class="new" href="../../index.php?title=User:Buggs&action=edit&redlink=1" title="User:Buggs (page does not exist)">Buggs</a>):
+</p>
+    <pre># An example Makefile to compile a context file, paper.tex
+paper.pdf: paper.tex
+    context paper
+
+test:
+    xpdf paper.pdf
+
+clean:
+    rm *.aux *.bbl *.blg *.log *.tuc
+</pre>
+    <p>If you put these mappings to your <code>vimrc</code> file, you can then compile the document with F9 and preview it with F8:
+</p>
+    <pre>" map ":make" to the F9 key
+imap &lt;F9&gt; &lt;ESC&gt;:exe "lcd" fnameescape(expand("%:p:h"))&lt;CR&gt;:make&lt;CR&gt;
+nmap &lt;F9&gt; :exe "lcd" fnameescape(expand("%:p:h"))&lt;CR&gt;:make&lt;CR&gt;
+
+"map ":make test" to the F8 key
+imap &lt;F8&gt; &lt;ESC&gt;:exe "lcd" fnameescape(expand("%:p:h"))&lt;CR&gt;:make test&lt;CR&gt;
+nmap &lt;F8&gt; :exe "lcd" fnameescape(expand("%:p:h"))&lt;CR&gt;:make test&lt;CR&gt;
+</pre>
+    <p>Note that if you use <tt>:make</tt> typesetting will happen synchronously.
+</p>
+    <h2>
+     <span class="mw-headline" id="Other_useful_Vim_plugins">
+      Other useful Vim plugins
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Autocompletion">
+      Autocompletion
+     </span>
+    </h3>
+    <p>Vim offers a rich completion mechanism (<tt>:help ins-completion</tt>), but there are several plugins
+that improve on it, in particular, to provide automatic completion of keywords:
+</p>
+    <ul>
+     <li>
+      MUcomplete
+      <a class="external autonumber" href="https://github.com/lifepillar/vim-mucomplete" rel="nofollow">
+       [2]
+      </a>
+     </li>
+     <li>
+      Coc
+      <a class="external autonumber" href="https://github.com/neoclide/coc.nvim" rel="nofollow">
+       [3]
+      </a>
+      .
+     </li>
+     <li>
+      Completor
+      <a class="external autonumber" href="https://github.com/maralla/completor.vim" rel="nofollow">
+       [4]
+      </a>
+     </li>
+     <li>
+      NeoComplete
+      <a class="external autonumber" href="https://github.com/Shougo/neocomplete.vim" rel="nofollow">
+       [5]
+      </a>
+     </li>
+     <li>
+      Deoplete (for NeoVim)
+      <a class="external autonumber" href="https://github.com/Shougo/deoplete.nvim" rel="nofollow">
+       [6]
+      </a>
+     </li>
+     <li>
+      YouCompleteMe
+      <a class="external autonumber" href="https://github.com/Valloric/YouCompleteMe" rel="nofollow">
+       [7]
+      </a>
+     </li>
+     <li>
+      AutoComplPop
+      <a class="external autonumber" href="https://github.com/vim-scripts/AutoComplPop" rel="nofollow">
+       [8]
+      </a>
+     </li>
+     <li>
+      SuperTab
+      <a class="external autonumber" href="https://github.com/ervandew/supertab" rel="nofollow">
+       [9]
+      </a>
+     </li>
+    </ul>
+    <p>In the asciicast at the top of this page MUcomplete was used.
+</p>
+    <h3>
+     <span class="mw-headline" id="UltiSnips">
+      UltiSnips
+     </span>
+    </h3>
+    <p>UltiSnips<a class="external autonumber" href="https://github.com/SirVer/ultisnips" rel="nofollow">[10]</a> is a sophisticated snippets manager.
+Here are a few examples of useful UltiSnips snippets for ConTeXt:
+</p>
+    <pre>snippet "s(tart)?" "start / stop" br
+\start${1:something}$2
+	${3:${VISUAL}}
+\stop$1
+endsnippet
+
+snippet enum "Enumerate" b
+\startitemize[n]
+	\item ${0:${VISUAL}}
+\stopitemize
+endsnippet
+
+snippet item "Itemize" b
+\startitemize
+	\item
+	${0:${VISUAL}}
+\stopitemize
+endsnippet
+
+snippet it "Individual item" b
+\item
+${0:${VISUAL}}
+endsnippet
+
+snippet fig "External figure" b
+\startplacefigure
+	\externalfigure[${1:${VISUAL}}][$2]
+\stopplacefigure
+endsnippet
+
+</pre>
+    <p>Save the above text into <tt>~/.vim/UltiSnips/context.snippets</tt>. 
+Click on the asciicast linked at the top of this document to see UltiSnips snippets in action.
+</p>
+    <h3>
+     <span class="mw-headline" id="Outline_of_a_document">
+      Outline of a document
+     </span>
+    </h3>
+    <p>Tagbar<a class="external autonumber" href="https://github.com/majutsushi/tagbar" rel="nofollow">[11]</a> is a useful plugin to display an outline or a table of contents of a document.
+It uses Ctags, which you must install, too. Ctags does not support ConTeXt out of the box, but it is easy to extend.
+Create a <tt>.ctags</tt> file in your home directory, then copy and paste the following:
+</p>
+    <pre>--langdef=context
+--regex-context=/^[[:space:]]*\\startsection[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/\. \1/s,section/
+--regex-context=/^[[:space:]]*\\startsubsection[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/\.\. \1/s,subsection/
+--regex-context=/^[[:space:]]*\\startsubsubsection[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/\.\.\. \1/s,subsubsection/
+--regex-context=/^[[:space:]]*\\startchapter[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/\1/c,chapter/
+--regex-context=/^[[:space:]]*\\startsubject[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/SUBJ \1/c,subject/
+--regex-context=/^[[:space:]]*\\startpart[[:space:]]*\[[^]]*title[[:space:]]*=[[:space:]]*\{[[:space:]]*(.+)\}/\1/p,part/
+</pre>
+    <p>Put this in your <tt>vimrc</tt>:
+</p>
+    <pre>   let g:tagbar_type_context = {
+         \ 'ctagstype': 'context',
+         \ 'kinds': [
+         \ 'p:parts',
+         \ 'c:chapters',
+         \ 's:sections'
+         \ ],
+         \ 'sort': 0
+         \ }
+</pre>
+    <p>That's it! See the image at the top of this document for an example.
+</p>
+    <h3>
+     <span class="mw-headline" id="Using_LaTeX-Suite">
+      Using LaTeX-Suite
+     </span>
+    </h3>
+    <p><a class="external text" href="http://vim-latex.sourceforge.net/" rel="nofollow">latex-suite</a> currently doesn't support ConTeXt, but if you use it, here's what you have to do to compile ConTeXt documents:
+</p>
+    <p>1. After downloading and installing latex-suite, locate the file "texrc" (usually located in <code>~/.vim/ftplugin/latex-suite</code>). Copy this file to <code>~/.vim/ftplugin/tex/texrc</code>
+</p>
+    <p>2. Open this copy in your favorite editor (vim comes to mind...)
+</p>
+    <p>3. After line 80 in this file, there is a series of "Compiler rules." Just add this line to the section:
+</p>
+    <pre>TexLet g:Tex_CompileRule_cont = 'texexec --pdf --nonstopmode $*'
+</pre>
+    <p>This will add compilation for ConTeXT. In order to use it:
+</p>
+    <p>4. When you're in vim normal mode, run this command:
+</p>
+    <pre>TGTarget cont [that's "colon TGTarger cont"] 
+</pre>
+    <p>5. Edit your TeX-files, save the changes; when you want to compile, switch to normal mode and just type <code>\ll</code> (that's <i> 'backslash el el' </i>)
+</p>
+    <p>Voila, compilation should start. You'll have to specify this compiler target every timeI you open a TeX-file in Vim. If you want to make this the default compiler, you should have this line in your texrc:
+</p>
+    <pre>TexLet g:Tex_DefaultTargetFormat = 'cont'
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212427
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.065 seconds
+Preprocessor visited node count: 454/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3462/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1012-1!canonical and timestamp 20260109212427 and revision id 38579
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/Vim">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

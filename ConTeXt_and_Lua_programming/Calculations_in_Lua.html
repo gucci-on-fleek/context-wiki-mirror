@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Calculations in Lua&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Calculations_in_Lua" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Calculations in Lua
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3433&diff=40531">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>I tried to use <a class="extiw" href="http://modules.contextgarden.net/letter" title="modules:letter">Wolfgang&rsquo;s letter module</a> for my invoices and came up with this Lua code:
+</p>
+    <pre class="tex">
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+
+userdata.invoice <span class="brx">=</span> <span class="br">{</span> amount <span class="brx">=</span> 0, hours <span class="brx">=</span> 0, perhour <span class="brx">=</span> 100, items <span class="brx">=</span> <span class="br">{</span><span class="br">}</span> <span class="br">}</span>
+
+function userdata.RegisterTimeItem<span class="brx">(</span>text, hours<span class="brx">)</span>
+-- register a time dependent invoice item
+	if tex.systemmodes.trialtypesetting then return end
+	table.insert<span class="brx">(</span>userdata.invoice.items, <span class="br">{</span>text<span class="brx">=</span>text, hours<span class="brx">=</span>hours, amount<span class="brx">=</span>0<span class="br">}</span><span class="brx">)</span>
+	userdata.invoice.hours <span class="brx">=</span> userdata.invoice.hours + hours
+	userdata.invoice.amount <span class="brx">=</span> userdata.invoice.amount + hours * userdata.invoice.perhour
+end
+
+function userdata.RegisterAmountItem<span class="brx">(</span>text, amount<span class="brx">)</span>
+-- register a invoice item with fixed amount
+	if tex.systemmodes.trialtypesetting then return end
+	table.insert<span class="brx">(</span>userdata.invoice.items, <span class="br">{</span>text<span class="brx">=</span>text, hours<span class="brx">=</span>0, amount<span class="brx">=</span>amount<span class="br">}</span><span class="brx">)</span>
+	userdata.invoice.amount <span class="brx">=</span> userdata.invoice.amount + amount
+end
+
+function userdata.numberformat<span class="brx">(</span>amount<span class="brx">)</span>
+-- replace decimal point with comma <span class="brx">(</span><span class="brx">=</span> German format<span class="brx">)</span>
+	return string.gsub<span class="brx">(</span>string.format<span class="brx">(</span>"<span class="cs">\%</span>.2f", amount<span class="brx">)</span>, "<span class="comment">%.", ",")</span>
+end
+
+function userdata.InvoiceTimeLine<span class="brx">(</span>text, hours, printperhour<span class="brx">)</span>
+-- print an invoice line for time dependent items
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>hours<span class="brx">)</span> .. "<span class="cs">\\</span>,h"<span class="brx">)</span>
+	if printperhour then
+		context.NC<span class="brx">(</span>"&agrave; " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>,&euro;/h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>hours * userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>,&euro;"<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceAmountLine<span class="brx">(</span>text, amount<span class="brx">)</span>
+-- print a lump sum item
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>amount<span class="brx">)</span> .. "<span class="cs">\\</span>,&euro;"<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceTextLine<span class="brx">(</span>text<span class="brx">)</span>
+-- print a free invoice item <span class="brx">(</span>just text<span class="brx">)</span>
+	context.NC<span class="brx">(</span>text<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.InvoiceSumLine<span class="brx">(</span>text, printperhour<span class="brx">)</span>
+-- print invoice sum line
+	context.HL<span class="brx">(</span><span class="brx">)</span>
+	context.NC<span class="brx">(</span>"<span class="cs">\\</span>bf " .. text<span class="brx">)</span>
+	if userdata.invoice.hours &gt; 0 then
+		context.NC<span class="brx">(</span>userdata.numberformat<span class="brx">(</span>userdata.invoice.hours<span class="brx">)</span> .. "<span class="cs">\\</span>,h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	if printperhour then
+		context.NC<span class="brx">(</span>"&agrave; " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.perhour<span class="brx">)</span> .. "<span class="cs">\\</span>,&euro;/h"<span class="brx">)</span>
+	else
+		context.NC<span class="brx">(</span><span class="brx">)</span>
+	end
+	context.NC<span class="brx">(</span>"<span class="cs">\\</span>bf " .. userdata.numberformat<span class="brx">(</span>userdata.invoice.amount<span class="brx">)</span> .. "<span class="cs">\\</span>,&euro;"<span class="brx">)</span>
+	context.NC<span class="brx">(</span><span class="brx">)</span>
+	context.NR<span class="brx">(</span><span class="brx">)</span>
+end
+
+function userdata.Invoice<span class="brx">(</span><span class="brx">)</span>
+-- print the whole invoice
+	local amountsum, hoursum <span class="brx">=</span> 0,0
+	local printperhour <span class="brx">=</span> true
+	printperhour <span class="brx">=</span> <span class="brx">(</span>userdata.invoice.amount ~<span class="brx">=</span> <span class="brx">(</span>userdata.invoice.hours * userdata.invoice.perhour<span class="brx">)</span><span class="brx">)</span>
+	context.starttabulate<span class="brx">(</span><span class="br">{</span>"|lw<span class="brx">(</span>8cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>2cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>2cm<span class="brx">)</span>|rg<span class="brx">(</span>,<span class="brx">)</span>w<span class="brx">(</span>3cm<span class="brx">)</span>|"<span class="br">}</span><span class="brx">)</span>
+	for no, item in ipairs<span class="brx">(</span>userdata.invoice.items<span class="brx">)</span> do
+		if item.hours ~<span class="brx">=</span> 0 and item.amount <span class="brx">=</span><span class="brx">=</span> 0 then
+			userdata.InvoiceTimeLine<span class="brx">(</span>item.text, item.hours, printperhour<span class="brx">)</span>
+			hoursum <span class="brx">=</span> hoursum + item.hours
+			amountsum <span class="brx">=</span> amountsum + item.hours * userdata.invoice.perhour
+		elseif item.amount ~<span class="brx">=</span> 0 and item.hours <span class="brx">=</span><span class="brx">=</span> 0 then
+			userdata.InvoiceAmountLine<span class="brx">(</span>item.text, item.amount<span class="brx">)</span>
+			amountsum <span class="brx">=</span> amountsum + item.amount
+		else
+			userdata.InvoiceTextLine<span class="brx">(</span>item.text<span class="brx">)</span>
+		end
+	end
+	printperhour <span class="brx">=</span> <span class="brx">(</span>amountsum <span class="brx">=</span><span class="brx">=</span> <span class="brx">(</span>hoursum * userdata.invoice.perhour<span class="brx">)</span><span class="brx">)</span>
+	--userdata.invoice.hours <span class="brx">=</span> hoursum
+	--userdata.invoice.amount <span class="brx">=</span> amountsum
+	userdata.InvoiceSumLine<span class="brx">(</span>"gesamt", printperhour<span class="brx">)</span>
+	context.stoptabulate<span class="brx">(</span><span class="brx">)</span>
+end
+
+-- register invoice items
+
+userdata.RegisterAmountItem<span class="brx">(</span>"Some introductional text", 0<span class="brx">)</span> -- just text
+
+userdata.RegisterTimeItem<span class="brx">(</span>"Learn <span class="cs">\\</span>LUATEX", 2.5<span class="brx">)</span>
+userdata.RegisterTimeItem<span class="brx">(</span>"Do some calculations in <span class="cs">\\</span>CONTEXT", 3.5 + 7<span class="brx">)</span>
+
+userdata.RegisterAmountItem<span class="brx">(</span>"Donations to Open Source projects", 99<span class="brx">)</span> -- lump sum
+
+-- output
+
+userdata.Invoice<span class="brx">(</span><span class="brx">)</span>
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+</pre>
+    <p>I know, the code is quite horrible, but easy enough to customize it for your needs.
+There&rsquo;s too much hardcoded to use it as a general module, of course.
+E.g. it can&rsquo;t cope with quantity dependent items or with page breaks.
+</p>
+    <p>The whole thing becomes obsolete with the <a class="external text" href="http://archive.contextgarden.net/message/20110220.232845.71ebb6a0.en.html" rel="nofollow">preliminary spreadsheet module</a> by Hans in 2011-02 (I guess it will end up in the distribution soon).
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212406
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8724/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3433-1!canonical and timestamp 20260109212406 and revision id 40531
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Calculations_in_Lua">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

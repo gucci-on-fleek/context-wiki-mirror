@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/MetaPost's textext function and positioning&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/MetaPost%27s_textext_function_and_positioning" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/MetaPost's textext function and positioning
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6383&diff=41663">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Note: 
+</p>
+    <ul>
+     <li>
+      With MkIV, be careful to use
+      <code>textext.dflt</code>
+      which means DeFauLT.
+     </li>
+     <li>
+      With LMTX, be careful to use
+      <code>textext.dlft</code>
+      ) for LeFT, like
+      <code>textext.ulft</code>
+      ) and
+      <code>textext.llft</code>
+      )
+      <ul>
+       <li>
+        (
+        <code>textext.dflt</code>
+        does not work with LMTX).
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\setupMPinstance</span></span>
+  <span class="brx">[</span>metafun<span class="brx">]</span>
+  <span class="brx">[</span>textstyle<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>name:dejavusans*default at 15pt<span class="brx">]</span><span class="cs">\ignorespaces</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startMPpage</span></span>
+
+string MonTexte&nbsp;; 
+MonTexte&nbsp;:<span class="brx">=</span> "Aujourd'hui";
+
+draw <span class="brx">(</span>0cm,0cm<span class="brx">)</span>--<span class="brx">(</span>15cm,0cm<span class="brx">)</span>--<span class="brx">(</span>15cm,15cm<span class="brx">)</span>--<span class="brx">(</span>0cm,15cm<span class="brx">)</span>--cycle
+  withpen pencircle
+  scaled 0.5mm
+  withcolor red;
+
+pair decal&nbsp;;  decal&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0.0cm,-1.8cm<span class="brx">)</span>&nbsp;;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PA&nbsp;;  PA&nbsp;:<span class="brx">=</span> <span class="brx">(</span>7.5cm,13.5cm<span class="brx">)</span>&nbsp;;
+  
+draw textext.urt <span class="brx">(</span>"URT-"  & MonTexte<span class="brx">)</span> shifted PA;
+draw textext.ulft<span class="brx">(</span>"ULFT-" & MonTexte<span class="brx">)</span> shifted PA;
+draw textext.llft<span class="brx">(</span>"LLFT-" & MonTexte<span class="brx">)</span> shifted PA;
+draw textext.lrt <span class="brx">(</span>"LRT-"  & MonTexte<span class="brx">)</span> shifted PA;
+
+draw PA withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PB&nbsp;;  PB&nbsp;:<span class="brx">=</span> PA shifted decal&nbsp;;
+  
+draw textext.drt <span class="brx">(</span>"DRT-"  & MonTexte<span class="brx">)</span> shifted PB;
+draw textext.dlft<span class="brx">(</span>"DLFT-" & MonTexte<span class="brx">)</span> shifted PB;
+
+draw PB withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PC&nbsp;;  PC&nbsp;:<span class="brx">=</span> PB shifted decal&nbsp;;
+  
+draw textext.d<span class="brx">(</span>"D-" & MonTexte<span class="brx">)</span> shifted PC;
+
+draw PC withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PD&nbsp;;  PD&nbsp;:<span class="brx">=</span> PC shifted decal&nbsp;;
+  
+draw textext.bot<span class="brx">(</span>"BOT-" & MonTexte<span class="brx">)</span> shifted PD;
+draw textext.top<span class="brx">(</span>"TOP-" & MonTexte<span class="brx">)</span> shifted PD;
+
+draw PD withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PE&nbsp;;  PE&nbsp;:<span class="brx">=</span> PD shifted decal&nbsp;;
+  
+draw textext.lft<span class="brx">(</span>"LFT-" & MonTexte<span class="brx">)</span> shifted PE;
+draw textext.rt<span class="brx">(</span>"RT-" & MonTexte<span class="brx">)</span>   shifted PE;
+
+draw PE withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PF&nbsp;;  PF&nbsp;:<span class="brx">=</span> PE shifted decal&nbsp;;
+  
+draw textext<span class="brx">(</span>MonTexte<span class="brx">)</span> shifted PF;
+
+draw PF withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PG&nbsp;;  PG&nbsp;:<span class="brx">=</span> PF shifted decal&nbsp;;
+  
+draw textext.origin<span class="brx">(</span>"ORIGIN-" & MonTexte<span class="brx">)</span> shifted PG;
+
+draw PG withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+pair PH&nbsp;;  PH&nbsp;:<span class="brx">=</span> PG shifted decal&nbsp;;
+  
+draw textext.raw<span class="brx">(</span>"RAW-" & MonTexte<span class="brx">)</span> shifted PH;
+
+draw PH withpen pencircle scaled 1.5mm  withcolor red;
+
+<span class="comment">%------------------------------------------------------------------------------</span>
+
+<span class="cs"><span class="documentcs">\stopMPpage</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="889" src="../../wikiteximage/ff2d0986d1b6fe0921b42b284469c350.webp" width="889">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 24/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 125/2097152 bytes
+Template argument size: 60/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4793/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.974      1 -total
+ 78.91%   11.816      5 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6383-1!canonical and timestamp 20260109212416 and revision id 41663
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/MetaPost%27s_textext_function_and_positioning">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

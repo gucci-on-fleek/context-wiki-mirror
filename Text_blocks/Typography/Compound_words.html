@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Typography/Compound words&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Typography/Compound_words" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Typography/Compound words
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2574&diff=38947">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <dl>
+     <dd>
+      <i>
+       This article is about words that are spelled with a hyphen. For hyphenated words, see
+       <a href="Hyphenation.html" title="Text blocks/Typography/Hyphenation">
+        Hyphenation
+       </a>
+       .
+      </i>
+     </dd>
+    </dl>
+    <p>Words consisting of two separate words are often separated by an intra word dash, as in x-axis.
+This dash can be placed between two | characters, for example |-|.
+</p>
+    <p>
+When || is typed, the default intra word dash is used, which is </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="7" src="../../wikiteximage/7d010443693eec253a121e2aa2ba177c.webp" width="12">
+     </li>
+    </ul>
+    <p>. You can configure this with <tt><a href="../../Command/setuphyphenmark.html" title="Command/setuphyphenmark">\setuphyphenmark</a></tt>.
+</p>
+    <p>Valid values are <code>normal</code> and <code>wide</code>.
+</p>
+    <p>The default sign is a combination of two hyphens:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphyphenmark</span></span><span class="brx">[</span>sign<span class="brx">=</span>wide<span class="brx">]</span>
+
+intra||word
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="15" src="../../wikiteximage/e663ad68d6a387830edd54b882247f23.webp" width="82">
+     </li>
+    </ul>
+    <p>To get a normal sign you could set this with the <code>normal</code> value (ConTeXt 2008.09.16 or later).
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphyphenmark</span></span><span class="brx">[</span>sign<span class="brx">=</span>normal<span class="brx">]</span>
+intra||word
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="15" src="../../wikiteximage/cf317d69bf36da96dec8ec845dd6539f.webp" width="78">
+     </li>
+    </ul>
+    <p>The || is also used in word combinations like (intra)word, which is typed as (intra|)|word.
+The mechanism is not foolproof but it serves most purposes. In case the hyphenation is
+incorrect you can hyphenate the first word of the composed one by hand: (in\-tra|)|word.
+</p>
+    <p>Another use of || is the processing of subsentences. The symbol that surrounds a subsentence varies 
+depending on the current language settings, as controlled by <tt><a href="../../Command/setuplanguage.html" title="Command/setuplanguage">\setuplanguage</a></tt>. When you use |&lt;| and |&gt;| to indicate the subsentence, the proper symbol will be used automatically.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+a |&lt;|as explained below|&gt;| conflirtaneous <span class="cs"><span class="documentcs">\unknown</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="17" src="../../wikiteximage/d1ec1ca71a1578ffcf18540e7d0b7749.webp" width="323">
+     </li>
+    </ul>
+    <p>The main reason behind this mechanism is that TeX doesn&rsquo;t really know how to hyphenate
+composed words and how to handle subsentences. TeX know a lot about math, but far less
+about normal texts. Using this command not only serves consistency, but also makes sure that
+TeX can break compound words at the right places. It also keeps boundary characters at the
+right place when a breakpoint is inserted.
+</p>
+    <p>The table below is an extended version of the table in the "big manual". In the third
+column, you see what the possible line breaks in the word would be, and the output
+that would come from that. 
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\ShowComposed</span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span> -- <span class="brx">#</span>1 -- <span class="cs"><span class="documentcs">\hyphenatedword</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\hyphenation</span><span class="br">{</span>intraword<span class="br">}</span>
+<span class="cs">\hyphenation</span><span class="br">{</span>intra<span class="br">}</span>
+
+<span class="br">{</span><span class="cs">\bf</span> input -- normal output -- hyphenated output<span class="br">}</span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intraword<span class="br">}</span>     <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra-word<span class="br">}</span>    <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra||word<span class="br">}</span>   <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|-|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|<span class="brx">(</span>|word<span class="brx">)</span><span class="br">}</span> <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span><span class="brx">(</span>intra|<span class="brx">)</span>|word<span class="br">}</span> <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|--|word<span class="br">}</span> <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|~|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|_|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|<span class="brx">=</span>|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|'|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\ShowComposed</span><span class="br">{</span>intra|*|word<span class="br">}</span>  <span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/9b7e4da9df6a83a9d0829514edabbbb6.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Enabling_hyphenation_on_hyphens_for_composed_words_globally">
+      Enabling hyphenation on hyphens for composed words globally
+     </span>
+    </h2>
+    <p>This is possible in MkIV with the command <tt><a href="../../Command/setbreakpoints.html" title="Command/setbreakpoints">\setbreakpoints</a>[compound]</tt>.
+This is equivalent to typing each composed-word as <code>composed|-|word</code>. It also sets the characters '+', '/', '(', and ')' as good breakpoints inside composed words. The slash must be typed verbatim, though, not as <tt><a class="new" href="../../index.php?title=Command/slash&action=edit&redlink=1.html" title="Command/slash (page does not exist)">\slash</a></tt> or <tt><a class="new" href="../../index.php?title=Command/backslash&action=edit&redlink=1.html" title="Command/backslash (page does not exist)">\backslash</a></tt>.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% mode=mkiv</span>
+<span class="comment">% mkiv only</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setbreakpoints</span></span><span class="brx">[</span>compound<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+love/hate/play/run/love/hate/play/run/love/hate/play/run/love/hate/play/run
+
+love<span class="brx">(</span>hate<span class="brx">(</span>play<span class="brx">(</span>run<span class="brx">(</span>love<span class="brx">(</span>hate<span class="brx">(</span>play<span class="brx">(</span>run<span class="brx">(</span>love<span class="brx">(</span>hate<span class="brx">(</span>play<span class="brx">(</span>run<span class="brx">(</span>love<span class="brx">(</span>hate<span class="brx">(</span>play<span class="brx">(</span>run
+
+love-hate-play-run-love-hate-play-run-love-hate-play-run-love-hate-play-run
+
+love+hate+play+run+love+hate+play+run+love+hate+play+run+love+hate+play+run
+
+love<span class="brx">)</span>hate<span class="brx">)</span>play<span class="brx">)</span>run<span class="brx">)</span>love<span class="brx">)</span>hate<span class="brx">)</span>play<span class="brx">)</span>run<span class="brx">)</span>love<span class="brx">)</span>hate<span class="brx">)</span>play<span class="brx">)</span>run<span class="brx">)</span>love<span class="brx">)</span>hate<span class="brx">)</span>play<span class="brx">)</span>run
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="299" src="../../wikiteximage/30157c12dd52e98795e562d101a55301.webp" width="480">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212439
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.033 seconds
+Real time usage: 0.089 seconds
+Preprocessor visited node count: 87/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 474/2097152 bytes
+Template argument size: 122/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6603/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   45.734      1 -total
+ 19.67%    8.997      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2574-1!canonical and timestamp 20260109212439 and revision id 38947
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Typography/Compound_words">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

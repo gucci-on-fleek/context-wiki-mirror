@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Modules/Karnaugh&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Modules/Karnaugh" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Modules/Karnaugh
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6423&diff=41700">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is a ConTeXt user module that draws Karnaugh maps containing data (ones, ceros, or anything) and their groupings, with easy to use syntax. It supports larger than four variable maps; and formulas, or any text, can be added.
+</p>
+    <p>The download page is <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/ruid=3120012435/action=view/id=111" rel="nofollow">here</a>
+</p>
+    <p>The PDF documentation (with the actual maps) is <a class="external text" href="https://raw.githubusercontent.com/VicSanRoPe/context-karnaugh/master/doc/context/third/karnaugh/karnaugh-docs.pdf" rel="nofollow">here</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Options">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Data_input">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Data input
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#As_a_list">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           As a list
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#As_a_map">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           As a map
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Groups_and_other_data">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Groups and other data
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Groups">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Groups
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Notes">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Notes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Connecting_lines">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Connecting lines
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Options">
+      Options
+     </span>
+    </h2>
+    <p>To draw a Karnaugh map, the <code>karnaugh</code> environment is used, the options specified here override the global options.
+</p>
+    <pre>\startkarnaugh [..,..=..,..] ... \stopkarnaugh</pre>
+    <p>The options are set globally with the <code>setupkarnaugh</code> command.
+</p>
+    <pre>\setupkarnaugh [..,..=..,..]
+    ylabels = LIST
+    xlabels = LIST
+    ny = NUMBER
+    nx = NUMBER
+    name = TEXT
+    labelstyle = edge corner bars
+    groupstype = pass stop
+    indices = yes no on off
+    spacing = small big normal NUMBER
+    indicesstart = NUMBER</pre>
+    <ul>
+     <li>
+      The options
+      <code>ylabels</code>
+      and
+      <code>xlabels</code>
+      are the input variables used for the map, they are written as a list, and math mode is usually used for each individual element.
+      <code>xlabels</code>
+      refers to the variables at the top of the map, and the last element is the least significant variable (for indices and minterms).
+      <code>ylabels</code>
+      are at the left, its first element is the most significant variable. If these labels are not specified, then the labels will be I
+      <sub>
+       5
+      </sub>
+      , I
+      <sub>
+       4
+      </sub>
+      , ... , I
+      <sub>
+       0
+      </sub>
+      , and so on.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      The options
+      <code>ny</code>
+      and
+      <code>nx</code>
+      are the map&rsquo;s size in number of cells, they are calculated automatically when labels are specified, and if no size or labels are specified but there is data, the size of the map is guessed with the newline characters.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      The
+      <code>name</code>
+      option is some text that is added on top or on the top-left corner of the map, the name of the function could be placed there.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      The
+      <code>labelstyle</code>
+      option specifies whether the input variables are placed in a corner of the map (value:
+      <code>corner</code>
+      ) or at the edges (value:
+      <code>edge</code>
+      ), or if they are placed on top of bars which represent when the variable's value is 1 (value:
+      <code>bars</code>
+      ). By default, the
+      <code>corner</code>
+      style is used for small maps and the
+      <code>edge</code>
+      style is used for 5 variable maps or larger.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      The
+      <code>groupstyle</code>
+      option changes how the group&rsquo;s lines are drawn, if its value is
+      <code>pass</code>
+      (the default), the lines continue for a bit outside of the map. If it is
+      <code>stop</code>
+      , they will not, which might be preferred when making a combination of maps using the overlay method, to mark that some adjacent groups are not connected, but the effect is minimal.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      If the
+      <code>indices</code>
+      option is set to yes or on, it will draw a small number on every cell with the value of the input variables in decimal. If groups are also being drawn, the map&rsquo;s spacing will be enlarged to accommodate both things and the data.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      The
+      <code>spacing</code>
+      option simply increases or decreases the whitespace around every cell&rsquo;s data. Please note that the document&rsquo;s font size affects the map&rsquo;s size, such that is looks the same, just smaller or bigger, always with the same font as the main text. To make the maps have a constant size, surround them with
+      <code>\scale</code>
+      spacing can be a number too, adjust both of these to get the proportions you want.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Data_input">
+      Data input
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="As_a_list">
+      As a list
+     </span>
+    </h3>
+    <pre>\karnaughtabledata {...,...}</pre>
+    <p>This command fills the map with the elements specified in the comma separated list in the same order as the truth table. Space before and after a comma is ignored. If all elements are just one simple character (very common), then the elements may be written one after the other, with no commas or spaces. The map&rsquo;s size is calculated automatically if no size or labels are given. The elements aren&rsquo;t limited to ceros and ones, they just have to be short.
+</p>
+    <pre>\karnaughminterms {...,...}
+\karnaughmaxterms {...,...}</pre>
+    <p>These commands place ones or ceros (respectively) on the specified locations (written as a list of the decimal values of the input variables) and then fill the rest of the map with the opposite symbol.
+</p>
+    <pre class="tex"><span class="cs">\startkarnaugh</span><span class="brx">[</span>ylabels<span class="brx">=</span><span class="br">{</span>A<span class="br">}</span>, xlabels<span class="brx">=</span><span class="br">{</span>B<span class="br">}</span><span class="brx">]</span>
+    <span class="cs">\karnaughminterms</span><span class="br">{</span>0, 3<span class="br">}</span>
+<span class="cs">\stopkarnaugh</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="As_a_map">
+      As a map
+     </span>
+    </h3>
+    <pre>\startkarnaughdata ... \stopkarnaughdata</pre>
+    <p>Inside of this environment the data is placed as a comma separated list, preferably with newlines at every row, in the same positions as they will appear on the map. A trailing comma is ignored, and cells may be left empty.
+</p>
+    <pre class="tex"><span class="cs">\startkarnaugh</span><span class="brx">[</span>ylabels<span class="brx">=</span><span class="br">{</span>d, c<span class="br">}</span>, xlabels<span class="brx">=</span><span class="br">{</span>b, a<span class="br">}</span><span class="brx">]</span>
+    <span class="cs">\startkarnaughdata</span>
+        1,  0,  1,  0,
+        0,  1,  1,  0,
+        1,  0,  1,  0,
+        0,  1,  1,  0,
+    <span class="cs">\stopkarnaughdata</span>
+<span class="cs">\stopkarnaugh</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Groups_and_other_data">
+      Groups and other data
+     </span>
+    </h2>
+    <p>This data is input with the map syntax because presumably the map is already drawn with the ones and ceros, and drawing the groups &ldquo;in-place&rdquo; is much easier than calculating the coordinates of the desired groups.
+</p>
+    <pre>\startkarnaughgroups ... \stopkarnaughgroups</pre>
+    <p>Inside of this environment various types of data are placed as a comma separated list with as many elements as there are cells in the map. Any cell may contain various instances of any of the information types mentioned here.
+</p>
+    <h3>
+     <span class="mw-headline" id="Groups">
+      Groups
+     </span>
+    </h3>
+    <p>Groups are input by inserting a letter (one per group) on every cell the group covers. The way they are drawn is handled automatically. The uppercase letters have colors assigned to them. The following example has three groups: at the corners, the edges, and in the middle.
+</p>
+    <pre class="tex"><span class="cs">\startkarnaugh</span><span class="brx">[</span>ny<span class="brx">=</span>4, nx<span class="brx">=</span>4<span class="brx">]</span>
+    <span class="cs">\startkarnaughgroups</span>
+        BA, ,   ,   BA,
+        B,  C,  C,  B,
+        ,   C,  C,  ,
+        A,  ,   ,   A,
+    <span class="cs">\stopkarnaughgroups</span>
+<span class="cs">\stopkarnaugh</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Notes">
+      Notes
+     </span>
+    </h3>
+    <p>After drawing a Karnaugh map, it is useful to know which term of the produced formula represents each group. These can be drawn as text with arrows coming from the desired group.
+</p>
+    <pre>\karnaughnote [...][...]{...}
+	CHARACTER
+	tr Tr tl Tl br Br bl Bl lb lt rb rt t b l r
+	CONTENT</pre>
+    <p>The base of the arrow is specified in the <code>karnaughgroups</code> environment as an asterisk after the group it represents, and the remaining data is specified using the <code>karnaughnote</code> command.
+The first argument is the character assigned to the group, the second is one of the specified directions the arrow may point to, and the third is the text to be added to the map.
+</p>
+    <p>The first letter of the direction is where it will mainly point towards, with <code>t</code> meaning top, <code>b</code> meaning bottom, <code>l</code> meaning left, and <code>r</code> meaning right; if it is uppercase it will be further separated from the map (for two rows of text, for example). The second letter (if present) will be a slight offset to the desired side, mainly to make the arrow not overlap with the grey code to the top and left. The arrows look better when they come out of a group&rsquo;s corner.
+</p>
+    <p>If the <code>labelstyle</code> option is <code>bars</code> and there are notes, the bars will be spaced further apart from the map to make space for short text.
+</p>
+    <pre class="tex"><span class="cs">\startkarnaugh</span><span class="brx">[</span>ny<span class="brx">=</span>4, nx<span class="brx">=</span>4<span class="brx">]</span>
+    <span class="cs">\startkarnaughgroups</span>
+        B*A, ,    ,    BA,
+        B,   C,   C,   B,
+        ,    C,   C*,  ,
+        A*,  ,    ,    A,
+    <span class="cs">\stopkarnaughgroups</span>
+	<span class="cs">\karnaughnote</span><span class="brx">[</span>A<span class="brx">]</span><span class="brx">[</span>b<span class="brx">]</span><span class="br">{</span>A's note<span class="br">}</span>
+	<span class="cs">\karnaughnote</span><span class="brx">[</span>B<span class="brx">]</span><span class="brx">[</span>Tr<span class="brx">]</span><span class="br">{</span>B's note<span class="br">}</span>
+	<span class="cs">\karnaughnote</span><span class="brx">[</span>C<span class="brx">]</span><span class="brx">[</span>rb<span class="brx">]</span><span class="br">{</span>C's note<span class="br">}</span>
+<span class="cs">\stopkarnaugh</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Connecting_lines">
+      Connecting lines
+     </span>
+    </h3>
+    <p>This feature is only used when drawing Karnaugh maps with more than 4 variables, then a mirror line is drawn in the middle, and groups which exist in both halves should be connected to each other.
+</p>
+    <p>To draw connections, a single plus <code>+</code> is placed in the <code>karnaughgroups</code> environment after the letter of the group to be connected, and at least one minus <code>-</code> has to be placed after the letter of a different region of the group.
+</p>
+    <p>The following example shows:
+</p>
+    <ul>
+     <li>
+      The group
+      <code>A</code>
+      which is mirrored on both axis and has 3 lines connecting one part of the group to the rest. An arrow could be added to the bottom-right part, the cell would be
+      <code>A+*</code>
+      or
+      <code>A*+</code>
+      .
+     </li>
+     <li>
+      The group
+      <code>C</code>
+      which is mirrored on one axis and thus has one connection line (the
+      <code>+</code>
+      and
+      <code>-</code>
+      can be switched around in this case)
+     </li>
+     <li>
+      The group
+      <code>B</code>
+      with a completely unnecessary connection.
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\startkarnaugh</span><span class="brx">[</span>ny<span class="brx">=</span>8, nx<span class="brx">=</span>8<span class="brx">]</span>
+    <span class="cs">\startkarnaughgroups</span>
+        ,     ,     ,     ,     ,     ,     ,     ,
+        ,     A,    A-C,  C,    ,     A-,   A,    ,
+        ,     ,     C+,   C,    ,     ,     ,     ,
+        B+,   ,     ,     ,     ,     ,     ,     B-,
+        B,    ,     ,     ,     ,     ,     ,     B,
+        ,     ,     C-,   C,    ,     ,     ,     ,
+        ,     A,    A-C,  C,    ,     A+,   A,    ,
+        ,     ,     ,     ,     ,     ,     ,     ,
+    <span class="cs">\stopkarnaughgroups</span>
+<span class="cs">\stopkarnaugh</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212422
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 82/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3744/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6423-1!canonical and timestamp 20260109212422 and revision id 41700
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Modules/Karnaugh">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

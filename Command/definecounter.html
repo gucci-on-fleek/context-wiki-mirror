@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Command/definecounter&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Command/definecounter" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Command/definecounter
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4870&diff=40480">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Creates a new numeric counter.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Examples">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Picture">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Picture
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Show_Section_Number">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Show Section Number
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#See_Also">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         See Also
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Source_Code">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Source Code
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Picture">
+      Picture
+     </span>
+    </h3>
+    <p>The following partial example adds a picture at the end of each chapter:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>EventCount<span class="brx">]</span>
+  <span class="brx">[</span>
+    way<span class="brx">=</span>bytext,
+    prefix<span class="brx">=</span>no,
+  <span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+  <span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>EventCount<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>EventCount<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+                 <span class="brx">[</span>
+                   height<span class="brx">=</span><span class="cs">\paperheight</span>,
+                   orientation<span class="brx">=</span>90,
+                 <span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+    <p>The pictures are numbered sequentially, starting at 1.
+</p>
+    <h3>
+     <span class="mw-headline" id="Show_Section_Number">
+      Show Section Number
+     </span>
+    </h3>
+    <p>The following example writes a counter in a layer, starting with the value of 1:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\definecounter</span></span><span class="brx">[</span>MyCounter<span class="brx">]</span><span class="brx">[</span>
+  way<span class="brx">=</span>bytext,
+  prefix<span class="brx">=</span>no
+<span class="brx">]</span>
+
+<span class="cs">\setnumber</span><span class="brx">[</span>MyCounter<span class="brx">]</span><span class="brx">[</span>-1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>
+  page<span class="brx">=</span>left,
+  before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="systemcs">\incrementcounter</span></span><span class="brx">[</span>MyCounter<span class="brx">]</span><span class="br">}</span>,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>MyLayer<span class="brx">]</span><span class="brx">[</span>
+  width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+  height<span class="brx">=</span><span class="cs">\paperheight</span>,
+  position<span class="brx">=</span>no,
+  repeat<span class="brx">=</span>no,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>
+  setups<span class="brx">=</span>MySetup,
+  background<span class="brx">=</span>MyLayer,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>MySetup<span class="brx">]</span>
+<span class="cs">\ifnum</span><span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>MyCounter<span class="brx">]</span>&gt;0<span class="br">{</span><span class="comment">%</span>
+  MyCounter <span class="brx">=</span> <span class="cs"><span class="systemcs">\rawcountervalue</span></span><span class="brx">[</span>MyCounter<span class="brx">]</span>
+<span class="br">}</span><span class="cs">\fi</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>S1<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+
+  <span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>S2<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><br>
+The initial value for the counter is set to -1 so that its value is 0 on the first page, then 1 on the second page.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_Also">
+      See Also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../ConTeXt_and_Lua_programming/Counters.html" title="ConTeXt and Lua programming/Counters">
+       Counters
+      </a>
+     </li>
+     <li>
+      <tt>
+       <a href="incrementcounter.html" title="Command/incrementcounter">
+        \incrementcounter
+       </a>
+      </tt>
+      - Increase the counter value
+     </li>
+     <li>
+      <tt>
+       <a href="decrementcounter.html" title="Command/decrementcounter">
+        \decrementcounter
+       </a>
+      </tt>
+      - Decrease the counter value
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/rawcounter&action=edit&redlink=1.html" title="Command/rawcounter (page does not exist)">
+        \rawcounter
+       </a>
+      </tt>
+      - Retrieve the unformatted value
+     </li>
+     <li>
+      <tt>
+       <a href="rawcountervalue.html" title="Command/rawcountervalue">
+        \rawcountervalue
+       </a>
+      </tt>
+      - Retrieve the unformatted value
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/convertedcounter&action=edit&redlink=1.html" title="Command/convertedcounter (page does not exist)">
+        \convertedcounter
+       </a>
+      </tt>
+      - Retrieve the formatted value
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Source_Code">
+      Source Code
+     </span>
+    </h2>
+    <p>View the source for more details:
+</p>
+    <p><a class="external free" href="https://source.contextgarden.net/tex/context/base/mkxl/strc-num.mkxl" rel="nofollow">https://source.contextgarden.net/tex/context/base/mkxl/strc-num.mkxl</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072815
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.032 seconds
+Preprocessor visited node count: 86/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 522/2097152 bytes
+Template argument size: 146/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3877/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.567      1 -total
+ 93.82%    5.223      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4870-1!canonical and timestamp 20260110072815 and revision id 40480
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Command/definecounter">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/EPUB&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/EPUB" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/EPUB
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4902&diff=39592">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page is work in progress and an update to the current pages <a href="EPUB/OLD_Epub.html" title="Input and compilation/EPUB/OLD Epub">Input and compilation/EPUB/OLD Epub</a> and <a href="EPUB/OLD_Epub_Sample.html" title="Input and compilation/EPUB/OLD Epub Sample">Input and compilation/EPUB/OLD Epub Sample</a>. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>&lt; <a href="XML_source.html" title="Input and compilation/XML source">XML</a> | <a href="Export.html" title="Input and compilation/Export">Export</a> | <a href="EPUB/OLD_Epub.html" title="Input and compilation/EPUB/OLD Epub">Old ePub docs</a> | <a href="EPUB/OLD_Epub_Sample.html" title="Input and compilation/EPUB/OLD Epub Sample">Old ePub Sample</a> &gt;
+</p>
+    <p>The ePub facilities of ConTeXt are based on its <a href="Export.html" title="Input and compilation/Export">Export</a> of XML/XHTML. Make sure you get useful export output from your project before you try ePub.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Documentation_about_ePub">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Documentation about ePub
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Minimal_ePub">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Minimal ePub
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Compressing_the_structure">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Compressing the structure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#TODO">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         TODO
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Documentation_about_ePub">
+      Documentation about ePub
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://en.wikipedia.org/wiki/EPUB" rel="nofollow">
+       Wikipedia entry
+      </a>
+      with some examples
+     </li>
+     <li>
+      <a class="external text" href="http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm" rel="nofollow">
+       Open Packaging Format
+      </a>
+      (OPF) 2.0.1 specs; contains also information about NCX
+     </li>
+     <li>
+      <a class="external text" href="https://www.iso.org/standard/53255.html" rel="nofollow">
+       ePub3 ISO/IEC TS 30135-1:2014
+      </a>
+      (Buy specs for 118 CHF?)
+     </li>
+     <li>
+      <a class="external text" href="https://github.com/w3c/epubcheck" rel="nofollow">
+       ePub Check
+      </a>
+      validator (most validation tools are based on this)
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Minimal_ePub">
+      Minimal ePub
+     </span>
+    </h2>
+    <p>If you already ran ConTeXt on your project and got the file structure as described in <a href="Export.html" title="Input and compilation/Export">Export</a>, you can run <code>mtxrun --script epub --make minimal</code> to get a structure like:
+</p>
+    <pre>minimal.epub
+minimal-epub
+&boxvr;&boxh;&boxh; META-INF
+&boxv;   &boxur;&boxh;&boxh; container.xml
+&boxvr;&boxh;&boxh; OEBPS
+&boxv;   &boxvr;&boxh;&boxh; cover.xhtml
+&boxv;   &boxvr;&boxh;&boxh; images
+&boxv;   &boxvr;&boxh;&boxh; minimal-div.html
+&boxv;   &boxvr;&boxh;&boxh; minimal.opf
+&boxv;   &boxvr;&boxh;&boxh; nav.xhtml
+&boxv;   &boxvr;&boxh;&boxh; styles
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; minimal-defaults.css
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; minimal-fonts.css
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; minimal-images.css
+&boxv;   &boxv;   &boxur;&boxh;&boxh; minimal-styles.css
+&boxv;   &boxur;&boxh;&boxh; toc.ncx
+&boxur;&boxh;&boxh; mimetype
+</pre>
+    <ul>
+     <li>
+      .epub: The epub file is just a zipped version of the directory structure.
+     </li>
+     <li>
+      mimetype: contains only "
+      <code>application/epub+zip</code>
+      "
+     </li>
+     <li>
+      container.xml points to the root file "minimal.opf"
+     </li>
+     <li>
+      cover.xhtml is the cover image shown by ePub readers
+     </li>
+     <li>
+      -div.html: your content
+     </li>
+     <li>
+      .opf: list of all resources, this keeps the "book" together. See also
+      <a class="external text" href="http://www.idpf.org/epub/20/spec/OPF_2.0.1_draft.htm" rel="nofollow">
+       OPF specs
+      </a>
+      .
+     </li>
+     <li>
+      .ncx: table of contents
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Compressing_the_structure">
+      Compressing the structure
+     </span>
+    </h2>
+    <p>The file structure outlined above gets packaged into a ZIP archive with the .epub extension.
+</p>
+    <ul>
+     <li>
+      <tt>
+       mimetype
+      </tt>
+      must be the first directory entry of the archive.
+     </li>
+     <li>
+      You must not use "extra file attributes", e.g. from MacOS (AKA resource forks) or NTFS; use the X parameter of zip.
+     </li>
+     <li>
+      You don&rsquo;t want some other lurking files like MacOS&rsquo;s
+      <tt>
+       .DS_Store
+      </tt>
+      directory information or PDF images; exclude them from recursive packaging.
+     </li>
+    </ul>
+    <pre>   EPUB=minimal.epub
+   zip -u9X  $EPUB mimetype
+   zip -u9X  $EPUB META-INF/container.xml
+   zip -u9rX $EPUB OEBPS -x OEBPS/.DS_Store OEBPS/Text/.DS_Store OEBPS/Images/.DS_Store "*/.DS_Store" "OEBPS/Images/*.pdf"
+</pre>
+    <h2>
+     <span class="mw-headline" id="TODO">
+      TODO
+     </span>
+    </h2>
+    <p>Write about
+</p>
+    <ul>
+     <li>
+      Cover
+     </li>
+     <li>
+      ToC
+     </li>
+     <li>
+      Readers
+     </li>
+     <li>
+      Styling
+     </li>
+     <li>
+      Images
+     </li>
+     <li>
+      Better workflow
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072920
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.048 seconds
+Real time usage: 0.079 seconds
+Preprocessor visited node count: 46/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 530/2097152 bytes
+Template argument size: 213/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 607/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   45.437      1 -total
+ 69.14%   31.416      1 Template:todo
+ 29.00%   13.176      2 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4902-1!canonical and timestamp 20260110072920 and revision id 39592
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/EPUB">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

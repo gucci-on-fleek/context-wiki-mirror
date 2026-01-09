@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Sidenotes style&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Sidenotes_style" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Sidenotes style
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4190&diff=38852">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Andy Thomas
+</p>
+    <hr>
+    <p>I am writing a physics textbook in ConTeXt Mk IV and I would like to share the macros I collected in a module. It is based on the design of our recent PhD theses and might be useful as an example with a lot of sidenotes (text, figures, tables, references). The newest version of the module is hosted on github.com: <a class="external text" href="https://github.com/andythomas/TeX-sidenotes" rel="nofollow">TeX-sidenotes</a>. Many thanks to the mailing list for all the help with it.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Prelude">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Prelude
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#BibTeX">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         BibTeX
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Title_page">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Title page
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Table_of_contents">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Table of contents
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#List_of_tables">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         List of tables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Chapter">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Chapter
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Sidenote">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Sidenote
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Citations">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Citations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Section">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Section
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Figures">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Figures
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Tables">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         Tables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Fullwidth_text">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         Fullwidth text
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Margintext">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         Margintext
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#References">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h4>
+     <span class="mw-headline" id="Prelude">
+      Prelude
+     </span>
+    </h4>
+    <p>Load the module with the layout and the helper macros:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>caesar<span class="brx">]</span>
+</pre>
+    <p>The next task is to set the main language of the manuscript. This is done the usual way.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\language</span></span><span class="brx">[</span>en<span class="brx">]</span>
+</pre>
+    <p>To avoid the hassle of several files, a library to set up dummy figures is initialized.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span><span class="brx">[</span>dum<span class="brx">]</span> 
+</pre>
+    <h4>
+     <span class="mw-headline" id="BibTeX">
+      BibTeX
+     </span>
+    </h4>
+    <p>The next lines set up the look of the citations and a file containing the sample references.
+</p>
+    <pre class="tex"><span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span><span class="br">{</span>library.bib<span class="br">}</span>,sort<span class="brx">=</span>author<span class="brx">]</span>
+<span class="cs">\setuppublications</span><span class="brx">[</span>alternative<span class="brx">=</span>apa<span class="brx">]</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Title_page">
+      Title page
+     </span>
+    </h4>
+    <p>Now, the text starts and information about the book has to be added. The name of the author, the title and the publisher can be set to automatically generate the title page.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setvariables</span></span>
+  <span class="brx">[</span>titlepage<span class="brx">]</span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Caesar<span class="cs">\\</span>Examples<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Andy Thomas<span class="br">}</span>,
+   publisher<span class="brx">=</span><span class="br">{</span>Bielefeld University<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Table_of_contents">
+      Table of contents
+     </span>
+    </h4>
+    <p>An auto-generated table of contents (toc) is placed the usual way, the look of the toc and e.g. the chapter headings is changed by the caesar module. In this case, only chapters are shown in the toc.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Contents<span class="br">}</span> 
+<span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="List_of_tables">
+      List of tables
+     </span>
+    </h4>
+    <p>A list of all the tables can be placed as well. The placelist macro needs two parameters this time, all tables are supposed to be shown here.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Tables<span class="br">}</span>
+<span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>table,widetable<span class="brx">]</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Chapter">
+      Chapter
+     </span>
+    </h4>
+    <p>It is time for the first chapter. This in done in the usual way.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>Examples<span class="br">}</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Sidenote">
+      Sidenote
+     </span>
+    </h4>
+    <p>After some text, an annotation can be placed on the same page in the margin using the sidenote macro.
+</p>
+    <pre class="tex"><span class="cs">\sidenote</span><span class="br">{</span>All information is on the same page, no turning of pages is necessary.<span class="br">}</span> 
+</pre>
+    <h4>
+     <span class="mw-headline" id="Citations">
+      Citations
+     </span>
+    </h4>
+    <p>Citations work in a similar manner and are also placed in the margin of the document. This is done with the sidecite macro. The macro allows two optional parameters besides the citekey. The values of left and right are placed directly in front of the reference and directly afterwards, respectively.
+</p>
+    <pre class="tex"><span class="cs">\sidecite</span><span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span>See e.g.\ <span class="br">}</span>, right<span class="brx">=</span><span class="br">{</span> And other Tufte books.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>Tufte1990,Tufte2006<span class="brx">]</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Section">
+      Section
+     </span>
+    </h4>
+    <p>The sections are also started the common way.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>Figures<span class="br">}</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Figures">
+      Figures
+     </span>
+    </h4>
+    <p>There are 3 different macros to place figures in the document. The first option is a small figure in the margin.
+</p>
+    <pre class="tex"><span class="cs">\startplacemarginfigure</span><span class="brx">[</span> title<span class="brx">=</span><span class="br">{</span>A small rectangle put in the margin.<span class="br">}</span>, reference<span class="brx">=</span>fig1<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>dummy<span class="brx">]</span><span class="brx">[</span>marginwidth<span class="brx">]</span>
+<span class="cs">\stopplacemarginfigure</span>
+</pre>
+    <p>A larger figure can be put in the text with
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>
+  title<span class="brx">=</span><span class="br">{</span>A larger rectangle in the main area of the
+         text, i.e.\ it does not span into the margin.<span class="br">}</span>,
+  reference<span class="brx">=</span>fig2<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>dummy<span class="brx">]</span><span class="brx">[</span>textwidth<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+    <p>In case that an even wider figure is needed, the third option spans over the text as well as the margin area. No special macro is needed here, just the figure width is larger.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>
+  title<span class="brx">=</span><span class="br">{</span>An even larger rectangle. This is the widest figure 
+         option. Both, the text as well as the margin width 
+         are used for the diagram.<span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>dummy<span class="brx">]</span><span class="brx">[</span>fullwidth<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Tables">
+      Tables
+     </span>
+    </h4>
+    <p>The same options are available for placing tables. The first one is again a small one in the margin.
+</p>
+    <pre class="tex"><span class="cs">\startplacemargintable</span><span class="brx">[</span>
+  reference<span class="brx">=</span>table1, 
+  title<span class="brx">=</span><span class="br">{</span>A couple of numbers in a table in the margin.<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|c|c|c|<span class="brx">]</span>
+  <span class="cs">\NC</span> A <span class="cs">\NC</span> B <span class="cs">\NC</span> C<span class="cs">\NC</span><span class="cs">\SR</span>
+  <span class="cs">\NC</span> 0.50 <span class="cs">\NC</span> 0.47 <span class="cs">\NC</span> 0.48  <span class="cs">\NC</span> <span class="cs">\FR</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+<span class="cs">\stopplacemargintable</span>
+</pre>
+    <p>The next option is a table across the text width.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacetable</span></span><span class="brx">[</span>
+  reference<span class="brx">=</span>table2, 
+  title<span class="brx">=</span><span class="br">{</span>A couple of numbers in a larger table. This table spans the 
+         usual text width.<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|c|c|c|c|c|c|c|c|<span class="brx">]</span>
+  <span class="cs">\NC</span>  A <span class="cs">\NC</span>  B <span class="cs">\NC</span> C <span class="cs">\NC</span> D <span class="cs">\NC</span> E <span class="cs">\NC</span> F <span class="cs">\NC</span> G <span class="cs">\NC</span> H <span class="cs">\NC</span> <span class="cs">\SR</span>
+<span class="cs">\NC</span> 0.21	<span class="cs">\NC</span> 0.23 <span class="cs">\NC</span> 0.34 <span class="cs">\NC</span> 0.42 <span class="cs">\NC</span> 0.53 <span class="cs">\NC</span> 0.64 <span class="cs">\NC</span> 0.72	<span class="cs">\NC</span> 0.33 <span class="cs">\NC</span><span class="cs">\FR</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+<span class="cs"><span class="documentcs">\stopplacetable</span></span>
+</pre>
+    <p>And the last example show a table across the full page (textwidth plus margin). A special widefigure float is needed to get an appropriate caption width.
+</p>
+    <pre class="tex"><span class="cs">\startplacewidetable</span><span class="brx">[</span>
+  reference<span class="brx">=</span><span class="br">{</span>table3<span class="br">}</span>, 
+  title<span class="brx">=</span><span class="br">{</span>Even more numbers in a big table are shown here. This table
+         spans across the full page, text width plus margin.<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|c|c|c|c|c|c|c|c|c|c|c|c|<span class="brx">]</span>
+  <span class="cs">\NC</span>  A <span class="cs">\NC</span> B <span class="cs">\NC</span> C <span class="cs">\NC</span> D <span class="cs">\NC</span> E <span class="cs">\NC</span> F 
+  <span class="cs">\NC</span> G <span class="cs">\NC</span> H <span class="cs">\NC</span> I <span class="cs">\NC</span> J <span class="cs">\NC</span> K <span class="cs">\NC</span> \ L <span class="cs">\NC</span> 
+  <span class="cs">\SR</span>
+  <span class="cs">\NC</span> 0.21 <span class="cs">\NC</span> 0.23 <span class="cs">\NC</span> 0.34 <span class="cs">\NC</span> 0.42 <span class="cs">\NC</span> 0.53 <span class="cs">\NC</span> 0.64 
+  <span class="cs">\NC</span> 0.72 <span class="cs">\NC</span> 0.33 <span class="cs">\NC</span> 0.22<span class="cs">\NC</span> 0.04 <span class="cs">\NC</span> 0.93 <span class="cs">\NC</span> 0.81 <span class="cs">\NC</span>
+  <span class="cs">\FR</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span>
+<span class="cs">\stopplacewidetable</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Fullwidth_text">
+      Fullwidth text
+     </span>
+    </h4>
+    <p>Additionally, there is a start/stopfullwidth that allows to fill text across the full page as well. However, it does not necessary work across page breaks and might overlap with marginal material.
+</p>
+    <pre class="tex"><span class="cs">\startfullwidth</span>
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus 
+elit, vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur 
+dictum gravida mauris. Nam arcu libero, nonummy eget, consectetuer 
+id, vulputate a, magna. Donec vehicula augue eu neque. Pellentesque 
+habitant morbi tristique senectus et netus et malesuada fames ac 
+turpis egestas. Mauris ut leo. Cras viverra metus rhoncus sem. Nulla 
+et lectus vestibulum urna fringilla ultrices. Phasellus eu tellus 
+sit amet tortor gravida placerat. Integer sapien est, iaculis in, 
+pretium quis, viverra ac, nunc. Praesent eget sem vel leo ultrices 
+bibendum. Aenean faucibus. 
+<span class="cs">\stopfullwidth</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="Margintext">
+      Margintext
+     </span>
+    </h4>
+    <p>Also useful might be the usual macro to place a note in the margin, but this time without a mark in the text.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\margintext</span></span><span class="br">{</span>It is also possible to put a remark in the margin without a 
+  corresponding mark in the text.<span class="br">}</span>
+</pre>
+    <h4>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h4>
+    <p>Finally, the references are placed, also using the common macro, but only used references are printed.
+</p>
+    <pre class="tex"><span class="cs">\placepublications</span><span class="brx">[</span>criterium<span class="brx">=</span>text<span class="brx">]</span>
+</pre>
+    <p>The example ends here.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.039 seconds
+Real time usage: 0.062 seconds
+Preprocessor visited node count: 143/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9645/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4190-1!canonical and timestamp 20260109212425 and revision id 38852
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Sidenotes_style">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

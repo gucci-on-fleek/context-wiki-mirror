@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/PDF/PDF viewer layers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_viewer_layers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/PDF/PDF viewer layers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5009&diff=38134">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>PDF has a concept of layers that you can enable and disable (at least in a few viewers). The official name is &ldquo;optional content groups&rdquo; (OCG). This has nothing to do with ConTeXt&rsquo;s <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">Layers</a>.
+</p>
+    <p>There&rsquo;s no other documentation yet, maybe have a look into the sources <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/attr-lay.mkiv" rel="nofollow">attr-lay.mkiv</a>, <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/attr-lay.lua" rel="nofollow">attr-lay.lua</a> and <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lpdf-ren.lua" rel="nofollow">lpdf-ren.lua</a>. It&rsquo;s also used in some presentation styles.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineviewerlayer</span></span><span class="brx">[</span>Plane<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupviewerlayer</span></span><span class="brx">[</span>Plane<span class="brx">]</span><span class="brx">[</span>
+  state<span class="brx">=</span>start,
+  visible<span class="brx">=</span>no, <span class="comment">% initially</span>
+  title<span class="brx">=</span>Test,
+  <span class="comment">%tag=,&nbsp;% don&rsquo;t know?</span>
+  editable<span class="brx">=</span>yes, <span class="comment">% in Acrobat Pro?</span>
+  printable<span class="brx">=</span>yes,
+  export<span class="brx">=</span>yes, <span class="comment">% exportable in xml?</span>
+  scope<span class="brx">=</span>global, <span class="comment">% or local</span>
+<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\startviewerlayer</span></span><span class="brx">[</span>Plane<span class="brx">]</span>
+<span class="br">{</span><span class="cs">\bfa</span> TOP SECRET<span class="br">}</span>
+This information is on a different plane of existence.
+<span class="cs"><span class="documentcs">\stopviewerlayer</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\viewerlayer</span></span><span class="brx">[</span>Plane<span class="brx">]</span><span class="br">{</span>Some more hidden text...<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>You can switch the visibility of layers with the JavaScript functions HideLayer and VideLayer (from <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/scrn-fld.mkvi" rel="nofollow">scrn-fld.mkvi</a>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineviewerlayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startviewerlayer</span></span><span class="brx">[</span>test<span class="brx">]</span>Hide Me<span class="cs"><span class="documentcs">\stopviewerlayer</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+   <span class="brx">[</span>WithTest<span class="brx">]</span>
+   <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="stylecs">\overlayrollbutton</span></span><span class="brx">[</span>HideLayer<span class="br">{</span>test<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>VideLayer<span class="br">{</span>test<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>background<span class="brx">=</span>WithTest<span class="brx">]</span><span class="br">{</span>toggle<span class="br">}</span>
+</pre>
+    <p><br>
+Viewer layers are known to work within <tt><a href="../../Command/setlayer.html" title="Command/setlayer">\setlayer</a></tt> (see <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">Layers</a>), e.g. <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/meta-ini.mkiv" rel="nofollow">meta-ini.mkiv</a>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.033 seconds
+Real time usage: 0.066 seconds
+Preprocessor visited node count: 47/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 494/2097152 bytes
+Template argument size: 142/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2790/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   48.445      1 -total
+ 53.40%   25.871      1 Template:cmd
+ 16.96%    8.217      5 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5009-1!canonical and timestamp 20260109212423 and revision id 38134
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_viewer_layers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

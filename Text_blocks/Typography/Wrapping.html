@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Typography/Wrapping&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Typography/Wrapping" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Typography/Wrapping
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5121&diff=41457">2025-10-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Very long continuous strings (such as SHA512 keys or DNA sequences) might have to be broken after any character, independent from the current hyphenation scheme.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Line_breaking_with_SHA512_sums">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Line breaking with SHA512 sums
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Workaround_with_soft_hyphens">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Workaround with soft hyphens
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Another_workaround_interleaving_colons">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Another workaround interleaving colons
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Example_DNA_sequences">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Example DNA sequences
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#See_also">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Help_from_ConTeXt-Mailinglist.2FForum">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Help from ConTeXt-Mailinglist/Forum
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Footnotes">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Footnotes
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Line_breaking_with_SHA512_sums">
+      Line breaking with SHA512 sums
+     </span>
+    </h2>
+    <p>Hans provided a way of breaking SHA512 sums in lines (now being checked).<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>
+</p>
+    <h3>
+     <span class="mw-headline" id="Workaround_with_soft_hyphens">
+      Workaround with soft hyphens
+     </span>
+    </h3>
+    <p>As a workaround, a simpler way to break SHA sums in lines, but without any character would be (abusing both <tt><a class="new" href="../../index.php?title=Command/handletokens&action=edit&redlink=1.html" title="Command/handletokens (page does not exist)">\handletokens</a></tt> and <tt><a class="new" href="../../index.php?title=Command/softhyphen&action=edit&redlink=1.html" title="Command/softhyphen (page does not exist)">\softhyphen</a></tt>):
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\SHA</span><span class="br">{</span><span class="br">{</span><span class="cs">\tt</span><span class="cs"><span class="systemcs">\handletokens</span></span> <span class="brx">#</span>1<span class="cs">\with</span><span class="cs">\SHABreak</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\SHABreak</span><span class="br">{</span><span class="brx">#</span>1<span class="cs">\softhyphen</span><span class="cs">\hskip</span> 0pt<span class="br">}</span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>1em, width<span class="brx">=</span>15em<span class="brx">]</span>
+SHA sum <span class="cs">\SHA</span><span class="br">{</span>8b2f3c087046c3943ace0dc4f958ef2138e58a51b40e<span class="comment">%</span>
+ef6fab6fa1aeb845cc257a410ab1b914bc399b4293f<span class="comment">%</span>
+31c76fc2c73e5be5ea4d329f9e6820984688efec2<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="149" src="../../wikiteximage/c249d5235f910fdd8f7d42953b89b7f5.webp" width="251">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Another_workaround_interleaving_colons">
+      Another workaround interleaving colons
+     </span>
+    </h3>
+    <p>Another workaround that also helps to improve readability are interleaved colons every two characters. Of course you might change the number of chars without colons adding single dots to <code>str:match("..")</code>. Please, keep in mind that this will make line wrapping not easier in some places. Of course, there is also a way to shorten the hash string.<sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+require<span class="brx">(</span>"util-sha"<span class="brx">)</span>
+function document.coloniter<span class="brx">(</span>str<span class="brx">)</span>
+  local n <span class="brx">=</span> 0
+  for c in str:gmatch<span class="brx">(</span>".."<span class="brx">)</span> do
+    if n &gt; 0 then
+      context<span class="brx">(</span><span class="brx">(</span>":<span class="comment">%s"):format(c))</span>
+    else
+      context<span class="brx">(</span>c<span class="brx">)</span>
+    end
+    n <span class="brx">=</span> n + 1
+  end
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\hsa</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\tt</span><span class="cs"><span class="documentcs">\hyphenatedurl</span></span><span class="comment">%</span>
+    <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>document.coloniter<span class="brx">(</span>utilities.sha2.hash512<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\hsafile</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\doiffileelse</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="br">{</span><span class="cs">\tt</span><span class="cs"><span class="documentcs">\hyphenatedurl</span></span>
+    <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>document.coloniter<span class="brx">(</span>utilities.sha2.hash512<span class="brx">(</span>io.loaddata<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+    <span class="br">{</span><span class="br">{</span><span class="cs">\bfd</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>red<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span> not available!!!<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>24pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>1dk<span class="brx">]</span>
+This is a sequence: <span class="cs">\hsa</span><span class="brx">[</span>This is a sequence<span class="brx">]</span>.
+<span class="cs"><span class="documentcs">\blank</span></span>
+This is a file: <span class="cs">\hsafile</span><span class="brx">[</span><span class="cs">\jobname</span>.tex<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1133" src="../../wikiteximage/0c172efb9b88ade4b7f2c70d1839bdc4.webp" width="658">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Example_DNA_sequences">
+      Example DNA sequences
+     </span>
+    </h2>
+    <p>This is an adoption from Wolfgang using Lua:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+
+    local shared <span class="brx">=</span> <span class="br">{</span>
+        start  <span class="brx">=</span> 1,
+        length <span class="brx">=</span> 1,
+        before <span class="brx">=</span> nil,
+        after  <span class="brx">=</span> nil,
+        left   <span class="brx">=</span> false,
+        right  <span class="brx">=</span> false,
+    <span class="br">}</span>
+
+    local all <span class="brx">=</span> table.setmetatableindex<span class="brx">(</span><span class="br">{</span> <span class="br">}</span>, function<span class="brx">(</span>t,k<span class="brx">)</span>
+        return shared
+    end<span class="brx">)</span>
+
+    languages.hyphenators.traditional.installmethod<span class="brx">(</span>"dna",
+        function<span class="brx">(</span>dictionary,word,n<span class="brx">)</span>
+            return all
+        end
+    <span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="stylecs">\definehyphenationfeatures</span></span>
+ <span class="brx">[</span>dna<span class="brx">]</span>
+ <span class="brx">[</span>characters<span class="brx">=</span>all,
+  alternative<span class="brx">=</span>dna<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startframedtext</span></span><span class="brx">[</span>width<span class="brx">=</span>6cm,style<span class="brx">=</span>mono<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\sethyphenationfeatures</span></span><span class="brx">[</span>dna<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\setuphyphenation</span></span><span class="brx">[</span>method<span class="brx">=</span>traditional<span class="brx">]</span>
+ GATTGCTTACTCCTGGTTGGTGGGGCTTACATTCTGTCGCCTCAAAACTACTAGAGCCGGCATATTCTAGAAGGGCCGCCTTCATGTGG
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="112" src="../../wikiteximage/e4b319b5138a45134fb0aca45b23de4b.webp" width="624">
+     </li>
+    </ul>
+    <p>And a solution using <tt><a class="new" href="../../index.php?title=Command/handletokens&action=edit&redlink=1.html" title="Command/handletokens (page does not exist)">\handletokens</a></tt> by Rik:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\DNA</span><span class="br">{</span><span class="cs"><span class="systemcs">\handletokens</span></span> <span class="brx">#</span>1<span class="cs">\with</span><span class="cs">\DNAspacer</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\DNAspacer</span><span class="br">{</span><span class="brx">#</span>1&shy;<span class="cs">\hskip</span> 2.3pt plus .1pt<span class="br">}</span>
+
+
+<span class="cs"><span class="documentcs">\startframedtext</span></span><span class="brx">[</span>width<span class="brx">=</span>6cm,style<span class="brx">=</span>mono<span class="brx">]</span>
+<span class="cs">\DNA</span><span class="br">{</span>GATTGCTTACTCCTGGTTGGTGGGGCTTACATTCTGTCGCCTCAAAACTACTAGAGCCGGCATATTCTAGAAGGGCCGCCTTCATGTGG<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="132" src="../../wikiteximage/8effea1b2e9ef1c8c922a74983a2608e.webp" width="624">
+     </li>
+    </ul>
+    <p>One caveat, however: this method always adds the spacer value, and can result in a blank line at the end in some cases, even when the spacer value is zero. This is not the case with the lua mechanism.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Hyphenation.html" title="Text blocks/Typography/Hyphenation">
+       Hyphenation
+      </a>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/hyphenation.html" title="Command/hyphenation">
+        \hyphenation
+       </a>
+      </tt>
+      to define the hyphenation of a specific word
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/startexceptions.html" title="Command/startexceptions">
+        \startexceptions
+       </a>
+      </tt>
+      to define language-specific hyphenations
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/-.html" title="Command/-">
+        \-
+       </a>
+      </tt>
+      to define an ad-hoc breakpoint
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/unhyphenated.html" title="Command/unhyphenated">
+        \unhyphenated
+       </a>
+      </tt>
+      to prevent hyphenation
+     </li>
+     <li>
+      <span class="plainlinks">
+       <a class="external text" href="http://www.tug.org/utilities/plain/cseq.html#doublehyphendemerits-rp" rel="nofollow">
+        <tt>
+         \doublehyphendemerits
+        </tt>
+       </a>
+       <span class="plainlinks">
+        to penalize hyphenation on consecutive lines
+       </span>
+      </span>
+     </li>
+     <li>
+      <a href="../../Command/setupalign#Nicer_justification_and_microtypography.html" title="Command/setupalign">
+       <tt>
+        \setupalign
+       </tt>
+       justification parameters
+      </a>
+      to tweak the auto-hyphenation algorithm
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/definebreakpoints.html" title="Command/definebreakpoints">
+        \definebreakpoints
+       </a>
+      </tt>
+      to initialize a breakpoint set
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/definebreakpoint.html" title="Command/definebreakpoint">
+        \definebreakpoint
+       </a>
+      </tt>
+      to add to a breakpoint set
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/setbreakpoints.html" title="Command/setbreakpoints">
+        \setbreakpoints
+       </a>
+      </tt>
+      to activate a breakpoint set
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/language.html" title="Command/language">
+        \language
+       </a>
+      </tt>
+      to activate a language's settings, including hyphenation
+     </li>
+     <li>
+      <a class="mw-selflink selflink">
+       Wrapping
+      </a>
+     </li>
+    </ul>
+    <p><a href="../Collections_of_tips_and_tricks#Verbatim_with_line_breaks.html" title="Text blocks/Collections of tips and tricks">Verbatim with line breaks</a> for another solution to the problem above.
+</p>
+    <h2>
+     <span id="Help_from_ConTeXt-Mailinglist/Forum">
+     </span>
+     <span class="mw-headline" id="Help_from_ConTeXt-Mailinglist.2FForum">
+      Help from ConTeXt-Mailinglist/Forum
+     </span>
+    </h2>
+    <p>All issues with:
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=SHA512+sort:newest" rel="nofollow">
+       SHA512 on the mailing list (all results)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=subject:SHA512+sort:newest" rel="nofollow">
+       SHA512 on the mailing list (subject only)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://tex.stackexchange.com/search?q=%5Bcontext%5D+SHA512" rel="nofollow">
+       SHA512 on stack exchange
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://source.contextgarden.net/?search=SHA512" rel="nofollow">
+       SHA512 in ConTeXt's source
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=Linebreak" rel="nofollow">
+       after x characters+sort:newest Linebreak after x characters on the mailing list (all results)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=subject:Linebreak" rel="nofollow">
+       after x characters+sort:newest Linebreak after x characters on the mailing list (subject only)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://tex.stackexchange.com/search?q=%5Bcontext%5D+Linebreak" rel="nofollow">
+       after x characters Linebreak after x characters on stack exchange
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://source.contextgarden.net/?search=Linebreak" rel="nofollow">
+       after x characters Linebreak after x characters in ConTeXt's source
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Footnotes">
+      Footnotes
+     </span>
+    </h2>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-1">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        There might be an issue with the custom hyphenator that needs to be reviewed, since the first characters in the new line are missing.
+        <ul class="demo">
+         <li class="code">
+          <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+
+     -- local shared <span class="brx">=</span> <span class="br">{</span>
+     --     start  <span class="brx">=</span> 1,
+     --     length <span class="brx">=</span> 1,
+     --     left   <span class="brx">=</span> false,
+     --     right  <span class="brx">=</span> false,
+     -- <span class="br">}</span>
+
+     local shared <span class="brx">=</span> <span class="br">{</span>
+         start  <span class="brx">=</span> 1,
+         length <span class="brx">=</span> 1,
+         before <span class="brx">=</span> utf.char<span class="brx">(</span>0xB7<span class="brx">)</span>,
+         after  <span class="brx">=</span> nil,
+         left   <span class="brx">=</span> false,
+         right  <span class="brx">=</span> false,
+     <span class="br">}</span>
+
+     -- languages.hyphenators.traditional.installmethod<span class="brx">(</span>"sha",
+     --     function<span class="brx">(</span>dictionary,word,n<span class="brx">)</span>
+     --         local t <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+     --         for i<span class="brx">=</span>1,<span class="brx">#</span>word do
+     --             t<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> shared
+     --         end
+     --         return t
+     --     end
+     -- <span class="brx">)</span>
+
+     -- or more efficient when used often:
+
+     -- local all <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+     -- for i<span class="brx">=</span>1,512 do
+     --     all<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> shared
+     -- end
+     -- languages.hyphenators.traditional.installmethod<span class="brx">(</span>"sha",
+     --     function<span class="brx">(</span>dictionary,word,n<span class="brx">)</span>
+     --         return all
+     --     end
+     -- <span class="brx">)</span>
+
+     -- or more obscure:
+
+     -- local all <span class="brx">=</span> table.setmetatableindex<span class="brx">(</span><span class="br">{</span> <span class="br">}</span>, function<span class="brx">(</span>t,k<span class="brx">)</span>
+     --     t<span class="brx">[</span>k<span class="brx">]</span> <span class="brx">=</span> shared
+     --     return shared
+     -- end<span class="brx">)</span>
+     --
+     -- languages.hyphenators.traditional.installmethod<span class="brx">(</span>"sha",
+     --     function<span class="brx">(</span>dictionary,word,n<span class="brx">)</span>
+     --         return all
+     --     end
+     -- <span class="brx">)</span>
+
+     -- or just <span class="brx">(</span>lua is fast enough anyway<span class="brx">)</span>
+
+     local all <span class="brx">=</span> table.setmetatableindex<span class="brx">(</span><span class="br">{</span> <span class="br">}</span>, function<span class="brx">(</span>t,k<span class="brx">)</span>
+         return shared
+     end<span class="brx">)</span>
+
+     languages.hyphenators.traditional.installmethod<span class="brx">(</span>"sha",
+         function<span class="brx">(</span>dictionary,word,n<span class="brx">)</span>
+             return all
+         end
+     <span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="stylecs">\definehyphenationfeatures</span></span>
+   <span class="brx">[</span>sha<span class="brx">]</span>
+   <span class="brx">[</span>characters<span class="brx">=</span>all,
+    alternative<span class="brx">=</span>sha<span class="brx">]</span>
+
+<span class="comment">% \unexpanded\def\sha#1%</span>
+<span class="comment">%   {\begingroup</span>
+<span class="comment">%    \sethyphenationfeatures[sha]%</span>
+<span class="comment">%    #1%</span>
+<span class="comment">%    \endgroup}</span>
+<span class="comment">%</span>
+<span class="comment">% \setuphyphenation[method=traditional]</span>
+
+<span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\sha</span><span class="brx">#</span>1<span class="comment">%</span>
+   <span class="br">{</span><span class="cs">\begingroup</span>
+    <span class="cs"><span class="stylecs">\sethyphenationfeatures</span></span><span class="brx">[</span>sha<span class="brx">]</span><span class="comment">%</span>
+    <span class="cs"><span class="stylecs">\setuphyphenation</span></span><span class="brx">[</span>method<span class="brx">=</span>traditional<span class="brx">]</span><span class="comment">%</span>
+    <span class="brx">#</span>1<span class="comment">%</span>
+    <span class="cs">\endgroup</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\showframe</span></span>
+
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>3em<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant,stretch<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span> <span class="br">{</span>10<span class="br">}</span> <span class="br">{</span><span class="comment">%</span>
+     some sha
+     <span class="cs">\sha</span><span class="br">{</span>8b2f3c087046c3943ace0dc4f958ef2138e58a51b40e<span class="comment">%</span>
+ef6fab6fa1aeb845cc257a410ab1b914bc399b4293f<span class="comment">%</span>
+31c76fc2c73e5be5ea4d329f9e6820984688efec2<span class="br">}</span> and
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+         </li>
+         <li class="rendering">
+          <img height="536" src="../../wikiteximage/aba34a2cb0c6548cc14134bc1d828e1d.webp" width="626">
+         </li>
+        </ul>
+       </span>
+      </li>
+      <li id="cite_note-2">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-2">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        A richer sample could set a smaller string length, another interval and a different character.
+        <ul class="demo">
+         <li class="code">
+          <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+require<span class="brx">(</span>"util-sha"<span class="brx">)</span>
+function document.coloniter<span class="brx">(</span>str,long,inter,sep<span class="brx">)</span>
+  local n <span class="brx">=</span> 0
+
+  long <span class="brx">=</span> tonumber<span class="brx">(</span>long<span class="brx">)</span>
+  inter <span class="brx">=</span> tonumber<span class="brx">(</span>inter<span class="brx">)</span>
+
+  if inter <span class="brx">=</span><span class="brx">=</span> "" then inter <span class="brx">=</span> 2 end
+  if sep <span class="brx">=</span><span class="brx">=</span> "" then sep <span class="brx">=</span> ":" end
+
+  if long ~<span class="brx">=</span> nil and long &gt; 0 then
+    if long <span class="comment">% inter &gt; 0 then</span>
+      long <span class="brx">=</span> long + <span class="brx">(</span>inter - <span class="brx">(</span>long <span class="comment">% inter))</span>
+    end
+    str <span class="brx">=</span> str:sub<span class="brx">(</span>0,long<span class="brx">)</span>
+  end
+
+  for c in str:gmatch<span class="brx">(</span><span class="brx">(</span>"."<span class="brx">)</span>:rep<span class="brx">(</span>inter<span class="brx">)</span><span class="brx">)</span> do
+    if n &gt; 0 then
+      context<span class="brx">(</span><span class="brx">(</span>"<span class="comment">%s%s"):format(sep,c))</span>
+    else
+      context<span class="brx">(</span>c<span class="brx">)</span>
+    end
+    n <span class="brx">=</span> n + 1
+  end
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\hsa</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\tt</span><span class="cs"><span class="documentcs">\hyphenatedurl</span></span>
+    <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>document.coloniter<span class="brx">(</span>utilities.sha2.hash512<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span>,"<span class="brx">#</span>2","<span class="brx">#</span>3","<span class="brx">#</span>4"<span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\hsafile</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>4<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\doiffileelse</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="br">{</span><span class="cs">\tt</span><span class="cs"><span class="documentcs">\hyphenatedurl</span></span>
+    <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>document.coloniter<span class="brx">(</span>utilities.sha2.hash512<span class="brx">(</span>io.loaddata<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span>,"<span class="brx">#</span>2","<span class="brx">#</span>3","<span class="brx">#</span>4"<span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+    <span class="br">{</span><span class="br">{</span><span class="cs">\bfd</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>red<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span> not available!!!<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>24pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>1dk<span class="brx">]</span>
+This is a sequence: <span class="cs">\hsa</span><span class="brx">[</span>This is a sequence<span class="brx">]</span><span class="brx">[</span>10<span class="brx">]</span><span class="brx">[</span>3<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>.
+
+This is a file: <span class="cs">\hsafile</span><span class="brx">[</span><span class="cs">\jobname</span>.tex<span class="brx">]</span><span class="brx">[</span>23<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="brx">[</span>-<span class="brx">]</span>.
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+         </li>
+         <li class="rendering">
+          <img height="245" src="../../wikiteximage/75b6c7540b49383fbcc7c3de87a84b0c.webp" width="643">
+         </li>
+        </ul>
+        <p>In this sample, the four arguments are the string (or the file) to be hashed, the length of the hash string, how many characters each interval has, and the interleaved character. Consider that not all chars break lines with <tt><a class="new" href="../../index.php?title=Command/hyphenatedurl&action=edit&redlink=1.html" title="Command/hyphenatedurl (page does not exist)">\hyphenatedurl</a></tt> -
+</p>
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.072 seconds
+Real time usage: 0.108 seconds
+Preprocessor visited node count: 245/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 3458/2097152 bytes
+Template argument size: 606/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 20196/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   71.292      1 -total
+ 17.06%   12.161      1 Template:Hyphenation_see_also
+  9.74%    6.942     13 Template:cmd
+  9.17%    6.541      1 Template:tex
+  3.18%    2.269      2 Template:Forum
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5121-1!canonical and timestamp 20260109212440 and revision id 41457
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Typography/Wrapping">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Module writing/Module namespaces&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing/Module_namespaces" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Module writing/Module namespaces
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3350&diff=40856">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Naming_Conventions">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Naming Conventions
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Generating_a_Namespace_for_Your_Module">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Generating a Namespace for Your Module
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Module_factory">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Module factory
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Framed_commands">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Framed commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Local_values">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Local values
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Background_information">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Background information
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Further_Information">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Further Information
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Naming_Conventions">
+      Naming Conventions
+     </span>
+    </h2>
+    <p>To avoid clashes with existing and future commands, any module
+should adhere to the following rules:
+</p>
+    <ul>
+     <li>
+      Namespace identifiers (their ID) should have more than two characters,
+     </li>
+     <li>
+      different from anything listed in
+      <a href="../../Input_and_compilation/Modules.html" title="Input and compilation/Modules">
+       Modules
+      </a>
+      ,
+     </li>
+     <li>
+      only 7 bit ASCII, lowercase, without underscores (hyphens are allowed) &ndash; CTAN conventions.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Generating_a_Namespace_for_Your_Module">
+      Generating a Namespace for Your Module
+     </span>
+    </h2>
+    <p>See also <a class="external text" href="https://meeting.contextgarden.net/2024/talks/wolfgang/module_howto.pdf" rel="nofollow">Wolfgang&rsquo;s talk</a> from context meeting 2024!
+</p>
+    <p>ConTeXt provides the user command <tt><a class="new" href="../../index.php?title=Command/installnamespace&action=edit&redlink=1.html" title="Command/installnamespace (page does not exist)">\installnamespace</a></tt> 
+that generates a namespace for macros and variables and enables simple setups for advanced techniques (defining instances, parameter setup & handling).
+</p>
+    <p>Suppose you have a module called <i>My Module</i> (preferably in a file <tt>t-mymodule.tex</tt>) and want to reserve the
+namespace <i>MyMod</i>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\installnamespace</span></span><span class="br">{</span>MyMod<span class="br">}</span>
+<span class="comment">% defines \????MyMod, only accessible after &hellip;</span>
+<span class="cs"><span class="systemcs">\unprotect</span></span>
+<span class="comment">% &hellip; up to</span>
+<span class="cs">\protect</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Module_factory">
+      Module factory
+     </span>
+    </h3>
+    <p>Depending on your needs, you can then use one or several of the &ldquo;factory&rdquo; macros that define the usual <code>\define&hellip;</code> (instances), <code>\setup&hellip;</code> etc. commands and parameter handling for you:
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a href="../../Command/installframedcommandhandler.html" title="Command/installframedcommandhandler">
+        \installframedcommandhandler
+       </a>
+      </tt>
+      (complete with inheritance from
+      <tt>
+       <a href="../../Command/setupframed.html" title="Command/setupframed">
+        \setupframed
+       </a>
+      </tt>
+      )
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installcommandhandler.html" title="Command/installcommandhandler">
+        \installcommandhandler
+       </a>
+      </tt>
+      (complete with nearly everything below, without
+      <code>framed</code>
+      )
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installsimplecommandhandler.html" title="Command/installsimplecommandhandler">
+        \installsimplecommandhandler
+       </a>
+      </tt>
+      (without
+      <code>define</code>
+      , but including
+      <code>setup</code>
+      , style and color)
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/installbasiccommandhandler&action=edit&redlink=1.html" title="Command/installbasiccommandhandler (page does not exist)">
+        \installbasiccommandhandler
+       </a>
+      </tt>
+      (without
+      <code>define</code>
+      ,
+      <code>setup</code>
+      , style and color)
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installdefinehandler.html" title="Command/installdefinehandler">
+        \installdefinehandler
+       </a>
+      </tt>
+      (
+      <code>define</code>
+      only)
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installsetuphandler.html" title="Command/installsetuphandler">
+        \installsetuphandler
+       </a>
+      </tt>
+      (
+      <code>setup</code>
+      only)
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installparameterhandler.html" title="Command/installparameterhandler">
+        \installparameterhandler
+       </a>
+      </tt>
+      (processing parameters)
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/installbasicparameterhandler&action=edit&redlink=1.html" title="Command/installbasicparameterhandler (page does not exist)">
+        \installbasicparameterhandler
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/installrootparameterhandler&action=edit&redlink=1.html" title="Command/installrootparameterhandler (page does not exist)">
+        \installrootparameterhandler
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installparametersethandler.html" title="Command/installparametersethandler">
+        \installparametersethandler
+       </a>
+      </tt>
+      (setting parameters)
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/installstyleandcolorhandler.html" title="Command/installstyleandcolorhandler">
+        \installstyleandcolorhandler
+       </a>
+      </tt>
+      (style and color)
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="systemcs">\installcommandhandler</span></span><span class="protectedcs">\????MyMod</span>
+</pre>
+    <p>creates
+</p>
+    <ul>
+     <li>
+      <code>\defineMyMod[&hellip;][&hellip;][&hellip;=&hellip;&sbquo;]</code>
+      = create a new
+      <code>MyMod</code>
+      instance
+      <ul>
+       <li>
+        <code>\currentMyMod</code>
+        and
+        <code>\currentMyModparent</code>
+        contain the names of the instance (or the parent of a copy)
+       </li>
+       <li>
+        <code>\everypresetMyMod</code>
+        and
+        <code>\everydefineMyMod</code>
+        can be used to apply additional settings
+       </li>
+      </ul>
+     </li>
+     <li>
+      <code>\setupMyMod[&hellip;][&hellip;=&hellip;,]</code>
+      = change settings, first parameter can be the name of an instance
+      <ul>
+       <li>
+        <code>\setupcurrentMyMod[&hellip;=&hellip;,]</code>
+        to change a value within a command/environment
+       </li>
+       <li>
+        <code>\everysetupMyMod</code>
+        and
+        <code>\everysetupMyModroot</code>
+        can be used to apply additional settings
+       </li>
+      </ul>
+     </li>
+     <li>
+      <code>\MyModparameter{&hellip;}</code>
+      to access single parameters
+      <ul>
+       <li>
+        <code>\namedMyModparameter{&hellip;}</code>
+        to access single parameters of a named instance
+       </li>
+       <li>
+        <code>\detokenizedMyModparameter{&hellip;}</code>
+        ,
+        <code>\directMyModparameter{&hellip;}</code>
+        ,
+        <code>\letfromMyModparameter\&hellip;{&hellip;}</code>
+       </li>
+       <li>
+        <code>\rootMyModparameter{&hellip;}</code>
+        and
+        <code>\detokenizedrootMyModparameter{&hellip;}</code>
+        only from
+        <tt>
+         <a class="new" href="../../index.php?title=Command/installrootparameterhandler&action=edit&redlink=1.html" title="Command/installrootparameterhandler (page does not exist)">
+          \installrootparameterhandler
+         </a>
+        </tt>
+       </li>
+      </ul>
+     </li>
+     <li>
+      <code>\useMyModstyleandcolor{&hellip;}{&hellip;}</code>
+      ,
+      <code>\useMyModstyleparameter{&hellip;}</code>
+      ,
+      <code>\useMyModcolorparameter{&hellip;}</code>
+      to use with style and color keys of the internally used macros (from
+      <tt>
+       <a href="../../Command/installstyleandcolorhandler.html" title="Command/installstyleandcolorhandler">
+        \installstyleandcolorhandler
+       </a>
+      </tt>
+      )
+     </li>
+     <li>
+      <code>\setMyModparameter{&hellip;}{&hellip;}</code>
+      ,
+      <code>\setexpandedMyModparameter{&hellip;}{&hellip;}</code>
+      ,
+      <code>\letMyModparameter\&hellip;{&hellip;}</code>
+      ,
+      <code>\resetMyModparameter{&hellip;}</code>
+      to work with parameters (from
+      <tt>
+       <a href="../../Command/installparametersethandler.html" title="Command/installparametersethandler">
+        \installparametersethandler
+       </a>
+      </tt>
+      )
+     </li>
+     <li>
+      finally
+      <code>\startMyMod[&hellip;=&hellip;,] &hellip; \stopMyMod</code>
+      and
+      <code>\MyMod[&hellip;=&hellip;,]</code>
+     </li>
+    </ul>
+    <p>Through <tt>\setupMyMod</tt> you can now set the variables that you want to use in your module &mdash; it is already a mature command that conforms to the overall ConTeXt style and can take a parameter list, a list of key-value pairs or both as arguments.
+</p>
+    <p>Any parameter defined that way can now be retrieved via <code>\MyModparameter{&hellip;}</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>MyMod<span class="brx">]</span>
+<span class="comment">% setting a parameter within the namespace</span>
+<span class="cs">\setupMyMod</span><span class="brx">[</span>
+  yamp<span class="brx">=</span>Yet another module parameter,
+<span class="brx">]</span>
+
+<span class="comment">% command sequence that does something with the parameter</span>
+<span class="cs">\def</span><span class="cs">\blueparameter</span><span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>blue<span class="brx">]</span><span class="br">{</span><span class="cs">\MyModparameter</span><span class="br">{</span>yamp<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% deploying the new user command</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\blueparameter</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>or within the module:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span><span class="brx">[</span><span class="protectedcs">\????MyMod</span><span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>10dk<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../../index.php?title=Command/getparameters&action=edit&redlink=1.html" title="Command/getparameters (page does not exist)">
+        \getparameters
+       </a>
+      </tt>
+      is for
+      <i>
+       setting
+      </i>
+      parameters in a namespace.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Framed_commands">
+      Framed commands
+     </span>
+    </h3>
+    <p>If you want a new <tt><a href="../../Command/framed.html" title="Command/framed">\framed</a></tt> command which takes its values from <code>\setupMyMod</code>, use <tt><a href="../../Command/installframedcommandhandler.html" title="Command/installframedcommandhandler">\installframedcommandhandler</a></tt> or single <tt><a class="new" href="../../index.php?title=Command/installinheritedframed&action=edit&redlink=1.html" title="Command/installinheritedframed (page does not exist)">\installinheritedframed</a></tt>.
+To avoid clashes with other MyMod settings, the namespace and command name should be different from the default one.
+</p>
+    <pre class="tex"><span class="cs">\installinheritedframed</span> <span class="protectedcs">\????MyModFrame</span> <span class="br">{</span>MyModFrame<span class="br">}</span>
+</pre>
+    <p>&hellip; then you get additionally:
+</p>
+    <ul>
+     <li>
+      <code>\currentMyModFrame</code>
+     </li>
+     <li>
+      <code>\MyModFrameparameter{&hellip;}</code>
+      and
+      <code>\MyModFrameparameterhash{&hellip;}</code>
+     </li>
+     <li>
+      <code>\inheritedMyModFrameframed{&hellip;}</code>
+      (like
+      <code>\framed</code>
+      with custom settings)
+     </li>
+     <li>
+      <code>\inheritedMyModFrameframedbox{&hellip;} &hellip;</code>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Local_values">
+      Local values
+     </span>
+    </h3>
+    <p>In some cases you want to accept values as assignments which are local to the
+command or environment. This can be done with the predefined <tt><a class="new" href="../../index.php?title=Command/getdummyparameters&action=edit&redlink=1.html" title="Command/getdummyparameters (page does not exist)">\getdummyparameters</a></tt>.
+</p>
+    <p>The values can be retrieved with <tt><a class="new" href="../../index.php?title=Command/dummyparameter&action=edit&redlink=1.html" title="Command/dummyparameter (page does not exist)">\dummyparameter</a>{...</tt>}
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\MyModText</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs">\begingroup</span>
+<span class="cs"><span class="systemcs">\getdummyparameters</span></span><span class="brx">[</span>blabla<span class="brx">=</span>,<span class="brx">#</span>1<span class="brx">]</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\dummyparameter</span></span><span class="br">{</span>blabla<span class="br">}</span>: <span class="brx">#</span>2<span class="comment">%</span>
+<span class="cs">\endgroup</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Background_information">
+      Background information
+     </span>
+    </h3>
+    <p>Internally the namespaces are represented as ordinary command
+sequences with a prefix of 4 question marks.
+</p>
+    <p>Outside of the <code>\unprotect &hellip; \protect</code> section, this is represented as something like <code>\2DD&gt;</code> which can&rsquo;t be used in normal documents and ensures that no user can modify the values.
+</p>
+    <p>The internal representation of <code>\getparameters[\????MyMod][width=10dk]</code> would be <code>\def\2DD&gt;width{10dk}</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Further_Information">
+      Further Information
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Tutorials/System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">
+       System Macros
+      </a>
+      .
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.033 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 317/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 2932/2097152 bytes
+Template argument size: 960/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2806/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   15.495      1 -total
+ 47.13%    7.303     22 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3350-1!canonical and timestamp 20260109212408 and revision id 40856
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing/Module_namespaces">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Theory book style&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Theory_book_style" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Theory book style
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2198&diff=38844">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is the style for a book on literary theory that I'm publishing with Blackwell. It will hopefully appear in spring 2007. The environment is rather long and evolved; perhaps it is useful to beginners. 
+</p>
+    <pre class="tex"><span class="comment">% first, the most basic stuff: input regime, font encoding, language</span>
+
+<span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span>
+
+<span class="cs">\setupencoding</span><span class="brx">[</span>default<span class="brx">=</span>texnansi<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfontenvironment</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>em<span class="brx">=</span>italic<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% PAPERSIZE, MARGINS, SETUP&nbsp;%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% the book uses a paper size of 6 in x 9 in which I typeset on A4 paper</span>
+
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>theory<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>6in,height<span class="brx">=</span>9in<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>theory<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+
+<span class="comment">% for copy editing, I added line numbers in the margin</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplinenumbering</span></span><span class="brx">[</span>color<span class="brx">=</span>red,style<span class="brx">=</span><span class="cs">\tt</span><span class="cs">\tfxx</span>,step<span class="brx">=</span>1,location<span class="brx">=</span>inmargin<span class="brx">]</span>
+
+<span class="comment">% margins etc.</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>location<span class="brx">=</span>middle,
+             marking<span class="brx">=</span>off,
+             topspace<span class="brx">=</span>1.8cm,
+             backspace<span class="brx">=</span>1.6cm,
+             height<span class="brx">=</span>fit,
+             width<span class="brx">=</span>fit,
+             rightmargin<span class="brx">=</span>2cm,
+             leftmargin<span class="brx">=</span>2cm,
+             header<span class="brx">=</span>1cm,
+             footer<span class="brx">=</span>.1cm,
+             setup<span class="brx">=</span>strict,
+             grid<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\defaultwidowpenalty</span><span class="br">{</span>0<span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\defaultclubpenalty</span><span class="br">{</span>0<span class="br">}</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% REGISTERS&nbsp;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% this is a special index: "important" references will have a bold page number,</span>
+<span class="comment">% it's called in this form: \index[imp::]{someword}</span>
+
+<span class="cs"><span class="stylecs">\setupregister</span></span><span class="brx">[</span>index<span class="brx">]</span><span class="brx">[</span>imp<span class="brx">]</span><span class="brx">[</span>pagestyle<span class="brx">=</span>bold<span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% PAGENUMBERING&nbsp;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided,location<span class="brx">=</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumber</span></span><span class="brx">[</span>number<span class="brx">=</span>5<span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% HEADERS&nbsp;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% Definitinos for the different headers. I use chapter, section, and subsection</span>
+<span class="comment">% and "title" for the acknowledgements because they should not be included in the TOC</span>
+
+<span class="comment">% The publisher wanted the chapter headings centered and split over two lines:</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapterCommand</span><span class="br">{</span><span class="cs"><span class="documentcs">\startalignment</span></span><span class="brx">[</span>middle<span class="brx">]</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs">\vbox</span><span class="br">{</span><span class="cs"><span class="stylecs">\headtext</span></span><span class="br">{</span>chapter<span class="br">}</span> <span class="brx">#</span>1<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>0*small<span class="brx">]</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="cs"><span class="documentcs">\stopalignment</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>yes,
+                   header<span class="brx">=</span>empty,
+                   command<span class="brx">=</span><span class="cs">\MyChapterCommand</span>,
+                   style<span class="brx">=</span><span class="cs">\bfc</span>,
+                   number<span class="brx">=</span>yes,
+                   before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span>,
+                   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>4*line<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupheadtext</span></span><span class="brx">[</span>chapter<span class="brx">=</span>Chapter<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>title<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>yes,
+                  header<span class="brx">=</span>empty,
+                  style<span class="brx">=</span><span class="cs">\bfc</span>,
+                  align<span class="brx">=</span>middle,
+                  before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span>,
+                  after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>4*line<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>no,
+                    style<span class="brx">=</span><span class="cs">\tfa</span>,
+                    align<span class="brx">=</span>right,
+                    number<span class="brx">=</span>no,
+                    before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span>,
+                    after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>no,
+                    style<span class="brx">=</span><span class="cs">\it</span>,
+                    align<span class="brx">=</span>right,
+                    number<span class="brx">=</span>no,
+                    before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span>,
+                    after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% BIBLIOGRAPHY&nbsp;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% Very long section to set up the bibliographic references and the style of the \cite</span>
+<span class="comment">% commands (I use numbered references).</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>bib<span class="brx">]</span>
+
+<span class="cs">\setupbibtex</span><span class="brx">[</span>database<span class="brx">=</span><span class="br">{</span>biblio<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcite</span>
+       <span class="brx">[</span>num<span class="brx">]</span>
+       <span class="brx">[</span>pubsep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+        lastpubsep<span class="brx">=</span><span class="br">{</span> and <span class="br">}</span>,
+        compress<span class="brx">=</span>yes,
+        inbetween<span class="brx">=</span><span class="br">{</span>--<span class="br">}</span>,
+        left<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span>,
+        right<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcite</span>
+       <span class="brx">[</span>year<span class="brx">]</span>
+       <span class="brx">[</span>pubsep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+        lastpubsep<span class="brx">=</span><span class="br">{</span> and <span class="br">}</span>,
+        compress<span class="brx">=</span>yes,
+        inbetween<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+        left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,
+        right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcite</span>
+       <span class="brx">[</span>authoryears<span class="brx">]</span>
+       <span class="brx">[</span>pubsep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+        lastpubsep<span class="brx">=</span><span class="br">{</span> and <span class="br">}</span>,
+        compress<span class="brx">=</span>yes,
+        inbetween<span class="brx">=</span><span class="br">{</span> <span class="br">}</span>,
+        left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,
+        right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcite</span>
+       <span class="brx">[</span>key,number,page,short,type,doi<span class="brx">]</span>
+       <span class="brx">[</span>pubsep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+        lastpubsep<span class="brx">=</span><span class="br">{</span> and <span class="br">}</span>,
+        compress<span class="brx">=</span>no,
+        inbetween<span class="brx">=</span><span class="br">{</span> <span class="br">}</span>,
+        left<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span>,
+        right<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\bracketed</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\hbox</span> to 20pt<span class="br">{</span><span class="cs">\hfill</span> <span class="brx">[</span><span class="cs">\TNum</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\setuppublications</span>
+            <span class="brx">[</span>sorttype<span class="brx">=</span>bbl,
+             autohang<span class="brx">=</span>no,
+             refcommand<span class="brx">=</span>num,
+             criterium<span class="brx">=</span>all,
+             numbering<span class="brx">=</span>bib,
+             numbercommand<span class="brx">=</span><span class="cs">\bracketed</span><span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\tasinvertedauthor</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="brx">#</span>4<span class="brx">#</span>5<span class="comment">%</span>
+    <span class="br">{</span><span class="brx">#</span>3<span class="comment">%</span>
+    <span class="cs">\bibdoif</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs">\bibalternative</span><span class="br">{</span>surnamesep<span class="br">}</span><span class="brx">#</span>1<span class="cs">\unskip</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\bibdoifelse</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span><span class="cs">\bibalternative</span><span class="br">{</span>vonsep<span class="br">}</span><span class="brx">#</span>2<span class="cs">\unskip</span><span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\bibdoifelse</span><span class="br">{</span><span class="brx">#</span>5<span class="br">}</span><span class="br">{</span><span class="cs">\bibalternative</span><span class="br">{</span>juniorsep<span class="br">}</span><span class="brx">#</span>5<span class="cs">\unskip</span><span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span><span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+<span class="cs">\setuppublicationlist</span>
+   <span class="brx">[</span>width<span class="brx">=</span>24pt,
+    maybeyear<span class="brx">=</span>off,
+    artauthor<span class="brx">=</span><span class="cs">\tasinvertedauthor</span>,
+    editor<span class="brx">=</span><span class="cs">\tasinvertedauthor</span>,
+    author<span class="brx">=</span><span class="cs">\tasinvertedauthor</span>,
+    namesep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+    lastnamesep<span class="brx">=</span><span class="br">{</span>, and <span class="br">}</span>,
+    finalnamesep<span class="brx">=</span><span class="br">{</span>, and <span class="br">}</span>,
+    firstnamesep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+    juniorsep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+    vonsep<span class="brx">=</span><span class="br">{</span> <span class="br">}</span>,
+    surnamesep<span class="brx">=</span><span class="br">{</span>, <span class="br">}</span>,
+    authoretallimit<span class="brx">=</span>5,
+    editoretallimit<span class="brx">=</span>5,
+    artauthoretallimit<span class="brx">=</span>5,
+    authoretaldisplay<span class="brx">=</span>5,
+    editoretaldisplay<span class="brx">=</span>5,
+    artauthoretaldisplay<span class="brx">=</span>5,
+    authoretaltext<span class="brx">=</span><span class="br">{</span> et al.<span class="br">}</span>,
+    editoretaltext<span class="brx">=</span><span class="br">{</span> et al.<span class="br">}</span>,
+    artauthoretaltext<span class="brx">=</span><span class="br">{</span> et al.<span class="br">}</span>,
+    distance<span class="brx">=</span>3pt<span class="brx">]</span>
+
+ <span class="cs">\newif</span><span class="cs">\ifeditedbook</span>
+ <span class="cs">\setuppublicationlayout</span><span class="brx">[</span>book<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs">\insertauthors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>: <span class="br">}</span><span class="br">{</span><span class="cs">\inserteditors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>, editor<span class="comment">%</span>
+                          <span class="cs">\ifnum</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>editor@num<span class="br">}</span>&gt; 1 s<span class="cs">\fi</span>
+                              \ <span class="cs">\global</span><span class="cs">\editedbooktrue</span> 
+                     <span class="cs">\unskip</span>: <span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\inserttitle</span><span class="br">{</span><span class="cs">\bgroup</span><span class="cs">\it</span> <span class="br">}</span><span class="br">{</span>\/<span class="cs">\egroup</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertseries</span><span class="br">{</span> <span class="brx">(</span><span class="br">}</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertedition</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span><span class="cs">\insertmonth</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span> edn. <span class="br">}</span><span class="br">{</span>, <span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertcity</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>: <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertpubname</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertpubyear</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertnote</span><span class="br">{</span> <span class="brx">[</span><span class="br">}</span><span class="br">{</span><span class="brx">]</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+ <span class="cs">\setuppublicationlayout</span><span class="brx">[</span>article<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs">\insertartauthors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>: <span class="br">}</span><span class="br">{</span><span class="cs">\insertthekey</span><span class="br">{</span><span class="br">}</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertarttitle</span><span class="br">{</span><span class="cs">\bgroup</span> ``<span class="br">}</span><span class="br">{</span><span class="cs">\egroup</span>,'' <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertjournal</span><span class="br">{</span><span class="cs">\bgroup</span> <span class="cs">\it</span><span class="br">}</span><span class="br">{</span><span class="cs">\egroup</span><span class="br">}</span><span class="br">{</span><span class="cs">\insertcrossref</span><span class="br">{</span>in <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertvolume</span><span class="br">{</span> <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertpubyear</span><span class="br">{</span> <span class="brx">(</span><span class="br">}</span><span class="br">{</span><span class="brx">)</span> <span class="br">}</span><span class="br">{</span><span class="cs">\unskip</span>.<span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\insertpages</span></span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\insertnote</span><span class="br">{</span> <span class="brx">[</span><span class="br">}</span><span class="br">{</span><span class="brx">]</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertcomment</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="br">{</span><span class="brx">]</span>.<span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+ <span class="br">}</span>
+
+ <span class="cs">\setuppublicationlayout</span><span class="brx">[</span>incollection<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs">\insertartauthors</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>: <span class="br">}</span><span class="br">{</span><span class="cs">\insertthekey</span><span class="br">{</span><span class="br">}</span><span class="br">{</span>. <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertarttitle</span><span class="br">{</span><span class="cs">\bgroup</span> ``<span class="br">}</span><span class="br">{</span><span class="cs">\egroup</span>,'' <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertcrossref</span><span class="br">{</span>in <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\insertpages</span></span><span class="br">{</span>, <span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\insertnote</span><span class="br">{</span> <span class="brx">[</span><span class="br">}</span><span class="br">{</span><span class="brx">]</span>.<span class="br">}</span><span class="br">{</span>.<span class="br">}</span><span class="comment">%</span>
+ <span class="br">}</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% CROPMARKS & VISUAL AIDS&nbsp;%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% during the copy-editing and production phase, I need to add some tools for visual debugging.</span>
+<span class="comment">% They were of course commented out for the final run.</span>
+
+<span class="comment">% \usemodule[t-crop][Mark=Camera,Info=yes]&nbsp;% this is a custom module I wrote myself</span>
+
+<span class="comment">% \showgrid</span>
+
+<span class="comment">% \showframe</span>
+
+<span class="comment">% \showsetups</span>
+
+<span class="comment">% \showlayout</span>
+
+<span class="comment">% \version[temporary]</span>
+
+<span class="comment">% \enablemode[transdraft]&nbsp;% this mode is defined later</span>
+
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% FONTS & SIZES&nbsp;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% first we define our Normal Size and our Small Size</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\NSize</span><span class="br">{</span>11pt<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\SSize</span><span class="br">{</span>9.5pt<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>size<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definebodyfont</span></span> <span class="brx">[</span><span class="cs">\NSize</span>,<span class="cs">\SSize</span><span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% My custom typescripts for the font Garamond Premier Pro from Adobe. </span>
+
+<span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-garmprem<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>AGaramondPrem<span class="brx">]</span> <span class="brx">[</span>texnansi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>AGaramondPremcpsp<span class="brx">]</span> <span class="brx">[</span>texnansi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>AGaramondPrempnum<span class="brx">]</span> <span class="brx">[</span>texnansi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>MyAGaramondPrempnum,<span class="cs">\NSize</span><span class="brx">]</span>
+
+<span class="comment">% this switches between proportional numbers (for normal bodytext) and tabular numbers</span>
+<span class="comment">% (for tables, bibliography etc.)</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\PNum</span><span class="br">{</span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>MyAGaramondPrempnum<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\TNum</span><span class="br">{</span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>MyAGaramondPrem<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>line<span class="brx">=</span>3.1ex<span class="brx">]</span>
+
+<span class="comment">% I had some (very few) Metapost pictures and wanted of course to use the same font.</span>
+
+<span class="cs"><span class="stylecs">\startMPenvironment</span></span>
+<span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-garmprem<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>AGaramondPrempnum<span class="brx">]</span> <span class="brx">[</span>texnansi<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>MyAGaramondPrempnum,11pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopMPenvironment</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% MODE FOR COPY-EDITING&nbsp;%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% double-spaced for copy-editing</span>
+
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>transdraft<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>line<span class="brx">=</span>24pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%% CUSTOM ENVIRONMENTS&nbsp;%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% I used tikz for one picture with arrows (its default arrows are nicer than the metapost ones)</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>tikz<span class="brx">]</span>
+<span class="cs">\usetikzlibrary</span><span class="brx">[</span>arrows,snakes,backgrounds<span class="brx">]</span>
+
+<span class="comment">% the Greek module with Monotype Porson as font, scaled just a bit</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>t-ancientgreek<span class="brx">]</span><span class="brx">[</span>font<span class="brx">=</span>GreekPorson,scale<span class="brx">=</span>1.03<span class="brx">]</span>
+
+<span class="comment">% a very nice symbol from Garamond Premier Pro for unnumbered itemizations</span>
+
+<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>8<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs">\getglyph</span><span class="br">{</span>orn-GaramondPremrPro<span class="br">}</span><span class="br">{</span>6<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% custom definitions for unnumbered and numbered lists</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\myitem</span><span class="br">{</span><span class="cs"><span class="stylecs">\setupitemize</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>atmargin<span class="brx">]</span><span class="brx">[</span>alignment<span class="brx">=</span>left<span class="brx">]</span><span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>8,packed<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\mynumber</span><span class="br">{</span><span class="cs"><span class="stylecs">\setupitemize</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>stopper<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span><span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>n,packed<span class="brx">]</span><span class="br">}</span>
+
+<span class="comment">% textbar doesn't seem to have a name in the texnansi-encoding?</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\textbar</span><span class="br">{</span><span class="cs">\getglyph</span><span class="br">{</span>Serif<span class="br">}</span><span class="br">{</span><span class="cs">\char</span>124<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% I had only four or five tables, so I wanted them numbered across the entire book</span>
+
+<span class="cs"><span class="stylecs">\setupcaptions</span></span><span class="brx">[</span>headstyle<span class="brx">=</span>italic,style<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span><span class="cs">\SSize</span><span class="brx">]</span><span class="br">}</span>,way<span class="brx">=</span>bytext,stopper<span class="brx">=</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupreferencing</span></span><span class="brx">[</span>partnumber<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="comment">% In the table of contents, I wanted tabular numerals</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span><span class="brx">[</span>chapter,section<span class="brx">]</span><span class="brx">[</span>pagecommand<span class="brx">=</span><span class="cs">\TNum</span><span class="brx">]</span>
+
+<span class="comment">% and finally, indenting</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>1.5em<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes<span class="brx">]</span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.072 seconds
+Real time usage: 0.164 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 34662/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2198-1!canonical and timestamp 20260109212425 and revision id 38844
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Theory_book_style">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

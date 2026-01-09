@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Variable fonts&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Variable_fonts" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Variable fonts
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6668&diff=37498">2025-01-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#What_are_variable_fonts">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         What are variable fonts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Getting_information_about_the_variable_font">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Getting information about the variable font
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Using_the_variable_axes">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Using the variable axes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Example_with_Roboto_Flex_font">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Example with Roboto Flex font
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="What_are_variable_fonts">
+      What are variable fonts
+     </span>
+    </h2>
+    <p><i>MDN Web Docs</i> define variable fonts as:
+</p>
+    <blockquote>
+     <p>&ldquo;Variable fonts are an evolution of the OpenType font specification that enables many different variations of a typeface to be incorporated into a single file, rather than having a separate font file for every width, weight, or style.&rdquo;<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup></p>
+    </blockquote>
+    <h2>
+     <span class="mw-headline" id="Getting_information_about_the_variable_font">
+      Getting information about the variable font
+     </span>
+    </h2>
+    <p>It is better to start playing with a variable font (such as <a class="external text" href="https://www.recursive.design/" rel="nofollow">Recursive</a>, which you can download for free at <a class="external text" href="https://github.com/arrowtype/recursive/releases/latest/" rel="nofollow">GitHub</a><sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>).
+</p>
+    <p>Once you put them in a place where ConTeXt can find them, just execute:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>fonts-variable<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs">\showfontvariations</span><span class="brx">[</span>font<span class="brx">=</span>file:recursive.ttf<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This will generate a PDF document with information about parameters, OpenType features (grouped by type) and axes (design axes cannot be accessed by the user). Instances are also provided with values for each used axis.
+</p>
+    <p>You may have either the variable font and the font styles, but there is no gain in having both font styles (or instances [individual font files]) and the variable font. And there is room for font name clashes (when variable fonts aren&rsquo;t named differently than their instances).
+</p>
+    <p>The axis information displays a table with: tag, name, minimum, default and maximum values (<i>Recursive</i> has the following axes, tagged as <code>mono</code>, <code>casl</code>, <code>wght</code>, <code>slnt</code> and <code>crsv</code>).
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_the_variable_axes">
+      Using the variable axes
+     </span>
+    </h2>
+    <p>Access to the variable font configuration is achieved through a font feature (using the <code>axis</code> key), such as in:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>myaxisa<span class="brx">]</span><span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>wght<span class="brx">=</span>500, mono<span class="brx">=</span>1<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>myaxisb<span class="brx">]</span><span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>wght<span class="brx">=</span>500, mono<span class="brx">=</span>1, casl<span class="brx">=</span>1<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>myaxisd<span class="brx">]</span><span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>wght<span class="brx">=</span>500, mono<span class="brx">=</span>1, casl<span class="brx">=</span>1, crsv<span class="brx">=</span>1<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>myaxise<span class="brx">]</span><span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>wght<span class="brx">=</span>500, mono<span class="brx">=</span>1, casl<span class="brx">=</span>1, crsv<span class="brx">=</span>1, slnt<span class="brx">=</span>-15<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span><span class="brx">[</span>mainface<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Recursive<span class="brx">]</span>
+  <span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>default, myaxisa<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span><span class="brx">[</span>mainfaceb<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Recursive<span class="brx">]</span>
+  <span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>default, myaxisb<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span><span class="brx">[</span>mainfaced<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Recursive<span class="brx">]</span>
+  <span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>default, myaxisd<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span><span class="brx">[</span>mainfacee<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Recursive<span class="brx">]</span>
+  <span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>default, myaxise<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>mainface<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\tf</span> Regular <span class="cs">\it</span> Italic<span class="br">}</span>
+<span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\mainfaceb</span><span class="cs">\tf</span> Regular <span class="cs">\it</span> Italic<span class="br">}</span>
+<span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\mainfaced</span><span class="cs">\tf</span> Regular <span class="cs">\it</span> Italic<span class="br">}</span>
+<span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\mainfacee</span><span class="cs">\tf</span> Regular <span class="cs">\it</span> Italic<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This font feature requires a new font instance (it cannot be added with <tt><a href="../Command/feature.html" title="Command/feature">\feature</a></tt>).
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_with_Roboto_Flex_font">
+      Example with Roboto Flex font
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Fonts (UFO, TTF) are available under the SIL Open Font License v1.1 at
+      <a class="external text" href="https://github.com/googlefonts/roboto-flex/releases" rel="nofollow">
+       github.com/googlefonts
+      </a>
+     </li>
+     <li>
+      It can be viewed on
+      <a class="external text" href="https://v-fonts.com/fonts/roboto-flex" rel="nofollow">
+       v-fonts.com
+      </a>
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>11pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span> <span class="brx">[</span>whatever<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefont</span></span> <span class="brx">[</span>MyFont<span class="brx">]</span> <span class="brx">[</span>name:robotoflexregular*whatever<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\MyFont</span> The quick brown fox jumps over the lazy dog.<span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+Axis WEIGHT~<span class="br">{</span><span class="cs">\darkred</span> <span class="cs">\leaders</span><span class="cs">\hrule</span> height 1mm<span class="cs">\relax</span><span class="cs">\hfill</span><span class="br">}</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\par</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span><span class="br">{</span>100<span class="br">}</span><span class="br">{</span>1000<span class="br">}</span><span class="br">{</span>150<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\definefontfeature</span></span> <span class="brx">[</span>whatever<span class="brx">]</span> <span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>weight<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefont</span></span> <span class="brx">[</span>MyFont<span class="brx">]</span> <span class="brx">[</span>name:robotoflexregular*whatever<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\MyFont</span> <span class="cs"><span class="systemcs">\recurselevel</span></span>~-~The quick brown fox jumps over the lazy dog.<span class="cs">\par</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+Axis YOPQ~<span class="br">{</span><span class="cs">\darkred</span> <span class="cs">\leaders</span><span class="cs">\hrule</span> height 1mm<span class="cs">\relax</span><span class="cs">\hfill</span><span class="br">}</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\par</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span><span class="br">{</span>25<span class="br">}</span><span class="br">{</span>135<span class="br">}</span><span class="br">{</span>20<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\definefontfeature</span></span> <span class="brx">[</span>whatever<span class="brx">]</span> <span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>YOPQ<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefont</span></span> <span class="brx">[</span>MyFont<span class="brx">]</span> <span class="brx">[</span>name:robotoflexregular*whatever<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\MyFont</span> <span class="cs"><span class="systemcs">\recurselevel</span></span>~-~The quick brown fox jumps over the lazy dog.<span class="cs">\par</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+Axis XTRA~<span class="br">{</span><span class="cs">\darkred</span> <span class="cs">\leaders</span><span class="cs">\hrule</span> height 1mm<span class="cs">\relax</span><span class="cs">\hfill</span><span class="br">}</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\par</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span><span class="br">{</span>323<span class="br">}</span><span class="br">{</span>603<span class="br">}</span><span class="br">{</span>40<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\definefontfeature</span></span> <span class="brx">[</span>whatever<span class="brx">]</span> <span class="brx">[</span>axis<span class="brx">=</span><span class="br">{</span>XTRA<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefont</span></span> <span class="brx">[</span>MyFont<span class="brx">]</span> <span class="brx">[</span>name:robotoflexregular*whatever<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\MyFont</span> <span class="cs"><span class="systemcs">\recurselevel</span></span>~-~The quick brown fox jumps over the lazy dog.<span class="cs">\par</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../File:RobotoFlex_screenshot.png"><img alt="RobotoFlex screenshot.png" decoding="async" height="1036" src="../images/1/15/RobotoFlex_screenshot.webp" width="762"></a></p>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-1">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        <a class="external free" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide" rel="nofollow">
+         https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Fonts/Variable_Fonts_Guide
+        </a>
+       </span>
+      </li>
+      <li id="cite_note-2">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-2">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        Variable fonts are in the directory
+        <code>ArrowType-Recursive-1.085/Recursive_Desktop/</code>
+        , being the font named
+        <code>Recursive_VF_1.085.ttf</code>
+        . It is easier to rename it just to
+        <code>Recursive.ttf</code>
+        .
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260110073246
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.051 seconds
+Real time usage: 0.303 seconds
+Preprocessor visited node count: 58/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 74/2097152 bytes
+Template argument size: 14/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11169/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.434      1 Template:cmd
+100.00%   10.434      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6668-1!canonical and timestamp 20260110073246 and revision id 37498
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Variable_fonts">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

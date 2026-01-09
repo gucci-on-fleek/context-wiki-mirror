@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Imposition&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Imposition" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Imposition
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=878&diff=40305">2025-12-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>To impose means to place pages on a bigger sheet in such a way that one can fold and cut the sheet to get a booklet or something similar (<a class="external text" href="https://en.wikipedia.org/wiki/Imposition" rel="nofollow">wikipedia</a>). Here are some examples:
+</p>
+    <ul>
+     <li>
+      Placing four A5 pages on both sides of an A4 sheet: 1 and 4 on the back, 2 and 3 on the front.
+     </li>
+     <li>
+      Placing 64 inner pages of a book on one printing sheet, to produce one signature.
+     </li>
+     <li>
+      One of those brochures made by folding an A4 sheet into three pieces. One could typeset this brochure as two pages with three columns each, or once could make six pages and impose them.
+     </li>
+     <li>
+      Printing address labels on an A4 sheet, eight labels per sheet.
+     </li>
+    </ul>
+    <p>In general, imposition is accessed in ConTeXt using <tt><a href="../Command/setuppaper.html" title="Command/setuppaper">\setuppaper</a></tt> and <tt><a href="../Command/setuparranging.html" title="Command/setuparranging">\setuparranging</a></tt>, or from the command line as follows:
+</p>
+    <pre>context --pdfarrange=...</pre>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Imposition_schemas">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Imposition schemas
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Default_schemas">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Default schemas
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#XY_schema">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           XY schema
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Testing_schemas">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Testing schemas
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Rearranging_existing_PDF_s">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Rearranging existing PDF s
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Custom_imposition_schema">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Custom imposition schema
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Cut_marks">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Cut marks
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Caveat:_common_troubles">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Caveat: common troubles
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Getting_the_last_page_of_a_Booklet">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Getting the last page of a Booklet
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Getting_to_the_Back_Cover_of_a_Booklet">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Getting to the Back Cover of a Booklet
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Adding_pages_for_imposition_signature">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Adding pages for imposition signature
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Imposition_by_signatures">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Imposition by signatures
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Imposition_schemas">
+      Imposition schemas
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Default_schemas">
+      Default schemas
+     </span>
+    </h3>
+    <p>ConTeXt has some built-in imposition schemas (see "arranging pages" in the manual):
+</p>
+    <ul>
+     <li>
+      2UP&nbsp;: 2 pages next to each other, n sheets arranged for a single booklet
+     </li>
+     <li>
+      2DOWN&nbsp;: 2 pages above each other,  n sheets arranged for a single booklet
+     </li>
+     <li>
+      2SIDE&nbsp;: 2 pages per form, side by side in pagination order, single sided only (no real imposition, only paper saving)
+     </li>
+     <li>
+      3SIDE&nbsp;: 3 pages per form, side by side in pagination order, as above for narrow pages
+     </li>
+     <li>
+      2TOP&nbsp;: 2 pages above each other, single sided only
+     </li>
+     <li>
+      2TOPSIDE: 2 odd pages on one side, two even pages verso, above each other
+     </li>
+     <li>
+      1*2-Conference&nbsp;:
+     </li>
+     <li>
+      1*4-Conference&nbsp;:
+     </li>
+     <li>
+      1*4&nbsp;:
+     </li>
+     <li>
+      1*8&nbsp;:
+     </li>
+     <li>
+      2*2&nbsp;: section: one sheet 2 x 2 pages = 4 pages (2 pages per form, for single sheets with front and back)
+     </li>
+     <li>
+      2**2&nbsp;: section: one sheet 2 x 2 pages = 4 pages (2 pages per form, for book ordering)
+     </li>
+     <li>
+      2*4&nbsp;: section: one sheet 2 x 4 pages = 8 pages (4 pages per form, 2x2 pages head to head)
+     </li>
+     <li>
+      2*8&nbsp;: section: one sheet 2 x 8 pages = 16 pages
+     </li>
+     <li>
+      2*16&nbsp;: section: one sheet 2 x 16 pages = 32 pages
+     </li>
+     <li>
+      2*2*2&nbsp;:
+     </li>
+     <li>
+      2*2*3&nbsp;:
+     </li>
+     <li>
+      2*4*2&nbsp;: section of 16 pages: 2 sheets, 4 pages front and backside
+     </li>
+     <li>
+      2*2*4&nbsp;: section of 16 pages: 4 sheets, 2 pages front and backside
+     </li>
+     <li>
+      2*6*Z&nbsp;: 6 page zigzag folded flyer
+     </li>
+     <li>
+      2*8*Z&nbsp;: 8 page zigzag folded flyer
+     </li>
+     <li>
+      ZFLYER-8&nbsp;: another 8 page zigzag folded flyer
+     </li>
+     <li>
+      ZFLYER-10&nbsp;: 10 page zigzag folded flyer
+     </li>
+     <li>
+      ZFLYER-12&nbsp;: 12 page zigzag folded flyer
+     </li>
+     <li>
+      MAPFLYER-12&nbsp;: 12 pages, 6 pages front and backside, map folding
+     </li>
+     <li>
+      DOUBLEWINDOW&nbsp;: 8 page window folded flyer
+     </li>
+     <li>
+      TRYPTICHON&nbsp;: another 6 page flyer
+     </li>
+     <li>
+      XY&nbsp;: one sheet with x rows and y columns, you can control the number with
+      <tt>
+       <a href="../Command/setuppaper.html" title="Command/setuppaper">
+        \setuppaper
+       </a>
+      </tt>
+      [nx=...,ny=...,dx=...,dy=...]
+     </li>
+    </ul>
+    <p>"form" means "one side of a sheet".
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> some graphical examples <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="XY_schema">
+      XY schema
+     </span>
+    </h3>
+    <p>Beware, you need to set up your XY arranging in the right order:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span><span class="brx">[</span>A4,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>4, ny<span class="brx">=</span>2<span class="brx">]</span> <span class="comment">% must come before \setuparranging!</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>middle, marking<span class="brx">=</span>on<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span> <span class="brx">[</span>XY<span class="brx">]</span>
+</pre>
+    <p>Here&rsquo;s an example for <a href="Tutorials/Creating_self-adhesive_labels.html" title="Document layout and layers/Tutorials/Creating self-adhesive labels">Creating self-adhesive labels</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Testing_schemas">
+      Testing schemas
+     </span>
+    </h3>
+    <p>Here's a convenient test file to help choose a schema or write a new one:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\Schema</span><span class="br">{</span>2*4<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A9,landscape<span class="brx">]</span><span class="brx">[</span>A7,landscape<span class="brx">]</span> 
+
+<span class="comment">% the schema being tested</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span> <span class="brx">[</span><span class="cs">\Schema</span><span class="brx">]</span> 
+
+<span class="comment">% Visuals</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>ss,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span> <span class="brx">[</span>margin<span class="brx">=</span>0pt, width<span class="brx">=</span>fit, header<span class="brx">=</span>2.8ex, footer<span class="brx">=</span>2.8ex<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>middle,hilo<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span> <span class="brx">[</span>alternative<span class="brx">=</span>doublesided,location<span class="brx">=</span>footer<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="cs"><span class="documentcs">\CONTEXT</span></span>\ imposition test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span> <span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>text<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>lightgray<span class="brx">]</span> 
+
+<span class="comment">% Where the block of pages is placed on the sheet </span>
+<span class="comment">% (relevant if there is space left over.)</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span> <span class="brx">[</span>location<span class="brx">=</span>middle,marking<span class="brx">=</span>on<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>Fakepage<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\strut</span></span>
+    <span class="cs"><span class="documentcs">\blank</span></span>
+    <span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span><span class="brx">[</span><span class="cs">\Schema</span><span class="brx">]</span><span class="br">}</span>
+    <span class="cs">\vfill</span>
+    This is page <span class="cs"><span class="systemcs">\recurselevel</span></span>
+    <span class="cs">\vfill</span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+    <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>16<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>Fakepage<span class="brx">]</span><span class="cs"><span class="documentcs">\page</span></span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/7243faef9f81ebf47e9287a6fb204ca3.webp" width="620">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Rearranging_existing_PDF_s">
+      Rearranging existing PDF s
+     </span>
+    </h3>
+    <p>ConTeXt is also handy when you need to <b>rearrange an existing pdf</b> into a booklet. This is a trial-and-error solution by Mari for rearranging an A4 pdf file into 2*8 spreads on A3 sheet (-&gt; A6 pages when printed and cut). 
+Not sure about the margins on the final A6 pages (the original has equal left and right margins, some extra inside margin might be a good thing), but at least otherwise this seems to do the trick:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span><span class="brx">[</span>A3<span class="brx">]</span> <span class="comment">%individual page A6 size, print size A3</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>2*8,rotated<span class="brx">]</span> <span class="comment">%makes an 8 page gathering when folded (duplex printing!)</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>backspace<span class="brx">=</span>0pt,
+    topspace<span class="brx">=</span>0pt,
+       width<span class="brx">=</span>middle,
+      height<span class="brx">=</span>middle,
+    location<span class="brx">=</span>middle,
+      header<span class="brx">=</span>0pt,
+      footer<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\insertpages</span></span>
+  <span class="brx">[</span>original_file.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <p>For proofing one sometimes wants to pick just some pages and when the original is A5, it is kind of handy to put them side-by-side for proofing. The command <tt><a href="../Command/filterpages.html" title="Command/filterpages">\filterpages</a></tt> allows you to define exactly what pages are needed. Be warned, though, that the page numbers refer to the pages in the pdf file, not the page numbers. 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span> <span class="comment">%individual page A5 size, print size A4</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>2SIDE,rotated<span class="brx">]</span> <span class="comment">%2 pages side by side, rotated to landscape to fit portrait A4</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>backspace<span class="brx">=</span>0pt,
+    topspace<span class="brx">=</span>0pt,
+       width<span class="brx">=</span>middle,
+      height<span class="brx">=</span>middle,
+    location<span class="brx">=</span>middle,
+      header<span class="brx">=</span>0pt,
+      footer<span class="brx">=</span>0pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\filterpages</span></span>
+  <span class="brx">[</span>file.pdf<span class="brx">]</span><span class="brx">[</span>2,5,16:19<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0pt<span class="brx">]</span> <span class="comment">%picks pdf pages 2, 5, and 16-19.</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>For more information, see the article on <a href="../Graphics_and_media/Including_pages_from_PDF_documents.html" title="Graphics and media/Including pages from PDF documents">Including pages from PDF documents</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Custom_imposition_schema">
+      Custom imposition schema
+     </span>
+    </h3>
+    <p>You can create a new imposition schema to meet your needs. To do so, take a look at the imposition definitions stored in <code>page-imp.mkiv</code> and find the closest one to work with. You can access the file online:
+</p>
+    <p><a class="external free" href="https://source.contextgarden.net/tex/context/base/mkiv/page-imp.mkiv?search=installpagearrangement" rel="nofollow">https://source.contextgarden.net/tex/context/base/mkiv/page-imp.mkiv?search=installpagearrangement</a>
+</p>
+    <p>Let's say we want this page arrangement on one sheet (R = page upside down):
+</p>
+    <pre>P4 P1
+R3 R2</pre>
+    <p>This is a mirrored/reversed version of <tt><a href="../Command/setuparranging.html" title="Command/setuparranging">\setuparranging</a></tt><code>[1*4]</code>, which gives:
+</p>
+    <pre>R1 R4
+P2 P3</pre>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% Adapted from page-imp.mkiv</span>
+
+<span class="cs"><span class="systemcs">\installpagearrangement</span></span> 1*4*reversed
+   <span class="br">{</span><span class="cs">\dosetuparrangement</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>3<span class="br">}</span><span class="br">{</span>3<span class="br">}</span><span class="comment">% X,Y,Total,hcutmarks,vcutmarks</span>
+        <span class="cs">\pusharrangedpageFOURSINGLESIDEDFOLDEDREVERSED</span><span class="cs">\poparrangedpagesTWO</span><span class="cs">\relax</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\pusharrangedpageFOURSINGLESIDEDFOLDEDREVERSED</span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\advancearrangedpageN</span>
+   <span class="cs">\reportarrangedpage</span><span class="cs">\arrangedpageN</span>
+   <span class="cs">\ifcase</span><span class="cs">\arrangedpageN</span>
+   <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>010<span class="cs">\arrangedpageA</span> <span class="comment">%  1 rot,hskip,vskip</span>
+   <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>111<span class="cs">\arrangedpageA</span> <span class="comment">%  2</span>
+   <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>101<span class="cs">\arrangedpageA</span> <span class="comment">%  3</span>
+   <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>000<span class="cs">\arrangedpageA</span> <span class="comment">%  4</span>
+     <span class="cs">\poparrangedpages</span>
+   <span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A10<span class="brx">]</span><span class="brx">[</span>A8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span> <span class="brx">[</span>1*4*reversed<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>    <span class="brx">[</span>margin<span class="brx">=</span>0pt, width<span class="brx">=</span>fit<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showframe</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs">\vbox</span> to <span class="cs">\textheight</span><span class="br">{</span><span class="cs">\vfill</span><span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\tfd</span> ABC<span class="br">}</span><span class="cs">\vfill</span><span class="br">}</span><span class="cs"><span class="documentcs">\page</span></span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/c7ffac7c73bd3686a77fb08c65c09b02.webp" width="307">
+     </li>
+    </ul>
+    <p>If it is necessary to have a different imposition scheme for the second page it is possible to create an arrangement that spans two physical pages. As an example the following schema arranges the pages like this
+</p>
+    <pre>P4 P1
+R3 R2
+
+P5 P6
+P7 P8</pre>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\installpagearrangement</span></span> 1*4*reversed*1*4
+  <span class="br">{</span><span class="cs">\dosetuparrangement</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>3<span class="br">}</span><span class="br">{</span>3<span class="br">}</span><span class="comment">% X,Y,Total,hcutmarks,vcutmarks</span>
+       <span class="cs">\pusharrangedpageFOURSINGLESIDEDFOLDEDREVERSED</span><span class="cs">\poparrangedpagesAB</span><span class="cs">\relax</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\pusharrangedpageFOURSINGLESIDEDFOLDEDREVERSED</span><span class="brx">#</span>1<span class="comment">%</span>
+ <span class="br">{</span><span class="cs">\advancearrangedpageN</span>
+  <span class="cs">\reportarrangedpage</span><span class="cs">\arrangedpageN</span>
+  <span class="cs">\ifcase</span><span class="cs">\arrangedpageN</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>010<span class="cs">\arrangedpageA</span> <span class="comment">%  1 rot,hskip,vskip</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>111<span class="cs">\arrangedpageA</span> <span class="comment">%  2</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>101<span class="cs">\arrangedpageA</span> <span class="comment">%  3</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>000<span class="cs">\arrangedpageA</span> <span class="comment">%  4</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>000<span class="cs">\arrangedpageB</span> <span class="comment">%  5</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>010<span class="cs">\arrangedpageB</span> <span class="comment">%  6</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>001<span class="cs">\arrangedpageB</span> <span class="comment">%  7</span>
+  <span class="cs">\or</span> <span class="cs">\handlearrangedpageXandY</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>011<span class="cs">\arrangedpageB</span> <span class="comment">%  8</span>
+    <span class="cs">\poparrangedpages</span>
+  <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="7" src="../wikiteximage/9027895fb76d6f797da06b09174f2f27.webp" width="7">
+     </li>
+    </ul>
+    <p>The <code>\arrangedpageA</code> and <code>\arrangedpageB</code> are box registers that you can use to build up your desired output pages. They actually go up to <code>\arrangedpageH</code>. 
+</p>
+    <p><i>Note:</i> if your imposition scheme needs more than eight physical pages see below <a href="#Imposition_by_signatures">Imposition by signatures</a> on how to interface with an external imposer program.
+</p>
+    <p>As you can see in 
+</p>
+    <p><a class="external free" href="https://source.contextgarden.net/tex/context/base/mkiv/page-imp.mkiv?search=poparrangedpages.+" rel="nofollow">https://source.contextgarden.net/tex/context/base/mkiv/page-imp.mkiv?search=poparrangedpages.+</a>
+</p>
+    <p>there are various alternative definitions of <code>\poparrangedpagesAB</code> that manipulate to box registers in different ways to output the desired imposition. The macro <code>\installpagearrangement</code> makes the generic <code>\poparrangedpages</code> use one of those alternatives (in this case <code>\poparrangedpagesAB</code>).
+</p>
+    <h2>
+     <span class="mw-headline" id="Cut_marks">
+      Cut marks
+     </span>
+    </h2>
+    <p>ConTeXt also allows to place cut marks. This can be controlled using the <tt>marking</tt> option of <tt><a href="../Command/setuplayout.html" title="Command/setuplayout">\setuplayout</a></tt>; possible values are:
+</p>
+    <ul>
+     <li>
+      <b>
+       on
+      </b>
+      show cut marks and page number
+     </li>
+     <li>
+      <b>
+       screen
+      </b>
+      ditto, but also print a grey-scale colour bar
+     </li>
+     <li>
+      <b>
+       colour
+      </b>
+      ditto, but also print a colour bar
+     </li>
+     <li>
+      <b>
+       text
+      </b>
+      print a text, defaults to
+      <code>empty</code>
+     </li>
+    </ul>
+    <p>The default settings are
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\pagecutmarksymbol</span>    <span class="br">{</span><span class="cs">\the</span><span class="cs">\realpageno</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\pagecutmarklength</span>    <span class="br">{</span>.5cm<span class="br">}</span>
+<span class="cs">\let</span><span class="cs">\pagecutmarktoptext</span>    <span class="cs">\empty</span>
+<span class="cs">\let</span><span class="cs">\pagecutmarkbottomtext</span> <span class="cs">\empty</span>
+</pre>
+    <p>To obtain register marks (or also called registration marks) you can use the small <a class="external text" href="http://archive.contextgarden.net/message/20070417.212628.76134ff7.en.html" rel="nofollow"><tt>crop</tt> module</a> which was posted to the mailing list.
+</p>
+    <h2>
+     <span class="mw-headline" id="Caveat:_common_troubles">
+      Caveat: common troubles
+     </span>
+    </h2>
+    <p>Note that some features (e.g. table of contents, internal references) are always disabled in imposition mode. So, they will not be included in the pdf if you ask for imposition.
+To get rid of this you can use the "arrange" key for the <code>context</code> command.
+</p>
+    <pre class="tex">context --arrange yourFilename
+</pre>
+    <p>This will run the document at first without page arrangement and impose the pages in a separate run after table of contents etc are created.
+</p>
+    <p>In <b>SciTe/WinConTeXt</b> you can run this command by choosing <i>Process and Arrange</i> in the <i>Tools</i> menu in SciTe.
+</p>
+    <h2>
+     <span class="mw-headline" id="Getting_the_last_page_of_a_Booklet">
+      Getting the last page of a Booklet
+     </span>
+    </h2>
+    <p>When you use imposition to print a booklet you want to put something on the very last page, the <code>quadruple</code> pagebreak did not always fill the remaining pages until you get a quadruple number of pages.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+
+<span class="cs">\startvariables</span>    all
+    nextquadruple: nextquadruple
+<span class="cs">\stopvariables</span>
+
+<span class="cs">\installpagebreakhandler</span> <span class="protectedcs">\v!nextquadruple</span>
+  <span class="br">{</span><span class="cs">\ifdoublesided</span>
+     <span class="protectedcs">\!!counta</span><span class="cs">\realpageno</span>
+     <span class="protectedcs">\!!countb</span><span class="cs">\realpageno</span>
+     <span class="cs">\advance</span><span class="protectedcs">\!!counta</span> 4
+     <span class="cs">\divide</span><span class="protectedcs">\!!counta</span> 4
+     <span class="cs">\multiply</span><span class="protectedcs">\!!counta</span> 4
+     <span class="cs">\advance</span><span class="protectedcs">\!!countb</span> 1
+     <span class="cs">\advance</span><span class="protectedcs">\!!counta</span>-<span class="protectedcs">\!!countb</span>
+     <span class="cs">\executepagebreakhandler</span><span class="protectedcs">\v!yes</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="protectedcs">\!!counta</span><span class="br">{</span><span class="cs">\executepagebreakhandler</span><span class="protectedcs">\v!empty</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs">\protect</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>2UP,rotated,doublesided<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Front Cover<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>nextquadruple<span class="brx">]</span>
+
+Back Cover
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Getting_to_the_Back_Cover_of_a_Booklet">
+      Getting to the Back Cover of a Booklet
+     </span>
+    </h2>
+    <p>When using imposition to print an a5 booklet (a4 folded in half) John Devereux wanted to specify content for the back cover, independently of the actual number of pages in the booklet. Here is a way that worked (thanks to Wolfgang Schuster on the mailing list). \page[beforequadruple] gets to the inside back cover. Another \page gets to the outside back cover.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+
+<span class="cs">\startvariables</span>    all
+  beforequadruple: beforequadruple
+<span class="cs">\stopvariables</span>
+
+<span class="cs">\installpagebreakhandler</span> <span class="protectedcs">\v!beforequadruple</span>
+  <span class="br">{</span><span class="cs">\ifdoublesided</span>
+     <span class="protectedcs">\!!counta</span><span class="cs">\realpageno</span>
+     <span class="protectedcs">\!!countb</span><span class="cs">\realpageno</span>
+     <span class="cs">\advance</span><span class="protectedcs">\!!counta</span> 5
+     <span class="cs">\divide</span><span class="protectedcs">\!!counta</span> 4
+     <span class="cs">\multiply</span><span class="protectedcs">\!!counta</span> 4
+     <span class="cs">\advance</span><span class="protectedcs">\!!countb</span> 2
+     <span class="cs">\advance</span><span class="protectedcs">\!!counta</span>-<span class="protectedcs">\!!countb</span>
+     <span class="cs">\executepagebreakhandler</span><span class="protectedcs">\v!yes</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="protectedcs">\!!counta</span><span class="br">{</span><span class="cs">\executepagebreakhandler</span><span class="protectedcs">\v!empty</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs">\protect</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>2UP,rotated,doublesided<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span> Front Cover
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>beforequadruple<span class="brx">]</span>
+
+Imprint
+
+<span class="cs"><span class="documentcs">\page</span></span>
+
+Back Cover
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Adding_pages_for_imposition_signature">
+      Adding pages for imposition signature
+     </span>
+    </h2>
+    <p>With <code>\setuppagenumbering[alternative=doublesided</code>, there will always be an even number of pages. If you need to always have a multiple of four pages, use <code>\page[quadruple]</code> at the end of the document:
+</p>
+    <pre class="tex"><span class="comment">% Enable doublesided; there will always be an even number of pages</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided,location<span class="brx">=</span>right<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\completecontent</span></span>
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A Chapter<span class="br">}</span><span class="brx">]</span>
+Text of chapter 1
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Another Chapter<span class="br">}</span><span class="brx">]</span>
+Text of chapter 2
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="comment">% Make sure there are a multiple of four pages in the document</span>
+<span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>quadruple<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><i>Is there is a case where the complex solution in the next section would be necessary?</i>
+</p>
+    <h2>
+     <span class="mw-headline" id="Imposition_by_signatures">
+      Imposition by signatures
+     </span>
+    </h2>
+    <p>Sometimes you want a booklet, but the pages are too many to be folded together. This is true especially when the number of pages rises above 80. So you need to pass the output PDF to an imposer, like pdfjam or psbook or pdfpages. The problem is that you need to get the "right" number of pages. 
+</p>
+    <p>E.g., if the original pages are 128, no problem, the signature is 64 and you can impose it without problems.
+</p>
+    <p>But, if the original pages are 129, the optimal signature is 44, so
+you need to add 3 pages during the PDF compiling.
+</p>
+    <p>First, create the following imposer.lua file
+</p>
+    <pre>-- translated from perl to lua. Original code is in
+-- http://theanarchistlibrary.org/docs/altools-6.6.tar.gz
+
+local maxsignature = 80 -- define the maximum of the signature
+local minsignature = 20 -- define the minimum of the signature
+function optimize_signature(pages)
+   local originalpages = pages
+   -- be sure we don't mess up
+   assert(numberpage ~= 0, "I can't work with 0 pages")
+
+   --set needed pages to and and signature to 0
+   local neededpages, signature = 0,0
+
+   -- this means that we have to work with n*4, if not, add them to
+   -- needed pages 
+   local modulo = pages&nbsp;% 4
+   if modulo==0 then
+      signature=pages
+   else
+      neededpages = 4 - modulo
+   end
+
+   -- add the needed pages to pages
+   pages = pages + neededpages
+   
+   -- give a try with the signature
+   signature = find_signature(pages)
+   
+   -- if the pages, are more than the max signature, find the right one
+   if pages&gt;maxsignature then
+      while signature&lt;minsignature do
+	 pages = pages + 4
+	 neededpages = 4 + neededpages
+	 signature = find_signature(pages)
+      end
+   end
+   
+   print("ImposerMessage:: Original pages: " .. originalpages .. "; " .. 
+	 "Signature is " .. signature .. ", " ..
+	 neededpages .. " pages are needed, " .. 
+	 pages ..  " of output")
+   -- let's do it
+   tex.print("\\dorecurse{" .. neededpages .. "}{\\page[empty]}")
+
+end
+
+function find_signature(number)
+   assert(number ~= 0, "I can't find the signature for 0 pages")
+   assert((number&nbsp;% 4) == 0, "I suppose something is wrong, not a n*4")
+   local i = maxsignature
+   while i&gt;0 do
+      if (number&nbsp;% i) == 0 then
+	 return i
+      end
+      i = i - 4
+   end
+end
+
+</pre>
+    <p>The ImposerMessage is important if you want to pass the output of the ConTeXt run to a script to do the imposing.
+</p>
+    <p>Then the master file
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\fillthesignature</span><span class="brx">#</span>1<span class="br">{</span>
+  <span class="cs">\directlua</span><span class="br">{</span>dofile<span class="brx">(</span>"imposer.lua"<span class="brx">)</span> 
+    optimize_signature<span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>53<span class="br">}</span><span class="br">{</span>
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>test<span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\realpageno</span><span class="br">}</span><span class="br">}</span>
+
+
+<span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>yes<span class="brx">]</span> <span class="comment">% reset the page</span>
+<span class="cs">\fillthesignature</span><span class="br">{</span><span class="cs">\the</span><span class="cs">\realpageno</span><span class="br">}</span>
+
+And this is the last page <span class="brx">(</span>the backcover<span class="brx">)</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212410
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.092 seconds
+Real time usage: 0.150 seconds
+Preprocessor visited node count: 202/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 869/2097152 bytes
+Template argument size: 163/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 24908/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   66.936      1 -total
+ 13.27%    8.881      1 Template:todo
+  8.17%    5.467      6 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:878-1!canonical and timestamp 20260109212410 and revision id 40305
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Imposition">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

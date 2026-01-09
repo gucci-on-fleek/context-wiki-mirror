@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Use MetaPost arrays&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Use_MetaPost_arrays" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Use MetaPost arrays
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5386&diff=41368">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>In Metapost (or rather in Metafun) one can define arrays of colors, strings, paths, pens and other variables. An example is the following:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startMPpage</span></span>
+
+string MyColors<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+path   MyPaths <span class="brx">[</span><span class="brx">]</span>&nbsp;;
+pen MyPens<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+for j <span class="brx">=</span> -1 step 1 until 3&nbsp;:
+  MyPens<span class="brx">[</span>j<span class="brx">]</span>&nbsp;:<span class="brx">=</span> pencircle scaled <span class="brx">(</span><span class="brx">(</span>2+j<span class="brx">)</span>*pt<span class="brx">)</span>&nbsp;;
+endfor
+
+MyPaths<span class="brx">[</span>-1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>-1.5cm,1.5cm<span class="brx">)</span> -- <span class="brx">(</span>1.5cm,1.5cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>-1<span class="brx">]</span>:<span class="brx">=</span> "magenta"&nbsp;; 
+MyPaths<span class="brx">[</span>0<span class="brx">]</span>  :<span class="brx">=</span> <span class="brx">(</span>-2cm,2cm<span class="brx">)</span> -- <span class="brx">(</span>2*cos<span class="brx">(</span>0<span class="brx">)</span>*cm,-2cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>0<span class="brx">]</span>&nbsp;:<span class="brx">=</span> "darkyellow"&nbsp;;
+MyPaths<span class="brx">[</span>1<span class="brx">]</span>  :<span class="brx">=</span> fullcircle scaled 3cm&nbsp;; 
+MyColors<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> "darkred"&nbsp;;
+MyPaths<span class="brx">[</span>2<span class="brx">]</span>  :<span class="brx">=</span> fullsquare scaled 2cm&nbsp;; 
+MyColors<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> "darkgreen"&nbsp;;
+MyPaths<span class="brx">[</span>3<span class="brx">]</span>  :<span class="brx">=</span> <span class="brx">(</span>-2cm,-2cm<span class="brx">)</span> -- <span class="brx">(</span>2cm,2cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>3<span class="brx">]</span>&nbsp;:<span class="brx">=</span> "darkblue"&nbsp;;
+
+for j <span class="brx">=</span> -1 step 1 until 3&nbsp;:
+  draw MyPaths<span class="brx">[</span>j<span class="brx">]</span> 
+       withpen MyPens<span class="brx">[</span>j<span class="brx">]</span> 
+       withcolor MyColors<span class="brx">[</span>j<span class="brx">]</span>&nbsp;;
+endfor
+<span class="cs"><span class="documentcs">\stopMPpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="247" src="../../wikiteximage/975536054abf379520440e42bcd8420d.webp" width="247">
+     </li>
+    </ul>
+    <p>In the above example, instead of 
+</p>
+    <pre class="tex">string MyColors<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+</pre>
+    <p>one could have said
+</p>
+    <pre class="tex">color MyColors<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+</pre>
+    <p>and then we should have defined each component of <code>MyColors</code> as colors instead of strings:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startMPpage</span></span>
+color MyColors<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+path   MyPaths <span class="brx">[</span><span class="brx">]</span>&nbsp;;
+pen MyPens<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+for j <span class="brx">=</span> -1 step 1 until 3&nbsp;:
+  MyPens<span class="brx">[</span>j<span class="brx">]</span>&nbsp;:<span class="brx">=</span> pencircle scaled <span class="brx">(</span><span class="brx">(</span>2+j<span class="brx">)</span>*pt<span class="brx">)</span>&nbsp;;
+endfor
+
+MyPaths<span class="brx">[</span>-1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>-1.5cm,1.5cm<span class="brx">)</span> -- <span class="brx">(</span>1.5cm,1.5cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>-1<span class="brx">]</span>:<span class="brx">=</span> magenta&nbsp;; 
+MyPaths<span class="brx">[</span>0<span class="brx">]</span>  :<span class="brx">=</span> <span class="brx">(</span>-2cm,2cm<span class="brx">)</span> -- <span class="brx">(</span>2*cos<span class="brx">(</span>0<span class="brx">)</span>*cm,-2cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>0<span class="brx">]</span>&nbsp;:<span class="brx">=</span> darkyellow&nbsp;;
+MyPaths<span class="brx">[</span>1<span class="brx">]</span>  :<span class="brx">=</span> fullcircle scaled 3cm&nbsp;; 
+MyColors<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> darkred&nbsp;;
+MyPaths<span class="brx">[</span>2<span class="brx">]</span>  :<span class="brx">=</span> fullsquare scaled 2cm&nbsp;; 
+MyColors<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> darkgreen&nbsp;;
+MyPaths<span class="brx">[</span>3<span class="brx">]</span>  :<span class="brx">=</span> <span class="brx">(</span>-2cm,-2cm<span class="brx">)</span> -- <span class="brx">(</span>2cm,2cm<span class="brx">)</span>&nbsp;; 
+MyColors<span class="brx">[</span>3<span class="brx">]</span>&nbsp;:<span class="brx">=</span> darkblue&nbsp;;
+
+for j <span class="brx">=</span> -1 step 1 until 3&nbsp;:
+  draw MyPaths<span class="brx">[</span>j<span class="brx">]</span> withpen MyPens<span class="brx">[</span>j<span class="brx">]</span> withcolor MyColors<span class="brx">[</span>j<span class="brx">]</span>&nbsp;;
+endfor
+<span class="cs"><span class="documentcs">\stopMPpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="247" src="../../wikiteximage/27f21f89fa8891043efbfb23887256d0.webp" width="247">
+     </li>
+    </ul>
+    <p>Also note that in order to specify the size of the pen in <code>MyPens[j]</code> we have to say <code>((2+j)*pt)</code> in order for Metapost to interpret correctly the desired size of the pen. The outer parentheses are to prevent MetaPost from interpreting the definition as
+</p>
+    <pre class="tex">MyPens<span class="brx">[</span>j<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>pencircle scaled <span class="brx">(</span>2+j<span class="brx">)</span><span class="brx">)</span> * pt&nbsp;;
+</pre>
+    <p>which would result in an error.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.029 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 66/2097152 bytes
+Template argument size: 27/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5795/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   11.211      1 -total
+ 65.25%    7.315      3 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5386-1!canonical and timestamp 20260109212416 and revision id 41368
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Use_MetaPost_arrays">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

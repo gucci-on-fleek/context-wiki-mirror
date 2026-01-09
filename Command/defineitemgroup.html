@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Command/defineitemgroup&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Command/defineitemgroup" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Command/defineitemgroup
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4802&diff=23045">2021-12-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Defining_lists">
+      Defining lists
+     </span>
+    </h2>
+    <p>Defining <tt><a class="mw-redirect" href="_startitemgroup.html" title="Command/startitemize">\startitemize</a></tt>-like <i>itemgroups</i> is accomplished through <tt><a class="mw-selflink selflink">\defineitemgroup</a></tt> and the corresponding setup. For historical reasons these have a non-standard, duplicate interface
+requiring some options to be specified as key-value setups, others as an argument list. For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineitemgroup</span></span><span class="brx">[</span>myitems<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>myitems<span class="brx">]</span> <span class="brx">[</span>each<span class="brx">]</span> <span class="brx">[</span>joinedup<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>myitems<span class="brx">]</span> <span class="brx">[</span>each<span class="brx">]</span> <span class="brx">[</span>itemalign<span class="brx">=</span>flushright<span class="brx">]</span>
+</pre>
+    <p>The arguments include the:
+</p>
+    <ul>
+     <li>
+      item group name;
+     </li>
+     <li>
+      itemization level; and
+     </li>
+     <li>
+      list of horizontal and vertical whitespace controls.
+     </li>
+    </ul>
+    <p>Parameters that concern whitespace (both vertical and horizontal) belong in the argument list: <code>joinedup</code>, <code>packed</code>, <code>nowhite</code>, and others.
+</p>
+    <p>Further options are part of the setup, and can be combined:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupitemgroup</span></span>  <span class="brx">[</span>myitems<span class="brx">]</span> <span class="brx">[</span>each<span class="brx">]</span> <span class="brx">[</span>joinedup<span class="brx">]</span> <span class="brx">[</span>itemalign<span class="brx">=</span>flushright<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Custom_bullets">
+      Custom bullets
+     </span>
+    </h2>
+    <p>Bullets are very flexible. They hook into the <tt><a href="symbol.html" title="Command/symbol">\symbol</a></tt> mechanism.
+</p>
+    <p>The macro generator here is <tt><a href="definesymbol.html" title="Command/definesymbol">\definesymbol</a></tt>. Basically it allows for all valid Context code to appear inside the definition, including the list item counter. This counter can be accessed via <tt><a class="new" href="../index.php?title=Command/currentitemnumber&action=edit&redlink=1.html" title="Command/currentitemnumber (page does not exist)">\currentitemnumber</a></tt>. To achieve the &ldquo;item number in a box&rdquo; effect we have to draw this
+number as the contents of the box like so:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definesymbol</span></span> <span class="brx">[</span>instruction_symbol_numbered<span class="brx">]</span>
+  <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span><span class="cs">\currentitemnumber</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The <tt><a href="framed.html" title="Command/framed">\framed</a></tt> must be adapted to the specific requirements.
+</p>
+    <h2>
+     <span class="mw-headline" id="Putting_it_together">
+      Putting it together
+     </span>
+    </h2>
+    <p>Below listing combines all the above into one working example.
+</p>
+    <pre class="tex">    <span class="cs"><span class="systemcs">\unprotect</span></span>
+    
+    <span class="comment">%% the bullet: a red square</span>
+    
+    <span class="cs"><span class="stylecs">\defineframed</span></span> <span class="brx">[</span>instruction_symbol_frame<span class="brx">]</span> <span class="brx">[</span>
+      background<span class="brx">=</span>color,
+      backgroundcolor<span class="brx">=</span>red,
+      frame<span class="brx">=</span>off,
+      width<span class="brx">=</span>1em,
+      height<span class="brx">=</span><span class="cs"><span class="systemcs">\framedparameter</span></span><span class="br">{</span>width<span class="br">}</span>, <span class="comment">%% -&gt; let height = width</span>
+    <span class="brx">]</span>
+    
+    <span class="comment">%% bare bullet</span>
+    
+    <span class="cs"><span class="stylecs">\definesymbol</span></span> <span class="brx">[</span>instruction_symbol<span class="brx">]</span>
+      <span class="brx">[</span><span class="br">{</span><span class="cs">\instruction_symbol_frame</span><span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+    
+    <span class="comment">%% same bullet, with item number inside</span>
+    
+    <span class="cs"><span class="stylecs">\definesymbol</span></span> <span class="brx">[</span>instruction_symbol_numbered<span class="brx">]</span>
+      <span class="brx">[</span><span class="br">{</span><span class="cs">\instruction_symbol_frame</span><span class="br">{</span><span class="cs">\currentitemnumber</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+    
+    <span class="comment">%% define the &ldquo;regular&ldquo; itemization with a red box as bullet indicator</span>
+    
+    <span class="cs"><span class="stylecs">\defineitemgroup</span></span> <span class="brx">[</span>RegularList<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>RegularList<span class="brx">]</span> <span class="brx">[</span>each<span class="brx">]</span> <span class="brx">[</span>joinedup<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>RegularList<span class="brx">]</span> <span class="brx">[</span>symbol<span class="brx">=</span>instruction_symbol<span class="brx">]</span>
+    
+    <span class="comment">%% define the &ldquo;Instructions&rdquo; type itemization that includes the item</span>
+    <span class="comment">%% number inside the box</span>
+    
+    <span class="cs"><span class="stylecs">\defineitemgroup</span></span> <span class="brx">[</span>Instructions<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>Instructions<span class="brx">]</span> <span class="brx">[</span>each<span class="brx">]</span> <span class="brx">[</span>joinedup<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>Instructions<span class="brx">]</span> <span class="brx">[</span>symbol<span class="brx">=</span>instruction_symbol_numbered<span class="brx">]</span>
+    
+    <span class="cs">\protect</span>
+    
+    <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+    <span class="comment">%% demo</span>
+    
+    <span class="cs"><span class="documentcs">\starttext</span></span>
+      Chemicals
+      <span class="cs">\startRegularList</span>
+        <span class="cs"><span class="documentcs">\startitem</span></span> <span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs"><span class="documentcs">\stopitem</span></span>
+        <span class="cs"><span class="documentcs">\startitem</span></span> <span class="cs"><span class="documentcs">\input</span></span> ward <span class="cs"><span class="documentcs">\stopitem</span></span>
+      <span class="cs">\stopRegularList</span>
+    
+      <span class="cs"><span class="documentcs">\blank</span></span> <span class="brx">[</span>2*big<span class="brx">]</span>
+    
+      Instructions
+      <span class="cs">\startInstructions</span>
+        <span class="cs"><span class="documentcs">\startitem</span></span> <span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs"><span class="documentcs">\stopitem</span></span>
+        <span class="cs"><span class="documentcs">\startitem</span></span> <span class="cs"><span class="documentcs">\input</span></span> ward <span class="cs"><span class="documentcs">\stopitem</span></span>
+      <span class="cs">\stopInstructions</span>
+    <span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072818
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.030 seconds
+Real time usage: 0.089 seconds
+Preprocessor visited node count: 116/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 608/2097152 bytes
+Template argument size: 157/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6321/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   24.420      1 -total
+ 35.63%    8.700      6 Template:cmd
+ 22.51%    5.498      3 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4802-1!canonical and timestamp 20260110072818 and revision id 23045
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Command/defineitemgroup">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

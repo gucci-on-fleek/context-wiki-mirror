@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7366&diff=41020">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Commands_and_Arguments">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Commands and Arguments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Defining_new_commands">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Defining new commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Use_of_brackets">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Use of brackets
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Using_variables">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Using variables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Special_characters_in_command_names">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Special characters in command names
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Passing_verbatim_text_as_macro_parameter">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Passing verbatim text as macro parameter
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Commands_and_Arguments">
+      Commands and Arguments
+     </span>
+    </h2>
+    <p>The commands in your input file can have the following appearance:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        <b>
+         Appearance of command
+        </b>
+       </th>
+       <th>
+        <b>
+         Example
+        </b>
+       </th>
+      </tr>
+      <tr>
+       <td><code>\startcommand ... \stopcommand</code></td>
+       <td><code>\starttext ... \stoptext</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\startcommand[] ... \stopcommand</code></td>
+       <td><code>\startitemize[packed] ... \stopitemize</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\command</code></td>
+       <td><code>\item</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\command[]</code></td>
+       <td><code>\in[cuyler]</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\command{}[]</code></td>
+       <td><code>\at{page}[cuyler]</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\command{}</code></td>
+       <td><code>\index{America}</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\command[]{}</code></td>
+       <td><code>\framed[foregroundcolor=blue]{The Cuyler family}</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Defining_new_commands">
+      Defining new commands
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Tutorials/Commands_with_KeyVal_arguments.html" title="ConTeXt and Lua programming/Tutorials/Commands with KeyVal arguments">
+       Commands with Key=Value arguments
+      </a>
+      : (Topic: things like
+      <code>\command[thiskey=thatvalue]</code>
+      .)
+     </li>
+     <li>
+      <a href="Tutorials/Commands_with_optional_arguments.html" title="ConTeXt and Lua programming/Tutorials/Commands with optional arguments">
+       Commands with optional arguments
+      </a>
+      : (Topic: one or more optional arguments within brackets.)
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Use_of_brackets">
+      Use of brackets
+     </span>
+    </h2>
+    <p>One must <b>not</b> confuse with the LaTeX convention where "mandatory"
+arguments are contained in curly braces and brackets indicate
+"optional" arguments.
+</p>
+    <p>Curly braces not only give grouping but generally
+are used for objects to be typeset, as for \in{Figure}{a} [fig:ref].
+</p>
+    <p>For new users, it is worth repeating here that arguments within braces
+can be either a comma-separated list of words OR a comma-separated
+list of keyword=value pairs, BUT NOT A MIXTURE OF BOTH. Generally, a
+keyword=value exists for all words, for example \cite[authoryear][ref]
+and \cite[alternative=authoryear,reference=ref]
+</p>
+    <p>values can be grouped using curly braces, as in
+\cite[alternative=authoryear,lefttext={{see },}][ref1,ref2] where the
+lefttext is associated with the first cite reference (and none with the
+second). This can be tricky but is in fact rather straight-forward.
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_variables">
+      Using variables
+     </span>
+    </h2>
+    <p>There are several ways to handle variables in ConTeXt.
+The recommended and easiest method is to use the
+<tt>\setvariables</tt> and <tt>\getvariable</tt> macros.
+Doing it this way you also avoid to get in conflict with
+already defined stuff (as variables use their own namespace).
+</p>
+    <p>To store variables, you can use the <tt>\setvariables</tt>
+macro.
+</p>
+    <pre class="tex"><span class="comment">% stores value in variable namespace:key</span>
+<span class="cs"><span class="stylecs">\setvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span>
+<span class="comment">% stores the expanded value</span>
+<span class="cs"><span class="systemcs">\setevariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span>
+<span class="comment">% global</span>
+<span class="cs"><span class="systemcs">\setgvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span>
+<span class="comment">% global and expanded value</span>
+<span class="cs"><span class="systemcs">\setxvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span>
+</pre>
+    <p>Use <tt>\getvariable</tt> to process a variable. Reading an undefined
+variable results in the <tt>\empty</tt> token. This is not a serious problem,
+as long as you expect text only.
+But be warned: the compilation process breaks, if you expect a dimension
+or number. So better take care, that you define your variables, before you use them.
+</p>
+    <pre class="tex"><span class="comment">% gets value of the variable namespace:key</span>
+<span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>namespace<span class="br">}</span><span class="br">{</span>key<span class="br">}</span>
+</pre>
+    <p>To avoid problems, also pay attention to the following:
+</p>
+    <p>You can set several variables (same namespace) at the same time.
+So the command <tt>\setvariables</tt> logically uses the <b>plural</b> form
+and works with <b>square brackets</b>.
+On the other hand you can only process one variable at the same time, so
+<tt>\getvariable</tt> uses the <b>singular</b> form and works with <b>braces</b>.
+</p>
+    <p>OK, here comes a simple example. Let's say, that we want to have variable
+space before and after a letter macro called <tt>\Opening</tt>.
+</p>
+    <pre class="tex"><span class="cs">\long</span><span class="cs">\def</span><span class="cs">\Opening</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>Letter:opening<span class="br">}</span><span class="br">{</span>before<span class="br">}</span>
+  <span class="cs">\noindent</span><span class="br">{</span><span class="cs"><span class="systemcs">\begstrut</span></span><span class="brx">#</span>1<span class="cs">\endstrut</span><span class="br">}</span>
+  <span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>Letter:opening<span class="br">}</span><span class="br">{</span>after<span class="br">}</span>
+<span class="br">}</span>
+</pre>
+    <p>By using variables in your macros, you can separate the layout definition,
+so that your macros get much more flexible.
+Just ensure, that all variables are set, before you use them!
+</p>
+    <p>In this example we want to have a blank line in front of the opening, and
+two blank lines right after it. The value for the second key contains
+square brackets, so it must be enclosed in braces.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setvariables</span></span><span class="brx">[</span>Letter:opening<span class="brx">]</span>
+  <span class="brx">[</span>before<span class="brx">=</span><span class="cs"><span class="documentcs">\blank</span></span>,
+   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span><span class="br">}</span>,
+  <span class="brx">]</span>
+</pre>
+    <p>You can now save this style setup (among others) in a separate file and
+include it at the start of your document (before <tt>\Opening</tt> is
+defined or at least used).
+</p>
+    <p>And don't forget:
+<b>Ensure that all variables are set before you use them!</b>
+</p>
+    <p>How to pass variable from TeX to Lua and vice versa? See <a href="ConTeXt_Lua_Documents_CLD/CLD_passing_variables#Variables.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD/CLD passing variables">CLD passing variables</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Special_characters_in_command_names">
+      Special characters in command names
+     </span>
+    </h2>
+    <p>Some commands have special characters in their names, that TeX normally does not consider to be 
+letters: <tt>@</tt>, <tt>!</tt> and <tt>?</tt>. 
+Before and after the use or definition of such protected commands in your input files, the catcode of these 
+characters has to be changed. This is done by <tt><a href="../Command/unprotect.html" title="Command/unprotect">\unprotect</a></tt> and <tt><a class="new" href="../index.php?title=Command/protect&action=edit&redlink=1.html" title="Command/protect (page does not exist)">\protect</a></tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+<span class="cs">\def</span><span class="protectedcs">\!test</span><span class="br">{</span>alfa<span class="br">}</span> 
+<span class="cs">\protect</span> 
+</pre>
+    <p>The newly defined command <tt>\!test</tt> can of course only be called upon when we are in the <tt><a href="../Command/unprotect.html" title="Command/unprotect">\unprotect</a></tt>ed state, otherwise TeX reads the command <tt>\!</tt>, followed by the word <tt>test</tt> (and probably complains loudly about not being in math mode). These protection/unprotection commands can be nested.  When the nesting becomes deeper than one level, the system reports the current protection level. It is a good habit to always start your macro files with <tt><a href="../Command/unprotect.html" title="Command/unprotect">\unprotect</a></tt> and end them with <tt><a class="new" href="../index.php?title=Command/protect&action=edit&redlink=1.html" title="Command/protect (page does not exist)">\protect</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Passing_verbatim_text_as_macro_parameter">
+      Passing verbatim text as macro parameter
+     </span>
+    </h2>
+    <p>(For passing text to LuaTex verbatim, see the <a href="Tutorials/Programming_in_LuaTeX#Manipulating_verbatim_text_for_dummies.html" title="ConTeXt and Lua programming/Tutorials/Programming in LuaTeX">Programming in LuaTeX</a> article on this wiki.)
+</p>
+    <p>In case you want to write macros that should handle verbatim text,
+you can use the tex primitives <tt>\obeyspaces</tt> and <tt>\obeylines</tt>.
+<tt>\obeyspaces</tt> changes the category code of the space character,
+so that spaces become significant. <tt>\obeylines</tt> does the same for the
+newline character.
+</p>
+    <p>This works fine for the following example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span><span class="cs">\obeyspaces</span><span class="br">{</span>A gap from here     to there!<span class="br">}</span><span class="br">}</span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="28" src="../wikiteximage/516609a064658a4434de0198816ee8eb.webp" width="216">
+     </li>
+    </ul>
+    <p>But if you pass this text as a parameter for your own macro
+<tt>\TextWithSpaces</tt>
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\TextWithSpaces</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span><span class="cs">\obeyspaces</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs">\TextWithSpaces</span><span class="br">{</span>A gap from here     to there!<span class="br">}</span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="28" src="../wikiteximage/a802dbf69a13626284ec9893f271861f.webp" width="195">
+     </li>
+    </ul>
+    <p>the additional spaces are <b>ignored</b>.
+This happens because the category code change is not yet in effect when
+the argument is parsed, and the spaces are removed during parsing.  To keep
+the spaces, the catcode change must be done <b>before</b> the argument is parsed.
+</p>
+    <p>Here is a two-part solution for the problem (<i>suggested by Taco Hoekwater</i>):
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\TextWithSpaces</span><span class="br">{</span><span class="cs">\bgroup</span><span class="cs">\obeyspaces</span><span class="cs">\doTextWithSpaces</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doTextWithSpaces</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\egroup</span><span class="br">}</span>
+</pre>
+    <p>Another way is to postpone argument loading (<i>suggested by Hans Hagen</i>).
+</p>
+    <pre class="tex"><span class="cs">\def</span>  <span class="cs">\TextWithSpaces</span>  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="cs">\bgroup</span><span class="cs">\obeyspaces</span><span class="cs">\doTextWithSpaces</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doTextWithSpaces</span>     <span class="brx">#</span>1<span class="br">{</span><span class="brx">#</span>1<span class="cs">\egroup</span><span class="br">}</span> 
+</pre>
+    <p>Both of these produce the desired result:
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="28" src="../wikiteximage/59541a57202292cad503a4ac09e8916f.webp" width="216">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.041 seconds
+Real time usage: 0.063 seconds
+Preprocessor visited node count: 126/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 394/2097152 bytes
+Template argument size: 82/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5196/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    7.608      1 -total
+ 75.68%    5.758      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7366-1!canonical and timestamp 20260109212408 and revision id 41020
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

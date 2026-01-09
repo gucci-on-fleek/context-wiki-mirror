@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Installing ConTeXt LMTX into a Docker container&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Installing_ConTeXt_LMTX_into_a_Docker_container" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Installing ConTeXt LMTX into a Docker container
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7012&diff=41688">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span id="1)_Install_Docker">
+     </span>
+     <span class="mw-headline" id="1.29_Install_Docker">
+      1) Install Docker
+     </span>
+    </h2>
+    <p>Install Docker for your system by following the instructions at <a class="external text" href="https://docker.com" rel="nofollow">Docker.com</a>.
+</p>
+    <h2>
+     <span id="2)_Build_the_Docker_container">
+     </span>
+     <span class="mw-headline" id="2.29_Build_the_Docker_container">
+      2) Build the Docker container
+     </span>
+    </h2>
+    <p>Building a container is a two-step process: first create a Dockerfile that specifies what needs to be built, then build it.
+</p>
+    <p>A Dockerfile is a plain text file called <code>Dockerfile</code> without any filetype extension. Copy the following into your Dockerfile:
+</p>
+    <pre># ConTeXt LMTX in a container
+FROM debian:latest
+WORKDIR /opt/context
+
+# The official Debian image provided by Docker does not include a program that can
+# uncompress .zip files, so we have to install one.
+RUN apt-get -y update \
+    && apt-get -y autoremove \
+    && apt-get clean \
+    && apt-get install -y unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Use the 64 bit Linux version
+ADD https://lmtx.pragma-ade.com/install-lmtx/context-linux-64.zip context-linux-64.zip
+RUN unzip context-linux-64.zip \
+    && rm installation.pdf context-linux-64.zip
+
+# Run the ConTeXt installer
+RUN chmod 755 install.sh \
+    && (./install.sh &gt; install.log 2&gt;&1)
+
+# Switch to a working directory
+WORKDIR /home/context
+ENV PATH=/opt/context/tex/texmf-linux-64/bin:$PATH
+</pre>
+    <p>and then run these commands:
+</p>
+    <pre>$ cd &lt;the directory containing Dockerfile&gt;
+$ docker build -t context .
+</pre>
+    <p>(Note the full stop at the end.)
+</p>
+    <h2>
+     <span id="3)_Check_that_ConTeXt_built_correctly_(optional)">
+     </span>
+     <span class="mw-headline" id="3.29_Check_that_ConTeXt_built_correctly_.28optional.29">
+      3) Check that ConTeXt built correctly (optional)
+     </span>
+    </h2>
+    <p>You can run a <code>bash</code> shell within the container to check that ConTeXt built correctly.
+</p>
+    <pre>$ cd &lt;the directory containing Dockerfile&gt;
+$ docker run -it context bash
+</pre>
+    <p>First, check that ConTeXt runs:
+</p>
+    <pre># context --version
+</pre>
+    <p>which should give something like:
+</p>
+    <pre>root@f96c7ca62c48:/home/context# context --version
+mtx-context     | ConTeXt Process Management 1.06
+mtx-context     |
+mtx-context     | main context file: /opt/context/tex/texmf-context/tex/context/base/mkiv/context.mkiv
+mtx-context     | current version: 2024.08.16 16:30
+mtx-context     | main context file: /opt/context/tex/texmf-context/tex/context/base/mkxl/context.mkxl
+mtx-context     | current version: 2024.08.16 16:30
+</pre>
+    <p>If not then check the build log for errors:
+</p>
+    <pre># more /opt/context/install.log
+</pre>
+    <p>Type <code>exit</code> to end.
+</p>
+    <h2>
+     <span id="4)_Compile_your_ConTeXt_document">
+     </span>
+     <span class="mw-headline" id="4.29_Compile_your_ConTeXt_document">
+      4) Compile your ConTeXt document
+     </span>
+    </h2>
+    <p>This is very similar to the check in step 3 but with a "bind mount" added so that Docker can access your source files.
+</p>
+    <pre>$ cd &lt;the directory containing your ConTeXt source(s)&gt;
+</pre>
+    <p>Create a file <code>hello.tex</code> containing the lines:
+</p>
+    <pre>\starttext
+Hello, this is \CONTEXT\ running in Docker
+\stoptext
+</pre>
+    <p>and then generate a PDF from it using:
+</p>
+    <pre>$ docker run -itv .:/home/context context bash
+# context hello.tex
+</pre>
+    <p>If it all works correctly you should have a <code>hello.pdf</code> file in your source(s) directory.
+</p>
+    <ul>
+     <li>
+      Fonts &ndash; Only the fonts supplied with ConTeXt will be available. Fonts installed on the host PC, i.e. the PC on which Docker is running, will not be available. Any required additional fonts need to be added into Debian as part of the Dockerfile build script.
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212428
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 60/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1699/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7012-1!canonical and timestamp 20260109212428 and revision id 41688
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Installing_ConTeXt_LMTX_into_a_Docker_container">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

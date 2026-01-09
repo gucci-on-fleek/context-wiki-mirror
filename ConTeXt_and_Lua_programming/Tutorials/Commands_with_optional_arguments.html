@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/Commands with optional arguments&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Commands_with_optional_arguments" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/Commands with optional arguments
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=807&diff=40440">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">ConTeXt and Lua programming</a> | <a href="Commands_with_KeyVal_arguments.html" title="ConTeXt and Lua programming/Tutorials/Commands with KeyVal arguments">Commands with KeyVal arguments</a> &gt;
+</p>
+    <p>In ConTeXt, the optional argument processing is handled as a two-step process.  First, we write the command for the end-user as a wrapper command, which calls <tt><a class="new" href="../../index.php?title=Command/dosingleempty&action=edit&redlink=1.html" title="Command/dosingleempty (page does not exist)">\dosingleempty</a></tt>, <tt><a href="../../Command/dodoubleempty.html" title="Command/dodoubleempty">\dodoubleempty</a></tt>, <tt><a class="new" href="../../index.php?title=Command/dotripleempty&action=edit&redlink=1.html" title="Command/dotripleempty (page does not exist)">\dotripleempty</a></tt>, ... (from <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/syst-aux.mkiv" rel="nofollow">syst-aux.mkiv</a> or <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/syst-gen.mkii" rel="nofollow">syst-gen.mkii</a>) to handle the arguments properly -- including the optional ones -- and then calls a "private" command that contains the internals of the macro.  Note that this function call does not explicitly refer to the arguments at all.
+</p>
+    <p>For a command with two optional arguments, we use:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\MyCommand</span><span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleempty</span></span><span class="cs">\doMyCommand</span><span class="br">}</span>
+</pre>
+    <p>We then create the "private" macro (<tt>\doMacroName</tt> is the traditional ConTeXt name for these), with all the arguments defined as nonoptional.  Default values for the arguments need to be handled somewhat more explicitly than with LaTeX; macros such as <tt><a class="new" href="../../index.php?title=Command/ifsecondargument&action=edit&redlink=1.html" title="Command/ifsecondargument (page does not exist)">\ifsecondargument</a></tt> are used to determine whether the given argument was specified, as follows:
+</p>
+    <pre class="tex"> <span class="cs">\def</span><span class="cs">\doMyCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>1Hello
+    <span class="cs">\ifsecondargument</span>
+       <span class="brx">#</span>2<span class="comment">%</span>
+    <span class="cs">\else</span>
+       World<span class="comment">%</span>
+    <span class="cs">\fi</span>
+    !<span class="br">}</span>
+</pre>
+    <p>Note that this makes both arguments optional -- something that is much more difficult to do in LaTeX (<a class="external text" href="http://www.tex.ac.uk/cgi-bin/texfaq2html?label=twooptarg" rel="nofollow">but can be done</a>).  This also means that we should reverse the order of arguments, since if the user specifies only one argument it will be treated as the first argument.
+</p>
+    <p>(Also, note that <tt>\MyCommand</tt> without the second argument ends up gobbling the following spaces, so we need to explicitly include one with "<tt>\ </tt>".)
+</p>
+    <pre class="tex"><span class="cs">\MyCommand</span><span class="brx">[</span><span class="cs">\bf</span><span class="brx">]</span>\ <span class="comment">%</span>
+<span class="cs">\MyCommand</span><span class="brx">[</span><span class="cs">\sc</span><span class="brx">]</span><span class="brx">[</span>Hans<span class="brx">]</span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="14" src="../../wikiteximage/443c1e0d2bff7d5a5dd6506edcb3e782.webp" width="219">
+     </li>
+    </ul>
+    <p>If you <i>don't</i> want any optional arguments, but still want your arguments enclosed in <tt>[]</tt> with appropriate handling for spaces (or line breaks) between the square brackets, use <tt><a class="mw-redirect" href="../../Command/dodoubleempty.html" title="Command/dodoubleargument">\dodoubleargument</a></tt> instead of <tt><a href="../../Command/dodoubleempty.html" title="Command/dodoubleempty">\dodoubleempty</a></tt>.  There are of course versions for other numbers of arguments, found by replacing <tt>double</tt> with <tt>single</tt> through <tt>seventuple</tt>; see <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/syst-aux.mkiv" rel="nofollow">syst-aux.mkiv</a> for the exact names.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Examples">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Pitfalls">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Pitfalls
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Passing_preceding_command.27s_argument">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Passing preceding command's argument
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Calling_the_macro_from_within_command_arguments_.28e.g._float_title.29">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Calling the macro from within command arguments (e.g. float title)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Comparison_with_LaTeX">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Comparison with LaTeX
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h3>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h3>
+    <p>To define <code>\mycommand[#1]{#2}</code> with one optional argument and one mandatory argument, do the following
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\mynewcommand</span><span class="br">{</span><span class="cs"><span class="systemcs">\dosingleempty</span></span><span class="cs">\doMyNewCommand</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doMyNewCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+ <span class="cs">\iffirstargument</span>
+  There is an optional parameter: <span class="br">{</span><span class="cs">\bf</span> <span class="brx">#</span>1<span class="br">}</span><span class="cs">\par</span><span class="comment">%</span>
+ <span class="cs">\else</span>
+  No optional parameter<span class="cs">\par</span><span class="comment">%</span>
+ <span class="cs">\fi</span>
+  This is the mandatory text: <span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> <span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\mynewcommand</span><span class="brx">[</span>opt<span class="brx">]</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\blank</span></span>
+<span class="cs">\mynewcommand</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/a34a0d345bb668f3e9a3bdd799c504da.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+To define <code>\mycommand[#1][#2]{#3}</code> with two optional arguments and one mandatory argument, do
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\mycommand</span><span class="br">{</span><span class="cs"><span class="systemcs">\dodoubleempty</span></span><span class="cs">\doMycommand</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doMycommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="brx">#</span>3<span class="br">{</span>whatever<span class="br">}</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Pitfalls">
+      Pitfalls
+     </span>
+    </h3>
+    <h4>
+     <span id="Passing_preceding_command's_argument">
+     </span>
+     <span class="mw-headline" id="Passing_preceding_command.27s_argument">
+      Passing preceding command's argument
+     </span>
+    </h4>
+    <p>Keep in mind that <code>\iffirstargument</code> will always return true if you put before it a command which itself has an argument. See the following example:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\mynewcommand</span><span class="br">{</span><span class="cs"><span class="systemcs">\dosingleempty</span></span><span class="cs">\doMyNewCommand</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doMyNewCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+ <span class="cs"><span class="documentcs">\startalignment</span></span><span class="brx">[</span>center<span class="brx">]</span>
+ <span class="cs">\iffirstargument</span>
+  There is an optional parameter: <span class="br">{</span><span class="cs">\bf</span> <span class="brx">#</span>1<span class="br">}</span><span class="cs">\par</span><span class="comment">%</span>
+ <span class="cs">\else</span>
+  No optional parameter<span class="cs">\par</span><span class="comment">%</span>
+ <span class="cs">\fi</span>
+  This is the mandatory text: <span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> <span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+ <span class="cs"><span class="documentcs">\stopalignment</span></span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\mynewcommand</span><span class="brx">[</span>opt<span class="brx">]</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\blank</span></span>
+<span class="cs">\mynewcommand</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>produces
+</p>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/04547b23f5756e32a0cef6d6df277207.webp" width="874">
+     </li>
+    </ul>
+    <p>Use <code>\doifsomethingelse</code> instead:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\mynewcommand</span><span class="br">{</span><span class="cs"><span class="systemcs">\dosingleempty</span></span><span class="cs">\doMyNewCommand</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\doMyNewCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+ <span class="cs"><span class="documentcs">\startalignment</span></span><span class="brx">[</span>center<span class="brx">]</span><span class="comment">%</span>
+ <span class="cs"><span class="systemcs">\doifsomethingelse</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+   <span class="br">{</span>There is an optional parameter: <span class="br">{</span><span class="cs">\bf</span> <span class="brx">#</span>1<span class="br">}</span><span class="cs">\par</span><span class="br">}</span>
+   <span class="br">{</span>No optional parameter<span class="cs">\par</span><span class="br">}</span>
+  This is the mandatory text: <span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> <span class="brx">#</span>2<span class="br">}</span>
+ <span class="cs"><span class="documentcs">\stopalignment</span></span><span class="comment">%</span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\mynewcommand</span><span class="brx">[</span>opt<span class="brx">]</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\blank</span></span>
+<span class="cs">\mynewcommand</span><span class="br">{</span>Hello People<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>This time this is correct:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/0973c90f2be8db8a026b74df54feea60.webp" width="874">
+     </li>
+    </ul>
+    <h4>
+     <span id="Calling_the_macro_from_within_command_arguments_(e.g._float_title)">
+     </span>
+     <span class="mw-headline" id="Calling_the_macro_from_within_command_arguments_.28e.g._float_title.29">
+      Calling the macro from within command arguments (e.g. float title)
+     </span>
+    </h4>
+    <p>-- I have no deeper insight yet on the why and neither on which other cases this might apply to, but I hope it may be useful to someone running into errors.
+</p>
+    <p>If you wanted to call your macro from within an "argument" such as you would have to with titles or captions in floats: 
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startplacefigure</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>We look at <span class="cs">\mynewcommand</span><span class="br">{</span>people<span class="br">}</span> in floats<span class="br">}</span><span class="brx">]</span>
+<span class="brx">(</span>content<span class="brx">)</span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+    <p>The above will create a <code>"\doMyNewCommand doesn't match its definition"</code> error. 
+This can be solved by preceding the definition that takes the optional argument with <code>\unexpanded</code>:
+</p>
+    <pre class="tex"><span class="cs">\unexpanded</span><span class="cs">\def</span><span class="cs">\doMyNewCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">% ... (etc.)</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Comparison_with_LaTeX">
+      Comparison with LaTeX
+     </span>
+    </h3>
+    <p>On a final note, for comparative purposes: in LaTeX, a new command with an optional argument is defined with <code>\newcommand</code>.
+</p>
+    <pre class="tex"><span class="cs">\newcommand</span><span class="br">{</span><span class="cs">\MyCommand</span><span class="br">}</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>World<span class="brx">]</span><span class="br">{</span><span class="br">{</span><span class="brx">#</span>2Hello <span class="brx">#</span>1!<span class="br">}</span><span class="br">}</span>
+<span class="cs">\MyCommand</span><span class="br">{</span><span class="cs">\bfseries</span><span class="br">}</span>
+<span class="cs">\MyCommand</span><span class="brx">[</span>Hans<span class="brx">]</span><span class="br">{</span><span class="cs">\scshape</span><span class="br">}</span>
+</pre>
+    <p>Reference: 
+<a class="external free" href="http://archive.contextgarden.net/message/20101215.225603.cc903e62.en.html" rel="nofollow">http://archive.contextgarden.net/message/20101215.225603.cc903e62.en.html</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.096 seconds
+Real time usage: 0.166 seconds
+Preprocessor visited node count: 166/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 864/2097152 bytes
+Template argument size: 246/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8952/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   36.982      1 -total
+ 26.50%    9.799      6 Template:cmd
+ 19.46%    7.196      3 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:807-1!canonical and timestamp 20260109212408 and revision id 40440
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Commands_with_optional_arguments">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

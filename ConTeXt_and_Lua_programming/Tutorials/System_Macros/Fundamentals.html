@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Fundamentals&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Fundamentals" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Fundamentals
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2149&diff=40714">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>| <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Mnemonics_and_Aliases.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Mnemonics and Aliases">Mnemonics & Aliases</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#The_ConTeXt_version">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         The ConTeXt version
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Conditional_execution_of_engine-specific_code">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Conditional execution of engine-specific code
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Guard_against_double-loading_of_input_files">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Guard against double-loading of input files
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Protecting_internal_macros">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Protecting internal macros
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h3>
+     <span class="mw-headline" id="The_ConTeXt_version">
+      The ConTeXt version
+     </span>
+    </h3>
+    <p>Even though ConTeXt does not have a rigid versioning interface, there are a few macros that deal with versions.
+</p>
+    <p><code>\contextversion</code> contains the ConTeXt version string. If you need to make sure you are running under ConTeXt, check for this macro. This macro is not defined in <a class="extiw" href="http://source.contextgarden.net/syst-gen.tex" title="source:syst-gen.tex"> syst-gen.tex</a>, but in <a class="extiw" href="http://source.contextgarden.net/context.tex" title="source:context.tex"> context.tex</a>, because <a class="extiw" href="http://source.contextgarden.net/syst-gen.tex" title="source:syst-gen.tex"> syst-gen.tex</a> is sometimes loaded under LaTeX, and it would be bad to define <code>\contextversion</code> in that case. The expansion of the macro </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="15" src="../../../wikiteximage/1ef911b5b8cbce1424543668f97a98aa.webp" width="121">
+     </li>
+    </ul>
+    <p><code>\fmtname</code> is defined at the same time, and it always expands to </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="12" src="../../../wikiteximage/71ff0711b4a0446ff7a1cfdbf254383d.webp" width="55">
+     </li>
+    </ul>
+    <p><code>\contextformat</code> is also defined at the same time, and it contains the name of the current format. The expansion of the macro </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="12" src="../../../wikiteximage/64612845fc6aa565b64e5f1a7e3ffac9.webp" width="55">
+     </li>
+    </ul>
+    <p><code>\contextmark</code> is also defined in <a class="extiw" href="http://source.contextgarden.net/context.tex" title="source:context.tex"> context.tex</a>, and it contains the ConTeXt major release marker. You can read more on this internal versioning marker in <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/mk.pdf" title="manual:mk.pdf"> ConTeXt, mkii & mkiv</a>. The expansion of the macro </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="13" src="../../../wikiteximage/8e8d10b7719fa6b3af4eef5a90f37d8e.webp" width="52">
+     </li>
+    </ul>
+    <p><code>\contextversionnumber</code> is defined in <a class="extiw" href="http://source.contextgarden.net/mult-ini.tex" title="source:mult-ini.tex"> mult-ini.tex</a>, by interpreting <code>\contextversion</code> and attaching the <code>\contextmark</code>. The expansion of the macro </p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="15" src="../../../wikiteximage/ef721f430d9220f43405461a418a3805.webp" width="124">
+     </li>
+    </ul>
+    <p><br>
+<code>\newcontextversion</code> is the last macro in this section. It is set in <a class="extiw" href="http://source.contextgarden.net/cont-new.tex" title="source:cont-new.tex"> cont-new.tex</a>, the file that is read in at runtime. This macro is a security measure: its content is compared with the value of <code>\contextversion</code> that was stored in the format file, and if the two do not match up, the job is aborted.
+</p>
+    <h3>
+     <span class="mw-headline" id="Conditional_execution_of_engine-specific_code">
+      Conditional execution of engine-specific code
+     </span>
+    </h3>
+    <p>In <a class="extiw" href="http://source.contextgarden.net/syst-prm.tex" title="source:syst-prm.tex"> syst-prm.tex</a>, a few macros are defined that can be used to delimit code that uses engine-specific features. <code>\beginTEX</code> and <code>\beginETEX</code> are mutually exclusive, depending on whether or not the format file was compiled under an e-TeX-enabled executable.  In the latest ConTeXt releases, this will always imply using the <code>\beginETEX</code> code, because e-TeX availability has recently become a requirement for ConTeXt. The macros will stay, however, because bits and pieces of ConTeXt are used in formats like <a class="new" href="../../../index.php?title=LaTeX&action=edit&redlink=1" title="LaTeX (page does not exist)">LaTeX</a> and <a class="new" href="../../../index.php?title=MPtoPDF&action=edit&redlink=1" title="MPtoPDF (page does not exist)">MPtoPDF</a>, that are not necesarily e-TeX.
+</p>
+    <p>A typical way of setting up your code to use e-TeX is like this:
+</p>
+    <pre class="tex"><span class="cs">\beginTEX</span>
+<span class="cs">\def</span><span class="cs">\ifundefined</span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\expandafter</span><span class="cs">\ifx</span><span class="cs">\csname</span><span class="brx">#</span>1<span class="cs">\endcsname</span><span class="cs">\relax</span><span class="br">}</span>
+<span class="cs">\endTEX</span>
+
+<span class="cs">\beginETEX</span> <span class="cs">\ifcsname</span>
+<span class="cs">\def</span><span class="cs">\ifundefined</span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\unless</span><span class="cs">\ifcsname</span><span class="brx">#</span>1<span class="cs">\endcsname</span><span class="br">}</span>
+<span class="cs">\endETEX</span>
+</pre>
+    <p><br>
+Code delimited by <code>\beginOMEGA ... \endOMEGA</code> is only executed if ConTeXt runs under <a href="../../../Aleph.html" title="Aleph">Aleph</a>. 
+</p>
+    <p>Code within <code>\beginXETEX ... \endXETEX</code> is only run when <a class="mw-redirect" href="../../../XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a> is used. 
+</p>
+    <p>Experimental code for <a href="../../ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a> can be put between <code>\beginMETATEX ... \endMETATEX</code>.
+</p>
+    <p><br>
+An optional argument after the <code>\begin...</code> can be used to give some more information to the viewer: the example above will print the following string to the terminal:
+</p>
+    <pre class="tex">system <span class="brx">(</span>E-TEX<span class="brx">)</span>&nbsp;: <span class="brx">[</span>line 833<span class="brx">]</span> <span class="cs">\ifcsname</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Guard_against_double-loading_of_input_files">
+      Guard against double-loading of input files
+     </span>
+    </h3>
+    <p>Sometimes, macro or layout definition files can be used from within various contexts inside a single typesetting run. If that is the case, it can come in handy to be able to prevent macro files from being loaded more than once. This can be done using:
+</p>
+    <pre class="tex"><span class="cs">\abortinputifdefined</span><span class="cs">\command</span>
+</pre>
+    <p>where <code>\command</code> is a command defined in the module to be loaded only once.
+</p>
+    <p>For example, <a class="extiw" href="http://source.contextgarden.net/syst-gen.tex" title="source:syst-gen.tex"> syst-gen.tex</a> implements <code>\writestatus</code>, and therefore it could start with:
+</p>
+    <pre class="tex"><span class="cs">\abortinputifdefined</span><span class="cs"><span class="systemcs">\writestatus</span></span>
+</pre>
+    <p>Normally, you don't need this macro at all, it is purely intended for files that are loaded via the TeX primitive <code>\input</code>.
+<code>\usemodule</code> does its own bookkeeping, and combining it with <code>\usetypescriptfile</code> is generally not a good idea.
+</p>
+    <h3>
+     <span class="mw-headline" id="Protecting_internal_macros">
+      Protecting internal macros
+     </span>
+    </h3>
+    <p>We can shield macros from users by using some special characters in their names. Some characters that TeX normally does not consider to be letters (and are therefore used for this purpose) are: <code>@</code>, <code>!</code> and <code>?</code>. Before and after the definition of protected macros, we have to change the &lt;<i>catcode</i>&gt; of these characters. This is done by <code>\unprotect</code> and <code>\protect</code>, for instance:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+<span class="cs">\def</span><span class="protectedcs">\!test</span><span class="br">{</span>alfa<span class="br">}</span>
+<span class="cs">\protect</span>
+</pre>
+    <p>The newly defined command <code>\!test</code> can of course only be called upon when we are in the <code>\unprotect</code>'ed state, otherwise TeX reads the command <code>\!</code>, followed by the word <code>test</code> and probably complains loudly about not being in math mode.
+</p>
+    <p>General purpose low-level commands in the ConTeXt core sometimes contain one or more <code>@</code> signs. 
+</p>
+    <p>Temporary values and definitions often start with two <code>!</code> markers, and macros that represent internal strings normally start with a single letter followed by a single exclamation mark, for example: <code>\v!off</code> stands for the meaning of <i>off</i> in the current interface language. More on this convention can be read in <a href="Scratch_Variables.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Scratch Variables">Scratch Variables</a>. 
+</p>
+    <p>Prefixes for parameter list assignments start with two <code>?</code> markers, like <code>\??ly</code>. This is explained in <a href="Key_Value_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments">Key Value Assignments</a>.
+</p>
+    <p>The protection and unprotection commands can be nested (unlike <code>\makeatletter</code> in LaTeX). This nesting ability is a convenience, since it allows one to use the protection pair regardless of whether protection is already turned on. It is a very good habit to always start your macro files with <code>\unprotect</code> and end them with <code>\protect</code>, even if you don't need to access internal commands right away. 
+</p>
+    <p>| <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Mnemonics_and_Aliases.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Mnemonics and Aliases">Mnemonics & Aliases</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 76/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2197/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2149-1!canonical and timestamp 20260109212409 and revision id 40714
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Fundamentals">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

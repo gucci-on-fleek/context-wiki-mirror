@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Presentations/Raw steps module&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Raw_steps_module" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Presentations/Raw steps module
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=993&diff=38055">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The <a class="external text" href="http://modules.contextgarden.net/t-rsteps" rel="nofollow">raw steps module</a> allows one to create multi-step slides in presentation without requiring JavaScript. This is achieved by spanning the steps of a slide over multiple document pages.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Commands">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Commands
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Setup">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Setup
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Step_block">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Step block
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Basic_stepping_commands">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Basic stepping commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Advanced_stepping_commands">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Advanced stepping commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Alternate_stepping_commands">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Alternate stepping commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Other_settings">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           Other settings
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Page_numbers">
+          <span class="tocnumber">
+           1.7
+          </span>
+          <span class="toctext">
+           Page numbers
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Usage_examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Usage examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Preamble">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Preamble
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Sectioning">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Sectioning
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Advanced_stepping">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Advanced stepping
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Alternate_stepping">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Alternate stepping
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#Reserving_space">
+          <span class="tocnumber">
+           2.5
+          </span>
+          <span class="toctext">
+           Reserving space
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Development">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Development
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#Most_important_missing_features">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Most important missing features
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#Slides_printing">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Slides printing
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Some_ideas_that_need_more_time">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Some ideas that need more time
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#External_Links">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         External Links
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Commands">
+      Commands
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Setup">
+      Setup
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \SetupSteps [...=...,...=...]
+      </tt>
+     </dt>
+     <dd>
+      Setup global options for generation of steps. Available options:
+      <dl>
+       <dt>
+        <tt>
+         state
+        </tt>
+       </dt>
+       <dd>
+        <tt>
+         <u>
+          start
+         </u>
+        </tt>
+        : enable stepping
+       </dd>
+       <dd>
+        <tt>
+         stop
+        </tt>
+        : disable stepping
+       </dd>
+       <dt>
+        <tt>
+         reserve
+        </tt>
+       </dt>
+       <dd>
+        <tt>
+         yes
+        </tt>
+        : when the item is not active, fill with empty space the area it takes when it is active (see section
+        <a href="#Reserving_space">
+         Reserving space
+        </a>
+        )
+       </dd>
+       <dd>
+        <tt>
+         <u>
+          no
+         </u>
+        </tt>
+        : when the item is not active, simply skip its generation
+       </dd>
+       <dt>
+        <tt>
+         defaultsection
+        </tt>
+       </dt>
+       <dd>
+        <tt>
+         <u>
+          Subject
+         </u>
+         , subject, chapter, ...
+        </tt>
+       </dd>
+      </dl>
+     </dd>
+     <dd>
+      To disable sectioning commands, set
+      <tt>
+       \SetupSteps[defaultsection=page]
+      </tt>
+      .
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Step_block">
+      Step block
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \StartSteps
+       <i>
+        [sectiontype]
+       </i>
+       <i>
+        [slide title]
+       </i>
+       ... \StopSteps
+      </tt>
+     </dt>
+     <dd>
+      The basic command pair for steps generation.
+      <tt>
+       <i>
+        sectiontype
+       </i>
+      </tt>
+      may be any sectioning command, such as
+      <tt>
+       chapter
+      </tt>
+      ,
+      <tt>
+       section
+      </tt>
+      ,
+      <tt>
+       subject
+      </tt>
+      , etc.
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Basic_stepping_commands">
+      Basic stepping commands
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \NextStep
+      </tt>
+     </dt>
+     <dd>
+      Use this as a separation between two steps.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \AllSteps
+      </tt>
+     </dt>
+     <dd>
+      Use like
+      <tt>
+       \NextStep
+      </tt>
+      , but the content appears on every step.
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Advanced_stepping_commands">
+      Advanced stepping commands
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \OnSteps [
+       <i>
+        step-list
+       </i>
+       ]
+       <i>
+        [reserve]
+       </i>
+       {...}
+      </tt>
+     </dt>
+     <dd>
+      Show the content on the specified steps from the comma-separated step list. Use dashes for intervals and
+      <tt>
+       ...
+      </tt>
+      to denote the first or the last step.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \HighlightSteps [
+       <i>
+        step-list
+       </i>
+       ] {...}
+      </tt>
+     </dt>
+     <dd>
+      Highlight content on the specified steps.
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Alternate_stepping_commands">
+      Alternate stepping commands
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \OnlyStep [
+       <i>
+        n
+       </i>
+       ]
+       <i>
+        [reserve]
+       </i>
+       {...}
+      </tt>
+     </dt>
+     <dd>
+      Show content only on the
+      <tt>
+       <i>
+        n
+       </i>
+      </tt>
+      <sup>
+       th
+      </sup>
+      step.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \FromStep [
+       <i>
+        n
+       </i>
+       ]
+       <i>
+        [reserve]
+       </i>
+       {...}
+      </tt>
+     </dt>
+     <dd>
+      Show content only from the
+      <tt>
+       <i>
+        n
+       </i>
+      </tt>
+      <sup>
+       th
+      </sup>
+      step through the last one.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \AfterStep [
+       <i>
+        n
+       </i>
+       ]
+       <i>
+        [reserve]
+       </i>
+       {...}
+      </tt>
+     </dt>
+     <dd>
+      Show content only from the
+      <tt>
+       <i>
+        n
+       </i>
+       +1
+      </tt>
+      <sup>
+       st
+      </sup>
+      step through the last one.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \UntilStep [
+       <i>
+        n
+       </i>
+       ]
+       <i>
+        [reserve]
+       </i>
+       {...}
+      </tt>
+     </dt>
+     <dd>
+      Show content only from the first step through the
+      <tt>
+       <i>
+        n
+       </i>
+      </tt>
+      <sup>
+       th
+      </sup>
+      one.
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Other_settings">
+      Other settings
+     </span>
+    </h3>
+    <dl>
+     <dt>
+      <tt>
+       \CurrentStepNumber
+      </tt>
+     </dt>
+     <dd>
+      Expands to the index (starting at 1) of the step being rendered.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \StepsRegisterNumber[...]
+      </tt>
+      and
+      <tt>
+       \StepsUnregisterNumber[...]
+      </tt>
+     </dt>
+     <dd>
+      Registers/unregisters a number so that it remains unchanged on a step set. E.g. if you're using
+      <tt>
+       \defineenumeration[Theorem][...]
+      </tt>
+      , then use
+      <tt>
+       \StepsRegisterNumber[Theorem]
+      </tt>
+      .
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      <tt>
+       \definecolor [highlightcolor] [blue]
+      </tt>
+     </dt>
+     <dd>
+      Color specification for the
+      <tt>
+       \HighlightStep
+      </tt>
+      command.
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="Page_numbers">
+      Page numbers
+     </span>
+    </h3>
+    <p>The module supports subpage numbers. To number pages in a format such as: <i>1/4, 2a/4, 2b/4, 2c/4, 3a/4, 3b/4, 4/4</i>, use the following code to generate page numbers:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\characters</span></span><span class="cs"><span class="stylecs">\subpagenumber</span></span><span class="br">}</span>/<span class="cs">\lastpagenumber</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Usage_examples">
+      Usage examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Preamble">
+      Preamble
+     </span>
+    </h3>
+    <p>The following preamble enables page numbering as shown in <a href="#Page_numbers">Page Numbers</a> in an interaction menu:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span> <span class="brx">[</span>pre-original<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span> <span class="brx">[</span>rsteps<span class="brx">]</span>
+
+<span class="comment">% interaction menu example:</span>
+<span class="comment">% page number with alphabetic subpage number</span>
+<span class="cs"><span class="stylecs">\startinteractionmenu</span></span><span class="brx">[</span>bottom<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>chapter<span class="brx">]</span> <span class="brx">[</span>alternative<span class="brx">=</span>bottom,criterium<span class="brx">=</span>all,pagenumber<span class="brx">=</span>no<span class="brx">]</span>
+  <span class="cs">\\</span>
+  <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\characters</span></span><span class="cs"><span class="stylecs">\subpagenumber</span></span><span class="br">}</span>/<span class="cs">\lastpagenumber</span>
+<span class="cs"><span class="stylecs">\stopinteractionmenu</span></span>
+
+<span class="comment">% setup example (default)</span>
+<span class="cs">\SetupSteps</span><span class="brx">[</span>defaultsection<span class="brx">=</span>Subject,reserve<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Sectioning">
+      Sectioning
+     </span>
+    </h3>
+    <p>The following illustrates different usage schemes of the <tt>\StartSteps ... \StopSteps</tt> pair:
+</p>
+    <pre class="tex"><span class="cs">\StartSteps</span><span class="brx">[</span>Topic<span class="brx">]</span><span class="brx">[</span>Topic Title<span class="brx">]</span>
+  This is a topic slide.
+  <span class="cs">\NextStep</span>
+  Another step.
+<span class="cs">\StopSteps</span>
+
+<span class="cs">\StartSteps</span><span class="brx">[</span>Subject<span class="brx">]</span><span class="brx">[</span>Subject Title 1<span class="brx">]</span>
+  This is a subject slide.
+  <span class="cs">\NextStep</span>
+  Another step.
+<span class="cs">\StopSteps</span>
+
+<span class="cs">\StartSteps</span><span class="brx">[</span>Subject Title 2<span class="brx">]</span>
+  This is a subject <span class="brx">(</span>defaultsection<span class="brx">)</span> slide as well.
+  <span class="cs">\NextStep</span>
+  Another step.
+<span class="cs">\StopSteps</span>
+
+<span class="cs">\StartSteps</span>
+  This slide comprises no section command.
+  <span class="cs">\NextStep</span>
+  Another step.
+<span class="cs">\StopSteps</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Advanced_stepping">
+      Advanced stepping
+     </span>
+    </h3>
+    <p>The following example illustrates the usage of the advanced stepping commands <tt>\OnSteps</tt> and <tt>\HighlightSteps</tt>:
+</p>
+    <pre class="tex"><span class="cs">\StartSteps</span><span class="brx">[</span>Advanced stepping <span class="brx">(</span>step <span class="cs">\CurrentStepNumber</span><span class="brx">)</span><span class="brx">]</span>
+  
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>1-3,5<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> Steps 1, 2, 3 and 5.<span class="br">}</span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>2-...<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> From step 2.<span class="br">}</span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>3<span class="brx">]</span>    <span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> Step 3.<span class="br">}</span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>...-4<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> Up to step 4.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+  
+<span class="cs">\StopSteps</span>
+
+
+<span class="cs">\StartSteps</span><span class="brx">[</span>Highlighting <span class="brx">(</span>step <span class="cs">\CurrentStepNumber</span><span class="brx">)</span><span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+  <span class="cs"><span class="documentcs">\item</span></span> <span class="cs">\HighlightSteps</span><span class="brx">[</span>1,4<span class="brx">]</span>	<span class="br">{</span>Step 1.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\item</span></span> <span class="cs">\HighlightSteps</span><span class="brx">[</span>2<span class="brx">]</span>	<span class="br">{</span>Step 2.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\item</span></span> <span class="cs">\HighlightSteps</span><span class="brx">[</span>3<span class="brx">]</span>	<span class="br">{</span>Step 3.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\item</span></span> <span class="cs">\HighlightSteps</span><span class="brx">[</span>4<span class="brx">]</span>	<span class="br">{</span>Start over from Step 1.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+  
+<span class="cs">\StopSteps</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Alternate_stepping">
+      Alternate stepping
+     </span>
+    </h3>
+    <p>The following example illustrates the usage of the alternate stepping commands <tt>\OnlyStep</tt>, <tt>\UntilStep</tt>, <tt>\FromStep</tt>, and <tt>\HighlightStep</tt>:
+</p>
+    <pre class="tex"><span class="cs">\StartSteps</span><span class="brx">[</span>Slide Title<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+    <span class="cs"><span class="documentcs">\item</span></span> This will always appear.
+    <span class="cs">\OnlyStep</span>      <span class="brx">[</span>2<span class="brx">]</span> <span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This appears only on step 2.<span class="br">}</span>
+    <span class="cs">\UntilStep</span>     <span class="brx">[</span>4<span class="brx">]</span> <span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This will change on step 4.<span class="br">}</span>
+    <span class="cs">\FromStep</span>      <span class="brx">[</span>3<span class="brx">]</span> <span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> This has changed since step 3.<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+  
+<span class="cs">\StopSteps</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Reserving_space">
+      Reserving space
+     </span>
+    </h3>
+    <p>The <tt>reserve</tt> keyword makes the item appear as empty space when it is not active instead of not generating the item at all. It is particularly useful in typesetting equations, as shown by the following example:
+</p>
+    <pre class="tex"><span class="cs">\StartSteps</span><span class="brx">[</span>Equations<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\placeformula</span></span><span class="brx">[</span>eq:divu<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startformula</span></span>
+    <span class="cs"><span class="documentcs">\vec</span></span><span class="cs">\nabla</span><span class="cs">\cdot</span><span class="cs"><span class="documentcs">\vec</span></span> u <span class="brx">=</span> 0
+  <span class="cs"><span class="documentcs">\stopformula</span></span>
+  
+  <span class="cs"><span class="documentcs">\placeformula</span></span><span class="brx">[</span>eq:NS<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startformula</span></span>
+    <span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>D<span class="cs"><span class="documentcs">\vec</span></span> u<span class="br">}</span><span class="br">{</span>Dt<span class="br">}</span> <span class="brx">=</span>
+      <span class="cs">\OnSteps</span><span class="brx">[</span>2-...<span class="brx">]</span><span class="brx">[</span>reserve<span class="brx">]</span><span class="br">{</span>-<span class="br">{</span><span class="cs">\red</span> <span class="cs"><span class="documentcs">\frac</span></span>1<span class="cs">\rho</span> <span class="cs"><span class="documentcs">\vec</span></span><span class="cs">\nabla</span> p<span class="br">}</span><span class="br">}</span>
+      <span class="cs">\OnSteps</span><span class="brx">[</span>3-...<span class="brx">]</span><span class="brx">[</span>reserve<span class="brx">]</span><span class="br">{</span>+\;<span class="br">{</span><span class="cs">\green</span> <span class="cs"><span class="documentcs">\vec</span></span> g<span class="br">}</span><span class="br">}</span>
+      <span class="cs">\OnSteps</span><span class="brx">[</span>4-...<span class="brx">]</span><span class="brx">[</span>reserve<span class="brx">]</span><span class="br">{</span>+\;<span class="br">{</span><span class="cs">\blue</span> <span class="cs"><span class="documentcs">\frac</span></span>1<span class="cs">\rho</span> <span class="cs"><span class="documentcs">\vec</span></span><span class="cs">\nabla</span><span class="cs">\cdot</span> S<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopformula</span></span>
+
+  Incompressibility <span class="brx">(</span><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>eq.<span class="br">}</span><span class="brx">[</span>eq:divu<span class="brx">]</span><span class="brx">)</span>.
+
+  Momentum transport <span class="brx">(</span><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>eq.<span class="br">}</span><span class="brx">[</span>eq:NS<span class="brx">]</span><span class="brx">)</span>:
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>2-...<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> <span class="br">{</span><span class="cs">\red</span>   Pressure gradient<span class="br">}</span><span class="br">}</span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>3-...<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> <span class="br">{</span><span class="cs">\green</span>	Gravity<span class="br">}</span><span class="br">}</span>
+  <span class="cs">\OnSteps</span><span class="brx">[</span>4-...<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> <span class="br">{</span><span class="cs">\blue</span>	Stress <span class="brx">(</span>viscous, turbulent, Maxwell<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+<span class="cs">\StopSteps</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Development">
+      Development
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Most_important_missing_features">
+      Most important missing features
+     </span>
+    </h3>
+    <p>Some ideas are liseted about what should be done to improve the module:
+</p>
+    <ul>
+     <li>
+      Enable
+      <tt>
+       \OnlyStep[reserve]
+      </tt>
+      also for text mode, not only for math
+     </li>
+     <li>
+      Space reservation could be achieved with a 100% transparent text color....
+     </li>
+     <li>
+      Fix some spacing problems
+      <a class="external autonumber" href="http://archive.contextgarden.net/message/20050607.212822.facbc9b4.html" rel="nofollow">
+       [1]
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Slides_printing">
+      Slides printing
+     </span>
+    </h3>
+    <ul>
+     <li>
+      implement a sort of "
+      <i>
+       page marking
+      </i>
+      ", so that someone can write
+      <tt>
+       \PrintThisSlide
+      </tt>
+      or
+      <tt>
+       \PrintSlides[1-3,5,7-9,13-last]
+      </tt>
+      (maybe
+      <tt>
+       Select[This]Slide
+      </tt>
+      sound better), than only the pages with this "mark" are selected out of the whole document and can be used to be printed out (we have to add some switch to select if we want a presentation or a print-out version of slides)
+     </li>
+     <li>
+      connect this with Hans's commands to compose more pages on one sheet of paper (for example to make 2*2, 2*4, ... latouts to be printed)
+     </li>
+     <li>
+      in a similar manner, add a possibility to add comments, that, again, are only printed next to the slide if some kind of \printmode and \setupSlideComments[state=on] is selected
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Some_ideas_that_need_more_time">
+      Some ideas that need more time
+     </span>
+    </h3>
+    <p>These ideas probablt need some more time and are not crucial at the time.
+</p>
+    <ul>
+     <li>
+      Enable a sort of switch that would do the same kind of stepping, but with JavaScript instead of raw steps
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="External_Links">
+      External Links
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external free" href="http://mhd.selfip.info/tex/" rel="nofollow">
+       http://mhd.selfip.info/tex/
+      </a>
+      - RawSteps module's page
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212411
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.077 seconds
+Real time usage: 0.124 seconds
+Preprocessor visited node count: 89/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10551/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:993-1!canonical and timestamp 20260109212411 and revision id 38055
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Raw_steps_module">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/User-defined enumerations&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/User-defined_enumerations" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/User-defined enumerations
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1027&diff=41034">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Sometimes, you might want to enumerate things using a number conversion (that is, the letter or symbol or whatever that "numbers" the item) which isn't one existing ConTeXt enumerations. (For a list of existing conversion, see <tt><a href="../../Command/convertnumber.html" title="Command/convertnumber">\convertnumber</a></tt>. For example, <a href="../../User:Mojca_Miklavec.html" title="User:Mojca Miklavec">Mojca Miklavec</a> pointed out on the mailing list that, in Slovenian, it is traditional to letter things using the Slovenian alphabet, which doesn't quite match the English one.  <a class="new" href="../../index.php?title=User:Hagen&action=edit&redlink=1" title="User:Hagen (page does not exist)">Hans</a> provided this example of how to create a new enumeration in ConTeXt, which defines a "Mojcanian" numbering system, and a conversion based on those numbers.
+</p>
+    <p>(The last line of the definition is a cleverness to repeat the letters over and over as needed; more traditional orderings tend to replace that with a simple <tt>-</tt> to indicate an out-of-range letter.)
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\mojcaniannumber</span><span class="brx">#</span>1<span class="comment">%</span>
+ <span class="br">{</span><span class="cs">\ifcase</span><span class="brx">#</span>1  <span class="cs">\or</span> m<span class="cs">\or</span> o<span class="cs">\or</span> j<span class="cs">\or</span> c<span class="cs">\or</span>
+            a<span class="cs">\or</span> m<span class="cs">\or</span> i<span class="cs">\or</span> k<span class="cs">\or</span> l<span class="cs">\or</span>
+            a<span class="cs">\or</span> v<span class="cs">\or</span> e<span class="cs">\or</span> c<span class="cs">\else</span>
+  <span class="cs">\expandafter</span>
+  <span class="cs">\mojcaniannumber</span>
+  <span class="cs">\expandafter</span><span class="br">{</span><span class="cs">\the</span><span class="cs">\numexpr</span><span class="brx">#</span>1-13<span class="cs">\relax</span><span class="br">}</span><span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\defineconversion</span></span><span class="brx">[</span>s<span class="brx">]</span><span class="brx">[</span><span class="cs">\mojcaniannumber</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>s,columns,five,packed,broad<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>50<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> test<span class="cs">\endgraf</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/f03da543ffc3f2a0c07a0205659dfe18.webp" width="438">
+     </li>
+    </ul>
+    <p>Conversions can also be language-specific.  For instance, suppose that we want the default "character" conversion to be Mojcanian numbers when the language is Slovenian.  This can be done with the following conversion defintion:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineconversion</span></span><span class="brx">[</span>sl<span class="brx">]</span><span class="brx">[</span>a<span class="brx">]</span><span class="brx">[</span><span class="cs">\mojcaniannumber</span><span class="brx">]</span>
+</pre>
+    <p>We can test this one like so:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\mojcaniannumber</span><span class="brx">#</span>1<span class="comment">%</span>
+ <span class="br">{</span><span class="cs">\ifcase</span><span class="brx">#</span>1  <span class="cs">\or</span> m<span class="cs">\or</span> o<span class="cs">\or</span> j<span class="cs">\or</span> c<span class="cs">\or</span>
+            a<span class="cs">\or</span> m<span class="cs">\or</span> i<span class="cs">\or</span> k<span class="cs">\or</span> l<span class="cs">\or</span>
+            a<span class="cs">\or</span> v<span class="cs">\or</span> e<span class="cs">\or</span> c<span class="cs">\else</span>
+  <span class="cs">\expandafter</span>
+  <span class="cs">\mojcaniannumber</span>
+  <span class="cs">\expandafter</span><span class="br">{</span><span class="cs">\the</span><span class="cs">\numexpr</span><span class="brx">#</span>1-13<span class="cs">\relax</span><span class="br">}</span><span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\defineconversion</span></span><span class="brx">[</span>sl<span class="brx">]</span><span class="brx">[</span>a<span class="brx">]</span><span class="brx">[</span><span class="cs">\mojcaniannumber</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+English:
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>a,columns,five,packed,broad<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>15<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> test<span class="cs">\endgraf</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+Slovenian:
+<span class="cs"><span class="documentcs">\language</span></span><span class="brx">[</span>sl<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>a,columns,five,packed,broad<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>15<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> test<span class="cs">\endgraf</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/0ac5c905cdeb1ef132ddffee5a2ceb32.webp" width="438">
+     </li>
+    </ul>
+    <p>An alternate way of defining conversions is via a list, using an <tt>itemize</tt> environment much like the previous examples. This has the advantage of being simpler and clearer to program, but the disadvantage that one can't include clever things like repeating the letters <i>ad infinitum</i>, or doubling them up ("..., x, y, z, aa, ab, ac, ...") as the default character enumerations do.
+</p>
+    <p>Notice how, once we run out of letters, the conversion simply produces empty labels.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineconversion</span></span><span class="brx">[</span>s<span class="brx">]</span><span class="brx">[</span>m, o, j, c, a, m, i, k, l, a, v, e, c<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>s,columns,five,packed,broad<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>20<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\item</span></span> test<span class="cs">\endgraf</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/99685a4b76debf31f61886ded1f256e5.webp" width="438">
+     </li>
+    </ul>
+    <p>There are a number of additional examples of conversion definitions in <tt>core-con.lua</tt>, which is where ConTeXt's default conversions are defined.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Another example of conversion posted by Hans on the mailing list
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+ <span class="comment">%\defineconversion[ordinal][\enordinaldaynumber]</span>
+ <span class="cs"><span class="documentcs">\starttext</span></span>
+ <span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>ordinal,2*broad<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\stopitemize</span></span>
+ <span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/c7b424a0efd2ce57d578daad1111ad50.webp" width="438">
+     </li>
+    </ul>
+    <ul>
+     <li>
+      An example from
+      <a class="extiw" href="http://source.contextgarden.net/meta-txt.tex" title="source:meta-txt.tex">
+       source:meta-txt.tex
+      </a>
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useMPlibrary</span></span><span class="brx">[</span>txt<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\starttext</span></span>
+ <span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>fuzzy,2*broad<span class="brx">]</span>
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\item</span></span> test
+ <span class="cs"><span class="documentcs">\stopitemize</span></span>
+ <span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/007c1aaba5e43d7afe320e39f504924c.webp" width="438">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212439
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.048 seconds
+Real time usage: 0.091 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 98/2097152 bytes
+Template argument size: 26/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8572/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.040      1 Template:cmd
+100.00%   14.040      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1027-1!canonical and timestamp 20260109212438 and revision id 41034
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/User-defined_enumerations">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

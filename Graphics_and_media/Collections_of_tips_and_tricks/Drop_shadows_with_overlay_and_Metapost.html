@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Drop shadows with overlay and Metapost&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Drop_shadows_with_overlay_and_Metapost" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Drop shadows with overlay and Metapost
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4972&diff=42438">2025-05-11</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>So you&rsquo;d like to have one of these nice drop shadows behind some object? Here&rsquo;s a piece of code to play with:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\startuniqueMPgraphic</span></span><span class="br">{</span>mpshadow<span class="br">}</span>
+<span class="comment">% BodyFontSize should be the current font size of/in the frame</span>
+mw&nbsp;:<span class="brx">=</span> BodyFontSize/3;
+ox&nbsp;:<span class="brx">=</span> -0.5&nbsp;; <span class="comment">% offset x</span>
+oy&nbsp;:<span class="brx">=</span> -0.5&nbsp;; <span class="comment">% offset y</span>
+bx&nbsp;:<span class="brx">=</span> 1.5mw&nbsp;; <span class="comment">% bleed x (height of the shadow)</span>
+by&nbsp;:<span class="brx">=</span> 1.5mw&nbsp;; <span class="comment">% bleed y (width of the shadow)</span>
+rx&nbsp;:<span class="brx">=</span> 3mw&nbsp;; <span class="comment">% max. corner radius x</span>
+ry&nbsp;:<span class="brx">=</span> 2mw&nbsp;; <span class="comment">% max. corner radius y</span>
+steps&nbsp;:<span class="brx">=</span> 10&nbsp;; <span class="comment">% number of shadow layers, 10 is a good value</span>
+hue&nbsp;:<span class="brx">=</span> 0.015&nbsp;; <span class="comment">% 0.02 is a good value</span>
+ycorr&nbsp;:<span class="brx">=</span> 1mw&nbsp;; <span class="comment">% difference between overlay height and shadow height</span>
+
+for step <span class="brx">=</span> 1 upto steps:
+
+	part&nbsp;:<span class="brx">=</span> <span class="brx">(</span>step-1<span class="brx">)</span>/steps;
+	xstep&nbsp;:<span class="brx">=</span> bx * part&nbsp;; <span class="comment">% current part of bleed</span>
+	ystep&nbsp;:<span class="brx">=</span> by * part&nbsp;;
+	crx&nbsp;:<span class="brx">=</span> <span class="brx">(</span>rx + rx*part<span class="brx">)</span>/2; <span class="comment">% current radius</span>
+	cry&nbsp;:<span class="brx">=</span> <span class="brx">(</span>ry + ry*part<span class="brx">)</span>/2;
+
+	<span class="comment">% points of the rounded rectangle</span>
+	xa&nbsp;:<span class="brx">=</span> -xstep + ox;
+	xb&nbsp;:<span class="brx">=</span> -xstep + ox + crx;
+	xc&nbsp;:<span class="brx">=</span>  xstep + ox - crx + <span class="cs"><span class="systemcs">\overlaywidth</span></span>;
+	xd&nbsp;:<span class="brx">=</span>  xstep + ox       + <span class="cs"><span class="systemcs">\overlaywidth</span></span>;
+	ya&nbsp;:<span class="brx">=</span> -ystep + ycorr + oy;
+	yb&nbsp;:<span class="brx">=</span> -ystep + ycorr + oy + cry;
+	yc&nbsp;:<span class="brx">=</span>  ystep - ycorr + oy - cry + <span class="cs"><span class="systemcs">\overlayheight</span></span>;
+	yd&nbsp;:<span class="brx">=</span>  ystep - ycorr + oy       + <span class="cs"><span class="systemcs">\overlayheight</span></span>;
+
+	fill <span class="brx">(</span>xb, ya<span class="brx">)</span>---
+	<span class="brx">(</span>xc, ya<span class="brx">)</span>...
+	<span class="brx">(</span>xd, yb<span class="brx">)</span>---
+	<span class="brx">(</span>xd, yc<span class="brx">)</span>...
+	<span class="brx">(</span>xc, yd<span class="brx">)</span>---
+	<span class="brx">(</span>xb, yd<span class="brx">)</span>...
+	<span class="brx">(</span>xa, yc<span class="brx">)</span>---
+	<span class="brx">(</span>xa, yb<span class="brx">)</span>...cycle
+	withcolor transparent<span class="brx">(</span>1, hue, black<span class="brx">)</span>&nbsp;;
+
+endfor;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuniqueMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>shadow<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>mpshadow<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\inframed</span></span>
+  <span class="brx">[</span>frame<span class="brx">=</span>off,
+   background<span class="brx">=</span>shadow,
+   foregroundcolor<span class="brx">=</span>darkred<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\bfa</span> This text box has a shadow.<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/2d887f66a5b2d304934896cf296c47d7.webp" width="438">
+     </li>
+    </ul>
+    <p>Here is a different approach, taken from the simpleslides module. You can play with the parameters:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\startuniqueMPgraphic</span></span><span class="br">{</span>mpshadow<span class="br">}</span>
+numeric a&nbsp;; a&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\overlaywidth</span></span> * 1.05&nbsp;;
+numeric b&nbsp;; b&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\overlayheight</span></span> * 1.05&nbsp;;
+numeric c&nbsp;; c&nbsp;:<span class="brx">=</span> 3pt&nbsp;;
+path p&nbsp;; p <span class="brx">=</span> <span class="brx">(</span>0, 0<span class="brx">)</span> -- <span class="brx">(</span>0, b<span class="brx">)</span> -- <span class="brx">(</span>a, b<span class="brx">)</span> -- <span class="brx">(</span>a, 0<span class="brx">)</span> -- cycle&nbsp;;
+pickup pencircle scaled c&nbsp;;
+for i <span class="brx">=</span> 1 upto 20&nbsp;:
+  draw p shifted <span class="brx">(</span>2, -2<span class="brx">)</span> 
+       withcolor transparent <span class="brx">(</span>1, 0.04, black<span class="brx">)</span>
+       withpen pencircle scaled <span class="brx">(</span>i*c/20<span class="brx">)</span>&nbsp;;
+endfor&nbsp;;
+draw p withcolor darkgreen&nbsp;;
+setbounds currentpicture to OverlayBox&nbsp;;
+<span class="cs"><span class="stylecs">\stopuniqueMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>shadow<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>mpshadow<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\inframed</span></span>
+  <span class="brx">[</span>frame<span class="brx">=</span>off,
+   background<span class="brx">=</span>shadow,
+   foregroundcolor<span class="brx">=</span>darkred<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\bfa</span> This text box has a shadow.<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/3189169edc8b583a37ce358403e1a971.webp" width="620">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004021
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.012 seconds
+Real time usage: 0.055 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6868/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4972-1!canonical and timestamp 20260110004021 and revision id 42438
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Drop_shadows_with_overlay_and_Metapost">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

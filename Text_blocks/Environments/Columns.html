@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/Columns&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/Columns" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/Columns
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1813&diff=42454">2025-07-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>(This page is a mess. The variety of column modes is just confusing. Have a look at the <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/columnsets.pdf" title="manual:columnsets.pdf">Columnsets manual</a> and the <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/pagecolumns.pdf" title="manual:pagecolumns.pdf">Page Columns manual</a>.)
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Columns">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Columns
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Vertical_alignment_consistency">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Vertical alignment consistency
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Paragraphs">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Paragraphs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#.28Simple.29Columns_in_a_narrow_frame">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         (Simple)Columns in a narrow frame
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Column_Sets">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Column Sets
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Vertical_lines_between_columnsets_.28rules.29">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Vertical lines between columnsets (rules)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Page_Columns">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Page Columns
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Streams">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Streams
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Examples_of_MkIV_streams">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           Examples of MkIV streams
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Floats_and_other_limitations_of_columns">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Floats and other limitations of columns
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Columnsets">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           Columnsets
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Columns_and_Floats">
+          <span class="tocnumber">
+           8.2
+          </span>
+          <span class="toctext">
+           Columns and Floats
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>There are different possibilities to typeset text in two or more columns:
+</p>
+    <ul>
+     <li>
+      columns&nbsp;: for simple cases of multi column text
+     </li>
+     <li>
+      mixed columns&nbsp;: the upgraded MkIV version of columns ("a bit better with balancing and penalties for keeping section heads with the text") with many more configurable options.
+     </li>
+     <li>
+      paragraphs&nbsp;: if you need a table-like structure (translations, questionaires etc.)
+     </li>
+     <li>
+      column sets&nbsp;: the flexible way for varying columns or other complex tasks
+     </li>
+     <li>
+      page columns&nbsp;: new column sets implementation
+     </li>
+     <li>
+      streams&nbsp;: set different text synchronized side-by-side (e.g. bilingual editions)
+     </li>
+    </ul>
+    <p>Columns and columnsets are different mechanisms to produce a document
+with two or more columns of text. 
+</p>
+    <ul>
+     <li>
+      The
+      <code>columns</code>
+      mechanism is the older one with limited control about the placement of figures but allows you to mix one column and multicolumns text on a page. It remains available in MkIV, but has been superseded for most purposes by
+      <code>mixedcolumns</code>
+      .
+     </li>
+     <li>
+      <code>columnsets</code>
+      are meant for magazine-like layouts with more control about the placement of figures and other features like spanned columns etc. (look at the
+      <a href="Columns#Column_Sets.html" title="Text blocks/Environments/Columns">
+       manual
+      </a>
+      for more).
+     </li>
+    </ul>
+    <p>Additionally, there&rsquo;s still the old columns and columnsets code available as a module.
+</p>
+    <h2>
+     <span class="mw-headline" id="Columns">
+      Columns
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>3<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="182" src="../../wikiteximage/046326c9d8a02937678bb0ab9f9d54e6.webp" width="626">
+     </li>
+    </ul>
+    <p>You can add all the options of <tt><a href="../../Command/setupcolumns.html" title="Command/setupcolumns">\setupcolumns</a></tt> to <tt><a class="mw-redirect" href="../../Command/_startmixedcolumns.html" title="Command/startcolumns">\startcolumns</a></tt>. For example, simple ruled columns are easy:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>2,separator<span class="brx">=</span>rule<span class="brx">]</span> <span class="comment">% [rule=on] seems to be deprecated</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="182" src="../../wikiteximage/259b764b007aa9361884135efeb08d8d.webp" width="626">
+     </li>
+    </ul>
+    <p>Normally, columns are automatically balanced with the text distributed over the number of requested columns. You can provoke a column switch using <tt><a href="../../Command/column.html" title="Command/column">\column</a></tt>.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> ward
+<span class="cs"><span class="documentcs">\column</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> weisman
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="182" src="../../wikiteximage/221058c12a4f2215c2ac49f68586c612.webp" width="626">
+     </li>
+    </ul>
+    <p>Column balancing fails in "lines" mode (e.g. for poetry).
+</p>
+    <p><br>
+Changing the color of the separator rule:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>3,separator<span class="brx">=</span>rule,rulecolor<span class="brx">=</span>red<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="182" src="../../wikiteximage/5179ec0077e018d35256fb83178dc5bc.webp" width="626">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Vertical_alignment_consistency">
+      Vertical alignment consistency
+     </span>
+    </h3>
+    <p>When using <tt><a class="mw-redirect" href="../../Command/_startmixedcolumns.html" title="Command/startcolumns">\startcolumns</a></tt> ... <tt><a class="new" href="../../index.php?title=Command/stopcolumns&action=edit&redlink=1.html" title="Command/stopcolumns (page does not exist)">\stopcolumns</a></tt>, the vertical alignment may change slightly depending on whether the content fits in a single line of one column or not. A consistent vertical alignment can be obtained using <tt><a class="mw-redirect" href="../../Command/_startmixedcolumns.html" title="Command/startboxedcolumns">\startboxedcolumns</a></tt> ... <tt><a class="new" href="../../index.php?title=Command/stopboxedcolumns&action=edit&redlink=1.html" title="Command/stopboxedcolumns (page does not exist)">\stopboxedcolumns</a></tt> or <tt><a class="new" href="../../index.php?title=Command/startsimplecolumns&action=edit&redlink=1.html" title="Command/startsimplecolumns (page does not exist)">\startsimplecolumns</a></tt> ... <tt><a class="new" href="../../index.php?title=Command/stopsimplecolumns&action=edit&redlink=1.html" title="Command/stopsimplecolumns (page does not exist)">\stopsimplecolumns</a></tt>, as shown in the example below (using a frame to show the difference in alignment).
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">With <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\startcolumns</span></span> ... <span class="cs"><span class="documentcs">\stopcolumns</span></span><span class="br">}</span>:
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startcolumns</span></span>
+    This is a test
+  <span class="cs"><span class="documentcs">\stopcolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startcolumns</span></span>
+    This is a slightly longer test using two columns
+  <span class="cs"><span class="documentcs">\stopcolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+With <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\startboxedcolumns</span></span> ... <span class="cs"><span class="documentcs">\stopboxedcolumns</span></span><span class="br">}</span>:
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startboxedcolumns</span></span>
+    This is a test
+  <span class="cs"><span class="documentcs">\stopboxedcolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startboxedcolumns</span></span>
+    This is a slightly longer test using two columns
+  <span class="cs"><span class="documentcs">\stopboxedcolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+With <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="systemcs">\startsimplecolumns</span></span> ... <span class="cs"><span class="systemcs">\stopsimplecolumns</span></span><span class="br">}</span>:
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\startsimplecolumns</span></span>
+    This is a test
+  <span class="cs"><span class="systemcs">\stopsimplecolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>offset<span class="brx">=</span>0pt<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\startsimplecolumns</span></span>
+    This is a slightly longer test using two columns
+  <span class="cs"><span class="systemcs">\stopsimplecolumns</span></span>
+<span class="cs"><span class="documentcs">\stopframed</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="283" src="../../wikiteximage/9a56656ae328bb825334e215dfe0cd26.webp" width="630">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Paragraphs">
+      Paragraphs
+     </span>
+    </h2>
+    <p>Paragraphs are useful in collecting text to be displayed together.
+For example:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineparagraphs</span></span><span class="brx">[</span>TwoThird<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+
+<span class="comment">% The width of the second paragraph is automatically calculated if unspecified.</span>
+<span class="cs"><span class="stylecs">\setupparagraphs</span></span><span class="brx">[</span>TwoThird<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>.66<span class="cs">\textwidth</span><span class="brx">]</span>
+
+<span class="cs">\startTwoThird</span>
+<span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>...<span class="br">{</span><span class="cs">\it</span> why is there something rather than nothing?<span class="br">}</span>
+For nothing is simpler and easier than something.
+Furthermore, assuming that things must exist,
+one must be able to explain
+<span class="br">{</span><span class="cs">\it</span> why they must exist thus,<span class="br">}</span>
+and not otherwise.<span class="br">}</span>
+<span class="cs">\nextTwoThird</span>
+G. W. Leibniz, <span class="br">{</span><span class="cs">\it</span><span class="cs">\fr</span> Principes de la nature et de la gr&acirc;ce fond&eacute;s en raison,<span class="br">}</span> 1714.
+<span class="cs">\stopTwoThird</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="99" src="../../wikiteximage/ca81833e0ae5e96d5e1c6bae0eda8117.webp" width="626">
+     </li>
+    </ul>
+    <p>See "Paragraphs in Columns" section in the <a class="external text" href="http://pmrb.free.fr/contextref.pdf" rel="nofollow">ConTeXt reference manual</a><a class="extiw" href="http://www.pragma-ade.nl/general/manuals/contextref.pdf" title="manual:contextref.pdf">manual:contextref.pdf</a> for further details.
+</p>
+    <h2>
+     <span id="(Simple)Columns_in_a_narrow_frame">
+     </span>
+     <span class="mw-headline" id=".28Simple.29Columns_in_a_narrow_frame">
+      (Simple)Columns in a narrow frame
+     </span>
+    </h2>
+    <p>To put multiple columns in a frame, this works:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>0.9<span class="cs">\hsize</span>,location<span class="brx">=</span>middle<span class="brx">]</span><span class="cs">\bgroup</span>
+  <span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>2*middle<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\setlocalhsize</span></span> <span class="cs">\hsize</span><span class="cs"><span class="systemcs">\localhsize</span></span> 
+  <span class="cs"><span class="systemcs">\startsimplecolumns</span></span>
+    <span class="cs"><span class="documentcs">\input</span></span> tufte
+  <span class="cs"><span class="systemcs">\stopsimplecolumns</span></span>
+  <span class="cs"><span class="documentcs">\stopnarrower</span></span>
+<span class="cs">\egroup</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="208" src="../../wikiteximage/4f42b2fa07b01a9f61415e81a4d60c93.webp" width="564">
+     </li>
+    </ul>
+    <p>Another possibility is to use <a href="Text_background.html" title="Text blocks/Environments/Text background">text background</a> around the text.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>  <span class="brx">[</span>book<span class="brx">]</span>
+       <span class="brx">[</span>state<span class="brx">=</span>start, topoffset<span class="brx">=</span>.5ex, location<span class="brx">=</span>paragraph,
+        leftoffset<span class="brx">=</span>1ex,bottomoffset<span class="brx">=</span>1ex<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>book<span class="brx">]</span>
+  Tufte again
+  <span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\input</span></span> tufte
+  <span class="cs"><span class="documentcs">\stopcolumns</span></span>
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/3113fd9e895c423eca38210e9f005e2a.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Column_Sets">
+      Column Sets
+     </span>
+    </h2>
+    <p>An alternative method of typesetting text into columns uses columnsets.
+This method offers more possibilities than simple columns,
+in particular in placing floats such as figures and in creating columnspans.
+See <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/columnsets.pdf" title="manual:columnsets.pdf">Columnsets manual</a> or <a class="extiw" href="http://source.contextgarden.net/page-set.mkiv" title="source:page-set.mkiv">column sets source</a> for many examples.
+</p>
+    <p>If you don't need much more than the "normal" columns, but e.g. "lines" mode, try this:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolumnset</span></span><span class="brx">[</span>TwoColumns<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>2<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startcolumnset</span></span><span class="brx">[</span>TwoColumns<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span> <span class="comment">% enforce line breaks</span>
+Starlight, star bright,
+first star I see tonight;
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\column</span></span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span>
+I wish I may, I wish I might
+have the wish I wish tonight.
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\stopcolumnset</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/d4c37375bbd98bf17fc51efc30cf7d53.webp" width="874">
+     </li>
+    </ul>
+    <p>For more details (layout grid features, spreads, different column widths etc.) please refer to the <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/columnsets.pdf" title="manual:columnsets.pdf">manual</a>!
+</p>
+    <h3>
+     <span id="Vertical_lines_between_columnsets_(rules)">
+     </span>
+     <span class="mw-headline" id="Vertical_lines_between_columnsets_.28rules.29">
+      Vertical lines between columnsets (rules)
+     </span>
+    </h3>
+    <p>Sometimes it is required to have a vertical line between the columns of your columnset. This code draws MetaPost lines in the right place:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>verticalrule<span class="br">}</span>
+  if CurrentColumn &lt; NOfColumns&nbsp;:
+    draw rightboundary OverlayBox shifted <span class="brx">(</span>4mm,0<span class="brx">)</span>;
+    setbounds currentpicture to OverlayBox enlarged 2.5mm;
+  fi
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>verticalrule<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>verticalrule<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolumnset</span></span><span class="brx">[</span>TwoColumns<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>2,background<span class="brx">=</span>verticalrule<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startcolumnset</span></span><span class="brx">[</span>TwoColumns<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span> <span class="comment">% enforce line breaks</span>
+Starlight, star bright,
+first star I see tonight;
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\column</span></span>
+
+<span class="cs"><span class="documentcs">\startlines</span></span>
+I wish I may, I wish I might
+have the wish I wish tonight.
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+
+<span class="cs"><span class="documentcs">\stopcolumnset</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/884c00f3694b193ea9c1a11c6fbd8c4e.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Page_Columns">
+      Page Columns
+     </span>
+    </h2>
+    <p>Page columns are a new implementation of columnsets, intended to replace the old mechanism.
+<a class="extiw" href="http://www.pragma-ade.nl/general/manuals/pagecolumns.pdf" title="manual:pagecolumns.pdf">Page Columns manual</a>
+</p>
+    <p>From the <a class="extiw" href="http://source.contextgarden.net/page-cst.mkiv" title="source:page-cst.mkiv">source</a>:
+</p>
+    <p>Columnsets are kind of special. They are mostly meant for special products with
+magazine like properties. They are normally not mixed with single column layouts
+and not all features of ConTeXt might cooperate well with a mechanism like
+this. We use the name page grid because (as with other reimplementations of
+MkII features in MkIV, we need another namespace in order to migrate stepwise.
+This implementation is not neccessarily better than the previous one but it might
+be easier to extend it. It should be a bit more efficient.
+</p>
+    <h2>
+     <span class="mw-headline" id="Streams">
+      Streams
+     </span>
+    </h2>
+    <p>From the [<a class="external text" href="http://archive.contextgarden.net/message/20060331.175831.414d087b.en.html" rel="nofollow">announcement mail</a>] by Thomas Schmitz:
+</p>
+    <p>We have streams for even and odd pages that can be synchronized at certain points. 
+This is useful for, e.g., typesetting bilingual books: have the original on the even pages, the translation on the odd pages, and synchronize at certain points.
+</p>
+    <p>Hans later re-implemented that mechanism in the core. For details see <a class="extiw" href="http://source.contextgarden.net/page-str.mkiv" title="source:page-str.mkiv">the source</a>.
+</p>
+    <p>The module provides a rather low-level interface. Hans suggested some handy shortcuts:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>streams<span class="brx">]</span> 
+
+<span class="cs">\def</span><span class="cs">\StartCouple</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="cs">\SwitchToNormal</span><span class="br">}</span> 
+<span class="cs">\def</span><span class="cs">\StopCouple</span> <span class="br">{</span><span class="cs">\SwitchToNormal</span> <span class="cs">\SynchronizeLeftAndRight</span> <span class="cs">\FlushLeftAndRight</span><span class="br">}</span> 
+<span class="cs">\def</span><span class="cs">\Original</span> <span class="br">{</span><span class="cs">\SwitchToNormal</span><span class="cs">\SynchronizeLeftAndRight</span><span class="cs">\SwitchToLeft</span><span class="br">}</span> 
+<span class="cs">\def</span><span class="cs">\Translation</span><span class="br">{</span><span class="cs">\SwitchToRight</span><span class="br">}</span> 
+
+<span class="cs">\StartCouple</span>
+<span class="cs">\Original</span><span class="cs">\en</span>
+Are you sleeping, brother John?
+
+<span class="cs">\Translation</span><span class="cs">\de</span>
+Bruder Jakob, schl&auml;fst du noch?
+<span class="cs">\StopCouple</span>
+</pre>
+    <p>So you put the part of your document where synchronization should take place between <tt><a class="new" href="../../index.php?title=Command/StartCouple&action=edit&redlink=1.html" title="Command/StartCouple (page does not exist)">\StartCouple</a></tt> and <tt><a class="new" href="../../index.php?title=Command/StopCouple&action=edit&redlink=1.html" title="Command/StopCouple (page does not exist)">\StopCouple</a></tt>. After that , <tt><a class="new" href="../../index.php?title=Command/Original&action=edit&redlink=1.html" title="Command/Original (page does not exist)">\Original</a></tt> and <tt><a class="new" href="../../index.php?title=Command/Translation&action=edit&redlink=1.html" title="Command/Translation (page does not exist)">\Translation</a></tt> switches between even and odd pages. 
+</p>
+    <p>Beware, streams don&rsquo;t work in columns and not very good in columnsets.
+</p>
+    <h3>
+     <span class="mw-headline" id="Examples_of_MkIV_streams">
+      Examples of MkIV streams
+     </span>
+    </h3>
+    <p>(copied from the source)
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>streams.flushing<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>grid<span class="brx">=</span>yes<span class="brx">]</span> <span class="cs"><span class="documentcs">\showgrid</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="systemcs">\startoutputstream</span></span><span class="brx">[</span>nl<span class="brx">]</span>
+
+Wat doen we hier?
+
+<span class="cs"><span class="systemcs">\enableoutputstream</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+Are you sleeping, brother John?<span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>xxx<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>x <span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>note <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="cs">\par</span> <span class="cs"><span class="systemcs">\pushoutputstream</span></span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\enableoutputstream</span></span><span class="brx">[</span>de<span class="brx">]</span>
+
+Bruder Jakob, schl&auml;fst du noch?<span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>yyy<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>x <span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>note <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="cs"><span class="documentcs">\input</span></span> ward <span class="cs">\par</span> <span class="cs"><span class="systemcs">\pushoutputstream</span></span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\disableoutputstream</span></span>
+
+<span class="cs"><span class="systemcs">\stopoutputstream</span></span>
+
+Vader Jacob, slaap je nog?<span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>zzz<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs">\synchronizestreams</span><span class="brx">[</span>en,de,nl<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\page</span></span> <span class="cs"><span class="systemcs">\flushoutputstream</span></span><span class="brx">[</span>en<span class="brx">]</span> <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\page</span></span> <span class="cs"><span class="systemcs">\flushoutputstream</span></span><span class="brx">[</span>de<span class="brx">]</span> <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\page</span></span> <span class="cs"><span class="systemcs">\flushoutputstream</span></span><span class="brx">[</span>nl<span class="brx">]</span> <span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Posting by Wolfgang to the mailing list (2016-11-27):
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\startoutputstream</span></span><span class="brx">[</span>one<span class="brx">]</span>
+   <span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>flushleft<span class="brx">]</span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>3<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+   <span class="cs"><span class="documentcs">\blank</span></span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+   <span class="cs"><span class="documentcs">\blank</span></span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+<span class="cs"><span class="systemcs">\stopoutputstream</span></span>
+
+<span class="cs"><span class="systemcs">\startoutputstream</span></span><span class="brx">[</span>two<span class="brx">]</span>
+   <span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>flushright<span class="brx">]</span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+   <span class="cs"><span class="documentcs">\blank</span></span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+   <span class="cs"><span class="documentcs">\blank</span></span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>7<span class="br">}</span><span class="br">{</span>Line <span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\par</span><span class="br">}</span><span class="cs"><span class="systemcs">\pushoutputstream</span></span>
+<span class="cs"><span class="systemcs">\stopoutputstream</span></span>
+
+<span class="cs">\synchronizestreams</span><span class="brx">[</span>one,two<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+   <span class="br">{</span><span class="cs"><span class="systemcs">\outputstreambox</span></span><span class="brx">[</span>one<span class="brx">]</span><span class="br">}</span>
+   <span class="br">{</span><span class="cs">\raise</span>2<span class="cs"><span class="systemcs">\strutdp</span></span><span class="cs"><span class="systemcs">\outputstreambox</span></span><span class="brx">[</span>two<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>(Wolfgang continued:)
+</p>
+    <p>The mechanism to create pages/columns for the stream content is
+missing.
+You can save text and flush it afterwards but there is no command which
+places the content side by side (or in columns). Below is a simple example
+but I had to write the splitter myself.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\startoutputstream</span></span><span class="brx">[</span>one<span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\startcolor</span></span><span class="brx">[</span>red<span class="brx">]</span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="cs">\par</span><span class="br">}</span>
+   <span class="cs"><span class="documentcs">\stopcolor</span></span>
+<span class="cs"><span class="systemcs">\stopoutputstream</span></span>
+
+<span class="cs"><span class="systemcs">\startoutputstream</span></span><span class="brx">[</span>two<span class="brx">]</span>
+   <span class="cs"><span class="documentcs">\startcolor</span></span><span class="brx">[</span>green<span class="brx">]</span>
+   <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> zapf<span class="cs">\par</span><span class="br">}</span>
+   <span class="cs"><span class="documentcs">\stopcolor</span></span>
+<span class="cs"><span class="systemcs">\stopoutputstream</span></span>
+
+<span class="cs">\synchronizestreams</span><span class="brx">[</span>one,two<span class="brx">]</span>
+
+<span class="cs">\setbox</span><span class="cs">\scratchboxone</span><span class="cs"><span class="systemcs">\outputstreambox</span></span><span class="brx">[</span>one<span class="brx">]</span>
+<span class="cs">\setbox</span><span class="cs">\scratchboxtwo</span><span class="cs"><span class="systemcs">\outputstreambox</span></span><span class="brx">[</span>two<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\doloop</span></span>
+ <span class="br">{</span><span class="cs">\ifvoid</span><span class="cs">\scratchboxone</span>
+    <span class="cs"><span class="systemcs">\exitloop</span></span>
+  <span class="cs">\else</span>
+    <span class="cs">\setbox</span><span class="cs">\scratchboxfour</span><span class="cs">\vsplit</span><span class="cs">\scratchboxone</span> to <span class="cs">\textheight</span>
+    <span class="cs">\vbox</span> to <span class="cs">\vsize</span><span class="br">{</span><span class="cs">\box</span><span class="cs">\scratchboxfour</span><span class="cs">\vss</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs">\setbox</span><span class="cs">\scratchboxfive</span><span class="cs">\vsplit</span><span class="cs">\scratchboxtwo</span> to <span class="cs">\textheight</span>
+    <span class="cs">\vbox</span> to <span class="cs">\vsize</span><span class="br">{</span><span class="cs">\box</span><span class="cs">\scratchboxfive</span><span class="cs">\vss</span><span class="br">}</span><span class="comment">%</span>
+  <span class="cs">\fi</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> We need documentation and samples for Paragraphs, Streams and Column Sets <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Floats_and_other_limitations_of_columns">
+      Floats and other limitations of columns
+     </span>
+    </h2>
+    <p>Columns and one-column floats don&rsquo;t work well together in TeX. It seems that you can't have a float that spans one column automatically put at the top or the bottom and have the columns balanced automatically at the end. Neither ConTeXt nor LaTeX can do it in a automatized way (like with floats that span more than a column). Here you have some tricks to make it work more or less:
+</p>
+    <h3>
+     <span class="mw-headline" id="Columnsets">
+      Columnsets
+     </span>
+    </h3>
+    <p>With columnsets you can put floats that span one, two or any number of columns and in any position (top, bottom, middle of the text). The price for this is that you have to balance the columns manually at the end (see <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/columnsets.pdf" title="manual:columnsets.pdf">Columnset manual</a>).
+</p>
+    <p>Columnsets have a limitation, however: they are very strongly grid-based, and you can't change the interlinespace within the columnset (e.g., if some paragraphs are typed in a smaller font). You can change the interlinespace if the entire text with a smaller interlinespace fits in one column, like a float or a section title (putting it between <code>\startlinecorrection\stoplinecorrection</code>), but if the text with a smaller interlinespace starts in one column and has to continue in the following one, nothing will work, and the layout will be completely messed.
+</p>
+    <p>Changing the font weight or shape inbetween <tt><a href="../../Command/startcolumnset.html" title="Command/startcolumnset">\startcolumnset</a></tt> and <tt><a class="new" href="../../index.php?title=Command/stopcolumnset&action=edit&redlink=1.html" title="Command/stopcolumnset (page does not exist)">\stopcolumnset</a></tt> may cause some columns to be shifted vertically. Then you must use <tt><a class="new" href="../../index.php?title=Command/restoreinterlinespace&action=edit&redlink=1.html" title="Command/restoreinterlinespace (page does not exist)">\restoreinterlinespace</a></tt> after the font switch (<tt><a class="new" href="../../index.php?title=Command/bf&action=edit&redlink=1.html" title="Command/bf (page does not exist)">\bf</a></tt>, <tt><a class="new" href="../../index.php?title=Command/ss&action=edit&redlink=1.html" title="Command/ss (page does not exist)">\ss</a></tt>) to correct the interline spacing. See <a class="external autonumber" href="http://thread.gmane.org/gmane.comp.tex.context/20932" rel="nofollow">[1]</a>.
+</p>
+    <p>So, if you want columns and one-column floats and don&rsquo;t have to change the interlinespacing, use Columnsets. If not, you can use Columns with some tricks.
+</p>
+    <h3>
+     <span class="mw-headline" id="Columns_and_Floats">
+      Columns and Floats
+     </span>
+    </h3>
+    <p>With Columns you have the columns automatically balanced at the end, but only certain floats are "officially" supported:
+</p>
+    <ul>
+     <li>
+      <b>
+       Floats that span more than a column at the top of the following page
+      </b>
+     </li>
+     <li>
+      <b>
+       Floats that span one column in the middle of the text, accidentally at the top of the following page
+      </b>
+     </li>
+    </ul>
+    <p>Here, the optional argument <code>placefloat[here, top, bottom, etc.]</code> does nothing. When you place a float, if its width is larger than the column width (<code>\textwidth</code>), that float will be automatically put at the top of the following page, spanning the columns needed. If its width is shorter than the column width, the float will be put in the middle of the text, spanning one column. If there is not enough space left in the column, it will float until the top of the following column. You can use this method to put floats at the top of a column, but it's not recommended, because it is tedious and if you change the text before the float, you will probably find it then in the middle of the column.
+</p>
+    <p>There is a semi-automatic way to put:
+</p>
+    <ul>
+     <li>
+      <b>
+       Floats that span one column at the top of the left column of a page
+      </b>
+     </li>
+     <li>
+      <b>
+       Any float in a separated page, without text
+      </b>
+     </li>
+    </ul>
+    <p>with the possibility of changing the text and having the float always correctly put, like with "officially" supported floats, using <code>\startpostponing\stoppostponing</code>. Everything that goes into this environment will be put at the beginning of the next page, or in the page indicated in the optional argument (e.g., <code>\startpostponing[34]</code>; see <a class="new" href="../../index.php?title=Input_and_compilation/From_LaTeX_to_ConTeXt/Latex_Packages&action=edit&redlink=1.html" title="Input and compilation/From LaTeX to ConTeXt/Latex Packages (page does not exist)">this wiki entry</a>). If we write
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startpostponing</span></span><span class="brx">[</span>35<span class="brx">]</span>
+<span class="cs">\vbox</span><span class="br">{</span><span class="cs">\vskip</span>-<span class="cs">\baselineskip</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="br">{</span>caption<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoppostponing</span></span>
+</pre>
+    <p>the figure will be put at the top of the first column at page 35, or four pages further on, if we put [+4], or on the following page, with no optional argument. The figure has to be enclosed in a box, or the grid will be broken. Putting the figure in a box lowers it a line (why?), so it has to be corrected with the <code>\vskip-\baselineskip</code>.
+</p>
+    <p>You can put more than a float in the same column, but they have to be into the same box, or the grid will be broken
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startpostponing</span></span>
+<span class="cs">\vbox</span><span class="br">{</span><span class="cs">\vskip</span>-<span class="cs">\baselineskip</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="br">{</span>caption<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="br">{</span>caption2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file2<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoppostponing</span></span>
+</pre>
+    <p>With this method you can put a float in a separated page, without any text
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startpostponing</span></span><span class="brx">[</span>+5<span class="brx">]</span>
+<span class="cs">\vbox</span><span class="br">{</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="br">{</span>caption<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span><span class="brx">]</span><span class="br">}</span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\stoppostponing</span></span>
+</pre>
+    <p>And you can use it to put a float that span more than a column in a page other than the one chosen by the algorithm (without <code>\vbox</code>):
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startpostponing</span></span><span class="brx">[</span>67<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="br">{</span>caption<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>file<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span><span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoppostponing</span></span>
+</pre>
+    <p>This has some limitations, too. If you put a float at the top of a column and there is another float that spans more than a column over all, the grid will be broken, so you have to put it in another page, but you can put more than one float of the same type together, as seen above.
+</p>
+    <table cellspacing="0" class="navbox" style=";">
+     <tbody>
+      <tr>
+       <td style="padding:2px;">
+<table cellspacing="0" class="nowraplinks collapsible expanded" style="width:100%;background:transparent;color:inherit;;">
+
+<tbody><tr>
+<th class="navbox-title" colspan="2" style=";"><div style="float:left; width:6em;text-align:left;"> <span class="noprint plainlinks navbar" style><span style="white-space:nowrap;word-spacing:-.12em;"><a href="../../Template:Columns_navbox.html" title="Template:Columns navbox"><span style=";;border:none;" title="View this template">v</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a class="new" href="../../index.php?title=Template_talk:Columns_navbox&action=edit&redlink=1" title="Template talk:Columns navbox (page does not exist)"><span style=";;border:none;" title="Discuss this template">d</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a class="external text" href="../../index.php?title=Template:Columns_navbox&action=edit" rel="nofollow"><span style=";;border:none;" title="Edit this template">e</span></a></span></span>
+ </div> <span style="font-size:110%;"> Columns</span>
+</th></tr>
+<tr style="height:2px;">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">General overview
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="mw-selflink selflink">Columns</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Commands
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<table cellspacing="0" class="nowraplinks navbox-subgroup" style="width:100%;;;;">
+<tbody><tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Columns</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><tt><a href="../../Command/setupcolumns.html" title="Command/setupcolumns">\setupcolumns</a></tt></li>
+<li><tt><a class="mw-redirect" href="../../Command/_startmixedcolumns.html" title="Command/startcolumns">\startcolumns</a></tt></li>
+<li><tt><a href="../../Command/column.html" title="Command/column">\column</a></tt></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Paragraphs</div>
+</td>
+<td class="navbox-list navbox-even" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><tt><a href="../../Command/defineparagraphs.html" title="Command/defineparagraphs">\defineparagraphs</a></tt></li>
+<li><tt><a href="../../Command/setupparagraphs.html" title="Command/setupparagraphs">\setupparagraphs</a></tt></li>
+<li><tt><a href="../../Command/startparagraph.html" title="Command/startparagraph">\startparagraph</a></tt></li>
+<li><tt><a href="../../Command/paragraph.html" title="Command/paragraph">\paragraph</a></tt></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Columnsets</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><tt><a href="../../Command/definecolumnset.html" title="Command/definecolumnset">\definecolumnset</a></tt></li>
+<li><tt><a href="../../Command/setupcolumnsetlines.html" title="Command/setupcolumnsetlines">\setupcolumnsetlines</a></tt></li>
+<li><tt><a href="../../Command/setupcolumnsetstart.html" title="Command/setupcolumnsetstart">\setupcolumnsetstart</a></tt></li>
+<li><tt><a href="../../Command/startcolumnset.html" title="Command/startcolumnset">\startcolumnset</a></tt></li></ul></div>
+</td></tr></tbody></table></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Manuals
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="external text" href="http://www.pragma-ade.com/general/manuals/columns.pdf" rel="nofollow">Columnsets manual</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Source files
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-set.mkii" rel="nofollow">page-set.mkii</a></li>
+<li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-mul.mkii" rel="nofollow">page-mul.mkii</a></li>
+<li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-set.mkiv" rel="nofollow">page-set.mkiv</a></li>
+<li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-col.mkiv" rel="nofollow">page-col.mkiv</a></li>
+<li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-mix.mkiv" rel="nofollow">page-mix.mkiv</a></li>
+<li><a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/page-mul.mkiv" rel="nofollow">page-mul.mkiv</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Examples
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="../../Input_and_compilation/Sample_documents/Skdk_style.html" title="Input and compilation/Sample documents/Skdk style">Skdk style</a></li>
+<li>MAPS style (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/s-map-10.mkii" rel="nofollow">mkii</a>, <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/s-map-10.mkiv" rel="nofollow">mkiv</a>)</li></ul></div>
+</td></tr></tbody></table>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212437
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.169 seconds
+Real time usage: 0.264 seconds
+Preprocessor visited node count: 1346/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 28140/2097152 bytes
+Template argument size: 11499/2097152 bytes
+Highest expansion depth: 13/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 30212/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  193.841      1 -total
+ 22.37%   43.368      1 Template:Columns_navbox
+ 20.89%   40.484      1 Template:navbox
+  8.67%   16.803      1 Template:Navbox_subgroup
+  6.38%   12.374      1 Template:Navbox
+  5.54%   10.746      1 Template:todo
+  5.49%   10.640     29 Template:cmd
+  2.33%    4.518      1 Template:navbar
+  2.27%    4.408      8 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1813-1!canonical and timestamp 20260109212437 and revision id 42454
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/Columns">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

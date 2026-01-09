@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Module writing&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Module writing
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6999&diff=41546">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../Input_and_compilation/Modules.html" title="Input and compilation/Modules">Modules</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#When_and_for_what_should_you_write_a_public_module.3F">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           When and for what should you write a public module?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#What_to_aim_for:">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           What to aim for:
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#What_to_avoid:">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           What to avoid:
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Basics">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Basics
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Directory_structure">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Directory structure
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Techniques">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Techniques
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Module_requirements">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Module requirements
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Module_release_file">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Module release file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Module_main_file">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Module main file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#License">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           License
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Documentation">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Documentation
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#README">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           README
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#Manual">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Manual
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#Self-documenting_source_code">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           Self-documenting source code
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#TeX_files">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           TeX files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#Lua_files">
+          <span class="tocnumber">
+           4.5
+          </span>
+          <span class="toctext">
+           Lua files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Create_the_documentation">
+          <span class="tocnumber">
+           4.6
+          </span>
+          <span class="toctext">
+           Create the documentation
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#XML_Interface_file">
+          <span class="tocnumber">
+           4.7
+          </span>
+          <span class="toctext">
+           XML Interface file
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#Publication_and_maintenance">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Publication and maintenance
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <h3>
+     <span id="When_and_for_what_should_you_write_a_public_module?">
+     </span>
+     <span class="mw-headline" id="When_and_for_what_should_you_write_a_public_module.3F">
+      When and for what should you write a public module?
+     </span>
+    </h3>
+    <ul>
+     <li>
+      reusable code
+     </li>
+     <li>
+      general enough that it may be of use for others
+     </li>
+     <li>
+      complex enough that it&rsquo;s more than a few settings
+     </li>
+     <li>
+      style modules (environments as modules) should be meant to be used unchanged (e.g. for a magazine)
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="What_to_aim_for:">
+      What to aim for:
+     </span>
+    </h3>
+    <ul>
+     <li>
+      usual ConTeXt behavior (define, setup, start&hellip;)
+     </li>
+     <li>
+      key-value setup
+     </li>
+     <li>
+      helpful documentation
+     </li>
+     <li>
+      long-term support
+     </li>
+     <li>
+      fun&nbsp;;)
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="What_to_avoid:">
+      What to avoid:
+     </span>
+    </h3>
+    <ul>
+     <li>
+      interfering with core features/commands
+     </li>
+     <li>
+      offering options for settings that are better handled by default setup commands (e.g. fonts)
+     </li>
+     <li>
+      modules for just a few settings
+     </li>
+     <li>
+      using undocumented low level features (they&rsquo;re prone to change)
+     </li>
+     <li>
+      &ldquo;write and forget&rdquo; projects; i.e. unmaintained modules
+     </li>
+    </ul>
+    <p><b>Please don&rsquo;t publish support modules for text fonts any more!</b> They&rsquo;re usually unnecessary. Instead publish <a href="../Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts.html" title="Characters words and fonts/Examples of font installation and of typescripts">typescripts</a> in the wiki instead. Support for symbols or unusual scripts might make sense.
+</p>
+    <h3>
+     <span class="mw-headline" id="Basics">
+      Basics
+     </span>
+    </h3>
+    <ul>
+     <li>
+      Modules are loaded with
+      <tt>
+       <a href="../Command/usemodule.html" title="Command/usemodule">
+        \usemodule
+       </a>
+      </tt>
+      .
+     </li>
+     <li>
+      Main module files can start with m, p, s, x or t:
+      <ul>
+       <li>
+        m: core module
+       </li>
+       <li>
+        p: private code (unpublished)
+       </li>
+       <li>
+        s: style file (more or less equivalent to an environment)
+       </li>
+       <li>
+        x: XML code (support for a XML format)
+       </li>
+       <li>
+        <b>
+         t
+        </b>
+        : &ldquo;third party&rdquo; modules &ndash; the usual choice for your module
+       </li>
+      </ul>
+     </li>
+     <li>
+      File extensions for module files can be tex, cld, lua, mkiv, mkvi, mkxl or mklx
+      <ul>
+       <li>
+        If you mostly use TeX (ConTeXt) commands and don&rsquo;t need to distinguish between code for MkIV and LMTX, use
+        <code>tex</code>
+        .
+       </li>
+       <li>
+        Use
+        <code>mkiv</code>
+        for MkIV-only code and
+        <code>mkxl</code>
+        for LMTX-only; base names can be the same.
+       </li>
+       <li>
+        Of course you can use other file extensions for auxiliary files.
+       </li>
+      </ul>
+     </li>
+     <li>
+      Choose a short and unique name that hints at the function or is at least original.
+      <ul>
+       <li>
+        <a class="external text" href="https://ctan.org/file/help/ctan/CTAN-upload-addendum" rel="nofollow">
+         CTAN conventions
+        </a>
+        : For compatibility, use only 7 bit ASCII lowercase characters for the main file name (ID); the module title may (but should not) differ (e.g. file
+        <tt>
+         t-somemod.tex
+        </tt>
+        vs. title &ldquo;SomeModule&rdquo;). Use hyphens if you must, don&rsquo;t use underscores.
+       </li>
+       <li>
+        Avoid naming conflicts with core features or other modules.
+       </li>
+      </ul>
+     </li>
+     <li>
+      If you add code/files by others, check their license! Don&rsquo;t add copyrighted stuff!
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Directory_structure">
+      Directory structure
+     </span>
+    </h3>
+    <p>While a module usually consists of one main file with a name like <tt>t-modulename.[tex|ctx|mkiv|mkxl]</tt>, there can be many more files, and there should be some documentation.
+</p>
+    <p>Sort these files into folders according to TDS (TeX directory structure):
+</p>
+    <ul>
+     <li>
+      Top level files: README, VERSION, LICENSE (required for publication, get moved to
+      <tt>
+       doc
+      </tt>
+      on installation)
+     </li>
+     <li>
+      Code files:
+      <tt>
+       tex/context/third/
+       <i>
+        modulename
+       </i>
+      </tt>
+     </li>
+     <li>
+      Documentation:
+      <tt>
+       doc/context/third/
+       <i>
+        modulename
+       </i>
+      </tt>
+     </li>
+     <li>
+      Scripts:
+      <tt>
+       scripts/context/lua/third/
+       <i>
+        modulename
+       </i>
+      </tt>
+      (extensions for
+      <a href="../Input_and_compilation/Executable_scripts_and_auxiliary_files/mtxrun_script.html" title="Input and compilation/Executable scripts and auxiliary files/mtxrun script">
+       mtxrun script
+      </a>
+      )
+     </li>
+     <li>
+      Fonts:
+      <tt>
+       fonts/data/
+       <i>
+        modulename
+       </i>
+      </tt>
+      (only free-licensed and if crucial for your module)
+     </li>
+     <li>
+      Interface:
+      <tt>
+       tex/context/interface/third
+      </tt>
+      (interface xml files for modules aren&rsquo;t used yet)
+     </li>
+    </ul>
+    <p>Maybe also have a look at the distribution to understand what goes where.
+</p>
+    <p>There can be more top level files that might be useful for publication on CTAN, e.g. preview images.
+</p>
+    <p><b>Don&rsquo;t publish unnecessary files!</b> i.e. leave out everything that gets automatically created (e.g. *.log, *.tuc, *.tuo, m_k_i_v_*), backups (e.g. *.bak, *.sav) or that is only relevant to other programs or the operating system (e.g. .DS_Store, __MACOSX, .thumbs).
+If you use <a class="external text" href="https://git-scm.com" rel="nofollow">git</a>, you can list these in a <tt><a class="external text" href="https://git-scm.com/docs/gitignore" rel="nofollow">.gitignore</a></tt> file.
+</p>
+    <h2>
+     <span class="mw-headline" id="Techniques">
+      Techniques
+     </span>
+    </h2>
+    <p>See e.g. <a class="external text" href="https://meeting.contextgarden.net/2024/talks/wolfgang/module_howto.pdf" rel="nofollow">Wolfgang&rsquo;s presentation</a> (PDF) at ConTeXt meeting 2024.
+</p>
+    <p>In order to avoid <i>conflicting macros</i> it is essential for a module that it adheres 
+to the <a href="Module_writing/Module_namespaces.html" title="ConTeXt and Lua programming/Module writing/Module namespaces">namespace convention</a>.
+After releasing a module add it to the list in <a href="../Input_and_compilation/Modules.html" title="Input and compilation/Modules">Modules</a> for other module authors to know.
+</p>
+    <h2>
+     <span class="mw-headline" id="Module_requirements">
+      Module requirements
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Module_release_file">
+      Module release file
+     </span>
+    </h3>
+    <ul>
+     <li>
+      A release file is a ZIP archive that contains the necessary files in a TDS compliant structure.
+     </li>
+     <li>
+      The filename should be
+      <code>modulename-version.zip</code>
+      , where the version is usually a date like
+      <tt>
+       YYYY.MM.DD
+      </tt>
+      .
+     </li>
+     <li>
+      On the top level there must be a VERSION file that only contains your version string.
+     </li>
+     <li>
+      On the top level there should be a README(|.md|.txt) file with some metadata like a short description and author info.
+     </li>
+     <li>
+      On the top level there can be a LICENSE file containing the text of an open source license of your choice, if the license is not included in the README.
+     </li>
+     <li>
+      On the top level there must NOT be a folder with the module name, but only TDS folders like "doc" and "tex".
+     </li>
+    </ul>
+    <p>The same applies for git/SVN repositories containing ConTeXt modules.
+</p>
+    <p>VERSION and README files are important for publication on <a class="external text" href="https://ctan.org" rel="nofollow">CTAN</a>. README is also displayed on git platforms like GitHub or Codeberg and should contain basic documentation. All top level files are ignored by the LMTX module installer.
+</p>
+    <p>Instead of zip files, also tar.gz archives are possible, but the installer script can only handle zip &ndash; libzip is a necessary part of Lua(Meta)TeX, while other archive formats are not.
+</p>
+    <h3>
+     <span class="mw-headline" id="Module_main_file">
+      Module main file
+     </span>
+    </h3>
+    <p>All module files should start with a block containing <i>meta information</i> about that module.
+There is a <a href="Module_writing/Module_template.html" title="ConTeXt and Lua programming/Module writing/Module template">Module template</a> available to help setting up that header correctly.
+</p>
+    <h3>
+     <span class="mw-headline" id="License">
+      License
+     </span>
+    </h3>
+    <p>Do not forget to specify a <i>license</i> as the permitted modes of distribution
+depend on which one you choose.
+The <a class="external text" href="http://wiki.contextgarden.net/Read_Me#The_Code" rel="nofollow">ConTeXt sources</a> are licensed
+either under <a class="external text" href="https://www.gnu.org/licenses/old-licenses/gpl-2.0" rel="nofollow">GPLv2</a> or the <a class="external text" href="https://www.latex-project.org/lppl/" rel="nofollow">LPPL</a>, so you might want to stick to these or a more permissive
+license.
+(Choose one: <a class="external autonumber" href="http://www.opensource.org/" rel="nofollow">[1]</a>.)
+Including the full text of your license in your source repo is best practice.
+</p>
+    <h2>
+     <span class="mw-headline" id="Documentation">
+      Documentation
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="README">
+      README
+     </span>
+    </h3>
+    <p>A <tt>README(|.txt|.md)</tt> file makes sense in a public git repository and for publication on CTAN. It should contain:
+</p>
+    <ul>
+     <li>
+      title of the module
+     </li>
+     <li>
+      a short explanation what it does
+     </li>
+     <li>
+      dependencies (ConTeXt LMTX, fonts, other programs)
+     </li>
+     <li>
+      a hint on installing (e.g. via mtxrun)
+     </li>
+     <li>
+      an example of its use
+     </li>
+     <li>
+      references to further documentation
+     </li>
+     <li>
+      authors/contributors
+     </li>
+     <li>
+      license
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Manual">
+      Manual
+     </span>
+    </h3>
+    <p>If a simple example and the self-documenting source code isn&rsquo;t enough to understand usage and options of your module, please include a manual (source and PDF). You can use the <a href="../Documentation/How_to_make_a_MyWay.html" title="Documentation/How to make a MyWay">How to make a MyWay</a> style.
+</p>
+    <h3>
+     <span class="mw-headline" id="Self-documenting_source_code">
+      Self-documenting source code
+     </span>
+    </h3>
+    <p>Source files are supposed to contain explanatory comments that document
+implementation details and other peculiarities the reader should be
+aware of.
+</p>
+    <p>ConTeXt provides several variations of comments to automatically create PDF documentation, see below.
+</p>
+    <h3>
+     <span class="mw-headline" id="TeX_files">
+      TeX files
+     </span>
+    </h3>
+    <p>In <tt>.tex</tt> files (and other files containing primarily TeX code, e.g.
+<tt>.mki[iv]</tt>), any line beginning with a comment leader will be treated as a docstring.
+Formatting is done via ordinary TeX commands.
+</p>
+    <pre> %D Use this comment type for examples and explanations
+ %D of the module. Keep in mind that each comment block
+ %D creates a local group when you change settings.
+</pre>
+    <pre> %M Use this comment type to load additional modules
+ %M (even the one you&rsquo;re documenting at the moment)
+ %M or make layout changes, because unlike the previous,
+ %M type settings are global.
+</pre>
+    <pre> %C Use this comment type for text which should remain
+ %C commented in the output, e.g. license information.
+</pre>
+    <pre> %S B
+ %S This comment type is used when you add text which
+ %S should ignored/skipped. It is necessary to use "B"
+ %S at the first and "E" at the last line.
+ %S E
+</pre>
+    <p>The latter style is never used in the source code of ConTeXt.
+</p>
+    <h3>
+     <span class="mw-headline" id="Lua_files">
+      Lua files
+     </span>
+    </h3>
+    <p>In Lua files (e.g. <tt>.cld</tt>) multi-line comments start with
+<tt>--[[ldx--</tt> and end with <tt>--ldx]]--</tt>.
+Text inside those delimiters can be formatted using basic <i>HTML</i> tags.
+Ordinary comments are still treated as part of the source and therefore
+they will be typeset inside the listing.
+</p>
+    <h3>
+     <span class="mw-headline" id="Create_the_documentation">
+      Create the documentation
+     </span>
+    </h3>
+    <p>Docstrings, though they appear to the (Lua)TeX interpreter as ordinary
+comments, allow for pretty printing source code when used with two
+dedicated modules:
+</p>
+    <ul>
+     <li>
+      <a class="extiw" href="http://source.contextgarden.net/x-ldx.ctx" title="source:x-ldx.ctx">
+       <tt>
+        x-ldx.ctx
+       </tt>
+      </a>
+      for Lua files, and
+     </li>
+     <li>
+      <a class="extiw" href="http://source.contextgarden.net/s-mod.ctx" title="source:s-mod.ctx">
+       <tt>
+        s-mod.ctx
+       </tt>
+      </a>
+      for TeX files.
+     </li>
+    </ul>
+    <p>Thus, in order to generate the documentation for the hypothetical
+<i>simple</i> module, you first have to <code>chdir</code> to the module&rsquo;s code directory.
+</p>
+    <p>Next you run the pretty printer on its main file
+</p>
+    <pre> context --ctx=s-mod t-simple.tex
+</pre>
+    <p>to get a <tt>t-simple.pdf</tt> which contains the &ndash; sparse
+&ndash; annotations in serif and the actual code as colorful listing.
+</p>
+    <p>Likewise the processing of Lua code, e.g. <tt><a class="extiw" href="http://source.contextgarden.net/font-def.lua" title="source:font-def.lua">font-def.lua</a></tt> from
+the main ConTeXt tree:
+</p>
+    <pre> context --ctx=x-ldx font-def.lua
+</pre>
+    <p>Which should generate a <tt>font-def.pdf</tt> in your current directory.
+</p>
+    <h3>
+     <span class="mw-headline" id="XML_Interface_file">
+      XML Interface file
+     </span>
+    </h3>
+    <p>Each module should have an associated XML specification file
+(as in <a class="external text" href="http://source.contextgarden.net/tex/context/interface/cont-en.xml" rel="nofollow">/tex/context/interface/cont-en.xml</a>).
+Its purpose is a comprehensive listing of the optional and non-optional
+arguments accepted by macros defined in the module.
+</p>
+    <p>From the interface a good deal of documentation can be auto-generated,
+as are for instance the <a class="external text" href="http://pragma-ade.nl/general/qrcs/setup-en.pdf" rel="nofollow">ConTeXt Quick Reference</a>
+and the initial input of the <a class="external text" href="http://wiki.contextgarden.net/Category:Reference/en" rel="nofollow">Command Reference</a>,
+which itself started as a wikification of the now obsolete <i>TeXshow</i>.
+</p>
+    <p>When documenting your module, you can use
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>setups-basics<span class="brx">]</span>
+<span class="cs">\loadsetups</span><span class="brx">[</span>t-name-of-your-module.xml<span class="brx">]</span> <span class="comment">% to load the file with definitions</span>
+<span class="cs"><span class="stylecs">\setup</span></span><span class="br">{</span>nameofyourcommand<span class="br">}</span>
+</pre>
+    <p>An example:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>setups-basics<span class="brx">]</span>
+<span class="cs">\loadsetups</span><span class="brx">[</span>i-framed<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setup</span></span><span class="br">{</span>setupframed<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="841" src="../wikiteximage/94d2abfa063985731b2ffe59300c0a67.webp" width="626">
+     </li>
+    </ul>
+    <p>By default, this places a frame around the setup. If you want to get gray background, as in the ConTeXt documentation, add a setup like:
+</p>
+    <pre class="tex"> <span class="cs"><span class="stylecs">\setupframedtexts</span></span>
+     <span class="brx">[</span>setuptext<span class="brx">]</span>
+     <span class="brx">[</span>background<span class="brx">=</span>color,
+      backgroundcolor<span class="brx">=</span>lightgray,
+      frame<span class="brx">=</span>off<span class="brx">]</span>
+</pre>
+    <p>Apart from the existing XML files in the ConTeXt tree, there is little
+documentation online, so feel free to relay your questions to
+the <a class="new" href="../index.php?title=Mailing_list&action=edit&redlink=1" title="Mailing list (page does not exist)">mailing list</a>.
+</p>
+    <p>Unfortunately, this is still not used by anything else than your own documentation, but e.g. ConTeXt support for editors that relies on interface files could be easily extended to module interfaces.
+</p>
+    <h2>
+     <span class="mw-headline" id="Publication_and_maintenance">
+      Publication and maintenance
+     </span>
+    </h2>
+    <p><b>Beware</b>, Taco is planning to rewrite the module website ATM (2024-10), this information might be slightly outdated.
+</p>
+    <ul>
+     <li>
+      Please upload your module(s) to
+      <a class="external free" href="https://modules.contextgarden.net" rel="nofollow">
+       https://modules.contextgarden.net
+      </a>
+      ! Our server scripts handle distribution for ConTeXt and CTAN.
+     </li>
+     <li>
+      Register an account, then you can login to the &ldquo;member section&rdquo;.
+     </li>
+     <li>
+      If you lost your password, please ask Taco (via the mailing list if you don&rsquo;t know them).
+     </li>
+     <li>
+      Please read the help page (it&rsquo;s mostly the same as here).
+     </li>
+    </ul>
+    <ul>
+     <li>
+      Create a
+      <b>
+       new module
+      </b>
+      entry with a distinct name (e.g. &ldquo;simple&rdquo;; this will become the internal ID) and fill in the metadata:
+      <ul>
+       <li>
+        Title (misleading, best use the same as before) &ldquo;simple&rdquo; (This will get used in filenames!)
+       </li>
+       <li>
+        Short and longer description (the short desc. is meant as the name and gets published e.g. in CTAN updates).
+       </li>
+       <li>
+        Home URL, if the module has a homepage, e.g. a wiki page or git repository.
+       </li>
+       <li>
+        Keywords (for CTAN search)
+       </li>
+       <li>
+        Type: Macro or font (Please don&rsquo;t publish font modules any more! Style, lua and xml modules will get added soon.)
+       </li>
+       <li>
+        Works with Mk... (please check)
+       </li>
+       <li>
+        License (there are licenses missing, we need to fix that)
+       </li>
+       <li>
+        Check &ldquo;Put in download section&rdquo; (yes please, allows installation by script)
+       </li>
+       <li>
+        Check &ldquo;Put in ConTeXt distribution&rdquo; (ATM just a hint for the admins, no automation)
+       </li>
+       <li>
+        Check &ldquo;Synch with CTAN&rdquo; (yes please, makes it visible; ATM just a hint for the admins)
+       </li>
+       <li>
+        CTAN location: e.g. &ldquo;
+        <tt>
+         /macros/context/contrib/context-simple
+        </tt>
+        &rdquo;
+       </li>
+       <li>
+        Comment: for you or the server admins
+       </li>
+      </ul>
+     </li>
+     <li>
+      Create a
+      <b>
+       new module version
+      </b>
+      from a ZIP upload/download or checkout from SVN or git
+      <ul>
+       <li>
+        Log message: short information about changes in this version (if empty, latest commit message is used)
+       </li>
+       <li>
+        Version: usually YYYY.MM.DD (hyphens are also ok; please avoid other versioning schemas)
+       </li>
+       <li>
+        File upload / HTTP download URL: release file as ZIP, as outlined above
+       </li>
+       <li>
+        SVN/GIT URL: repository checkout, structured like the ZIP, as outlined above
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <p>As a module author, it makes sense to subscribe to the <a class="external text" href="https://lists.contextgarden.net/mailman3/lists/dev-context.ntg.nl/" rel="nofollow">developers mailing list</a>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.033 seconds
+Real time usage: 0.065 seconds
+Preprocessor visited node count: 99/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 82/2097152 bytes
+Template argument size: 18/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1472/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   12.470      1 Template:cmd
+100.00%   12.470      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6999-1!canonical and timestamp 20260109212407 and revision id 41546
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Module_writing">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

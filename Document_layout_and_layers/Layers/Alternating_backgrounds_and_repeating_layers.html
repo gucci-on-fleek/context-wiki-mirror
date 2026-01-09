@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Layers/Alternating backgrounds and repeating layers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Layers/Alternating_backgrounds_and_repeating_layers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Layers/Alternating backgrounds and repeating layers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2208&diff=41636">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>I was in need of adding a watermark to the background of a book.  Left and right pages needed a different watermark.  I also needed the ability to position the watermark anywhere on the page.  Through a nice <a class="external text" href="http://archive.contextgarden.net/message/20061102.165302.c22abc29.en.html" rel="nofollow">discussion on mailing list</a> Hans was able to make clear how to go about this.
+</p>
+    <p>In my final usage of the code below, I changed the preset to bottomleft/bottomright and added hoffset/voffset values to position the text where I wanted it.  The solution below would also allow for placing images in the background instead of text.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm,height<span class="brx">=</span>74mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span>
+ <span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span>
+ <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+ <span class="brx">[</span>leftpage<span class="brx">]</span>
+ <span class="brx">[</span>background<span class="brx">=</span>Watermark-Left<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+ <span class="brx">[</span>rightpage<span class="brx">]</span>
+ <span class="brx">[</span>background<span class="brx">=</span>Watermark-Right<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span>
+ <span class="brx">[</span>Watermark-Left<span class="brx">]</span>
+ <span class="brx">[</span>repeat<span class="brx">=</span>yes,
+  width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+  height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span>
+ <span class="brx">[</span>Watermark-Right<span class="brx">]</span>
+ <span class="brx">[</span>repeat<span class="brx">=</span>yes,
+  width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+  height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span>
+ <span class="brx">[</span>Watermark-Left<span class="brx">]</span>
+ <span class="brx">[</span>preset<span class="brx">=</span>middle<span class="brx">]</span>
+ <span class="brx">[</span>foregroundcolor<span class="brx">=</span>middlemagenta,
+  frame<span class="brx">=</span><span class="brx">=</span>off<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>2,sy<span class="brx">=</span>2<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>20.0<span class="brx">]</span><span class="br">{</span>left page watermark<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span>
+ <span class="brx">[</span>Watermark-Right<span class="brx">]</span>
+ <span class="brx">[</span>preset<span class="brx">=</span>middle<span class="brx">]</span>
+ <span class="brx">[</span>foregroundcolor<span class="brx">=</span>middlemagenta,
+  frame<span class="brx">=</span><span class="brx">=</span>off<span class="brx">]</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>2,sy<span class="brx">=</span>2<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>-20.0<span class="brx">]</span><span class="br">{</span>right page watermark<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+   <span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>first<span class="br">}</span>  <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>30<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte  <span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/9d2865c4ca2247ba7767ecc80ddc505f.webp" width="921">
+     </li>
+    </ul>
+    <p>For a somewhat different example, see <a href="../../Graphics_and_media/Boxes_and_stacking_mechanisms/Draft_watermark_example.html" title="Graphics and media/Boxes and stacking mechanisms/Draft watermark example">Draft Watermark</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004016
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.030 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4882/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2208-1!canonical and timestamp 20260110004016 and revision id 41636
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Layers/Alternating_backgrounds_and_repeating_layers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

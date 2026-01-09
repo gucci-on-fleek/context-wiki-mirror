@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/EPUB/OLD Epub Sample&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/EPUB/OLD_Epub_Sample" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/EPUB/OLD Epub Sample
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4872&diff=39593">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Beware, this doesn&rsquo;t fit the current export files and ePub workflow as of January 2015! <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>&lt; <a href="OLD_Epub.html" title="Input and compilation/EPUB/OLD Epub">Input and compilation/EPUB/OLD Epub</a> | <a href="../XML_source.html" title="Input and compilation/XML source">XML</a> | <a href="../Export.html" title="Input and compilation/Export">Export</a> | <a href="../EPUB.html" title="Input and compilation/EPUB">New ePub docs</a>&gt;
+</p>
+    <p>Creating an ebook with ConTeXt is still tedious and needs a lot of manual work - that will not change, since everyone has other needs, uses different structures etc.
+Here I&rsquo;ll show you my workflow for creating ebooks of my songbooklets (that use <a href="../../LilyPond.html" title="LilyPond">LilyPond</a> via <a class="extiw" href="http://modules.contextgarden.net/t-filter" title="modules:t-filter">filter module</a> for the notes).
+</p>
+    <p>I&rsquo;m using ConTeXt&rsquo;s <a href="../Project_and_file_management.html" title="Input and compilation/Project and file management">Project structure</a>, separating content in products (for me: single booklets) and components (for me: single songs) with a common stylesheet (environment).
+</p>
+    <p>Beware, you need a current beta version of ConTeXt, since Hans fixed some export related bugs in the last few days!
+</p>
+    <p>--<a href="../../User:Hraban.html" title="User:Hraban">Hraban</a> 13 September 2014.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#ConTeXt_setup">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         ConTeXt setup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#ePub_structure">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         ePub structure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Unchanged_files">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Unchanged files
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#mimetype">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           mimetype
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#container.xml">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           container.xml
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Transform_XML_to_HTML">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Transform XML to HTML
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#export2html.xsl">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           export2html.xsl
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#style.css">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           style.css
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Create_a_Cover">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Create a Cover
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#export2cover.xsl">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           export2cover.xsl
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Create_OPF">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Create OPF
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#export2opf.xsl">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           export2opf.xsl
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Create_NCX_.28table_of_contents.29">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Create NCX (table of contents)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#export2ncx.xsl">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           export2ncx.xsl
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Converting_images">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Converting images
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#Create_ePub">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Create ePub
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#Shell_script">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Shell script
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#epub.sh">
+          <span class="tocnumber">
+           10.1
+          </span>
+          <span class="toctext">
+           epub.sh
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="ConTeXt_setup">
+      ConTeXt setup
+     </span>
+    </h2>
+    <p>In your environment or product, you need these settings (perhaps not all of them):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexport</span></span><span class="brx">[</span>
+	hyphen<span class="brx">=</span>yes,
+	<span class="comment">%firstpage={cover.jpg},&nbsp;% is ignored</span>
+	title<span class="brx">=</span><span class="br">{</span>Songbook<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	author<span class="brx">=</span><span class="br">{</span>Hraban<span class="br">}</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>export.xml<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\settaggedmetadata</span></span><span class="brx">[</span>
+	<span class="comment">% here you can set as many metadata entries as you like</span>
+	title<span class="brx">=</span><span class="br">{</span>Songbook<span class="br">}</span>,
+	name<span class="brx">=</span>ebook, <span class="comment">% this becomes the name of the output directory</span>
+	author<span class="brx">=</span><span class="br">{</span>Hraban<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	version<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="systemcs">\expanded</span></span><span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span> <span class="comment">% doesn&rsquo;t work</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,
+	color<span class="brx">=</span>,contrastcolor<span class="brx">=</span>,
+	<span class="comment">% these settings are for PDF metadata</span>
+	title<span class="brx">=</span><span class="br">{</span>Songbook<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	keywords<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	author<span class="brx">=</span><span class="br">{</span>Hraban<span class="br">}</span>
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definehighlight</span></span><span class="brx">[</span>emph<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span>italic<span class="brx">]</span> <span class="comment">% use \emph{something} instead of {\em something}</span>
+</pre>
+    <p>Make sure to tag all your structural elements with <tt><a class="new" href="../../index.php?title=Command/start...&action=edit&redlink=1" title="Command/start... (page does not exist)">\start...</a></tt>-<tt><a class="new" href="../../index.php?title=Command/stop...&action=edit&redlink=1" title="Command/stop... (page does not exist)">\stop...</a></tt>, e.g. <tt><a class="mw-redirect" href="../../Command/_startsection.html" title="Command/startchapter">\startchapter</a></tt>, but even <tt><a href="../../Command/startparagraph.html" title="Command/startparagraph">\startparagraph</a></tt>!
+</p>
+    <p>In places where <tt><a href="../../Command/startparagraph.html" title="Command/startparagraph">\startparagraph</a></tt> does not work, such as itemizations, where it causes a blank line after the bullet and before the item text, use <tt><a class="new" href="../../index.php?title=Command/bpar&action=edit&redlink=1.html" title="Command/bpar (page does not exist)">\bpar</a></tt> (and closing <tt><a class="new" href="../../index.php?title=Command/epar&action=edit&redlink=1.html" title="Command/epar (page does not exist)">\epar</a></tt>) to tag paragraphs.
+</p>
+    <p>Then you can call ConTeXt and its ePub script:
+</p>
+    <pre>context mysongbook
+mtxrun --script epub --make mysongbook
+</pre>
+    <p>The first creates <code>export.xml</code> and a bunch of other files.
+The second creates a directory <code>ebook.tree</code> with the proper structure for ePub. The ePub file in the tree directory is unusable.
+</p>
+    <p>We&rsquo;ll mostly work with "export.xml" that contains all your content (check that, you&rsquo;ll miss everything that was not properly tagged).
+</p>
+    <h2>
+     <span class="mw-headline" id="ePub_structure">
+      ePub structure
+     </span>
+    </h2>
+    <p>This is the directory structure that we need for our ePub:
+</p>
+    <pre>/songbook.tree/
+&boxvr;&boxh;&boxh; META-INF
+&boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; container.xml
+&boxvr;&boxh;&boxh; OEBPS
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; Fonts
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; somefont.otf
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; Images
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; ...
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; c_farewell-1.png
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; c_farewell-2.png
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; c_farewell.png
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; ...
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; cover.jpg
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; Styles
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; style.css
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; Text
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; _intro.html
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; aut_1.html
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; ...
+&boxv;&nbsp;&nbsp; &boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; aut_99.html
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; cover.html
+&boxv;&nbsp;&nbsp; &boxvr;&boxh;&boxh; songbook.opf
+&boxv;&nbsp;&nbsp; &boxur;&boxh;&boxh; toc.ncx
+&boxur;&boxh;&boxh; mimetype
+</pre>
+    <p>We use mimetype and container.xml unchanged from ConTeXt&rsquo;s epub script and (re)create everything else.
+At the end this structure is just zipped with an "epub" file ending.
+</p>
+    <h2>
+     <span class="mw-headline" id="Unchanged_files">
+      Unchanged files
+     </span>
+    </h2>
+    <p>For the records:
+</p>
+    <h3>
+     <span class="mw-headline" id="mimetype">
+      <code>mimetype</code>
+     </span>
+    </h3>
+    <pre>application/epub+zip
+</pre>
+    <h3>
+     <span class="mw-headline" id="container.xml">
+      <code>container.xml</code>
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8"?</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">rootfiles</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">rootfile full-path="OEBPS/songbook.opf" media-type="application/oebps-package+xml"/</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/rootfiles</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/container</span><span class="br">&gt;</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Transform_XML_to_HTML">
+      Transform XML to HTML
+     </span>
+    </h2>
+    <p>Even if the ePub format is supposed to work with any XML, most readers only accept HTML.
+I use the free version of <a class="external text" href="http://saxon.sourceforge.net" rel="nofollow">Saxon</a> and some XSL transformations for the conversion.
+</p>
+    <p>The incantation goes like <code>saxon -o:content.xhtml -s:export.xml -xsl:export2html.xsl</code>.
+I installed Saxon on my Mac with MacPorts, then instead of just "saxon" you must call <code>java -jar /opt/local/share/java/saxon9he.jar</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="export2html.xsl">
+      <code>export2html.xsl</code>
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:stylesheet version= "2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:output 
+	method="xml"
+	encoding="utf-8"
+	indent="yes"
+	omit-xml-declaration="yes"
+/</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:variable name="within-paragraph"</span><span class="br">&gt;</span>0<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:variable name="within-section"</span><span class="br">&gt;</span>0<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:variable name="previous-section"</span><span class="br">&gt;</span>0<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match='section'</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+	<span class="br">&lt;</span><span class="name">xsl:if test="@detail='part'"</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:text disable-output-escaping="yes"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">![CDATA[<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/html</span><span class="br">&gt;</span>]]</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/xsl:text</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/xsl:if</span><span class="br">&gt;</span>
+--</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">xsl:result-document method="xml" href="aut_{@implicit}.html"</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">html xmlns="http://www.w3.org/1999/xhtml"</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">head</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">meta charset="utf-8" /</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='./sectiontitle'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:for-each select="//metavariable"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">meta</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">xsl:attribute name="name"</span><span class="br">&gt;</span>
+					<span class="br">&lt;</span><span class="name">xsl:value-of select="@name"/</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">xsl:attribute name="content"</span><span class="br">&gt;</span>
+					<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/meta</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/xsl:for-each</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">link rel="stylesheet" href="../Styles/style.css" type="text/css" </span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/link</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">body</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="lang"</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">xsl:value-of select='//document/@language'/</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">!--
+			<span class="br">&lt;</span><span class="name">xsl:variable name="previous-section"</span><span class="br">&gt;</span>{$within-section}<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:variable name="within-section"</span><span class="br">&gt;</span>{@detail}<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+			--</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">!--
+			<span class="br">&lt;</span><span class="name">xsl:variable name="within-section"</span><span class="br">&gt;</span>{$previous-section}<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:variable name="previous-section"</span><span class="br">&gt;</span>0<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+			--</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/html</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/xsl:result-document</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span> 
+
+
+<span class="br">&lt;</span><span class="name">xsl:template match="sectiontitle"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:choose</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='part'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h1</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h1</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='chapter'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h2</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h2</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='Titel'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h2</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h2</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='TitelKlein'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h2</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h2</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='section'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h3</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h3</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:when test="../@detail='subsection'"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h4</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h4</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:when</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:otherwise</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">h6 class="../@detail"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/h6</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:otherwise</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/xsl:choose</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="sectioncontent"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">div class="{../@detail}-content"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="externalfilter"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">div class="{@detail}"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="lines"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">div class="lines"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="line"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">br /</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="list"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">ul</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/ul</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="listitem"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">li</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/li</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="listcontent"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">span class="listcontent"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/span</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="listpage"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">span class="listpage"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/span</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="break"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:if test="within-paragraph = 0"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:text disable-output-escaping="yes"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">![CDATA[<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>]]</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/xsl:text</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:if</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:if test="within-paragraph </span><span class="br">&gt;</span> 0"<span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">br/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:if</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="paragraph"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:variable name="within-paragraph"</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:variable name="within-paragraph"</span><span class="br">&gt;</span>0<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="delimited"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">span class="delim-{@detail}"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/span</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="construct"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">div class="struct-{@detail}"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="highlight"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:if test="@detail = 'emph'"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">em</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/em</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:if</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="comment">&lt;!-- all the images in my songbook are notes generated by LilyPond via t-filter; in ePub I shorten the file names --&gt;</span>
+
+
+<span class="br">&lt;</span><span class="name">xsl:template match="image"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">img src="../Images/{substring-after(@name,'prd_hraban-temp-lilypond-')}.png" id="{@id}" alt="{@name}" /</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="link"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">a href="{@location}" title="{@destination}"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:apply-templates/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/a</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="register"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="registerentry"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="registerpage"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+
+<span class="br">&lt;</span><span class="name">/xsl:stylesheet</span><span class="br">&gt;</span>
+
+</pre>
+    <h3>
+     <span class="mw-headline" id="style.css">
+      <code>style.css</code>
+     </span>
+    </h3>
+    <p>Now you have a (hopefully usable) (X)HTML file, you need a CSS for the styling.
+</p>
+    <p>A simple example:
+</p>
+    <pre>body {
+	font-family: TeX Gyre Schola, Century Schoolbook, serif;
+	font-size: 12pt;
+	margin: 0 auto;
+	max-width: 40em;
+	line-height: 1.44;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	-ms-hyphens: auto;
+	hyphens: auto;
+}
+
+h1, h2, h3, h4, h4, h6 {
+	font-family: TeX Gyre Heros, Helvetica, Arial, sans-serif;
+	color: #286000;
+	-webkit-hyphens: manual;
+	-moz-hyphens: manual;
+	-ms-hyphens: manual;
+	hyphens: manual;
+}
+
+.Titel, .chapter {
+	margin-top: 1em;
+	border-top: 1px solid #600a00;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.lilypond {
+	margin: 1em 0;
+}
+
+.lilypond img {
+	width: 100%;
+	margin-bottom: 0.25em;
+}
+</pre>
+    <h2>
+     <span class="mw-headline" id="Create_a_Cover">
+      Create a Cover
+     </span>
+    </h2>
+    <p>Create a <code>cover.xhtml</code>:
+</p>
+    <h3>
+     <span class="mw-headline" id="export2cover.xsl">
+      <code>export2cover.xsl</code>
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:stylesheet version= "2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:output 
+	method="xml"
+	encoding="utf-8"
+	indent="yes"
+	omit-xml-declaration="yes"
+/</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="/"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">html</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">head</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="title"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">link rel="stylesheet" href="style.css" type="text/css" </span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/link</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">link rel="stylesheet" href="Styles/style.css" type="text/css" </span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/link</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">body</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">img src="Images/cover.jpg"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="alt"</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="title"]'/</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/img</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/html</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">/xsl:stylesheet</span><span class="br">&gt;</span>
+</pre>
+    <p>If you don&rsquo;t have a different cover picture, create one from the first page of your PDF (using ImageMagick&rsquo;s <code>convert</code>):
+</p>
+    <pre>convert -density 196 songbook.pdf'[0]' +repage cover.jpg
+</pre>
+    <h2>
+     <span class="mw-headline" id="Create_OPF">
+      Create OPF
+     </span>
+    </h2>
+    <p>The <a class="external text" href="http://www.idpf.org/epub/20/spec/OPF_2.0.1_draft.htm" rel="nofollow">OPF file</a> keeps the others together, it lists all resources of the ebook.
+</p>
+    <p>You will have to adapt the listing of images (since I use only PDFs converted to PNG) and add fonts manually, if you ship any.
+</p>
+    <h3>
+     <span class="mw-headline" id="export2opf.xsl">
+      <code>export2opf.xsl</code>
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:stylesheet version= "2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:output 
+	method="xml"
+	encoding="utf-8"
+	indent="yes"
+/</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="/"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">package version="2.0" xmlns="http://www.idpf.org/2007/opf" unique-identifier="BookId"</span><span class="br">&gt;</span>
+<span class="comment">&lt;!-- see http://www.idpf.org/epub/20/spec/OPF_2.0.1_draft.htm --&gt;</span>
+
+
+	<span class="br">&lt;</span><span class="name">identifier id="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="identifier"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/identifier</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">identifier id="isbn" scheme="isbn"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="isbn"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/identifier</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="title"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">creator</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="author"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/creator</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">subject</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="subject"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/subject</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">description</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="description"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/description</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">publisher</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="publisher"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/publisher</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">language</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//document/@language'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/language</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">rights</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="rights"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/rights</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf"</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">dc:title</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="title"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/dc:title</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">dc:language</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//document/@language'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/dc:language</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">dc:identifier id="BookId" opf:scheme="UUID"</span><span class="br">&gt;</span>urn:uuid:3bbe3f04-4275-841f-44d7-7d3a4e0794a5<span class="br">&lt;</span><span class="name">/dc:identifier</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">dc:creator</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="author"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/dc:creator</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">dc:date</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//document/@date'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/dc:date</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">meta name="cover" content="cover-html" /</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/metadata</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">manifest</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">item id="cover-html" href="cover.html" media-type="application/xhtml+xml"/</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml"/</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">item id="style" href="Styles/style.css" media-type="text/css"/</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">item id="intro-html" href="Text/_intro.html" media-type="application/xhtml+xml"/</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">xsl:for-each select='//section'</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">item media-type="application/xhtml+xml"</span><span class="br">&gt;</span>
+  			<span class="br">&lt;</span><span class="name">xsl:attribute name="id"</span><span class="br">&gt;</span>aut_<span class="br">&lt;</span><span class="name">xsl:value-of select="@implicit"/</span><span class="br">&gt;</span>-html<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+  			<span class="br">&lt;</span><span class="name">xsl:attribute name="href"</span><span class="br">&gt;</span>Text/aut_<span class="br">&lt;</span><span class="name">xsl:value-of select="@implicit"/</span><span class="br">&gt;</span>.html<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span>
+	  	<span class="br">&lt;</span><span class="name">/xsl:for-each</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">item media-type="image/jpeg" id="cover" href="Images/cover.jpg"/</span><span class="br">&gt;</span>
+ 		<span class="comment">&lt;!-- again, LilyPond related images --&gt;</span>
+
+  		<span class="br">&lt;</span><span class="name">xsl:for-each select='//image'</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">item media-type="image/png" id="{@id}"</span><span class="br">&gt;</span>
+  			<span class="br">&lt;</span><span class="name">xsl:attribute name="href"</span><span class="br">&gt;</span>Images/<span class="br">&lt;</span><span class="name">xsl:value-of select="substring-after(@name,'prd_hraban-temp-lilypond-')"/</span><span class="br">&gt;</span>.png<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span>
+	  	<span class="br">&lt;</span><span class="name">/xsl:for-each</span><span class="br">&gt;</span>
+	  	<span class="comment">&lt;!-- add fonts manually --&gt;</span>
+
+	  	<span class="br">&lt;</span><span class="name">!--
+	  	<span class="br">&lt;</span><span class="name">item media-type="application/x-font-otf" id="" href="Fonts/xyz.otf" /</span><span class="br">&gt;</span>
+	  	<span class="br">&lt;</span><span class="name">item media-type="application/x-font-ttf" id="" href="Fonts/xyz.ttf" /</span><span class="br">&gt;</span>
+	  	--</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/manifest</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">spine toc="ncx"</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">itemref idref="cover-html" /</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">itemref idref="intro-html" /</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">xsl:for-each select='//section'</span><span class="br">&gt;</span>
+  		<span class="br">&lt;</span><span class="name">itemref</span><span class="br">&gt;</span>
+  			<span class="br">&lt;</span><span class="name">xsl:attribute name="idref"</span><span class="br">&gt;</span>aut_<span class="br">&lt;</span><span class="name">xsl:value-of select="@implicit"/</span><span class="br">&gt;</span>-html<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/itemref</span><span class="br">&gt;</span>
+	  	<span class="br">&lt;</span><span class="name">/xsl:for-each</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/spine</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">/package</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">/xsl:stylesheet</span><span class="br">&gt;</span>
+</pre>
+    <h2>
+     <span id="Create_NCX_(table_of_contents)">
+     </span>
+     <span class="mw-headline" id="Create_NCX_.28table_of_contents.29">
+      Create NCX (table of contents)
+     </span>
+    </h2>
+    <p>This one will probably differ from your setup &ndash; I (ab)use an index for an alphabetically ordered table of contents.
+The structure that ConTeXt outputs for index entries is somewhat uncomfortable...
+</p>
+    <h3>
+     <span class="mw-headline" id="export2ncx.xsl">
+      <code>export2ncx.xsl</code>
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">xsl:stylesheet version= "2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:output 
+	method="xml"
+	encoding="utf-8"
+	indent="yes"
+/</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">xsl:template match="/"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+<span class="br">&lt;</span><span class="name">!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx 2005-1//EN" "http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"</span><span class="br">&gt;</span>
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1"</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">head</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">meta name="dtb:uid"           content="BookId" /</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">meta name="dtb:depth"         content="1" /</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">meta name="dtb:totalPgeCount" </span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">xsl:attribute name="content"</span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">xsl:value-of select='count(section[starts-with(@detail,"Titel")])' /</span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/meta</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">meta name="dtb:maxPageNumber"</span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">xsl:attribute name="content"</span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">xsl:value-of select='count(section[starts-with(@detail,"Titel")])' /</span><span class="br">&gt;</span>
+        	<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/meta</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">docTitle</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="title"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/docTitle</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">docAuthor</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='//metavariable[@name="author"]'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/docAuthor</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">navMap</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">navPoint id="aut_0" origin="aut_0" playOrder="0"</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">navLabel</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span>Cover<span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/navLabel</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">content src="cover.html"/</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/navPoint</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">navPoint id="aut_1" origin="aut_1" playOrder="1"</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">navLabel</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span>Start<span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/navLabel</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">content src="Text/_intro.html"/</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/navPoint</span><span class="br">&gt;</span>
+        
+	<span class="br">&lt;</span><span class="name">xsl:for-each select="//registerentry"</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:variable name="location"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:value-of select='(./descendant::link/@location)[1]'/</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">xsl:variable name="origin"</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:value-of select='//registerlocation[@internal=$location]/ancestor::section[starts-with(@detail,"Titel")]/@implicit'/</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/xsl:variable </span><span class="br">&gt;</span>
+
+		<span class="br">&lt;</span><span class="name">navPoint</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="id"</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">xsl:value-of select='$location'/</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="origin"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select="$origin" /</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="playOrder"</span><span class="br">&gt;</span>
+				  <span class="br">&lt;</span><span class="name">xsl:value-of select="2 + count(preceding-sibling::registerentry)" /</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">navLabel</span><span class="br">&gt;</span>
+					<span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">xsl:value-of select='./registercontent'/</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">/navLabel</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">content</span><span class="br">&gt;</span>
+			<span class="br">&lt;</span><span class="name">xsl:attribute name="src"</span><span class="br">&gt;</span>Text/aut_<span class="br">&lt;</span><span class="name">xsl:value-of select='$origin' /</span><span class="br">&gt;</span>.html<span class="br">&lt;</span><span class="name">/xsl:attribute</span><span class="br">&gt;</span>
+				<span class="br">&lt;</span><span class="name">/content</span><span class="br">&gt;</span>
+		<span class="br">&lt;</span><span class="name">/navPoint</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/xsl:for-each</span><span class="br">&gt;</span>
+
+    <span class="br">&lt;</span><span class="name">/navMap</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/ncx</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/xsl:template</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">/xsl:stylesheet</span><span class="br">&gt;</span>
+</pre>
+    <p>The links to a named anchor should work, but don&rsquo;t in my reader. I must investigate further...
+</p>
+    <h2>
+     <span class="mw-headline" id="Converting_images">
+      Converting images
+     </span>
+    </h2>
+    <p>In my case, all images are note lines, generated by LilyPond in one temporary directory. Your mileage will vary.
+ConTeXt&rsquo;s epub script creates a list of images in <code>export-images.css</code>, you might want to parse that to find all images.
+</p>
+    <pre>cd $LILYPONDTEMPDIR
+for IMG in prd_songbook-temp-lilypond-*.pdf; do
+	NEWIMG=${IMG#prd_songbook-temp-lilypond-}
+	convert -density 196 $IMG'[0]' -trim +repage ../songbook.tree/OEBPS/Images/${NEWIMG%.pdf}.png
+done
+</pre>
+    <h2>
+     <span class="mw-headline" id="Create_ePub">
+      Create ePub
+     </span>
+    </h2>
+    <p>Look at the tree above - are all your files in the right location? Then zip your tree!
+</p>
+    <pre>cd songbook.tree
+zip -uqr ../songbook.epub *
+</pre>
+    <p>Now test it with your reader or editor (e.g. Calibre). (Apple iBooks or Adobe Digital Editions don&rsquo;t work.)
+</p>
+    <h2>
+     <span class="mw-headline" id="Shell_script">
+      Shell script
+     </span>
+    </h2>
+    <p>Of course I don&rsquo;t do all these steps above manually. Here&rsquo;s my little shell script.
+</p>
+    <h3>
+     <span class="mw-headline" id="epub.sh">
+      <code>epub.sh</code>
+     </span>
+    </h3>
+    <pre>#!/bin/bash
+# call as "./epub.sh productname"
+
+# ConTeXt is not in my usual path (setuptex needs too long to be called with every shell);
+# probably your installation is at a different location
+if [ "$TEXROOT" == "" ]; then
+	source ~/Library/texmf/tex/setuptex ~/Library/texmf/tex
+fi
+
+# all my products are named like "prd_something.tex"
+PRD=$1
+if [&nbsp;! -e prd_${PRD}.tex ]; then
+	echo "Product ${PRD} not found!"
+	exit 1
+fi
+
+# all XSL files are in this WORKDIR
+WORKDIR=epub-workflow
+
+# my ConTeXt wrapper "makeit.sh" script creates PDFs with a date
+ISODATE=`date +"%Y-%m-%d"`
+PRDPDF=${PRD}_${ISODATE}.pdf
+
+# LilyPond is run in this TEMPDIR and creates its note images there
+TEMPDIR=lilytemp
+
+EPUBPREFIX=epub_
+TREE=${PRD}.tree
+OEBPS=${TREE}/OEBPS
+SAXON="java -jar /opt/local/share/java/saxon9he.jar"
+# http://saxonica.com/documentation/html/using-xsl/commandline.html
+
+if [&nbsp;! -f export.xml ]; then
+	echo "File export.xml not found! Trying to run ConTeXt..."
+	# you should replace this call with your own
+	./makeit.sh ${PRD}
+	exit 2
+fi
+
+if [&nbsp;! -f $PRDPDF ]; then
+	echo Product $PRDPDF not found!
+	echo Please run "makeit.sh $PRD"
+	exit 3
+fi
+
+if [&nbsp;! -d $OEBPS ]; then
+	echo Directory $OEBPS missing!
+	echo Creating new ePub ...
+	mtxrun --script epub --make ${PRD}
+fi
+
+if [ -d $OEBPS ]; then
+	echo "Creating directories (might exist) ..."
+	mkdir $OEBPS/Styles
+	mkdir $OEBPS/Images
+	mkdir $OEBPS/Fonts
+	mkdir $OEBPS/Text
+
+	echo Creating HTML ...
+	$SAXON -o:$OEBPS/Text/_intro.html -s:export.xml -xsl:$WORKDIR/export2html.xsl
+	echo Creating OPF ...
+	$SAXON -o:$OEBPS/${PRD}.opf -s:export.xml -xsl:$WORKDIR/export2opf.xsl
+	echo Creating ToC NCX ...
+	$SAXON -o:$OEBPS/toc.ncx -s:export.xml -xsl:$WORKDIR/export2ncx.xsl
+	echo Creating Cover ...
+	$SAXON -o:$OEBPS/cover.html -s:export.xml -xsl:$WORKDIR/export2cover.xsl
+	echo Creating cover image from first page of PDF ...
+	convert -density 196 $PRDPDF'[0]' +repage $OEBPS/Images/cover.jpg
+	
+	echo Copying files ...
+	cp style.css $OEBPS/Styles/
+	# This copies only fonts from your project directory; adapt.
+	cp *.?tf $OEBPS/Fonts/
+
+	echo Converting images from PDF to PNG ...
+	cd $TEMPDIR
+	for IMG in prd_${PRD}-temp-lilypond-*.pdf; do
+		NEWIMG=../$OEBPS/Images/${IMG#prd_${PRD}-temp-lilypond-}
+		NEWIMG=${NEWIMG%.pdf}.png
+		if [&nbsp;! -f $NEWIMG ]; then
+			convert -density 196 $IMG'[0]' -trim +repage ${NEWIMG}
+		fi
+	done
+	cd ..
+	
+	# delete old epub
+	rm $TREE/${PRD}.epub
+	rm ${EPUBPREFIX}${PRD}.epub
+	echo Creating ePub ${EPUBPREFIX}${PRD}.epub ...
+	cd $TREE
+	zip -uqr ../${EPUBPREFIX}${PRD}.epub *
+	cd ..
+fi
+echo Ready.
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212420
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.085 seconds
+Real time usage: 0.191 seconds
+Preprocessor visited node count: 297/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1401/2097152 bytes
+Template argument size: 467/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 49712/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   55.669      1 -total
+ 35.02%   19.497      1 Template:todo
+ 15.66%    8.720     15 Template:code
+ 14.45%    8.046      7 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4872-1!canonical and timestamp 20260109212420 and revision id 39593
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/EPUB/OLD_Epub_Sample">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

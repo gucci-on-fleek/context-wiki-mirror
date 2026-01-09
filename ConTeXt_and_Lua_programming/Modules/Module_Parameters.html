@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Modules/Module Parameters&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Modules/Module_Parameters" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Modules/Module Parameters
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1911&diff=40886">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h3>
+     <span class="mw-headline" id="Module_parameters">
+      Module parameters
+     </span>
+    </h3>
+    <p>As of April 2006, ConTeXt provides a new mechanism for defining parameters
+when calling a module. This is interesting for all those who consider
+writing their own modules. It allows you to set variables in the call and
+use them <b>within</b> the module's code; this was possible, but much less
+convenient before. 
+</p>
+    <p>Here's a brief sample explaining how this mechanism works. It consists 
+of a test module and an example file; they are dull (I admit) but 
+instructive (I hope). In real life, this example module could be a whole 
+lot shorter, but that would defeat the educational value&nbsp;:)
+</p>
+    <p>Our module will allow users to set the background color for a document. So
+we call it <tt>t-bgcolor</tt>. 
+</p>
+    <p>The module starts, surprisingly enough, with a line saying 
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startmodule</span></span><span class="brx">[</span>bgcolor<span class="brx">]</span>
+</pre>
+    <p>Since we need to use some internal parameters, we have to "unprotect" the
+contents of the module:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span>
+</pre>
+    <p>The next step is to set up the module's variables with default parameters 
+the settings asked for  by the user. This is handled by a single command 
+that first processes its own argument list, and then it fetches the option
+list the input file that loaded the module has asked for (such
+user options overrule the default settings in the argument list):
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\setupmodule</span></span><span class="brx">[</span>color<span class="brx">=</span>newman<span class="brx">]</span>
+</pre>
+    <p>Our strategy will be to define a variable <tt>\BColor</tt> for the background color 
+which will be set by the module; for this, we will use the
+<a href="../Tutorials/Commands_with_KeyVal_arguments.html" title="ConTeXt and Lua programming/Tutorials/Commands with KeyVal arguments">processaction</a> mechanism. 
+</p>
+    <p>So we define a macro <tt>\BColor</tt>, like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\processaction</span></span><span class="brx">[</span><span class="cs"><span class="systemcs">\currentmoduleparameter</span></span><span class="br">{</span>color<span class="br">}</span><span class="brx">]</span>
+   <span class="brx">[</span>    newman<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\BColor</span><span class="br">{</span>red<span class="br">}</span>,
+      gottlieb<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\BColor</span><span class="br">{</span>yellow<span class="br">}</span>,
+        rothko<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\BColor</span><span class="br">{</span>blue<span class="br">}</span>,
+    <span class="protectedcs">\v!unknown</span><span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\BColor</span><span class="br">{</span>white<span class="br">}</span>,
+    <span class="protectedcs">\v!default</span><span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\BColor</span><span class="br">{</span>red<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>We then use this variable to define the background of our document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span><span class="cs">\BColor</span><span class="brx">]</span>
+</pre>
+    <p>And that's it! We now just have to finish the module with these lines:
+</p>
+    <pre class="tex"><span class="cs">\protect</span>
+<span class="cs"><span class="systemcs">\stopmodule</span></span>
+<span class="cs">\endinput</span>
+</pre>
+    <p>A simple test document will look like  this:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>bgcolor<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>rothko<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Hello world!
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This is just meant as a first example; of course, there are many more possibilities to use this mechanism. If you want to use the parameters directly in your code, you can use the form <tt><a class="new" href="../../index.php?title=Command/currentmoduleparameter&action=edit&redlink=1.html" title="Command/currentmoduleparameter (page does not exist)">\currentmoduleparameter</a></tt><tt>{color}</tt>, or alternatively, <tt><a class="new" href="../../index.php?title=Command/moduleparameter&action=edit&redlink=1.html" title="Command/moduleparameter (page does not exist)">\moduleparameter</a></tt><tt>{bgcolor}{color}</tt>. 
+</p>
+    <p>-- <a href="../../User:Thomas.html" title="User:Thomas">Thomas</a> 18:28, 26 April 2006 (CEST) --
+-- <a href="../../User:Taco.html" title="User:Taco">Taco</a> 12:46, 27 April 2006 (CEST) --
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 240/2097152 bytes
+Template argument size: 74/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2606/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    4.432      1 -total
+ 97.88%    4.338      2 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1911-1!canonical and timestamp 20260109212408 and revision id 40886
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Modules/Module_Parameters">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

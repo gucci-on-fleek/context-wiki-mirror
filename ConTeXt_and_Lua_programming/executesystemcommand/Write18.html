@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/executesystemcommand/Write18&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/executesystemcommand/Write18" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/executesystemcommand/Write18
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2212&diff=40511">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>When write18 is turned on, it means that it's possible to execute external programs in the middle of a TeX run. This is required to make some modules such as those for R, lilypond, gnuplot, ... etc. to work properly, but may impose a security leak if you would be running TeX on a server with untrusted sources of TeX files, so it's turned off by default.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#How_to_turn_on_write18">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         How to turn on write18
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Windows_-_MikTeX">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Windows - MikTeX
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Windows.2FLinux.2FMac_-_TexLive">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Windows/Linux/Mac - TexLive
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Linux.2FMac">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Linux/Mac
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#How_to_check_if_write18_is_turned_on">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         How to check if write18 is turned on
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#See_also">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="How_to_turn_on_write18">
+      How to turn on write18
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Windows_-_MikTeX">
+      Windows - MikTeX
+     </span>
+    </h3>
+    <p><b>MikTeX 2.5/2.6</b>
+</p>
+    <p>Each application now has its own configuration file. To enable <code>write18</code> run
+</p>
+    <pre>initexmf --edit-config-file=miktex\config\pdftex.ini
+</pre>
+    <p>or (if you have MikTeX 2.5 or a version of ConTeXt from 2006)
+</p>
+    <pre>initexmf --edit-config-file=miktex\config\pdfetex.ini
+</pre>
+    <p>and put
+</p>
+    <pre>EnableWrite18=t
+</pre>
+    <p>into it. An alternative is to set the environment variable <code>MIKTEX_ENABLEWRITE18=t</code>.
+</p>
+    <h3>
+     <span id="Windows/Linux/Mac_-_TexLive">
+     </span>
+     <span class="mw-headline" id="Windows.2FLinux.2FMac_-_TexLive">
+      Windows/Linux/Mac - TexLive
+     </span>
+    </h3>
+    <p><b>TexLive 2008</b>
+</p>
+    <p>Open the file 'path to TexLive'/texmf/web2c/texmf.cnf and search in the file for the following passage:
+</p>
+    <pre>% Enable system commands via \write18{...}?  Obviously insecure, despite
+% being so useful.
+shell_escape = f
+</pre>
+    <p>change here the option from false to true so that the last line above looks like
+</p>
+    <pre>shell_escape = t
+</pre>
+    <p>After that you just have to recompile your formats. That is done by
+</p>
+    <pre>texexec --make --all
+</pre>
+    <p>or/and
+</p>
+    <pre>texexec --make --all cont-xx
+</pre>
+    <p>where xx stands for your needed countrycode.
+Additionally if you're using MK IV already you have to do the following steps afterwards to get a running environment:
+</p>
+    <pre>luatools --generate
+context --make --all
+context --make --all cont-xx
+</pre>
+    <p>after that write18 sould be enabled and you sould be able to use it.
+</p>
+    <h3>
+     <span id="Linux/Mac">
+     </span>
+     <span class="mw-headline" id="Linux.2FMac">
+      Linux/Mac
+     </span>
+    </h3>
+    <p>First try to figure out where your configuration file resides:
+</p>
+    <pre>kpsewhich texmf.cnf
+</pre>
+    <p>will should return you something like
+</p>
+    <pre>/usr/local/teTeX/texmf.cnf
+</pre>
+    <p>or
+</p>
+    <pre>/usr/local/gwTeX/texmf.cnf
+</pre>
+    <p>In that file you'll probably find a line reading
+</p>
+    <pre>shell_escape = f
+</pre>
+    <p>Change that "f" (false) to "t" (true) to enable it.
+</p>
+    <h2>
+     <span class="mw-headline" id="How_to_check_if_write18_is_turned_on">
+      How to check if write18 is turned on
+     </span>
+    </h2>
+    <p>Sometimes while writings a module, one needs to check if write18 is enabled or not. There are different ways in which this can be done.
+</p>
+    <ul>
+     <li>
+      A new primitive in pdftex 1.30:
+      <tt>
+       <a class="new" href="../../index.php?title=Command/pdfshellescape&action=edit&redlink=1.html" title="Command/pdfshellescape (page does not exist)">
+        \pdfshellescape
+       </a>
+      </tt>
+      is a read-only integer that is 1 if
+      <tt>
+       <a class="new" href="../../index.php?title=Command/write18&action=edit&redlink=1.html" title="Command/write18 (page does not exist)">
+        \write18
+       </a>
+      </tt>
+      is enabled, 0 otherwise.
+     </li>
+     <li>
+      ConTeXt defines
+      <tt>
+       <a class="new" href="../../index.php?title=Command/systemcommandmode&action=edit&redlink=1.html" title="Command/systemcommandmode (page does not exist)">
+        \systemcommandmode
+       </a>
+      </tt>
+      that is 2 if
+      <tt>
+       <a class="new" href="../../index.php?title=Command/write18&action=edit&redlink=1.html" title="Command/write18 (page does not exist)">
+        \write18
+       </a>
+      </tt>
+      is enabled, 1 otherwise.
+     </li>
+     <li>
+      A primitive
+      <tt>
+       <a class="new" href="../../index.php?title=Command/ifeof18&action=edit&redlink=1.html" title="Command/ifeof18 (page does not exist)">
+        \ifeof18
+       </a>
+      </tt>
+      that is
+      <code>true</code>
+      if
+      <tt>
+       <a class="new" href="../../index.php?title=Command/write18&action=edit&redlink=1.html" title="Command/write18 (page does not exist)">
+        \write18
+       </a>
+      </tt>
+      is disabled,
+      <code>false</code>
+      otherwise.
+     </li>
+    </ul>
+    <p><tt><a class="new" href="../../index.php?title=Command/ifeof18&action=edit&redlink=1.html" title="Command/ifeof18 (page does not exist)">\ifeof18</a></tt> works with both pdfTeX and XeTeX, while <tt><a class="new" href="../../index.php?title=Command/pdfshellescape&action=edit&redlink=1.html" title="Command/pdfshellescape (page does not exist)">\pdfshellescape</a></tt> only works with pdfTeX.
+</p>
+    <p>Hans response on the mailing list
+</p>
+    <p>write 18 is a hack and pdfshellescape a sane replacement
+</p>
+    <p>in luatex it will probably be gone completely since there we have
+</p>
+    <pre class="tex"><span class="cs">\directlua</span> 0 <span class="br">{</span> os.execute<span class="brx">(</span>"..."<span class="brx">)</span> <span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../executesystemcommand.html" title="ConTeXt and Lua programming/executesystemcommand">
+       ConTeXt and Lua programming/executesystemcommand
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072912
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.023 seconds
+Preprocessor visited node count: 119/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 688/2097152 bytes
+Template argument size: 160/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 181/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.660      1 -total
+ 88.98%    5.926      8 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2212-1!canonical and timestamp 20260110072912 and revision id 40511
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/executesystemcommand/Write18">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

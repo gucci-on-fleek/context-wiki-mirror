@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Typography/Indentation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Typography/Indentation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Typography/Indentation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3400&diff=38964">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Setting_up_indentation_for_the_whole_document">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Setting up indentation for the whole document
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Setting_up_indentation_after_an_environment">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Setting up indentation after an environment
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Setting_up_indentation_inside_environments">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Setting up indentation inside environments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#.22indentnext.3Dauto.22_demo">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         "indentnext=auto" demo
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Manual_indentation">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Manual indentation
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Paragraphs_with_hanging_indention">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Paragraphs with hanging indention
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p>In plain TeX, controlling indentation is accomplished by configuring <tt>parindent</tt>, and each new paragraph is indented by that value, unless explicitly begun with <tt>noindent</tt>. Environments can provide a <tt>noindent</tt> at the end of their definitions, and if the user wants to overrule that, he can add an explicit <tt>indent</tt> at the beginning of the next paragraph. For the most part, LaTeX follows the same convention.
+</p>
+    <p>Indentation in ConTeXt is a bit different: it mostly does not rely on the presence of blank lines, but uses <tt><a href="../../Command/setupindenting.html" title="Command/setupindenting">\setupindenting</a></tt> to manage general indentation, the <code>indentnext=yes/no/auto</code> key on environments to enable/disable indentation after them, and <tt><a href="../../Command/indentation.html" title="Command/indentation">\indentation</a></tt> and <tt><a href="../../Command/noindentation.html" title="Command/noindentation">\noindentation</a></tt> to manually force/disable an indentation. 
+</p>
+    <p>The commands <tt><a class="new" href="../../index.php?title=Command/indent&action=edit&redlink=1.html" title="Command/indent (page does not exist)">\indent</a></tt>, <tt><a class="new" href="../../index.php?title=Command/noindent&action=edit&redlink=1.html" title="Command/noindent (page does not exist)">\noindent</a></tt>, <tt><a href="../../Command/indenting.html" title="Command/indenting">\indenting</a></tt>, and <tt><a href="../../Command/noindenting.html" title="Command/noindenting">\noindenting</a></tt> are present for historical reasons, but should not be used. Especially, they should not be confused with <tt><a href="../../Command/indentation.html" title="Command/indentation">\indentation</a></tt> and <tt><a href="../../Command/noindentation.html" title="Command/noindentation">\noindentation</a></tt>
+</p>
+    <h2>
+     <span class="mw-headline" id="Setting_up_indentation_for_the_whole_document">
+      Setting up indentation for the whole document
+     </span>
+    </h2>
+    <p>Indentation involves two things: when to indent, and how much to indent. In ConTeXt, these can be specified using <tt><a href="../../Command/setupindenting.html" title="Command/setupindenting">\setupindenting</a></tt><tt>[...]</tt>. There are three types of keys for this command:
+</p>
+    <ul>
+     <li>
+      <code><i>no</i> yes</code>
+      : turn indentation on/off'
+     </li>
+     <li>
+      <code><i>none</i> small medium big <i>dimension</i></code>
+      : size of indents
+     </li>
+     <li>
+      <code><i>first</i> next</code>
+      : turn indentation of first paragraph on/off. Can be overridden by environments with
+      <code>indentnext=yes/no/auto</code>
+      .
+     </li>
+     <li>
+      <code>odd even</code>
+      : indent odd/even lines in \obeylines scopes
+     </li>
+     <li>
+      <code>normal</code>
+      : the globally defined size of indent. Useful when used as the values of the
+      <code>indenting</code>
+      key of different environments.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Setting_up_indentation_after_an_environment">
+      Setting up indentation after an environment
+     </span>
+    </h2>
+    <p><tt><a href="../../Command/setupindenting.html" title="Command/setupindenting">\setupindenting</a></tt> does not take care of indenting after environments, such as ConTeXt's itemizes, enumerations, definitions, formulas and floats. It also does not take care of indenting after heads such as chapters, sections, and subsections. 
+</p>
+    <p>The setup command of these environments provides an <b><code>indentnext</code></b> key to configure the indentation behaviour after the environment. The <code>indentnext</code> key can take one of three values: 
+</p>
+    <ul>
+     <li>
+      <code>yes</code>
+      declares the first paragraph following the environment should always be indented.
+     </li>
+     <li>
+      <code>no</code>
+      declares the first paragraph following the environment should never be indented.
+     </li>
+     <li>
+      <code>auto</code>
+      declares
+      <code>indentnext=auto</code>
+      the next paragraph should be indented only if there is a blank space after the environment. Setting
+      <code>indentnext=auto</code>
+      is equivalent to the default plain TeX and LaTeX behaviour.
+     </li>
+    </ul>
+    <p>Some examples:
+</p>
+    <pre class="tex"><span class="comment">% Do not indent paragraphs after \stopitemize</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>itemize<span class="brx">]</span><span class="brx">[</span>indentnext<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="comment">% indent paragraphs after section heads</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>indentnext<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="comment">% indent the paragraphs after all sectioning heads </span>
+<span class="cs"><span class="stylecs">\setupheads</span></span><span class="brx">[</span>indentnext<span class="brx">=</span>yes<span class="brx">]</span> 
+
+<span class="comment">% indent paragraphs after formulas if there is a blank space in between</span>
+<span class="cs"><span class="stylecs">\setupformulas</span></span><span class="brx">[</span>indentnext<span class="brx">=</span>auto<span class="brx">]</span> 
+</pre>
+    <h2>
+     <span class="mw-headline" id="Setting_up_indentation_inside_environments">
+      Setting up indentation inside environments
+     </span>
+    </h2>
+    <p>There is one case that is not taken care of by <tt><a href="../../Command/setupindenting.html" title="Command/setupindenting">\setupindenting</a></tt> and the <code>indentnext</code> key: indentation of paragraphs inside multi-paragraph environments such as itemizes, descriptions, and enumerations. By default ConTeXt does not indent such paragraphs. The setup commands of these environments provides an <code>indenting=</code> key to configure the indentation behaviour of paragraphs inside these environments. This key takes the same arguments as the <tt><a href="../../Command/setupindenting.html" title="Command/setupindenting">\setupindenting</a></tt> command does. An example using <tt><a href="../../Command/setupitemgroup.html" title="Command/setupitemgroup">\setupitemgroup</a></tt>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>medium,yes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>itemize<span class="brx">]</span><span class="brx">[</span>indenting<span class="brx">=</span><span class="br">{</span>40pt,next<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startitemize</span></span>
+<span class="cs"><span class="documentcs">\item</span></span> This is an example of a multi|-|paragraph 
+      item inside an itemize environment.
+
+      This second paragraph is indented by 40pt
+      <span class="brx">(</span>double the normal indentation<span class="brx">)</span>.
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+</pre>
+      <p>gives
+</p>
+     </li>
+     <li class="rendering">
+      <img height="76" src="../../wikiteximage/3b095de6b153834fa2b5e9fee41f3b89.webp" width="630">
+     </li>
+    </ul>
+    <h2>
+     <span id='"indentnext=auto"_demo'>
+     </span>
+     <span class="mw-headline" id=".22indentnext.3Dauto.22_demo">
+      "indentnext=auto" demo
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>medium,yes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemize</span></span><span class="brx">[</span>indentnext<span class="brx">=</span>auto<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+    <span class="cs"><span class="documentcs">\item</span></span> One
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+  This paragraph should be indented - due to the blank line after <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\stopitemize</span></span><span class="br">}</span>.
+
+  <span class="cs"><span class="documentcs">\startitemize</span></span>
+    <span class="cs"><span class="documentcs">\item</span></span> Two
+  <span class="cs"><span class="documentcs">\stopitemize</span></span>
+  This paragraph should not be indented.
+</pre>
+      <p>gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="125" src="../../wikiteximage/dc83d1054eba6a41523d1a60f594f99d.webp" width="604">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Manual_indentation">
+      Manual indentation
+     </span>
+    </h2>
+    <p>No matter how careful we are with all the settings, there are some cases which cannot be taken care of by automatic indentation, and we have to tell ConTeXt how to indent. This is done with <tt><a href="../../Command/indentation.html" title="Command/indentation">\indentation</a></tt> and <tt><a href="../../Command/noindentation.html" title="Command/noindentation">\noindentation</a></tt>. The Plain TeX (and LaTeX) commands <tt>\indent</tt> and <tt>\noindent</tt> are defined in ConTeXt, but are not hooked into the indentation mechanism.
+</p>
+    <p>Suppose the default setup for an article is
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>itemize<span class="brx">]</span> <span class="brx">[</span>indentnext<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <p>Now, if we want to indent after an itemize, starting the next paragraph with <tt><a class="new" href="../../index.php?title=Command/indent&action=edit&redlink=1.html" title="Command/indent (page does not exist)">\indent</a></tt> does not work; to get indentation we have to say <tt><a href="../../Command/indentation.html" title="Command/indentation">\indentation</a></tt>. For example,
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span> <span class="brx">[</span>big,yes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span> <span class="brx">[</span>itemize<span class="brx">]</span> <span class="brx">[</span>indentnext<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>n<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\item</span></span> A dummy list with <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>indentnext<span class="brx">=</span>no<span class="br">}</span>...
+    <span class="cs"><span class="documentcs">\item</span></span> ...to test the <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>indent<span class="br">}</span> command
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+<span class="cs">\indent</span> This paragraph is not indented, because <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>indent<span class="br">}</span> does not work.
+
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>n<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\item</span></span> Another dummy list with <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>indentnext<span class="brx">=</span>no<span class="br">}</span>...
+    <span class="cs"><span class="documentcs">\item</span></span> ...to test the <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>indentation<span class="br">}</span> command
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+<span class="cs"><span class="documentcs">\indentation</span></span> This paragraph will be indented, because we used <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>indentation<span class="br">}</span>.
+</pre>
+      <p>gives
+</p>
+     </li>
+     <li class="rendering">
+      <img height="195" src="../../wikiteximage/78ba3da05ea2c05c1b0c551b379e060e.webp" width="512">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Paragraphs_with_hanging_indention">
+      Paragraphs with hanging indention
+     </span>
+    </h2>
+    <p>If you want to indent paragraphs from the second line on, you can use this bit from Hans Hagen:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\definestartstop</span></span>
+  <span class="brx">[</span>exdent<span class="brx">]</span>
+  <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>left<span class="brx">]</span><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>-<span class="cs">\leftskip</span>,yes<span class="brx">]</span><span class="br">}</span>,
+   after<span class="brx">=</span><span class="cs"><span class="documentcs">\stopnarrower</span></span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>indentnext<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>Test<span class="br">}</span>
+<span class="cs">\startexdent</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs">\endgraf</span>
+<span class="cs">\stopexdent</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/57fbd090bb174881cc2fcf4649ced07f.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.045 seconds
+Real time usage: 0.125 seconds
+Preprocessor visited node count: 265/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1656/2097152 bytes
+Template argument size: 414/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7546/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   38.964      1 -total
+ 39.91%   15.551     18 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3400-1!canonical and timestamp 20260109212439 and revision id 38964
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Typography/Indentation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

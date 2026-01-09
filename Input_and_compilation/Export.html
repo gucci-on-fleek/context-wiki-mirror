@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Export&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Export" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Export
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4903&diff=42456">2025-07-21</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page is work in progress. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>ConTeXt does not only produce beautiful PDFs, but can also export to <a href="XML_source.html" title="Input and compilation/XML source">XML</a>/HTML. This is especially useful for creating eBooks in <a href="EPUB.html" title="Input and compilation/EPUB">EPUB</a> format.
+</p>
+    <p>&lt; <a href="XML_source.html" title="Input and compilation/XML source">XML</a> | <a href="EPUB.html" title="Input and compilation/EPUB">EPUB</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Minimal_example">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Minimal example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Exported_structure">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Exported structure
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#div.html">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           div.html
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#tag.xhtml">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           tag.xhtml
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#raw.xml">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           raw.xml
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#pub.lua">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           pub.lua
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Required_structuring_of_your_ConTeXt_code">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Required structuring of your ConTeXt code
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#More_useful_example">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         More useful example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Choice_of_output_files">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Choice of output files
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#raw.xml_2">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           raw.xml
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#tag.xhtml_2">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           tag.xhtml
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#div.html_2">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           div.html
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#pub.lua_2">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           pub.lua
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Export_options">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Export options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Solutions">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Solutions
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#Missing_Hyphens">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           Missing Hyphens
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#Hyphens_replaced_by_soft_hyphens">
+          <span class="tocnumber">
+           7.2
+          </span>
+          <span class="toctext">
+           Hyphens replaced by soft hyphens
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Suppressing_Presentation_Forms_in_Arabic_Script_Fonts">
+          <span class="tocnumber">
+           7.3
+          </span>
+          <span class="toctext">
+           Suppressing Presentation Forms in Arabic Script Fonts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#Missing_Images">
+          <span class="tocnumber">
+           7.4
+          </span>
+          <span class="toctext">
+           Missing Images
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#Missing_Background_or_other_elements_in_the_PDF">
+          <span class="tocnumber">
+           7.5
+          </span>
+          <span class="toctext">
+           Missing Background or other elements in the PDF
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#More_TODO">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         More TODO
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#Open_Issues">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Open Issues
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Minimal_example">
+      Minimal example
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span> <span class="comment">% this is all to activate export!</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>tufte<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Exported_structure">
+      Exported structure
+     </span>
+    </h2>
+    <p>If you compile an example as above as <code>minimal.tex</code>, you get a directory structure like this:
+</p>
+    <pre>.
+&boxvr;&boxh;&boxh; minimal-export
+&boxv;   &boxvr;&boxh;&boxh; images
+&boxv;   &boxvr;&boxh;&boxh; minimal-div.html
+&boxv;   &boxvr;&boxh;&boxh; minimal-pub.lua
+&boxv;   &boxvr;&boxh;&boxh; minimal-raw.xml
+&boxv;   &boxvr;&boxh;&boxh; minimal-tag.xhtml
+&boxv;   &boxur;&boxh;&boxh; styles
+&boxv;       &boxvr;&boxh;&boxh; minimal-defaults.css
+&boxv;       &boxvr;&boxh;&boxh; minimal-fonts.css
+&boxv;       &boxvr;&boxh;&boxh; minimal-images.css
+&boxv;       &boxvr;&boxh;&boxh; minimal-styles.css
+&boxv;       &boxur;&boxh;&boxh; minimal-templates.css
+&boxvr;&boxh;&boxh; minimal.log
+&boxvr;&boxh;&boxh; minimal.pdf
+&boxvr;&boxh;&boxh; minimal.tex
+&boxur;&boxh;&boxh; minimal.tuc
+</pre>
+    <p>We will further refer to these files without the prefix ("minimal-"). We reformatted the code copies a bit to make them smaller and better readable.
+</p>
+    <h3>
+     <span class="mw-headline" id="div.html">
+      div.html
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="no"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+    input filename   : minimal
+    processing date  : 2024-10-22 19:43:06+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">html xmlns="http://www.w3.org/1999/xhtml"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">head</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">meta charset="utf-8" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span>minimal<span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/minimal-defaults.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/minimal-images.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/minimal-fonts.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/minimal-styles.css" /</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">body</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">div class="document" xmlns="http://www.pragma-ade.com/context/export"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">div class="warning"</span><span class="br">&gt;</span>Rendering can be suboptimal because there is no default/fallback css loaded.<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">div</span><span class="br">&gt;</span>
+      We thrive in information--thick worlds because of our marvelous and everyday capacity to select, edit, single out, structure, highlight, group, pair, merge, harmonize, synthesize, focus, organize, condense, reduce, boil down, choose,
+      categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, distinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster,
+      aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, refine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats.<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/html</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="tag.xhtml">
+      tag.xhtml
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="yes"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+    input filename   : minimal
+    processing date  : 2024-10-22 19:43:05+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-defaults.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-images.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-fonts.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-styles.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document context="2024.09.25 11:53" date="2024-10-22 19:43:05+02:00" file="minimal" href="minimal" language="en" title="minimal" version="0.36" xml:lang="en"</span><span class="br">&gt;</span>
+  We thrive in information--thick worlds because of our marvelous and everyday capacity to select, edit, single out, structure, highlight, group, pair, merge, harmonize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize,
+  catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, distinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline,
+  summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, refine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats.
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="raw.xml">
+      raw.xml
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="yes"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+    input filename   : minimal
+    processing date  : 2024-10-22 19:43:05+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-defaults.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-images.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-fonts.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/minimal-styles.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document context="2024.09.25 11:53" date="2024-10-22 19:43:05+02:00" file="minimal" language="en" title="minimal" version="0.36" xml:lang="en"</span><span class="br">&gt;</span>
+We thrive in information--thick worlds because of our marvelous and everyday capacity to select, edit, single out, structure, highlight, group, pair, merge, harmonize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, distinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, refine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats.
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="pub.lua">
+      pub.lua
+     </span>
+    </h3>
+    <pre class="tex">return <span class="br">{</span>
+ <span class="brx">[</span>"htmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "minimal-div.html" <span class="br">}</span>,
+ <span class="brx">[</span>"htmlroot"<span class="brx">]</span><span class="brx">=</span>"minimal-div.html",
+ <span class="brx">[</span>"identifier"<span class="brx">]</span><span class="brx">=</span>"bf72902d-4e46-9e20-b9a0-3b1a14b3f352",
+ <span class="brx">[</span>"imagefile"<span class="brx">]</span><span class="brx">=</span>"styles/minimal-images.css",
+ <span class="brx">[</span>"imagepath"<span class="brx">]</span><span class="brx">=</span>"images",
+ <span class="brx">[</span>"images"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+ <span class="brx">[</span>"language"<span class="brx">]</span><span class="brx">=</span>"en",
+ <span class="brx">[</span>"metadata"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+ <span class="brx">[</span>"name"<span class="brx">]</span><span class="brx">=</span>"minimal",
+ <span class="brx">[</span>"stylepath"<span class="brx">]</span><span class="brx">=</span>"styles",
+ <span class="brx">[</span>"styles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "minimal-defaults.css", "minimal-images.css", "minimal-fonts.css", "minimal-styles.css" <span class="br">}</span>,
+ <span class="brx">[</span>"title"<span class="brx">]</span><span class="brx">=</span>"minimal",
+ <span class="brx">[</span>"xhtmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "minimal-tag.xhtml" <span class="br">}</span>,
+ <span class="brx">[</span>"xmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "minimal-raw.xml" <span class="br">}</span>,
+<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Required_structuring_of_your_ConTeXt_code">
+      Required structuring of your ConTeXt code
+     </span>
+    </h2>
+    <p>The export contains usable content only for content that is "well structured" in an XML sense. In our above example all text ended up in the root tag <code>document</code>.
+</p>
+    <p>That means, you need to mark <i>everything,</i> from markup spans over paragraphs and enumeration items to chapters and parts with <code>\start... &hellip; \stop...</code>.
+</p>
+    <p>Also note that switches like <tt><a href="../Command/em.html" title="Command/em">\em</a></tt> don&rsquo;t translate into output structure, you need to <tt><a href="../Command/definehighlight.html" title="Command/definehighlight">\definehighlight</a>[emph][style={\em}]</tt> and use as <code>\emph{emphasized}.</code>
+</p>
+    <p><b>Beware: The exported XML contains the structure of the <i>output</i>, i.e. it lacks some information that might be in your code.</b> E.g. <tt><a class="mw-redirect" href="../Command/_register.html" title="Command/index">\index</a></tt> creates an empty <tt>registerlocation</tt> anchor, while the content appears in <tt>registerentry</tt> structures where you placed your index.
+</p>
+    <h2>
+     <span class="mw-headline" id="More_useful_example">
+      More useful example
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,
+	color<span class="brx">=</span>,contrastcolor<span class="brx">=</span>,
+	<span class="comment">% This metadata is used for the PDF</span>
+	title<span class="brx">=</span><span class="br">{</span>My first eBook 1<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	keywords<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	author<span class="brx">=</span><span class="br">{</span>Hans 1<span class="br">}</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupexport</span></span><span class="brx">[</span>
+	hyphen<span class="brx">=</span>yes,
+	<span class="comment">% This metadata is used by ConTeXt&rsquo;s ePub script</span>
+	<span class="comment">% title, subtitle and author are taken from \setupinteraction, if not set</span>
+	title<span class="brx">=</span><span class="br">{</span>My first eBook 2<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	author<span class="brx">=</span><span class="br">{</span>Hans 2<span class="br">}</span>
+<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\settaggedmetadata</span></span><span class="brx">[</span>
+	<span class="comment">% here you can set as many metadata entries as you like, but you need to process them yourself</span>
+	title<span class="brx">=</span><span class="br">{</span>My first eBook 3<span class="br">}</span>,
+	author<span class="brx">=</span><span class="br">{</span>Hans 3<span class="br">}</span>,
+	subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+	version<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\date</span></span><span class="br">}</span> <span class="comment">% TODO: doesn&rsquo;t expand</span>
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definehighlight</span></span><span class="brx">[</span>emph<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span>italicface<span class="brx">]</span> <span class="comment">% use \emph{something} instead of {\em something}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span>Example<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startparagraph</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stopparagraph</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A section<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startparagraph</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>packed,joinup<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startitem</span></span> First <span class="cs"><span class="documentcs">\stopitem</span></span>
+  <span class="cs"><span class="documentcs">\startitem</span></span> Second <span class="cs"><span class="documentcs">\stopitem</span></span>
+  <span class="cs"><span class="documentcs">\startitem</span></span> Third <span class="cs"><span class="documentcs">\stopitem</span></span>
+  <span class="cs"><span class="documentcs">\startitem</span></span> Fourth<span class="cs"><span class="documentcs">\stopitem</span></span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+
+<span class="cs"><span class="documentcs">\stopparagraph</span></span>
+
+<span class="cs"><span class="documentcs">\startparagraph</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stopparagraph</span></span>
+
+<span class="cs"><span class="documentcs">\startparagraph</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+<span class="cs"><span class="documentcs">\stopparagraph</span></span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span>Quoth<span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span>by Edgar Allan Poe<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startlines</span></span>
+<span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>Prophet!<span class="br">}</span> said I, <span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>thing of evil!&mdash;prophet still, if bird or devil!
+By that Heaven that bends above us&mdash;by that God we both adore&mdash;
+Tell this soul with sorrow laden if, within the distant Aidenn,
+It shall clasp a sainted maiden whom the angels name Lenore&mdash;
+Clasp a rare and radiant maiden whom the angels name Lenore.<span class="br">}</span>
+<span class="cs">\emph</span><span class="br">{</span>Quoth the Raven <span class="cs"><span class="documentcs">\quotation</span></span><span class="br">{</span>Nevermore.<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>There&rsquo;s also an example of an export-friendly ConTeXt file in the sources: <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/export-example.tex" rel="nofollow">export-example.tex</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Choice_of_output_files">
+      Choice of output files
+     </span>
+    </h2>
+    <p>Only after such tagging we find significant differences between the three content output files:
+</p>
+    <p>TODO: explain differences between export variants
+</p>
+    <h3>
+     <span class="mw-headline" id="raw.xml_2">
+      raw.xml
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="yes"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+
+    input filename   : useful
+    processing date  : 2024-10-22 19:49:25+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-defaults.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-images.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-fonts.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-styles.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document author="Hans 1" context="2024.09.25 11:53" date="2024-10-22 19:49:25+02:00" file="useful" language="en" title="My first eBook 1" version="0.36" xml:lang="en"</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">section detail="chapter" chain="chapter" implicit="1" level="2"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">metadata</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="author"</span><span class="br">&gt;</span>Hans 3<span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="title"</span><span class="br">&gt;</span>My first eBook 3<span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="version"</span><span class="br">&gt;</span>\date <span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/metadata</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>Example<span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">section detail="section" chain="section" implicit="2" level="3"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>1.1<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>A section<span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats. <span class="br">&lt;</span><span class="name">itemgroup detail="itemize" level="1" packed="yes" symbol="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>First<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Second<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Third<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Fourth<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/itemgroup</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>Thus, I came to the conclusion that the designer of a new system must not only be the implementer and first large--scale user; the designer should also write the first user manual.       <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+The separation of any of these four components would have hurt TEX significantly. If I had not participated fully in all these activities, literally hundreds of improve&shy;ments would never have been made, because I would never have thought of them or perceived why they were important.       <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+But a system cannot be successful if it is too strongly influenced by a single person. Once the initial design is complete and fairly robust, the real test begins as people with many different viewpoints undertake their own experiments. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>Coming back to the use of typefaces in electronic publishing: many of the new ty&shy;pographers receive their knowledge and information about the rules of typography from books, from computer magazines or the instruction manuals which they get with the purchase of a PC or software. There is not so much basic instruction, as of now, as there was in the old days, showing the differences between good and bad typographic design. Many people are just fascinated by their PC's tricks, and think that a widely--praised program, called up on the screen, will make every&shy;thing automatic from now on. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">section detail="chapter" chain="chapter" implicit="4" level="2"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>2<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>Quoth<span class="br">&lt;</span><span class="name">descriptionsymbol detail="footnote" insert="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">sup</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sup</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/descriptionsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">description detail="footnote" chain="footnote" insert="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">descriptiontag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">sup</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sup</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/descriptiontag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">descriptioncontent</span><span class="br">&gt;</span>by Edgar Allan Poe<span class="br">&lt;</span><span class="name">/descriptioncontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/description</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">lines detail="lines" chain="lines"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>Prophet!<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span> said I, <span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>thing of evil!&mdash;prophet still, if bird or devil!<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>By that Heaven that bends above us&mdash;by that God we both adore&mdash; <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>Tell this soul with sorrow laden if, within the distant Aidenn, <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>It shall clasp a sainted maiden whom the angels name Lenore&mdash; <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>Clasp a rare and radiant maiden whom the angels name Lenore.     <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">highlight detail="emph"</span><span class="br">&gt;</span>Quoth the Raven <span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>Nevermore.<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/highlight</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">/lines</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="tag.xhtml_2">
+      tag.xhtml
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="yes"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+    input filename   : useful
+    processing date  : 2024-10-22 19:49:25+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-defaults.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-images.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-fonts.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">?xml-stylesheet type="text/css" href="styles/useful-styles.css"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document author="Hans 1" context="2024.09.25 11:53" date="2024-10-22 19:49:25+02:00" file="useful" href="useful" language="en" title="My first eBook 1" version="0.36" xml:lang="en"</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">section chain="chapter" detail="chapter" id="aut:1" implicit="1" level="2"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">metadata</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="author"</span><span class="br">&gt;</span>Hans 3<span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="title"</span><span class="br">&gt;</span>My first eBook 3<span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">metavariable name="version"</span><span class="br">&gt;</span>\date <span class="br">&lt;</span><span class="name">/metavariable</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/metadata</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>Example<span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">section chain="section" detail="section" id="aut:2" implicit="2" level="3"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>1.1<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>A section<span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense, reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the goats. <span class="br">&lt;</span><span class="name">itemgroup detail="itemize" level="1" packed="yes" symbol="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>First<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Second<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Third<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemtag</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/itemtag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">itemcontent</span><span class="br">&gt;</span>Fourth<span class="br">&lt;</span><span class="name">/itemcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/itemgroup</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>Thus, I came to the conclusion that the designer of a new system must not only be the implementer and first large--scale user; the designer should also write the first user manual.       <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+The separation of any of these four components would have hurt TEX significantly. If I had not participated fully in all these activities, literally hundreds of improve&shy;ments would never have been made, because I would never have thought of them or perceived why they were important.       <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+But a system cannot be successful if it is too strongly influenced by a single person. Once the initial design is complete and fairly robust, the real test begins as people with many different viewpoints undertake their own experiments. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">paragraph</span><span class="br">&gt;</span>Coming back to the use of typefaces in electronic publishing: many of the new ty&shy;pographers receive their knowledge and information about the rules of typography from books, from computer magazines or the instruction manuals which they get with the purchase of a PC or software. There is not so much basic instruction, as of now, as there was in the old days, showing the differences between good and bad typographic design. Many people are just fascinated by their PCapos;s tricks, and think that a widely--praised program, called up on the screen, will make every&shy;thing automatic from now on. <span class="br">&lt;</span><span class="name">/paragraph</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">section chain="chapter" detail="chapter" id="aut:4" implicit="4" level="2"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncaption</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectionnumber</span><span class="br">&gt;</span>2<span class="br">&lt;</span><span class="name">/sectionnumber</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">sectiontitle</span><span class="br">&gt;</span>Quoth<span class="br">&lt;</span><span class="name">descriptionsymbol detail="footnote" insert="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">sup</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sup</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/descriptionsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">description chain="footnote" detail="footnote" insert="1"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">descriptiontag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">sup</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/sup</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/descriptiontag</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">descriptioncontent</span><span class="br">&gt;</span>by Edgar Allan Poe<span class="br">&lt;</span><span class="name">/descriptioncontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/description</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/sectiontitle</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncaption</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">sectioncontent</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">lines chain="lines" detail="lines"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>Prophet!<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span> said I, <span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>thing of evil!&mdash;prophet still, if bird or devil!<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>By that Heaven that bends above us&mdash;by that God we both adore&mdash; <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>Tell this soul with sorrow laden if, within the distant Aidenn, <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>It shall clasp a sainted maiden whom the angels name Lenore&mdash; <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span>Clasp a rare and radiant maiden whom the angels name Lenore.     <span class="br">&lt;</span><span class="name">break/</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">line</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">highlight detail="emph"</span><span class="br">&gt;</span>Quoth the Raven <span class="br">&lt;</span><span class="name">delimited detail="quotation"</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedcontent</span><span class="br">&gt;</span>Nevermore.<span class="br">&lt;</span><span class="name">/delimitedcontent</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">delimitedsymbol symbol="right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/delimitedsymbol</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/delimited</span><span class="br">&gt;</span><span class="br">&lt;</span><span class="name">/highlight</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/line</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">/lines</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/sectioncontent</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">/section</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="div.html_2">
+      div.html
+     </span>
+    </h3>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0" encoding="UTF-8" standalone="no"&nbsp;?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">!--
+    input filename   : useful
+    processing date  : 2024-10-22 19:49:26+02:00
+    context version  : 2024.09.25 11:53
+    exporter version&nbsp;: 0.36
+--</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">html xmlns="http://www.w3.org/1999/xhtml"</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">head</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">meta charset="utf-8" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span>My first eBook 2<span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/useful-defaults.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/useful-images.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/useful-fonts.css" /</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">link type="text/css" rel="stylesheet" href="styles/useful-styles.css" /</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">body</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">div class="document" xmlns="http://www.pragma-ade.com/context/export"</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">div class="warning"</span><span class="br">&gt;</span>Rendering can be suboptimal because there is no default/fallback css loaded.<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">div class="section chapter level-2" id="aut-1"</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div class="metadata"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="metavariable metaname-author" label="author"</span><span class="br">&gt;</span>Hans 3<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="metavariable metaname-title" label="title"</span><span class="br">&gt;</span>My first eBook 3<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="metavariable metaname-version" label="version"</span><span class="br">&gt;</span>\date <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div class="sectioncaption"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="sectionnumber"</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="sectiontitle"</span><span class="br">&gt;</span>Example<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div class="sectioncontent"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="paragraph"</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense, reduce,
+            boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth, chunk, average,
+            approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate the sheep from the
+            goats. <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="section level-3" id="aut-2"</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">div class="sectioncaption"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="sectionnumber"</span><span class="br">&gt;</span>1.1<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="sectiontitle"</span><span class="br">&gt;</span>A section<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">div class="sectioncontent"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="paragraph"</span><span class="br">&gt;</span>We thrive in information--thick worlds because of our marvelous and everyday ca&shy;pacity to select, edit, single out, structure, highlight, group, pair, merge, harmo&shy;nize, synthesize, focus, organize, condense,
+                reduce, boil down, choose, categorize, catalog, classify, list, abstract, scan, look into, idealize, isolate, discriminate, dis&shy;tinguish, screen, pigeonhole, pick over, sort, integrate, blend, inspect, filter, lump, skip, smooth,
+                chunk, average, approximate, cluster, aggregate, outline, summarize, itemize, review, dip into, flip through, browse, glance into, leaf through, skim, re&shy;fine, enumerate, glean, synopsize, winnow the wheat from the chaff and separate
+                the sheep from the goats. <span class="br">&lt;</span><span class="name">div class="itemgroup itemize level-1 packed-yes symbol-1"</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="item"</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemtag"</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemcontent"</span><span class="br">&gt;</span>First<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="item"</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemtag"</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemcontent"</span><span class="br">&gt;</span>Second<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="item"</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemtag"</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemcontent"</span><span class="br">&gt;</span>Third<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="item"</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemtag"</span><span class="br">&gt;</span>&bull; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                    <span class="br">&lt;</span><span class="name">div class="itemcontent"</span><span class="br">&gt;</span>Fourth<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="paragraph"</span><span class="br">&gt;</span>Thus, I came to the conclusion that the designer of a new system must not only be the implementer and first large--scale user; the designer should also write the first user manual. <span class="br">&lt;</span><span class="name">div class="break"</span><span class="br">&gt;</span><span class="comment">&lt;!--empty--&gt;</span>
+
+                <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                The separation of any of these four components would have hurt TEX significantly. If I had not participated fully in all these activities, literally hundreds of improve&shy;ments would never have been made, because I would never have
+                thought of them or perceived why they were important. <span class="br">&lt;</span><span class="name">div class="break"</span><span class="br">&gt;</span><span class="comment">&lt;!--empty--&gt;</span>
+<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                But a system cannot be successful if it is too strongly influenced by a single person. Once the initial design is complete and fairly robust, the real test begins as people with many different viewpoints undertake their own
+                experiments. <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="paragraph"</span><span class="br">&gt;</span>Coming back to the use of typefaces in electronic publishing: many of the new ty&shy;pographers receive their knowledge and information about the rules of typography from books, from computer magazines or the
+                instruction manuals which they get with the purchase of a PC or software. There is not so much basic instruction, as of now, as there was in the old days, showing the differences between good and bad typographic design. Many people
+                are just fascinated by their PCapos;s tricks, and think that a widely--praised program, called up on the screen, will make every&shy;thing automatic from now on. <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">div class="section chapter level-2" id="aut-4"</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div class="sectioncaption"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="sectionnumber"</span><span class="br">&gt;</span>2<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="sectiontitle"</span><span class="br">&gt;</span>Quoth<span class="br">&lt;</span><span class="name">div class="descriptionsymbol footnote insert-1"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="sup"</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">div class="description footnote insert-1"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="descriptiontag"</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="sup"</span><span class="br">&gt;</span>1<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="descriptioncontent"</span><span class="br">&gt;</span>by Edgar Allan Poe<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">div class="sectioncontent"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">div class="lines"</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="delimited quotation"</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedcontent"</span><span class="br">&gt;</span>Prophet!<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span> said I, <span class="br">&lt;</span><span class="name">div class="delimited quotation"</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedcontent"</span><span class="br">&gt;</span>thing of evil!&mdash;prophet still, if bird or devil!<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>By that Heaven that bends above us&mdash;by that God we both adore&mdash; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>Tell this soul with sorrow laden if, within the distant Aidenn, <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>It shall clasp a sainted maiden whom the angels name Lenore&mdash; <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>Clasp a rare and radiant maiden whom the angels name Lenore. <span class="br">&lt;</span><span class="name">div class="break"</span><span class="br">&gt;</span><span class="comment">&lt;!--empty--&gt;</span>
+<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">div class="line"</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">div class="highlight emph"</span><span class="br">&gt;</span>Quoth the Raven <span class="br">&lt;</span><span class="name">div class="delimited quotation"</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-left"</span><span class="br">&gt;</span>&ldquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="delimitedcontent"</span><span class="br">&gt;</span>Nevermore.<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                  <span class="br">&lt;</span><span class="name">div class="delimitedsymbol symbol-right"</span><span class="br">&gt;</span>&rdquo;<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+                <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+              <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+            <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/html</span><span class="br">&gt;</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="pub.lua_2">
+      pub.lua
+     </span>
+    </h3>
+    <pre class="tex">return <span class="br">{</span>
+ <span class="brx">[</span>"author"<span class="brx">]</span><span class="brx">=</span>"<span class="br">{</span>Hans 2<span class="br">}</span> ",
+ <span class="brx">[</span>"htmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "useful-div.html" <span class="br">}</span>,
+ <span class="brx">[</span>"htmlroot"<span class="brx">]</span><span class="brx">=</span>"useful-div.html",
+ <span class="brx">[</span>"identifier"<span class="brx">]</span><span class="brx">=</span>"2958b30c-47d6-9c0f-0f2d-357f8f094e98",
+ <span class="brx">[</span>"imagefile"<span class="brx">]</span><span class="brx">=</span>"styles/useful-images.css",
+ <span class="brx">[</span>"imagepath"<span class="brx">]</span><span class="brx">=</span>"images",
+ <span class="brx">[</span>"images"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+ <span class="brx">[</span>"language"<span class="brx">]</span><span class="brx">=</span>"en",
+ <span class="brx">[</span>"metadata"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+ <span class="brx">[</span>"name"<span class="brx">]</span><span class="brx">=</span>"useful",
+ <span class="brx">[</span>"stylepath"<span class="brx">]</span><span class="brx">=</span>"styles",
+ <span class="brx">[</span>"styles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "useful-defaults.css", "useful-images.css", "useful-fonts.css", "useful-styles.css" <span class="br">}</span>,
+ <span class="brx">[</span>"title"<span class="brx">]</span><span class="brx">=</span>"My first eBook 2",
+ <span class="brx">[</span>"xhtmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "useful-tag.xhtml" <span class="br">}</span>,
+ <span class="brx">[</span>"xmlfiles"<span class="brx">]</span><span class="brx">=</span><span class="br">{</span> "useful-raw.xml" <span class="br">}</span>,
+<span class="br">}</span>
+</pre>
+    <p>(WORK IN PROGRESS)
+</p>
+    <h2>
+     <span class="mw-headline" id="Export_options">
+      Export options
+     </span>
+    </h2>
+    <p>From <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/back-exp.mkiv" rel="nofollow">back-exp.mkiv</a>, see <tt><a href="../Command/setupexport.html" title="Command/setupexport">\setupexport</a></tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexport</span></span><span class="brx">[</span>
+   align<span class="brx">=</span><span class="cs">\raggedstatus</span>,
+   bodyfont<span class="brx">=</span><span class="cs"><span class="systemcs">\bodyfontsize</span></span>,
+   width<span class="brx">=</span><span class="cs">\textwidth</span>,
+   title<span class="brx">=</span><span class="br">{</span><span class="br">}</span>, <span class="comment">% from interaction</span>
+   subtitle<span class="brx">=</span><span class="br">{</span><span class="br">}</span>, <span class="comment">% from interaction</span>
+   author<span class="brx">=</span><span class="br">{</span><span class="br">}</span>, <span class="comment">% from interaction</span>
+   firstpage<span class="brx">=</span>, <span class="comment">% imagename</span>
+   lastpage<span class="brx">=</span>,  <span class="comment">% imagename</span>
+   alternative<span class="brx">=</span>, <span class="comment">% html or div</span>
+   properties<span class="brx">=</span>no,
+   hyphen<span class="brx">=</span>no,
+   svgstyle<span class="brx">=</span>,
+   cssfile<span class="brx">=</span>,
+<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      The options align, bodyfont and width end up in the exported CSS.
+     </li>
+     <li>
+      title, subtitle and author default to those from
+      <tt>
+       <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+        \setupinteraction
+       </a>
+      </tt>
+     </li>
+     <li>
+      firstpage, lastpage: cover image (end up only in pub.lua and is handled by ePub script)
+     </li>
+     <li>
+      hyphen: yes/no; include invisible hyphenation characters (
+      <a class="external text" href="http://en.wikipedia.org/wiki/Soft_hyphen" rel="nofollow">
+       soft hyphen
+      </a>
+      ,
+      <code>&amp;shy;</code>
+      ) at every possible place
+     </li>
+     <li>
+      alternative: html or div (influence on html export style? where?)
+     </li>
+     <li>
+      properties: no: ignore, yes: as attribute, otherwise: use as prefix (used where?)
+     </li>
+     <li>
+      svgstyle: maybe compression?
+     </li>
+     <li>
+      cssfile: file name of
+      <i>
+       additional
+      </i>
+      CSS file
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Solutions">
+      Solutions
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Missing_Hyphens">
+      Missing Hyphens
+     </span>
+    </h3>
+    <p>Problem: If you setup export, hyphen signs go missing.
+</p>
+    <p>Reason: Your font is missing a soft hyphen glyph at x00A0.
+</p>
+    <p>Workaround:
+</p>
+    <pre>   \enabledirectives[otf.checksofthyphen]
+</pre>
+    <p>In 2024, you usually don&rsquo;t need hyphenation in HTML files, since the browsers can hyphenate.
+</p>
+    <h3>
+     <span class="mw-headline" id="Hyphens_replaced_by_soft_hyphens">
+      Hyphens replaced by soft hyphens
+     </span>
+    </h3>
+    <p>Problem: Hyphens in hyphenated words such as &ldquo;co-worker&rdquo; may be invisible in the exported file.
+</p>
+    <p>Reason: The &ldquo;minus&rdquo; symbol 0x002D is converted to a soft hyphen (0x00A0) in the middle of a word, which is generally not rendered by web browsers unless they break the line there.
+</p>
+    <p>Solution: Use \setupbackend[export=yes,hyphen=no]
+</p>
+    <p>Alternatively, you can use the UTF-8 hyphen symbol (0x2010). 
+</p>
+    <p>Example: Replace 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+co-worker
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>with 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+co&hyphen;worker
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Suppressing_Presentation_Forms_in_Arabic_Script_Fonts">
+      Suppressing Presentation Forms in Arabic Script Fonts
+     </span>
+    </h3>
+    <p>As is well known, Arabic script requires contextual analysis: Given a character, it takes a different form depending on its position within a word or other continuous string of characters. Certain pre-Unicode conventions encoded each of these different forms for use in certain ancient typesetting applications. Those encodings are preserved as part of the Arabic Presentation Forms B block in Unicode (U+FE7 - U+FEF block). But this is a legacy encoding: These codepoints should <em>never</em> be used to prepare fresh Unicode documents. Rather, Arabic script characters should be encoded primarily using codepoints from the standard Arabic block (U+600-6FF). Contextual forms of these characters are called upon during OpenType processing, but they do not take separate codepoints.
+</p>
+    <p>Unfortunately, certain Arabic fonts such as Linotype Lotus &ndash; it is a staple of the Middle East publishing industry &ndash; give the contextual forms of standard Arabic-script characters Unicode names that correspond to codepoints from Arabic Presentation Forms B. This saves space in the font, and for some purposes it is innocuous. But for, e.g., ConTeXt processing, many of the original, standard codepoints in the input are replaced by presentation-form codepoints in the output. For example:
+</p>
+    <pre class="tex">مِّنَ السَّمَاءِ وَالْأَرْضِ</pre>
+    <p>becomes
+</p>
+    <pre class="tex">ﻣﱢﻦَ اﻟﺴﱠﻤَﺎءِ وَاﻷَْرْضِ</pre>
+    <p>If one looks carefully, one will see that there are errors in the output. (If one uses the font almfixed in a text editor that supports Unicode and Arabic script you will easily see the differences).
+</p>
+    <p>When exporting to XML, this issue become a serious problem, for the exported text will not use the same codepoints as the input. To get around this issue, use something along the lines of the following in your preamble:
+</p>
+    <pre class="tex"><span class="comment">% private typescript that combines TeX Gyre Termes for Latin with Linotype Lotus for Arabic</span>
+<span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-times-lotus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>times-lotus<span class="brx">]</span>
+
+<span class="comment">% choose your desired features for pdf output</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+   <span class="brx">[</span>lotus-default<span class="brx">]</span>
+   <span class="brx">[</span>mode<span class="brx">=</span>node,language<span class="brx">=</span>dflt,script<span class="brx">=</span>arab,
+    init<span class="brx">=</span>yes,medi<span class="brx">=</span>yes,fina<span class="brx">=</span>yes,isol<span class="brx">=</span>yes,
+    liga<span class="brx">=</span>no,rlig<span class="brx">=</span>yes,trep<span class="brx">=</span>yes,tlig<span class="brx">=</span>yes, 
+    mark<span class="brx">=</span>yes,ccmp<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="comment">% use this in export mode</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+   <span class="brx">[</span>lotus-default<span class="brx">]</span>
+   <span class="brx">[</span>mode<span class="brx">=</span>none<span class="brx">]</span>
+
+<span class="comment">% setup the bodyfont last; the order is important!</span>
+   
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>times-lotus,12pt<span class="brx">]</span>
+</pre>
+    <p>So <tt>mode=none</tt> will suppress the contextual analysis, bypass the presentation-forms codepoints, and give the original input in the exported XML.
+</p>
+    <h3>
+     <span class="mw-headline" id="Missing_Images">
+      Missing Images
+     </span>
+    </h3>
+    <p>MetaPost images can be exported by wrapping them in <code>\startimage</code> and <code>\stopimage</code>, then running
+</p>
+    <pre>mtxrun --script epub --images &lt;tex_file&gt;
+context &lt;tex_file&gt;
+</pre>
+    <p>For instance, the following code
+</p>
+    <pre class="tex"><span class="cs">\startimage</span>
+    <span class="cs"><span class="documentcs">\startMPcode</span></span>
+        fill fullcircle scaled 1cm withcolor blue&nbsp;;
+    <span class="cs"><span class="documentcs">\stopMPcode</span></span>
+<span class="cs">\stopimage</span>
+</pre>
+    <p>will export an SVG file with a blue disc, which a web browser can load alongside the <code>html</code> or <code>xhtml file</code>. 
+This works with other content too. For instance, 
+</p>
+    <pre class="tex"><span class="cs">\startimage</span>
+    <span class="cs"><span class="documentcs">\startformula</span></span>
+        e <span class="brx">=</span> <span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>m_0 c^2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\sqrt</span></span><span class="br">{</span>1 - v^2 / c^2<span class="br">}</span><span class="br">}</span>
+    <span class="cs"><span class="documentcs">\stopformula</span></span>
+<span class="cs">\stopimage</span>
+</pre>
+    <p>generates an SVG file with the well-known equation. 
+</p>
+    <p><b>Note:</b> With ConTeXt LMTX 2025.07.21, the vertical alignment of the text following an equation is not always correct. It seems that wrapping the formula in <code>\startframed</code> ... <code>\stopframed</code> as follows resolves the issue: 
+</p>
+    <pre class="tex"><span class="cs">\startimage</span>
+  <span class="cs"><span class="documentcs">\startframed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\startformula</span></span>
+        e <span class="brx">=</span> <span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>m_0 c^2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\sqrt</span></span><span class="br">{</span>1 - v^2 / c^2<span class="br">}</span><span class="br">}</span>
+    <span class="cs"><span class="documentcs">\stopformula</span></span>
+  <span class="cs"><span class="documentcs">\stopframed</span></span>
+<span class="cs">\stopimage</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Missing_Background_or_other_elements_in_the_PDF">
+      Missing Background or other elements in the PDF
+     </span>
+    </h3>
+    <p>Some features of ConTeXt are disabled when export is activated, which may lead to missing elements, for instance page backgrounds. For instance, with ConTeXt LMTX 2024.11.01, compiling the following code
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span> <span class="brx">[</span>page<span class="brx">]</span> <span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>blue<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+test
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>gives a PDF with white (instead of blue) page color. One possible workaround is to use a mode:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>export<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span> <span class="brx">[</span>page<span class="brx">]</span> <span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>blue<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+test
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The line <code>\setupbackend[export=yes]</code> can then be toggled on (for generating the exported files) or off (for generating the correct PDF) by compiling with or without the flag <code>--mode=export</code>. 
+</p>
+    <p><b>Note:</b> This workaround deals with the missing background color in the pdf output, not in the exported files. To add a background color to the latter, you can add a custom .css file using <tt><a href="../Command/setupexport.html" title="Command/setupexport">\setupexport</a></tt>, as <code>\setupexport[cssfile=...]</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="More_TODO">
+      More TODO
+     </span>
+    </h2>
+    <ul>
+     <li>
+      handling of images
+     </li>
+     <li>
+      which files get overwritten, which stay
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Open_Issues">
+      Open Issues
+     </span>
+    </h2>
+    <p>as of 2014-01-20, updated 2015-08-08/-15, 2017-11-11, and 2024-10-22
+</p>
+    <ul>
+     <li>
+      <code>&lt;break/&gt;</code>
+      in
+      <code>raw.xml</code>
+      after the root happens sometimes if something&rsquo;s not tagged. (added 2024)
+     </li>
+     <li>
+      Metadata is sometimes missing, if it&rsquo;s set in an environment and not in the main file. (added 2024)
+     </li>
+     <li>
+      FIXED
+      <s>
+       Structure bug: Metadata ends up within the first section instead of in front of everything
+      </s>
+     </li>
+     <li>
+      FIXED
+      <s>
+       Names of metavariables are missing in div.xhtml
+      </s>
+      (could be better, but not that important)
+     </li>
+     <li>
+      Notes (footnotes): Only visual formatting, no semantical markup and no reference/ID
+     </li>
+     <li>
+      FIXED
+      <s>
+       Delimited: Quotations have tagging
+       <i>
+        and
+       </i>
+       quotation marks, even in raw.xml
+      </s>
+      (now marks have their own tags)
+     </li>
+     <li>
+      Firstpage/Lastpage (cover setup) is ignored in project structure
+     </li>
+     <li>
+      Minimal example doesn&rsquo;t create a cover at all
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/color.html" title="Command/color">
+        \color
+       </a>
+      </tt>
+      leaves no trace in export.
+     </li>
+     <li>
+      Spacing characters like \, get lost.
+     </li>
+     <li>
+      Additional commas in export of register ranges (1,&ndash;,5 instead of 1&ndash;5).
+     </li>
+     <li>
+      There&rsquo;s no marking of page breaks (ePub should have page break markers of the PDF for scientific quotability).
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125255
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.111 seconds
+Real time usage: 0.292 seconds
+Preprocessor visited node count: 328/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1252/2097152 bytes
+Template argument size: 309/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 79430/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  101.055      1 -total
+  9.26%    9.354      7 Template:cmd
+  8.31%    8.396      1 Template:todo
+  6.18%    6.248      5 Template:code
+  5.32%    5.373      2 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4903-1!canonical and timestamp 20260109125254 and revision id 42456
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Export">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

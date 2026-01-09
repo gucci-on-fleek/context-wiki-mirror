@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Update Hints&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Update_Hints" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Update Hints
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=867&diff=37478">2025-01-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a class="new" href="index.php?title=Installation_hints&action=edit&redlink=1" title="Installation hints (page does not exist)">Installation hints</a>
+</p>
+    <p><i>Hans Hagen wrote in the mailing list at 2004-10-25:</i>
+</p>
+    <p>In the latest TDS specs, scripts now reside under the <tt>../scripts</tt> path instead of under package entries (like <tt>../context</tt>).
+</p>
+    <p>One way to locate a script used to be to call <i>kpsewhich</i> with the format "other text files" but now the format is "texmfscripts".
+</p>
+    <p>The consequence of this is, that (combined with moved <tt>enc</tt> and <tt>map</tt> files in combination with strict paths in the <a href="Texmf.cnf" title="Texmf.cnf">Texmf.cnf</a> files), TeX distributions are not downward compatible. The assumption is more or less that users reinstall the whole lot and don't have their own fonts and such -)
+</p>
+    <p>Another change is the flattening of format suffixes to <tt>fmt</tt> (so make sure that you remove the <tt>efmt</tt> ones when you update binaries); although the spec suggests the usage of an <tt>$engine</tt> subpath (in order to distinguish formats) it looks like distributions will not implement this (too difficult).
+</p>
+    <p>The way context deals with that is the following:
+</p>
+    <ul>
+     <li>
+      you can use
+      <tt>
+       texmfstart
+      </tt>
+      (ruby script, win binary at our website) to launch a resource (document, script. whatever is supported)
+     </li>
+     <li>
+      you can use
+      <tt>
+       textools--fixtexmftree
+      </tt>
+      to convert an old to a new tree
+     </li>
+     <li>
+      you can use
+      <tt>
+       --engine
+      </tt>
+      (or set the var in
+      <a class="new" href="index.php?title=texexec.ini&action=edit&redlink=1" title="texexec.ini (page does not exist)">
+       texexec.ini
+      </a>
+      ) to use the
+      <tt>
+       $engine
+      </tt>
+      subpath conforming the TDS structure (unfortunately it looks like the
+      <tt>
+       $engine
+      </tt>
+      subpath will not be supported by
+      <a href="Texmf.cnf" title="Texmf.cnf">
+       Texmf.cnf
+      </a>
+      file; so much for standards)
+     </li>
+    </ul>
+    <p>Alternatively, one can (manually) adapt the <a href="Texmf.cnf" title="Texmf.cnf">Texmf.cnf</a> file (or have a partial copy in your local tree) that extends the enc + map paths to the old locations
+</p>
+    <p>Launching a script, can be done indirectly, using <i>texmfstart,</i> like
+</p>
+    <pre>texmfstart texexec.pl ... args ...
+</pre>
+    <p>or one can make a small stub, for instance:
+</p>
+    <pre>texmfstart --make texexec.pl
+</pre>
+    <p>and move the resulting <tt>bat</tt> file in one of your <tt>bin</tt> path. The <i>texmfstart</i> route is supposed to work with the old and new trees and future trees (since I will try to keep <i>texmfstart</i> downward compatible).
+</p>
+    <p>On UNIX, it's hard to distinguish files by type, i.e. <i>texexec</i> can be a stub, perl script, binary, whatever; in this case, <i>texmfstart</i> will create a link<i>(? end of line was missing)</i>
+</p>
+    <p>Note that distributions have different means of locating scripts and resources, in which case you depend on the integrety of a distribution. In case of problems, you can always replace the stubs by <i>texmfstart</i> based stubs.
+</p>
+    <p>Because of testing for TeXlive (which is the reference cross platform TeX distribution), I package the ZIPs in the new structure, and this means that users who have old trees and binaries may run into problems when they mix things.
+</p>
+    <p>[These changes in the enc/map file locations may give users who have their own font trees some headaches; also, if you use scripts in your own scripting tools e.g. in server apps, then you should be aware of the fact that locating scripts needs patches, i.e. the format fed to <i>kpsewhich;</i> Here I have so many scripts that I don't put them all in the path, for instance because of name clashes, and I used to use <i>kpsewhich</i> to locate them; using <i>texmfstart</i> in such cases is more future safe, and with the coming new kpse run-as-deamon libraries it may become faster as well.]
+</p>
+    <h3>
+     <span class="mw-headline" id="Updating_fonts">
+      Updating fonts
+     </span>
+    </h3>
+    <ul>
+     <li>
+      mkdir new
+     </li>
+     <li>
+      fetch iwona.zip. antt.zip kurier.zip (or any other font that you want to have)
+     </li>
+     <li>
+      unzip them in new
+     </li>
+    </ul>
+    <p>then run:
+</p>
+    <pre>textools  --update new e:\tex\texmf
+</pre>
+    <p>and see what gets reported; if you feel comfortable, run
+</p>
+    <pre>textools  --update new e:\tex\texmf --merge --force --delete
+</pre>
+    <p>and then
+</p>
+    <pre>mktexlsr
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212441
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.009 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 88/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:867-1!canonical and timestamp 20260109212441 and revision id 37478
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Update_Hints">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

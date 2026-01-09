@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Changes Evolution&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Changes_Evolution" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Changes Evolution
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5068&diff=38784">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="Input_and_compilation/Sample_documents.html" title="Input and compilation/Sample documents">Sample documents</a>
+</p>
+    <p>Some documents need to evolve. Laws change, a client changes their mind.
+While working on a project I like to see the changes but when the project is finished I only need the final document.
+</p>
+    <p>The following document creates both documents from a single source.
+It offers two change histories, one by version number and one by date.
+In a normal document you would probably only use one.
+</p>
+    <pre class="tex"><span class="comment">% !TEX TS-program = ConTeXt (LuaTeX 1.0.9)</span>
+<span class="comment">% !TEX encoding = UTF-8 Unicode</span>
+
+<span class="comment">% Copyright 2018 - 2021 Axel Kielhorn</span>
+<span class="comment">% Lizenz: CC-BY-SA 4.0 Unported http://creativecommons.org/licenses/by-sa/4.0/deed.de</span>
+
+<span class="cs"><span class="stylecs">\enablemode</span></span><span class="brx">[</span>change<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphyphenation</span></span><span class="brx">[</span>method<span class="brx">=</span>expanded<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\language</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setbreakpoints</span></span><span class="brx">[</span>compound<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A4<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>    <span class="brx">[</span>width<span class="brx">=</span>middle,  backspace<span class="brx">=</span>1in, cutspace<span class="brx">=</span>1in,
+                 height<span class="brx">=</span>middle, topspace<span class="brx">=</span>0.75in, bottomspace<span class="brx">=</span>0.75in<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>11pt<span class="brx">]</span>
+
+<span class="comment">% Colo[u]rs</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>ChrC<span class="brx">]</span><span class="brx">[</span>red<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>ChaC<span class="brx">]</span><span class="brx">[</span>darkgreen<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>ChcC<span class="brx">]</span><span class="brx">[</span>blue<span class="brx">]</span>
+
+<span class="comment">% Befehle im Text</span>
+
+<span class="cs">\def</span><span class="cs">\Chrc</span><span class="br">{</span><span class="cs">\ChrC</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\Chac</span><span class="br">{</span><span class="cs">\ChaC</span><span class="br">}</span>
+
+<span class="comment">% Alternative Hervorhebungen</span>
+
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>
+ <span class="brx">[</span>Highlight<span class="brx">]</span>
+ <span class="brx">[</span>frame<span class="brx">=</span>off,
+  background<span class="brx">=</span>color,
+  backgroundcolor<span class="brx">=</span>yellow<span class="brx">]</span>
+  
+<span class="cs"><span class="stylecs">\setupbar</span></span><span class="brx">[</span>overstrike<span class="brx">]</span><span class="brx">[</span><span class="comment">%</span>
+ color<span class="brx">=</span>ChrC,           <span class="comment">%  Farbe</span>
+ rulethickness<span class="brx">=</span>0.2,   <span class="comment">%  Liniendicke in pt </span>
+ offset<span class="brx">=</span>.7<span class="brx">]</span>           <span class="comment">%  H&ouml;henverschiebung in ex</span>
+
+<span class="comment">% \def\Chrc{\overstrike}</span>
+<span class="comment">% \def\Chac{\Highlight}</span>
+
+
+<span class="comment">% Register for version</span>
+<span class="cs"><span class="stylecs">\defineregister</span></span> <span class="brx">[</span>changev<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupregister</span></span>  <span class="brx">[</span>changev<span class="brx">]</span> <span class="brx">[</span>
+  indicator<span class="brx">=</span>no          <span class="comment">%% no letter</span>
+      style<span class="brx">=</span>sansbold,   <span class="comment">%% headings</span>
+  textstyle<span class="brx">=</span>slanted,    <span class="comment">%% entries</span>
+  pagestyle<span class="brx">=</span>bolditalic, <span class="comment">%% page refs</span>
+          n<span class="brx">=</span>1,          <span class="comment">%% columns</span>
+<span class="brx">]</span>
+
+
+<span class="comment">% Register for date</span>
+<span class="cs"><span class="stylecs">\defineregister</span></span> <span class="brx">[</span>changed<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupregister</span></span>  <span class="brx">[</span>changed<span class="brx">]</span> <span class="brx">[</span>
+  indicator<span class="brx">=</span>no          <span class="comment">%% no letter</span>
+      style<span class="brx">=</span>sansbold,   <span class="comment">%% headings</span>
+  textstyle<span class="brx">=</span>slanted,    <span class="comment">%% entries</span>
+  pagestyle<span class="brx">=</span>bolditalic, <span class="comment">%% page refs</span>
+          n<span class="brx">=</span>1,          <span class="comment">%% columns</span>
+<span class="brx">]</span>
+
+<span class="comment">% Change marker and short version for register</span>
+<span class="comment">% by version number</span>
+<span class="cs">\def</span><span class="cs">\ChangeV</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\changev</span><span class="br">{</span><span class="brx">#</span>1+<span class="brx">#</span>2<span class="br">}</span><span class="cs"><span class="stylecs">\doifmode</span></span><span class="br">{</span>change<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\tx</span></span> <span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs">\ChcC</span> <span class="brx">#</span>2<span class="cs">\par</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\ChangeD</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\changed</span><span class="br">{</span><span class="brx">#</span>1+<span class="brx">#</span>2<span class="br">}</span><span class="cs"><span class="stylecs">\doifmode</span></span><span class="br">{</span>change<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\tx</span></span> <span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs">\ChcC</span> <span class="brx">#</span>2<span class="cs">\par</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Inline change</span>
+<span class="cs">\def</span><span class="cs">\Changer</span><span class="brx">#</span>1<span class="br">{</span><span class="br">{</span><span class="cs"><span class="stylecs">\doifmode</span></span><span class="br">{</span>change<span class="br">}</span><span class="br">{</span><span class="cs">\Chrc</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>		            	<span class="comment">% removed</span>
+<span class="cs">\def</span><span class="cs">\Changea</span><span class="brx">#</span>1<span class="br">{</span><span class="br">{</span><span class="cs"><span class="stylecs">\doifmodeelse</span></span><span class="br">{</span>change<span class="br">}</span><span class="br">{</span><span class="cs">\Chac</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>	    		<span class="comment">% added</span>
+<span class="cs">\def</span><span class="cs">\Changec</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="br">{</span><span class="cs"><span class="stylecs">\doifmodeelse</span></span><span class="br">{</span>change<span class="br">}</span><span class="br">{</span><span class="cs">\Chrc</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\Chac</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="br">}</span>	<span class="comment">% changed</span>
+
+<span class="cs"><span class="stylecs">\defineblock</span></span> <span class="brx">[</span>ChangePR<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineblock</span></span> <span class="brx">[</span>ChangePA<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupblock</span></span> <span class="brx">[</span>ChangePR<span class="brx">]</span>
+ <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startsidebar</span></span><span class="brx">[</span>rulecolor<span class="brx">=</span>ChrC<span class="brx">]</span><span class="br">}</span>,
+  after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>overlay<span class="brx">]</span><span class="cs"><span class="documentcs">\stopsidebar</span></span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupblock</span></span> <span class="brx">[</span>ChangePA<span class="brx">]</span>
+ <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startsidebar</span></span><span class="brx">[</span>rulecolor<span class="brx">=</span>ChaC<span class="brx">]</span><span class="br">}</span>,
+  after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>overlay<span class="brx">]</span><span class="cs"><span class="documentcs">\stopsidebar</span></span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\doifelsemode</span></span> <span class="br">{</span>change<span class="br">}</span> <span class="br">{</span>
+   <span class="cs"><span class="stylecs">\keepblocks</span></span><span class="brx">[</span>ChangePR,ChangePA<span class="brx">]</span>
+<span class="br">}</span> <span class="br">{</span>
+   <span class="cs"><span class="stylecs">\keepblocks</span></span><span class="brx">[</span>ChangePA<span class="brx">]</span>
+   <span class="cs"><span class="stylecs">\setupblock</span></span>
+     <span class="brx">[</span>ChangePA<span class="brx">]</span>
+     <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,
+      after<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>  
+<span class="br">}</span>
+  
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\beginChangePR</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 1.0<span class="br">}</span><span class="br">{</span>Fertig!<span class="br">}</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 2.0<span class="br">}</span><span class="br">{</span>Langer Text von DEK entfernt.<span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs">\endChangePR</span>
+
+<span class="cs">\ChangeD</span><span class="br">{</span>2018-12-22<span class="br">}</span><span class="br">{</span>Fertig!<span class="br">}</span>
+
+<span class="cs">\beginChangePA</span>
+<span class="cs">\ChangeD</span><span class="br">{</span>2018-12-23<span class="br">}</span><span class="br">{</span>Letzter Fehler beseitigt.<span class="br">}</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 2.0<span class="br">}</span><span class="br">{</span>Langer Text von DEK als Seitenf&uuml;ller<span class="br">}</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs">\endChangePA</span>
+
+<span class="cs">\ChangeD</span><span class="br">{</span>2018-12-23<span class="br">}</span><span class="br">{</span>Allerletzter Fehler beseitigt.<span class="br">}</span>
+
+In diesem Satz war ein <span class="cs">\Changec</span><span class="br">{</span>F&auml;hler<span class="br">}</span><span class="br">{</span>Fehler<span class="br">}</span>.
+
+<span class="cs">\beginChangePA</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 2.0<span class="br">}</span><span class="br">{</span>Farben ge&auml;ndert<span class="br">}</span>
+Die &Auml;nderungskommentare werden jetzt in <span class="br">{</span><span class="cs">\ChcC</span> blau<span class="br">}</span> ausgegeben, da <span class="br">{</span><span class="cs">\ChrC</span> rot<span class="br">}</span> f&uuml;r gel&ouml;schte Texte und <span class="br">{</span><span class="cs">\ChaC</span> gr&uuml;n<span class="br">}</span> f&uuml;r hinzugef&uuml;gte Texte verwendet wird.
+<span class="cs">\endChangePA</span>
+
+<span class="cs">\beginChangePR</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 3.0<span class="br">}</span><span class="br">{</span>Syntax veraltet<span class="br">}</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 2.0<span class="br">}</span><span class="br">{</span>Neue Befehle <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>ChangeA<span class="br">}</span>, <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>ChangeR<span class="br">}</span>, <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>Changea<span class="br">}</span>, <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>Changer<span class="br">}</span> und <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span>Changec<span class="br">}</span><span class="br">}</span>
+Mit den Befehlen <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\ChangeA</span><span class="br">}</span> und <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\ChangeR</span><span class="br">}</span> werden hinzugef&uuml;gte bzw. gel&ouml;schte Abs&auml;tze gekennzeichnet.
+<span class="cs">\endChangePR</span>
+
+<span class="cs">\beginChangePA</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 3.0<span class="br">}</span><span class="br">{</span>Syntax veraltet<span class="br">}</span>
+Die neuen Befehle <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\beginChangePA</span><span class="br">}</span>/ <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\endChangePA</span><span class="br">}</span> <span class="brx">(</span>Paragraph added<span class="brx">)</span> und <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\beginChangePR</span><span class="br">}</span>/ <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\endChangePR</span><span class="br">}</span> <span class="brx">(</span>Paragraph removed<span class="brx">)</span> werden zum hervorheben von absatzweisen &Auml;nderungen benutzt.
+Die Information &uuml;ber die &Auml;nderung <span class="brx">(</span>Version und Kurzbeschreibung<span class="brx">)</span> wird &uuml;ber einen <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\ChangeV</span><span class="br">}</span> oder <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\ChangeD</span><span class="br">}</span> hinzugef&uuml;gt.
+<span class="cs">\endChangePA</span>
+
+<span class="cs">\beginChangePA</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 2.0<span class="br">}</span><span class="br">{</span>Befehle f&uuml;r &Auml;nderungen im Text<span class="br">}</span>
+Mit den Befehlen <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\Changea</span><span class="br">}</span>, <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\Changer</span><span class="br">}</span> und <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\Changec</span><span class="br">}</span> werden hinzugef&uuml;gte, gel&ouml;schte oder ge&auml;nderte Satzteile gekennzeichnet. Der Befehl <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs">\Changec</span><span class="br">}</span> hat zwei Argumente: alter Text und neuer Text.
+<span class="cs">\endChangePA</span>
+
+<span class="cs">\beginChangePA</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 3.0<span class="br">}</span><span class="br">{</span>Absatz hinzugef&uuml;gt mit Start/Stopp<span class="br">}</span>
+Absatz hinzugef&uuml;gt
+<span class="cs">\endChangePA</span>
+
+<span class="cs">\beginChangePR</span>
+<span class="cs">\ChangeV</span><span class="br">{</span>V. 3.0<span class="br">}</span><span class="br">{</span>Absatz gel&ouml;scht mit Start/Stopp<span class="br">}</span>
+Abstaz entfernt
+<span class="cs">\endChangePR</span>
+
+Ende
+
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>History<span class="br">}</span><span class="brx">]</span>
+
+By Version Number:
+
+<span class="cs">\placechangev</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+By Date:
+
+<span class="cs">\placechanged</span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260110063326
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.048 seconds
+Real time usage: 0.126 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 18381/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5068-1!canonical and timestamp 20260110063326 and revision id 38784
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Changes_Evolution">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

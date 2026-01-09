@@ -1,0 +1,3522 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TEI xml&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TEI_xml" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TEI xml
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3357&diff=42630">2025-12-17</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#General">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         General
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Our_xml_file">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Our xml file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#The_ConTeXt_style_file">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         The ConTeXt style file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Removing_unwanted_strings_from_xml_source">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Removing unwanted strings from xml source
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Additional_considerations_for_TEI_.E2.86.92_ConTeXt_workflows">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Additional considerations for TEI &rarr; ConTeXt workflows
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#TEI_markup_and_poetic_structures">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           TEI markup and poetic structures
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#From_semantic_description_to_typographic_procedure">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           From semantic description to typographic procedure
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Historical_examples_and_their_limitations">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           Historical examples and their limitations
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#External_XML_versus_internal_XML_buffers">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           External XML versus internal XML buffers
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Alignment_of_parallel_poetic_texts">
+          <span class="tocnumber">
+           5.5
+          </span>
+          <span class="toctext">
+           Alignment of parallel poetic texts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Commentary.2C_notes.2C_and_verse-based_layouts">
+          <span class="tocnumber">
+           5.6
+          </span>
+          <span class="toctext">
+           Commentary, notes, and verse-based layouts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Typographic_context_and_poetic_scope">
+          <span class="tocnumber">
+           5.7
+          </span>
+          <span class="toctext">
+           Typographic context and poetic scope
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Explicit_mappings_as_an_editorial_choice">
+          <span class="tocnumber">
+           5.8
+          </span>
+          <span class="toctext">
+           Explicit mappings as an editorial choice
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#Example_TEI_sources_and_workflows">
+          <span class="tocnumber">
+           5.9
+          </span>
+          <span class="toctext">
+           Example TEI sources and workflows
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Overview_.28three_approaches.29">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Overview (three approaches)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#.28A.29_ConTeXt-native_XML_processing_.28recommended_for_verse_MWEs.29">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           (A) ConTeXt-native XML processing (recommended for verse MWEs)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#.28B.29_Lua-driven_XML_processing_.28optional.2C_project-specific.29">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           (B) Lua-driven XML processing (optional, project-specific)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#.28C.29_Hybrid_workflows_.28advanced.29">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           (C) Hybrid workflows (advanced)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#Example_sources_.28TEI.29">
+          <span class="tocnumber">
+           6.4
+          </span>
+          <span class="toctext">
+           Example sources (TEI)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#Example_TEI_sources_and_repositories">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Example TEI sources and repositories
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#A_minimal_TEI_.E2.86.92_ConTeXt_example">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           A minimal TEI &rarr; ConTeXt example
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#Another_MWE_.28Minimum_Working_Example.29_in_poetry">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Another MWE (Minimum Working Example) in poetry
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#Mapping_TEI_.28verse.29_to_ConTeXt:_why_the_buffer-based_approach_is_useful">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           Mapping TEI (verse) to ConTeXt: why the buffer-based approach is useful
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#A_much_more_complete_MWE_in_XML-TEI_poetry">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         A much more complete MWE in XML-TEI poetry
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#Scope_and_limitations_of_this_example">
+          <span class="tocnumber">
+           9.1
+          </span>
+          <span class="toctext">
+           Scope and limitations of this example
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#A_minimal_TEI_source_file">
+          <span class="tocnumber">
+           9.2
+          </span>
+          <span class="toctext">
+           A minimal TEI source file
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-27">
+           <a href="#Minimal_TEI_file_.28example.xml.29">
+            <span class="tocnumber">
+             9.2.1
+            </span>
+            <span class="toctext">
+             Minimal TEI file (example.xml)
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#Loading_a_TEI_file_in_ConTeXt">
+          <span class="tocnumber">
+           9.3
+          </span>
+          <span class="toctext">
+           Loading a TEI file in ConTeXt
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-29">
+           <a href="#Minimal_ConTeXt_file_.28example.tex.29">
+            <span class="tocnumber">
+             9.3.1
+            </span>
+            <span class="toctext">
+             Minimal ConTeXt file (example.tex)
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-30">
+         <a href="#Routing_XML_elements_to_ConTeXt_macros">
+          <span class="tocnumber">
+           9.4
+          </span>
+          <span class="toctext">
+           Routing XML elements to ConTeXt macros
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-31">
+           <a href="#Defining_XML_setups">
+            <span class="tocnumber">
+             9.4.1
+            </span>
+            <span class="toctext">
+             Defining XML setups
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-32">
+           <a href="#Processing_the_TEI_structure">
+            <span class="tocnumber">
+             9.4.2
+            </span>
+            <span class="toctext">
+             Processing the TEI structure
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-33">
+       <a href="#A_progressive_TEI_.E2.86.92_ConTeXt_example_.28Greek_.2B_French.29">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         A progressive TEI &rarr; ConTeXt example (Greek + French)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#Scope_and_limitations_of_this_example_2">
+          <span class="tocnumber">
+           10.1
+          </span>
+          <span class="toctext">
+           Scope and limitations of this example
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-35">
+         <a href="#A_minimal_TEI_source_file_2">
+          <span class="tocnumber">
+           10.2
+          </span>
+          <span class="toctext">
+           A minimal TEI source file
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-36">
+           <a href="#Minimal_TEI_file_.28example.xml.29_2">
+            <span class="tocnumber">
+             10.2.1
+            </span>
+            <span class="toctext">
+             Minimal TEI file (example.xml)
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#Loading_a_TEI_file_in_ConTeXt_2">
+          <span class="tocnumber">
+           10.3
+          </span>
+          <span class="toctext">
+           Loading a TEI file in ConTeXt
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-38">
+           <a href="#Minimal_ConTeXt_file_.28example.tex.29_2">
+            <span class="tocnumber">
+             10.3.1
+            </span>
+            <span class="toctext">
+             Minimal ConTeXt file (example.tex)
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-39">
+         <a href="#Routing_XML_elements_to_ConTeXt_macros_2">
+          <span class="tocnumber">
+           10.4
+          </span>
+          <span class="toctext">
+           Routing XML elements to ConTeXt macros
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-40">
+           <a href="#Defining_XML_setups_2">
+            <span class="tocnumber">
+             10.4.1
+            </span>
+            <span class="toctext">
+             Defining XML setups
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-41">
+           <a href="#Processing_the_TEI_structure_2">
+            <span class="tocnumber">
+             10.4.2
+            </span>
+            <span class="toctext">
+             Processing the TEI structure
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-42">
+         <a href="#Distinguishing_Greek_and_French_text">
+          <span class="tocnumber">
+           10.5
+          </span>
+          <span class="toctext">
+           Distinguishing Greek and French text
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-43">
+           <a href="#Language-aware_routing">
+            <span class="tocnumber">
+             10.5.1
+            </span>
+            <span class="toctext">
+             Language-aware routing
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-44">
+         <a href="#A_simple_parallel_presentation">
+          <span class="tocnumber">
+           10.6
+          </span>
+          <span class="toctext">
+           A simple parallel presentation
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-45">
+           <a href="#Example_using_blocks">
+            <span class="tocnumber">
+             10.6.1
+            </span>
+            <span class="toctext">
+             Example using blocks
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-46">
+         <a href="#What_this_example_does_not_do">
+          <span class="tocnumber">
+           10.7
+          </span>
+          <span class="toctext">
+           What this example does not do
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-47">
+         <a href="#Summary">
+          <span class="tocnumber">
+           10.8
+          </span>
+          <span class="toctext">
+           Summary
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-48">
+         <a href="#Distinguishing_Greek_and_French_text_2">
+          <span class="tocnumber">
+           10.9
+          </span>
+          <span class="toctext">
+           Distinguishing Greek and French text
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-49">
+           <a href="#Language-aware_routing_2">
+            <span class="tocnumber">
+             10.9.1
+            </span>
+            <span class="toctext">
+             Language-aware routing
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-50">
+         <a href="#A_simple_parallel_presentation_2">
+          <span class="tocnumber">
+           10.10
+          </span>
+          <span class="toctext">
+           A simple parallel presentation
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-51">
+           <a href="#Example_using_blocks_2">
+            <span class="tocnumber">
+             10.10.1
+            </span>
+            <span class="toctext">
+             Example using blocks
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-52">
+         <a href="#What_this_example_does_not_do_2">
+          <span class="tocnumber">
+           10.11
+          </span>
+          <span class="toctext">
+           What this example does not do
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-53">
+         <a href="#Summary_2">
+          <span class="tocnumber">
+           10.12
+          </span>
+          <span class="toctext">
+           Summary
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-54">
+       <a href="#About_.5Cxmltext_vs_.5Cxmlflush_when_processing_TEI_content">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         About \xmltext vs \xmlflush when processing TEI content
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-55">
+       <a href="#Overview:_how_the_workflow_works">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         Overview: how the workflow works
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-56">
+       <a href="#Expected_TEI_structure">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         Expected TEI structure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-57">
+       <a href="#Why_ConTeXt_does_not_require_an_external_XML_parser">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         Why ConTeXt does not require an external XML parser
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-58">
+       <a href="#A_ConTeXt-native_XML_example_.28recommended.29">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         A ConTeXt-native XML example (recommended)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-59">
+         <a href="#XML_file_.28simplified_TEI.29">
+          <span class="tocnumber">
+           15.1
+          </span>
+          <span class="toctext">
+           XML file (simplified TEI)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-60">
+         <a href="#ConTeXt_file">
+          <span class="tocnumber">
+           15.2
+          </span>
+          <span class="toctext">
+           ConTeXt file
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-61">
+       <a href="#What_this_example_demonstrates">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         What this example demonstrates
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-62">
+       <a href="#When_Lua_code_becomes_necessary">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         When Lua code becomes necessary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-63">
+       <a href="#Summary_3">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         Summary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-64">
+       <a href="#1._TEI_file_structure:_what_does_Lua_expect.3F">
+        <span class="tocnumber">
+         19
+        </span>
+        <span class="toctext">
+         1. TEI file structure: what does Lua expect?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-65">
+       <a href="#A_ConTeXt-native_XML_example_.28recommended.29_2">
+        <span class="tocnumber">
+         20
+        </span>
+        <span class="toctext">
+         A ConTeXt-native XML example (recommended)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-66">
+         <a href="#1._Create_the_TEI_file">
+          <span class="tocnumber">
+           20.1
+          </span>
+          <span class="toctext">
+           1. Create the TEI file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-67">
+         <a href="#2._Directory_layout">
+          <span class="tocnumber">
+           20.2
+          </span>
+          <span class="toctext">
+           2. Directory layout
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-68">
+         <a href="#3._Create_the_ConTeXt_file">
+          <span class="tocnumber">
+           20.3
+          </span>
+          <span class="toctext">
+           3. Create the ConTeXt file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-69">
+         <a href="#4._Run_the_example">
+          <span class="tocnumber">
+           20.4
+          </span>
+          <span class="toctext">
+           4. Run the example
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-70">
+         <a href="#5._What_this_demonstrates">
+          <span class="tocnumber">
+           20.5
+          </span>
+          <span class="toctext">
+           5. What this demonstrates
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-71">
+         <a href="#6._Next_step_.28recommended.29">
+          <span class="tocnumber">
+           20.6
+          </span>
+          <span class="toctext">
+           6. Next step (recommended)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-72">
+       <a href="#8._What_this_example_demonstrates">
+        <span class="tocnumber">
+         21
+        </span>
+        <span class="toctext">
+         8. What this example demonstrates
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-73">
+         <a href="#For_testing.2C_learning.2C_or_experimenting_with_TEI_.E2.86.92_ConTeXt_processing.2C_the_following_sample_files_and_repositories_are_helpful">
+          <span class="tocnumber">
+           21.1
+          </span>
+          <span class="toctext">
+           For testing, learning, or experimenting with TEI &rarr; ConTeXt processing, the following sample files and repositories are helpful
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-74">
+       <a href="#Further_reading">
+        <span class="tocnumber">
+         22
+        </span>
+        <span class="toctext">
+         Further reading
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-75">
+       <a href="#See_also">
+        <span class="tocnumber">
+         23
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="General">
+      General
+     </span>
+    </h2>
+    <p>TEI (Text Encoding Initiative) is "a consortium which collectively develops and maintains a standard for the representation of texts in digital form," to quote <a class="external text" href="http://www.tei-c.org/index.xml" rel="nofollow">their own website</a>. They have developed a series of guidelines for editing texts in a digital form. In their latest form (which is called P 5), these guidelines weigh in at a hefty 1350 pages (OK, that's counting the bibliography and the index too; there are only 1290 pages of real text). These describe an xml format which is suitable for editing texts. The TEI guidelines have the advantage of being very well documented. There are a number of free resources available that should help everyone who is interested in getting started (one extremely helpful website with lots of tutorials, examples, and tests is <a class="external text" href="http://teibyexample.org" rel="nofollow">TEI by example</a>). They are not (and do not aspire to be) an absolute standard that everyone has to follow, but many academic projects use these guidelines, and they should be a pretty good way to make sure that your electronic edition of a text will be useful in the future.
+</p>
+    <p>Since editing texts is something which quite a few users of ConTeXt are involved in, it makes sense to think about ways in which xml documents which follow the TEI guidelines can be typeset with ConTeXt. We would invite users to keep a few caveats in mind: 
+</p>
+    <ol>
+     <li>
+      The TEI guidelines are very detailed because they try to cater to a large number of needs. Most users will only need a small subset of the tags and attributes which the guidelines offer (in fact, TEI is aware of this and has a slimmed down version of their guidelines which is called
+      <a class="external text" href="http://www.tei-c.org/Guidelines/Customization/Lite" rel="nofollow">
+       TEI Lite
+      </a>
+      . This is a very good starting place to familiarize yourself with TEI). It would not make sense to try and provide a monolithic solution that defines all TEI tags; instead, localized ConTeXt style sheets are necessary which will define a subset which is relevant for a number of texts with similar features.
+     </li>
+     <li>
+      Even with this huge number of tags, TEI does not expect to be sufficient for every text. Users are encouraged to develop their own styles; again, this necessitates special ConTeXt style sheets to process such adaptations.
+     </li>
+     <li>
+      Encoding and typesetting texts in xml is an ongoing process. As you go forward in your edition, you realize that you need more tags, that you need to distinguish more special cases, that you want to add more information to your edition. This means that you will have to go back and forth between your xml file and the ConTeXt style and adapt both to your needs.
+     </li>
+    </ol>
+    <p>All of which means that the following paragraphs are just the first step in an ongoing attempt. I (Thomas) have written down a setup for a text that I am editing (for those who are interested: <a class="external text" href="http://www.livius.org/phi-php/philostratus/philostratus.htm#VS" rel="nofollow">the <i>Lives of the Sophists</i> by Philostratus</a>). I fully expect this to be a community effort: as others use TEI xml, they will discover new ways of handling things, will want to add features or add examples for other sorts of texts. My example is meant to start the discussion. Since those who edit texts usually have a background in the humanities, not in programming, I have added lengthy comments which will explain every step.
+</p>
+    <h2>
+     <span class="mw-headline" id="Our_xml_file">
+      Our xml file
+     </span>
+    </h2>
+    <p>Philostratus's text is in ancient Greek, but since the text itself doesn't matter much when we talk about structure and typesetting xml, I have replaced it here with a simple lorem ipsum text that is easier to display. So here's what the first paragraphs of the xml file philostratus.xml look like:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version="1.0"?</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">TEI xmlns="http://www.tei-c.org/ns/1.0" xml:lang="en"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">teiHeader</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">fileDesc</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">titleStmt</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">title</span><span class="br">&gt;</span>Lives of the Sophists<span class="br">&lt;</span><span class="name">/title</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">author</span><span class="br">&gt;</span>Philostratus<span class="br">&lt;</span><span class="name">/author</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">respStmt</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">resp</span><span class="br">&gt;</span>editor<span class="br">&lt;</span><span class="name">/resp</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">name xml:id="TAS"</span><span class="br">&gt;</span>Thomas<span class="br">&lt;</span><span class="name">/name</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/respStmt</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/titleStmt</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">publicationStmt</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>Work in progress<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/publicationStmt</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">sourceDesc</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>See indication of manuscripts<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/sourceDesc</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/fileDesc</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/teiHeader</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">text</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">front</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">div type="sigla"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">listWit</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">witness id="c2"</span><span class="br">&gt;</span>codd. 2<span class="br">&lt;</span><span class="name">/witness</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">witness id="Richards"</span><span class="br">&gt;</span>Richards<span class="br">&lt;</span><span class="name">/witness</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/listWit</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">div type="work"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">head type="main"</span><span class="br">&gt;</span>Philostrati<span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">head type="sub"</span><span class="br">&gt;</span>Vitae Sophistarum.<span class="br">&lt;</span><span class="name">/head</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">opener</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">salute</span><span class="br">&gt;</span>Lorem <span class="br">&lt;</span><span class="name">pb ed="Olearius" n="479"/</span><span class="br">&gt;</span>Ipsum<span class="br">&lt;</span><span class="name">/salute</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/opener</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/front</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">body</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">div xml:id="VS1" n="I" type="book"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">div xml:id="VS1.1" n="1" type="chapter"</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">div xml:id="VS1.1.1" n="1" type="section"</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+	    diam nonumy eirmod tempor invidunt
+	    <span class="br">&lt;</span><span class="name">app</span><span class="br">&gt;</span>
+	      <span class="br">&lt;</span><span class="name">rdg wit="#Richards"</span><span class="br">&gt;</span>induunt<span class="br">&lt;</span><span class="name">/rdg</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">/app</span><span class="br">&gt;</span>
+	    ut labore et dolore magna aliquyam erat, sed diam voluptua. At
+	    vero eos et accusam et justo duo dolores et ea rebum. Stet
+	    clita kasd gubergren
+	    <span class="br">&lt;</span><span class="name">app</span><span class="br">&gt;</span>
+	      <span class="br">&lt;</span><span class="name">rdg wit="#c2"</span><span class="br">&gt;</span>arrgl<span class="br">&lt;</span><span class="name">/rdg</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">/app</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">pb ed="Olearius" n="480"/</span><span class="br">&gt;</span>
+	    no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem
+	    ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+	    nonumy eirmod tempor invidunt.<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">div xml:id="VS1.1.2" n="2" rend="inline" type="section"</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>ut labore et dolore magna aliquyam erat, sed diam
+	    voluptua. <span class="br">&lt;</span><span class="name">pb ed="Olearius" n="481"/</span><span class="br">&gt;</span> At vero eos et accusam et
+	    justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+	    sea takimata sanctus est Lorem ipsum dolor sit amet.
+	    <span class="br">&lt;</span><span class="name">lg</span><span class="br">&gt;</span>
+	      <span class="br">&lt;</span><span class="name">l</span><span class="br">&gt;</span>At vero eos et accusam et justo duo dolores<span class="br">&lt;</span><span class="name">/l</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">/lg</span><span class="br">&gt;</span>
+	    et
+	    <span class="br">&lt;</span><span class="name">lg</span><span class="br">&gt;</span>
+	      <span class="br">&lt;</span><span class="name">l</span><span class="br">&gt;</span>ea rebum. Stet clita kasd gubergren, no sea takimata<span class="br">&lt;</span><span class="name">/l</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">/lg</span><span class="br">&gt;</span>
+	    sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
+	    amet<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">div xml:id="VS1.1.3" n="3" rend="paragraph" type="section"</span><span class="br">&gt;</span>
+	    <span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>Duis autem vel eum iriure dolor in hendrerit in vulputate
+	    velit esse molestie consequat, vel illum dolore eu feugiat
+	    nulla facilisis at vero eros et accumsan et iusto odio
+	    dignissim qui blandit praesent luptatum zzril delenit augue
+	    duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit
+	    amet, consectetuer adipiscing elit, sed diam nonummy nibh
+	    euismod tincidunt ut laoreet dolore magna aliquam erat
+	    volutpat.<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+      <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">/body</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/text</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/TEI</span><span class="br">&gt;</span>
+</pre>
+    <p>So let's have a look at this file. This can be brief since most of the tags are described in the TEI guidelines and tutorials.
+</p>
+    <p>Every TEI file has as its root level (i.e. the "outer" level of the xml file) the element 
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">TEI</span><span class="br">&gt;</span>
+
+<span class="br">&lt;</span><span class="name">/TEI</span><span class="br">&gt;</span>
+</pre>
+    <p>which defines it as a TEI xml file. Everything else is a "child" of this root level. At the next level, you see two of these children: on the one hand, the &lt;teiHeader&gt; element. This contains meta-information about your electronic edition: title, author, editor, publication status, source of your edition. There can be much more information here. This is meta-information which will usually not be typeset in your edition.
+</p>
+    <p>The other child is the &lt;text&gt; element. This is what will really be in a typeset, printed edition. As you see, the &lt;text&gt; element has again two children. The &lt;front&gt; contains the title of the work you edit in the form in which it will appear in your typeset document, prefatory material, etc. The &lt;body&gt; element contains the text itself. This text has a logical structure: It consists of books, chapters, and sections. All of these logical parts are expressed via different <code>&lt;div&gt;</code> elements; to distinguish them from each other, these <code>&lt;div&gt;</code> elements have so-called attributes, so we have:
+</p>
+    <pre class="xml">      <span class="br">&lt;</span><span class="name">div xml:id="VS1" n="I" type="book"</span><span class="br">&gt;</span>
+	<span class="br">&lt;</span><span class="name">div xml:id="VS1.1" n="1" type="chapter"</span><span class="br">&gt;</span>
+	  <span class="br">&lt;</span><span class="name">div xml:id="VS1.1.1" n="1" type="section"</span><span class="br">&gt;</span>
+          <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+        <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+     <span class="br">&lt;</span><span class="name">/div</span><span class="br">&gt;</span>
+</pre>
+    <p>As you can see, most of these "div" elements have other attributes as well: the "xml:id" attribute gives every section in your document a unique identifier. This makes it easier to refer to these sections later. You are free to choose these attributes; as an example, I have opted for a short numeric tag that refers to the paragraph. The "n" attribute is the name of the section as it will appear in your typeset edition. For classical prose texts, it is customary to have the chapter and section numbers appear in the margin of the edition, with no prefix and no additional information about the structure. E.g., at the beginning of chapter 8, there will be a bold <b>8</b> in the margin (the mark for "section 1" is understood and usually not expressed). For subsequent sections of chapter 8, there will be smaller section numbers in the margin, like "2," "3," etc. Finally, such sections of chapters do not necessarily begin a new paragraph. In order to make this clear, I have used the "rend" attribute (not exactly in the way TEI defines it, but close enough). For sections, I have two types of "rend" attributes: "inline" means that this section should just continue the typographical paragraph; "paragraph" means that it should begin in a new paragraph. This is an important distinction which I want to emphasize: in your typeset edition, these two will appear very different. For the <b>logical</b> structure of your digital text, however, they are both on the same level. That's why they are both "div" of the same type, but with different "rend" attributes.
+</p>
+    <p>Further, we have <tt>&lt;pb&gt;</tt> elements. These are used to denote pagebreaks in standard editions, which are often used for reference purposes and displayed in the margin; in the case of the <i>Lives of the Sophists</i>, this is the 18th-century edition of Olearius. These elements are inserted at the places where these pagebreaks occur.
+</p>
+    <p>Finally, we have the critical apparatus. Its notes are included in &lt;app&gt; elements. Every single entry into the apparatus is within a &lt;rdg&gt; (= reading) element.
+</p>
+    <p>This should be enough to get us started. We will now look at the way in which we will typeset such a xml document with ConTeXt.
+</p>
+    <h2>
+     <span class="mw-headline" id="The_ConTeXt_style_file">
+      The ConTeXt style file
+     </span>
+    </h2>
+    <p><b>NB:</b> Some of the functionality described here has been introduced quite recently. You will need a ConTeXt version not earlier than December 2010 in order to try this example!
+</p>
+    <p>In order to typeset such a file with ConTeXt, we need a style file which will map xml elements and attributes to specific ConTeXt commands. We have to save this file (let's call it tei-style.tex) somewhere where ConTeXt can find it (e.g., somewhere in your personal texmf tree or in the same directory as the xml file) and then typeset with the command <tt>context --environment=tei-style philostratus.xml</tt>. We will look at this file in detail:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <p>We define a set of <code>\xmlsetups</code> in a <code>\start \stop</code> environment, and we give it a name in the namespace <tt>xml:</tt>. The first line of these setups does only one thing: the <code>\xmlsetsetup</code> operates on the current xml tree (that's what the first argument <code>{#1}</code> refers to), takes all its elements (<code>{*}</code>) and discards them (<code>{-}</code>). That means <b>only</b> elements which we address explicitly will be typeset. This is necessary in our case because we do not want the information in the TEI header to be typeset.
+</p>
+    <p>For those elements we <b>do</b> want typeset, we have to add instructions. This involves a three-step process:
+</p>
+    <ol>
+     <li>
+      We have to add their names to a line which defines a
+      <code>\xmlsetsetup</code>
+     </li>
+     <li>
+      We define a specific setup for them
+     </li>
+     <li>
+      (optional) we define TeX commands for typesetting
+     </li>
+    </ol>
+    <p>Let us begin with some easy steps. The xml tree we are operating on is empty now. So we first have to tell ConTeXt to pass the content of the topmost elements to its typesetting engine. The topmost element is TEI, so we write:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:teisetups<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:TEI
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <p>So: we add the <tt>TEI</tt> element to a new <code>\xmlsetsetup</code>. We "register" the setups we have defined. And then we declare that the content of the element <tt>TEI</tt> should be passed to ConTeXt; this is what the line <code>\xmlflush{#1}</code> does.
+</p>
+    <p>Of course, we will do the same for the <tt>text</tt> element, but not for the <tt>TEIheader</tt> element, which we do not want to be typeset. So we now have:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:teisetups<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:TEI
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:text
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <p>Things become a bit more interesting when we look at the next level. We will start with the text proper, which is contained in the <tt>body</tt> element. For the text, we want line numbers in the margin, and we want these linenumbers in steps of five, in a small font. Here you can see the three steps we have to take:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:teisetups<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:TEI
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:text
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:body
+    <span class="cs"><span class="documentcs">\startlinenumbering</span></span>
+    <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+    <span class="cs"><span class="documentcs">\stoplinenumbering</span></span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setuplinenumbering</span></span><span class="brx">[</span>location<span class="brx">=</span>inner,
+                    step<span class="brx">=</span>5,
+                    method<span class="brx">=</span>page,
+                    style<span class="brx">=</span><span class="cs">\tfxx</span>,
+                    align<span class="brx">=</span>left,
+                    distance<span class="brx">=</span>0.3em,
+                    width<span class="brx">=</span>0.3cm<span class="brx">]</span>
+
+</pre>
+    <p>So we have:
+</p>
+    <ol>
+     <li>
+      added the element
+      <tt>
+       body
+      </tt>
+      to our
+      <code>\xmlsetsetup</code>
+     </li>
+     <li>
+      added a specific setup for the element which puts its content within a
+      <code>\startlinenumbering</code>
+      environment
+     </li>
+     <li>
+      added ConTeXt setup commands for the
+      <code>\startlinenumbering</code>
+      environment.
+     </li>
+    </ol>
+    <p>Things become even more interesting at the next level. When you look at our xml document, you will see that the entire body consists of different divisions in <tt>div</tt> elements; the different levels are distinguished by different <tt>type</tt> attributes. This means we cannot simply add the <tt>div</tt> element to our general <code>\xmlsetsetup</code>, but have to add a specific <code>\xmlsetsetup</code> for every type. Fortunately, ConTeXt makes it easy to address these different elements. We begin with the <tt>book</tt> level: (for clarity, I will now only show the new steps, not the entire style document):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+	<span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>div<span class="brx">[</span>@type<span class="brx">=</span>'book'<span class="brx">]</span><span class="br">}</span><span class="br">{</span>xml:div:book<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:div:book
+	<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <p>What happens here? The expression <code>div[@type='book']</code> means "every element div which has an attribute 'type' with the value 'book.'" We want a blank line before the title of the book. Then, we take the value of the <tt>n</tt> attribute (that's what the construct <code>\xmlatt{#1}{n}</code> expands to: the value of the attribute <tt>n</tt> of the current tag) and typeset it midaligned. We add another, smaller blank. And don't forget to "flush" the content of the <tt>div</tt> element!
+</p>
+    <p>For the next level, the <tt>chapter</tt>, we need again three steps: add it to the <code>\xmlsetsetup</code>, define a setup command and a ConTeXt macro for it:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+	<span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>div<span class="brx">[</span>@type<span class="brx">=</span>'chapter'<span class="brx">]</span><span class="br">}</span><span class="br">{</span>xml:div:chapter<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:div:chapter
+	<span class="cs">\PhilSection</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span>
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+	<span class="cs">\par</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\defineinmargin</span> <span class="brx">[</span>PhilSection<span class="brx">]</span> <span class="brx">[</span>outer<span class="brx">]</span> <span class="brx">[</span>normal<span class="brx">]</span> <span class="brx">[</span>distance<span class="brx">=</span>0.3em,style<span class="brx">=</span><span class="cs">\tfa</span><span class="cs">\bf</span><span class="brx">]</span>
+</pre>
+    <p>So: here, the argument of the <tt>n</tt> attribute is passed to a ConTeXt
+macro <code>\PhilSection</code>. This macro is defined as an
+<code>\inmargin</code> which will be typeset in the outer margin, in a
+bigger, bold font. This will be the "chapter" numbering in the outer
+margin.
+</p>
+    <p>For the section numbering, we take a similar approach, but as you will see,
+we need to define even more different setups:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:teisetups
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>*<span class="br">}</span><span class="br">{</span>-<span class="br">}</span>
+        <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+	<span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>div<span class="brx">[</span>@type<span class="brx">=</span>'section'<span class="brx">]</span><span class="br">}</span><span class="br">{</span>xml:div:section<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:div:section
+	<span class="cs"><span class="systemcs">\doifelse</span></span>
+	 <span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span>
+	 <span class="br">{</span>1<span class="br">}</span>
+	 <span class="br">{</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+	 <span class="br">{</span><span class="cs"><span class="systemcs">\doifelse</span></span>
+	  <span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>rend<span class="br">}</span><span class="br">}</span>
+	  <span class="br">{</span>paragraph<span class="br">}</span>
+	  <span class="br">{</span><span class="cs">\par</span><span class="cs">\PhilSubsection</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+	  <span class="br">{</span><span class="cs">\PhilSubsection</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\defineinmargin</span> <span class="brx">[</span>PhilSubsection<span class="brx">]</span> <span class="brx">[</span>outer<span class="brx">]</span> <span class="brx">[</span>normal<span class="brx">]</span> <span class="brx">[</span>distance<span class="brx">=</span>0.3em,style<span class="brx">=</span>normal<span class="brx">]</span>
+</pre>
+    <p>Here, we define a setup for the section level which contains two further
+tests, for which we use ConTeXt's <code>\doifelse</code> macro. The first
+<code>\doifelse</code> tests if the value of the <tt>n</tt> attribute is
+"1," i.e., if this is the first section in a chapter. If it is, it does
+nothing more than "flush" the content of this section -- remember, the
+number for the first section should not appear in the margin since it is
+implied in the chapter number. It's still good to have this number -- if
+you ever decide that your typeset output should look different, the
+information is there and can be shown. But for the time being, we do not
+want it to appear, and that's what the first condition does. If the
+<tt>n</tt> attribute's value <b>isn't</b> 1, another test is performed; this
+time, we look at the value of the <tt>rend</tt> attribute. If this
+attribute has the value "paragraph," we insert a <code>\par</code>, pass
+the value of the <tt>n</tt> attribute to the macro
+<code>\PhilSubsection</code>, and "flush" the content of our section. If
+the value is anything else (i.e., "inline"), we flush the content without
+inserting a <code>\par</code>. Then, we define <code>\PhilSubsection</code>
+as another <code>\inmargin</code>, which will appear in the outer margin,
+at the same place as the chapter numbering, but in a normal font. Finally,
+when you look at the main text, you will see that we now have defined
+setups for books, chapters, sections, but not yet for the smallest element,
+<tt>p</tt>. Remember: we don't want paragraph breaks for these elements, so
+all we need to do is "flush" them. Which means: we add the <tt>p</tt>
+element to the list:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body|p<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+</pre>
+    <p>and the appropriate setup is:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:p
+	<span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <p>And that's it! This is our structure for the main text! If you typeset the
+xml file with this setup, you get text with marginal numbering for your
+chapters and sections.
+</p>
+    <p>We now add the bells and whistles. We begin with the Olearius pagebreaks,
+the <tt>&lt;pb&gt;</tt> elements. If you've followed so far, this should be
+easy. As you see, these elements contain a reference to the relevant
+edition (the <tt>ed=</tt> attribute) and the pagenumber. If we had more
+elements of this type, it would make sense to define a <tt>setsetup</tt>
+for every one of them. In the case of Philostratus, we will probably only
+have Olearius, so we just add them to our list:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>TEI|text|body|p|pb<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+</pre>
+    <p>and add both the setup for the xml element and a new definition for a
+marginal text (since we're a bit paranoid, we still test whether the
+<tt>xmlattribute ed</tt> is set to <tt>Olearius</tt>). Since I want the
+Olearius numbers in square brackets, I needed to take a two-step approach
+(the square brackets would be confusing to the ConTeXt parser). So I first
+define an inmargin <code>\Zolearius</code> and then a macro
+<code>\Olearius</code> which takes this value and typesets it within square
+brackets, in the outer margin, at a distance of 2em from the main text:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:pb
+	<span class="cs"><span class="systemcs">\doifelse</span></span>
+	<span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>ed<span class="br">}</span><span class="br">}</span>
+	<span class="br">{</span>Olearius<span class="br">}</span>
+	<span class="br">{</span><span class="cs">\Olearius</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+	<span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\defineinmargin</span> <span class="brx">[</span>ZOlearius<span class="brx">]</span> <span class="brx">[</span>outer<span class="brx">]</span> <span class="brx">[</span>normal<span class="brx">]</span> <span class="brx">[</span>distance<span class="brx">=</span>2em,style<span class="brx">=</span>small<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Olearius</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\ZOlearius</span><span class="br">{</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p><a href="User:Thomas.html" title="User:Thomas">Thomas</a> 21:38, 7 November 2010 (UTC)
+</p>
+    <h2>
+     <span class="mw-headline" id="Removing_unwanted_strings_from_xml_source">
+      Removing unwanted strings from xml source
+     </span>
+    </h2>
+    <p>In some cases you might want to remove strings or characters from the xml source. For example ConTeXt cannot process a hashmark. The following example shows how to remove the hashmark from a xml identifier before processing with the command \cldcontext
+</p>
+    <p>The xml source:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">a href="#myspecialid"</span><span class="br">&gt;</span>the previous section<span class="br">&lt;</span><span class="name">/a</span><span class="br">&gt;</span>
+</pre>
+    <p>The setup code:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:initialize
+      <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>a<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:initialize<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:a
+     <span class="cs"><span class="systemcs">\cldcontext</span></span><span class="br">{</span>string.sub<span class="brx">(</span><span class="brx">[</span><span class="brx">[</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>href<span class="br">}</span><span class="brx">]</span><span class="brx">]</span>,2<span class="brx">)</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+</pre>
+    <div style="border-left:4px solid #3366cc; background:#eef4ff; padding:1.2em; margin:1.3em 0;">
+     <p><b style="font-size:120%;">Summary of the TEI + ConTeXt approach (after Thomas)</b>
+</p>
+     <p>The TEI (Text Encoding Initiative) defines a very rich XML vocabulary for scholarly editions.  
+ConTeXt is not designed to handle the entire TEI specification, and should not attempt to do so.  
+Instead, as Thomas notes, each project should define a <b>project-specific TEI subset</b> 
+that matches its editorial goals and conventions.
+</p>
+     <p>Main principles:
+</p>
+     <ul>
+      <li>
+       <b>
+        1. TEI is too large to be supported &ldquo;as a whole&rdquo;.
+       </b>
+       The full TEI P5 specification is overly broad and not intended for direct rendering.
+      </li>
+      <li>
+       <b>
+        2. Projects should adopt a restricted TEI profile.
+       </b>
+       Only necessary elements and attributes should be encoded.
+      </li>
+      <li>
+       <b>
+        3. ConTeXt excels at processing such custom subsets.
+       </b>
+       Lua filters and ConTeXt styles can map TEI structures to typeset output.
+      </li>
+      <li>
+       <b>
+        4. Editorial conventions must be explicit and documented.
+       </b>
+       Clear rules ensure consistent encoding and predictable rendering.
+      </li>
+      <li>
+       <b>
+        5. Workflows evolve.
+       </b>
+       Additional TEI elements can be supported progressively as the edition grows.
+      </li>
+     </ul>
+     <p><b>In short:</b> ConTeXt is not a universal TEI renderer;  
+it is a flexible <i>framework</i> for building TEI-powered editorial workflows.
+</p>
+    </div>
+    <hr>
+    <h2>
+     <span id="Additional_considerations_for_TEI_&rarr;_ConTeXt_workflows">
+     </span>
+     <span class="mw-headline" id="Additional_considerations_for_TEI_.E2.86.92_ConTeXt_workflows">
+      Additional considerations for TEI &rarr; ConTeXt workflows
+     </span>
+    </h2>
+    <p>The following notes expand the original text and provide practical guidance for users wishing to combine TEI XML with ConTeXt.
+</p>
+    <p>Working with TEI-encoded poetry in ConTeXt raises a number of specific difficulties that are not immediately visible from general XML examples. These difficulties are closely tied to the structural and typographic constraints of verse: line segmentation, stanza grouping, alignment, and the close coupling between text and commentary.
+</p>
+    <p>This section focuses exclusively on TEI workflows applied to poetic material.
+</p>
+    <h3>
+     <span class="mw-headline" id="TEI_markup_and_poetic_structures">
+      TEI markup and poetic structures
+     </span>
+    </h3>
+    <p>In TEI, poetic structures are typically encoded using elements such as &lt;lg&gt; (line group) and &lt;l&gt; (verse line). These elements describe the logical and semantic organization of a poem: strophes, verse units, and their hierarchy.
+</p>
+    <p>ConTeXt, however, does not interpret these elements semantically. It processes XML as a tree of nodes selected by XPath expressions, leaving the typographic interpretation entirely to the user.
+</p>
+    <p>As a consequence, verse lines and stanzas must be explicitly mapped to typographic constructs: lines must be iterated over, grouped, aligned, and rendered according to editorial intent.
+</p>
+    <h3>
+     <span class="mw-headline" id="From_semantic_description_to_typographic_procedure">
+      From semantic description to typographic procedure
+     </span>
+    </h3>
+    <p>The main conceptual difficulty lies in the transition from a semantic description of poetry to a procedural typographic workflow.
+</p>
+    <p>TEI expresses what a verse line is.  
+ConTeXt requires instructions describing how verse lines are composed on the page.
+</p>
+    <p>This involves, for example:
+</p>
+    <ul>
+     <li>
+      explicit iteration over &lt;l&gt; elements,
+     </li>
+     <li>
+      control of line numbering,
+     </li>
+     <li>
+      synchronization of parallel verse sequences (original text, translation, commentary),
+     </li>
+     <li>
+      management of page and column breaks in relation to poetic structure.
+     </li>
+    </ul>
+    <p>For poetry, this mapping step is unavoidable and must be designed consciously.
+</p>
+    <h3>
+     <span class="mw-headline" id="Historical_examples_and_their_limitations">
+      Historical examples and their limitations
+     </span>
+    </h3>
+    <p>Many existing TEI-related examples in ConTeXt documentation originate from earlier development stages and often mix different approaches without clearly identifying their scope or limitations.
+</p>
+    <p>For poetic material, this can be problematic:
+</p>
+    <ul>
+     <li>
+      examples may assume fixed stanza lengths,
+     </li>
+     <li>
+      alignment mechanisms may not scale beyond trivial cases,
+     </li>
+     <li>
+      commentary and notes may interfere with verse layout.
+     </li>
+    </ul>
+    <p>A careful separation between structural logic (iteration and alignment) and typographic decisions is therefore essential.
+</p>
+    <h3>
+     <span class="mw-headline" id="External_XML_versus_internal_XML_buffers">
+      External XML versus internal XML buffers
+     </span>
+    </h3>
+    <p>A common approach consists in placing the TEI source in an external XML file and processing it from a ConTeXt document. While this is suitable for production workflows, it can obscure the interaction between poetic structure and typographic output during experimentation.
+</p>
+    <p>Embedding the TEI source directly inside the ConTeXt document, using an internal XML buffer, provides a clearer working model. This internal buffer approach, suggested by Hans Hagen, offers a particularly clear way to keep the poetic XML structure and its typographic processing under tight control within a single source file.
+</p>
+    <p>For verse-based material, this makes it easier to observe how changes in stanza structure, line order, or commentary placement affect the composed page.
+</p>
+    <h3>
+     <span class="mw-headline" id="Alignment_of_parallel_poetic_texts">
+      Alignment of parallel poetic texts
+     </span>
+    </h3>
+    <p>Poetic editions frequently involve parallel structures, such as an original text and a translation aligned verse by verse. In ConTeXt, such alignments are typically implemented by iterating over verse lines and synchronizing parallel sequences by position.
+</p>
+    <p>This approach is intentionally explicit and mechanical: verse lines are aligned because they occupy the same index within their respective structures. Although simple, this method provides stability and predictability, which are essential for scholarly poetic layouts.
+</p>
+    <h3>
+     <span id="Commentary,_notes,_and_verse-based_layouts">
+     </span>
+     <span class="mw-headline" id="Commentary.2C_notes.2C_and_verse-based_layouts">
+      Commentary, notes, and verse-based layouts
+     </span>
+    </h3>
+    <p>Commentary in poetic editions is often attached to individual verse lines rather than to continuous prose. When such commentary is combined with structured layouts (tables or columns), standard footnotes can quickly become intrusive or unstable.
+</p>
+    <p>A more controlled strategy consists in defining dedicated note mechanisms and placing the collected notes explicitly. This allows the editor to:
+</p>
+    <ul>
+     <li>
+      preserve the visual integrity of verse layouts,
+     </li>
+     <li>
+      avoid interference between notes and line alignment,
+     </li>
+     <li>
+      maintain a clear relationship between verses and their commentary.
+     </li>
+    </ul>
+    <p>This level of control is particularly important in poetic material, where spatial organization is part of the meaning.
+</p>
+    <h3>
+     <span class="mw-headline" id="Typographic_context_and_poetic_scope">
+      Typographic context and poetic scope
+     </span>
+    </h3>
+    <p>When annotations are triggered from within a specific poetic context&mdash;such as a column containing the original verse text&mdash;they inherit typographic properties from that context. This behavior can be used deliberately to reinforce the editorial structure of the edition.
+</p>
+    <p>In poetic workflows, understanding how ConTeXt propagates typographic context helps avoid unintended side effects and enables more refined layouts.
+</p>
+    <h3>
+     <span class="mw-headline" id="Explicit_mappings_as_an_editorial_choice">
+      Explicit mappings as an editorial choice
+     </span>
+    </h3>
+    <p>There is no automatic or universal solution for processing TEI-encoded poetry in ConTeXt. Instead, ConTeXt encourages explicit mappings between poetic XML structures and typographic procedures.
+</p>
+    <p>Such mappings make editorial choices visible and controllable. They are particularly well suited to poetic material, where structure, alignment, and commentary are integral to the text itself.
+</p>
+    <h3>
+     <span class="mw-headline" id="Example_TEI_sources_and_workflows">
+      Example TEI sources and workflows
+     </span>
+    </h3>
+    <p>This part of the page provides orientation for TEI &rarr; ConTeXt work. It does not describe a single mandatory workflow. Depending on the size of the source, the editorial goal (especially for verse), and the amount of preprocessing needed, there are three distinct approaches.
+</p>
+    <h2>
+     <span id="Overview_(three_approaches)">
+     </span>
+     <span class="mw-headline" id="Overview_.28three_approaches.29">
+      Overview (three approaches)
+     </span>
+    </h2>
+    <p>The same TEI source can be processed in different ways:
+</p>
+    <pre>(A) ConTeXt-native XML processing
+TEI XML  &rarr;  ConTeXt XML mechanisms (xmlsetups / xmlcommand / XPath)  &rarr;  PDF
+</pre>
+    <pre>(B) Lua-driven XML processing
+TEI XML  &rarr;  Lua parsing + traversal  &rarr;  context() calls  &rarr;  PDF
+</pre>
+    <pre>(C) Hybrid workflows (advanced)
+TEI XML  &rarr;  preprocessing / transformation (Lua or external tools)  &rarr;  ConTeXt typesetting  &rarr;  PDF
+</pre>
+    <p>In the context of this page (poetry and versification), approach (A) is generally the most transparent and reproducible, and it scales well from minimal examples to more elaborate layouts (line numbering, parallel columns, controlled note placement).
+</p>
+    <h3>
+     <span id="(A)_ConTeXt-native_XML_processing_(recommended_for_verse_MWEs)">
+     </span>
+     <span class="mw-headline" id=".28A.29_ConTeXt-native_XML_processing_.28recommended_for_verse_MWEs.29">
+      (A) ConTeXt-native XML processing (recommended for verse MWEs)
+     </span>
+    </h3>
+    <p>ConTeXt can process XML directly, using its built-in XML tools:
+</p>
+    <ul>
+     <li>
+      load XML from an external file (e.g.
+      <code>\xmlload</code>
+      ),
+     </li>
+     <li>
+      or embed XML in a buffer for a self-contained example (e.g.
+      <code>\startbuffer...\stopbuffer</code>
+      +
+      <code>\xmlprocessbuffer</code>
+      ),
+     </li>
+     <li>
+      define mappings from XML elements to ConTeXt actions (xmlsetups),
+     </li>
+     <li>
+      select nodes with XPath and typeset the result.
+     </li>
+    </ul>
+    <p>This approach is well suited for:
+</p>
+    <ul>
+     <li>
+      TEI-encoded verse (
+      <code>&lt;lg&gt;</code>
+      ,
+      <code>&lt;l&gt;</code>
+      ),
+     </li>
+     <li>
+      line-by-line alignment (original / translation),
+     </li>
+     <li>
+      commentary attached to verse lines,
+     </li>
+     <li>
+      notes placed in a controlled location (especially when tables or columns are involved).
+     </li>
+    </ul>
+    <h3>
+     <span id="(B)_Lua-driven_XML_processing_(optional,_project-specific)">
+     </span>
+     <span class="mw-headline" id=".28B.29_Lua-driven_XML_processing_.28optional.2C_project-specific.29">
+      (B) Lua-driven XML processing (optional, project-specific)
+     </span>
+    </h3>
+    <p>Lua can also be used to parse and traverse the TEI tree and to send extracted content to ConTeXt via <code>context()</code> calls.
+</p>
+    <p>This approach can be useful when:
+</p>
+    <ul>
+     <li>
+      complex transformations are needed before typesetting,
+     </li>
+     <li>
+      the workflow includes algorithmic selection, filtering, or restructuring,
+     </li>
+     <li>
+      the project already relies on Lua-based processing.
+     </li>
+    </ul>
+    <p>However, it introduces additional moving parts (Lua code, parsing strategy, module availability), so it is not used in the MWEs presented here for verse workflows.
+</p>
+    <h3>
+     <span id="(C)_Hybrid_workflows_(advanced)">
+     </span>
+     <span class="mw-headline" id=".28C.29_Hybrid_workflows_.28advanced.29">
+      (C) Hybrid workflows (advanced)
+     </span>
+    </h3>
+    <p>In large or research-oriented projects, a hybrid pipeline is common:
+</p>
+    <ul>
+     <li>
+      preprocessing or transformation of TEI (Lua or external tools),
+     </li>
+     <li>
+      followed by ConTeXt-native typesetting.
+     </li>
+    </ul>
+    <p>Such workflows are outside the scope of this page and are best documented separately.
+</p>
+    <h3>
+     <span id="Example_sources_(TEI)">
+     </span>
+     <span class="mw-headline" id="Example_sources_.28TEI.29">
+      Example sources (TEI)
+     </span>
+    </h3>
+    <p>For testing, learning, or experimenting with TEI encoding, the following resources are often useful:
+</p>
+    <ul>
+     <li>
+      TEI by Example (tutorial with progressively structured samples)
+     </li>
+     <li>
+      TEI Guidelines (specification and examples)
+     </li>
+     <li>
+      EpiDoc (TEI subset for inscriptions and classical texts)
+     </li>
+     <li>
+      Various public repositories of TEI samples (check licences before reuse)
+     </li>
+    </ul>
+    <p><i>Note: when reusing sample TEI files, always verify the licence terms and attribution requirements.</i>
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_TEI_sources_and_repositories">
+      Example TEI sources and repositories
+     </span>
+    </h2>
+    <h3>
+     <span id="A_minimal_TEI_&rarr;_ConTeXt_example">
+     </span>
+     <span class="mw-headline" id="A_minimal_TEI_.E2.86.92_ConTeXt_example">
+      A minimal TEI &rarr; ConTeXt example
+     </span>
+    </h3>
+    <p>The following example shows how to:
+</p>
+    <ul>
+     <li>
+      store a very small TEI document in a buffer within a ConTeXt file,
+     </li>
+     <li>
+      and typeset it with ConTeXt as a chapter and a paragraph.
+     </li>
+    </ul>
+    <p>This is not a full TEI engine, just a didactic &ldquo;first step&rdquo;.
+</p>
+    <pre>\setuppapersize[A4]
+\setupTABLE[frame=off]
+\setupTABLE[column][1][width=.1\textwidth]
+\setupTABLE[column][2][width=.450\textwidth]
+\setupTABLE[column][3][width=.45\textwidth]
+\startbuffer[poem]
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+      &lt;lg type="stanza"&gt;
+        &lt;lg type="orig"&gt;
+          &lt;l&gt;First light touches the closed houses,&lt;/l&gt;
+          &lt;l&gt;and the street breathes a pale memory.&lt;/l&gt;
+        &lt;/lg&gt;
+        &lt;lg type="trans"&gt;
+          &lt;l&gt;La premi&egrave;re lumi&egrave;re effleure les maisons closes,&lt;/l&gt;
+          &lt;l&gt;et la rue respire une m&eacute;moire p&acirc;le.&lt;/l&gt;
+        &lt;/lg&gt;
+        &lt;lg type="comm"&gt;
+          &lt;l&gt;light] atmospheric motif in the poem.&lt;/l&gt;
+          &lt;l&gt;memory] semantic key recurring in several stanzas.&lt;/l&gt;
+        &lt;/lg&gt;
+      &lt;/lg&gt;
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+\startxmlsetups xml:main
+    \xmlsetsetup{#1}{*}{xml:*}
+\stopxmlsetups
+\xmlregistersetup{xml:main}
+\startxmlsetups xml:TEI
+    \xmlcommand{#1}{text/body/lg[@type='stanza']}{xml:stanza}
+\stopxmlsetups
+\startxmlsetups xml:original
+    \language[french]
+    \xmltext{#1}
+\stopxmlsetups
+\startxmlsetups xml:translation
+    \language[french]
+    \xmltext{#1}
+\stopxmlsetups
+\startxmlsetups xml:comment
+    \footnote{\xmltext{#1}}
+\stopxmlsetups
+\startxmlsetups xml:stanza
+\bTABLE
+    \bTR
+        \bTH line \eTH
+        \bTH original \eTH
+        \bTH translation \eTH
+    \eTR
+    \dorecurse {\xmlcount{#1}{./lg[@type='orig']/l}} {
+        \bTR
+            \bTD
+                ##1
+            \eTD
+            \bTD
+                \xmlcommand{#1}{./lg[@type='orig']/l[##1]}{xml:original}
+                \xmlcommand{#1}{./lg[@type='comm']/l[##1]}{xml:comment}
+            \eTD
+            \bTD
+                \xmlcommand{#1}{./lg[@type='trans']/l[##1]}{xml:translation}
+            \eTD
+        \eTR
+    }
+\eTABLE
+\stopxmlsetups
+\setupfootertexts
+  [{\em Document g&eacute;n&eacute;r&eacute; avec \ConTeXt}]
+  []
+\starttext
+    \xmlprocessbuffer{main}{poem}{}
+\stoptext
+</pre>
+    <h2>
+     <span id="Another_MWE_(Minimum_Working_Example)_in_poetry">
+     </span>
+     <span class="mw-headline" id="Another_MWE_.28Minimum_Working_Example.29_in_poetry">
+      Another MWE (Minimum Working Example) in poetry
+     </span>
+    </h2>
+    <h3>
+     <span id="Mapping_TEI_(verse)_to_ConTeXt:_why_the_buffer-based_approach_is_useful">
+     </span>
+     <span class="mw-headline" id="Mapping_TEI_.28verse.29_to_ConTeXt:_why_the_buffer-based_approach_is_useful">
+      Mapping TEI (verse) to ConTeXt: why the buffer-based approach is useful
+     </span>
+    </h3>
+    <p>In this example &mdash; slightly more elaborate than the previous one &mdash; we deliberately adopt a method suggested by Hans Hagen: the TEI-like XML document is stored in an internal buffer. This choice is not merely technical; it makes the logic of the workflow fully visible in a single file.
+</p>
+    <p>The buffered XML already contains <i>all the semantic structure</i> needed for the edition:
+</p>
+    <ul>
+     <li>
+      the division into stanzas,
+     </li>
+     <li>
+      the verse lines,
+     </li>
+     <li>
+      the English original,
+     </li>
+     <li>
+      the French translation,
+     </li>
+     <li>
+      and the line-by-line comments (lemmas).
+     </li>
+    </ul>
+    <p>ConTeXt does <i>not</i> interpret TEI by itself. Its role is to <i>map</i> specific XML structures to typesetting actions. This mapping is made explicit through a small set of <code>\xmlsetups</code>, each one answering a simple question: <i>when ConTeXt encounters this XML element, what should be done with it?</i>
+</p>
+    <p>In practical terms:
+</p>
+    <ul>
+     <li>
+      <code>&lt;l&gt;</code>
+      elements are mapped to numbered table rows,
+     </li>
+     <li>
+      <code>&lt;lg type="orig"&gt;</code>
+      and
+      <code>&lt;lg type="trans"&gt;</code>
+      are mapped to distinct columns,
+     </li>
+     <li>
+      <code>&lt;lg type="comm"&gt;</code>
+      is mapped to line-bound notes,
+     </li>
+     <li>
+      the surrounding
+      <code>&lt;lg type="stanza"&gt;</code>
+      controls the iteration over verses.
+     </li>
+    </ul>
+    <p>Once this mapping is defined, the actual typesetting phase is minimal. Between <code>\starttext</code> and <code>\stoptext</code>, ConTeXt can be reduced to a single call:
+</p>
+    <pre>\xmlprocessbuffer{main}{poem}{}
+</pre>
+    <p>At that point, ConTeXt is no longer &ldquo;reading a poem&rdquo;: it executes a predefined correspondence between XML semantics and typographical structures. The result is a stable, reproducible layout where editorial logic remains in the XML, typographical logic remains in ConTeXt, and the mapping between the two is explicit and inspectable.
+</p>
+    <p>This separation of concerns &mdash; semantic encoding in XML, layout logic in ConTeXt, and an explicit mapping between the two &mdash; is the key idea demonstrated by this example.
+</p>
+    <h2>
+     <span class="mw-headline" id="A_much_more_complete_MWE_in_XML-TEI_poetry">
+      A much more complete MWE in XML-TEI poetry
+     </span>
+    </h2>
+    <p>This section presents a more complete XML-TEI example based on a poetic text.
+Such examples can quickly become difficult to read and reuse if introduced all
+at once.
+</p>
+    <p>For this reason, the material below is approached progressively.
+Before examining the full poetic TEI source, we first introduce a sequence of
+minimal working examples that explain the underlying mechanisms step by step:
+</p>
+    <ul>
+     <li>
+      how a TEI document is loaded in ConTeXt,
+     </li>
+     <li>
+      how XML elements are routed to ConTeXt macros,
+     </li>
+     <li>
+      how multiple languages are handled,
+     </li>
+     <li>
+      and how these techniques scale to a more complex poetic structure.
+     </li>
+    </ul>
+    <p>The complete XML-TEI poetry example shown later in this section can then be read
+as a direct application of these principles, rather than as an isolated or
+opaque code sample.
+</p>
+    <p>This section presents a step-by-step example showing how a small TEI document
+containing Greek text and a French translation can be processed directly by
+ConTeXt.
+</p>
+    <p>The goal is not to demonstrate the full TEI specification, but to explain how
+ConTeXt can read a TEI source, select its elements, and map them to typographical
+structures.
+</p>
+    <p>All examples below are minimal working examples and can be compiled independently.
+</p>
+    <p>The general processing flow can be summarized as follows:
+</p>
+    <pre>TEI XML source
+      |
+      v
+\xmlprocessfile
+      |
+      v
+XML element routing
+(\xmlsetups, \xmlflush)
+      |
+      v
+ConTeXt macros
+      |
+      v
+Typeset output (PDF)
+</pre>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Scope_and_limitations_of_this_example">
+      Scope and limitations of this example
+     </span>
+    </h3>
+    <p>This example illustrates:
+</p>
+    <ul>
+     <li>
+      loading a TEI XML file in ConTeXt,
+     </li>
+     <li>
+      routing XML elements to ConTeXt macros,
+     </li>
+     <li>
+      handling multiple languages (Greek and French),
+     </li>
+     <li>
+      producing a simple typographical layout.
+     </li>
+    </ul>
+    <p>It deliberately does <b>not</b> cover:
+</p>
+    <ul>
+     <li>
+      critical apparatus or textual variants,
+     </li>
+     <li>
+      complex TEI customizations,
+     </li>
+     <li>
+      XSLT-based preprocessing,
+     </li>
+     <li>
+      advanced editorial layouts.
+     </li>
+    </ul>
+    <p>The focus is on clarity and reproducibility.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="A_minimal_TEI_source_file">
+      A minimal TEI source file
+     </span>
+    </h3>
+    <p>We start with a very small TEI document, containing only the elements needed for
+this example.
+</p>
+    <h4>
+     <span id="Minimal_TEI_file_(example.xml)">
+     </span>
+     <span class="mw-headline" id="Minimal_TEI_file_.28example.xml.29">
+      Minimal TEI file (
+      <code>example.xml</code>
+      )
+     </span>
+    </h4>
+    <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TEI xml:lang="grc"&gt;
+  &lt;teiHeader&gt;
+    &lt;fileDesc&gt;
+      &lt;titleStmt&gt;
+        &lt;title&gt;Sample Greek Text&lt;/title&gt;
+      &lt;/titleStmt&gt;
+      &lt;publicationStmt&gt;
+        &lt;p&gt;Unpublished&lt;/p&gt;
+      &lt;/publicationStmt&gt;
+      &lt;sourceDesc&gt;
+        &lt;p&gt;Demonstration only&lt;/p&gt;
+      &lt;/sourceDesc&gt;
+    &lt;/fileDesc&gt;
+  &lt;/teiHeader&gt;
+
+  &lt;text&gt;
+    &lt;body&gt;
+      &lt;div&gt;
+        &lt;l xml:lang="grc"&gt;&beta;&omicron;&upsilon;&lambda;ὴ &delta;ὲ &kappa;&alpha;&kappa;ὴ &nu;ί&kappa;&eta;&sigma;&epsilon;&nu; ἑ&tau;&alpha;ί&rho;&omega;&nu;&lt;/l&gt;
+        &lt;l xml:lang="fr"&gt;Mais un mauvais conseil l&rsquo;emporta sur les compagnons.&lt;/l&gt;
+      &lt;/div&gt;
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+</pre>
+    <p><b>Remarks</b>
+</p>
+    <ul>
+     <li>
+      Only standard TEI elements are used.
+     </li>
+     <li>
+      Language information is provided via
+      <code>xml:lang</code>
+      .
+     </li>
+     <li>
+      No apparatus or annotations are included.
+     </li>
+    </ul>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Loading_a_TEI_file_in_ConTeXt">
+      Loading a TEI file in ConTeXt
+     </span>
+    </h3>
+    <p>The first step in ConTeXt is simply to load the XML file and make it accessible.
+</p>
+    <h4>
+     <span id="Minimal_ConTeXt_file_(example.tex)">
+     </span>
+     <span class="mw-headline" id="Minimal_ConTeXt_file_.28example.tex.29">
+      Minimal ConTeXt file (
+      <code>example.tex</code>
+      )
+     </span>
+    </h4>
+    <pre>\starttext
+
+\xmlprocessfile{main}{example.xml}{}
+
+\stoptext
+</pre>
+    <p>At this stage, nothing is typeset.
+This confirms only that the XML file can be read by ConTeXt.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Routing_XML_elements_to_ConTeXt_macros">
+      Routing XML elements to ConTeXt macros
+     </span>
+    </h3>
+    <p>ConTeXt does not format TEI automatically.
+Instead, XML elements are explicitly mapped to ConTeXt commands.
+</p>
+    <p>The routing mechanism used in this example can be summarized as follows:
+</p>
+    <pre>&lt;l xml:lang="grc"&gt;...&lt;/l&gt;  --&gt;  \xmlsetups xml:l  --&gt;  Greek formatting
+
+&lt;l xml:lang="fr"&gt;...&lt;/l&gt;   --&gt;  \xmlsetups xml:l  --&gt;  French formatting
+</pre>
+    <h4>
+     <span class="mw-headline" id="Defining_XML_setups">
+      Defining XML setups
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:tei
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:l
+  \xmlflush{#1}\par
+\stopxmlsetups
+</pre>
+    <h4>
+     <span class="mw-headline" id="Processing_the_TEI_structure">
+      Processing the TEI structure
+     </span>
+    </h4>
+    <pre>\starttext
+
+\xmlprocessfile{main}{example.xml}{xml:tei}
+
+\stoptext
+</pre>
+    <h2>
+     <span id="A_progressive_TEI_&rarr;_ConTeXt_example_(Greek_+_French)">
+     </span>
+     <span class="mw-headline" id="A_progressive_TEI_.E2.86.92_ConTeXt_example_.28Greek_.2B_French.29">
+      A progressive TEI &rarr; ConTeXt example (Greek + French)
+     </span>
+    </h2>
+    <p>This section presents a step-by-step example showing how a small TEI document
+containing Greek text and a French translation can be processed directly by
+ConTeXt.
+</p>
+    <p>The goal is not to demonstrate the full TEI specification, but to explain how
+ConTeXt can read a TEI source, select its elements, and map them to typographical
+structures.
+</p>
+    <p>All examples below are minimal working examples and can be compiled independently.
+</p>
+    <p>The general processing flow can be summarized as follows:
+</p>
+    <pre>TEI XML source
+      |
+      v
+\xmlprocessfile
+      |
+      v
+XML element routing
+(\xmlsetups, \xmlflush)
+      |
+      v
+ConTeXt macros
+      |
+      v
+Typeset output (PDF)
+</pre>
+    <p>---
+</p>
+    <h3>
+     <span class="mw-headline" id="Scope_and_limitations_of_this_example_2">
+      Scope and limitations of this example
+     </span>
+    </h3>
+    <p>This example illustrates:
+</p>
+    <ul>
+     <li>
+      loading a TEI XML file in ConTeXt,
+     </li>
+     <li>
+      routing XML elements to ConTeXt macros,
+     </li>
+     <li>
+      handling multiple languages (Greek and French),
+     </li>
+     <li>
+      producing a simple typographical layout.
+     </li>
+    </ul>
+    <p>It deliberately does <b>not</b> cover:
+</p>
+    <ul>
+     <li>
+      critical apparatus or textual variants,
+     </li>
+     <li>
+      complex TEI customizations,
+     </li>
+     <li>
+      XSLT-based preprocessing,
+     </li>
+     <li>
+      advanced editorial layouts.
+     </li>
+    </ul>
+    <p>The focus is on clarity and reproducibility.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="A_minimal_TEI_source_file_2">
+      A minimal TEI source file
+     </span>
+    </h3>
+    <p>We start with a very small TEI document, containing only the elements needed for
+this example.
+</p>
+    <h4>
+     <span id="Minimal_TEI_file_(example.xml)_2">
+     </span>
+     <span class="mw-headline" id="Minimal_TEI_file_.28example.xml.29_2">
+      Minimal TEI file (
+      <code>example.xml</code>
+      )
+     </span>
+    </h4>
+    <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TEI xml:lang="grc"&gt;
+  &lt;teiHeader&gt;
+    &lt;fileDesc&gt;
+      &lt;titleStmt&gt;
+        &lt;title&gt;Sample Greek Text&lt;/title&gt;
+      &lt;/titleStmt&gt;
+      &lt;publicationStmt&gt;
+        &lt;p&gt;Unpublished&lt;/p&gt;
+      &lt;/publicationStmt&gt;
+      &lt;sourceDesc&gt;
+        &lt;p&gt;Demonstration only&lt;/p&gt;
+      &lt;/sourceDesc&gt;
+    &lt;/fileDesc&gt;
+  &lt;/teiHeader&gt;
+
+  &lt;text&gt;
+    &lt;body&gt;
+      &lt;div&gt;
+        &lt;l xml:lang="grc"&gt;&beta;&omicron;&upsilon;&lambda;ὴ &delta;ὲ &kappa;&alpha;&kappa;ὴ &nu;ί&kappa;&eta;&sigma;&epsilon;&nu; ἑ&tau;&alpha;ί&rho;&omega;&nu;&lt;/l&gt;
+        &lt;l xml:lang="fr"&gt;Mais un mauvais conseil l&rsquo;emporta sur les compagnons.&lt;/l&gt;
+      &lt;/div&gt;
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+</pre>
+    <p><b>Remarks</b>
+</p>
+    <ul>
+     <li>
+      Only standard TEI elements are used.
+     </li>
+     <li>
+      Language information is provided via
+      <code>xml:lang</code>
+      .
+     </li>
+     <li>
+      No apparatus or annotations are included.
+     </li>
+    </ul>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Loading_a_TEI_file_in_ConTeXt_2">
+      Loading a TEI file in ConTeXt
+     </span>
+    </h3>
+    <p>The first step in ConTeXt is simply to load the XML file and make it accessible.
+</p>
+    <h4>
+     <span id="Minimal_ConTeXt_file_(example.tex)_2">
+     </span>
+     <span class="mw-headline" id="Minimal_ConTeXt_file_.28example.tex.29_2">
+      Minimal ConTeXt file (
+      <code>example.tex</code>
+      )
+     </span>
+    </h4>
+    <pre>\starttext
+
+\xmlprocessfile{main}{example.xml}{}
+
+\stoptext
+</pre>
+    <p>At this stage, nothing is typeset.
+This confirms only that the XML file can be read by ConTeXt.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Routing_XML_elements_to_ConTeXt_macros_2">
+      Routing XML elements to ConTeXt macros
+     </span>
+    </h3>
+    <p>ConTeXt does not format TEI automatically.
+Instead, XML elements are explicitly mapped to ConTeXt commands.
+</p>
+    <p>The routing mechanism used in this example can be summarized as follows:
+</p>
+    <pre>&lt;l xml:lang="grc"&gt;...&lt;/l&gt;  --&gt;  \xmlsetups xml:l  --&gt;  Greek formatting
+
+&lt;l xml:lang="fr"&gt;...&lt;/l&gt;   --&gt;  \xmlsetups xml:l  --&gt;  French formatting
+</pre>
+    <h4>
+     <span class="mw-headline" id="Defining_XML_setups_2">
+      Defining XML setups
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:tei
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:l
+  \xmlflush{#1}\par
+\stopxmlsetups
+</pre>
+    <h4>
+     <span class="mw-headline" id="Processing_the_TEI_structure_2">
+      Processing the TEI structure
+     </span>
+    </h4>
+    <pre>\starttext
+
+\xmlprocessfile{main}{example.xml}{xml:tei}
+
+\stoptext
+</pre>
+    <p><b>Key idea</b>
+</p>
+    <p>ConTeXt treats TEI as structured data.
+Formatting decisions are made entirely by the user.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Distinguishing_Greek_and_French_text">
+      Distinguishing Greek and French text
+     </span>
+    </h3>
+    <p>Language information from <code>xml:lang</code> can be used to select different
+formatting rules.
+</p>
+    <h4>
+     <span class="mw-headline" id="Language-aware_routing">
+      Language-aware routing
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:l
+  \doif{\xmlatt{#1}{xml:lang}}{grc}
+    {\italic\xmlflush{#1}}
+    {\xmlflush{#1}}
+  \par
+\stopxmlsetups
+</pre>
+    <p>In this example:
+</p>
+    <ul>
+     <li>
+      Greek lines are typeset in italics.
+     </li>
+     <li>
+      French lines are typeset normally.
+     </li>
+    </ul>
+    <p>More advanced font or language setups can be added later if needed.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="A_simple_parallel_presentation">
+      A simple parallel presentation
+     </span>
+    </h3>
+    <p>The same XML structure can be used to produce a simple parallel layout.
+</p>
+    <h4>
+     <span class="mw-headline" id="Example_using_blocks">
+      Example using blocks
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:l
+  \startalignment[flushleft]
+    \xmlflush{#1}
+  \stopalignment
+\stopxmlsetups
+</pre>
+    <p>This example keeps the layout intentionally simple.
+More complex column-based layouts are possible, but outside the scope of this
+demonstration.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="What_this_example_does_not_do">
+      What this example does not do
+     </span>
+    </h3>
+    <p>This example intentionally avoids:
+</p>
+    <ul>
+     <li>
+      critical apparatus handling,
+     </li>
+     <li>
+      lemma numbering,
+     </li>
+     <li>
+      manuscript variants,
+     </li>
+     <li>
+      TEI transformations outside ConTeXt.
+     </li>
+    </ul>
+    <p>Such features require additional editorial structures and are better treated in
+dedicated examples.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Summary">
+      Summary
+     </span>
+    </h3>
+    <p>This example demonstrates a minimal and transparent TEI &rarr; ConTeXt workflow:
+</p>
+    <ul>
+     <li>
+      TEI provides structured textual data.
+     </li>
+     <li>
+      ConTeXt selects and maps XML elements.
+     </li>
+     <li>
+      Typography is controlled entirely at the ConTeXt level.
+     </li>
+    </ul>
+    <p>This approach scales from simple demonstrations to more advanced editorial
+projects.
+</p>
+    <p><i>Final note</i>
+</p>
+    <p>This example is meant to be read, modified, and extended.
+Its purpose is not to prescribe a workflow, but to clarify how ConTeXt interacts
+with TEI at a basic level.
+</p>
+    <p><br>
+<b>Key idea</b>
+</p>
+    <p>ConTeXt treats TEI as structured data.
+Formatting decisions are made entirely by the user.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Distinguishing_Greek_and_French_text_2">
+      Distinguishing Greek and French text
+     </span>
+    </h3>
+    <p>Language information from <code>xml:lang</code> can be used to select different
+formatting rules.
+</p>
+    <h4>
+     <span class="mw-headline" id="Language-aware_routing_2">
+      Language-aware routing
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:l
+  \doif{\xmlatt{#1}{xml:lang}}{grc}
+    {\italic\xmlflush{#1}}
+    {\xmlflush{#1}}
+  \par
+\stopxmlsetups
+</pre>
+    <p>In this example:
+</p>
+    <ul>
+     <li>
+      Greek lines are typeset in italics.
+     </li>
+     <li>
+      French lines are typeset normally.
+     </li>
+    </ul>
+    <p>More advanced font or language setups can be added later if needed.
+</p>
+    <p>---
+</p>
+    <h3>
+     <span class="mw-headline" id="A_simple_parallel_presentation_2">
+      A simple parallel presentation
+     </span>
+    </h3>
+    <p>The same XML structure can be used to produce a simple parallel layout.
+</p>
+    <h4>
+     <span class="mw-headline" id="Example_using_blocks_2">
+      Example using blocks
+     </span>
+    </h4>
+    <pre>\startxmlsetups xml:l
+  \startalignment[flushleft]
+    \xmlflush{#1}
+  \stopalignment
+\stopxmlsetups
+</pre>
+    <p>This example keeps the layout intentionally simple.
+More complex column-based layouts are possible, but outside the scope of this
+demonstration.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="What_this_example_does_not_do_2">
+      What this example does not do
+     </span>
+    </h3>
+    <p>This example intentionally avoids:
+</p>
+    <ul>
+     <li>
+      critical apparatus handling,
+     </li>
+     <li>
+      lemma numbering,
+     </li>
+     <li>
+      manuscript variants,
+     </li>
+     <li>
+      TEI transformations outside ConTeXt.
+     </li>
+    </ul>
+    <p>Such features require additional editorial structures and are better treated in
+dedicated examples.
+</p>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="Summary_2">
+      Summary
+     </span>
+    </h3>
+    <p>This example demonstrates a minimal and transparent TEI &rarr; ConTeXt workflow:
+</p>
+    <ul>
+     <li>
+      TEI provides structured textual data.
+     </li>
+     <li>
+      ConTeXt selects and maps XML elements.
+     </li>
+     <li>
+      Typography is controlled entirely at the ConTeXt level.
+     </li>
+    </ul>
+    <p>This approach scales from simple demonstrations to more advanced editorial
+projects.
+</p>
+    <p><i>Final note</i>
+</p>
+    <p>This example is meant to be read, modified, and extended.
+Its purpose is not to prescribe a workflow, but to clarify how ConTeXt interacts
+with TEI at a basic level. Now that the procedures have been clarified, here is a slightly more substantial example (an English poem, with its French translation).
+</p>
+    <ul>
+     <li>
+      This MWE is larger and more sophisticated than the previous one, but the structure is the same (some addenda about \xmltext and \xmlflush are developped, after the code below:
+     </li>
+    </ul>
+    <pre> 
+\setuppapersize[A4]
+\setupbodyfont[EBGaramond,10pt]&nbsp;% Latin Modern (d&eacute;faut), 10pt
+
+
+\setupTABLE[frame=off]
+\setupTABLE[column][1][width=.1\textwidth]
+\setupTABLE[column][2][width=.450\textwidth]
+\setupTABLE[column][3][width=.45\textwidth]
+% ----------------------------------------------------------
+% Pied de page
+% ----------------------------------------------------------
+\setupfootertexts
+  []
+  [{\tfxx Document compos&eacute; avec \ConTeXt}]
+
+% ----------------------------------------------------------
+% Notes "pla&ccedil;ables" (robustes avec les tableaux)
+% ----------------------------------------------------------
+\definenote[commnote]
+\setupnote[commnote][
+  rule=off,
+  paragraph=yes,
+  inbetween=\quad,
+  style=\tfxx,
+]
+% ----------------------------------------------------------
+% XML dans un buffer (m&eacute;thode Hans) &mdash; 16 vers + commentaire
+% ----------------------------------------------------------
+\startbuffer[poem]
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+      &lt;lg type="stanza"&gt;
+        &lt;lg type="orig"&gt;
+          &lt;l&gt;First light touches the closed houses,&lt;/l&gt;
+          &lt;l&gt;and the street breathes a pale memory.&lt;/l&gt;
+          &lt;l&gt;I hear the fountain count its coins,&lt;/l&gt;
+          &lt;l&gt;while sparrows edit yesterday&rsquo;s crumbs.&lt;/l&gt;
+          &lt;l&gt;The baker lifts a shutter like a veil,&lt;/l&gt;
+          &lt;l&gt;and flour rises, a brief white weather.&lt;/l&gt;
+          &lt;l&gt;At the corner, a newspaper opens,&lt;/l&gt;
+          &lt;l&gt;its headlines folded like tired wings.&lt;/l&gt;
+          &lt;l&gt;I write your name, then cross it out,&lt;/l&gt;
+          &lt;l&gt;the paper keeps the pressure, not the meaning.&lt;/l&gt;
+          &lt;l&gt;Between two words a well appears,&lt;/l&gt;
+          &lt;l&gt;and echoes practice someone else&rsquo;s voice.&lt;/l&gt;
+          &lt;l&gt;A tram arrives; its doors hesitate,&lt;/l&gt;
+          &lt;l&gt;as if choosing which century to enter.&lt;/l&gt;
+          &lt;l&gt;In my pocket, a key warms slowly,&lt;/l&gt;
+          &lt;l&gt;metal remembering the shape of home.&lt;/l&gt;
+        &lt;/lg&gt;
+
+&lt;lg type="trans"&gt;
+          &lt;l&gt;La premi&egrave;re lumi&egrave;re effleure les maisons closes,&lt;/l&gt;
+          &lt;l&gt;et la rue respire une m&eacute;moire p&acirc;le.&lt;/l&gt;
+          &lt;l&gt;J&rsquo;entends la fontaine compter ses pi&egrave;ces,&lt;/l&gt;
+          &lt;l&gt;tandis que les moineaux corrigent les miettes d&rsquo;hier.&lt;/l&gt;
+          &lt;l&gt;Le boulanger rel&egrave;ve un volet comme un voile,&lt;/l&gt;
+          &lt;l&gt;et la farine monte, br&egrave;ve m&eacute;t&eacute;o blanche.&lt;/l&gt;
+          &lt;l&gt;Au coin, un journal s&rsquo;ouvre,&lt;/l&gt;
+          &lt;l&gt;ses gros titres pli&eacute;s comme des ailes lass&eacute;es.&lt;/l&gt;
+          &lt;l&gt;J&rsquo;&eacute;cris ton nom, puis je le rature,&lt;/l&gt;
+          &lt;l&gt;le papier garde la pression, pas le sens.&lt;/l&gt;
+          &lt;l&gt;Entre deux mots, un puits appara&icirc;t,&lt;/l&gt;
+          &lt;l&gt;et les &eacute;chos r&eacute;p&egrave;tent la voix d&rsquo;un autre.&lt;/l&gt;
+          &lt;l&gt;Un tram arrive&nbsp;; ses portes h&eacute;sitent,&lt;/l&gt;
+          &lt;l&gt;comme si elles choisissaient le si&egrave;cle o&ugrave; entrer.&lt;/l&gt;
+          &lt;l&gt;Dans ma poche, une cl&eacute; se r&eacute;chauffe lentement,&lt;/l&gt;
+          &lt;l&gt;le m&eacute;tal se souvient de la forme du foyer.&lt;/l&gt;
+        &lt;/lg&gt;
+ &lt;lg type="comm"&gt;
+          &lt;l&gt;light] atmospheric motif; establishes the scene.&lt;/l&gt;
+          &lt;l&gt;memory] semantic key recurring across the poem.&lt;/l&gt;
+          &lt;l&gt;fountain] auditory image; introduces counting/metre.&lt;/l&gt;
+          &lt;l&gt;edit] meta-textual verb; aligns with &ldquo;variants&rdquo; later.&lt;/l&gt;
+          &lt;l&gt;shutter/veil] unveiling metaphor; morning as revelation.&lt;/l&gt;
+          &lt;l&gt;white weather] synesthetic image; flour as climate.&lt;/l&gt;
+          &lt;l&gt;newspaper] public voice entering the private walk.&lt;/l&gt;
+          &lt;l&gt;headlines] folded wings; fatigue of news cycles.&lt;/l&gt;
+          &lt;l&gt;name] inscription + erasure; motif of revision.&lt;/l&gt;
+          &lt;l&gt;pressure/meaning] material trace vs semantic loss.&lt;/l&gt;
+          &lt;l&gt;well] gap between words; abyss of interpretation.&lt;/l&gt;
+          &lt;l&gt;someone else] polyphony; speaker displaced.&lt;/l&gt;
+          &lt;l&gt;tram] modern intrusion; tests punctuation in table.&lt;/l&gt;
+          &lt;l&gt;century] controlled anachronism; time as choice.&lt;/l&gt;
+          &lt;l&gt;key] pocket object; memory by touch/heat.&lt;/l&gt;
+          &lt;l&gt;home] &ldquo;shape&rdquo; as form; stable equivalence in translation.&lt;/l&gt;
+        &lt;/lg&gt;
+      &lt;/lg&gt;
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+% ----------------------------------------------------------
+% Setups XML (structure Hans)
+% ----------------------------------------------------------
+\startxmlsetups xml:main
+  \xmlsetsetup{#1}{*}{xml:*}
+\stopxmlsetups
+
+\xmlregistersetup{xml:main}
+
+\startxmlsetups xml:TEI
+  \xmlcommand{#1}{text/body/lg[@type='stanza']}{xml:stanza}
+\stopxmlsetups
+
+\startxmlsetups xml:original
+  \language[english]
+  \xmltext{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:translation
+  \language[french]
+  \xmltext{#1}
+\stopxmlsetups
+% commentaire -&gt; note "pla&ccedil;able"
+\startxmlsetups xml:comment
+  \commnote{\xmltext{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:stanza
+\bTABLE
+  \bTR
+    \bTH line \eTH
+    \bTH original \eTH
+    \bTH translation \eTH
+  \eTR
+  \dorecurse{\xmlcount{#1}{./lg[@type='orig']/l}}{%
+    \bTR
+      \bTD ##1 \eTD
+      \bTD
+        \xmlcommand{#1}{./lg[@type='orig']/l[##1]}{xml:original}
+        \xmlcommand{#1}{./lg[@type='comm']/l[##1]}{xml:comment}
+      \eTD
+      \bTD
+        \xmlcommand{#1}{./lg[@type='trans']/l[##1]}{xml:translation}
+      \eTD
+    \eTR
+  }
+\eTABLE
+\stopxmlsetups
+
+\starttext
+  \centerline{\bfb Po&egrave;me TEI-XML&nbsp;: original, traduction, notes &ldquo;pla&ccedil;ables&rdquo;}
+  \blank[big]
+  {\em 
+  Objectif&nbsp;: montrer une m&eacute;thode robuste (inspir&eacute;e de Hans Hagen) pour afficher un po&egrave;me encod&eacute; en XML-TEI
+  en trois colonnes (n&deg; du vers, original, traduction) tout en attachant un commentaire ligne &agrave; ligne sous forme de notes,
+  plac&eacute;es &agrave; un endroit choisi (ici&nbsp;: apr&egrave;s le tableau), afin d&rsquo;&eacute;viter les collisions &ldquo;tableau + footnotes&rdquo;. On remarquera les commentaires en anglais plac&eacute;s dans la cellule concernant le texte original.}\par
+Purpose: to demonstrate a robust method (inspired by Hans Hagen) for displaying a poem encoded in XML-TEI in three columns (verse number, original, translation) while attaching line-by-line commentary in the form of notes, placed in a chosen location (here: after the table), in order to avoid collisions between the table and footnotes. Note the comments in English placed in the cell concerning the original text.
+
+  \blank[medium]
+\centerline{\sc &mdash; Proc&eacute;dure (r&eacute;sum&eacute; technique) &mdash;}
+  \starttyping
+1) XML int&eacute;gr&eacute; dans un buffer (\startbuffer...\stopbuffer)
+2) Boucle sur le nombre de vers&nbsp;: \dorecurse{\xmlcount{#1}, etc.
+3) Extraction des lignes via XPath&nbsp;: orig/l[i], trans/l[i], comm/l[i]
+4) Commentaires collect&eacute;s avec \commnote{\xmltext{#1}}, puis rendus par \placenotes[commnote]
+  \stoptyping
+  \blank[big]
+
+  \xmlprocessbuffer{main}{poem}{}
+
+  \blank[big]
+  % Notes en deux colonnes pour limiter les d&eacute;bordements
+  \startcolumns[n=2,balance=yes]
+    \placenotes[commnote]
+  \stopcolumns
+\stoptext
+</pre>
+    <h2>
+     <span id="About_\xmltext_vs_\xmlflush_when_processing_TEI_content">
+     </span>
+     <span class="mw-headline" id="About_.5Cxmltext_vs_.5Cxmlflush_when_processing_TEI_content">
+      About \xmltext vs \xmlflush when processing TEI content
+     </span>
+    </h2>
+    <p>In the examples above, the command \xmltext is used to extract and typeset the textual content of TEI elements. This approach is perfectly adequate for many minimal or controlled MWEs, especially when the XML elements only contain plain text.
+</p>
+    <p>However, it is important to understand a limitation of \xmltext: it only returns the textual content of the current node, and therefore silently discards any nested XML elements that may occur further down the tree.
+</p>
+    <p>For example, consider the following TEI line:
+</p>
+    <p><code>&lt;l&gt;First light touches the closed houses,&lt;/l&gt;</code>
+</p>
+    <p><br>
+If this element is processed using:
+</p>
+    <p><code>\xmltext{#1}</code>
+</p>
+    <p><br>
+the output will be:
+</p>
+    <p>First <code>emph</code>light<code>/emph</code> touches the closed houses,
+</p>
+    <p><br>
+The word <code>light</code> will be preserved as text, but the &lt;emph&gt; element itself is lost, and no specific formatting can be applied to it.
+</p>
+    <p>In contrast, using \xmlflush preserves the full XML structure of the node and allows ConTeXt to process nested elements via dedicated setups. For instance:
+</p>
+    <pre class="xml">\startxmlsetups xml:original
+  \language[english]
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:emph
+  \emph{\xmlflush{#1}}
+\stopxmlsetups
+</pre>
+    <p>With this approach, ConTeXt can correctly detect and format the &lt;emph&gt; element, producing emphasized output in the final document.
+</p>
+    <p>This distinction becomes crucial in more advanced TEI workflows, especially when dealing with:
+</p>
+    <ul>
+     <li>
+      inline markup such as &lt;emph&gt;, &lt;hi&gt;, &lt;foreign&gt;,
+     </li>
+    </ul>
+    <ul>
+     <li>
+      named entities (&lt;persName&gt;, &lt;placeName&gt;),
+     </li>
+    </ul>
+    <ul>
+     <li>
+      critical apparatus elements (&lt;app&gt;, &lt;lem&gt;, &lt;rdg&gt;),
+     </li>
+    </ul>
+    <p>or any situation where semantic XML markup must be preserved during typesetting.
+</p>
+    <p>As Denis Maier has pointed out, using <code>\xmltext</code> in such cases may result in an unintended loss of structural information, whereas <code>\xmlflush</code> provides a safer and more extensible mechanism for mapping TEI markup to ConTeXt commands.
+</p>
+    <p>In short:
+</p>
+    <ul>
+     <li>
+      <code>\xmltext</code>
+      is simple and convenient for flat content,
+     </li>
+    </ul>
+    <ul>
+     <li>
+      <code>\xmlflush</code>
+      is preferable whenever nested XML elements need to be processed or preserved.
+     </li>
+    </ul>
+    <p>For pedagogical MWEs, both approaches are useful, but it is important to be aware of their respective implications when designing scalable TEI &rarr; ConTeXt workflows.
+</p>
+    <h2>
+     <span class="mw-headline" id="Overview:_how_the_workflow_works">
+      Overview: how the workflow works
+     </span>
+    </h2>
+    <p>Before looking at concrete examples, it is useful to clarify the mental model behind XML processing in ConTeXt.
+</p>
+    <p>ConTeXt does not treat XML as an external format that must be converted beforehand. Instead, XML is read, traversed, and interpreted <b>inside the ConTeXt engine</b>, using Lua as an internal extension language.
+</p>
+    <p>The workflow can therefore be summarized as follows:
+</p>
+    <pre>TEI XML document
+        &darr;
+ConTeXt XML interface
+(\xmlload, \xmlsetups, \xmlflush)
+        &darr;
+LuaMetaTeX engine
+        &darr;
+Typeset PDF
+</pre>
+    <p>In this model:
+</p>
+    <ul>
+     <li>
+      XML provides
+      <b>
+       structure and semantics
+      </b>
+      ;
+     </li>
+     <li>
+      Lua is used
+      <b>
+       internally by ConTeXt
+      </b>
+      ;
+     </li>
+     <li>
+      ConTeXt controls
+      <b>
+       all typographic decisions
+      </b>
+      .
+     </li>
+    </ul>
+    <p>No external preprocessing step is required.
+</p>
+    <p>For an overview of the XML subsystem, see:
+</p>
+    <ul>
+     <li>
+      <a class="new" href="index.php?title=XML_processing&action=edit&redlink=1" title="XML processing (page does not exist)">
+       XML processing
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=XML_setups&action=edit&redlink=1" title="XML setups (page does not exist)">
+       XML setups
+      </a>
+     </li>
+     <li>
+      Hans Hagen,
+      <i>
+       ConTeXt MkIV / LMTX Manual
+      </i>
+      , XML chapters.
+     </li>
+    </ul>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="Expected_TEI_structure">
+      Expected TEI structure
+     </span>
+    </h2>
+    <p>ConTeXt does not impose a specific TEI schema. However, successful processing relies on a <b>clear and stable structural convention</b>.
+</p>
+    <p>For the examples below, we assume a minimal and readable structure:
+</p>
+    <pre>TEI
+ &boxur;&boxh; text
+     &boxur;&boxh; body
+         &boxvr;&boxh; div type="work"
+         &boxv;    &boxvr;&boxh; head
+         &boxv;    &boxur;&boxh; lg
+         &boxv;         &boxvr;&boxh; l (with optional notes)
+         &boxv;         &boxur;&boxh; l
+         &boxur;&boxh; div type="translation"
+              &boxvr;&boxh; head
+              &boxur;&boxh; p
+</pre>
+    <p>ConTeXt will then extract and process:
+</p>
+    <ul>
+     <li>
+      <code>&lt;head&gt;</code>
+      elements as section titles,
+     </li>
+     <li>
+      <code>&lt;l&gt;</code>
+      elements as individual lines or verses,
+     </li>
+     <li>
+      <code>&lt;note&gt;</code>
+      elements as footnotes or critical annotations,
+     </li>
+     <li>
+      <code>&lt;p&gt;</code>
+      elements as prose paragraphs.
+     </li>
+    </ul>
+    <p>The important point is not the exact TEI vocabulary, but the <b>logical consistency</b> of the structure.
+</p>
+    <p>See also:
+</p>
+    <ul>
+     <li>
+      <a class="new" href="index.php?title=TEI_XML&action=edit&redlink=1" title="TEI XML (page does not exist)">
+       TEI XML
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=XML_and_structure&action=edit&redlink=1" title="XML and structure (page does not exist)">
+       XML and structure
+      </a>
+     </li>
+    </ul>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="Why_ConTeXt_does_not_require_an_external_XML_parser">
+      Why ConTeXt does not require an external XML parser
+     </span>
+    </h2>
+    <p>Some XML workflows rely on external Lua libraries (such as <code>lxp.lom</code>) to parse XML files manually. While this approach can be useful in generic Lua environments, it is <b>not the intended method in ConTeXt</b>.
+</p>
+    <p>ConTeXt already embeds Lua at engine level and provides:
+</p>
+    <ul>
+     <li>
+      a native XML loader (
+      <code>\xmlload</code>
+      ,
+      <code>\xmlprocessfile</code>
+      ),
+     </li>
+     <li>
+      XPath-like selection,
+     </li>
+     <li>
+      setup-based routing of XML nodes,
+     </li>
+     <li>
+      controlled flushing of content into the typesetting stream.
+     </li>
+    </ul>
+    <p>Using an external parser duplicates functionality and bypasses ConTeXt&rsquo;s own XML model. For this reason, ConTeXt documentation and examples do not rely on <code>lxp.lom</code>.
+</p>
+    <p>The preferred approach is therefore <b>ConTeXt-native XML processing</b>.
+</p>
+    <p>Reference:
+</p>
+    <ul>
+     <li>
+      Hans Hagen,
+      <i>
+       Lua in ConTeXt
+      </i>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=LuaMetaTeX&action=edit&redlink=1" title="LuaMetaTeX (page does not exist)">
+       LuaMetaTeX
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=XML_processing&action=edit&redlink=1" title="XML processing (page does not exist)">
+       XML processing
+      </a>
+     </li>
+    </ul>
+    <hr>
+    <h2>
+     <span id="A_ConTeXt-native_XML_example_(recommended)">
+     </span>
+     <span class="mw-headline" id="A_ConTeXt-native_XML_example_.28recommended.29">
+      A ConTeXt-native XML example (recommended)
+     </span>
+    </h2>
+    <p>The following example illustrates the recommended method: XML is loaded once, and its elements are mapped to ConTeXt structures through setup definitions.
+</p>
+    <h3>
+     <span id="XML_file_(simplified_TEI)">
+     </span>
+     <span class="mw-headline" id="XML_file_.28simplified_TEI.29">
+      XML file (simplified TEI)
+     </span>
+    </h3>
+    <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+
+      &lt;div type="edition" xml:lang="la"&gt;
+        &lt;head&gt;Exemplum Ciceronis&lt;/head&gt;
+        &lt;p&gt;
+          &lt;persName&gt;Marcus Tullius Cicero&lt;/persName&gt;
+          in
+          &lt;placeName&gt;Arpino&lt;/placeName&gt;
+          natus est.
+          &lt;note&gt;Simple note.&lt;/note&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div type="translation" xml:lang="fr"&gt;
+        &lt;head&gt;Traduction fran&ccedil;aise&lt;/head&gt;
+        &lt;p&gt;Cic&eacute;ron naquit &agrave; Arpinum.&lt;/p&gt;
+      &lt;/div&gt;
+
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+</pre>
+    <hr>
+    <h3>
+     <span class="mw-headline" id="ConTeXt_file">
+      ConTeXt file
+     </span>
+    </h3>
+    <pre>\setuppapersize[A5]
+\setupbodyfont[latin-modern]
+
+\xmlload{cicero}{cicero-sample-tei.xml}{}
+
+\starttext
+
+\chapter{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/head}}
+
+\sc{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/persName}}
+\space in
+\em{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/placeName}}
+\space natus est.\footnote{%
+  \xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/note}
+}
+
+\blank[big]
+
+\subject{\xmltext{cicero}{/TEI/text/body/div[@type='translation']/head}}
+
+\xmltext{cicero}{/TEI/text/body/div[@type='translation']/p}
+
+\stoptext
+</pre>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="What_this_example_demonstrates">
+      What this example demonstrates
+     </span>
+    </h2>
+    <p>This example shows how ConTeXt handles XML in a controlled and typographically sound way:
+</p>
+    <ul>
+     <li>
+      XML encodes
+      <b>
+       semantic information
+      </b>
+      (persons, places, notes),
+     </li>
+     <li>
+      ConTeXt decides
+      <b>
+       how
+      </b>
+      these elements are rendered,
+     </li>
+     <li>
+      the XML file remains reusable and readable,
+     </li>
+     <li>
+      no external Lua parsing is required.
+     </li>
+    </ul>
+    <p>This approach scales naturally to:
+</p>
+    <ul>
+     <li>
+      poetry (
+      <code>&lt;lg&gt;</code>
+      ,
+      <code>&lt;l&gt;</code>
+      ),
+     </li>
+     <li>
+      critical apparatus (
+      <code>&lt;app&gt;</code>
+      ,
+      <code>&lt;lem&gt;</code>
+      ,
+      <code>&lt;rdg&gt;</code>
+      ),
+     </li>
+     <li>
+      multilingual editions,
+     </li>
+     <li>
+      scholarly annotations.
+     </li>
+    </ul>
+    <p>See also:
+</p>
+    <ul>
+     <li>
+      <a class="new" href="index.php?title=Critical_apparatus&action=edit&redlink=1" title="Critical apparatus (page does not exist)">
+       Critical apparatus
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=Poetry_typesetting&action=edit&redlink=1" title="Poetry typesetting (page does not exist)">
+       Poetry typesetting
+      </a>
+     </li>
+     <li>
+      Hans Hagen,
+      <i>
+       ConTeXt XML Explained
+      </i>
+     </li>
+    </ul>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="When_Lua_code_becomes_necessary">
+      When Lua code becomes necessary
+     </span>
+    </h2>
+    <p>In advanced cases, Lua code may still be useful, for example to:
+</p>
+    <ul>
+     <li>
+      preprocess large XML datasets,
+     </li>
+     <li>
+      generate indices,
+     </li>
+     <li>
+      compute derived structures.
+     </li>
+    </ul>
+    <p>In such situations, Lua is still used <b>inside ConTeXt</b>, and should interact with the XML interface already provided by the system.
+</p>
+    <p>External XML parsers such as <code>lxp.lom</code> belong to a different class of solutions and should be considered <b>experimental or exploratory</b>, not part of the standard ConTeXt workflow.
+</p>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="Summary_3">
+      Summary
+     </span>
+    </h2>
+    <ul>
+     <li>
+      ConTeXt integrates Lua natively and does not require external XML parsers.
+     </li>
+     <li>
+      XML processing is declarative and setup-driven.
+     </li>
+     <li>
+      Typographic responsibility always remains on the ConTeXt side.
+     </li>
+     <li>
+      This makes ConTeXt particularly well suited for scholarly and critical editions.
+     </li>
+    </ul>
+    <p>References:
+</p>
+    <ul>
+     <li>
+      Hans Hagen,
+      <i>
+       ConTeXt MkIV / LMTX Manual
+      </i>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=XML_processing&action=edit&redlink=1" title="XML processing (page does not exist)">
+       XML processing
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=LuaMetaTeX&action=edit&redlink=1" title="LuaMetaTeX (page does not exist)">
+       LuaMetaTeX
+      </a>
+     </li>
+     <li>
+      <a class="new" href="index.php?title=TEI_XML&action=edit&redlink=1" title="TEI XML (page does not exist)">
+       TEI XML
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span id="1._TEI_file_structure:_what_does_Lua_expect?">
+     </span>
+     <span class="mw-headline" id="1._TEI_file_structure:_what_does_Lua_expect.3F">
+      1. TEI file structure: what does Lua expect?
+     </span>
+    </h2>
+    <p>Lua will assume the TEI file has this structural pattern:
+</p>
+    <pre>TEI
+ &boxur;&boxh;&boxh; text
+      &boxur;&boxh;&boxh; body
+           &boxvr;&boxh;&boxh; div type="work" (Greek text)
+           &boxv;     &boxvr;&boxh;&boxh; head
+           &boxv;     &boxur;&boxh;&boxh; lg
+           &boxv;          &boxvr;&boxh;&boxh; l (verse 1) + note
+           &boxv;          &boxur;&boxh;&boxh; l (verse 2)
+           &boxur;&boxh;&boxh; div type="translation"
+                 &boxvr;&boxh;&boxh; head
+                 &boxur;&boxh;&boxh; p
+</pre>
+    <p>Everything inside these elements is extracted:
+</p>
+    <ul>
+     <li>
+      <code>&lt;head&gt;</code>
+      &rArr; chapter title
+     </li>
+     <li>
+      <code>&lt;l n="&hellip;"&gt;</code>
+      &rArr; numbered verse
+     </li>
+     <li>
+      <code>&lt;note&gt;</code>
+      &rArr; converted to ConTeXt footnote
+     </li>
+     <li>
+      <code></code>
+      <div>
+       <code></code>
+       &rArr; printed in French
+      </div>
+     </li>
+    </ul>
+    <h2>
+     <span id="A_ConTeXt-native_XML_example_(recommended)_2">
+     </span>
+     <span class="mw-headline" id="A_ConTeXt-native_XML_example_.28recommended.29_2">
+      A ConTeXt-native XML example (recommended)
+     </span>
+    </h2>
+    <p>The examples above introduced the general principles of XML processing in ConTeXt.
+This section provides a compact and fully working example, intentionally small,
+that demonstrates the recommended approach:
+</p>
+    <ul>
+     <li>
+      XML is loaded by ConTeXt,
+     </li>
+     <li>
+      relevant nodes are selected using ConTeXt&rsquo;s XML interface,
+     </li>
+     <li>
+      ConTeXt decides how each element is typeset.
+     </li>
+    </ul>
+    <p>No external XML parser and no standalone Lua XML code is required.
+</p>
+    <h3>
+     <span class="mw-headline" id="1._Create_the_TEI_file">
+      1. Create the TEI file
+     </span>
+    </h3>
+    <p>Create a file named: <code>cicero-sample-tei.xml</code>
+</p>
+    <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!-- Simplified TEI, no namespace for clarity --&gt;
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+
+      &lt;div type="edition" xml:lang="la"&gt;
+        &lt;head&gt;Exemplum Ciceronis&lt;/head&gt;
+        &lt;p&gt;
+          &lt;persName&gt;Marcus Tullius Cicero&lt;/persName&gt;
+          in
+          &lt;placeName&gt;Arpino&lt;/placeName&gt;
+          natus est.
+          &lt;note&gt;Simple note.&lt;/note&gt;
+        &lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div type="translation" xml:lang="fr"&gt;
+        &lt;head&gt;Traduction fran&ccedil;aise&lt;/head&gt;
+        &lt;p&gt;Cic&eacute;ron naquit &agrave; Arpinum.&lt;/p&gt;
+      &lt;/div&gt;
+
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+</pre>
+    <h3>
+     <span class="mw-headline" id="2._Directory_layout">
+      2. Directory layout
+     </span>
+    </h3>
+    <p>Place both files in the same directory:
+</p>
+    <pre>/my-tei-demo/
+  cicero-sample-tei.xml
+  cicero-tei-demo.tex
+</pre>
+    <p>(If you use subfolders, adjust the path given to <code>\xmlload</code> accordingly.)
+</p>
+    <h3>
+     <span class="mw-headline" id="3._Create_the_ConTeXt_file">
+      3. Create the ConTeXt file
+     </span>
+    </h3>
+    <p>Create a file named: <code>cicero-tei-demo.tex</code>
+</p>
+    <pre>\setuppapersize[A5]
+\setupbodyfont[latin-modern]
+
+% Load the TEI file:
+\xmlload{cicero}{cicero-sample-tei.xml}{}
+
+\starttext
+
+% 1. Title of the Latin edition:
+\chapter{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/head}}
+
+% 2. Latin paragraph with a simple semantic mapping:
+%    &lt;persName&gt;  -&gt; small caps
+%    &lt;placeName&gt; -&gt; italics
+%    &lt;note&gt;      -&gt; footnote
+
+\sc{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/persName}}
+\space in
+\em{\xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/placeName}}
+\space natus est.\footnote{%
+  \xmltext{cicero}{/TEI/text/body/div[@type='edition']/p/note}%
+}
+
+\blank[big]
+
+% 3. Title of the translation:
+\subject{\xmltext{cicero}{/TEI/text/body/div[@type='translation']/head}}
+
+% 4. Translation paragraph:
+\xmltext{cicero}{/TEI/text/body/div[@type='translation']/p}
+
+\stoptext
+</pre>
+    <h3>
+     <span class="mw-headline" id="4._Run_the_example">
+      4. Run the example
+     </span>
+    </h3>
+    <p>From your terminal:
+</p>
+    <pre>context cicero-tei-demo.tex
+</pre>
+    <p>The resulting PDF will contain:
+</p>
+    <ul>
+     <li>
+      a chapter title (taken from
+      <code>&lt;head&gt;</code>
+      ),
+     </li>
+     <li>
+      a short Latin text where
+      <code>&lt;persName&gt;</code>
+      and
+      <code>&lt;placeName&gt;</code>
+      are typeset differently,
+     </li>
+     <li>
+      a footnote extracted from
+      <code>&lt;note&gt;</code>
+      ,
+     </li>
+     <li>
+      a French translation section.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="5._What_this_demonstrates">
+      5. What this demonstrates
+     </span>
+    </h3>
+    <p>This compact example illustrates the ConTeXt-native XML workflow:
+</p>
+    <ul>
+     <li>
+      TEI stores structure and semantics (names, places, notes, translation).
+     </li>
+     <li>
+      ConTeXt loads the XML file and selects nodes using its XML interface.
+     </li>
+     <li>
+      ConTeXt controls typesetting (fonts, spacing, notes, headings).
+     </li>
+    </ul>
+    <p>This approach scales to larger TEI projects, including:
+</p>
+    <ul>
+     <li>
+      verse structures (
+      <code>&lt;lg&gt;</code>
+      ,
+      <code>&lt;l&gt;</code>
+      ),
+     </li>
+     <li>
+      richer inline markup (
+      <code>&lt;persName&gt;</code>
+      ,
+      <code>&lt;placeName&gt;</code>
+      , etc.),
+     </li>
+     <li>
+      more elaborate routing via
+      <code>\xmlsetups</code>
+      and
+      <code>\xmlflush</code>
+      ,
+     </li>
+     <li>
+      scholarly additions such as critical apparatus (
+      <code>&lt;app&gt;</code>
+      ,
+      <code>&lt;lem&gt;</code>
+      ,
+      <code>&lt;rdg&gt;</code>
+      ).
+     </li>
+    </ul>
+    <h3>
+     <span id="6._Next_step_(recommended)">
+     </span>
+     <span class="mw-headline" id="6._Next_step_.28recommended.29">
+      6. Next step (recommended)
+     </span>
+    </h3>
+    <p>For maintainability, avoid hardcoding each element selection in the main document.
+Instead, define XML setups to route elements to ConTeXt macros in a declarative way
+(see the earlier progressive examples on this page).
+</p>
+    <h2>
+     <span class="mw-headline" id="8._What_this_example_demonstrates">
+      8. What this example demonstrates
+     </span>
+    </h2>
+    <ul>
+     <li>
+      TEI stores
+      <b>
+       structure + semantics
+      </b>
+      (verses, notes, translation).
+     </li>
+     <li>
+      Lua reads TEI as a
+      <b>
+       tree
+      </b>
+      .
+     </li>
+     <li>
+      ConTeXt handles:
+     </li>
+    </ul>
+    <pre> * chapter heading,
+ * line-by-line typesetting,
+ * footnotes,
+ * bilingual layout.
+</pre>
+    <ul>
+     <li>
+      The pipeline is modular:
+     </li>
+    </ul>
+    <pre>TEI &rarr; Lua &rarr; ConTeXt &rarr; PDF</pre>
+    <ul>
+     <li>
+      A real project would add:
+     </li>
+    </ul>
+    <ul>
+     <li>
+      namespaces,
+     </li>
+     <li>
+      multiple
+      <code>&lt;lg&gt;</code>
+      groups,
+     </li>
+     <li>
+      persons/place indexing (
+      <code>&lt;persName&gt;</code>
+      ,
+      <code>&lt;placeName&gt;</code>
+      ),
+     </li>
+     <li>
+      critical apparatus (
+      <code>&lt;app&gt;</code>
+      ,
+      <code>&lt;lem&gt;</code>
+      ,
+      <code>&lt;rdg&gt;</code>
+      ),
+     </li>
+     <li>
+      parallel typesetting for facing-page editions.
+     </li>
+    </ul>
+    <hr>
+    <h3>
+     <span id="For_testing,_learning,_or_experimenting_with_TEI_&rarr;_ConTeXt_processing,_the_following_sample_files_and_repositories_are_helpful">
+     </span>
+     <span class="mw-headline" id="For_testing.2C_learning.2C_or_experimenting_with_TEI_.E2.86.92_ConTeXt_processing.2C_the_following_sample_files_and_repositories_are_helpful">
+      For testing, learning, or experimenting with TEI &rarr; ConTeXt processing, the following sample files and repositories are helpful
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://tei-c.org/release/doc/tei-p5-doc/en/html/examples-TEI.html" rel="nofollow">
+       TEI Guidelines examples
+      </a>
+      &ndash; Minimal and pedagogical TEI documents published by the TEI Consortium.
+     </li>
+     <li>
+      <a class="external text" href="https://github.com/eeditiones/tei-examples" rel="nofollow">
+       eeditiones / tei-examples (GitHub)
+      </a>
+      &ndash; A curated collection of TEI examples: poetry, prose, critical editions, scholarly annotation.
+     </li>
+     <li>
+      <a class="external text" href="https://github.com/AdamSteffanick/sample-tei-xml-files" rel="nofollow">
+       sample-tei-xml-files (GitHub)
+      </a>
+      &ndash; Simple TEI files suitable for testing Lua parsers and ConTeXt workflows.
+     </li>
+     <li>
+      <a class="external text" href="https://www.teibyexample.org" rel="nofollow">
+       TEI by Example
+      </a>
+      &ndash; A structured tutorial introducing TEI step by step, with exercises and downloadable files.
+     </li>
+     <li>
+      <a class="external text" href="https://www.bvh.univ-tours.fr/XML-TEI/ManuelWeb/Manuel_TEI_BVH.html" rel="nofollow">
+       BVH TEI Manual (Universit&eacute; de Tours)
+      </a>
+      &ndash; Comprehensive French documentation on TEI encoding used in scholarly early-modern editions.
+     </li>
+     <li>
+      <a class="external text" href="https://wiki.digitalclassicist.org/EpiDoc" rel="nofollow">
+       EpiDoc
+      </a>
+      &ndash; TEI subset for epigraphy, inscriptions, papyri and classical texts.
+     </li>
+    </ul>
+    <div style="border-left:4px solid #3366cc; background:#eef4ff; padding:1em; margin:1.2em 0;">
+     <p><b>Note</b> &mdash; Many repositories are published under open licences (MIT, public domain).  
+Please check licence conditions before reuse.
+</p>
+    </div>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="Further_reading">
+      Further reading
+     </span>
+    </h2>
+    <p>The following resources provide authoritative and in-depth documentation
+on XML processing, Lua integration, and scholarly workflows in ConTeXt.
+</p>
+    <ul>
+     <li>
+      Hans Hagen,
+      <i>
+       ConTeXt MkIV / LMTX Manual
+      </i>
+     </li>
+    </ul>
+    <pre> <a class="external free" href="https://www.pragma-ade.nl/general/manuals/" rel="nofollow">https://www.pragma-ade.nl/general/manuals/</a>
+</pre>
+    <ul>
+     <li>
+      Hans Hagen,
+      <i>
+       XML in ConTeXt
+      </i>
+     </li>
+    </ul>
+    <pre> <a class="external free" href="https://www.pragma-ade.nl/general/manuals/xsteps-s.pdf" rel="nofollow">https://www.pragma-ade.nl/general/manuals/xsteps-s.pdf</a>
+</pre>
+    <ul>
+     <li>
+      ConTeXt Garden &mdash; XML processing
+     </li>
+    </ul>
+    <pre> <a class="external free" href="XML_processing.html" rel="nofollow">https://wiki.contextgarden.net/XML_processing</a>
+</pre>
+    <ul>
+     <li>
+      ConTeXt Garden &mdash; TEI XML
+     </li>
+    </ul>
+    <pre> <a class="external free" href="." rel="nofollow">https://wiki.contextgarden.net/TEI_xml</a>
+</pre>
+    <ul>
+     <li>
+      ConTeXt Garden &mdash; LuaMetaTeX
+     </li>
+    </ul>
+    <pre> <a class="external free" href="LuaMetaTeX.html" rel="nofollow">https://wiki.contextgarden.net/LuaMetaTeX</a>
+</pre>
+    <p>These documents describe the native ConTeXt approach to XML processing,
+based on setup definitions and controlled flushing, without external parsers.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <p>A more pedagogical introduction to TEI + ConTeXt (in French) is available in the ConTeXt Wikibook:
+</p>
+    <p>&rarr; <a class="external text" href="https://fr.wikibooks.org/wiki/ConTeXt/Travailler_avec_XML-TEI_dans_ConTeXt" rel="nofollow">Travailler avec XML-TEI dans ConTeXt</a> (which is&nbsp;: How to work XML-TEI within ConTeXt)
+</p>
+    <p><a href="User:Adeimantos.html" title="User:Adeimantos">Adeimantos</a> 11:38, 29 November 2025 (UTC)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125316
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.101 seconds
+Real time usage: 0.599 seconds
+Preprocessor visited node count: 485/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 44656/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3357-1!canonical and timestamp 20260109125315 and revision id 42630
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TEI_xml">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

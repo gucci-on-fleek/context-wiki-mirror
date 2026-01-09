@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Table of contents/Table of contents with fake columns&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Table_of_contents/Table_of_contents_with_fake_columns" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Table of contents/Table of contents with fake columns
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7440&diff=42322">2025-03-02</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This a sample on how to generate an alternative list setup to resemble three columns.
+</p>
+    <p>Since this comes from a document which contained parallel text in facing pages, numbers are the even and the odd page numbers (original text and its translation).
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start,
+   style<span class="brx">=</span>,
+   color<span class="brx">=</span>,
+   focus<span class="brx">=</span>standard<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\enabledirectives</span></span><span class="brx">[</span>references.border<span class="brx">=</span>red<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelistalternative</span></span>
+  <span class="brx">[</span>pmcols<span class="brx">]</span> <span class="brx">[</span>renderingsetup<span class="brx">=</span>list:pmcol<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> <span class="brx">[</span>list:pmcol:common<span class="brx">]</span>
+  <span class="cs">\relax</span> <span class="comment">% prevent lookahead</span>
+  <span class="cs"><span class="systemcs">\startcurrentlistentrywrapper</span></span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\currentlistentrynumber</span></span><span class="brx">]</span>
+  <span class="cs">\nbsp</span>
+  <span class="cs"><span class="stylecs">\currentlistentrypagenumber</span></span>
+  <span class="cs">\narrownobreakspace</span> &middot; <span class="cs">\narrownobreakspace</span>
+  <span class="cs">\the</span><span class="cs">\numexpr</span> 1 + <span class="cs"><span class="stylecs">\currentlistentrypagenumber</span></span><span class="cs">\relax</span>
+  <span class="cs"><span class="systemcs">\stopcurrentlistentrywrapper</span></span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> <span class="brx">[</span>list:pmcol<span class="brx">]</span>
+ <span class="cs">\ifnum</span><span class="br">{</span><span class="cs">\structurelistrawnumber</span><span class="br">{</span><span class="cs">\currentlist</span><span class="br">}</span>&nbsp;; 3<span class="br">}</span> <span class="brx">=</span> 1<span class="cs">\relax</span>
+   <span class="cs"><span class="stylecs">\dontleavehmode</span></span>
+   <span class="cs"><span class="systemcs">\rlap</span></span> <span class="br">{</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>list:pmcol:common<span class="br">}</span><span class="br">}</span>
+ <span class="cs">\orelse</span><span class="cs">\ifnum</span><span class="br">{</span><span class="cs">\structurelistrawnumber</span><span class="br">{</span><span class="cs">\currentlist</span><span class="br">}</span>&nbsp;; 3<span class="br">}</span> <span class="brx">=</span> 2<span class="cs">\relax</span>
+   <span class="cs">\hfill</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>list:pmcol:common<span class="br">}</span>
+ <span class="cs">\else</span>
+   <span class="cs">\hfill</span><span class="cs"><span class="systemcs">\llap</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>list:pmcol:common<span class="br">}</span><span class="br">}</span><span class="cs"><span class="documentcs">\crlf</span></span>
+ <span class="cs">\fi</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs">\definestructureconversionset</span><span class="brx">[</span>rom<span class="brx">]</span><span class="brx">[</span>n,R<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>title<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>even,
+   sectionconversionset<span class="brx">=</span>rom<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>alternative<span class="brx">=</span>pmcols<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\completecontent</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>100<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\startchapter</span></span>
+     <span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>zapf<span class="br">}</span>
+   <span class="cs"><span class="documentcs">\stopchapter</span></span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../../wikiteximage/03d12799de6425381e6ad264e462add8.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004019
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.061 seconds
+Preprocessor visited node count: 5/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5019/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7440-1!canonical and timestamp 20260110004018 and revision id 42322
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Table_of_contents/Table_of_contents_with_fake_columns">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Dimensions and calculations for image placement&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Dimensions_and_calculations_for_image_placement" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Dimensions and calculations for image placement
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4987&diff=41315">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><br>
+If you&rsquo;re using ConTeXt for complex layout tasks, you need to calculate with image sizes. Often it makes sense to use Lua functions.
+</p>
+    <p><b>Beware</b>, TeX calculates internally in "scaled points" (sp), 1 sp = 1/65536 pt.
+</p>
+    <h2>
+     <span class="mw-headline" id="Measures_in_pure_ConTeXt">
+      Measures in pure ConTeXt
+     </span>
+    </h2>
+    <p>You can get at a picture&rsquo;s dimensions with one line of TeX code:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span>default<span class="brx">]</span> <span class="comment">% necessary to find pictures in tree</span>
+<span class="cs"><span class="systemcs">\getfiguredimensions</span></span><span class="brx">[</span>hacker.jpg<span class="brx">]</span>
+</pre>
+    <p>This defines a bunch of variables:
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="549" src="../../wikiteximage/ed4084db56f132fcce23713be7f2179e.webp" width="564">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Measures_in_Lua">
+      Measures in Lua
+     </span>
+    </h2>
+    <p>There is a way to take them in Lua:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>sans, 20pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>1em<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+  local f <span class="brx">=</span> figures.getinfo<span class="brx">(</span>"cow.pdf"<span class="brx">)</span>
+  context<span class="brx">(</span>f.used.width<span class="brx">)</span>
+  context.par<span class="brx">(</span><span class="brx">)</span>
+  context<span class="brx">(</span>f.used.height<span class="brx">)</span>
+  context.getfiguredimensions<span class="brx">(</span><span class="br">{</span> "cow.pdf" <span class="br">}</span><span class="brx">)</span>
+  context.par<span class="brx">(</span><span class="brx">)</span>
+  context<span class="brx">(</span>context.noffigurepages<span class="brx">)</span>
+  context.par<span class="brx">(</span><span class="brx">)</span>
+  context<span class="brx">(</span>context.figurewidth<span class="brx">)</span>
+  context.par<span class="brx">(</span><span class="brx">)</span>
+  context<span class="brx">(</span>context.figureheight<span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="327" src="../../wikiteximage/8492613e2416a005f9e263e6e4b8398d.webp" width="288">
+     </li>
+    </ul>
+    <p>The <code>figures.getinfo</code> gives just numbers and it has less options. <code>context.getfiguredimensions</code> gives the same outputs than it TeX counterpart.
+</p>
+    <h2>
+     <span class="mw-headline" id="Calculations_in_Lua">
+      Calculations in Lua
+     </span>
+    </h2>
+    <pre>TEXpt = 65536 -- sp per pt
+TEXptpi = 72.27 -- pt per inch
+
+function sp2mm(n)
+	-- convert sp into mm
+	return math.floor(n * 35.28 / TEXpt)/100
+end
+
+function glue2num(glue)
+	-- convert TeX glue (e.g. skips) into dimensions(? or numbers)
+	return glue.width + (glue.stretch * glue.stretch_order) - (glue.shrink * glue.shrink_order)
+end
+
+function ImgSize(resolution)
+	local filename = figures.current().status.fullname -- current image
+	local pic = img.scan{filename = filename}
+	local picH = pic.ysize * TEXptpi * TEXpt / resolution  -- picture height in sp
+	local picW = pic.xsize * TEXptpi * TEXpt / resolution  -- picture width in sp
+	context("height=" .. picH .. ",width=" .. picW)
+end
+</pre>
+    <h2>
+     <span class="mw-headline" id="Postponing">
+      Postponing
+     </span>
+    </h2>
+    <p>If you want to place full page images or similar content on distinct pages, try the postponing mechanism:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definemakeup</span></span><span class="brx">[</span>fullpage<span class="brx">]</span><span class="brx">[</span>
+  page<span class="brx">=</span>no,
+  doublesided<span class="brx">=</span>no,
+  <span class="comment">% headerstate=empty,</span>
+  <span class="comment">% footerstate=empty,</span>
+  pagestate<span class="brx">=</span>start,
+<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startpostponing</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span>
+<span class="cs">\startfullpagemakeup</span>
+<span class="comment">% use \setlayer & friends</span>
+<span class="cs">\stopfullpagemakeup</span>
+<span class="cs"><span class="documentcs">\stoppostponing</span></span>
+</pre>
+    <p>The pagenumber argument can be absolute or relative, e.g. 23 or +2. Values like +0 or -1 might fit your usecase.
+</p>
+    <p>((WORK IN PROGRESS))
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.081 seconds
+Real time usage: 0.156 seconds
+Preprocessor visited node count: 35/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3908/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4987-1!canonical and timestamp 20260109212416 and revision id 41315
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Dimensions_and_calculations_for_image_placement">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

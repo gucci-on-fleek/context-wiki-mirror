@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Mathematics/Fonts/Bold Math&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Mathematics/Fonts/Bold_Math" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Mathematics/Fonts/Bold Math
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=846&diff=41580">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Mathematics.html" title="Mathematics">Mathematics</a> | <a class="new" href="../../index.php?title=Bold_Typewriter&action=edit&redlink=1" title="Bold Typewriter (page does not exist)">Bold Typewriter</a>  &gt;
+</p>
+    <p>Hans has descibed how to work with bold math in <a class="external text" href="http://www.pragma-ade.nl/general/magazines/mag-0005.pdf" rel="nofollow">MyWay No.5 about "Mixed Normal and Bold Math"</a>. 
+However, this method only seems to work with lucida fonts. For other fonts (currently only for latin modern and euler), one can also define
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>boldmath<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>boldmath<span class="brx">]</span> <span class="brx">[</span>latin-modern<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span>
+</pre>
+    <p>and then use <code>boldsymbol</code> around symbol that you want in bold.
+</p>
+    <h2>
+     <span class="mw-headline" id="Mixing_Math_Fonts">
+      Mixing Math Fonts
+     </span>
+    </h2>
+    <p><i>This should be better documented and should go into a separate document, but until then I just leave it here before it gets lost. Perhaps the example above could be typeset in a similar way as well.</i>
+</p>
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;font-style:italic;">
+     <tbody>
+      <tr>
+       <td style="padding:1em 1em;"><ul class="demo"><li class="rendering"><img height="1240" src="../../wikiteximage/eb9bd0cb1ad0da0a41378c8ac8aabf5e.webp" width="874"></li></ul><br>
+</td>
+       <td style="padding:1em 1em;">Someone thinks this entry needs some more explanation.
+</td>
+       <td style="padding:1em 1em;">(See: <a href="../../Category:Needs_Explanation.html" title="Category:Needs Explanation">Needs Explanation?</a>, <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>.)
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p><br>
+<b>Background</b>: If you use
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>ant<span class="brx">]</span> <span class="comment">% Antykwa Torunska</span>
+</pre>
+    <p>the math will be typeset with Antykwa as well. <i>(Perhaps this is a deprecated way of selecting fonts, I don't know. It works on my distribution, but not on the garden. Please use at your own risk.)</i>
+</p>
+    <p>So far so good. You get pretty mathematical symbols mathcing the document style. The problem arises when you want to try something like
+</p>
+    <pre class="tex">$<span class="cs">\Longrightarrow</span>$
+</pre>
+    <p><b>Solution:</b> <a href="../../User:Taco.html" title="User:Taco">Taco</a> provided the following code and comments:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>math<span class="brx">]</span> <span class="brx">[</span>antykwa-torunska<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>MathRoman<span class="brx">]</span>        <span class="brx">[</span>ComputerModernMath-Roman<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>MathExtension<span class="brx">]</span>    <span class="brx">[</span>ComputerModernMath-Extension<span class="brx">]</span>
+  <span class="comment">%definefontsynonym [MathItalic]       [ComputerModernMath-Italic]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>MathSymbol<span class="brx">]</span>       <span class="brx">[</span>ComputerModernMath-Symbol<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <p>Since there is more in the MathItalic fonts than just letters, it
+may produce un-even effects.
+</p>
+    <p>If you want more detailed control, you have to load extra math
+font families and redefine selected bits of the math collection
+(see also <a class="external text" href="http://source.contextgarden.net/tex/context/base/font-unk.tex" rel="nofollow">font-unk.tex</a>, <a class="external text" href="http://source.contextgarden.net/tex/context/base/math-tex.tex" rel="nofollow">math-tex.tex</a> and <a class="external text" href="http://source.contextgarden.net/type-syn.tex" rel="nofollow">type-syn.tex</a>)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212431
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.018 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 465/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1902/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    8.259      1 Template:Explanation
+100.00%    8.259      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:846-1!canonical and timestamp 20260109212431 and revision id 41580
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Mathematics/Fonts/Bold_Math">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/Typing/Custom pretty printer&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/Typing/Custom_pretty_printer" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/Typing/Custom pretty printer
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2729&diff=40709">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../Typing.html" title="Text blocks/Environments/Typing">Verbatim_text</a> 
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Custom_pretty_printers">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Custom pretty printers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Registering_a_new_pretty_printer">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Registering a new pretty printer
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Hooks">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Hooks
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#empty_line">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           empty_line
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#begin_of_line">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           begin_of_line
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#end_of_line">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           end_of_line
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#line">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           line
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#flush_line">
+          <span class="tocnumber">
+           3.5
+          </span>
+          <span class="toctext">
+           flush_line
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#begin_of_display.2C_end_of_display.2C_begin_of_inline.2C_end_of_inline">
+          <span class="tocnumber">
+           3.6
+          </span>
+          <span class="toctext">
+           begin_of_display, end_of_display, begin_of_inline, end_of_inline
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Utility_functions_and_variables">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Utility functions and variables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#More_info">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         More info
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Custom_pretty_printers">
+      Custom pretty printers
+     </span>
+    </h2>
+    <p>ConTeXt allows one to define a custom pretty printer, which knows how to
+interpret and display a particular type of file, text or programming
+language.
+</p>
+    <p>This page details the creation of a pretty printer in Lua, which is
+possible with MkIV and <a href="../../../ConTeXt_and_Lua_programming/ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a>. This page does not apply to MkII.
+</p>
+    <p>To create a custom pretty printer, you need to create a file named
+<tt>pret-foo.lua</tt>, where <tt>foo</tt> is the name of the
+prettyprinter. Fore more details about where to put this file and how to
+use it, see <a href="../Typing#Your_own_formatter.html" title="Text blocks/Environments/Typing">Text blocks/Environments/Typing#Your_own_formatter</a>. We'll focus here on
+what to put in the file.
+</p>
+    <h2>
+     <span class="mw-headline" id="Registering_a_new_pretty_printer">
+      Registering a new pretty printer
+     </span>
+    </h2>
+    <p>To let the pretty printer core know about your pretty printer, you need 
+to register it first. You do this by calling the
+<code>buffers.newvisualizer</code> function:
+</p>
+    <pre> local visualizer = buffers.newvisualizer('foo')
+</pre>
+    <p>Here, you pass the name of the pretty printer, which is the (lowercase)
+version of the first argument to <code>\installprettytype</code>.
+</p>
+    <p>This function returns an (empty) table, into which you should store the
+hook functions for any hooks you want to override. You can do this by
+simply declaring the function with <code>visualizer</code> as the first
+component of the name (or whatever you assigned the return value from
+<code>newvisualizer</code> to). 
+</p>
+    <p>For example, after registering the 'foo' prettyprinter as above, the
+<tt>flush_line</tt> hook should be defined as:
+</p>
+    <pre> function visualizer.flush_line(str,nested)
+</pre>
+    <p>Each pretty printer can define a number of hook functions. Each of
+these will be called at specific times during the pretty printing and
+are free to handle the input in any way. See below for when and how a
+hook is called. Defining a hook is optional, if it is not defined, a
+default version will be called instead.
+</p>
+    <h2>
+     <span class="mw-headline" id="Hooks">
+      Hooks
+     </span>
+    </h2>
+    <p>This section lists all hooks available to a pretty printer. First
+we'll show how and when the hooks are called.
+</p>
+    <p>When pretty printing a file or buffer (named or anonymous using
+<code>\starttyping</code>), the following hooks are called:
+</p>
+    <ol>
+     <li>
+      Call
+      <tt>
+       begin_of_display
+      </tt>
+     </li>
+     <li>
+      For each line in the input:
+      <ul>
+       <li>
+        If the line contains only whitespace:
+        <ol>
+         <li>
+          Call
+          <tt>
+           empty_line
+          </tt>
+         </li>
+        </ol>
+       </li>
+       <li>
+        Else:
+        <ol>
+         <li>
+          Call
+          <tt>
+           begin_of_line
+          </tt>
+         </li>
+         <li>
+          Call
+          <tt>
+           line
+          </tt>
+          to modify the current line.
+         </li>
+         <li>
+          Call
+          <tt>
+           flush_line
+          </tt>
+          to process and output the current line.
+         </li>
+         <li>
+          Call
+          <tt>
+           end_of_line
+          </tt>
+         </li>
+        </ol>
+       </li>
+      </ul>
+     </li>
+     <li>
+      Call
+      <tt>
+       end_of_display
+      </tt>
+     </li>
+    </ol>
+    <p>When prettyprint a single phrase (using <code>\type</code>), the following
+hooks are called:
+</p>
+    <ol>
+     <li>
+      Call
+      <tt>
+       begin_of_inline
+      </tt>
+     </li>
+     <li>
+      Call
+      <tt>
+       flush_line
+      </tt>
+     </li>
+     <li>
+      Call
+      <tt>
+       end_of_inline
+      </tt>
+     </li>
+    </ol>
+    <p>Note that in this case, the <tt>line</tt> hook is not called!
+</p>
+    <p>The following hooks are available to a pretty printer.
+</p>
+    <h3>
+     <span class="mw-headline" id="empty_line">
+      <tt>
+       empty_line
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.empty_line()
+</pre>
+    <p>This hook is called for every empty line in the output. The default
+implementation just outputs an empty line, using the
+<tt>buffers.commands.empty_line_command</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="begin_of_line">
+      <tt>
+       begin_of_line
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.begin_of_line(n)
+</pre>
+    <p>This hook is called at the start of every non-empty line. The only
+argument, <tt>n</tt>, is the number of the line. The function should
+return nothing (but use <tt>texprint</tt> and friends to produce
+output).
+</p>
+    <p>The default implementation outputs an optional line number and some
+other tex commands, using
+<tt>buffers.commands.begin_of_line_command</tt>.
+</p>
+    <p>Note that the line number does not include empty lines. This is
+configurable using the <tt>flags.count_empty_lines</tt> variable,
+although there does not seem to be a way to set this flag using a
+ConTeXt macro.
+</p>
+    <h3>
+     <span class="mw-headline" id="end_of_line">
+      <tt>
+       end_of_line
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.end_of_line(n)
+</pre>
+    <p>This hook is called at the end of every non-empty line. The function
+should return nothing (but use <tt>texprint</tt> and friends to produce
+output).
+</p>
+    <p>The default implementation outputs some tex commands using
+<tt>buffers.commands.end_of_line_command</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="line">
+      <tt>
+       line
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.line(str)
+</pre>
+    <p>This hook is called for every non-empty line. The first argument is the
+line itself,. The function should return an updated line, which is then
+passed to <tt>flush_line</tt>.
+</p>
+    <p>The default implementation just returns its argument unmodified.
+</p>
+    <p>It's not exactly clear to me what the purpose of this hook is. None of
+the existing pretty printers seem to use it, they all do their work in
+<tt>flush_line</tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="flush_line">
+      <tt>
+       flush_line
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.flush_line(str, nested)
+</pre>
+    <p>This hook is called for every non-empty line, or the entire content of
+an inline <code>\type</code> command. The first argument is the
+line itself, as returned by the <tt>line</tt> hook. The second argument
+is some indication of nested brackets in the input, but it's not
+completely clear how this works.
+</p>
+    <p>The function should return nothing, but use <tt>texprint</tt> and
+friends to produce output. Alternatively, the function could build a
+table and pass that to <tt>buffers.flush_result</tt> (which also handles
+some stuff related to nesting).
+</p>
+    <h3>
+     <span id="begin_of_display,_end_of_display,_begin_of_inline,_end_of_inline">
+     </span>
+     <span class="mw-headline" id="begin_of_display.2C_end_of_display.2C_begin_of_inline.2C_end_of_inline">
+      <tt>
+       begin_of_display, end_of_display, begin_of_inline, end_of_inline
+      </tt>
+     </span>
+    </h3>
+    <pre> function visualizer.begin_of_display()
+ function visualizer.end_of_display()
+ function visualizer.begin_of_inline()
+ function visualizer.end_of_inline()
+</pre>
+    <p>These hooks are called at the start and end of prettyprinting a buffer, 
+file or phrase. The <code>_display</code> versions are used when
+prettyprinting a buffer (named or anonymous using
+<code>\starttyping</code>) or a file. The <code>_inline</code> versions
+are used for prettyprinting a phrase inline, using <code>\type</code>.
+</p>
+    <p>These functions should return nothing, but can use <tt>texprint</tt> and
+friends to produce output.
+</p>
+    <p>The default implementations output some tex commands using
+<tt>buffers.commands.{begin,end}_of_{display,inline}_command</tt> (which
+seem to expand to nothing currently).
+</p>
+    <h2>
+     <span class="mw-headline" id="Utility_functions_and_variables">
+      Utility functions and variables
+     </span>
+    </h2>
+    <p>There are some utilities available for pretty printers. All of the below
+are defined in <tt>buff-ini.lua</tt>, as well as some other stuff not
+listed here.
+</p>
+    <dl>
+     <dt>
+      <tt>
+       buffers.flush_result(result, nested)
+      </tt>
+     </dt>
+     <dd>
+      Output all values in the given table
+      <tt>
+       result
+      </tt>
+      , while doing something with nesting.
+     </dd>
+     <dt>
+      <tt>
+       buffers.change_state(n, state)
+      </tt>
+     </dt>
+     <dd>
+      Set the current color to n, given the current color state. Returns the new color state.
+     </dd>
+     <dt>
+      <tt>
+       buffers.finish_state(state)
+      </tt>
+     </dt>
+     <dd>
+      Reset the current color, given the current color state. Returns the new color state.
+     </dd>
+     <dt>
+      <tt>
+       buffers.currentcolors
+      </tt>
+     </dt>
+     <dd>
+      This is a table that maps color numbers (as passed to
+      <tt>
+       buffer.change_state
+      </tt>
+      ) to TeX color names. A pretty printer using coloring should set this in its
+      <tt>
+       flush_line
+      </tt>
+      , for example.
+     </dd>
+     <dt>
+      <tt>
+       buffers.commands
+      </tt>
+     </dt>
+     <dd>
+      This variable contains a number of useful TeX commands. See
+      <tt>
+       buff-ini.lua
+      </tt>
+      for details.
+     </dd>
+    </dl>
+    <h2>
+     <span class="mw-headline" id="More_info">
+      More info
+     </span>
+    </h2>
+    <p>The above is not quite complete, some things are missing or
+underdocumented. The code that drives the prettyprinting is in the file
+<a class="extiw" href="http://source.contextgarden.net/buff-ini.lua" title="source:buff-ini.lua">buff-ini.lua</a> (which is called by <a class="extiw" href="http://source.contextgarden.net/buff-ini.mkiv" title="source:buff-ini.mkiv">buff-ini.mkiv</a> and
+<a class="extiw" href="http://source.contextgarden.net/buff-ver.mkiv" title="source:buff-ver.mkiv">buff-ver.mkiv</a> from the TeX side), in the ConTeXt distribution.
+If you're missing anything, you'll probably find some answers there.
+Don't forget to write down what you find on this page!
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212438
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 36/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2729-1!canonical and timestamp 20260109212438 and revision id 40709
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/Typing/Custom_pretty_printer">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   References notes and floats/Manual bibliography&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/References_notes_and_floats/Manual_bibliography" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    References notes and floats/Manual bibliography
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4584&diff=41519">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Short_approach">
+      Short approach
+     </span>
+    </h2>
+    <p>Here is manual approach for simple bibliographies.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definereferenceformat</span></span><span class="brx">[</span>cite<span class="brx">]</span><span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span>,right<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineitemgroup</span></span> <span class="brx">[</span>bibliography<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span>  <span class="brx">[</span>bibliography<span class="brx">]</span><span class="brx">[</span>each<span class="brx">]</span> 
+                 <span class="brx">[</span>symbol<span class="brx">=</span>n,
+                  left<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span>,
+                  right<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span>,
+                  width<span class="brx">=</span>1.5em,
+                  stopper<span class="brx">=</span>,
+                  itemalign<span class="brx">=</span>flushright,
+                  inbetween<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>4pt<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\appendtoks</span></span>
+	<span class="cs">\let</span><span class="cs">\bibitem</span>             <span class="cs">\itemgroupitem</span>
+	<span class="cs">\let</span><span class="cs">\startbibitem</span>       <span class="cs">\startitemgroupitem</span>
+	<span class="cs">\let</span><span class="cs">\stopbibitem</span>        <span class="cs">\stopitemgroupitem</span>
+<span class="cs">\to</span> <span class="cs">\itemgroupcommands</span>
+</pre>
+    <p>Now you can use
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>References<span class="br">}</span>
+<span class="cs">\startbibliography</span>
+  <span class="cs">\bibitem</span><span class="brx">[</span>ref1<span class="brx">]</span> This is my first reference
+  <span class="cs">\bibitem</span><span class="brx">[</span>ref2<span class="brx">]</span> This is the second reference
+<span class="cs">\stopbibliography</span>
+</pre>
+    <p>and use <tt>[[Command/cite[ref1]|\cite[ref1]]]</tt> etc to refer to bibliography items.
+</p>
+    <p><a href="Bibliography_and_citations#Simple_manual_bibliography.html" title="References notes and floats/Bibliography and citations">Here&rsquo;s a similar approach</a> using <tt><a href="../Command/definedescription.html" title="Command/definedescription">\definedescription</a></tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Easy_approach">
+      Easy approach
+     </span>
+    </h2>
+    <p>If you need a list of publications really quickly, simply use:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Lnk</span>  <span class="br">{</span>\<span class="brx">[</span><span class="cs"><span class="documentcs">\in</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span>\<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="comment">%\startbodymatter</span>
+
+    A reference: see <span class="cs">\Lnk</span><span class="br">{</span>libA<span class="br">}</span> p. 1 or visit <span class="cs">\Lnk</span><span class="br">{</span>libB<span class="br">}</span>.
+
+  <span class="comment">%\stopbodymatter</span>
+  <span class="comment">%\startappendices</span>
+  
+    <span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>List of Publications<span class="br">}</span><span class="brx">]</span> <span class="comment">% in appendices use chapter instead of section!</span>
+        <span class="br">{</span><span class="cs">\tfx</span>
+          <span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>n<span class="brx">]</span><span class="brx">[</span>stopper<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,left<span class="brx">=</span><span class="br">{</span>\<span class="brx">[</span><span class="br">}</span>,right<span class="brx">=</span><span class="br">{</span>\<span class="brx">]</span><span class="br">}</span>,distance<span class="brx">=</span>1em<span class="brx">]</span>
+
+            <span class="cs"><span class="documentcs">\startitem</span></span><span class="brx">[</span>libA<span class="brx">]</span>
+              A. Bloch, <span class="br">{</span><span class="cs">\it</span> Pleasuredome<span class="br">}</span>, AH-A Ltd., 2018
+            <span class="cs"><span class="documentcs">\stopitem</span></span>
+            
+            <span class="cs"><span class="documentcs">\startitem</span></span><span class="brx">[</span>libB<span class="brx">]</span>
+              <span class="br">{</span><span class="cs">\blue</span> http://wiki.contextgarden.net<span class="br">}</span> <span class="brx">(</span>visited 31.12.2017<span class="brx">)</span>
+            <span class="cs"><span class="documentcs">\stopitem</span></span>
+          
+          <span class="cs"><span class="documentcs">\stopitemize</span></span>
+        <span class="br">}</span>
+    <span class="cs"><span class="documentcs">\stopsection</span></span>
+    
+  <span class="comment">%\stopappendices</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/8bb599a47aae5b6c19d52e4658d331b3.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212433
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.039 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 200/2097152 bytes
+Template argument size: 54/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5581/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    4.591      1 -total
+ 97.97%    4.498      2 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4584-1!canonical and timestamp 20260109212433 and revision id 41519
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/References_notes_and_floats/Manual_bibliography">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

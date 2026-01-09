@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Encodings and Regimes in XeTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Encodings_and_Regimes_in_XeTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Encodings and Regimes in XeTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1942&diff=28176">2020-06-07</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is a somewhat temporary & incomplete page for those interested in details about how XeTeX deals with input encodings and font encodings. (I've dropped a couple of notes here before I forget them.)
+</p>
+    <p>Plain user should not bother about this - ConTeXt should eventually do everything automatically using the same macro commands as for pdfTeX. So please do not consider this page as a part of official documentation or as a recipe of how things should be done. This information might become obsolete.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Input_Encodings_.28Regimes.29">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Input Encodings (Regimes)
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Using_another_input_encoding_.28regime.29">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Using another input encoding (regime)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Font_Encodings">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Font Encodings
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Misc.">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Misc.
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Testing_for_a_presence_of_a_glyph">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Testing for a presence of a glyph
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Named_glyphs">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Named glyphs
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="Input_Encodings_(Regimes)">
+     </span>
+     <span class="mw-headline" id="Input_Encodings_.28Regimes.29">
+      Input Encodings (Regimes)
+     </span>
+    </h2>
+    <p>As opposed to most other TeX engines, XeTeX interprets the input as UTF-8 by default. In pdfTeX you have to say
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf-8<span class="brx">]</span>
+</pre>
+    <p>which is not necessary in XeTeX any more (to be more precise: it's even ignored).
+</p>
+    <p>However, there is a subtle difference:
+</p>
+    <ul>
+     <li>
+      Macros for pdfTeX will convert some parts of the Unicode (the most frequently used ones / those that are easy enough to name / those that are present in some frequent TeX encodings / those that can be faked easily) into
+      <b>
+       named glyphs
+      </b>
+      . '&ccaron;' will become
+      <code>\ccaron</code>
+      for example. By default this will expand into a
+      <i>
+       caron
+      </i>
+      accent placed above
+      <i>
+       'c'
+      </i>
+      , unless such a glyph exists in the encoding. In the case of EC-encoded fonts, the proper glyphy
+      <i>
+       ccaron
+      </i>
+      would be used for it.
+     </li>
+     <li>
+      If you use an OpenType font in XeTeX, XeTeX will take care to find the corresponding glyph (for the letter that you type) in the font automatically; there is no need for macro trickery inbetween. However, if you're using Type1 fonts or if no proper glyph is present in the font, you are on your own (there is no faking of glyphs present in the background) and you'll get empty output instead of seing the characters that you typed in. (This might/should be modified/fixed.)
+     </li>
+    </ul>
+    <h3>
+     <span id="Using_another_input_encoding_(regime)">
+     </span>
+     <span class="mw-headline" id="Using_another_input_encoding_.28regime.29">
+      Using another input encoding (regime)
+     </span>
+    </h3>
+    <p>The macro
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>name<span class="brx">]</span>
+</pre>
+    <p>should be adapted for the usage in XeTeX.
+</p>
+    <p><i>(Written by Jonathan Kew on the <a class="external text" href="http://thread.gmane.org/gmane.comp.tex.xetex/1556" rel="nofollow">XeTeX mailing list</a>:)</i>
+</p>
+    <p>You can say
+</p>
+    <pre class="tex"><span class="cs">\XeTeXinputencoding</span> "cp1250"
+</pre>
+    <p>and then input will then be interpreted as codepage 1250 (and mapped
+to the corresponding Unicode character codes for processing within
+XeTeX).
+</p>
+    <p>To be precise, \XeTeXinputencoding will change the interpretation of
+the input bytes beginning at the *next* line of the input file.
+</p>
+    <p>There is also
+</p>
+    <pre class="tex"><span class="cs">\XeTeXdefaultencoding</span> "..."
+</pre>
+    <p>which is similar, but it does
+not affect the reading of the *current* file; instead, it changes the
+initial encoding for any files that are *subsequently* opened.
+Therefore, you can use this to get XeTeX to read an existing file in
+a legacy encoding, without having to edit that file itself -- just
+set the default encoding from a "driver" file before doing \input.
+</p>
+    <p>One caution about setting the default encoding: regardless of the
+\XeTeX...encoding settings, any files that XeTeX writes (with \write)
+will *always* be written as UTF-8. So if you're writing and then
+reading auxiliary files from within the job, these will be UTF-8 even
+if your main input text is a legacy codepage, and you may have to
+take care to switch the default encoding back to utf8 before opening
+such a file.
+</p>
+    <p>There's another possibility, too: if you use
+</p>
+    <pre class="tex"><span class="cs">\XeTeXinputencoding</span> "bytes"
+</pre>
+    <p>then XeTeX will simply read the input text as byte values 0..255,
+with no attempt to map them to Unicode according to any specific
+codepage. (In practice, this is probably the same as using encoding
+"8859-1" or "latin1".) If you do this, then ConTeXt's active-character
+scheme for handling encodings within TeX macros should
+still work, as you'll be getting the same character codes as standard
+TeX would see.
+</p>
+    <h2>
+     <span class="mw-headline" id="Font_Encodings">
+      Font Encodings
+     </span>
+    </h2>
+    <p>You're adviced to use OpenType fonts anyway, but just in case that you stil want to use the old Type1 "256"-glyph fonts.
+</p>
+    <p>XeTeX currently doesn't know which glyphs are present in such fonts. A temporary way out of it is todefine active characters for the letters that you need; like this:
+</p>
+    <pre class="tex"><span class="cs">\catcode</span>`&ccaron;<span class="brx">=</span><span class="cs">\active</span> <span class="cs">\def</span>&ccaron;<span class="br">{</span>^^a3<span class="br">}</span> <span class="comment">% ccaron is on place 163 (0xA3) in EC encoding</span>
+</pre>
+    <p>Or, since ConTeX is clever enough to perform the rest of the story properly:
+</p>
+    <pre class="tex"><span class="cs">\catcode</span>`&ccaron;<span class="brx">=</span><span class="cs">\active</span> <span class="cs">\def</span>&ccaron;<span class="br">{</span><span class="cs">\ccaron</span><span class="br">}</span>
+</pre>
+    <p>However, this should be fixed/automated somehow.
+</p>
+    <h2>
+     <span class="mw-headline" id="Misc.">
+      Misc.
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Testing_for_a_presence_of_a_glyph">
+      Testing for a presence of a glyph
+     </span>
+    </h3>
+    <p>Macros in ConTeXt for faking the glyphs could be adapted a bit, so that if a certain glyph was missing, it would be faked.
+</p>
+    <p>Example:
+</p>
+    <pre class="tex"><span class="cs">\ifnum</span><span class="cs">\XeTeXcharglyph</span>"018E&gt;0
+    <span class="cs">\char</span>"018E
+<span class="cs">\else</span>
+    <span class="comment">% code for faking it</span>
+<span class="cs">\fi</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Named_glyphs">
+      Named glyphs
+     </span>
+    </h3>
+    <p>If you know the name of the glyphs, but not their exact location (for example, these could be glyphs in private area of Unicode, which is not standardized), <code>\XeTeXglyphindex</code> can help you.
+</p>
+    <pre class="tex"><span class="cs">\XeTeXglyphindex</span> "glyphname"
+</pre>
+    <p>returns glyph ID of a named glyph.
+</p>
+    <p>You can (hopefully) use it like that <i>(to be tested once XeTeX 0.993 for Linux is out!!!)</i>:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\ubreveinvertedlow</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs">\char</span><span class="br">{</span><span class="cs">\XeTeXglyphindex</span> "ubreveinvertedlow"<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p><i>(Works with <a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a> &gt;= 0.993 and <a href="Latin_Modern.html" title="Latin Modern">Latin Modern</a> &gt;= 1.0.)</i>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212413
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.025 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 64/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1679/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1942-1!canonical and timestamp 20260109212413 and revision id 28176
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Encodings_and_Regimes_in_XeTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

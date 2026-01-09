@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Pascal's triangle&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Pascal%27s_triangle" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Pascal's triangle
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6257&diff=41846">2025-01-21</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><br>
+<a class="new" href="../../index.php?title=Pascal's_Triangle&action=edit&redlink=1" title="Pascal's Triangle (page does not exist)">Pascal's Triangle</a> is a triangula array of numbers which is well-known in mathematics. The number at the n-th row and r-th column in the array is the value of combination&nbsp;:
+</p>
+    <pre class="tex"> <span class="br">{</span>n <span class="cs">\choose</span> k<span class="br">}</span> </pre>
+    <p>or 
+</p>
+    <pre class="tex"> <span class="cs"><span class="documentcs">\binom</span></span><span class="br">{</span>n<span class="br">}</span><span class="br">{</span>k<span class="br">}</span> </pre>
+    <p>More detailed explanation, you may read wikipedia.
+</p>
+    <ul>
+     <li>
+      <b>
+       <a class="external text" href="https://en.wikipedia.org/wiki/Pascal%27s_triangle" rel="nofollow">
+        Pascal's Triangle in Wikipedia
+       </a>
+      </b>
+     </li>
+    </ul>
+    <p>We draw Pascal's triangle using MetaFun and Lua. It can be done by the help of Hans.
+</p>
+    <p>First, we define a function to calculate the combination with Lua.
+</p>
+    <h2>
+     <span class="mw-headline" id="lua_code_for_calculation">
+      lua code for calculation
+     </span>
+    </h2>
+    <p>The functions MP.p_ncr(n,r) and MP.p_ncr_x() are provided for better and simpler code.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+  local function fact <span class="brx">(</span>n<span class="brx">)</span>
+    if n &lt;<span class="brx">=</span> 0 then
+      return 1
+    else
+      return n * fact<span class="brx">(</span>n-1<span class="brx">)</span>
+    end
+  end
+
+  local function ncr<span class="brx">(</span>n,r<span class="brx">)</span>
+    return fact<span class="brx">(</span>n<span class="brx">)</span>/<span class="brx">(</span>fact<span class="brx">(</span>r<span class="brx">)</span>*fact<span class="brx">(</span>n-r<span class="brx">)</span><span class="brx">)</span>
+  end
+  userdata.P <span class="brx">=</span> <span class="br">{</span>
+       fact <span class="brx">=</span> fact,
+       ncr  <span class="brx">=</span> ncr,
+  <span class="br">}</span>
+  function MP.p_ncr<span class="brx">(</span>n, r<span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>n,r<span class="brx">)</span><span class="brx">)</span>
+  end
+  function MP.p_ncr_x<span class="brx">(</span><span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>mp.scan.pair<span class="brx">(</span><span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+  end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="7" src="../../wikiteximage/1d560469e5c6a879ca564b974bc52808.webp" width="7">
+     </li>
+    </ul>
+    <h2>
+     <span id="Drawing_Pascal's_triangle_with_lines">
+     </span>
+     <span class="mw-headline" id="Drawing_Pascal.27s_triangle_with_lines">
+      Drawing Pascal's triangle with lines
+     </span>
+    </h2>
+    <p>There are 3 different ways of calculating the value of combination tt.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+  local function fact <span class="brx">(</span>n<span class="brx">)</span>
+    if n &lt;<span class="brx">=</span> 0 then
+      return 1
+    else
+      return n * fact<span class="brx">(</span>n-1<span class="brx">)</span>
+    end
+  end
+
+  local function ncr<span class="brx">(</span>n,r<span class="brx">)</span>
+    return fact<span class="brx">(</span>n<span class="brx">)</span>/<span class="brx">(</span>fact<span class="brx">(</span>r<span class="brx">)</span>*fact<span class="brx">(</span>n-r<span class="brx">)</span><span class="brx">)</span>
+  end
+  userdata.P <span class="brx">=</span> <span class="br">{</span>
+       fact <span class="brx">=</span> fact,
+       ncr  <span class="brx">=</span> ncr,
+  <span class="br">}</span>
+  function MP.p_ncr<span class="brx">(</span>n, r<span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>n,r<span class="brx">)</span><span class="brx">)</span>
+  end
+  function MP.p_ncr_x<span class="brx">(</span><span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>mp.scan.pair<span class="brx">(</span><span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+  end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\startMPcode</span></span>
+numeric n,r,u,dx,dy,tt,final; u&nbsp;:<span class="brx">=</span> 1.8cm;
+
+path p, q;
+pair A,now;
+
+A&nbsp;:<span class="brx">=</span> dir<span class="brx">(</span>210<span class="brx">)</span>*u;
+dy&nbsp;:<span class="brx">=</span> ypart A;
+dx&nbsp;:<span class="brx">=</span> -2*<span class="brx">(</span>xpart A<span class="brx">)</span>;
+
+for n<span class="brx">=</span>0 upto 4:
+  for r<span class="brx">=</span>0 upto n: 
+<span class="comment">%   tt&nbsp;:= lua("mp.print(P.ncr(" & decimal n & "," &  decimal r & " ))");</span>
+<span class="comment">%   tt&nbsp;:= lua.MP.p_ncr(n,r);</span>
+    tt&nbsp;:<span class="brx">=</span> runscript<span class="brx">(</span>"MP.p_ncr_x<span class="brx">(</span><span class="brx">)</span>"<span class="brx">)</span> <span class="brx">(</span>n,r<span class="brx">)</span>  ;
+    now&nbsp;:<span class="brx">=</span> n*A + <span class="brx">(</span>r*dx,0<span class="brx">)</span>;
+    dotlabel<span class="brx">(</span>textext<span class="brx">(</span>"<span class="cs">\dm</span> <span class="br">{</span><span class="cs"><span class="documentcs">\binom</span></span> <span class="br">{</span>" & decimal n & "<span class="br">}</span><span class="br">{</span>" & decimal r & "<span class="br">}</span> <span class="brx">=</span> " & decimal tt & "<span class="br">}</span>"<span class="brx">)</span>,now<span class="brx">)</span>;
+    draw <span class="brx">(</span>now+A<span class="brx">)</span> -- now -- <span class="brx">(</span>now+A+<span class="brx">(</span>dx,0<span class="brx">)</span><span class="brx">)</span>;
+  endfor;
+endfor;
+<span class="cs"><span class="documentcs">\stopMPcode</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="288" src="../../wikiteximage/1acddab2728c76a9d1ad5dc998e11b02.webp" width="924">
+     </li>
+    </ul>
+    <h2>
+     <span id="Drawing_Pascal's_triangle_of_numbers">
+     </span>
+     <span class="mw-headline" id="Drawing_Pascal.27s_triangle_of_numbers">
+      Drawing Pascal's triangle of numbers
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+  local function fact <span class="brx">(</span>n<span class="brx">)</span>
+    if n &lt;<span class="brx">=</span> 0 then
+      return 1
+    else
+      return n * fact<span class="brx">(</span>n-1<span class="brx">)</span>
+    end
+  end
+
+  local function ncr<span class="brx">(</span>n,r<span class="brx">)</span>
+    return fact<span class="brx">(</span>n<span class="brx">)</span>/<span class="brx">(</span>fact<span class="brx">(</span>r<span class="brx">)</span>*fact<span class="brx">(</span>n-r<span class="brx">)</span><span class="brx">)</span>
+  end
+  userdata.P <span class="brx">=</span> <span class="br">{</span>
+       fact <span class="brx">=</span> fact,
+       ncr  <span class="brx">=</span> ncr,
+  <span class="br">}</span>
+  function MP.p_ncr<span class="brx">(</span>n, r<span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>n,r<span class="brx">)</span><span class="brx">)</span>
+  end
+  function MP.p_ncr_x<span class="brx">(</span><span class="brx">)</span>
+    mp.print<span class="brx">(</span>ncr<span class="brx">(</span>mp.scan.pair<span class="brx">(</span><span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+  end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\startMPcode</span></span>
+numeric n,r,u,dx,dy,tt,final; u&nbsp;:<span class="brx">=</span> 1.2cm;
+
+path p, q;
+pair A,now;
+
+A&nbsp;:<span class="brx">=</span> dir<span class="brx">(</span>210<span class="brx">)</span>*u;
+dy&nbsp;:<span class="brx">=</span> ypart A;
+dx&nbsp;:<span class="brx">=</span> -2*<span class="brx">(</span>xpart A<span class="brx">)</span>;
+
+for n<span class="brx">=</span>0 upto 8:
+  for r<span class="brx">=</span>0 upto n:
+<span class="comment">%   tt&nbsp;:= lua("mp.print(P.ncr(" & decimal n & "," &  decimal r & " ))");</span>
+<span class="comment">%   tt&nbsp;:= lua.MP.p_ncr(n,r);</span>
+    tt&nbsp;:<span class="brx">=</span> runscript<span class="brx">(</span>"MP.p_ncr_x<span class="brx">(</span><span class="brx">)</span>"<span class="brx">)</span> <span class="brx">(</span>n,r<span class="brx">)</span>  ;
+    now&nbsp;:<span class="brx">=</span> n*A + <span class="brx">(</span>r*dx,0<span class="brx">)</span>;
+    label<span class="brx">(</span>textext<span class="brx">(</span>"$" & decimal tt & "$"<span class="brx">)</span>,now<span class="brx">)</span>;
+   endfor;
+endfor;
+<span class="cs"><span class="documentcs">\stopMPcode</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="297" src="../../wikiteximage/cb231c09153926761ea31053c87a78be.webp" width="994">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 33/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7755/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6257-1!canonical and timestamp 20260109212416 and revision id 41846
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Pascal%27s_triangle">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

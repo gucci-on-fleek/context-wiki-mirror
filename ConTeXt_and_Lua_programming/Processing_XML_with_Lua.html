@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Processing XML with Lua&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Processing_XML_with_Lua" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Processing XML with Lua
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4686&diff=40559">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#General">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         General
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#The_xml_file">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         The xml file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#The_ConTeXt_style_file">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         The ConTeXt style file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#The_Lua_file">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         The Lua file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#The_XML_node_at_Lua_end">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         The XML node at Lua end
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#XML_preprocessor">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         XML preprocessor
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="General">
+      General
+     </span>
+    </h2>
+    <p>If you process xml with ConTeXt Mkiv, you have the power of the Lua language at your fingertips. All <code>\xml...</code> commands have their Lua counterparts. Unfortunately, this is not yet fully documented, so this wiki page is a place-holder until Hans finishes this section in the <a class="external text" href="http://pragma-ade.nl/show-man-43.htm" rel="nofollow">Mkiv manual</a>.
+</p>
+    <p>A few general observations to help you getting started:
+</p>
+    <ul>
+     <li>
+      There are two sets of Lua commands: the
+      <code>xml...</code>
+      commands allow you to work with the content of your xml elements within Lua;
+      <code>lxml...</code>
+      commands pass the content to ConTeXt and typeset it.
+     </li>
+     <li>
+      Both commands receive the content as a Lua table.
+     </li>
+    </ul>
+    <p>Now let's get started with a silly example to show you what we can do in Lua. 
+</p>
+    <h2>
+     <span class="mw-headline" id="The_xml_file">
+      The xml file
+     </span>
+    </h2>
+    <p>Here is the prices.xml file that we will be processing, a price list for cars. Prices are given in Euros; this used to be a currency in some countries in Europe:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">list</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">model</span><span class="br">&gt;</span>Volkswagen<span class="br">&lt;</span><span class="name">/model</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">price</span><span class="br">&gt;</span>12000<span class="br">&lt;</span><span class="name">/price</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">model</span><span class="br">&gt;</span>Mercedes<span class="br">&lt;</span><span class="name">/model</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">price</span><span class="br">&gt;</span>35000<span class="br">&lt;</span><span class="name">/price</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">item</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">model</span><span class="br">&gt;</span>Ferrari<span class="br">&lt;</span><span class="name">/model</span><span class="br">&gt;</span>
+    <span class="br">&lt;</span><span class="name">price</span><span class="br">&gt;</span>150000<span class="br">&lt;</span><span class="name">/price</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">/item</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/list</span><span class="br">&gt;</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="The_ConTeXt_style_file">
+      The ConTeXt style file
+     </span>
+    </h2>
+    <p>Next, we write the environment file <tt>prices-style.tex</tt> which we will use to process our list; on the command line, you use <tt>context --environment=prices-style prices.xml</tt>. As an exercise, we will use Lua for all xml elements (though this doesn't make sense in most cases). If you have already read the <a class="external text" href="http://pragma-ade.nl/show-man-43.htm" rel="nofollow">manual</a>, most of this will be familiar. The first line connects our environment with the Lua file where all the Lua code will go. The last lines set up a ConTeXt table, since this is how we want to display the information:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\registerctxluafile</span></span><span class="br">{</span>l-prices<span class="br">}</span><span class="br">{</span>1.001<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:pricesetups
+	<span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>list|
+			 item|
+			 model|
+			 price<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:pricesetups<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:list
+	<span class="cs">\xmlfunction</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>list<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:item
+	<span class="cs">\xmlfunction</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>item<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:model
+	<span class="cs">\xmlfunction</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>model<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:price
+	<span class="cs">\xmlfunction</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>price<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setupTABLE</span></span> <span class="brx">[</span>column<span class="brx">]</span> <span class="brx">[</span>1<span class="brx">]</span>         <span class="brx">[</span>style<span class="brx">=</span>bold,width<span class="brx">=</span>0.3<span class="cs">\textwidth</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span> <span class="brx">[</span>column<span class="brx">]</span> <span class="brx">[</span>2,3,4<span class="brx">]</span>     <span class="brx">[</span>style<span class="brx">=</span>italic,width<span class="brx">=</span>0.2<span class="cs">\textwidth</span><span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="The_Lua_file">
+      The Lua file
+     </span>
+    </h2>
+    <p>And finally, the Lua file <tt>l-prices.lua</tt>, which will hold all the lua functions we use to process the xml:
+</p>
+    <code><pre>function xml.functions.list(t)
+ context.bTABLE()
+ context.bTR()
+ context.bTD()
+ context("Model")
+ context.eTD()
+ context.bTD()
+ context("Euros")
+ context.eTD()
+ context.bTD()
+ context("Dollars")
+ context.eTD()
+ context.bTD()
+ context("Yen")
+ context.eTD()
+ context.eTR()
+ lxml.flush(t)
+ context.eTABLE()
+end
+
+function xml.functions.item(t)
+ context.bTR()
+ lxml.flush(t)
+ context.eTR()
+end
+
+function xml.functions.model(t)
+ context.bTD()
+ lxml.flush(t)
+ context.eTD()
+end
+
+function xml.functions.price(t)
+ local price = tonumber(xml.text(t, "./"))
+ local dollar_price = price * 1.28
+ local yen_price = price * 120.4
+ context.bTD()
+ context(price)
+ context.eTD()
+ context.bTD()
+ context(dollar_price)
+ context.eTD()
+ context.bTD()
+ context(yen_price)
+ context.eTD()
+end
+</pre></code>
+    <p>What does this do? As you can see, we mostly use the <code>context...</code> commands which are described in the <a class="external text" href="http://www.pragma-ade.nl/general/manuals/cld-mkiv.pdf" rel="nofollow">cld manual</a>. They are Lua functions which print to ConTeXt. With the <code>list</code> function, we start a ConTeXt table and typeset a first row with the meta information for our list. The functions for <code>item</code> and <code>model</code> do nothing more than print the argument of the connected elements as table rows and as the first table column. Things get a bit more interesting for the <code>price</code> function: this is where we use the power of Lua to do some easy calculations and convert the Euros to other currencies. First, we extract the content of the <code>&lt;price&gt;</code> element. We need to tell Lua that this content is not a string, but a number, hence the use of the <code>tonumber</code> function. Within a ConTeXt environment, we would use <code>\xmltext{#1}{./}</code>. The Lua equivalent is <code>xml.text(t, "./")</code>. Now that we have this content as a number, we can perform all kinds of arithmetic operations on it. Likewise, if it were a string, we could use Lua string manipulations on it &ndash; that's the good thing about using Lua, you have the full power of the language at your disposal. And finally, we typeset the results of our arithmetic operations in table cells.
+</p>
+    <p>This is just one example of what you can do with Lua. Here are a few more suggestions for things which are easier to do in Lua than in pure ConTeXt:
+</p>
+    <p>If you want to format your numbers to make the table easier to understand, you could use the Lua <code>string.format</code> function, e.g.
+</p>
+    <code><pre>price = string.format("%08d", price)
+</pre></code>
+    <p>which will left-pad your price with 0s.
+</p>
+    <p>Another easy thing is string manipulation (OK, the example is very silly, but you see what is meant):
+</p>
+    <code><pre>function xml.functions.model(t)
+ model_name = xml.text(t, "./")
+ model_name = model_name:gsub("o", "x")
+ context.bTD()
+ context(model_name)
+ context.eTD()
+end
+</pre></code>
+    <p>But where Lua really shines is when it comes to constructions such as loops and conditionals. Here is an easy example for a conditional:
+</p>
+    <code><pre> local price = tonumber(xml.text(t, "./"))
+ context.bTD()
+ if price &gt; 50000 then
+  context.color( { "red" }, price)
+ else
+  context(price)
+ end
+</pre></code>
+    <p>Have fun finding more ways to do interesting things with Lua and xml!
+</p>
+    <p><br>
+--<a href="../User:Thomas.html" title="User:Thomas">Thomas</a> 09:35, 28 March 2013 (CET)
+</p>
+    <h2>
+     <span class="mw-headline" id="The_XML_node_at_Lua_end">
+      The XML node at Lua end
+     </span>
+    </h2>
+    <p>In the example above the XML node <tt>id</tt> (<tt>#1</tt>) is passed to Lua by <tt><a class="new" href="../index.php?title=Command/xmlfunction&action=edit&redlink=1.html" title="Command/xmlfunction (page does not exist)">\xmlfunction</a></tt> command, being transformed from node string <tt>id</tt> (e.g. <tt>xml:name::6</tt>) to Lua table representing the xml elements in the xml tree. To get this table at Lua end <tt>lxml.getid()</tt> function is used (e.g. <tt>xml.text(lxml.getid("#1"), "/price")</tt>). There is no performance gain in doing so.
+</p>
+    <h2>
+     <span class="mw-headline" id="XML_preprocessor">
+      XML preprocessor
+     </span>
+    </h2>
+    <p>Sometimes the XML source is not in the best shape and changing it at the originator side is not possible. You can preprocess it during ConTeXt run to the better shaped XML before it is used.
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version "1.0"?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>Altitude 60amp;nbsp;m<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+</pre>
+    <p>will be transformed to the new xml
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version "1.0"?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">document</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">p</span><span class="br">&gt;</span>Altitude 60<span class="br">&lt;</span><span class="name">nbsp/</span><span class="br">&gt;</span>m<span class="br">&lt;</span><span class="name">/p</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span>
+</pre>
+    <p>with <tt>lxml.preprocessor</tt> function
+</p>
+    <pre class="xml">\startluacode
+function lxml.preprocessor(data)
+    data = string.gsub(data, "amp;nbsp;", "<span class="br">&lt;</span><span class="name">nbsp/</span><span class="br">&gt;</span>")
+    return data
+end
+\stopluacode
+</pre>
+    <p>You can check the result of this transformation with <tt><a class="new" href="../index.php?title=Command/xmlshow&action=edit&redlink=1.html" title="Command/xmlshow (page does not exist)">\xmlshow</a></tt> command.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.043 seconds
+Real time usage: 0.069 seconds
+Preprocessor visited node count: 79/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 164/2097152 bytes
+Template argument size: 36/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7048/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.147      1 -total
+ 96.99%    9.842      2 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4686-1!canonical and timestamp 20260109212408 and revision id 40559
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Processing_XML_with_Lua">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

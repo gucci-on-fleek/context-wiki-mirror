@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TrueType fonts in luaTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TrueType_fonts_in_luaTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TrueType fonts in luaTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2542&diff=41604">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#TrueType_fonts_in_luaTeX">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         TrueType fonts in luaTeX
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#The_problem">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           The problem
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#The_solution:_The_fea_file">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           The solution: The fea file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#The_solution:_The_typescript_file">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           The solution: The typescript file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#To_know_more">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           To know more
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="TrueType_fonts_in_luaTeX">
+      TrueType fonts in luaTeX
+     </span>
+    </h2>
+    <p>The following page will provide a short example of what is possible in ConTeXt mkiv. Most of the actual code has been provided by Arthur Reutenauer, to whom I am immensely grateful for his help. The instructions should help you explore some features of luaTeX/mkiv and should inspire you to find your own solutions.
+</p>
+    <h3>
+     <span class="mw-headline" id="The_problem">
+      The problem
+     </span>
+    </h3>
+    <p>Newer Windows versions come with a nice Palatino font which I use for my ConTeXt typesetting quite a lot. It has oldstyle figures, real small caps, and a couple of nice additional ligatures. With an OpenType font, luaTeX could just "switch on" this additional stuff by calling the right OpenType features. With an old-fashioned TrueType font, things are a bit less handy. Nevertheless, it is still immensely more convenient than they ever were with pdfTeX. So as an exercise, we will do two things: use some of the ligatures, and use old-style numerals.
+</p>
+    <h3>
+     <span class="mw-headline" id="The_solution:_The_fea_file">
+      The solution: The
+      <code>fea</code>
+      file
+     </span>
+    </h3>
+    <p><code>fea</code> files tell luaTeX to do something special about a font. In our case, we will create a <code>fea</code> file that tells it to use oldstyle figures and replace some letter combinations by the corresponding ligature. This has to be done in two <code>lua</code> lua tables; the code is easy to understand and write, so even if you have absolutely no experience with <code>lua</code>, you will have no trouble setting this up. So let us begin with the first table. The first wonderful thing about luaTeX is that it can address characters by their unicode value. With pdfTeX, you always had to find out what the name of the character in that particular font was; for luaTeX, it is enough to know that an oldstyle zero is at position F730, oldstyle one at position F731 etc (if you don't know the Adobe glyph list by heart, you can find a reference [<a class="external text" href="http://partners.adobe.com/public/developer/en/opentype/glyphlist.txt" rel="nofollow">here</a>]). This means that our first <code>lua</code>  table for the "simple" lookups (one character is replaced with one other character) will look like this:
+</p>
+    <pre>lookup PalatinoSimple {
+    lookupflag 0&nbsp;;
+	sub zero by uniF730&nbsp;;
+	sub one by  uniF731&nbsp;;
+	sub two by uniF732&nbsp;;
+	sub three by uniF733&nbsp;;
+	sub four by uniF734&nbsp;;
+	sub five by uniF735&nbsp;;
+	sub six by uniF736&nbsp;;
+	sub seven by uniF737&nbsp;;
+	sub eight by uniF738&nbsp;;
+	sub nine by uniF739&nbsp;;
+} PalatinoSimple&nbsp;;
+</pre>
+    <p>This tells luaTeX: please <b>sub</b>stitute, whenever you encounter the charater <code>zero</code> in the source file, this character witht the character at the unicode position <code>F730</code>, etc. 
+</p>
+    <p>The next table will contain the "multiple" lookups (two characters are replaced by one character, viz. a ligature). Unfortunately, these ligatures have no fixed Unicode position that would be valid for all fonts, so in this case, it is safer to use the actual character names (which I found out by opening the font in <code>fontforge</code>):
+</p>
+    <pre>lookup PalatinoMultiple {
+    lookupflag 0&nbsp;;
+	sub f f i by ffi&nbsp;;
+	sub f f l by ffl&nbsp;;
+	sub f i by fi&nbsp;;
+	sub f l by fl&nbsp;;
+	sub f f by ff&nbsp;;
+	sub f t by ft&nbsp;;
+	sub Q u by Qu&nbsp;;
+	sub T h by Th&nbsp;;
+} PalatinoMultiple&nbsp;;
+</pre>
+    <p>This table, then, tells luaTeX: whenever an <code>f</code> is followed by an <code>i</code> in the input stream, replace this with the character <code>fi</code> (which happens to be the fi-ligature). 
+</p>
+    <p>We need to combine these two lookup tables into something that is called a "font feature." These features have to follow certain conventions; they have to have exactly four letters; so let's call it <code>pala</code> for our Palatino font:
+</p>
+    <pre>feature pala {
+    script DFLT&nbsp;;
+	language dflt&nbsp;;
+	    lookup PalatinoMultiple&nbsp;;
+	    lookup PalatinoSimple&nbsp;;
+
+    script latn;
+	language dflt&nbsp;;
+	    lookup PalatinoMultiple&nbsp;;
+	    lookup PalatinoSimple&nbsp;;
+} pala&nbsp;;
+</pre>
+    <p>We define this feature both for the "default" and for the "latin" script (I don't know if this is strictly necessary, but go for the "belt and suspenders" approach.)
+</p>
+    <p>We save the file with these tables under a name that ends in <code>fea</code> (<code>palatino.fea</code> comes to mind) and put it in a directory under <code>$texmf/fonts/fea/context</code>. 
+</p>
+    <h3>
+     <span class="mw-headline" id="The_solution:_The_typescript_file">
+      The solution: The typescript file
+     </span>
+    </h3>
+    <p>We now have written the <code>fea</code> file, but we need to instruct ConTeXt to use it. This is done in the typescript. First, we need to make sure that this file and the corresponding typescript will only be used when ConTeXt mkiv is run. So we first write a typescript that is a simple stub. Let's call it <code>type-palatino.tex</code>. It contains just one line:
+</p>
+    <pre class="tex"><span class="cs">\loadmarkfile</span><span class="br">{</span>type-palatino<span class="br">}</span>
+</pre>
+    <p>Which means: when ConTeXt is run, see if it is run as mkii or as mkiv and load the corresponding typescript. 
+</p>
+    <p>Next, we write the real typescript, <code>type-palatino.mkiv</code>. In it, we have to "install" the font feature <code>pala</code> which we have defined in the <code>fea</code> file, and we have to connect this feature to the <code>fea</code> file. Moreover, we use the font the mkiv way, i.e. we refer to the font by its disk name so luaTeX will directly read and use the TrueType font file, without needing a <code>tfm</code>, as pdfTeX did. The rest is exactly like any ConTeXt typescript:
+</p>
+    <pre class="tex"><span class="cs">\installfontfeature</span><span class="brx">[</span>otf<span class="brx">]</span><span class="brx">[</span>pala<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>myfeature<span class="brx">]</span>
+  <span class="brx">[</span>mode<span class="brx">=</span>node,script<span class="brx">=</span>latn,language<span class="brx">=</span>dflt,kern<span class="brx">=</span>yes,trep<span class="brx">=</span>yes,pala<span class="brx">=</span>yes,featurefile<span class="brx">=</span>palatino.fea<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>palatino<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Palatino-Roman<span class="brx">]</span>          <span class="brx">[</span>name:PalatinoLinotype-Roman<span class="brx">]</span>      <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Palatino-Bold<span class="brx">]</span>           <span class="brx">[</span>name:PalatinoLinotype-Bold<span class="brx">]</span>       <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Palatino-Italic<span class="brx">]</span>         <span class="brx">[</span>name:PalatinoLinotype-Italic<span class="brx">]</span>     <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Palatino-Bold-Italic<span class="brx">]</span>    <span class="brx">[</span>name:PalatinoLinotype-BoldItalic<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+ <span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>palatino<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>fallback<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>                   <span class="brx">[</span>Palatino-Roman<span class="brx">]</span>                   <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>             <span class="brx">[</span>Palatino-Italic<span class="brx">]</span>                  <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>               <span class="brx">[</span>Palatino-Bold<span class="brx">]</span>                    <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span>         <span class="brx">[</span>Palatino-Bold-Italic<span class="brx">]</span>             <span class="brx">[</span>features<span class="brx">=</span>myfeature<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>Palatino<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>Palatino<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>palatino<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\stoptypescript</span></span> 
+
+</pre>
+    <p>And that's all! Now you can simply use this palatino font with something like this in your files:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>Palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>Palatino,12pt<span class="brx">]</span>
+</pre>
+    <p>and you'll get the proper ligatures and oldstyle numerals. Defining a small caps Palatino variant is left as an exercise to the reader (hint: small caps characters have names such as <code>Asmall</code> in Palatino, and this is a case for a "simple" lookup table).
+</p>
+    <h3>
+     <span class="mw-headline" id="To_know_more">
+      To know more
+     </span>
+    </h3>
+    <p>Arthur has been kind enough to provide a few links to official documents from Adobe and Microsoft that explain everything in great detail: 
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.microsoft.com/typography/otspec/gsub.htm" rel="nofollow">
+       1
+      </a>
+      The page of the OpenType specification that explains the use of GSUB
+     </li>
+     <li>
+      <a class="external text" href="http://www.adobe.com/devnet/opentype/afdko/topic_feature_file_syntax.html" rel="nofollow">
+       2
+      </a>
+      The page of the Adobe Font Development Kit documentation that describes fea files.
+     </li>
+     <li>
+      <a class="external text" href="http://fontforge.sourceforge.net/featurefile.html" rel="nofollow">
+       3
+      </a>
+      The page from the FontForge manual that describes various extensions to the Adobe syntax that are in use by luatex
+     </li>
+    </ul>
+    <p>Good luck with your own experiments!
+</p>
+    <p><a href="User:Thomas.html" title="User:Thomas">Thomas</a> 21:51, 8 December 2007 (CET)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 45/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5912/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2542-1!canonical and timestamp 20260109212440 and revision id 41604
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TrueType_fonts_in_luaTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

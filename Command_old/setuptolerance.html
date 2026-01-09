@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Command old/setuptolerance&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Command_old/setuptolerance" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Command old/setuptolerance
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3162&diff=33313">2021-12-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Syntax">
+      <a class="mw-redirect" href="../Help:Reference.html" title="Help:Reference">
+       Syntax
+      </a>
+     </span>
+    </h2>
+    <table cellpadding="3" cellspacing="4" class="cmd">
+     <tbody>
+      <tr>
+       <td class="cmd" colspan="2">\setuptolerance<span class="arg1">[...,...]</span></td>
+      </tr>
+      <tr class="arg1" valign="top">
+       <td class="cmd">[...,...]</td>
+       <td>horizontal vertical verystrict strict tolerant verytolerant space stretch </td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Description">
+      Description
+     </span>
+    </h2>
+    <p>Set up how tolerant TeX should be of &lsquo;ugly&rsquo; stretching of spaces. The more stretching you allow, the easier it is for TeX to choose a stretched-out underfull line instead of a margin-invading overfull line.
+</p>
+    <p>Use <code>\setuptolerance[horizontal,...]</code> for interword spacing and <code>\setuptolerance[vertical,...]</code> for column stretching. Don't try to combine these two.
+</p>
+    <p>The default orientation is <i>horizontal</i>, so the following two are equivalent:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuptolerance</span></span><span class="brx">[</span>horizontal,tolerant<span class="brx">]</span>
+<span class="comment">% and</span>
+<span class="cs"><span class="stylecs">\setuptolerance</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+</pre>
+    <p>In horizontal orientation the keywords have the following effect:
+</p>
+    <table>
+     <tbody>
+      <tr>
+       <td>stretch:
+</td>
+       <td>make <tt>\emergencystretch</tt> equal to <tt>\bodyfontsize</tt> (i.e. 11pt), default is 0pt
+</td>
+      </tr>
+      <tr>
+       <td>space:
+</td>
+       <td><tt>\spaceskip .5em plus .25em minus .25em</tt>
+</td>
+      </tr>
+      <tr>
+       <td>verystrict:
+</td>
+       <td><tt>\tolerance 200</tt>
+</td>
+      </tr>
+      <tr>
+       <td>strict:
+</td>
+       <td><tt>\tolerance 1500</tt>
+</td>
+      </tr>
+      <tr>
+       <td>tolerant:
+</td>
+       <td><tt>\tolerance 3000</tt>
+</td>
+      </tr>
+      <tr>
+       <td>verytolerant:
+</td>
+       <td><tt>\tolerance 4500</tt>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>In <i>vertical</i> orientation the keywords define a factor <i>bottomtolerance</i>
+which is only used(?) in columns. The factors are:
+</p>
+    <table>
+     <tbody>
+      <tr>
+       <td>verystrict:
+</td>
+       <td>0
+</td>
+      </tr>
+      <tr>
+       <td>strict:
+</td>
+       <td>0.050
+</td>
+      </tr>
+      <tr>
+       <td>tolerant:
+</td>
+       <td>0.075
+</td>
+      </tr>
+      <tr>
+       <td>verytolerant:
+</td>
+       <td>0.100
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Tolerance_of_float_captions">
+      Tolerance of float captions
+     </span>
+    </h2>
+    <p>Float captions don't inherit the global tolerance setting, but instead use their own tolerance:
+</p>
+    <pre class="tex"><span class="comment">%% global tolerance</span>
+<span class="cs"><span class="stylecs">\setuptolerance</span></span>
+  <span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="comment">%% tolerance for captions</span>
+<span class="cs"><span class="stylecs">\setupcaption</span></span>
+  <span class="brx">[</span>align<span class="brx">=</span>tolerant<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Tolerance_of_framed_texts">
+      Tolerance of framed texts
+     </span>
+    </h2>
+    <p>Framed texts don't inherit the global tolerance setting, but instead use their own tolerance as well:
+</p>
+    <pre class="tex"><span class="comment">%% global tolerance</span>
+<span class="cs"><span class="stylecs">\setuptolerance</span></span>
+  <span class="brx">[</span>tolerant<span class="brx">]</span>
+
+<span class="comment">%% tolerance for framed texts</span>
+<span class="cs"><span class="stylecs">\setupframedtext</span></span>
+  <span class="brx">[</span>align<span class="brx">=</span>verytolerant<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <h2>
+     <span id="Help_from_ConTeXt-Mailinglist/Forum">
+     </span>
+     <span class="mw-headline" id="Help_from_ConTeXt-Mailinglist.2FForum">
+      Help from ConTeXt-Mailinglist/Forum
+     </span>
+    </h2>
+    <p>All issues with:
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=setuptolerance+sort:newest" rel="nofollow">
+       setuptolerance on the mailing list (all results)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=subject:setuptolerance+sort:newest" rel="nofollow">
+       setuptolerance on the mailing list (subject only)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://tex.stackexchange.com/search?q=%5Bcontext%5D+setuptolerance" rel="nofollow">
+       setuptolerance on stack exchange
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://source.contextgarden.net/?search=setuptolerance" rel="nofollow">
+       setuptolerance in ConTeXt's source
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212404
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.027 seconds
+Preprocessor visited node count: 65/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 547/2097152 bytes
+Template argument size: 126/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1502/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   12.533      1 -total
+ 24.17%    3.029      1 Template:Reference
+ 19.45%    2.438      1 Template:Forum
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3162-1!canonical and timestamp 20260109212404 and revision id 33313
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Command_old/setuptolerance">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

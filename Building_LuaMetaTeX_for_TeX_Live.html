@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Building LuaMetaTeX for TeX Live&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Building LuaMetaTeX for TeX Live
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6689&diff=41658">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>TeX Live 2023 includes the new <a class="external text" href="https://www.pragma-ade.nl/general/manuals/luametatex.pdf" rel="nofollow">LuaMetaTeX engine</a> which is required to run the latest version of ConTeXt (LMTX/MkXL).
+</p>
+    <p>LuaMetaTeX is a successor to LuaTeX that features improved math typesetting, many new primatives, and faster runtimes. LuaMetaTeX has entirely removed the backend (PDF output), font-handling, and many primitives from TeX82 and pdfTeX; these must all be implemented by the format. Currently, only ConTeXt supports LuaMetaTeX, although nothing in the engine is specific to it. Proofs-of-concept exist for both LaTeX and Plain, but these are only of interest to developers and will not be useful anytime soon (if ever).
+</p>
+    <p>LuaMetaTeX is not built as part of TL because it uses a build system (cmake) which is incompatible with TL&rsquo;s build system (autotools).
+</p>
+    <p>A snapshot of the source for the binaries included at the time of TL release is in the <a class="external text" href="https://tug.org/svn/texlive/trunk/Master/source/" rel="nofollow">TL source/</a> tree (not duplicated in any TL release tarballs); this sources corresponds to the binaries distributed with TL and will thus always be compatible TL&rsquo;s <code>texmf-dist</code> tree.
+</p>
+    <p>LuaMetaTeX is a quickly evolving engine, so you may benefit from the bugfixes included in the upstream <a class="external text" href="https://github.com/contextgarden/luametatex/" rel="nofollow">LuaMetaTeX source</a>. These releases will generally have fewer bugs; however, there may be brief incompatibilities with TL&rsquo;s <code>texmf-dist</code> tree since TL updates ConTeXt less frequently than upstream.
+</p>
+    <p>LuaMetaTeX in its standard configuration successfully builds on Windows (x86, x86_64, and arm64; clang, msvc, and mingw), macOS (x86_64 and arm64), Linux (x86, x86_64, armhf, and aarch64; clang and gcc; glibc and musl), FreeBSD (x86 and x86_64), OpenBSD (x86_64), and Solaris (sparc, x86, and x86_64). LuaMetaTeX builds successfully for Cygwin <a class="external text" href="https://tug.org/pipermail/tex-live/2023-March/048988.html" rel="nofollow">with a patch</a>. Unlisted platforms will likely compile with few modifications; please send any patches to <a class="external text" href="mailto:tlbuild@tug.org" rel="nofollow">tlbuild@tug.org</a> (TL) or <a class="external text" href="mailto:ntg-context@ntg.nl" rel="nofollow">ntg-context@ntg.nl</a> (upstream).
+</p>
+    <p>Building LuaMetaTeX needs cmake (required) and ninja (optional, but highly recommended). Aside from standard system libraries, LuaMetaTeX has no build- or runtime dependencies. Generally, building LuaMetaTeX only requires you to run the <code>build.sh</code> script in the source&rsquo;s root directory; read the documentation included in the source archives for more details.
+</p>
+    <p>To install LuaMetaTeX, you must place the binary <code>luametatex</code> in your TL binary directory. To use with ConTeXt (which is the only practical use at the moment), in the same directory you must create symlinks <code>context</code> and <code>mtxrun</code> both pointing to <code>luametatex</code>, as well as symlinks <code>mtxrun.lua</code> and <code>context.lua</code> pointing to their respective files in the the <code>texmf-dist/scripts/context/lua directory</code>.
+</p>
+    <p>LuaMetaTeX does not use kpathsea or any of the standard TL configuration files/scripts. You can configure a few basic paths in <code>texmf- dist/texmfcnf.lua</code> (default configuration in <code>texmf-dist/web2c/texmfcnf.lua</code>); beyond this, most settings are undocumented, so ask on <a class="external text" href="mailto:tex-live@tug.org" rel="nofollow">tex-live@tug.org</a> (TL) or <a class="external text" href="mailto:ntg-context@ntg.nl" rel="nofollow">ntg-context@ntg.nl</a> (upstream) if you have any questions.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212212
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.010 seconds
+Real time usage: 0.035 seconds
+Preprocessor visited node count: 1/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 1/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6689-1!canonical and timestamp 20260109212212 and revision id 41658
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

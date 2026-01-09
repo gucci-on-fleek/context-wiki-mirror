@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/PDF/PDF boxes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_boxes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/PDF/PDF boxes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4921&diff=38150">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Basics">
+      Basics
+     </span>
+    </h2>
+    <div class="thumb tright">
+     <div class="thumbinner" style="width:352px;">
+      <a class="image" href="../../File:page-boxes.png">
+       <img alt class="thumbimage" decoding="async" height="495" src="../../images/thumb/6/6b/page-boxes.webp" width="350">
+      </a>
+      <div class="thumbcaption">
+       <div class="magnify">
+        <a class="internal" href="../../File:page-boxes.png" title="Enlarge">
+        </a>
+       </div>
+       PDF Boxes
+      </div>
+     </div>
+    </div>
+    <p>While PostScript (and EPS, that is) knows only one kind of page size, defined by the BoundingBox (or HiResBoundingBox), the size of PDF pages can have different meanings &ndash; e.g. the visible page, the printed page, the cropped printed page. Therefore the PDF standard defines a set of "boxes":
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Meaning
+       </th>
+      </tr>
+      <tr>
+       <td>MediaBox</td>
+       <td>Size of the physical medium (print sheet); this is the page format.
+</td>
+      </tr>
+      <tr>
+       <td>CropBox</td>
+       <td>Page size that is visible in a viewer.
+</td>
+      </tr>
+      <tr>
+       <td>BleedBox</td>
+       <td>Page size plus bleed (cut space); defines the trimmed page plus the bleed.
+</td>
+      </tr>
+      <tr>
+       <td>TrimBox</td>
+       <td>Size of trimmed (cut) page, &ldquo;final&rdquo; page size; the net result document format.
+</td>
+      </tr>
+      <tr>
+       <td>ArtBox</td>
+       <td>Size of the page content (artwork); might be used for imposition purposes; typically, it can be used to specify any section of the page.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>In <a href="PDFX.html" title="Input and compilation/PDF/PDFX">PDF/X</a>, if ArtBox is defined at all, it must not differ from TrimBox.
+</p>
+    <h2>
+     <span class="mw-headline" id="In_ConTeXt">
+      In ConTeXt
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A5,oversized<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+ <span class="brx">[</span>location<span class="brx">=</span>middle,
+  cropoffset<span class="brx">=</span>0mm,<span class="comment">% default</span>
+  trimoffset<span class="brx">=</span>-7.5mm,<span class="comment">% negative offset from MediaBox to TrimBox</span>
+  bleedoffset<span class="brx">=</span>3mm,<span class="comment">% bleed size</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteractionscreen</span></span><span class="brx">[</span>width<span class="brx">=</span>max,height<span class="brx">=</span>max<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\showlayout</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <ul>
+     <li>
+      Unfortunately, the offsets are not independent: If you define a
+      <code>cropoffset</code>
+      , you must add its value to the negative
+      <code>trimoffset</code>
+      .
+     </li>
+     <li>
+      It doesn&rsquo;t work without
+      <tt>
+       <a href="../../Command/setupinteractionscreen.html" title="Command/setupinteractionscreen">
+        \setupinteractionscreen
+       </a>
+      </tt>
+      .
+     </li>
+     <li>
+      <code>cropoffset=auto</code>
+      only works with
+      <code>location=middle</code>
+      (message otherwise).
+     </li>
+     <li>
+      You can&rsquo;t set ArtBox, since nobody seems to need it. (
+      <tt>
+       <a href="../../Command/externalfigure.html" title="Command/externalfigure">
+        \externalfigure
+       </a>
+      </tt>
+      understands
+      <code>size=art</code>
+      if you need to place a PDF image by its ArtBox.)
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/setupbackend.html" title="Command/setupbackend">
+        \setupbackend
+       </a>
+      </tt>
+      is
+      <i>
+       not
+      </i>
+      significant for the box calculations.
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/setupbleeding.html" title="Command/setupbleeding">
+        \setupbleeding
+       </a>
+      </tt>
+      affects only image placement, but not the BleedBox, see the
+      <a class="new" href="../../index.php?title=Template:manual&action=edit&redlink=1" title="Template:manual (page does not exist)">
+       Template:manual
+      </a>
+      manual.
+     </li>
+     <li>
+      MediaBox (i.e. the size of the sheet) is taken from the second parameter of
+      <tt>
+       <a href="../../Command/setuppapersize.html" title="Command/setuppapersize">
+        \setuppapersize
+       </a>
+      </tt>
+      .
+     </li>
+     <li>
+      <code>trimoffset</code>
+      specifies the difference between the CropBox and the TrimBox. This parameter seems to be completely ignored, if it is positive.
+     </li>
+     <li>
+      <code>bleedoffset</code>
+      defines the difference between the TrimBox and the BleedBox. Negative values yield a BleedBox that&rsquo;s smaller than the TrimBox, which is against the specs. Values bigger than the (positive)
+      <code>trimoffset</code>
+      also make no sense.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Complete_Example">
+      Complete Example
+     </span>
+    </h3>
+    <p>This uses a <code>print</code> mode:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A5,oversized<span class="brx">]</span> <span class="comment">% oversized adds 15mm, enough for the crop marks</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+  location<span class="brx">=</span>middle,
+  marking<span class="brx">=</span>on,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>print<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+  cropoffset<span class="brx">=</span>0mm,<span class="comment">% default</span>
+  bleedoffset<span class="brx">=</span>3mm,<span class="comment">% bleed</span>
+  trimoffset<span class="brx">=</span>-7.5mm,<span class="comment">% half of negative size difference of sheet and paper</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="cs"><span class="stylecs">\startnotmode</span></span><span class="brx">[</span>print<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+  cropoffset<span class="brx">=</span>7.5mm,<span class="comment">% shrink the visible page to the final paper size</span>
+  bleedoffset<span class="brx">=</span>3mm,
+  trimoffset<span class="brx">=</span>0mm,<span class="comment">% the TrimBox is influenced by the CropBox</span>
+<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopnotmode</span></span>
+
+<span class="cs"><span class="stylecs">\setupinteractionscreen</span></span><span class="brx">[</span>width<span class="brx">=</span>max,height<span class="brx">=</span>max<span class="brx">]</span><span class="comment">% activate!</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\showlayout</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.057 seconds
+Real time usage: 0.146 seconds
+Preprocessor visited node count: 135/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 740/2097152 bytes
+Template argument size: 236/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3176/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   46.535      1 -total
+ 50.95%   23.711      5 Template:cmd
+ 34.44%   16.025      8 Template:code
+ 10.14%    4.719      1 Template:manual
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4921-1!canonical and timestamp 20260109212423 and revision id 38150
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_boxes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

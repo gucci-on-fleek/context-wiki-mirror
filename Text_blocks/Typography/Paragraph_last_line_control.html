@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Typography/Paragraph last line control&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Typography/Paragraph_last_line_control" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Typography/Paragraph last line control
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4938&diff=38972">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>In case of separating paragraphs by indenting the first line (instead of blank line), it allows influencing a minimum and maximum length of the last line. The former prevents gaps between the end of the line and next indented line. The latter avoids cases the last line ends at the rigth edge so the next paragraph has no clear distincion from the previous one.
+</p>
+    <p>1. the last line lenght should be greater than the left indent
+</p>
+    <pre>   xxxxxxxxxxxxxxxx
+   xxxx
+     xxxxxxxxxxxxxx
+   xxxxxxxxxxxxxxxx
+</pre>
+    <p>2. the last line should be shorter than block width
+</p>
+    <pre>   xxxxxxxxxxxxxxxx
+   xxxxxxxxxxxxxx
+     xxxxxxxxxxxxxx
+   xxxxxxxxxxxxxxxx
+</pre>
+    <p>It can be achieved by custom settings of <tt><a class="new" href="../../index.php?title=Command/parfillskip&action=edit&redlink=1.html" title="Command/parfillskip (page does not exist)">\parfillskip</a></tt> command.
+<a class="external free" href="https://www.tug.org/utilities/plain/cseq.html#parfillskip-rp" rel="nofollow">https://www.tug.org/utilities/plain/cseq.html#parfillskip-rp</a>
+</p>
+    <p>The first parameter is a minimal right indent which can eventually be enlarged by the value of the second parameter:
+<code>\parfillskip &lt;right-indent&gt; plus &lt;tolerance&gt;</code>
+</p>
+    <p>However, in case of unfavourable conditions the result can still yield to the length outside the allowed range<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup>, as can be seen on several pages in the following example. So this approach should never been taken as a universal solution.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes, 2em<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuptolerance</span></span><span class="brx">[</span>strict<span class="brx">]</span>
+
+<span class="cs">\newdimen</span><span class="cs">\lastlineminlength</span>
+<span class="cs">\newdimen</span><span class="cs">\lastlinemingap</span>
+
+<span class="cs">\lastlineminlength</span><span class="brx">=</span>3em
+<span class="cs">\lastlinemingap</span><span class="brx">=</span>1em
+
+<span class="cs">\parfillskip</span> <span class="cs">\lastlinemingap</span> plus <span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\availablehsize</span></span>-<span class="cs">\lastlineminlength</span>-<span class="cs">\lastlinemingap</span><span class="cs">\relax</span>
+
+<span class="cs">\edef</span><span class="cs">\ward</span><span class="br">{</span><span class="cs"><span class="systemcs">\cldloadfile</span></span><span class="br">{</span>ward<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>100<span class="br">}</span><span class="br">{</span>
+   <span class="cs">\hsize</span><span class="cs">\dimexpr</span><span class="cs">\textwidth</span>-<span class="brx">#</span>1mm<span class="cs">\relax</span>
+   <span class="cs">\ward</span><span class="br">{</span><span class="br">}</span>okey <span class="cs">\par</span>
+   <span class="cs">\ward</span><span class="br">{</span><span class="br">}</span>okey <span class="cs">\par</span>
+   <span class="cs"><span class="documentcs">\page</span></span>
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>__________
+</p>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-1">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        Even if the second parameter is properly calculated, thanks to internal TeX processing the larger value may be used at the end.
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.026 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 26/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 90/2097152 bytes
+Template argument size: 22/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2271/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    6.051      1 Template:cmd
+100.00%    6.051      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4938-1!canonical and timestamp 20260109212439 and revision id 38972
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Typography/Paragraph_last_line_control">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

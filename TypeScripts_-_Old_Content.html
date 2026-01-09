@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TypeScripts - Old Content&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TypeScripts_-_Old_Content" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TypeScripts - Old Content
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=966&diff=33597">2022-07-02</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Typescripts are the ConTeXt way of using fonts and defining font families.
+</p>
+    <p>Beware, the examples on this page work only with MkII / pdfTeX (i.e. neither XeTeX nor LuaTeX).
+</p>
+    <h2>
+     <span class="mw-headline" id="Basics">
+      Basics
+     </span>
+    </h2>
+    <p>Sample typescript for the free text font <a class="external text" href="http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&item_id=Gentium" rel="nofollow">Gentium</a>. Installation instructions are at <a href="Installing_a_TrueType_font,_step_by_step_-_Old_Content.html" title="Installing a TrueType font, step by step - Old Content">Installing a TrueType font, step by step - Old Content</a>.
+A typescript must live in your project folder or in another folder in your ConTeXt path (e.g., <tt>(texmf)/tex/context/user</tt>)
+</p>
+    <pre class="tex"><span class="comment">% type-sil-gentium.tex</span>
+<span class="comment">% Typescript for serif family SIL Gentium</span>
+
+<span class="comment">% load mapfile</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>map<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+    <span class="cs">\loadmapfile</span> <span class="brx">[</span><span class="cs">\defaultencoding</span>-sil-gentium.map<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% mapping from PostScript name (or visible font name, if it's a TrueType font) to TFM file name</span>
+<span class="comment">% The second argument means that these names are loaded with either the 'gentium'</span>
+<span class="comment">% or 'gentium-alt' names.</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium,gentium-alt<span class="brx">]</span> <span class="brx">[</span><span class="cs">\defaultencoding</span><span class="brx">]</span> <span class="comment">% mapping is used by two "name" typescripts</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Gentium<span class="brx">]</span>           <span class="brx">[</span><span class="cs">\defaultencoding</span>-genr101<span class="brx">]</span>  <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Gentium-Italic<span class="brx">]</span>    <span class="brx">[</span><span class="cs">\defaultencoding</span>-geni101<span class="brx">]</span>  <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>GentiumAlt<span class="brx">]</span>        <span class="brx">[</span><span class="cs">\defaultencoding</span>-genar101<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span> <span class="brx">[</span><span class="cs">\defaultencoding</span>-genai101<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% mapping from generic family name to PostScript name</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>       <span class="brx">[</span>Gentium<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span> <span class="brx">[</span>Gentium-Italic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% additional mapping to alternate glyphs, not further used</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium-alt<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>       <span class="brx">[</span>GentiumAlt<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span> <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% sample family definition</span>
+<span class="comment">% here we define only the serif (rm) version.</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sil-gentium<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>sil-gentium<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs">\defaultencoding</span><span class="brx">]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [ss] [sans]  [default] [default] [encoding=\defaultencoding]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [tt] [mono]  [default] [default] [encoding=\defaultencoding]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [mm] [math]  [default] [default] [encoding=\defaultencoding]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+</pre>
+    <p>The multiple mapping is not strictly needed, but increases flexibility.
+</p>
+    <p>To use your new typescript, write the following in your environment file (or single TeX file):
+</p>
+    <pre class="tex"><span class="cs">\setupencoding</span><span class="brx">[</span>default<span class="brx">=</span>ec<span class="brx">]</span> <span class="comment">% defines \defaultencoding</span>
+
+<span class="cs"><span class="stylecs">\usetypescriptfile</span></span><span class="brx">[</span>type-sil-gentium<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>sil-gentium<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>sil-gentium,rm,12pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfontenvironment</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>em<span class="brx">=</span>italic<span class="brx">]</span> <span class="comment">% slanted is default emphasize in ConTeXt</span>
+</pre>
+    <p>The map file was written by <a class="new" href="index.php?title=texfont&action=edit&redlink=1" title="texfont (page does not exist)">texfont</a> and lives in <tt>(texmf)/fonts/map/pdftex/context</tt>.
+It combines raw TFM (metrics), PostScript name, font file and encoding
+</p>
+    <pre class="tex"><span class="comment">% ec-sil-gentium.map</span>
+ec-raw-genai101 GentiumAlt-Italic 4 &lt; genai101.pfb ec.enc
+ec-raw-genar101 GentiumAlt 4 &lt; genar101.pfb ec.enc
+ec-raw-geni101 Gentium-Italic 4 &lt; geni101.pfb ec.enc
+ec-raw-genr101 Gentium 4 &lt; genr101.pfb ec.enc
+</pre>
+    <h2>
+     <span class="mw-headline" id="The_next_step:_making_it_more_generic">
+      The next step: making it more generic
+     </span>
+    </h2>
+    <p>If you'd like to write a typescript that handles many more encodings, somewhat more generically, here is one model to build upon:
+</p>
+    <pre class="tex"><span class="comment">% type-sil-gentium.tex</span>
+<span class="comment">% Typescript for serif family SIL Gentium</span>
+
+<span class="comment">% This is the first change we need to make: we list all the encodings it can match,</span>
+<span class="comment">% and then use that data within the typescript:</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>map<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>ec,texnansi,8r,t5,t2a,t2b,qx<span class="brx">]</span>
+    <span class="cs">\loadmapfile</span> <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-sil-gentium.map<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% We use the same technique. As the encoding variable shows up in the third</span>
+<span class="comment">% argument, we use \typescriptthree.</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>ec,texnansi,8r,t5,t2a,t2b,qx<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Gentium<span class="brx">]</span>           <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-genr101<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Gentium-Italic<span class="brx">]</span>    <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-geni101<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>GentiumAlt<span class="brx">]</span>        <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-genar101<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="systemcs">\typescriptthree</span></span>-genai101<span class="brx">]</span><span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescriptthree</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% Getting fancy: occasionally you want to access alternates from the main font:</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setups</span></span> <span class="brx">[</span>font:fallback:serif<span class="brx">]</span> <span class="comment">% We use the new (and fast loading) font fallbacks to cover bold markup.</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>               <span class="brx">[</span>Gentium<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>         <span class="brx">[</span>Gentium-Italic<span class="brx">]</span>
+    <span class="comment">% Gentium contains only two faces, so we map everything else on Italic</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifSlanted<span class="brx">]</span>        <span class="brx">[</span>SerifItalic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span>     <span class="brx">[</span>SerifItalic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifCaps<span class="brx">]</span>           <span class="brx">[</span>SerifItalic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldCaps<span class="brx">]</span>       <span class="brx">[</span>SerifItalic<span class="brx">]</span>
+    <span class="comment">% markup of \Var[alt] results in a (subtle) font switch (Gentium's alternate glyphs change only some diacritics):</span>
+    <span class="cs">\definefontvariant</span> <span class="brx">[</span>Serif<span class="brx">]</span> <span class="brx">[</span>alt<span class="brx">]</span> <span class="brx">[</span>Alt<span class="brx">]</span>
+    <span class="comment">% unfortunately you need to define eight synonyms to handle the fallback cases:</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegular<span class="brx">]</span>        <span class="brx">[</span>Serif<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifRegularAlt<span class="brx">]</span>     <span class="brx">[</span>GentiumAlt<span class="brx">]</span> <span class="comment">% you must define "Regular" for every additional variant</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldAlt<span class="brx">]</span>        <span class="brx">[</span>GentiumAlt<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifCapsAlt<span class="brx">]</span>        <span class="brx">[</span>GentiumAlt<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalicAlt<span class="brx">]</span>      <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifSlantedAlt<span class="brx">]</span>     <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalicAlt<span class="brx">]</span>  <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldSlantedAlt<span class="brx">]</span> <span class="brx">[</span>GentiumAlt-Italic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% sample family definition</span>
+<span class="comment">% here we define only the serif (rm) version.</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sil-gentium<span class="brx">]</span> <span class="brx">[</span>ec,texnansi,8r,t5,t2a,t2b,qx<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>sil-gentium<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>gentium<span class="brx">]</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>encoding<span class="brx">=</span><span class="cs"><span class="systemcs">\typescripttwo</span></span><span class="brx">]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [ss] [sans]  [default] [default] [encoding=\typescripttwo]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [tt] [mono]  [default] [default] [encoding=\typescripttwo]</span>
+<span class="comment">%   \definetypeface [sil-gentium] [mm] [math]  [default] [default] [encoding=\typescripttwo]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+</pre>
+    <h2>
+     <span class="mw-headline" id="Links">
+      Links
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/general/manuals/showfont.pdf" rel="nofollow">
+       examples of using typescripts
+      </a>
+      by Pragma
+     </li>
+     <li>
+      Sample of
+      <a class="external text" href="http://wiki.contextgarden.net/exljbris_typescript" rel="nofollow">
+       MkIV  typescripts for exljbris fonts
+      </a>
+     </li>
+     <li>
+      typescripts for some fonts from the FontSite500 CD on the
+      <a href="Font_Site.html" title="Font Site">
+       Font Site
+      </a>
+      page, by Holger Sch&ouml;ner
+     </li>
+     <li>
+      typescripts for lazy font combinations on the
+      <a href="Flexi_Face.html" title="Flexi Face">
+       Flexi Face
+      </a>
+      page
+     </li>
+     <li>
+      some pointers on extending typescripts to accommodate access to &ldquo;variants,&rdquo; like old-style figures, are on the
+      <a href="Font_Variants.html" title="Font Variants">
+       Font Variants
+      </a>
+      page
+     </li>
+     <li>
+      <a href="Fonts_in_XeTeX_-_Old_Content.html" title="Fonts in XeTeX - Old Content">
+       Fonts in XeTeX - Old Content
+      </a>
+      gives some details about the
+      <a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">
+       XeTeX
+      </a>
+      -specific typescripts in
+      <tt>
+       type-xtx
+      </tt>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.064 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15673/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:966-1!canonical and timestamp 20260109212440 and revision id 33597
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TypeScripts_-_Old_Content">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

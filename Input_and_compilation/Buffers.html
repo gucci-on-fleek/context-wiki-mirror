@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Buffers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Buffers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Buffers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3518&diff=41509">2025-01-19</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#A_bit_about_buffers">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         A bit about buffers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#The_LuaTeX_buffers..2A_commands">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         The LuaTeX buffers.* commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Accessing_buffer_names">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Accessing buffer names
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#How-to_write_to_an_external_document">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         How-to write to an external document
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="A_bit_about_buffers">
+      A bit about buffers
+     </span>
+    </h2>
+    <p>Buffers are named chunks of text, saved by ConTeXt to be retrieved by the user later. They are meant for storing information not being typeset, yet. Typeset material is stored in <a href="../ConTeXt_and_Lua_programming/TeX_Boxes.html" title="ConTeXt and Lua programming/TeX Boxes">Boxes</a>. Buffers are usually defined as follows:
+</p>
+    <pre class="tex"><span class="comment">% Start a buffer with a custom name</span>
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>Marie<span class="brx">]</span>
+This is the text in the buffer 'Marie'
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="comment">% Define the \start...\stopPierre environment</span>
+<span class="cs">\def</span><span class="cs">\startPierre</span>
+    <span class="br">{</span><span class="cs">\dostartbuffer</span><span class="brx">[</span>Pierre<span class="brx">]</span><span class="brx">[</span>startPierre<span class="brx">]</span><span class="brx">[</span>stopPierre<span class="brx">]</span><span class="br">}</span>
+
+<span class="comment">% Give \stopPierre some meaning if you want to do something with the buffer right away.</span>
+<span class="comment">%\def\stopPierre</span>
+<span class="comment">%   {\getbuffer[Pierre]}}</span>
+
+<span class="cs">\startPierre</span>
+This is the text in the buffer 'Pierre'.
+<span class="cs">\stopPierre</span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>Pierre<span class="brx">]</span> <span class="comment">% Print typeset contents</span>
+
+<span class="cs">\startPierre</span>
+Now this is the text in the buffer 'Pierre', instead.
+<span class="cs">\stopPierre</span>
+<span class="cs"><span class="documentcs">\typebuffer</span></span><span class="brx">[</span>Pierre<span class="brx">]</span> <span class="comment">% Print verbatim contents</span>
+</pre>
+    <h2>
+     <span id="The_LuaTeX_buffers.*_commands">
+     </span>
+     <span class="mw-headline" id="The_LuaTeX_buffers..2A_commands">
+      The LuaTeX buffers.* commands
+     </span>
+    </h2>
+    <p>These commands were all found in the source code: <a class="external text" href="http://source.contextgarden.net/buff-ini.lua" rel="nofollow">buff-ini.lua</a>
+</p>
+    <ul>
+     <li>
+      <code>buffers.getcontent(b)</code>
+      : Get the contents of the buffer
+      <code>b</code>
+      , or the empty string if the buffer does not exist.
+     </li>
+     <li>
+      <code>buffers.raw(b)</code>
+      : Synonym for
+      <code>buffers.getcontent(b)</code>
+      .
+     </li>
+     <li>
+      <code>buffers.getlines(b)</code>
+      : Equivalent to
+      <code>splitlines(buffers.getcontent(b))</code>
+      .
+     </li>
+     <li>
+      <code>buffers.erase(b)</code>
+      : Delete the buffer
+      <code>b</code>
+      (not just its contents).
+     </li>
+     <li>
+      <code>buffers.assign(b, text, catcodes)</code>
+      : Set the contents of buffer
+      <code>b</code>
+      to
+      <code>text</code>
+      , using catcodetable
+      <code>catcodes</code>
+     </li>
+     <li>
+      <code>buffers.append(b, text)</code>
+      : Append
+      <code>text</code>
+      to buffer
+      <code>b</code>
+      .
+     </li>
+     <li>
+      <code>buffers.exists(b)</code>
+      : Returns the name of the buffer if it exists, or else
+      <code>nil</code>
+      .
+     </li>
+     <li>
+      <code>buffers.collectcontent(names, seperator)</code>
+      : Returns the contents of the buffers in
+      <code>names</code>
+      , seperated by
+      <code>seperator</code>
+      (
+      <code>'\n'</code>
+      by default). Names can be either a table, or a comma-seperated string (surrounding braces are automatically removed &mdash; see
+      <code>parsers.settings_to_array</code>
+      in
+      <code>util-prs.lua</code>
+      .
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Accessing_buffer_names">
+      Accessing buffer names
+     </span>
+    </h2>
+    <p>From the mailing list:
+</p>
+    <p>It's not easy to access buffer names from ConTeXt because ConTeXt stores the buffers in a local variable <code>cache</code> which is an upvalue for all the other functions. However, you can use the Lua <code>debug</code> library to access upvalues. The <code>buffers.erase</code> function only has a single upvalue which is <code>cache</code>, making it easy to extract all the buffer names from that. However, you can't get them in the order of declaration because <code>cache</code> is a hashmap and not an array.  Moreover, ConTeXt is usually in sandboxing mode. To get access to the <code>debug</code> library you have to run ConTeXt with:
+</p>
+    <p><code>context --debug test.tex</code>
+</p>
+    <p>MWE:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>ex1<span class="brx">]</span>
+Buffer 1
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>ex2<span class="brx">]</span>
+Buffer 2
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+local _, cache <span class="brx">=</span> debug.getupvalue<span class="brx">(</span>buffers.erase,1<span class="brx">)</span>
+local names <span class="brx">=</span> <span class="br">{</span><span class="br">}</span>
+for name,_ in pairs<span class="brx">(</span>cache<span class="brx">)</span> do
+    names<span class="brx">[</span><span class="brx">#</span>names+1<span class="brx">]</span> <span class="brx">=</span> name
+end
+context<span class="brx">(</span>table.concat<span class="brx">(</span>names,", "<span class="brx">)</span><span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+<span class="comment">% Prints ex2, ex1 (but specific order is not guaranteed)</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="How-to_write_to_an_external_document">
+      How-to write to an external document
+     </span>
+    </h2>
+    <p>Basically, to embed text in your document (tex input file) which is written to an external document when you process it, you can use buffers: 
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>x<span class="brx">]</span>
+x
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="stylecs">\savebuffer</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>temp.log<span class="brx">]</span>
+</pre>
+    <p>The second argument is optional and when omitted the buffer will be saved as <code>jobname-&lt;buffername&gt;.tmp</code>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212420
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3301/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3518-1!canonical and timestamp 20260109212419 and revision id 41509
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Buffers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

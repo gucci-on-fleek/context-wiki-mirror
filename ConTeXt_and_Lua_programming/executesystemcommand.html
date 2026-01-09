@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/executesystemcommand&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/executesystemcommand" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/executesystemcommand
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2299&diff=40510">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span id="How_to_pass_over_part_of_the_source_to_an_external_program?">
+     </span>
+     <span class="mw-headline" id="How_to_pass_over_part_of_the_source_to_an_external_program.3F">
+      How to pass over part of the source to an external program?
+     </span>
+    </h2>
+    <p>There are two ways: <tt><a class="new" href="../index.php?title=Command/executesystemcommand&action=edit&redlink=1.html" title="Command/executesystemcommand (page does not exist)">\executesystemcommand</a></tt> and
+<tt><a class="new" href="../index.php?title=Command/installprogram&action=edit&redlink=1.html" title="Command/installprogram (page does not exist)">\installprogram</a></tt>.
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/executesystemcommand&action=edit&redlink=1.html" title="Command/executesystemcommand (page does not exist)">
+        \executesystemcommand
+       </a>
+      </tt>
+      is equal to
+      <tt>
+       <a class="new" href="../index.php?title=Command/immediate&action=edit&redlink=1.html" title="Command/immediate (page does not exist)">
+        \immediate
+       </a>
+      </tt>
+      <tt>
+       <a class="new" href="../index.php?title=Command/write18&action=edit&redlink=1.html" title="Command/write18 (page does not exist)">
+        \write18
+       </a>
+      </tt>
+      while
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/installprogram&action=edit&redlink=1.html" title="Command/installprogram (page does not exist)">
+        \installprogram
+       </a>
+      </tt>
+      defines a program in the tui file which is then run before the next execution of texexec.
+     </li>
+    </ul>
+    <p>I do not know what is the best source of their documenentation.
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/write&action=edit&redlink=1.html" title="Command/write (page does not exist)">\write</a></tt> is explained in the TeXbook, <a href="executesystemcommand/Write18.html" title="ConTeXt and Lua programming/executesystemcommand/Write18">Write18</a> executes its argument on shell.
+luatex will have a better model for executing commands on the shell, and some
+of it is explained in the luatex manual. (But luatex is still pre-alpha, so
+the interface can change).
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/installprogram&action=edit&redlink=1.html" title="Command/installprogram (page does not exist)">\installprogram</a></tt> is not documented, you need to read <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/core-uti.tex" rel="nofollow">core-uti.tex</a> and
+<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/texutil.rb" rel="nofollow">texutil.rb</a> to understand how it works.
+</p>
+    <p>I found ConTeXt sources to be the best way to understand how these things are
+working. See <a class="extiw" href="http://modules.contextgarden.net/t-lilypond" title="modules:t-lilypond">t-lilypond</a>, which checks if <a href="executesystemcommand/Write18.html" title="ConTeXt and Lua programming/executesystemcommand/Write18">Write18</a> is enabled or not, and then
+uses <tt><a class="new" href="../index.php?title=Command/executesystemcommand&action=edit&redlink=1.html" title="Command/executesystemcommand (page does not exist)">\executesystemcommand</a></tt> or <tt><a class="new" href="../index.php?title=Command/installprogram&action=edit&redlink=1.html" title="Command/installprogram (page does not exist)">\installprogram</a></tt>:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\LP</span><span class="br">{</span>texmfstart --ifchanged<span class="brx">=</span><span class="protectedcs">\lily!filename</span>.tmp --exec bin:lilypond -b eps -dno-gs-load-fonts -dinclude-eps-fonts <span class="protectedcs">\lily!filename</span>.tmp<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\PDF</span><span class="br">{</span>texmfstart --ifchanged<span class="brx">=</span><span class="protectedcs">\lily!filename</span>.eps pstopdf <span class="protectedcs">\lily!filename</span>.eps<span class="br">}</span>
+<span class="cs">\ifeof</span>18
+	<span class="cs">\installprogram</span><span class="br">{</span><span class="cs">\LP</span><span class="br">}</span><span class="comment">%</span>
+	<span class="cs"><span class="systemcs">\doif</span></span><span class="cs">\jobsuffix</span><span class="br">{</span>pdf<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+		<span class="cs">\installprogram</span><span class="br">{</span><span class="cs">\PDF</span><span class="br">}</span><span class="comment">%</span>
+	<span class="br">}</span><span class="comment">%</span>
+<span class="cs">\else</span>
+	<span class="cs">\executesystemcommand</span><span class="br">{</span><span class="cs">\LP</span><span class="br">}</span><span class="comment">%</span>
+	<span class="cs"><span class="systemcs">\doif</span></span><span class="cs">\jobsuffix</span><span class="br">{</span>pdf<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+		<span class="cs">\executesystemcommand</span><span class="br">{</span><span class="cs">\PDF</span><span class="br">}</span><span class="comment">%</span>
+	<span class="br">}</span><span class="comment">%</span>
+<span class="cs">\fi</span>
+</pre>
+    <p>The module writes stuff to a temporary file, and then uses lilypond to get a ps/pdf which
+is included back in the document. Another example is <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/m-r.tex" rel="nofollow">m-r.tex</a> which writes
+things to a temp file and runs them through R (a statistical program) and
+types the output. It also shows how you can capture the contents of an
+evironment to a temp file.  The same idea is used in the <a class="extiw" href="http://modules.contextgarden.net/vim" title="modules:vim">t-vim</a> module. Of
+course, the ConTeXt sources have plenty of examples. There is also <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/core-buf.tex" rel="nofollow">core-buf.tex</a>
+where the buffer handling is implemented, and the sources related to metapost
+handling, which are perhaps the best example of how to go back and forth
+between tex and an external program.
+</p>
+    <p>Perhaps the R module is easiest to understand. That method will work for most
+cases where you simply want to capture part of tex source and write it
+verbatim to a file, and then read the output back into tex.
+</p>
+    <h2>
+     <span id="How_to_input_the_result?">
+     </span>
+     <span class="mw-headline" id="How_to_input_the_result.3F">
+      How to input the result?
+     </span>
+    </h2>
+    <p>If you want to read the output verbatim to ConTeXt, you can use
+<tt><a href="../Command/typefile.html" title="Command/typefile">\typefile</a>{filename</tt>}. If the external program outputs tex file,
+then you can use <tt><a href="../Command/input.html" title="Command/input">\input</a>{filename</tt>}.
+</p>
+    <h2>
+     <span class="mw-headline" id="Modules_which_use_write18">
+      Modules which use write18
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/m-r.tex" rel="nofollow">
+       m-r.tex
+      </a>
+     </li>
+     <li>
+      <a class="extiw" href="http://modules.contextgarden.net/t-lilypond" title="modules:t-lilypond">
+       t-lilypond
+      </a>
+     </li>
+     <li>
+      <a class="extiw" href="http://modules.contextgarden.net/vim" title="modules:vim">
+       t-vim
+      </a>
+     </li>
+     <li>
+      <a class="extiw" href="http://modules.contextgarden.net/gnuplot" title="modules:gnuplot">
+       t-gnuplot
+      </a>
+     </li>
+     <li>
+      <a class="extiw" href="http://modules.contextgarden.net/filter" title="modules:filter">
+       t-filter
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212410
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.025 seconds
+Real time usage: 0.036 seconds
+Preprocessor visited node count: 200/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1574/2097152 bytes
+Template argument size: 414/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1832/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   21.933      1 -total
+ 30.18%    6.619     12 Template:cmd
+ 27.73%    6.082      5 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2299-1!canonical and timestamp 20260109212410 and revision id 40510
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/executesystemcommand">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

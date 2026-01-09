@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Gnuplot Development&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Gnuplot_Development" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Gnuplot Development
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1935&diff=28734">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Known_bugs">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Known bugs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#TODO:">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         TODO:
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#ConTeXt_.2B_terminal">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           ConTeXt + terminal
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Efficiency">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Efficiency
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Gnuplot_core">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Gnuplot core
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Obscure_ideas">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Obscure ideas
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#What_has_to_be_added_to_m-gnuplot.tex_to_support_ConTeXt_terminal">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         What has to be added to m-gnuplot.tex to support ConTeXt terminal
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#What_has_to_be_added_to_context.trm">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         What has to be added to context.trm
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#High_priority">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           High priority
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Middle_priority">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Middle priority
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Low_priority">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           Low priority
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Legend">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           Legend
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Notes">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Notes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#Hans.27s_note">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Hans's note
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#closed_curves_in_parametric_plots">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           closed curves in parametric plots
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Known_bugs">
+      Known bugs
+     </span>
+    </h2>
+    <ul>
+     <li>
+      mathematics
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\startGNUPLOTscript</span><span class="br">{</span>exp<span class="br">}</span>
+plot <span class="brx">[</span>0:3<span class="brx">]</span> 2/sqrt<span class="brx">(</span>pi<span class="brx">)</span>*exp<span class="brx">(</span>-x**2<span class="brx">)</span> t '$<span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\sqrt</span></span><span class="br">{</span><span class="cs">\pi</span><span class="br">}</span><span class="br">}</span>e^<span class="br">{</span>-x^2<span class="br">}</span>$'
+<span class="cs">\stopGNUPLOTscript</span>
+</pre>
+    <ul>
+     <li>
+      comments
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs">\startGNUPLOTscript</span><span class="br">{</span>sin<span class="br">}</span>
+<span class="brx">#</span> this comment should be ignored
+plot sin<span class="brx">(</span>x<span class="brx">)</span>
+<span class="cs">\stopGNUPLOTscript</span>
+</pre>
+    <ul>
+     <li>
+      doesn't work with XeTeX yet
+     </li>
+     <li>
+      Rotated PostScript images
+     </li>
+    </ul>
+    <pre>-dAutoRotatePages=/PageByPage
+</pre>
+    <h2>
+     <span class="mw-headline" id="TODO:">
+      TODO:
+     </span>
+    </h2>
+    <h3>
+     <span id="ConTeXt_+_terminal">
+     </span>
+     <span class="mw-headline" id="ConTeXt_.2B_terminal">
+      ConTeXt + terminal
+     </span>
+    </h3>
+    <ul>
+     <li>
+      contour plot,
+      <code>set style fill pattern</code>
+     </li>
+     <li>
+      images
+     </li>
+     <li>
+      handling fonts / set label "font"
+     </li>
+     <li>
+      colour palettes
+     </li>
+     <li>
+      smooth shading
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Efficiency">
+      Efficiency
+     </span>
+    </h3>
+    <ul>
+     <li>
+      optimize the number of gnuplot runs (if possible, gnuplot should be run only once)
+     </li>
+     <li>
+      optimize the number of times for loading/converting an already used graphic
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Gnuplot_core">
+      Gnuplot core
+     </span>
+    </h3>
+    <ul>
+     <li>
+      CLIP lines & points
+     </li>
+     <li>
+      MITTERED/BUTT
+     </li>
+     <li>
+      encoding: bigger list, it's not updated in help (encoding), add utf-8
+     </li>
+     <li>
+      pm3d - smooth shading
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Obscure_ideas">
+      Obscure ideas
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <code>set decimalsign ','</code>
+      based on language setting or locales
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="What_has_to_be_added_to_m-gnuplot.tex_to_support_ConTeXt_terminal">
+      What has to be added to m-gnuplot.tex to support ConTeXt terminal
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="What_has_to_be_added_to_context.trm">
+      What has to be added to context.trm
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="High_priority">
+      High priority
+     </span>
+    </h3>
+    <ul>
+     <li>
+      fix the syntax for
+     </li>
+    </ul>
+    <pre>set terminal context
+</pre>
+    <ul>
+     <li>
+      write documentation
+     </li>
+     <li>
+      [HTH] add \switchtobodyfont[whateverisprovided]\strut to evert \sometxt: try using (implementing first) \GPtext instead of \sometxt
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Middle_priority">
+      Middle priority
+     </span>
+    </h3>
+    <ul>
+     <li>
+      support different font sizes
+     </li>
+     <li>
+      check if everything is documented well enough in help
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Low_priority">
+      Low priority
+     </span>
+    </h3>
+    <ul>
+     <li>
+      implement with_image: once it's clear how to do it
+     </li>
+     <li>
+      study the code for palettes, implement them and document them
+     </li>
+     <li>
+      (need some interference with the core code) improve the code for
+     </li>
+    </ul>
+    <pre>draw_color_smooth_box(MODE_SPLOT) in graph3d.c -&gt; color.c
+</pre>
+    <h3>
+     <span class="mw-headline" id="Legend">
+      Legend
+     </span>
+    </h3>
+    <ul>
+     <li>
+      [HTH] = Need Hans's or Taco's Help
+     </li>
+    </ul>
+    <p>Different remarks about gnuplot development
+</p>
+    <h2>
+     <span class="mw-headline" id="Notes">
+      Notes
+     </span>
+    </h2>
+    <h3>
+     <span id="Hans's_note">
+     </span>
+     <span class="mw-headline" id="Hans.27s_note">
+      Hans's note
+     </span>
+    </h3>
+    <p>Once we have lua in place it should not be that difficult to make a mechanism that works as follows:
+</p>
+    <ul>
+     <li>
+      context calls gnuplot and opens a socket
+     </li>
+     <li>
+      and starts waiting for gp to finish
+     </li>
+     <li>
+      when gnuplot needs dimensions it talks back via the socket
+     </li>
+     <li>
+      tex executes the command send by the socket
+     </li>
+     <li>
+      etc
+     </li>
+    </ul>
+    <p>it needs some thinking but i think that it is possible
+</p>
+    <h3>
+     <span class="mw-headline" id="closed_curves_in_parametric_plots">
+      closed curves in parametric plots
+     </span>
+    </h3>
+    <ul>
+     <li>
+      it's probably not seen that easy, but if you want a circle with --cycle, set trange [0:2*pi]
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.031 seconds
+Real time usage: 0.067 seconds
+Preprocessor visited node count: 54/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 994/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1935-1!canonical and timestamp 20260109212415 and revision id 28734
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Gnuplot_Development">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

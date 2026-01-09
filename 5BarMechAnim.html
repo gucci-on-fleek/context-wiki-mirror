@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   5BarMechAnim&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/5BarMechAnim" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    5BarMechAnim
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1894&diff=41325">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="Document_layout_and_layers/Presentations/Animation.html" title="Document layout and layers/Presentations/Animation">Animation</a>
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Warning: Work in progress&nbsp;! This page should be expanded. The tex code should be commented and needs improvements. <i>(See: <a href="Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>This animation is based on the pdfclock sample.
+</p>
+    <p>Some general declarations:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupoutput</span></span><span class="brx">[</span>pdftex<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>165x100<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>165mm,height<span class="brx">=</span>100mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>165x100<span class="brx">]</span><span class="brx">[</span>165x100<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>header<span class="brx">=</span>0pt,
+   footer<span class="brx">=</span>0pt,
+   backspace<span class="brx">=</span>.25cm,
+   topspace<span class="brx">=</span>.25cm,
+   width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span> <span class="comment">% closeaction fails here</span>
+  <span class="brx">[</span>state<span class="brx">=</span>start,
+   closeaction<span class="brx">=</span>JS<span class="brx">(</span>stop_clock<span class="brx">)</span>,
+   closepageaction<span class="brx">=</span>JS<span class="brx">(</span>stop_clock<span class="brx">)</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+</pre>
+    <p>Next, we need to define the "callback":
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startJSpreamble</span></span> stepper used now
+  var state <span class="brx">=</span> 0&nbsp;;
+  var step <span class="brx">=</span> 0&nbsp;;
+  function step_clock <span class="brx">(</span><span class="brx">)</span>
+    <span class="br">{</span> try
+        <span class="br">{</span>
+          Walk_Field<span class="brx">(</span>"clock"<span class="brx">)</span>&nbsp;;
+          this.dirty <span class="brx">=</span> false <span class="br">}</span>
+      catch <span class="brx">(</span>e<span class="brx">)</span>
+        <span class="br">{</span> <span class="br">}</span> <span class="br">}</span>
+  function start_clock <span class="brx">(</span><span class="brx">)</span>
+    <span class="br">{</span> try
+        <span class="br">{</span> if <span class="brx">(</span>state<span class="brx">=</span><span class="brx">=</span>0<span class="brx">)</span>
+            <span class="br">{</span> step <span class="brx">=</span> app.setInterval <span class="brx">(</span>"step_clock<span class="brx">(</span><span class="brx">)</span>", 20<span class="brx">)</span>&nbsp;;
+              step.count <span class="brx">=</span> 0&nbsp;;
+              state <span class="brx">=</span> 1 <span class="br">}</span>
+          else if <span class="brx">(</span>state<span class="brx">=</span><span class="brx">=</span>1<span class="brx">)</span>
+            <span class="br">{</span> app.clearInterval <span class="brx">(</span>step<span class="brx">)</span>&nbsp;;
+              state <span class="brx">=</span> 2 <span class="br">}</span>
+          else if <span class="brx">(</span>state<span class="brx">=</span><span class="brx">=</span>2<span class="brx">)</span>
+            <span class="br">{</span> app.clearInterval <span class="brx">(</span>step<span class="brx">)</span>&nbsp;;
+              Reset_Fields<span class="brx">(</span>"clock"<span class="brx">)</span>&nbsp;;
+              Set_Field<span class="brx">(</span>"clock", "1"<span class="brx">)</span>&nbsp;;
+              state <span class="brx">=</span> 0 <span class="br">}</span> <span class="br">}</span>
+      catch <span class="brx">(</span>e<span class="brx">)</span>
+        <span class="br">{</span> <span class="br">}</span> <span class="br">}</span>
+  function stop_clock <span class="brx">(</span><span class="brx">)</span>
+    <span class="br">{</span> try
+        <span class="br">{</span> app.clearInterval <span class="brx">(</span>step<span class="brx">)</span> <span class="br">}</span>
+      catch <span class="brx">(</span>e<span class="brx">)</span>
+        <span class="br">{</span> <span class="br">}</span> <span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopJSpreamble</span></span>
+</pre>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startreusableMPgraphic</span></span><span class="br">{</span>mechcommon<span class="br">}</span>
+numeric u; u:<span class="brx">=</span>2mm;
+pair A, B;
+path ancrage, trait, cliphachure;
+picture hachureoblique;
+
+drawoptions<span class="brx">(</span>withpen pencircle scaled .1u<span class="brx">)</span>;
+
+trait&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0,-10u<span class="brx">)</span>--<span class="brx">(</span>0,10u<span class="brx">)</span>;
+for i<span class="brx">=</span>-10 upto 10&nbsp;:
+draw trait shifted <span class="brx">(</span>i*.5u,0<span class="brx">)</span> rotated -45;
+endfor
+cliphachure <span class="brx">=</span> <span class="brx">(</span>-2u,0u<span class="brx">)</span>--<span class="brx">(</span>2u,0u<span class="brx">)</span>--<span class="brx">(</span>2u,-1.5u<span class="brx">)</span>--<span class="brx">(</span>-2u,-1.5u<span class="brx">)</span>--cycle;
+clip currentpicture to cliphachure;
+hachureoblique&nbsp;:<span class="brx">=</span> currentpicture;
+currentpicture&nbsp;:<span class="brx">=</span> nullpicture;
+draw hachureoblique shifted <span class="brx">(</span>0,-2u<span class="brx">)</span>;
+draw hachureoblique shifted <span class="brx">(</span>40u,-2u<span class="brx">)</span>;
+
+label<span class="brx">(</span>btex $<span class="cs">\varphi</span> <span class="brx">=</span> <span class="cs"><span class="documentcs">\frac</span></span><span class="br">{</span>5<span class="cs">\pi</span><span class="br">}</span><span class="br">{</span>8<span class="br">}</span>$etex, <span class="brx">(</span>20u,0u<span class="brx">)</span><span class="brx">)</span>;
+
+A&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0,0<span class="brx">)</span>;
+B&nbsp;:<span class="brx">=</span> <span class="brx">(</span>40u,0<span class="brx">)</span>;
+ancrage&nbsp;:<span class="brx">=</span> <span class="brx">(</span>-1.5u,-2u<span class="brx">)</span>--<span class="brx">(</span>0,0<span class="brx">)</span>--<span class="brx">(</span>1.5u,-2u<span class="brx">)</span>--cycle;
+draw ancrage shifted A;
+draw ancrage shifted B;
+
+labeloffset:<span class="brx">=</span>1u;
+label.top<span class="brx">(</span>btex $A$ etex, A<span class="brx">)</span>;
+label.top<span class="brx">(</span>btex $B$ etex, B<span class="brx">)</span>;
+
+pair frameloc; frameloc&nbsp;:<span class="brx">=</span> <span class="brx">(</span>-5u,-25u<span class="brx">)</span>;
+
+drawarrow <span class="brx">(</span><span class="brx">(</span>0,0<span class="brx">)</span>--<span class="brx">(</span>5u,0<span class="brx">)</span><span class="brx">)</span> shifted frameloc;
+drawarrow <span class="brx">(</span><span class="brx">(</span>0,0<span class="brx">)</span>--<span class="brx">(</span>0,5u<span class="brx">)</span><span class="brx">)</span> shifted frameloc;
+fill <span class="brx">(</span>fullcircle scaled 1u<span class="brx">)</span> shifted frameloc withcolor white;
+draw <span class="brx">(</span>fullcircle scaled 1u<span class="brx">)</span> shifted frameloc;
+draw <span class="brx">(</span><span class="brx">(</span>-.5u,0<span class="brx">)</span>--<span class="brx">(</span>.5u,0<span class="brx">)</span><span class="brx">)</span> rotated 45 shifted frameloc;
+draw <span class="brx">(</span><span class="brx">(</span>0,-.5u<span class="brx">)</span>--<span class="brx">(</span>0,.5u<span class="brx">)</span><span class="brx">)</span> rotated 45 shifted frameloc;
+label.rt<span class="brx">(</span>btex $<span class="cs"><span class="documentcs">\vec</span></span><span class="br">{</span>x<span class="br">}</span>$ etex,<span class="brx">(</span>5u,0<span class="brx">)</span> shifted frameloc<span class="brx">)</span>;
+label.top<span class="brx">(</span>btex $<span class="cs"><span class="documentcs">\vec</span></span><span class="br">{</span>z<span class="br">}</span>$ etex,<span class="brx">(</span>0,5u<span class="brx">)</span> shifted frameloc<span class="brx">)</span>;
+label.llft<span class="brx">(</span>btex $<span class="cs"><span class="documentcs">\vec</span></span><span class="br">{</span>y<span class="br">}</span>$ etex,<span class="brx">(</span>0,0<span class="brx">)</span> shifted frameloc<span class="brx">)</span>;
+
+setbounds currentpicture to <span class="brx">(</span>-10u,10u<span class="brx">)</span>--<span class="brx">(</span>-10u,-30u<span class="brx">)</span>--<span class="brx">(</span>55u,-30u<span class="brx">)</span>--<span class="brx">(</span>55u,10u<span class="brx">)</span>--cycle;
+<span class="cs"><span class="stylecs">\stopreusableMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>clock<span class="br">}</span>
+numeric stp&nbsp;; stp&nbsp;:<span class="brx">=</span> <span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>n<span class="br">}</span>-1&nbsp;;
+
+numeric u; u:<span class="brx">=</span>2mm;
+pair A, B, P<span class="brx">[</span><span class="brx">]</span>, Q<span class="brx">[</span><span class="brx">]</span>, M<span class="brx">[</span><span class="brx">]</span>;
+path cerclel<span class="brx">[</span><span class="brx">]</span>, cercler<span class="brx">[</span><span class="brx">]</span>, cerclelb<span class="brx">[</span><span class="brx">]</span>, cerclerb<span class="brx">[</span><span class="brx">]</span>, pivot, trajectoire;
+
+drawoptions<span class="brx">(</span>withpen pencircle scaled .1u<span class="brx">)</span>;
+
+pivot&nbsp;:<span class="brx">=</span> fullcircle scaled 1u;
+
+A&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0,0<span class="brx">)</span>;
+B&nbsp;:<span class="brx">=</span> <span class="brx">(</span>40u,0<span class="brx">)</span>;
+
+for i<span class="brx">=</span>0 upto 10&nbsp;:
+P<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>6u,0<span class="brx">)</span> rotated <span class="brx">(</span>0+5*i<span class="brx">)</span>;
+Q<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>6u,0<span class="brx">)</span> rotated <span class="brx">(</span>112.5+5*i<span class="brx">)</span> shifted B;
+cerclel<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled 12u;
+cercler<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled 12u shifted B;
+cerclelb<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled 59.67u shifted P<span class="brx">[</span>i<span class="brx">]</span>&nbsp;;
+cerclerb<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled 59.67u shifted Q<span class="brx">[</span>i<span class="brx">]</span>&nbsp;;
+
+M<span class="brx">[</span>i<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="brx">(</span>cerclelb<span class="brx">[</span>i<span class="brx">]</span> intersectionpoint <span class="brx">(</span>subpath <span class="brx">(</span> .5*<span class="brx">(</span>length cerclerb<span class="brx">[</span>i<span class="brx">]</span><span class="brx">)</span>,
+1*<span class="brx">(</span>length cerclerb<span class="brx">[</span>i<span class="brx">]</span><span class="brx">)</span><span class="brx">)</span> of cerclerb<span class="brx">[</span>i<span class="brx">]</span><span class="brx">)</span><span class="brx">)</span>&nbsp;;
+endfor
+
+drawoptions<span class="brx">(</span>withcolor .625red withpen pencircle scaled .15u<span class="brx">)</span>;
+draw A--P<span class="brx">[</span>stp<span class="brx">]</span>;
+draw B--Q<span class="brx">[</span>stp<span class="brx">]</span>;
+draw P<span class="brx">[</span>stp<span class="brx">]</span>--M<span class="brx">[</span>stp<span class="brx">]</span>;
+draw Q<span class="brx">[</span>stp<span class="brx">]</span>--M<span class="brx">[</span>stp<span class="brx">]</span>;
+
+drawoptions<span class="brx">(</span>withcolor .625red withpen pencircle scaled .15u<span class="brx">)</span>;
+trajectoire&nbsp;:<span class="brx">=</span> M<span class="brx">[</span>0<span class="brx">]</span> for i<span class="brx">=</span>1 upto stp&nbsp;: -- M<span class="brx">[</span>i<span class="brx">]</span> endfor;
+draw trajectoire withcolor <span class="brx">(</span>1,.0,.0<span class="brx">)</span>;
+
+path chemin<span class="brx">[</span><span class="brx">]</span>;
+chemin<span class="brx">[</span>0<span class="brx">]</span>&nbsp;:<span class="brx">=</span> A--<span class="brx">(</span>10u,0<span class="brx">)</span>;
+chemin<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> A--P<span class="brx">[</span>stp<span class="brx">]</span>;
+chemin<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> B--<span class="brx">(</span>50u,0<span class="brx">)</span>;
+chemin<span class="brx">[</span>3<span class="brx">]</span>&nbsp;:<span class="brx">=</span> B--Q<span class="brx">[</span>stp<span class="brx">]</span>;
+
+drawoptions<span class="brx">(</span>withcolor black withpen pencircle scaled .1u<span class="brx">)</span>;
+draw chemin<span class="brx">[</span>0<span class="brx">]</span> dashed dashpattern<span class="brx">(</span>on 24bp off 12bp on 6bp off 12bp on
+24bp<span class="brx">)</span> scaled .25;
+draw chemin<span class="brx">[</span>2<span class="brx">]</span> dashed dashpattern<span class="brx">(</span>on 24bp off 12bp on 6bp off 12bp on
+24bp<span class="brx">)</span> scaled .25;
+
+anglelength&nbsp;:<span class="brx">=</span> 1.0cm&nbsp;;
+drawoptions<span class="brx">(</span>withcolor .625red withpen pencircle scaled .25u<span class="brx">)</span>;
+drawarrow anglebetween<span class="brx">(</span>chemin<span class="brx">[</span>0<span class="brx">]</span>,chemin<span class="brx">[</span>1<span class="brx">]</span> ,btex $<span class="cs">\omega</span> t $ etex<span class="brx">)</span>;
+drawarrow anglebetween<span class="brx">(</span>chemin<span class="brx">[</span>2<span class="brx">]</span>,chemin<span class="brx">[</span>3<span class="brx">]</span> ,btex $<span class="cs">\omega</span> t + <span class="cs">\varphi</span> $ etex<span class="brx">)</span>;
+
+drawoptions<span class="brx">(</span>dashed evenly withcolor <span class="brx">(</span>.8,.8,.8<span class="brx">)</span><span class="brx">)</span>;
+draw P<span class="brx">[</span>stp<span class="brx">]</span>--Q<span class="brx">[</span>stp<span class="brx">]</span> dashed evenly withcolor <span class="brx">(</span>.8,.8,.8<span class="brx">)</span>;
+draw .5<span class="brx">[</span>P<span class="brx">[</span>stp<span class="brx">]</span>,Q<span class="brx">[</span>stp<span class="brx">]</span><span class="brx">]</span>--M<span class="brx">[</span>stp<span class="brx">]</span> dashed evenly withcolor <span class="brx">(</span>.8,.8,.8<span class="brx">)</span>;
+
+angle_radius <span class="brx">=</span> 10pt&nbsp;;
+def mark_rt_angle <span class="brx">(</span>expr a, b, c<span class="brx">)</span> <span class="brx">=</span>
+draw <span class="brx">(</span><span class="brx">(</span>1,0<span class="brx">)</span>--<span class="brx">(</span>1,1<span class="brx">)</span>--<span class="brx">(</span>0,1<span class="brx">)</span><span class="brx">)</span>
+zscaled <span class="brx">(</span>angle_radius*unitvector<span class="brx">(</span>a-b<span class="brx">)</span><span class="brx">)</span>
+shifted b
+enddef&nbsp;;
+
+mark_rt_angle<span class="brx">(</span> P<span class="brx">[</span>stp<span class="brx">]</span>, <span class="brx">(</span>.5<span class="brx">[</span>P<span class="brx">[</span>stp<span class="brx">]</span>,Q<span class="brx">[</span>stp<span class="brx">]</span><span class="brx">]</span><span class="brx">)</span>, M<span class="brx">[</span>stp<span class="brx">]</span><span class="brx">)</span>;
+
+drawoptions<span class="brx">(</span>withpen pencircle scaled .1u<span class="brx">)</span>;
+fill pivot shifted A withcolor white;
+draw pivot shifted A withcolor black;
+fill pivot shifted B withcolor white;
+draw pivot shifted B withcolor black;
+fill pivot shifted P<span class="brx">[</span>stp<span class="brx">]</span> withcolor white;
+draw pivot shifted P<span class="brx">[</span>stp<span class="brx">]</span> withcolor black;
+fill pivot shifted Q<span class="brx">[</span>stp<span class="brx">]</span> withcolor white;
+draw pivot shifted Q<span class="brx">[</span>stp<span class="brx">]</span> withcolor black;
+fill pivot shifted M<span class="brx">[</span>stp<span class="brx">]</span> withcolor white;
+draw pivot shifted M<span class="brx">[</span>stp<span class="brx">]</span> withcolor black;
+
+labeloffset:<span class="brx">=</span>1u;
+freelabeloffset:<span class="brx">=</span>1u;
+freelabel<span class="brx">(</span>btex $P$ etex, P<span class="brx">[</span>stp<span class="brx">]</span>, A<span class="brx">)</span>&nbsp;;
+freelabel<span class="brx">(</span>btex $Q$ etex, Q<span class="brx">[</span>stp<span class="brx">]</span>, B<span class="brx">)</span>&nbsp;;
+label.bot<span class="brx">(</span>btex $M$ etex, M<span class="brx">[</span>stp<span class="brx">]</span><span class="brx">)</span>;
+
+setbounds currentpicture to <span class="brx">(</span>-10u,10u<span class="brx">)</span>--<span class="brx">(</span>-10u,-30u<span class="brx">)</span>--<span class="brx">(</span>55u,-30u<span class="brx">)</span>--<span class="brx">(</span>55u,10u<span class="brx">)</span>--cycle;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>mechcommon<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\reuseMPgraphic</span></span><span class="br">{</span>mechcommon<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\let</span><span class="cs">\mechlist</span><span class="cs">\empty</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>72<span class="br">}</span><span class="comment">% from 0 by 5 to 360 gives 72 steps&nbsp;!</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\appendtocommalist</span></span><span class="br">{</span>step:<span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="cs">\mechlist</span>
+   <span class="cs"><span class="systemcs">\expanded</span></span>
+     <span class="br">{</span><span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>step:<span class="cs"><span class="systemcs">\recurselevel</span></span><span class="brx">]</span>
+        <span class="brx">[</span><span class="cs">\noexpand</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span>
+           <span class="br">{</span>clock<span class="br">}</span><span class="br">{</span>n<span class="brx">=</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\expanded</span></span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\definefieldstack</span></span> <span class="brx">[</span>clock<span class="brx">]</span> <span class="brx">[</span><span class="cs">\mechlist</span><span class="brx">]</span>
+     <span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setuppagenumber</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\midaligned</span></span>
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off,background<span class="brx">=</span>mechcommon,align<span class="brx">=</span>middle,offset<span class="brx">=</span>none<span class="brx">]</span><span class="br">{</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\fieldstack</span></span><span class="brx">[</span>clock<span class="brx">]</span><span class="br">}</span> 
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\goto</span></span><span class="br">{</span>Play<span class="br">}</span><span class="brx">[</span>JS<span class="brx">(</span>start_clock<span class="brx">)</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109124544
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.049 seconds
+Real time usage: 0.257 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 404/2097152 bytes
+Template argument size: 114/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 20869/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   35.842      1 Template:todo
+100.00%   35.842      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1894-1!canonical and timestamp 20260109124544 and revision id 41325
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/5BarMechAnim">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

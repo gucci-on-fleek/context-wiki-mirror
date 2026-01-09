@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   The rest of the filters&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/The_rest_of_the_filters" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    The rest of the filters
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2484&diff=28847">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="HTML_to_ConTeXt.html" title="HTML to ConTeXt">HTML_to_ConTeXt</a>
+</p>
+    <pre>
+
+# Now we transfer the syntactically altered html to a string Object
+# and manipulate that object further
+
+
+newdoc=@article.inner_html
+
+# remove empty space in the beginning
+newdoc.gsub!(/^\s+/,"")
+
+# remove all elements we don't need.
+newdoc.gsub!(/^&lt;div.*/,"")
+newdoc.gsub!(/^&lt;\/div.*/,"")
+newdoc.gsub!(/^&lt;form.*/,"")
+newdoc.gsub!(/^&lt;\/form.*/,"")
+newdoc.gsub!(/&lt;p&gt;/,"\n")
+newdoc.gsub!(/&lt;\/p&gt;/,"\n")
+newdoc.gsub!(/&lt;\u&gt;/,"")
+newdoc.gsub!(/&lt;\/u&gt;/,"")
+newdoc.gsub!(/&lt;ul&gt;/,"\\startitemize[1]")
+newdoc.gsub!(/&lt;\/ul&gt;/,"\\stopitemize")
+newdoc.gsub!(/&lt;ol&gt;/,"\\startitemize[n]")
+newdoc.gsub!(/&lt;\/ol&gt;/,"\\stopitemize")
+newdoc.gsub!(/&lt;li&gt;/,"\\item ")
+newdoc.gsub!(/&lt;\/li&gt;/,"\n")
+newdoc.gsub!("_","\\_")
+newdoc.gsub!(/&lt;table&gt;/,"\\bTABLE \n")
+newdoc.gsub!(/&lt;\/table&gt;/,"\\eTABLE \n")
+newdoc.gsub!(/&lt;tr&gt;/,"\\bTR ")
+newdoc.gsub!(/&lt;\/tr&gt;/,"\\eTR ")
+newdoc.gsub!(/&lt;td&gt;/,"\\bTD ")
+newdoc.gsub!(/&lt;\/td&gt;/,"\\eTD ")
+newdoc.gsub!(/&lt;th&gt;/,"\\bTH ")
+newdoc.gsub!(/&lt;\/th&gt;/,"\\eTH ")
+newdoc.gsub!(/&lt;center&gt;/,"")
+newdoc.gsub!(/&lt;\/center&gt;/,"")
+newdoc.gsub!(/&lt;em&gt;/,"{\\em ")
+newdoc.gsub!(/&lt;\/em&gt;/,"}")
+newdoc.gsub!("^","")
+newdoc.gsub!("\%","\\%")
+newdoc.gsub!("&","&")
+newdoc.gsub!("&",'\\\&')
+newdoc.gsub!("$",'\\$')
+newdoc.gsub!(/&lt;tbody&gt;/,"\\bTABLEbody \n")
+newdoc.gsub!(/&lt;\/tbody&gt;/,"\\eTABLEbody \n")
+
+# Context does not mind "_" in figures and does not recognize \_,
+# so i have to catch these and replace \_ with _
+
+# First catch
+filter=/\/AnnRep07\/Figures\/(\w+\/)*(\w+\\_)*/
+
+if newdoc[filter]
+newdoc.gsub!(filter) { |fString|
+fString.gsub("\\_","_")
+}
+end
+
+# Second catch
+filter2=/\/AnnRep07\/Figures\/(\w+\/)*\w+[-.]\w+\\_\w+/
+
+if newdoc[filter2]
+newdoc.gsub!(filter2) { |fString|
+fString.gsub("\\_","_") }
+end
+
+# Third catch; remove \_ inside []
+filter3=/\[\w+\\_\w+\]/
+
+if newdoc[filter3]
+newdoc.gsub!(filter3) { |fString|
+puts fString
+fString.gsub("\\_","_") }
+end
+
+
+# remove the comment tag, which we used to embed context commands
+newdoc.gsub!("&lt;!--","")
+newdoc.gsub!("--&gt;","")
+                                # add full path to the images                                                                 
+newdoc.gsub!("\/AnnRep07\/Figures\/","~\/AnnRep07\/Figures\/")
+
+newdoc.gsub!(/&lt;\w+\s*\/&gt;/,"")
+
+#puts newdoc
+# open file for output
+#outfil="#{oFile}.tex"
+#`rm #{outfil}`
+
+#fil=File.new(outfil,"a")
+#puts "Writing #{oFile}"
+oFile.write newdoc
+
+end
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.004 seconds
+Real time usage: 0.004 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2522/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2484-1!canonical and timestamp 20260109212440 and revision id 28847
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/The_rest_of_the_filters">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

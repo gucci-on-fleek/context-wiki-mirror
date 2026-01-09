@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/Commands with KeyVal arguments&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Commands_with_KeyVal_arguments" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/Commands with KeyVal arguments
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=743&diff=40581">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">ConTeXt and Lua programming</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Using_Lua">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Using Lua
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Using_ConTeXt.2FTeX">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Using ConTeXt/TeX
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Example_1">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Example 1
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Example_2">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Example 2
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Example_2_with_commentary">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Example 2 with commentary
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Using_Lua">
+      Using Lua
+     </span>
+    </h2>
+    <p>There is a lovely set of functions in the <tt>utilities.parsers</tt> table that turns strings into nice Lua-accessible tables of various kinds. An example is given below; the functions are documented on the <a href="../Extensions_to_the_Lua_IO_library/String_manipulation#util-prs.lua" title="ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation">string manipulation</a> page.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+userdata <span class="brx">=</span> userdata or <span class="br">{</span> <span class="br">}</span>
+
+function userdata.mycommand<span class="brx">(</span>keywords, keyvals<span class="brx">)</span> 
+    keyword_options <span class="brx">=</span> utilities.parsers.settings_to_array<span class="brx">(</span>keywords<span class="brx">)</span>
+    named_values <span class="brx">=</span> utilities.parsers.settings_to_hash<span class="brx">(</span>keyvals<span class="brx">)</span>
+    
+    -- do stuff based on that array and that hashtable.
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\def</span><span class="cs">\mycommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>
+    userdata.mycommand<span class="brx">(</span>'<span class="brx">#</span>1', '<span class="brx">#</span>2'<span class="brx">)</span><span class="br">}</span>    
+
+<span class="cs">\mycommand</span><span class="brx">[</span>top, inmargin, now<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>green, roof<span class="brx">=</span>gabled<span class="brx">]</span>
+</pre>
+    <h2>
+     <span id="Using_ConTeXt/TeX">
+     </span>
+     <span class="mw-headline" id="Using_ConTeXt.2FTeX">
+      Using ConTeXt/TeX
+     </span>
+    </h2>
+    <p>This section is based on a post on the mailing list by Taco Hoekwater from [<a class="external text" href="http://www.mail-archive.com/ntg-context@ntg.nl/msg03235.html" rel="nofollow">2004-06-28</a>] and Hans Hagen from [<a class="external text" href="https://www.mail-archive.com/ntg-context@ntg.nl/msg100795.html" rel="nofollow">2021-12-14</a>].
+</p>
+    <h3>
+     <span class="mw-headline" id="Example_1">
+      Example 1
+     </span>
+    </h3>
+    <p>To parse your own optional keyval argument from a command. You may want to adapt the logic according to your needs. Note that in the example below, <tt>[#1]</tt> is not optional. 
+</p>
+    <pre class="tex"><span class="cs">\tolerant</span><span class="cs">\protected</span><span class="cs">\def</span><span class="cs">\MyCommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2
+  <span class="br">{</span><span class="cs">\ifempty</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+     I only got <span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>.
+   <span class="cs">\orelse</span><span class="cs">\ifhastok</span><span class="brx">=</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+     <span class="cs"><span class="systemcs">\getdummyparameters</span></span><span class="brx">[</span>MyOwnKeyOne<span class="brx">=</span><span class="br">{</span><span class="br">}</span>,MyOwnKeyTwo<span class="brx">=</span><span class="br">{</span>B<span class="br">}</span>,<span class="brx">#</span>1<span class="brx">]</span>
+     <span class="comment">% this is to define default values; overwritten when mentioned as part of ",#1"</span>
+     <span class="cs">\ifcstok</span><span class="br">{</span><span class="cs"><span class="systemcs">\dummyparameter</span></span><span class="br">{</span>MyOwnKeyOne<span class="br">}</span><span class="br">}</span><span class="cs">\emptytoks</span>
+     <span class="cs">\else</span>
+       <span class="comment">% if this one is not empty, we do ...</span>
+       Here is <span class="brx">#</span>1! 
+     <span class="cs">\fi</span>
+     And I also got <span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>.
+   <span class="cs">\else</span>
+     <span class="brx">#</span>1 and <span class="brx">#</span>2  <span class="comment">% whatever</span>
+   <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <p>Of course, one can pass on <tt>#1</tt> as argument to other commands. If <tt>MyOwnKeyOne</tt> is not matched by its argument list, it's ignored.
+</p>
+    <p>See also <a class="external free" href="https://www.mail-archive.com/ntg-context@ntg.nl/msg100795.html" rel="nofollow">https://www.mail-archive.com/ntg-context@ntg.nl/msg100795.html</a> for more complex cases and other variants.
+</p>
+    <h3>
+     <span class="mw-headline" id="Example_2">
+      Example 2
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span> <span class="comment">% enable exclamations in macro names</span>
+
+<span class="comment">% Helper function: if the user specifies nothing, throw an error</span>
+<span class="cs">\def</span><span class="cs">\errorDir</span><span class="br">{</span><span class="comment">%</span>
+   <span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>0<span class="br">}</span><span class="comment">% error recovery</span>
+   <span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>Please supply "Dir" argument<span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+<span class="comment">% Helper function: process Dir=... other than Up/Down/Left/Right</span>
+<span class="comment">% Accept numbers, else throw an error</span>
+<span class="cs">\def</span><span class="cs">\checkDir</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\doifnumberelse</span></span> <span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+                  <span class="br">{</span><span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+                  <span class="br">{</span><span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>Invalid "Dir" argument! <span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+<span class="br">}</span>
+
+<span class="comment">% Defining our command that accepts key=val</span>
+<span class="cs">\def</span><span class="cs">\MyZigzag</span><span class="brx">#</span>1<span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+  <span class="comment">% the #1 makes sure we allow a space before the bracket</span>
+
+  <span class="comment">% create commands \ZZDir, \ZZLinewidth (default 1pt), etc.</span>
+  <span class="cs"><span class="systemcs">\getparameters</span></span><span class="brx">[</span>ZZ<span class="brx">]</span><span class="brx">[</span>Dir<span class="brx">=</span>,Linewidth<span class="brx">=</span>1pt,Color<span class="brx">=</span>Red,Width<span class="brx">=</span>3em,<span class="brx">#</span>2<span class="brx">]</span>
+
+  <span class="comment">% define an alias</span>
+  <span class="cs">\edef</span><span class="cs">\mywidth</span><span class="br">{</span><span class="cs">\ZZWidth</span><span class="br">}</span><span class="comment">%</span>
+
+  <span class="comment">% accept keywords for Dir= (and map those keywords to numbers)</span>
+  <span class="comment">%\expandafter\processaction\expandafter[\ZZDir]&nbsp;% mkii</span>
+  <span class="cs"><span class="systemcs">\processaction</span></span><span class="brx">[</span><span class="cs">\ZZDir</span><span class="brx">]</span>                          <span class="comment">% mkiv</span>
+	<span class="brx">[</span>      Down<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>270<span class="br">}</span>,
+	       Left<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>180<span class="br">}</span>,
+   	         Up<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>90<span class="br">}</span>,
+ 	      Right<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>0<span class="br">}</span>,
+	 <span class="protectedcs">\s!default</span><span class="brx">=</span>&gt;<span class="cs">\errorDir</span>, 
+	 <span class="protectedcs">\s!unknown</span><span class="brx">=</span>&gt;<span class="cs">\checkDir</span><span class="br">{</span><span class="cs">\ZZDir</span><span class="br">}</span><span class="brx">]</span>
+<span class="br">}</span> <span class="comment">% this brace belongs to \def!</span>
+
+<span class="cs">\protect</span> <span class="comment">% end of definitions</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Example_2_with_commentary">
+      Example 2 with commentary
+     </span>
+    </h3>
+    <p>The 'key' to the keyval functionality in ConTeXt are two macros called
+<tt><a class="new" href="../../index.php?title=Command/getparameters&action=edit&redlink=1.html" title="Command/getparameters (page does not exist)">\getparameters</a></tt> and <tt><a class="new" href="../../index.php?title=Command/processaction&action=edit&redlink=1.html" title="Command/processaction (page does not exist)">\processaction</a></tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\unprotect</span></span> <span class="comment">% enable exclamations in macro names</span>
+
+<span class="cs">\def</span><span class="cs">\MyZigzag</span><span class="brx">#</span>1<span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="comment">%&nbsp;% This brace is closed below, after the \expandafter block</span>
+  <span class="comment">% the #1 makes sure we allow a space before the bracket</span>
+
+  <span class="cs"><span class="systemcs">\getparameters</span></span><span class="brx">[</span>ZZ<span class="brx">]</span><span class="brx">[</span>Dir<span class="brx">=</span>,Linewidth<span class="brx">=</span>1pt,Color<span class="brx">=</span>Red,Width<span class="brx">=</span>3em,<span class="brx">#</span>2<span class="brx">]</span>
+</pre>
+    <p>Now you have a set of new macros that all start with ZZ.
+At least there are <tt>\ZZDir</tt>,<tt>\ZZLinewidth</tt>, <tt>\ZZColor</tt> and <tt>\ZZWidth</tt> (these have default values) but possibly others as well, depending on user input. In the next lines you make use of these variables, for example as follows:  
+</p>
+    <pre class="tex"> <span class="cs">\edef</span><span class="cs">\mywidth</span><span class="br">{</span><span class="cs">\ZZWidth</span><span class="br">}</span><span class="comment">%</span>
+</pre>
+    <p>If you want some of the variables to accept keyword values, then you also need to use <tt><a class="new" href="../../index.php?title=Command/processaction&action=edit&redlink=1.html" title="Command/processaction (page does not exist)">\processaction</a></tt> on the ZZ variable in question to map the keywords onto actual values.
+</p>
+    <p>Say you want "Dir" to be mandatory and that it accepts 4 directional keywords, as well as a direct angle specification. I've used all mixed case keywords, because otherwise you might run into conflicts with the multilingual interface:
+</p>
+    <pre class="tex">  <span class="comment">%\expandafter\processaction\expandafter[\ZZDir]&nbsp;% mkii</span>
+  <span class="cs"><span class="systemcs">\processaction</span></span><span class="brx">[</span><span class="cs">\ZZDir</span><span class="brx">]</span>                          <span class="comment">% mkiv</span>
+	<span class="brx">[</span>      Down<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>270<span class="br">}</span>,
+	       Left<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>180<span class="br">}</span>,
+   	         Up<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>90<span class="br">}</span>,
+ 	      Right<span class="brx">=</span>&gt;<span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>0<span class="br">}</span>,
+	 <span class="protectedcs">\s!default</span><span class="brx">=</span>&gt;<span class="cs">\errorDir</span>, 
+	 <span class="protectedcs">\s!unknown</span><span class="brx">=</span>&gt;<span class="cs">\checkDir</span><span class="br">{</span><span class="cs">\ZZDir</span><span class="br">}</span><span class="brx">]</span>
+<span class="br">}</span> <span class="comment">% this brace belongs to \def!</span>
+</pre>
+    <p><tt>\s!default</tt> may be triggered because <tt>\ZZDir</tt>'s expansion is empty unless the user supplied something.
+</p>
+    <p>In MkII, the first argument to <tt><a class="new" href="../../index.php?title=Command/processaction&action=edit&redlink=1.html" title="Command/processaction (page does not exist)">\processaction</a></tt> has to be expanded, so you need the <tt><a class="new" href="../../index.php?title=Command/expandafter&action=edit&redlink=1.html" title="Command/expandafter (page does not exist)">\expandafter</a></tt>s. In MkIV, <tt>\processaction</tt> does this automatically.
+</p>
+    <p>For completeness, here is an example definition of <tt>\checkDir</tt> and <tt>\errorDir</tt>:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\errorDir</span><span class="br">{</span><span class="comment">%</span>
+   <span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span>0<span class="br">}</span><span class="comment">% error recovery</span>
+   <span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>Please supply "Dir" argument<span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\checkDir</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\doifnumberelse</span></span> <span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+                  <span class="br">{</span><span class="cs">\def</span><span class="cs">\Dir</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+                  <span class="br">{</span><span class="cs"><span class="systemcs">\message</span></span><span class="br">{</span>Invalid "Dir" argument! <span class="brx">(</span><span class="brx">#</span>1<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+<span class="br">}</span>
+
+<span class="cs">\protect</span> <span class="comment">% end of definitions</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.053 seconds
+Real time usage: 0.085 seconds
+Preprocessor visited node count: 108/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 528/2097152 bytes
+Template argument size: 141/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11518/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.575      1 -total
+ 40.70%    6.746      6 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:743-1!canonical and timestamp 20260109212408 and revision id 40581
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Commands_with_KeyVal_arguments">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

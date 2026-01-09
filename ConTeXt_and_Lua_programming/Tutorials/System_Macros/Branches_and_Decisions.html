@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Branches_and_Decisions" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2155&diff=40368">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Definitions_and_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments">Definitions & Assignments</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Loops_and_Recursion.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion">Loops and Recursion</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#.5Cdoifnextcharelse">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         \doifnextcharelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#.5Cdoifundefined.2C_.5Cdoifdefined.2C_etc.">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         \doifundefined, \doifdefined, etc.
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#.5Cdoif.2C_.5Cdoifnot.2C_.5Cdoifelse">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         \doif, \doifnot, \doifelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#.5Cdoifempty.2C_.5Cdoifnotempty.2C_.5Cdoifemptyelse">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         \doifempty, \doifnotempty, \doifemptyelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#.5Cdoifinset.2C_.5Cdoifnotinset.2C_.5Cdoifnotinsetelse">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         \doifinset, \doifnotinset, \doifnotinsetelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#.5Cdoifcommon.2C_.5Cdoifnotcommon.2C_.5Cdoifcommonelse">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         \doifcommon, \doifnotcommon, \doifcommonelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#.5Cdoifsamestringelse.2C.5Cdoifsamestring.2C.5Cdoifnotsamestring">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         \doifsamestringelse,\doifsamestring,\doifnotsamestring
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#.5Cdoifinstringelse.2C.5Cdoifincsnameelse">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         \doifinstringelse,\doifincsnameelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#.5Cdoifnumberelse">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         \doifnumberelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#.5Cdoifassignmentelse">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         \doifassignmentelse
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#.5Cdoiftext.2C_.5Cdoiftextelse">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         \doiftext, \doiftextelse
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h3>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h3>
+    <p>This page describes the conditional expressions available in ConTeXt.
+</p>
+    <p>See also: <tt><a href="../../../Command/doif..." title="Command/doif...">\doif...</a></tt>
+</p>
+    <h3>
+     <span id="\doifnextcharelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifnextcharelse">
+      \doifnextcharelse
+     </span>
+    </h3>
+    <p>When Pragma ADE started using TeX in the late eighties, their first experiences with programming concerned a simple shell around LaTeX. The commands probably used most at Pragma ADE are the itemizing ones. One of those initial shell commands took care of an optional argument, that enabled the specification of the item symbol to be used. Without understanding anything they were able to locate a LaTeX macro that could be used to inspect the next character.
+</p>
+    <p>It is that macro that the ancester of the next one presented here. It executes one of two actions, dependant of the next character. Disturbing spaces and line endings, which are normally interpreted as spaces too, are skipped.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifnextcharelse</span></span> <span class="br">{</span>char<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doifundefined,_\doifdefined,_etc.">
+     </span>
+     <span class="mw-headline" id=".5Cdoifundefined.2C_.5Cdoifdefined.2C_etc.">
+      \doifundefined, \doifdefined, etc.
+     </span>
+    </h3>
+    <p>The standard way of testing if a macro is defined is comparing its meaning with another undefined one, aptly named <code>\undefined</code>. To guarantee correct working of this set of macros, <code>\undefined</code> may <b>never</b> be defined by a user!
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifundefined</span></span>      <span class="br">{</span>string<span class="br">}</span>    <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifdefined</span></span>        <span class="br">{</span>string<span class="br">}</span>    <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifundefinedelse</span></span>  <span class="br">{</span>string<span class="br">}</span>    <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifdefinedelse</span></span>    <span class="br">{</span>string<span class="br">}</span>    <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifalldefinedelse</span></span> <span class="br">{</span>commalist<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doif,_\doifnot,_\doifelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoif.2C_.5Cdoifnot.2C_.5Cdoifelse">
+      \doif, \doifnot, \doifelse
+     </span>
+    </h3>
+    <p>Programming in TeX differs from programming in procedural languages like Modula. This means that one --- well, let me speek for myself --- tries to do the things in the well known way. Therefore the next set of <code>\ifthenelse</code> commands were between the first ones we needed. A few years later, the opposite became true: when programming in Modula, I sometimes miss handy things like grouping, runtime redefinition, expansion etc. While Modula taught me to structure, TeX taught me to think recursive.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doif</span></span>     <span class="br">{</span>string1<span class="br">}</span> <span class="br">{</span>string2<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifnot</span></span>  <span class="br">{</span>string1<span class="br">}</span> <span class="br">{</span>string2<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifelse</span></span> <span class="br">{</span>string1<span class="br">}</span> <span class="br">{</span>string2<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span><span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>These macros test string equality of the (expanded) first two arguments.
+</p>
+    <h3>
+     <span id="\doifempty,_\doifnotempty,_\doifemptyelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifempty.2C_.5Cdoifnotempty.2C_.5Cdoifemptyelse">
+      \doifempty, \doifnotempty, \doifemptyelse
+     </span>
+    </h3>
+    <p>We complete our set of conditionals with:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifempty</span></span>     <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifnotempty</span></span>  <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifemptyelse</span></span> <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>This time, the string is not expanded. Remember to expand it yourself where needed.
+</p>
+    <h3>
+     <span id="\doifinset,_\doifnotinset,_\doifnotinsetelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifinset.2C_.5Cdoifnotinset.2C_.5Cdoifnotinsetelse">
+      \doifinset, \doifnotinset, \doifnotinsetelse
+     </span>
+    </h3>
+    <p>We can check if a string is present in a comma separated set of strings. Depending on the result, some action is taken.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifinset</span></span>     <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifnotinset</span></span>  <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifinsetelse</span></span> <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>The second argument is the comma separated set of strings. If the first string expands 'empty', it is considered to be <b>not</b> in the set. The comma separated set is not expanded.
+</p>
+    <h3>
+     <span id="\doifcommon,_\doifnotcommon,_\doifcommonelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifcommon.2C_.5Cdoifnotcommon.2C_.5Cdoifcommonelse">
+      \doifcommon, \doifnotcommon, \doifcommonelse
+     </span>
+    </h3>
+    <p>Probably the most time consuming tests are those that test for overlap in sets of strings.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifcommon</span></span>     <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifnotcommon</span></span>  <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\doifcommonelse</span></span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>string,...<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doifsamestringelse,\doifsamestring,\doifnotsamestring">
+     </span>
+     <span class="mw-headline" id=".5Cdoifsamestringelse.2C.5Cdoifsamestring.2C.5Cdoifnotsamestring">
+      \doifsamestringelse,\doifsamestring,\doifnotsamestring
+     </span>
+    </h3>
+    <p>The next comparison macro converts the arguments into
+expanded strings. This command can be used to compare for
+instance <code>\jobname</code> with a name stored in a macro.
+</p>
+    <h3>
+     <span id="\doifinstringelse,\doifincsnameelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifinstringelse.2C.5Cdoifincsnameelse">
+      \doifinstringelse,\doifincsnameelse
+     </span>
+    </h3>
+    <p>We can check for the presence of a substring in a given sequence of characters.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifinstringelse</span></span> <span class="br">{</span>substring<span class="br">}</span> <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>The next alternative proved to be upto twice as fast on tasks like checking reserved words in pretty verbatim typesetting. This is mainly due to the fact that passing (expanded) strings is much slower that passing a macro.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifincsnameelse</span></span> <span class="br">{</span>substring<span class="br">}</span> <span class="br">{</span><span class="cs">\string</span><span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>Where <code>\doifinstringelse</code> does as much expansion as possible, the latter alternative does minimal (one level) expansion.
+</p>
+    <h3>
+     <span id="\doifnumberelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifnumberelse">
+      \doifnumberelse
+     </span>
+    </h3>
+    <p>The next macro executes a command depending of the outcome of a test on numerals.It checks only the first character of string.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifnumberelse</span></span> <span class="br">{</span>string<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>The macro accepts <code>123</code>, <code>abc</code>, <code>{}</code>, <code>\anumber</code> and <code>\the\count...</code>.
+</p>
+    <p>The definition of this macro is extremly ugly, or extremely beautiful, depending on how you feel about TeX macro expansion. It is the first of only a few that will actually appear in this series of articles, I promise.
+</p>
+    <pre class="tex"><span class="cs">\long</span><span class="cs">\def</span><span class="cs"><span class="systemcs">\doifnumberelse</span></span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\ifcase</span>0<span class="cs">\ifcase</span>1<span class="brx">#</span>1<span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\or</span><span class="cs">\else</span>1<span class="cs">\fi</span><span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\secondoftwoarguments</span></span>
+   <span class="cs">\else</span>
+     <span class="cs">\expandafter</span><span class="cs"><span class="systemcs">\firstoftwoarguments</span></span>
+   <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doifassignmentelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoifassignmentelse">
+      \doifassignmentelse
+     </span>
+    </h3>
+    <p>A lot of ConTeXt commands take optional arguments, for
+instance:
+</p>
+    <pre class="tex"><span class="cs">\dothisorthat</span><span class="brx">[</span>alfa,beta<span class="brx">]</span>
+<span class="cs">\dothisorthat</span><span class="brx">[</span>first<span class="brx">=</span>foo,second<span class="brx">=</span>bar<span class="brx">]</span>
+<span class="cs">\dothisorthat</span><span class="brx">[</span>alfa,beta<span class="brx">]</span><span class="brx">[</span>first<span class="brx">=</span>foo,second<span class="brx">=</span>bar<span class="brx">]</span>
+</pre>
+    <p>Although a combined solution is possible, we prefer a
+seperation. The next command takes care of propper
+handling of such multi-faced commands.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifassignmentelse</span></span> <span class="br">{</span>...<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <h3>
+     <span id="\doiftext,_\doiftextelse">
+     </span>
+     <span class="mw-headline" id=".5Cdoiftext.2C_.5Cdoiftextelse">
+      \doiftext, \doiftextelse
+     </span>
+    </h3>
+    <p>See <a class="external free" href="https://www.mail-archive.com/ntg-context@ntg.nl/msg73506.html" rel="nofollow">https://www.mail-archive.com/ntg-context@ntg.nl/msg73506.html</a> for details.
+</p>
+    <pre> \define\CustomHeader{%
+   \cap{\ss{\|&nbsp;%
+     \doiftextelse{\getmarking[chapter]}%
+     {\getmarking[chapter]}%
+     {Contents}%
+   }}
+ }
+</pre>
+    <pre> \setupheadertexts[\CustomHeader{}][][][\CustomHeader{}]
+</pre>
+    <p><br>
+&lt; <b>Prev:</b> <a href="Definitions_and_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments">Definitions & Assignments</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Loops_and_Recursion.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Loops and Recursion">Loops & Recursion</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.071 seconds
+Real time usage: 0.124 seconds
+Preprocessor visited node count: 111/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 74/2097152 bytes
+Template argument size: 14/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7217/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   11.826      1 Template:cmd
+100.00%   11.826      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2155-1!canonical and timestamp 20260109212409 and revision id 40368
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Branches_and_Decisions">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

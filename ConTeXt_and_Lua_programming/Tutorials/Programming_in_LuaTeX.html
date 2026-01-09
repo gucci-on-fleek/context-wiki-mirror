@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/Programming in LuaTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Programming_in_LuaTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/Programming in LuaTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2759&diff=41371">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Calling_Lua_from_TeX">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Calling Lua from TeX
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Calling_a_bit_of_Lua_inline:_.5Cctxlua">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Calling a bit of Lua inline: \ctxlua
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Calling_a_lua_function_with_.5Ccldcontext_and_get_the_return">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Calling a lua function with \cldcontext and get the return
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#A_larger_Lua_block:_.5Cstartluacode.E2.80.A6.5Cstopluacode">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           A larger Lua block: \startluacode&hellip;\stopluacode
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Putting_Lua_code_in_an_external_file">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Putting Lua code in an external file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Namespaces">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Namespaces
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Undefined_Commands_in_Lua_Comments">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           Undefined Commands in Lua Comments
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1">
+       <a href="#Calling_TeX_from_Lua">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Calling TeX from Lua
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Putting_stuff_in_your_TeX_document_from_Lua">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Putting stuff in your TeX document from Lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Simple_printing:_context.28.29.2C_tex.print.28.29.2C_and_tex.sprint.28.29">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Simple printing: context(), tex.print(), and tex.sprint()
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Context_commands">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Context commands
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Passing_arguments_and_buffers:_ConTeXt_commands_that_hook_into_Lua">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Passing arguments and buffers: ConTeXt commands that hook into Lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Making_.5Ccommand.7Barg1.7D.7Barg2.7D_hook_into_Lua">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Making \command{arg1}{arg2} hook into Lua
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Making_.5Cstartenv.E2.80.A6.5Cstopenv_hook_into_Lua">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Making \startenv&hellip;\stopenv hook into Lua
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Examples">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#Arithmetic_without_using_an_abacus">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Arithmetic without using an abacus
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-16">
+           <a href="#mathexpr_with_LMTX">
+            <span class="tocnumber">
+             5.1.1
+            </span>
+            <span class="toctext">
+             mathexpr with LMTX
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#Loops_without_worrying_about_expansion">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           Loops without worrying about expansion
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Parsing_input_without_exploding_your_head">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           Parsing input without exploding your head
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#Manipulating_verbatim_text">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           Manipulating verbatim text
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#Generate_SHA_for_text_and_external_files">
+          <span class="tocnumber">
+           5.5
+          </span>
+          <span class="toctext">
+           Generate SHA for text and external files
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#Other_examples">
+          <span class="tocnumber">
+           5.6
+          </span>
+          <span class="toctext">
+           Other examples
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#In_detail:_the_interaction_between_TeX_and_Lua">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         In detail: the interaction between TeX and Lua
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-23">
+       <a href="#Notes">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Notes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#See_also">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Calling_Lua_from_TeX">
+      Calling Lua from TeX
+     </span>
+    </h2>
+    <p>The interweaving of ConTeXt and Lua consists of two elements: first you tell TeX that you're starting some Lua code; then, once inside Lua, you need to use the appropriate functions to put things into the TeX stream.
+</p>
+    <p>There are two main ways to execute Lua code in a ConTeXt document: The command <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt>, and the environment <tt><a href="../../Command/startluacode.html" title="Command/startluacode">\startluacode</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stopluacode&action=edit&redlink=1.html" title="Command/stopluacode (page does not exist)">\stopluacode</a></tt>. Both are wrappers around the LuaTeX primitive <tt><a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">\directlua</a></tt>, which you should never need to use. In general, you will define a function inside a <tt><a href="../../Command/startluacode.html" title="Command/startluacode">\startluacode</a></tt> block, and then define a TeX command that calls the function using {{cmd|ctxlua, especially because <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> has a few idiosyncracies.
+</p>
+    <blockquote>
+     <p>The main thing about Lua code in a TeX document is this: the code is expanded by TeX <i>before</i> Lua gets to it. <b>This means that all the Lua code, even the comments, must be valid TeX!</b> A string like <tt><a class="new" href="../../index.php?title=Command/undefined&action=edit&redlink=1.html" title="Command/undefined (page does not exist)">\undefined</a></tt> will cause an immediate failure.</p>
+    </blockquote>
+    <h3>
+     <span id="Calling_a_bit_of_Lua_inline:_\ctxlua">
+     </span>
+     <span class="mw-headline" id="Calling_a_bit_of_Lua_inline:_.5Cctxlua">
+      Calling a bit of Lua inline:
+      <tt>
+       <a href="../../Command/ctxlua.html" title="Command/ctxlua">
+        \ctxlua
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <p>The command <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> is for short inline snippets of Lua, such
+as
+</p>
+    <pre class="tex">$2 + 5 <span class="cs">\neq</span> <span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>3+5<span class="brx">)</span><span class="br">}</span>$, but is equal to <span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>2+5<span class="brx">)</span><span class="br">}</span>.
+This is <span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>string.upper<span class="brx">(</span>"absolutely"<span class="brx">)</span><span class="brx">)</span><span class="br">}</span> true.
+</pre>
+    <p><tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> operates under the normal TeX catcodes (category codes). This means the following two things for the Lua code inside:
+</p>
+    <ul>
+     <li>
+      all newlines get treated as spaces
+     </li>
+     <li>
+      special TeX characters like &, #, $, {, }, etc., need to be escaped.
+     </li>
+    </ul>
+    <p>In addition, the warning above still holds. All the Lua code, even the comments, must be valid TeX.
+</p>
+    <p>Some code to illustrate the newline problem:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span>
+  <span class="br">{</span>-- A Lua comment
+   tex.print<span class="brx">(</span>"This is not printed"<span class="brx">)</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\ctxlua</span></span>
+  <span class="br">{</span><span class="comment">% A Tex comment</span>
+   tex.print<span class="brx">(</span>"This is printed"<span class="brx">)</span><span class="br">}</span>
+</pre>
+    <p>The problem with special TeX characters. (<code>#t</code> is Lua for 'the length of array <code>t</code>.)
+</p>
+    <pre class="tex"><span class="comment">% This doesn't work:</span>
+<span class="comment">%\ctxlua</span>
+<span class="comment">%  {local t = {1,2,3,4}</span>
+<span class="comment">%   tex.print("length " .. #t)}</span>
+<span class="cs"><span class="systemcs">\ctxlua</span></span>
+  <span class="br">{</span>local t <span class="brx">=</span> <span class="br">{</span>1,2,3,4<span class="br">}</span>
+   tex.print<span class="brx">(</span>"length " .. <span class="cs">\string</span><span class="brx">#</span>t<span class="brx">)</span><span class="br">}</span>
+</pre>
+    <h3>
+     <span id="Calling_a_lua_function_with_\cldcontext_and_get_the_return">
+     </span>
+     <span class="mw-headline" id="Calling_a_lua_function_with_.5Ccldcontext_and_get_the_return">
+      Calling a lua function with
+      <tt>
+       <a href="../../Command/cldcontext.html" title="Command/cldcontext">
+        \cldcontext
+       </a>
+      </tt>
+      and get the return
+     </span>
+    </h3>
+    <p>One can execute a Lua code from within TeX and get back the result in TeX by using <tt><a href="../../Command/cldcontext.html" title="Command/cldcontext">\cldcontext</a></tt>. Thus, if <code>myfunction</code> is a function of a variable <code>x</code> defined in Lua, <tt><a href="../../Command/cldcontext.html" title="Command/cldcontext">\cldcontext</a>{myfunction(5)</tt>} returns the value <code>myfunction(5)</code> in TeX. This is equivalent to <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a>{context(myfunction(5))</tt>}.
+</p>
+    <h3>
+     <span id="A_larger_Lua_block:_\startluacode&hellip;\stopluacode">
+     </span>
+     <span class="mw-headline" id="A_larger_Lua_block:_.5Cstartluacode.E2.80.A6.5Cstopluacode">
+      A larger Lua block:
+      <tt>
+       <a href="../../Command/startluacode.html" title="Command/startluacode">
+        \startluacode
+       </a>
+      </tt>
+      &hellip;
+      <tt>
+       <a class="new" href="../../index.php?title=Command/stopluacode&action=edit&redlink=1.html" title="Command/stopluacode (page does not exist)">
+        \stopluacode
+       </a>
+      </tt>
+     </span>
+    </h3>
+    <p>Inside the <tt><a href="../../Command/startluacode.html" title="Command/startluacode">\startluacode</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stopluacode&action=edit&redlink=1.html" title="Command/stopluacode (page does not exist)">\stopluacode</a></tt> environment, newlines and special characters behave normally. This solves the catcode problem that <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> suffers from. Apart from these special characters, the main warning remains in force: all the Lua code, even the comments, must be valid TeX.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    -- The unknown command <span class="cs">\undefined</span> will cause this entire block to fail.
+
+    -- Print a countdown '10, 8, &hellip;, 0!'
+    -- `..` is Lua for string concatenation
+    for i <span class="brx">=</span> 10, 2, -2 do
+        context<span class="brx">(</span>i .. ", "<span class="brx">)</span>
+    end
+    context<span class="brx">(</span>"0!"<span class="brx">)</span>
+
+    -- <span class="cs">\\</span>par is equivalent to a blank line in the input
+    -- <span class="brx">(</span>Notice the escaped backslash: TeX won't mind the above comment.<span class="brx">)</span>
+    context.par<span class="brx">(</span><span class="brx">)</span>
+
+    -- Look! we can use <span class="brx">#</span> and $ with impunity!
+    context<span class="brx">(</span>"Unless we print them, then we must <span class="cs">\\</span><span class="brx">#</span><span class="cs">\\</span>$<span class="cs">\\</span>& print the escape characters, too."<span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Putting_Lua_code_in_an_external_file">
+      Putting Lua code in an external file
+     </span>
+    </h3>
+    <p>You can put your lua code in an external file (with the <code>.lua</code> extension) and include it with the <code>require</code> command:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+-- include the file my-lua-lib.lua
+require<span class="brx">(</span>"my-lua-lib"<span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Namespaces">
+      Namespaces
+     </span>
+    </h3>
+    <p>It is a good habit to put your custom-defined functions in their own namespace. The traditional namespace for this is <code>userdata</code>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    -- if userdata doesn't exist yet, create it
+    userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+    -- define a shorter synonym
+    u <span class="brx">=</span> userdata
+
+    -- create my custom function inside the userdata namespace
+    function u.myfunction<span class="brx">(</span><span class="brx">)</span>
+        -- do stuff
+    end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>The full list of canonical namespaces, taken from <a class="external text" href="https://distribution.contextgarden.net/current/context/latest/tex/context/base/mkxl/luat-ini.lmt" rel="nofollow">luat-ini.lmt</a>:
+</p>
+    <code><pre>userdata      = userdata      or { } -- for users (e.g. functions etc)
+thirddata     = thirddata     or { } -- only for third party modules
+moduledata    = moduledata    or { } -- only for development team
+documentdata  = documentdata  or { } -- for users (e.g. raw data)
+parametersets = parametersets or { } -- experimental for team
+</pre></code>
+    <p>If your module, environment, or document is going to be used by other people, you should create your own subnamespaces within these tables.
+</p>
+    <code><pre>moduledata['mymodule'] = { }
+mm = moduledata.mymodule
+function mm.mainfunction()
+    -- do stuff
+end
+</pre></code>
+    <h3>
+     <span class="mw-headline" id="Undefined_Commands_in_Lua_Comments">
+      Undefined Commands in Lua Comments
+     </span>
+    </h3>
+    <p>Lua code invoked inside TeX doesn&rsquo;t allow TeX undefined commands <i>even inside comments</i>.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+--<span class="cs">\undefinedcommandfromme</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+Hello
+<span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>--<span class="cs">\undefinedcommandfromme</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>To get the sample above working (as <a class="external text" href="https://www.mail-archive.com/ntg-context@ntg.nl/msg103892.html" rel="nofollow">explained by Hans in a NTG-context thread from jan. 2023 entitled &ldquo;Minor bug in Lua or ConTeXt&rdquo;</a>), you would need a fallback definition:
+</p>
+    <pre class="tex"><span class="cs">\ifdefined</span><span class="cs">\undefinedcommandfromme</span> <span class="cs">\else</span> <span class="cs">\let</span><span class="cs">\undefinedcommandfromme</span><span class="cs">\relax</span> <span class="cs">\fi</span>
+</pre>
+    <p><tt><a class="new" href="../../index.php?title=Command/undefinedcommandfromme&action=edit&redlink=1.html" title="Command/undefinedcommandfromme (page does not exist)">\undefinedcommandfromme</a></tt> gets only defined (as <tt><a class="new" href="../../index.php?title=Command/relax&action=edit&redlink=1.html" title="Command/relax (page does not exist)">\relax</a></tt>, to do nothing), if and only if it is undefined.
+</p>
+    <h2>
+     <span class="mw-headline" id="Calling_TeX_from_Lua">
+      Calling TeX from Lua
+     </span>
+    </h2>
+    <p>Being a topic on itself, pages are dedicated:
+</p>
+    <ul>
+     <li>
+      <b>
+       <a href="../ConTeXt_Lua_Documents_CLD.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD">
+        ConTeXt Lua Documents
+       </a>
+      </b>
+      , or CLD, are way to access TeX from inside Lua scripts. A page give clues about
+      <a href="../ConTeXt_Lua_Documents_CLD/CLD_passing_variables.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD/CLD passing variables">
+       passing variables
+      </a>
+      within CLD (2018).
+     </li>
+     <li>
+      <a href="../Extensions_to_the_Lua_IO_library.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library">
+       Extensions to the Lua IO library
+      </a>
+      <ul>
+       <li>
+        <a href="../Extensions_to_the_Lua_IO_library/String_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation">
+         String manipulation
+        </a>
+       </li>
+       <li>
+        <a href="../Extensions_to_the_Lua_IO_library/Table_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/Table manipulation">
+         Table manipulation
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Putting_stuff_in_your_TeX_document_from_Lua">
+      Putting stuff in your TeX document from Lua
+     </span>
+    </h2>
+    <h3>
+     <span id="Simple_printing:_context(),_tex.print(),_and_tex.sprint()">
+     </span>
+     <span class="mw-headline" id="Simple_printing:_context.28.29.2C_tex.print.28.29.2C_and_tex.sprint.28.29">
+      Simple printing: context(), tex.print(), and tex.sprint()
+     </span>
+    </h3>
+    <p>Use <code>context(&hellip;)</code> for most things. It is equivalent to <code>tex.print(string.format(&hellip;))</code>, so
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+name <span class="brx">=</span> "Jane"
+date <span class="brx">=</span> "today"
+context<span class="brx">(</span>"Hello <span class="comment">%s, how are you %s?", name, date)</span>
+-- Becomes 'Hello Jane, how are you today?'
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>More primitively, you have <code>tex.print()</code> and <code>tex.sprint()</code>. Either one can take as an argument either a number of strings, or an array of strings, and will then insert the strings into the TeX stream. The only difference is that <code>tex.print()</code> treats each string as a separate input line, while <code>tex.sprint()</code> doesn't. So the following lines
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>tex.print<span class="brx">(</span>"a", "b"<span class="brx">)</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>tex.print<span class="brx">(</span><span class="br">{</span>"a", "b"<span class="br">}</span><span class="brx">)</span><span class="br">}</span>
+</pre>
+    <p>are both interpreted by TeX as
+</p>
+    <pre class="tex">a
+b
+</pre>
+    <p>but when we use <code>tex.sprint</code> instead, either of the following
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>tex.sprint<span class="brx">(</span>"a", "b"<span class="brx">)</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>tex.sprint<span class="brx">(</span><span class="br">{</span>"a", "b"<span class="br">}</span><span class="brx">)</span><span class="br">}</span>
+</pre>
+    <p>will be read by TeX as
+</p>
+    <pre class="tex">ab
+</pre>
+    <p>without any space in between.
+</p>
+    <h3>
+     <span class="mw-headline" id="Context_commands">
+      Context commands
+     </span>
+    </h3>
+    <p>Most commands that you would type with a backslash in plain ConTeXt, you can access from Lua with <code>context.<em>command</em></code>. Unadorned strings end up in TeX as arguments in curly braces; Lua tables end up in TeX as paramater blocks in square brackets. The following two pieces of code are equivalent:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    context.chapter<span class="brx">(</span><span class="br">{</span>first<span class="br">}</span>, "Some title"<span class="brx">)</span>
+    context.startcolumns<span class="brx">(</span><span class="br">{</span>n <span class="brx">=</span> 3, rule <span class="brx">=</span> "on"<span class="br">}</span><span class="brx">)</span>
+        context<span class="brx">(</span>"Hello one"<span class="brx">)</span>
+    context.column<span class="brx">(</span><span class="brx">)</span>
+        context<span class="brx">(</span>"Hello two"<span class="brx">)</span>
+    context.column<span class="brx">(</span><span class="brx">)</span>
+        context<span class="brx">(</span>"Hello three"<span class="brx">)</span>
+    context.stopcolumns<span class="brx">(</span><span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <pre class="tex">    <span class="cs"><span class="documentcs">\chapter</span></span><span class="brx">[</span>first<span class="brx">]</span><span class="br">{</span>Some title<span class="br">}</span>
+    <span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>3, rule<span class="brx">=</span>on<span class="brx">]</span>
+        Hello one
+    <span class="cs"><span class="documentcs">\column</span></span>
+        Hello two
+    <span class="cs"><span class="documentcs">\column</span></span>
+        Hello three
+    <span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+    <p>For a fuller account of the context.commands, see the <a class="external text" href="http://www.pragma-ade.nl/general/manuals/cld-mkiv.pdf" rel="nofollow">ConTeXt Lua document</a> manual. It is old, but most of it still applies.
+</p>
+    <p>One final note: arguments can also be specified in the form of nested functions. Because LuaTeX evaluates the deepest-nested argument first, this may cause the <code>context()</code> calls to be evaluated in the wrong order. For more on this, see the article on <a href="../ConTeXt_Lua_Documents_CLD.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD">ConTeXt Lua documents</a>, and also, again, the <a class="external text" href="http://www.pragma-ade.nl/general/manuals/cld-mkiv.pdf" rel="nofollow">CLD manual</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Passing_arguments_and_buffers:_ConTeXt_commands_that_hook_into_Lua">
+      Passing arguments and buffers: ConTeXt commands that hook into Lua
+     </span>
+    </h2>
+    <h3>
+     <span id="Making_\command{arg1}{arg2}_hook_into_Lua">
+     </span>
+     <span class="mw-headline" id="Making_.5Ccommand.7Barg1.7D.7Barg2.7D_hook_into_Lua">
+      Making \command{arg1}{arg2} hook into Lua
+     </span>
+    </h3>
+    <p>First, define a Lua function:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    -- remember, using the userdata namespace prevents conflicts
+    userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+
+    function userdata.surroundwithdashes<span class="brx">(</span>str<span class="brx">)</span>
+        context<span class="brx">(</span>"--" .. str .. "--"<span class="brx">)</span>
+    end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>Then define the TeX command that expands to a <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> call:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\surroundwd</span><span class="brx">#</span>1<span class="comment">%</span>
+    <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>userdata.surroundwithdashes<span class="brx">(</span><span class="brx">[</span><span class="brx">=</span><span class="brx">=</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">=</span><span class="brx">=</span><span class="brx">]</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p><i>NB</i>: quoting with <code>[==[#1]==]</code>
+(<a class="external text" href="http://www.lua.org/manual/5.2/manual.html#3.1" rel="nofollow">long strings</a>)
+works just like <code>"#1"</code> in most cases, but in addition 
+it is robust against <code>#1</code> containing the quotation mark
+<code>"</code> which would terminate the Lua string prematurely.
+Inside <tt><a class="new" href="../../index.php?title=Command/protect&action=edit&redlink=1.html" title="Command/protect (page does not exist)">\protect</a></tt>&hellip;<tt><a href="../../Command/unprotect.html" title="Command/unprotect">\unprotect</a></tt> the macros <tt><a class="new" href="../../index.php?title=Command/!!bs&action=edit&redlink=1.html" title="Command/!!bs (page does not exist)">\!!bs</a></tt>
+and {{cmd|!!es} are at your disposition.
+They are equivalent to <code>[===[</code> and <code>]===]</code> and --
+being single tokens to TeX -- parsed faster.
+(See <a class="external text" href="http://repo.or.cz/w/context.git/blob/refs/heads/origin:/tex/context/base/luat-ini.mkiv#l174" rel="nofollow"><code>luat-ini.mkiv</code></a>.)
+</p>
+    <h3>
+     <span id="Making_\startenv&hellip;\stopenv_hook_into_Lua">
+     </span>
+     <span class="mw-headline" id="Making_.5Cstartenv.E2.80.A6.5Cstopenv_hook_into_Lua">
+      Making
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startenv&action=edit&redlink=1.html" title="Command/startenv (page does not exist)">
+        \startenv
+       </a>
+      </tt>
+      &hellip;
+      <tt>
+       <a class="new" href="../../index.php?title=Command/stopenv&action=edit&redlink=1.html" title="Command/stopenv (page does not exist)">
+        \stopenv
+       </a>
+      </tt>
+      hook into Lua
+     </span>
+    </h3>
+    <p>The first job is, as ever, to have the Lua function at the ready
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+
+    function userdata.verynarrow<span class="brx">(</span>buffer<span class="brx">)</span>
+        -- equivalent to <span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>10em<span class="brx">]</span>
+        context.startnarrower<span class="brx">(</span><span class="br">{</span>"10em"<span class="br">}</span><span class="brx">)</span>
+            context<span class="brx">(</span>buffer<span class="brx">)</span>
+        context.stopnarrower<span class="brx">(</span><span class="brx">)</span>
+    end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>Next, we define the start command of our custom buffer:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\startverynarrow</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\dostartbuffer</span>
+    <span class="brx">[</span>verynarrow<span class="brx">]</span>      <span class="comment">% buffer name</span>
+    <span class="brx">[</span>startverynarrow<span class="brx">]</span> <span class="comment">% command where buffer starts</span>
+    <span class="brx">[</span>stopverynarrow<span class="brx">]</span><span class="br">}</span> <span class="comment">% command where buffer ends</span>
+                      <span class="comment">% also: command invoked when buffer stops</span>
+
+</pre>
+    <p>Lastly, we define the <tt><a class="new" href="../../index.php?title=Command/stopverynarrow&action=edit&redlink=1.html" title="Command/stopverynarrow (page does not exist)">\stopverynarrow</a></tt> command such that it passes the recently-complated buffer to our <code>verynarrow</code> Lua function:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\stopverynarrow</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span>
+     <span class="br">{</span>userdata.verynarrow<span class="brx">(</span>buffers.getcontent<span class="brx">(</span>'verynarrow'<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>And that's it! The rest of this article will consist of examples.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Arithmetic_without_using_an_abacus">
+      Arithmetic without using an abacus
+     </span>
+    </h3>
+    <p><i>This example demonstrates writing simple commands that invoke \ctxlua.</i>
+</p>
+    <p>Doing simple arithmetic in TeX can be extremely difficult. With Lua, simple arithmetic becomes trivial. For example, if you want a macro to find the cosine of an angle (in degrees), you can write
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\COSINE</span><span class="brx">#</span>1<span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>math.cos<span class="brx">(</span><span class="brx">#</span>1*2*math.pi/360<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>The built-in <code>math.cos</code> function assumes that the argument is specified in radians, so we convert from degrees to radians on the fly. If you want to type the value of $\pi$ in an article, you can simply say
+</p>
+    <pre class="tex">$<span class="cs">\pi</span> <span class="brx">=</span> <span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>math.pi<span class="brx">)</span><span class="br">}</span>$ 
+</pre>
+    <p>or, if you want less precision:
+</p>
+    <pre class="tex"> 
+$<span class="cs">\pi</span> <span class="brx">=</span> <span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>"<span class="cs"><span class="documentcs">\letterpercent</span></span>.6f", math.pi<span class="brx">)</span><span class="br">}</span>$
+</pre>
+    <p>Notice that the percent sign is escaped with letterpercent.
+</p>
+    <h4>
+     <span class="mw-headline" id="mathexpr_with_LMTX">
+      mathexpr with LMTX
+     </span>
+    </h4>
+    <p>In LMTX there is a new way to use calculated expressions with mathexpr through (<a class="external text" href="https://github.com/contextgarden/context-mirror/blob/7fd782dace8f90e7e032ca8f449f8ca4eada450b/doc/context/sources/general/manuals/math/math-fun.tex" rel="nofollow">math-fun</a>).
+</p>
+    <p>Some examples are:
+</p>
+    <pre class="tex">$ <span class="cs">\pi</span> <span class="brx">=</span> <span class="cs">\mathexpr</span><span class="brx">[</span>.40N<span class="brx">]</span><span class="br">{</span>pi<span class="br">}</span>            $
+$ <span class="cs">\pi</span> <span class="brx">=</span> <span class="cs">\mathexpr</span><span class="brx">[</span>.80N<span class="brx">]</span><span class="br">{</span>sqrt<span class="brx">(</span>11<span class="brx">)</span><span class="br">}</span>      $
+$ <span class="cs">\pi</span> <span class="brx">=</span> <span class="cs">\decimalexpr</span><span class="brx">[</span>.80N<span class="brx">]</span><span class="br">{</span>sqrt<span class="brx">(</span>11<span class="brx">)</span><span class="br">}</span>   $
+$ <span class="cs">\pi</span> <span class="brx">=</span> <span class="cs">\decimalexpr</span><span class="br">{</span>sqrt<span class="brx">(</span>11<span class="brx">)</span><span class="br">}</span>         $
+$ c <span class="brx">=</span> <span class="cs">\complexexpr</span><span class="br">{</span>123 + new<span class="brx">(</span>456,789<span class="brx">)</span><span class="br">}</span> $
+</pre>
+    <h3>
+     <span class="mw-headline" id="Loops_without_worrying_about_expansion">
+      Loops without worrying about expansion
+     </span>
+    </h3>
+    <p><i>This example demonstrates using Lua to write a quasi-repetitive piece of ConTeXt code.</i>
+</p>
+    <p>Loops in TeX are tricky, because macro assignments and macro expansion interact in strange ways. For example, suppose we want to typeset a table showing the sum of the roll of two dice and want the output to look like this:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>2em,height<span class="brx">=</span>2em,align<span class="brx">=</span><span class="br">{</span>middle,middle<span class="br">}</span><span class="brx">]</span>  
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>r<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>gray<span class="brx">]</span>  
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>gray<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\bTABLE</span></span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> $<span class="brx">(</span>+<span class="brx">)</span>$ <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 1 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 2 <span class="cs">\eTD</span> 
+       <span class="cs"><span class="documentcs">\bTD</span></span> 3 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 4  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 5  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 6  <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 1     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 2 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 3 <span class="cs">\eTD</span> 
+       <span class="cs"><span class="documentcs">\bTD</span></span> 4 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 5  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 6  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 7  <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 2     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 3 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 4 <span class="cs">\eTD</span> 
+       <span class="cs"><span class="documentcs">\bTD</span></span> 5 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 6  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 7  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 8  <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 3     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 4 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 5 <span class="cs">\eTD</span>
+       <span class="cs"><span class="documentcs">\bTD</span></span> 6 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 7  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 8  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 9  <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 4     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 5 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 6 <span class="cs">\eTD</span>
+       <span class="cs"><span class="documentcs">\bTD</span></span> 7 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 8  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 9  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 10 <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 5     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 6 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 7 <span class="cs">\eTD</span> 
+       <span class="cs"><span class="documentcs">\bTD</span></span> 8 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 9  <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 10 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 11 <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> 6     <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 7 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 8 <span class="cs">\eTD</span> 
+       <span class="cs"><span class="documentcs">\bTD</span></span> 9 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 10 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 11 <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> 12 <span class="cs">\eTD</span> <span class="cs">\eTR</span>  
+<span class="cs">\eTABLE</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="234" src="../../wikiteximage/75af8ff791d9a436cfc9137918c224dc.webp" width="234">
+     </li>
+    </ul>
+    <p>This is easy in LuaTeX. Once a Lua instance starts, TeX does not see anything until the Lua instance exits. So, we can write the loop in Lua, and simply print the values that we would have typed to the TeX stream. When the control is passed to TeX, TeX sees the input as if we had typed it by hand. This is the Lua code for the above table:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>2em,height<span class="brx">=</span>2em,align<span class="brx">=</span><span class="br">{</span>middle,middle<span class="br">}</span><span class="brx">]</span>  
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>r<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>gray<span class="brx">]</span>  
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>gray<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+context.bTABLE<span class="brx">(</span><span class="brx">)</span>
+  context.bTR<span class="brx">(</span><span class="brx">)</span>
+    context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>"$<span class="brx">(</span>+<span class="brx">)</span>$"<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+    for j<span class="brx">=</span>1,6 do
+      context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>j<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+    end
+  context.eTR<span class="brx">(</span><span class="brx">)</span>
+  for i<span class="brx">=</span>1,6 do
+    context.bTR<span class="brx">(</span><span class="brx">)</span>
+    context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>i<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+    for j<span class="brx">=</span>1,6 do
+      context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>i+j<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+    end
+    context.eTR<span class="brx">(</span><span class="brx">)</span>
+  end
+context.eTABLE<span class="brx">(</span><span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Parsing_input_without_exploding_your_head">
+      Parsing input without exploding your head
+     </span>
+    </h3>
+    <p><i>This example demonstrates parsing simple ASCII notation with Lua's lpeg parser.</i>
+</p>
+    <p>As an example, let's consider typesetting chemical molecules in TeX. Normally, molecules should be typeset in text mode rather than math mode. 
+If we want 
+</p>
+    <dl>
+     <dd>
+      H
+      <sub>
+       3
+      </sub>
+      SO
+      <sub>
+       4
+      </sub>
+      <sup>
+       +
+      </sup>
+      ,
+     </dd>
+    </dl>
+    <p>we must type 
+</p>
+    <dl>
+     <dd>
+      <code>H<tt><a href="../../Command/low.html" title="Command/low">\low</a>{3</tt>}SO<tt><a href="../../Command/lohi.html" title="Command/lohi">\lohi</a>{4</tt>}textplus</code>
+      ,
+     </dd>
+    </dl>
+    <p>but we'd much rather type
+</p>
+    <dl>
+     <dd>
+      <tt>
+       <a href="../../Command/molecule.html" title="Command/molecule">
+        \molecule
+       </a>
+       {H_3SO_4^+
+      </tt>
+      }.
+     </dd>
+    </dl>
+    <p>So, we need a function that can take a string like that, parse it, and turn it into the appropriate TeX code. LuaTeX includes a general parser based on PEG (parsing expression grammar) called <a class="external text" href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html" rel="nofollow">lpeg</a>, and it makes writing little parsers positively joyful. (Once you've got the knack of it, at least.) For example, the above <tt><a href="../../Command/molecule.html" title="Command/molecule">\molecule</a></tt> macro can be written as follows.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+
+-- we will put our molecule function in the userdata namespace.
+userdata <span class="brx">=</span> userdata or <span class="br">{</span> <span class="br">}</span>
+
+-- The formatting functions into which the captured
+-- superscript/subscript blocks will be fed
+local formatters <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+function formatters.low<span class="brx">(</span>one<span class="brx">)</span>
+    return string.format<span class="brx">(</span>"<span class="cs">\\</span>low<span class="br">{</span><span class="comment">%s}", one)</span>
+end
+
+function formatters.high<span class="brx">(</span>one<span class="brx">)</span>
+    return string.format<span class="brx">(</span>"<span class="cs">\\</span>high<span class="br">{</span><span class="comment">%s}", one)</span>
+end
+
+function formatters.lowhigh<span class="brx">(</span>one, two<span class="brx">)</span>
+    return string.format<span class="brx">(</span>"<span class="cs">\\</span>lohi<span class="br">{</span><span class="comment">%s}{%s}", one, two)</span>
+end
+
+function formatters.highlow<span class="brx">(</span>one, two,three<span class="brx">)</span>
+    return string.format<span class="brx">(</span>"<span class="cs">\\</span>lohi<span class="br">{</span><span class="comment">%s}{%s}", one,two)</span>
+end
+
+-- These are the characters we may encounter
+-- The `/` means we want to expand + and - to <span class="cs"><span class="documentcs">\textplus</span></span> c.q. <span class="cs"><span class="documentcs">\textminus</span></span>;
+-- this substition is not instant, but will take place inside the first 
+-- surrounding lpeg.Cs<span class="brx">(</span><span class="brx">)</span> call.
+local plus         <span class="brx">=</span> lpeg.P<span class="brx">(</span>"+"<span class="brx">)</span> / "<span class="cs">\\</span>textplus "
+local minus        <span class="brx">=</span> lpeg.P<span class="brx">(</span>"-"<span class="brx">)</span> / "<span class="cs">\\</span>textminus "
+local character    <span class="brx">=</span> lpeg.R<span class="brx">(</span>"az", "AZ", "09"<span class="brx">)</span> -- R is for 'range'
+local subscript    <span class="brx">=</span> lpeg.P<span class="brx">(</span>"_"<span class="brx">)</span>              -- P is simply for 'pattern'
+local superscript  <span class="brx">=</span> lpeg.P<span class="brx">(</span>"^"<span class="brx">)</span>
+local leftbrace    <span class="brx">=</span> lpeg.P<span class="brx">(</span>"<span class="br">{</span>"<span class="brx">)</span>
+local rightbrace   <span class="brx">=</span> lpeg.P<span class="brx">(</span>"<span class="br">}</span>"<span class="brx">)</span>
+
+-- a ^ or _ affects either a single character, or a brace-delimited
+-- block. Whichever it is, call it `content`.
+local single    <span class="brx">=</span> character + plus + minus
+local multiple  <span class="brx">=</span> leftbrace * single^1 * rightbrace
+local content   <span class="brx">=</span> single + multiple
+
+-- These are our top-level elements: non-special text, of course, and
+-- blocks of superscript/subscript/both.
+-- lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> does two things:
+-- <span class="brx">(</span>1<span class="brx">)</span> not all matches go into the `/ function` construction; only
+--     *captures* go in. The C in Cs stands for Capture. This way, 
+--     the superscript/subscript mark gets discarded.
+-- <span class="brx">(</span>2<span class="brx">)</span> it expands plus/minus before they go into the formatter. The
+--     s in Cs stands for 'substitute in the replacement values, if any'
+local text    <span class="brx">=</span> single^1
+local low     <span class="brx">=</span> subscript * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> 
+                / formatters.low
+local high    <span class="brx">=</span> superscript * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> 
+                / formatters.high
+local lowhigh <span class="brx">=</span> subscript   * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> * 
+                superscript * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> 
+                / formatters.lowhigh
+local highlow <span class="brx">=</span> superscript * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> * 
+                subscript * lpeg.Cs<span class="brx">(</span>content<span class="brx">)</span> 
+                / formatters.highlow
+
+-- Finally, the root element: 'moleculepattern'
+local moleculepattern <span class="brx">=</span> lpeg.Cs<span class="brx">(</span><span class="brx">(</span>lowhigh + highlow + low + high + text<span class="brx">)</span>^0<span class="brx">)</span>
+
+function thirddata.molecule<span class="brx">(</span>string<span class="brx">)</span>
+    -- * `:match` returns the matched string. Our pattern
+    --   `moleculepattern` should match the entire input string. Any
+    --   *performed* substitutions are retained. <span class="brx">(</span>`.Cs<span class="brx">(</span><span class="brx">)</span>` performs a
+    --   previously defined substitution.<span class="brx">)</span>
+    -- * `context<span class="brx">(</span><span class="brx">)</span>` inserts the resulting string into the stream, ready for
+    --   TeX to evaluate.
+    context<span class="brx">(</span>moleculepattern:match<span class="brx">(</span>string<span class="brx">)</span><span class="brx">)</span>
+end
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\def</span><span class="cs"><span class="documentcs">\molecule</span></span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>thirddata.molecule<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+    <span class="cs"><span class="documentcs">\molecule</span></span><span class="br">{</span>Hg^+<span class="br">}</span>, <span class="cs"><span class="documentcs">\molecule</span></span><span class="br">{</span>SO_4^<span class="br">{</span>2-<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Quite terse and readable by parser standards, isn't it?
+</p>
+    <h3>
+     <span class="mw-headline" id="Manipulating_verbatim_text">
+      Manipulating verbatim text
+     </span>
+    </h3>
+    <p><i>This example demonstrates defining a custom <tt><a class="new" href="../../index.php?title=Command/start&action=edit&redlink=1.html" title="Command/start (page does not exist)">\start</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stop&action=edit&redlink=1.html" title="Command/stop (page does not exist)">\stop</a></tt> buffer that gets processed through Lua in its entirety.</i>
+</p>
+    <p>Suppose we want to write an environment <tt><a class="new" href="../../index.php?title=Command/startdedentedtyping&action=edit&redlink=1.html" title="Command/startdedentedtyping (page does not exist)">\startdedentedtyping</a></tt> &hellip; <tt><a class="new" href="../../index.php?title=Command/stopdedentedtyping&action=edit&redlink=1.html" title="Command/stopdedentedtyping (page does not exist)">\stopdedentedtyping</a></tt> that removes the indentation of the first line from every line. Thus, the output of &hellip;
+</p>
+    <pre class="tex"><span class="cs">\startdedentedtyping</span>
+    <span class="brx">#</span>include &lt;stdio.h&gt;
+    void main<span class="brx">(</span><span class="brx">)</span>
+    <span class="br">{</span>
+        print<span class="brx">(</span>"Hello world <span class="cs">\n</span>"<span class="brx">)</span>&nbsp;;
+    <span class="br">}</span>
+<span class="cs">\stopdedentedtyping</span>
+</pre>
+    <p>&hellip; should be the same as the output of &hellip;
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttyping</span></span>
+<span class="brx">#</span>include &lt;stdio.h&gt;
+void main<span class="brx">(</span><span class="brx">)</span>
+<span class="br">{</span>
+    print<span class="brx">(</span>"Hello world <span class="cs">\n</span>"<span class="brx">)</span>&nbsp;;
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptyping</span></span>
+</pre>
+    <p>&hellip; even though the leading whitespace is different.
+</p>
+    <p>Defining an environment in TeX that removes the leading spaces but leaves
+other spaces untouched is complicated. On the other hand, once we capture the
+contents of the environment, removing the leading indent or <i>dedenting</i> the
+content in Lua is easy. Here is a Lua function that uses simple string
+substitutions.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+  -- Initialize a userdata name space to keep our own functions in.
+  -- That way, we won't interfere with anything ConTeXt keeps in 
+  -- the global name space.
+  userdata <span class="brx">=</span> userdata or <span class="br">{</span><span class="br">}</span>
+
+  function userdata.dedentedtyping<span class="brx">(</span>content<span class="brx">)</span>
+    local lines    <span class="brx">=</span> string.splitlines<span class="brx">(</span>content<span class="brx">)</span>
+    local indent   <span class="brx">=</span> string.match<span class="brx">(</span>lines<span class="brx">[</span>1<span class="brx">]</span>, '^ +'<span class="brx">)</span> or ''
+    local pattern  <span class="brx">=</span> '^' .. indent
+    for i<span class="brx">=</span>1,<span class="brx">#</span>lines do
+      lines<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> string.gsub<span class="brx">(</span>lines<span class="brx">[</span>i<span class="brx">]</span>,pattern,""<span class="brx">)</span>
+    end
+
+    content <span class="brx">=</span> table.concat<span class="brx">(</span>lines,'<span class="cs">\n</span>'<span class="brx">)</span>
+
+    tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>starttyping<span class="cs">\n</span>" .. content .. "<span class="cs">\\</span>stoptyping<span class="cs">\n</span>"<span class="brx">)</span>
+
+    -- The typing environment looks for an explicit <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\stoptyping</span></span><span class="br">}</span>. So,
+    --     context.starttyping<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>content<span class="brx">)</span> context.stoptyping<span class="brx">(</span><span class="brx">)</span>
+    -- does not work. But
+    --     context.starttyping<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>content<span class="brx">)</span> tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>stoptyping"<span class="brx">)</span>
+    -- does.
+  end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <p>Here is the code for defining the <tt><a class="new" href="../../index.php?title=Command/startdedentedtyping&action=edit&redlink=1.html" title="Command/startdedentedtyping (page does not exist)">\startdedentedtyping</a></tt> &hellip; <tt><a class="new" href="../../index.php?title=Command/stopdedentedtyping&action=edit&redlink=1.html" title="Command/stopdedentedtyping (page does not exist)">\stopdedentedtyping</a></tt> pair:
+</p>
+    <pre class="tex"><span class="comment">% Create an environment that stores everything </span>
+<span class="comment">% between \startdedentedtyping and \stopdedentedtyping </span>
+<span class="comment">% in a buffer named 'dedentedtyping'.</span>
+<span class="cs">\def</span><span class="cs">\startdedentedtyping</span>
+  <span class="br">{</span><span class="cs">\dostartbuffer</span>
+    <span class="brx">[</span>dedentedtyping<span class="brx">]</span>
+    <span class="brx">[</span>startdedentedtyping<span class="brx">]</span>
+    <span class="brx">[</span>stopdedentedtyping<span class="brx">]</span><span class="br">}</span>
+
+<span class="comment">% On closing the dedentedtyping environment, call the LuaTeX</span>
+<span class="comment">% function dedentedtyping(), and pass it the contents of </span>
+<span class="comment">% the buffer called 'dedentedtyping'</span>
+<span class="cs">\def</span><span class="cs">\stopdedentedtyping</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span>
+     <span class="br">{</span>userdata.dedentedtyping<span class="brx">(</span>buffers.getcontent<span class="brx">(</span>'dedentedtyping'<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>That's all. Finally, we will go into a little more detail on how TeX and Lua communicate with each other.
+</p>
+    <h3>
+     <span class="mw-headline" id="Generate_SHA_for_text_and_external_files">
+      Generate SHA for text and external files
+     </span>
+    </h3>
+    <p>From Ousia, August 2022&lrm;
+</p>
+    <p>ConTeXt needs no external programs to generate SHA for text and external files:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>require<span class="brx">(</span>"util-sha"<span class="brx">)</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\shatwo</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\cldcontext</span></span><span class="br">{</span>utilities.sha2.hash256<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\shafive</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\cldcontext</span></span><span class="br">{</span>utilities.sha2.hash512<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\shatwofile</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\cldcontext</span></span><span class="br">{</span>utilities.sha2.hash256<span class="brx">(</span>io.loaddata<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\shafivefile</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="systemcs">\cldcontext</span></span><span class="br">{</span>utilities.sha2.hash512<span class="brx">(</span>io.loaddata<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\testtext</span><span class="br">{</span>abc<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\testfile</span><span class="br">{</span><span class="cs">\jobname</span>.tex<span class="br">}</span>
+
+<span class="cs">\shatwo</span><span class="br">{</span><span class="cs">\testtext</span><span class="br">}</span><span class="cs">\\</span>
+<span class="cs">\shafive</span><span class="br">{</span><span class="cs">\testtext</span><span class="br">}</span>
+
+<span class="cs">\shatwofile</span><span class="br">{</span><span class="cs">\testfile</span><span class="br">}</span><span class="cs">\\</span>
+<span class="cs">\shafivefile</span><span class="br">{</span><span class="cs">\testfile</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="74" src="../../wikiteximage/cacf7320bc54ddcb8891974b5e02be35.webp" width="1045">
+     </li>
+    </ul>
+    <p>It may be even used when embedding external files with <tt><a class="mw-redirect" href="../../Command/_attachment.html" title="Command/attachment">\attachment</a></tt>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Other_examples">
+      Other examples
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="../LPeg_Lua_Parsing_Expression_Grammars.html" title="ConTeXt and Lua programming/LPeg Lua Parsing Expression Grammars">
+       Writing a parser with LPeg
+      </a>
+      (Lua Parsing Expression Grammars)
+     </li>
+     <li>
+      <a href="../Random_numbers.html" title="ConTeXt and Lua programming/Random numbers">
+       Random numbers
+      </a>
+      in ConTeXt and MetaPost
+     </li>
+     <li>
+      <a href="../SQL_example.html" title="ConTeXt and Lua programming/SQL example">
+       An example with SQL database
+      </a>
+     </li>
+     <li>
+      <a href="../../Graphics_and_media/Collections_of_tips_and_tricks/Pascal's_triangle.html" title="Graphics and media/Collections of tips and tricks/Pascal's triangle">
+       Pascal's triangle
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="In_detail:_the_interaction_between_TeX_and_Lua">
+      In detail: the interaction between TeX and Lua
+     </span>
+    </h2>
+    <p>To a first approximation, the interaction between TeX and Lua is straightforward. When TeX (i.e., the LuaTeX engine) starts, it loads the input file in memory and processes it token by token. When TeX encounters <tt><a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">\directlua</a></tt>, it stops reading the file in memory, <em>fully expands the argument of <tt><a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">\directlua</a></tt></em>, and passes the control to a Lua instance. The Lua instance, which runs with a few preloaded libraries, processes the expanded arguments of <tt><a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">\directlua</a></tt>. This Lua instance has a special output stream which can be accessed using <code>tex.print(&hellip;)</code>. The function <code>tex.print(&hellip;)</code> is just like the Lua function <code>print(&hellip;)</code> except that <code>tex.print(&hellip;)</code> prints to a <em>TeX stream</em> rather than to the standard output. When the Lua instance finishes processing its input, it passes the contents of the <em>TeX stream</em> back to TeX.<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup> TeX then inserts the contents of the <em>TeX stream</em> at the current location of the file that it was reading; expands the contents of the <em>TeX stream</em>; and continues. If TeX encounters another <tt><a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">\directlua</a></tt>, the above process is repeated. 
+</p>
+    <p>As an exercise, imagine what happens when the following input is processed by LuaTeX. The answer is in the footnotes. <sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>
+</p>
+    <pre class="tex"><span class="cs">\directlua</span><span class="comment">%</span>
+  <span class="br">{</span>tex.print<span class="brx">(</span>"Depth 1 
+           <span class="cs">\\</span>directlua<span class="br">{</span>tex.print<span class="brx">(</span>'Depth 2'<span class="brx">)</span><span class="br">}</span>"<span class="brx">)</span><span class="br">}</span>
+</pre>
+    <p>For more on this, see the <a class="external autonumber" href="http://wiki.luatex.org/index.php/Writing_Lua_in_TeX" rel="nofollow">[1]</a> article on the <a class="external text" href="http://wiki.luatex.org/index.php/Main_Page" rel="nofollow">LuaTeX wiki</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Notes">
+      Notes
+     </span>
+    </h2>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-1">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        The output of
+        <code>tex.print(&hellip;)</code>
+        is buffered and not passed to TeX until the Lua instance has stopped.
+       </span>
+      </li>
+      <li id="cite_note-2">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-2">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        In this example, two different kinds of quotations are used to avoid escaping quotes. Escaping quotes inside
+        <tt>
+         <a class="new" href="../../index.php?title=Command/directlua&action=edit&redlink=1.html" title="Command/directlua (page does not exist)">
+          \directlua
+         </a>
+        </tt>
+        is tricky. The above was a contrived example; if you ever need to escape quotes, you can use the
+        <tt>
+         <a href="../../Command/startluacode.html" title="Command/startluacode">
+          \startluacode
+         </a>
+        </tt>
+        &hellip;
+        <tt>
+         <a class="new" href="../../index.php?title=Command/stopluacode&action=edit&redlink=1.html" title="Command/stopluacode (page does not exist)">
+          \stopluacode
+         </a>
+        </tt>
+        syntax.
+       </span>
+      </li>
+     </ol>
+    </div>
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="54" src="../../wikiteximage/930de1a7eb6b29b2cd06e657affefa30.webp" width="29"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>NOTE:</b>  This article is originally based on <a class="external text" href="https://www.tug.org/members/TUGboat/tb30-2/tb95mahajan-luatex.pdf" rel="nofollow">this TugBoat article </a>. Feel free to modify it.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">
+       LuaTeX
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125243
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.168 seconds
+Real time usage: 0.376 seconds
+Preprocessor visited node count: 848/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 4401/2097152 bytes
+Template argument size: 1100/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 37736/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  225.221      1 -total
+ 10.15%   22.850     46 Template:cmd
+  7.35%   16.548      1 Template:note
+  3.16%    7.114      3 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2759-1!canonical and timestamp 20260109125242 and revision id 41371
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/Programming_in_LuaTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

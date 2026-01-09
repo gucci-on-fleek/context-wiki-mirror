@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Examples of font installation and of typescripts/Fraktur fonts Typescripts&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts/Fraktur_fonts_Typescripts" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Examples of font installation and of typescripts/Fraktur fonts Typescripts
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5026&diff=37261">2025-01-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Rudolf Bahr
+</p>
+    <p><b>Not ready yet!</b>
+</p>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>This Wiki-Page deals with summarizing experiences of three Fraktur fonts available on:
+</p>
+    <pre>                    [1]    <a class="external free" href="https://www.ctan.org/tex-archive/fonts/ps-type1/yfonts" rel="nofollow">https://www.ctan.org/tex-archive/fonts/ps-type1/yfonts</a>
+                    [2]    <a class="external free" href="http://unifraktur.sourceforge.net/maguntia.html" rel="nofollow">http://unifraktur.sourceforge.net/maguntia.html</a> 
+                    [3]    <a class="external free" href="http://www.peter-wiegel.de/Leipzig.html" rel="nofollow">http://www.peter-wiegel.de/Leipzig.html</a>
+</pre>
+    <p><b>Yfrak [1]:</b> Fraktur font originally made by Yannis Haralambos in TeX font format.
+</p>
+    <p><b>UnifrakturMaguntia [2]:</b> You shall see both a German and an English language flag. The font is based on 
+Peter Wiegel&rsquo;s font "Berthold Mainzer Fraktur" [2a]. For main differences see in [2] 
+the chapter "About the Font". There you shall find links to manuals too (with General Rules for 
+Typesetting Fraktur) by Gerrit Ansmann, written in antiqua as well as in fraktur. 
+Interesting is a set of orthography rules and their changes over various centuries 
+beginning in the 16th up to today. A user forum used to exist, but recently it doesn't seem possible to register as new user. But one can read elder entries. "Maguntia" is derived from "Mogontiacum" which was the original celtic influenced name of a Roman camp of legions where today is the city of Mainz (Wikipedia).
+</p>
+    <p><b>Leipzig Fraktur [3]:</b> Web page is in German. Peter Wiegel made this font for the same reasons as with "Mainzer Fraktur". The formats OT, T1, TT of the font are all together better found at another address [3a].
+This web page is in German too and admittedly the advertising makes it even more complicated to find the right download button. Because words with accents on letters normally weren't typeset in Fraktur, but in Antiqua, &aacute;, &agrave;, &oacute;, &ograve;, &uacute;, &ugrave;, the $-Symbol and others were free to designate ligatures and the round s. Me however, I found it easier to define correspondend macros (See further down). At least FAQs in English can be found in [3b] after the German ones. The author points to a program (Not examined by me, for MS operating systems only) to facilitate inputting Fraktur text automatically with the right ligatures in [3c].
+</p>
+    <hr>
+    <h2>
+     <span id="Download,_installing_and_using_Fraktur_fonts">
+     </span>
+     <span class="mw-headline" id="Download.2C_installing_and_using_Fraktur_fonts">
+      Download, installing and using Fraktur fonts
+     </span>
+    </h2>
+    <p><b>Yfrak [1]:</b> 
+</p>
+    <p>1. Download yfrak.afm and install it under your ConTeXt tree ".../tex/texmf-local/".
+</p>
+    <pre>2. Run following programs:
+
+   mtxrun --generate
+   mtxrun --script fonts --reload
+   mtxrun --script fonts --list --all --pattern=yfrak*
+
+   With the last command you should get following output:
+
+   identifier     familyname   fontname       filename    subfont   instances
+
+   yfrak          yfrak        yfrakregular   yfrak.afm
+   yfraknormal    yfrak        yfrakregular   yfrak.afm
+   yfrakregular   yfrak        yfrakregular   yfrak.afm
+</pre>
+    <pre>3. You can see the provided ligatures of the font "yfrak" by the following commands, 
+   but pay attention, their index numbers are hexadecimal:
+
+   starttext
+   \usemodule [fnt-10]
+   \ShowCompleteFont{name:yfrak}{14pt}{1}
+   \stoptext
+</pre>
+    <pre>4. Providing an example of ConTeXt commands for yfrak:
+   More extensive examples of font defining you can see in [4] (Willi Egger)
+</pre>
+    <pre>   \definefont [XIVyfrak] [name:yfrakregular at 14pt] [.75]
+
+   \def\q{\hbox{}\hskip12pt }&nbsp;% indentation of some example text lines
+   \def\glqq {\char  92 }     % ,, (German left quotation)
+   \def\grqq {\char  34 }     % " (German right quotation)
+   \def\s    {\char 330 }     % the round s
+   \def\ch   {\char 282 }     % ligature  ch
+   \def\ck   {\char 280 }     %     "     ck
+   \def\tz   {\char 323 }     %     "     tz
+   \def\ae   {\char 321 }     % German umlaut &auml;
+</pre>
+    <pre>   \starttext
+
+   \XIVyfrak
+   \glqq Ein Hundert Ba\tz en mein Gebot,
+   \q Fall\s\ Du die Kunst besi\tz est;
+   Doch, merk' e\s\ dir, di\ch\ stech' ich todt,
+   \q So du die Haut mir ri\tz est.\grqq
+   Und der Gesell: \glqq Den Teufel auch!
+   Da\s\ ist de\s\ Lande\s\ nicht der Brauch.\grqq
+   \q Er l\ae uft und schi\ck t den Jungen.
+
+   \stoptext
+</pre>
+    <pre>   The result is here: [[File:wiki-yfrak.png]]
+   See also [5], the 6th verse.
+</pre>
+    <hr>
+    <p><br>
+<b>UnifrakturMaguntia [2]:</b>
+</p>
+    <pre>1. Download UnifrakturMaguntia (UnifrakturMaguntia.2017-03-19.zip) and unzip it. You will get  
+   "UnifrakturMaguntia.2017-03-19/" with its content:
+
+   Dokumentation_de_antiqua.pdf
+   Dokumentation_de_fraktur.pdf
+   Dokumentation_en_antiqua.pdf
+   Dokumentation_en_fraktur.pdf
+   FontLog.txt
+   OFL-FAQ.txt
+   OFL.txt
+   sources/
+   switched-on_features/
+   UnifrakturMaguntia.ttf
+</pre>
+    <pre>   The content of "switched-on_features/" contains UnifrakturMaguntia fonts from 16th to 21th century:
+
+   README.pdf
+   UnifrakturMaguntia16.ttf
+   UnifrakturMaguntia17.ttf
+   UnifrakturMaguntia18.ttf
+   UnifrakturMaguntia19.ttf
+   UnifrakturMaguntia20.ttf
+   UnifrakturMaguntia21.ttf
+
+   You could take all of them into your ConTeXt tree ".../tex/texmf-local/", but we will here restrict to 
+   "UnifrakturMaguntia18.ttf".
+</pre>
+    <pre>2. Run following programs:
+
+   mtxrun --generate
+   mtxrun --script fonts --reload
+   mtxrun --script fonts --list --all --pattern=unifrakturmaguntia18*
+
+   With the last command you should get following output:
+
+   identifier                   familyname             fontname               filename                   subfont   instances
+
+   unifrakturmaguntia18         unifrakturmaguntia18   unifrakturmaguntia18   UnifrakturMaguntia18.ttf
+   unifrakturmaguntia18book     unifrakturmaguntia18   unifrakturmaguntia18   UnifrakturMaguntia18.ttf
+   unifrakturmaguntia18normal   unifrakturmaguntia18   unifrakturmaguntia18   UnifrakturMaguntia18.ttf
+</pre>
+    <pre>3. You can see the provided ligatures of the font by the following commands,
+   but pay attention, their index numbers are hexadecimal:
+
+   starttext
+   \usemodule [fnt-10]
+   \ShowCompleteFont{name:unifrakturmaguntia18}{12pt}{1}
+   \stoptext
+</pre>
+    <pre>4. Providing two examples of ConTeXt commands for unifrakturmaguntia18.
+   Because this font at 14pt is rather big and fat compared to the other ones (yfrak, leipzig), 
+   we treat it how Hans Hagen suggested to "tweak" it a bit in the second example (\ufb).
+   More extensive examples of font defining you can see in [4] (Willi Egger). 
+   Both following examples should be comparable to 12pt:
+</pre>
+    <pre>   \definefontfeature[thinned-10][effect={width=-0.10,auto=yes}]
+   \definefont[ufa][unifrakturmaguntia18*default]
+   \definefont[ufb][unifrakturmaguntia18*default,thinned-10]
+
+   \def\q{\hbox{}\hskip12pt }&nbsp;% indentation of some of the verse text lines
+   \def\glqq{\char 8222 }     % ,, (German left quotation)
+   \def\grqq{\char 8220 }     % " (German right quotation)
+
+   \def\s {\char    383 }     % tall s
+   \def\ch{\char  57403 }     % ligature ch
+   \def\ck{\char  57404 }     %     "    ck
+   \def\tz{\char  57406 }     %     "    tz
+   \def\ff{\char  57407 }     %     "    ff
+   \def\fl{\char    242 }     %     "    fl
+   \def\ft{\char  57417 }     %     "    ft
+   \def\st{\char  64261 }     %     "    st
+</pre>
+    <pre>   \starttext
+
+   \ufa
+   \glqq Ein Hundert Ba\tz en mein Gebot,\\
+   \q Falls du die Kun\st\ be\s i\tz e\st;\\
+   Do\ch, merk' es dir, di\ch\ \st e\ch' i\ch\ todt,\\
+   \q So du die Haut mir ri\tz e\st.\grqq\\
+   Und der Ge\s ell: \glqq Den Teufel auch!\\
+   Das i\s t des Landes ni\ch t der Brau\ch.\grqq\\
+   \q Er l&auml;u\ft\ und \s\ch i\ck t den Jungen.
+
+   \stoptext
+</pre>
+    <pre>   After having done so, the same text will be "tweaked" by "\ufb". 
+   Compare the two prints. The result is here: [[File:wiki-maguntia.png]]
+   See also [5], the 6th verse.
+</pre>
+    <hr>
+    <p><br>
+<b>Leipzig Fraktur [3a]</b>
+</p>
+    <pre>1. If we really succeeded in downloading "Leipzigfraktur_font.zip" in the advertising jungle of [3a], 
+   we can unzip it and get:
+
+   inflating: LeipzigFrakturTT.zip    
+   inflating: LeipzigFrakturT1.zip    
+   inflating: LeipzigFrakturOT.zip    
+
+   Let's take the OT-version and unzip it. So we get:
+
+   inflating: Leipzig Fraktur Lies mich.txt  
+   inflating: Leipzig Fraktur.gif     
+   inflating: Creative Commons Lizenz.txt  
+   inflating: Leipzig Fraktur Heavy.otf  
+   inflating: Leipzig Fraktur Normal.otf  
+   inflating: Leipzig Fraktur Bold.otf  
+   inflating: Leipzig Fraktur Normal LF.otf  
+   inflating: Leipzig Fraktur Bold LF.otf  
+
+</pre>
+    <pre>   We'll take "Leipzig Fraktur Normal.otf", but as brave linuxers we don't like MS-gaps in file names
+   and alter this one into "Leipzig_Fraktur_Normal.otf", before we store the file into the ConTeXt tree 
+   ".../tex/texmf-local/".
+</pre>
+    <pre>2. We run following programs:
+
+   mtxrun --generate
+   mtxrun --script fonts --reload
+   mtxrun --script fonts --list --all --pattern=leipzig*
+
+   With the last command we should get following output:
+
+   identifier             familyname       fontname               filename                     subfont   instances
+
+   leipzigfraktur         leipzigfraktur   leipzigfrakturnormal   Leipzig_Fraktur_Normal.otf
+   leipzigfrakturnormal   leipzigfraktur   leipzigfrakturnormal   Leipzig_Fraktur_Normal.otf
+</pre>
+    <pre>3. We can see the provided ligatures of the font by the following commands,
+   but pay attention, their index numbers are hexadecimal:
+
+   starttext
+   \usemodule [fnt-10]
+   \ShowCompleteFont{name:leipzigfrakturnormal}{14pt}{1}
+   \stoptext
+</pre>
+    <pre>4. Providing an example of ConTeXt commands for leipzigfrakturnormal:
+   More extensive examples of font defining you can see in [4] (Willi Egger)
+</pre>
+    <pre>   \definefont [XIVleip]  [leipzigfrakturnormal at 14pt] [.75]
+
+   \def\q{\hbox{}\hskip12pt }  % indentation 12pt in some verses text lines
+
+   \def\glqq {\char 8222 }     % ,, (German left-quotation)
+   \def\grqq {\char 8220 }     % " (German right-quotation)
+   \def\s    {\$ }             % round s
+   \def\ae   {\char  228 }     % German umlaut &auml;
+   \def\ch   {\char  224 }     % Ligature ch
+   \def\ck   {\char  225 }     %     "    ck
+   \def\tz   {\char  250 }     %     "    tz
+   \def\st   {\char  249 }     %     "    st
+   \def\ft   {\char  237 }     %     "    ft
+   \def\ll   {l\hskip-.5pt l}  %     "    ll
+   \def\sch  {s\hskip-1pt\ch }&nbsp;%     "    sch (tweaked)
+
+   % No ordinary exclamation mark "!" available, but a spanish upside down one: "\char 161". 
+   % So we have to rotate it by 180&deg; and push it 6pt higher:
+   \setbox0=\hbox{\lower-6pt\hbox{\rotate[rotation=180]{\char 161 }}}
+</pre>
+    <pre>   \starttext
+
+   \XIVleip
+   \glqq Ein Hundert Ba\tz en mein Gebot,\\
+   \q Fa\ll\s\ Du die Kun\st\ besi\tz e\st;\\
+   Do\ch, merk' e\s\ dir, di\ch\ \st e\ch' i\ch\ todt,\\
+   \q So du die Haut mir ri\tz e\st.\grqq\\
+   Und der Gese\ll: \glqq Den Teufel auch\copy0\\
+   Da\s\ i\st\ de\s\ Lande\s\ nicht der Brau\ch.\grqq\\
+   \q Er l\ae u\ft\ und \sch i\ck t den Jungen.
+
+   \stoptext
+</pre>
+    <pre>   The result is here: [[File:wiki-leipzig.png]]
+   See also [5], the 6th verse.
+</pre>
+    <hr>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <pre>[1]    https://www.ctan.org/tex-archive/fonts/ps-type1/yfonts (Torsten Bronger, Yannis Haralambos)
+[2]    http://unifraktur.sourceforge.net/maguntia.html
+[2a]   http://www.peter-wiegel.de/MainzerFraktur.html
+[3]    http://www.peter-wiegel.de/Leipzig.html
+[3a]   https://www.chip.de/downloads/Leipzig-Fraktur-Font_36248614.html
+[3b]   http://www.peter-wiegel.de/index.html
+[3c]   http://www.ligafaktur.de
+[4]    https://meeting.contextgarden.net/2018/talks/willi-unifraktur/presentation-unifraktur.pdf (Willi Egger)
+[5]    [[File:wiki-Der-rechte-Barbier.png]]   (Adelbert von Chamisso: "Der rechte Barbier", Verlag des 
+       Bibliographischen Instituts, Leipzig
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212215
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.008 seconds
+Real time usage: 0.010 seconds
+Preprocessor visited node count: 122/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9169/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5026-1!canonical and timestamp 20260109212215 and revision id 37261
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts/Fraktur_fonts_Typescripts">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

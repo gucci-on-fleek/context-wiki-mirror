@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/TeX Boxes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/TeX_Boxes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/TeX Boxes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6406&diff=41510">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Boxes are the basis of all (low level) TeX typesetting. As the building blocks they store typeset parts of lines, paragraphs or pages. For storing material not being typeset yet, like input text for later use, use <a href="../Input_and_compilation/Buffers.html" title="Input and compilation/Buffers">Buffers</a>.
+</p>
+    <p>The introduction to LuaTeX boxes can be found in  <a class="external text" href="https://www.overleaf.com/learn/latex/Articles/Pandora%E2%80%99s_%5Chbox:_Using_LuaTeX_to_Lift_the_Lid_of_TeX_Boxes" rel="nofollow">Pandora&rsquo;s \hbox: Using LuaTeX to Lift the Lid of TeX Boxes</a>.
+</p>
+    <p>LuaMetaTeX boxes serve the same purpose, but their properties are changed and extended. For the details see <a class="external text" href="http://distribution.contextgarden.net/current/context/latest/doc/context/documents/general/manuals/lowlevel-boxes.pdf" rel="nofollow">Low Level TeX: Boxes</a> manual.
+</p>
+    <h2>
+     <span id="Cached_Boxes_(LMTX)">
+     </span>
+     <span class="mw-headline" id="Cached_Boxes_.28LMTX.29">
+      Cached Boxes (LMTX)
+     </span>
+    </h2>
+    <p>Box has to be typeset with TeX. Usually the user is on the TeX side, where box is typeset, stored and can be used later. However, combining TeX with Lua demands some extra work. While being on the Lua side to typeset and store the box you must finish the Lua block jump to TeX and typeset boxes. Thus setting the boxes on Lua side will be forgotten and boxes will not exist after finishing the Lua block. To let TeX do something from within Lua there is a <a class="new" href="../index.php?title=Lua_Steps&action=edit&redlink=1" title="Lua Steps (page does not exist)">Lua Steps</a> mechanism described in <a class="external text" href="http://distribution.contextgarden.net/current/context/latest/doc/context/documents/general/manuals/cld-mkiv.pdf" rel="nofollow">CLD Manual</a>, but in LMTX we also have mechanism for <b>cached boxes</b>.
+</p>
+    <p>List of the commands to work with cached boxes:
+</p>
+    <p><tt><a href="../Command/putboxincache.html" title="Command/putboxincache">\putboxincache</a></tt>          <tt>{category} {name} number</tt>
+</p>
+    <p><tt><a href="../Command/getboxfromcache.html" title="Command/getboxfromcache">\getboxfromcache</a></tt>        <tt>{category} {name} number</tt>
+</p>
+    <p><tt><a href="../Command/doifelseboxincache.html" title="Command/doifelseboxincache">\doifelseboxincache</a></tt>    <tt>{category} {name}</tt>
+</p>
+    <p><tt><a href="../Command/copyboxfromcache.html" title="Command/copyboxfromcache">\copyboxfromcache</a></tt>       <tt>{category} {name} number</tt>
+</p>
+    <p><tt><a href="../Command/directboxfromcache.html" title="Command/directboxfromcache">\directboxfromcache</a></tt>     <tt>{category} {name}</tt>
+</p>
+    <p><tt><a href="../Command/directcopyboxfromcache.html" title="Command/directcopyboxfromcache">\directcopyboxfromcache</a></tt> <tt>{category} {name}</tt>
+</p>
+    <p><tt><a href="../Command/resetboxesincache.html" title="Command/resetboxesincache">\resetboxesincache</a></tt>      <tt>{category}</tt>
+</p>
+    <p><tt><a href="../Command/putnextboxincache.html" title="Command/putnextboxincache">\putnextboxincache</a></tt>      <tt>{category} {name} box</tt>
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/getboxwdfromcache&action=edit&redlink=1.html" title="Command/getboxwdfromcache (page does not exist)">\getboxwdfromcache</a></tt>      <tt>{category} {name}</tt>
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/getboxhtfromcache&action=edit&redlink=1.html" title="Command/getboxhtfromcache (page does not exist)">\getboxhtfromcache</a></tt>      <tt>{category} {name}</tt>
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/getboxdpfromcache&action=edit&redlink=1.html" title="Command/getboxdpfromcache (page does not exist)">\getboxdpfromcache</a></tt>      <tt>{category} {name}</tt>
+</p>
+    <p>All these commands can be used on Lua side with the usual syntax <tt>context.&lt;command&gt;(&lt;params&gt;)</tt>
+</p>
+    <p><br>
+Boxed are stored in user defined <b>categories</b> (namespaces) and every box has its unique <b>name</b> inside the category.
+</p>
+    <p>If the boxes are not to be cached for the subsequent runs, one needs to clear the category cache at the beginning of the document.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\resetboxesincache</span></span><span class="br">{</span>category<span class="br">}</span>
+</pre>
+    <p>One defines and typesets the box as usual:
+</p>
+    <pre class="tex"><span class="cs">\setbox</span>0<span class="brx">=</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>50mm,
+                      background<span class="brx">=</span>color,
+                      backgroundcolor<span class="brx">=</span>gray,
+                      frame<span class="brx">=</span>off,
+                      align<span class="brx">=</span><span class="br">{</span>flushleft<span class="br">}</span><span class="brx">]</span><span class="br">{</span>framed text<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>To cache that box the user can use either
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\putboxincache</span></span><span class="br">{</span>category<span class="br">}</span><span class="br">{</span>name<span class="br">}</span> 0<span class="comment">% space is optional </span>
+</pre>
+    <p>or
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\putnextboxincache</span></span><span class="br">{</span>category<span class="br">}</span><span class="br">{</span>name<span class="br">}</span><span class="cs">\box</span>0
+</pre>
+    <p>and the box can be retrieved any time later (or even in subsequent runs) with 
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getboxfromcache</span></span><span class="br">{</span>category<span class="br">}</span><span class="br">{</span>name<span class="br">}</span><span class="comment">% analogy to \box0, box will be forgotten</span>
+</pre>
+    <p>or 
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\copyboxfromcache</span></span><span class="br">{</span>category<span class="br">}</span><span class="br">{</span>name<span class="br">}</span><span class="comment">% analogy to \copy0, box will persist</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Tracing">
+      Tracing
+     </span>
+    </h2>
+    <p>One can trace the creation of cached boxes in log or console with
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>nodes.boxes<span class="brx">]</span>
+</pre>
+    <p>To visualize boxes (hbox, vbox) in PDF use
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\showmakeup</span></span><span class="brx">[</span>boxes<span class="brx">]</span>
+</pre>
+    <p>Tracing in general is explained in <a href="../Input_and_compilation/Debugging.html" title="Input and compilation/Debugging">Debugging</a>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072911
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.044 seconds
+Preprocessor visited node count: 176/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1254/2097152 bytes
+Template argument size: 374/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2184/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   16.055      1 -total
+ 87.70%   14.080     11 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6406-1!canonical and timestamp 20260110072911 and revision id 41510
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/TeX_Boxes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

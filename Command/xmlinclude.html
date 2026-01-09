@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Command/xmlinclude&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Command/xmlinclude" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Command/xmlinclude
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4660&diff=21360">2020-08-29</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Syntax">
+      <a class="mw-redirect" href="../Help:Reference.html" title="Help:Reference">
+       Syntax
+      </a>
+     </span>
+    </h2>
+    <table cellpadding="2" cellspacing="4" class="cmd">
+     <tbody>
+      <tr>
+       <td class="cmd" colspan="2">\xmlinclude<span class="first">{...}</span><span class="second">{...}</span><span class="third">{...}</span></td>
+      </tr>
+      <tr class="first" valign="top">
+       <td class="cmd">{...}</td>
+       <td><i>xmldata</i>, usually <code>main</code></td>
+      </tr>
+      <tr class="second" valign="top">
+       <td class="cmd">{...}</td>
+       <td><i>pattern that matches tags that stand for 'include external file'. Default:</i> <code>include</code></td>
+      </tr>
+      <tr class="third" valign="top">
+       <td class="cmd">{...}</td>
+       <td><i>names of attribute containing URL of file to include, separated by pipes. Default:</i> <code>href</code></td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Description">
+      Description
+     </span>
+    </h2>
+    <p><tt><a class="mw-selflink selflink">\xmlinclude</a>{main}{include}{filename|href|name}</tt> merges XML trees in external files into the tree called <code>main</code>. External files are merged in at every <code>include</code> tag; which file to merge in is determined by looking at the <code>filename</code> attribute; if that is absent the <code>href</code> and <code>name</code> attributes are tried in order. 
+</p>
+    <p>Further behaviour:
+</p>
+    <ul>
+     <li>
+      If no attribute is specified,
+      <code>href</code>
+      is assumed.
+     </li>
+     <li>
+      If the file is empty or not found, the inclusion tag is replaced with nothing.
+     </li>
+     <li>
+      Inclusion is recursive: if there are inclusion tags in the external tree you pull in, then they, in turn are acted on, too. If you do not want recursive inclusion, you must use the
+      <code>xml.include))</code>
+      command directly, like so:
+     </li>
+    </ul>
+    <pre>\ctxlxml{include("main","include","filename|href",false)}&nbsp;% false means no recursion
+</pre>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <p>Here is an example how to use <tt><a class="mw-selflink selflink">\xmlinclude</a></tt> to combine several xml files into one document. The xml files represent single chapters of a book project. Their structure is:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">chapter title="Chapter 1"</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">content</span><span class="br">&gt;</span>
+    Text of chapter
+  <span class="br">&lt;</span><span class="name">/content</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/chapter</span><span class="br">&gt;</span>
+</pre>
+    <p>Then, one master file combines all these into one structure via the xi:include element <a class="external autonumber" href="http://www.w3.org/TR/2003/WD-xinclude-20031110/" rel="nofollow">[1]</a>:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">document</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">xi:include href="chapter_1.xml"/</span><span class="br">&gt;</span>
+  <span class="br">&lt;</span><span class="name">xi:include href="chapter_2.xml"/</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/document</span><span class="br">&gt;</span> 
+</pre>
+    <p>And finally, you process this with a master tex file:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:setups
+    <span class="cs"><span class="stylecs">\xmlinclude</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>xi:include<span class="br">}</span><span class="br">{</span>href<span class="br">}</span>
+    <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>document|chapter<span class="br">}</span><span class="br">{</span>xml:*<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:setups<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:document
+    <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:chapter
+    <span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>title<span class="br">}</span><span class="brx">]</span>
+        <span class="cs"><span class="stylecs">\xmlall</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>content<span class="br">}</span>
+    <span class="cs"><span class="documentcs">\stopchapter</span></span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+    <span class="cs"><span class="stylecs">\xmlprocessfile</span></span><span class="br">{</span>main<span class="br">}</span><span class="br">{</span>master.xml<span class="br">}</span><span class="br">{</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span> 
+</pre>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lxml-ini.mkiv" rel="nofollow">
+       lxml-ini.mkiv
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lxml-aux.lua" rel="nofollow">
+       lxml-aux.lua
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span id="Help_from_ConTeXt-Mailinglist/Forum">
+     </span>
+     <span class="mw-headline" id="Help_from_ConTeXt-Mailinglist.2FForum">
+      Help from ConTeXt-Mailinglist/Forum
+     </span>
+    </h2>
+    <p>All issues with:
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=xmlinclude+sort:newest" rel="nofollow">
+       xmlinclude on the mailing list (all results)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.mail-archive.com/search?l=ntg-context%40ntg.nl&q=subject:xmlinclude+sort:newest" rel="nofollow">
+       xmlinclude on the mailing list (subject only)
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://tex.stackexchange.com/search?q=%5Bcontext%5D+xmlinclude" rel="nofollow">
+       xmlinclude on stack exchange
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://source.contextgarden.net/?search=xmlinclude" rel="nofollow">
+       xmlinclude in ConTeXt's source
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212404
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.047 seconds
+Real time usage: 0.062 seconds
+Preprocessor visited node count: 171/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1096/2097152 bytes
+Template argument size: 274/2097152 bytes
+Highest expansion depth: 5/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3117/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   40.987      1 -total
+ 18.38%    7.535      2 Template:cmd
+ 17.14%    7.026     10 Template:code
+ 11.09%    4.544      2 Template:src
+  7.92%    3.245      1 Template:Reference
+  6.23%    2.552      1 Template:Forum
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4660-1!canonical and timestamp 20260109212404 and revision id 21360
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Command/xmlinclude">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

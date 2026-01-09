@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Downsampling&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Downsampling" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Downsampling
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4911&diff=40303">2025-01-13</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="Tutorials/Using_graphics.html" title="Graphics and media/Tutorials/Using graphics">Using Graphics</a> &gt;
+</p>
+    <p>Downsampling means to reduce the resolution of a picture to save space.
+</p>
+    <p>There&rsquo;s a solution outlined in <a href="Tutorials/Using_graphics#Image_Conversion.html" title="Graphics and media/Tutorials/Using graphics">Using graphics</a>; the rest of this page is outdated.
+</p>
+    <h2>
+     <span class="mw-headline" id="grph-downsample">
+      grph-downsample
+     </span>
+    </h2>
+    <p><b>This doesn&rsquo;t work any more; it was a bit better than the script in <a href="Tutorials/Using_graphics#Image_Conversion.html" title="Graphics and media/Tutorials/Using graphics">Using graphics</a>.</b>
+</p>
+    <p>This MkIV module is not in the distribution and not documented, but you can download it from <a class="external text" href="http://modules.contextgarden.net/grph-downsample" rel="nofollow">here</a>. It expects the <code>gm</code> tool from <a class="external text" href="http://www.graphicsmagick.org" rel="nofollow">GraphicsMagick</a> to be callable and works on PNG, JPG and GIF pictures.
+</p>
+    <p>Copy grph-downsample.lua to <code>.../texmf-local/tex/context/third/grph-downsample/grph-downsample.lua</code>
+</p>
+    <p>Call <code>context --generate</code>
+</p>
+    <p>Copy <code>hacker.jpg</code> to your directory.
+</p>
+    <p>Write this to <code>downsample.tex</code>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\loadluafile</span></span><span class="brx">[</span>grph-downsample<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>conversion<span class="brx">=</span>lowres.jpg, resolution<span class="brx">=</span>10<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker.jpg<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>5cm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The module extends <tt><a href="../Command/setupexternalfigures.html" title="Command/setupexternalfigures">\setupexternalfigures</a></tt> with the <code>conversion</code> and <code>resolution</code> keys. The former defines an extension to the filename, the latter the final resolution dpi. It works only if the <code>width</code> or <code>height</code> key of <tt><a href="../Command/externalfigure.html" title="Command/externalfigure">\externalfigure</a></tt> is defined.
+</p>
+    <p><code>conversion=lowres.jpg</code> in the above example creates a temporary file <code>m_k_i_v_hacker.jpg_10.lowres.jpg</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="t-degrade">
+      t-degrade
+     </span>
+    </h2>
+    <p>This MkII module is in the distribution, but also available <a class="external text" href="http://modules.contextgarden.net/t-degrade" rel="nofollow">here</a>. It works only on JPG pictures and has some <a class="external text" href="http://modules.contextgarden.net/dl/t-degrade/doc/context/third/degrade/degrade-doc.pdf" rel="nofollow">documentation</a>.
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/setupDegrade&action=edit&redlink=1.html" title="Command/setupDegrade (page does not exist)">\setupDegrade</a></tt> understands the keys <code>Res</code>, <code>Dir</code>, <code>SDir</code>:
+</p>
+    <ul>
+     <li>
+      Res = resolution in dpi (default: 100)
+     </li>
+     <li>
+      Dir = target directory for degraded images (default: degrade)
+     </li>
+     <li>
+      SDir = source directory of original images (default: .)
+     </li>
+    </ul>
+    <p>This modules works only if the if the <code>width</code> or <code>height</code> key of <tt><a href="../Command/externalfigure.html" title="Command/externalfigure">\externalfigure</a></tt> is defined. or <code>height</code> key of <tt><a href="../Command/externalfigure.html" title="Command/externalfigure">\externalfigure</a></tt> is defined.
+</p>
+    <p>It creates a Bash (shell) script and calls the tools <code>jpeg2ps</code>, <code>epstopdf</code> or <code>texutil</code>, <code>identify</code> and <code>convert</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>degrade<span class="brx">]</span>
+<span class="cs">\setupDegrade</span><span class="brx">[</span>Res<span class="brx">=</span>10, Dir<span class="brx">=</span>temp, SDir<span class="brx">=</span>.<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker.jpg<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>5cm<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212417
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.017 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 71/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 526/2097152 bytes
+Template argument size: 148/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1413/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    7.657      1 -total
+ 95.01%    7.275      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4911-1!canonical and timestamp 20260109212417 and revision id 40303
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Downsampling">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

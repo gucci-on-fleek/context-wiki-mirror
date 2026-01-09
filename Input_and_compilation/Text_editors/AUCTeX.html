@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/AUCTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/AUCTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/AUCTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1906&diff=42092">2025-02-02</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#With_use-package">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         With use-package
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Help_with_delimiters_and_math_mode">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Help with delimiters and math mode
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Help_with_natural_tables">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Help with natural tables
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Help_with_FLOW_charts_.28from_m-chart.tex.29">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Help with FLOW charts (from m-chart.tex)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Metapost-mode_and_r-mode_.28from_ESS.2C_http:.2F.2Fess.r-project.org.29_in_context-mode_with_mmm-mode">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Metapost-mode and r-mode (from ESS, http://ess.r-project.org) in context-mode with mmm-mode
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#See_also">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="With_use-package">
+      With use-package
+     </span>
+    </h2>
+    <p>View a demostration <a class="external text" href="https://asciinema.org/a/657842" rel="nofollow">here</a>.
+</p>
+    <pre>;;; Till Mueller, 2024-05-04.  No copyright.
+
+;; AUCTeX has good support for LaTeX out-of-the-box. For ConTeXt, not
+;; so much.
+;;
+;; Fortunately much of the functionality, in particular
+;; LaTeX-math-mode can be reused as-is in ConTeXt mode.
+;; LaTeX-math-mode is a minor mode with easy access to TeX math
+;; macros.  Such as ` a for \alpha.  You can define custom shortcuts
+;; via LaTeX-math-list as well.
+;;
+;; The key is to tweak texmathp-tex-commands for recognizing math
+;; environment in a ConTeXt document, or else LaTeX-math will not
+;; work.
+
+(use-package context
+  :hook
+  ((ConTeXt-mode . turn-on-reftex)
+
+   ;; personal preference
+   (ConTeXt-mode . variable-pitch-mode)
+
+   ;; show \alpha as &alpha; and \mathbb{R} as &reals;
+   (ConTeXt-mode . prettify-symbols-mode)
+
+   ;; shortcuts for symbols
+   (ConTeXt-mode . LaTeX-math-mode))
+
+  :custom
+  ;; AUCTeX defaults to mkii; change to iv for iv and lmtx
+  (ConTeXt-Mark-version "IV")
+
+  ;; Enable electric left right brace
+  (LaTeX-electric-left-right-brace t)
+
+  ;; Do not unprettify symbol at point
+  (prettify-symbols-unprettify-at-point nil)
+
+  ;; Let AUCTeX properly detect formula environment as math mode
+  (texmathp-tex-commands '(("\\startformula" sw-on) ("\\stopformula" sw-off)))
+
+  ;; Set PDF viewer
+  (TeX-view-program-selection '((output-pdf "Zathura")))
+
+  ;; Don't as for permission, just save all files
+  (TeX-save-query nil)
+
+  ;; Auto-save
+  (TeX-auto-save t)
+
+  ;; Debug bad boxes and warnings after compilation via
+  ;; C-c ` key
+  (TeX-debug-bad-boxes t)
+  (TeX-debug-warnings t)
+
+  ;; Electric inline math, 
+  (TeX-electric-math '("$" . "$"))
+
+  ;; Electric sub and superscript, inserts {} after ^ and _
+  ;; such as a^{}.
+  (TeX-electric-sub-and-superscript t)
+
+  ;; RefTex
+  (reftex-plug-into-AUCTeX t)
+
+  ;; Customize keyboard shortcuts for TeX math macros
+  (LaTeX-math-list
+   '(("o r" "mathbb{R}" nil nil)
+     ("o Q" "qquad" nil nil)
+     ("o q" "quad" nil nil)
+     ("o n" "mathbb{N}" nil nil)
+     (?= "coloneq" nil nil)
+     ("o c" "mathbb{C}" nil nil)))
+
+  :bind
+  ;; Electric \left(\right) \left[\right] \left\{\right\}
+  ;; only left brace; there is no right electric brace function
+  (:map ConTeXt-mode-map ("(" . LaTeX-insert-left-brace))
+  (:map ConTeXt-mode-map ("[" . LaTeX-insert-left-brace))
+  (:map ConTeXt-mode-map ("{" . LaTeX-insert-left-brace))
+
+  :config
+  (add-hook 'TeX-after-compilation-finished-functions
+            #'TeX-revert-document-buffer)
+
+  ;; Prettify symbols mode, customizable.
+  (with-eval-after-load "tex-mode"
+    (dolist (symb
+             '(("\\colon" .&nbsp;?:)
+               ("\\mathbb{C}" . ?&complexes;)
+               ("\\mathbb{K}" . ?&Kopf;)))
+      (add-to-list 'tex--prettify-symbols-alist symb))))
+</pre>
+    <h2>
+     <span class="mw-headline" id="Help_with_delimiters_and_math_mode">
+      Help with delimiters and math mode
+     </span>
+    </h2>
+    <p>These customizations are mostly for faster insertion of special characters (and math mode).
+</p>
+    <pre>;;; Useful AUCTeX setup for ConTeXt (for your .emacs)
+;;; Sanjoy Mahajan (sanjoy@mrao.cam.ac.uk), 2006-04-20.  No copyright.
+;;;
+;;; With recent AUCTeX (11.50 or later), editing ConTeXt files should
+;;; just work, but I use the following elisp as well.
+
+; the AUCTeX manual recommends these settings
+(setq TeX-parse-self t)			; Enable parse on load.
+(setq TeX-auto-save t)			; Enable parse on save.
+
+; for outline views (hide/show sections, chapters, etc.)
+(add-hook 'TeX-mode-hook '(lambda () (TeX-fold-mode 1)))
+(add-hook 'TeX-mode-hook '(lambda () (outline-minor-mode 1)))
+; make PDF by default (can toggle with C-c C-t C-p
+(add-hook 'TeX-mode-hook '(lambda () (TeX-PDF-mode 1)))
+; these math abbrevs (` as prefix char) are also useful in TeX/ConTeXt files
+(require 'latex)			; defines LaTeX-math-mode
+(add-hook 'TeX-mode-hook 'LaTeX-math-mode)
+; Emacs help for \label, \ref, \cite.  Normally used only with
+; LaTeX-mode but also useful with plain TeX + eplain and with ConTeXt, so:
+(setq reftex-plug-into-AUCTeX t)
+(add-hook 'TeX-mode-hook 'reftex-mode)
+
+(defun insert-balanced (left right)
+  "Insert a left, right delmiter pair and be poised to type inside them."
+  (interactive)
+  (insert left)
+  (save-excursion
+    (insert right)))
+
+; When start-context-math() is bound to $:
+; Typing one $ gets you $$ with the insertion point between them.
+; Typing a second $ turns the $$ into ConTeXt's form for displayed math:
+;
+;   \placeformula\startformula
+;   [blank line with insertion point at beginning]
+;   \stopformula
+;
+; Delete the \placeformula if you don't want equations numbered automatically.
+
+(defun start-context-math ()
+  (interactive)
+  (let* ((start (max (point-min) (- (point) 1)))
+	 (stop  (min (point-max) (+ (point) 1))))
+    ; if in the middle of a $$, turn inline math into context display math
+    (if (equal "$$" (buffer-substring-no-properties start stop))
+	(progn
+	  (delete-region start stop)	;get rid of the $$
+	  ; delete preceding spaces, if any
+	  (while (and (&lt; (point-min) (point))
+		      (equal (buffer-substring-no-properties (- (point) 1)
+							     (point))
+			     " "))
+	    (backward-delete-char 1))
+	  ; delete a preceding newline, if any
+	  (if (equal (buffer-substring-no-properties (- (point) 1)
+						     (point))
+		     "\n")
+	    (backward-delete-char 1))
+	  ; ConTeXt's display math with automatic equation numbering
+	  (insert "\n\\placeformula\\startformula\n")
+	  (save-excursion (insert "\n\\stopformula")))
+      ; else: just doing inline math
+      (insert-balanced&nbsp;?\$&nbsp;?\$))))
+
+; automatically insert right delimiter for $, {, [, and ( and be
+; poised to type inside them.
+(add-hook 'TeX-mode-hook
+	  '(lambda ()
+	     (local-set-key "$" 
+			    '(lambda ()
+			       (interactive)
+			       (insert-balanced&nbsp;?\$&nbsp;?\$)))
+	     (local-set-key "{"
+			    '(lambda ()
+			       (interactive)
+			       (insert-balanced&nbsp;?\{&nbsp;?\})))
+	     (local-set-key "["
+			    '(lambda ()
+			       (interactive)
+			       (insert-balanced&nbsp;?\[&nbsp;?\])))
+	     (local-set-key "("
+			    '(lambda ()
+			       (interactive)
+			       (insert-balanced&nbsp;?\(&nbsp;?\))))))
+
+; For ConTeXt mode, inserting two $ signs needs to behave specially
+(add-hook 'ConTeXt-mode-hook
+	  '(lambda ()
+	     (local-set-key "$" 'start-context-math)))
+
+; The TeX-format-list from AUCTeX's tex.el (v11.82) with a few more
+; ConTeXt-specific patterns.  I've submitted it to the AUCTeX lists,
+; so later versions should have them automatically and you won't need
+; this regexp mess in your .emacs
+;
+(setq TeX-format-list
+  '(("JLATEX" japanese-latex-mode
+     "\\\\\\(documentstyle\\|documentclass\\)[^%\n]*{\\(j[s-]?\\|t\\)\\(article\\|report\\|book\\|slides\\)")
+    ("JTEX" japanese-plain-tex-mode
+     "-- string likely in Japanese TeX --")
+    ("AMSTEX" ams-tex-mode
+     "\\\\document\\b")
+    ("CONTEXT" context-mode
+     "\\(\\\\\\(start\\(text\\|project\\|environment\\|product\\|typing\\|component\\|tekst\\)\\)\\|%.*?interface=\\)")
+    ("LATEX" latex-mode
+     "\\\\\\(begin\\|section\\|chapter\\|documentstyle\\|documentclass\\)\\b")
+    ("TEX" plain-tex-mode ".")))
+</pre>
+    <h2>
+     <span class="mw-headline" id="Help_with_natural_tables">
+      Help with natural tables
+     </span>
+    </h2>
+    <p>These customizations, by Johan Sandblom, make entering <a href="../../Tables/Natural_tables_with_TABLE#Using_character_alignment_TABLE.html" title="Tables/Natural tables with TABLE">|Natural tables with TABLE</a> easy.
+</p>
+    <pre>(defun context-insert-nattab (rows columns)
+  ;; Johan Sandblom 2006-01-28
+  "Insert a TABLE skeleton"
+  (interactive "nNumber of rows: \nnNumber of columns: \n")
+  (newline)
+  (insert "\\bTABLE\n\\setupTABLE\[\]\n")
+  ;; First a TABLE header
+  (insert "\\bTABLEhead\n\\bTR\\bTH \\eTH\n")
+  (let ((column 1))
+    (while (&lt; column (- columns 1))
+      (insert "    \\bTH \\eTH\n")
+      (setq column (1+ column))))
+  (insert "    \\bTH \\eTH\\eTR\n\\eTABLEhead\n\\bTABLEbody\n")
+  ;; The rows and columns
+  (let ((row 1))
+    (while (&lt;= row rows)
+      (insert "\\bTR\\bTD \\eTD\n")
+      ;; The let expression makes sure that each loop starts at the
+      ;; right place
+      (let ((column 1))
+	(while (&lt; column (- columns 1))
+	  (insert "    \\bTD \\eTD\n")
+	  (setq column (1+ column)))
+	(insert "    \\bTD \\eTD\\eTR\n")
+	(setq row (1+ row))))
+    (insert "\\eTABLEbody\n\\eTABLE\n")))
+
+(defun context-insert-nattab-row (columns)
+ "Insert a row in a TABLE"
+ (interactive "nNumber of columns: \n")
+ (newline)
+ (insert "\\bTR\\bTD \\eTD\n")
+ (let ((column 1))
+   (while (&lt; column (- columns 1))
+     (insert "    \\bTD \\eTD\n")
+     (setq column (1+ column)))
+   (insert "    \\bTD \\eTD\\eTR\n")))
+
+(defun context-insert-nattab-column (&optional arg)
+ "Insert a column in a TABLE"
+ (interactive "P")
+ (insert "\\bTD \\eTD")
+ (indent-for-tab-command)
+ (newline)
+ (backward-char 5))
+
+
+
+(add-hook 'ConTeXt-mode-hook
+         '(lambda ()
+	    (local-set-key "\C-cnr" 'context-insert-nattab-row)
+	    (local-set-key "\C-cnc" 'context-insert-nattab-column)
+	    (local-set-key "\C-cnn" 'context-insert-nattab)))
+</pre>
+    <h2>
+     <span id="Help_with_FLOW_charts_(from_m-chart.tex)">
+     </span>
+     <span class="mw-headline" id="Help_with_FLOW_charts_.28from_m-chart.tex.29">
+      Help with FLOW charts (from m-chart.tex)
+     </span>
+    </h2>
+    <pre>;; Johan Sandblom. No copyright.
+(defun context-FLOW-shift-cells (x y beg end)
+  "Shifts FLOW cells in region right and down"
+  (interactive "nRight: \nnDown: \nr")
+  (save-excursion
+    (goto-char beg)
+      (while (search-forward-regexp
+	      "{\\([0-9]+\\),\\([0-9]+\\)}" end t)
+	 (replace-match 
+	  (concat "{" (number-to-string 
+		       (+ (string-to-number (match-string 1)) x))
+		  ","  (number-to-string 
+		       (+ (string-to-number (match-string 2)) y)) "}")
+	  nil nil))))
+
+(defun context-FLOW-insert-cells (%optional n)
+ "Insert a FLOWchart cell"
+ (interactive "P")
+ (if (not (bolp)) (newline))
+ (let ((x 1))
+   (while (&lt;= x (if n n 1))
+     (insert "\\startFLOWcell\n")
+     (insert "  \\name          {}\n")
+     (insert "  \\location      {}\n")
+     (insert "  \\shape         {action}\n")
+     (insert "  \\text          {}\n")
+     (insert "  \\connection[rl]{}\n")
+     (insert "\\stopFLOWcell\n")
+     (setq x (1+ x)))))
+(add-hook 'ConTeXt-mode-hook
+         '(lambda ()
+	    (define-key (current-local-map) "\C-cnF" 'context-FLOW-insert-cells)
+            (define-key (current-local-map) "\C-cnS" 'context-FLOW-shift-cells)))
+</pre>
+    <h2>
+     <span id="Metapost-mode_and_r-mode_(from_ESS,_http://ess.r-project.org)_in_context-mode_with_mmm-mode">
+     </span>
+     <span class="mw-headline" id="Metapost-mode_and_r-mode_.28from_ESS.2C_http:.2F.2Fess.r-project.org.29_in_context-mode_with_mmm-mode">
+      Metapost-mode and r-mode (from ESS,
+      <a class="external free" href="http://ess.r-project.org" rel="nofollow">
+       http://ess.r-project.org
+      </a>
+      ) in context-mode with mmm-mode
+     </span>
+    </h2>
+    <pre>;; Johan Sandblom. No copyright.
+(require 'mmm-mode)
+(setq mmm-global-mode 'maybe)
+(setq mmm-submode-decoration-level 2)
+(mmm-add-group 'context-plus
+               '((context-R
+                  :submode r-mode
+                  :face mmm-comment-submode-face
+                  :front ".*\\\\startR\\w*\\({\\w*}\\|\\[\\w*\\]\\|\\)\\W*"
+                  :back  ".*\\\\stopR")
+                 (context-MP
+                  :submode metapost-mode
+                  :face mmm-code-submode-face
+                  :front ".*\\\\start\\w*MP\\w*\\({\\w*}\\|\\[\\w*\\]\\|\\)\\W*"
+                  :back  ".*\\\\stop\\w*MP")
+                 ))
+(add-to-list 'mmm-mode-ext-classes-alist '(context-mode nil context-plus))
+</pre>
+    <ul>
+     <li>
+      AUCTeX, Emacs TeX/ConTeXt/LaTex mode
+      <a class="external text" href="http://www.gnu.org/software/auctex/" rel="nofollow">
+       www.gnu.org
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.013 seconds
+Real time usage: 0.016 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10356/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1906-1!canonical and timestamp 20260109212425 and revision id 42092
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/AUCTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

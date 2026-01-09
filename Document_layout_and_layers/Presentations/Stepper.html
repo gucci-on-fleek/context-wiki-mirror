@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Presentations/Stepper&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Stepper" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Presentations/Stepper
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2771&diff=38057">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Another way to show materials step by step in your presentation is using the <a href="Raw_steps_module.html" title="Document layout and layers/Presentations/Raw steps module">Raw steps module</a> module. However that approach is going to create a page for each step, so that your presentation document may end up clogged with too many pages. Nevertheless it has the advantage of being able to go backward through the steps, and the resulted PDF file may be viewed in any PDF viewer.
+</p>
+    <p>Here we give an example using the Stepper which is buit in ConTeXt. In order to use it one has to add the following lines at the beginning of the source file:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pre-60<span class="brx">]</span> <span class="comment">% use the stepper</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>invoke<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\overlaybutton</span></span><span class="br">{</span>InvokeStepper<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>text<span class="brx">]</span>
+	<span class="brx">[</span>background<span class="brx">=</span>invoke<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,click<span class="brx">=</span>off<span class="brx">]</span>
+</pre>
+    <p>After doing this the following example shows how things work:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pre-60<span class="brx">]</span> <span class="comment">% use the stepper</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>S6<span class="brx">]</span><span class="brx">[</span>S6<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>invoke<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\overlaybutton</span></span><span class="br">{</span>InvokeStepper<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>text<span class="brx">]</span>
+	<span class="brx">[</span>background<span class="brx">=</span>invoke<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,click<span class="brx">=</span>off<span class="brx">]</span>
+
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Steps in <span class="cs"><span class="documentcs">\CONTEXT</span></span><span class="br">}</span>
+In the next slide we are going to see items appearing step by step.
+
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Just a test to see the stepper<span class="br">}</span>
+ <span class="cs">\StartSteps</span> 
+   <span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>packed<span class="brx">]</span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This <span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This is <span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This is shown <span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This is shown step <span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This is shown step by<span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+       <span class="cs"><span class="documentcs">\startitem</span></span> This is shown step by step <span class="cs">\FlushStep</span> <span class="cs"><span class="documentcs">\stopitem</span></span>
+   <span class="cs"><span class="documentcs">\stopitemize</span></span>   
+<span class="cs">\StopSteps</span>
+
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Another test to see the stepper<span class="br">}</span>
+
+<span class="cs">\StartSteps</span> 
+This <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> is <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> shown <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> step <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span>
+by<span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> step. <span class="cs">\FlushStep</span>   
+<span class="cs">\StopSteps</span>
+
+<span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Another test to see the stepper in maths<span class="br">}</span> 
+<span class="cs">\StartSteps</span>
+These two functions  <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> 
+$x <span class="cs">\mapsto</span> <span class="cs">\sin</span>^2<span class="brx">(</span>x<span class="brx">)</span>$  <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> 
+and $x <span class="cs">\mapsto</span> x$ <span class="cs">\FlushStep</span><span class="br">{</span><span class="br">}</span> 
+have the same integral on $<span class="brx">[</span>0,1<span class="brx">]</span>$ <span class="br">{</span><span class="br">}</span> <span class="cs">\FlushStep</span>
+<span class="cs"><span class="documentcs">\startformula</span></span>
+<span class="cs">\int_</span><span class="br">{</span>0<span class="br">}</span>^<span class="br">{</span><span class="cs">\pi</span><span class="br">}</span> <span class="cs">\sin</span>^2<span class="brx">(</span>x<span class="brx">)</span>dx <span class="cs">\FlushStep</span> <span class="brx">=</span> <span class="cs">\int_</span><span class="br">{</span>0<span class="br">}</span>^<span class="br">{</span>1<span class="br">}</span> xdx <span class="cs">\FlushStep</span>
+<span class="brx">=</span> <span class="br">{</span>1 <span class="cs"><span class="documentcs">\over</span></span> 2<span class="br">}</span> <span class="cs">\FlushStep</span>
+<span class="cs"><span class="documentcs">\stopformula</span></span>
+<span class="cs">\StopSteps</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Notice that the resulting PDF file must be viewed in a PDF viewver such as Acrobat Reader (the stepping procedure doesn't ork in Apple's Preview.app, nor in TeXShop).
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004017
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.057 seconds
+Real time usage: 0.179 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6314/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2771-1!canonical and timestamp 20260110004017 and revision id 38057
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Presentations/Stepper">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

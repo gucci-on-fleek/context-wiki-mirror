@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Calendar script&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Calendar_script" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Calendar script
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2289&diff=38818">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>I decided not to spoil the first day of the new year by doing real work. I also wanted to get to know a bit more about lua...
+</p>
+    <p>The background: we produce a calendar with pictures of our kids every year. Of course, I wanted to do that with ConTeXt. There is a number of precooked scripts to produce various calendars for LaTeX, but nothing for ConTeXt, as far as I could see. So I decided to write something myself. I first did it in perl, with the Date::Calc module. Then, I tried to achieve the same result with a lua script. Without the convenience of a precooked date module, I had to do all the calculations of holidays and days of the week myself, taking my cues mostly from wikipedia, but it was relatively easy. 
+</p>
+    <p>You invoke the script from the command line: <tt>lua calendar.lua XXXX</tt>, and it will produce a file <tt>kalenderXXXX.tex</tt>, where <tt>XXXX</tt> is a number between 1900 and 2299. This file can then be typeset with ConTeXt. The result will be a calendar for the year <tt>XXXX</tt>, with every month on one page; Sundays and German official holidays are in boldface; the first day of the week is Monday. The names of  the months are in German, but that should be easy to modify. We have a simple version in black and white which we print on colored paper and into which real pictures are glued, and a digital version which we send to friends via e-mail where the pages of the typeset pdf have colored backgrounds and the pictures are included. 
+</p>
+    <p>Neither the lua code nor the TeX code is particularly beautiful (hey, this was my first day with lua), but it may be interesting for someone out there. 
+</p>
+    <pre>#!/usr/local/bin/lua
+
+year = arg[1]
+
+-- create boolean switch for leap years
+
+if (math.mod(year,4) == 0) then 
+   if (math.mod(year,100) == 0) then 
+      if (math.mod(year,400) == 0) then 
+	 leap_year = true
+	 else leap_year = false end
+      else leap_year = true end
+   else leap_year = false
+end
+
+-- calculate easter sunday, according to Meeus/Jones/Butcher
+-- (see http://en.wikipedia.org/wiki/Computus#Meeus.2FJones.2FButcher_Gregorian_algorithm )
+
+a = math.mod(year,19)
+
+b = math.floor(year / 100)
+
+c = math.mod(year,100)
+
+d = math.floor(b / 4)
+
+e = math.mod(b,4)
+
+f = math.floor((b + 8) / 25) 
+
+g = math.floor((b - f + 1) / 3)
+
+h = math.mod((19 * a + b - d - g + 15),30)
+
+i = math.floor(c / 4)
+
+k = math.mod(c,4)
+
+L = math.mod((32 + 2 * e + 2 * i - h - k),7)
+
+m = math.floor((a + 11 * h + 22 * L) / 451)
+
+eastersundaymonth = math.floor((h + L - 7 * m + 114) / 31)
+
+eastersunday = math.mod((h + L - 7 * m + 114),31) + 1
+
+-- now, calculate other Christian holidays which depend on Easter Sunday
+
+if eastersunday + 1 &lt;= 31 then 
+eastermonday,eastermondaymonth = (eastersunday + 1),eastersundaymonth 
+else eastermonday,eastermondaymonth = (eastersunday - 30),(eastersundaymonth + 1) 
+end
+
+if eastersunday -2 &gt;= 1 then 
+goodfriday,goodfridaymonth = (eastersunday - 2),eastersundaymonth 
+else goodfriday,goodfridaymonth = (eastersunday + 29),(eastersundaymonth - 1) 
+end
+
+if leap_year == true then 
+   if eastersundaymonth == 4 then juliansunday = 91 + eastersunday
+   elseif eastersundaymonth == 3 then juliansunday = 60 + eastersunday end
+else if eastersundaymonth == 4 then juliansunday = 90 + eastersunday
+   elseif eastersundaymonth == 3 then juliansunday = 59 + eastersunday end
+end 
+
+if leap_year == true then
+if juliansunday + 50 &lt;= 152 then pentecostmonday,pentecostmonth = (juliansunday - 71),5
+elseif (juliansunday + 50) &gt; 152 then pentecostmonday,pentecostmonth = (juliansunday - 102),6
+end
+if juliansunday + 60 &lt;= 152 then corpusday,corpusmonth = (juliansunday - 61),5
+elseif (juliansunday + 60) &gt; 152 then corpusday,corpusmonth = (juliansunday - 92),6
+end
+if juliansunday + 39 &lt;= 121 then ascensionday,ascensionmonth = (juliansunday - 52),4
+elseif (juliansunday + 39) &gt; 121 then ascensionday,ascensionmonth = (juliansunday - 82),5
+end
+else
+if juliansunday + 50 &lt;= 151 then pentecostmonday,pentecostmonth = (juliansunday - 70),5
+elseif (juliansunday + 50) &gt; 151 then pentecostmonday,pentecostmonth = (juliansunday - 101),6
+end
+
+if juliansunday + 60 &lt;= 151 then corpusday,corpusmonth = (juliansunday - 60),5
+elseif (juliansunday + 60) &gt; 151 then corpusday,corpusmonth = (juliansunday - 91),6
+end
+
+if juliansunday + 39 &lt;= 120 then ascensionday,ascensionmonth = (juliansunday - 51),4
+elseif (juliansunday + 39) &gt; 120 then ascensionday,ascensionmonth = (juliansunday - 81),5
+end
+end
+
+-- we open our outfile
+
+outfile = io.open("kalender"..year..".tex","w")
+
+outfile:write("%%% calendar for the year "..year..", produced by the lua script\n%%% calendar.lua on "..os.date().."\n\n")
+
+-- and first write the header of our document
+
+outfile:write("\\enableregime[utf]\n\n\\setuppagenumbering[state=stop]\n\n\\setuplayout[footer=0cm,\n\t margin=0cm,\n\t backspace=1cm,\n\t 
+width=fit]\n\n\\setupcolors[state=start]\n\n\\definecolor [mycyan] [r=0, g=0.8, b=1]\n\n\\starttext\n\n%\\showframe\n\n% \\setupbackgrounds[page]
+[background=color,backgroundcolor=darkred]\n\n% \\midaligned{\\externalfigure[title][width=.9\\textwidth]}\n\n\\switchtobodyfont[38pt]\n\n
+\\startalignment[middle]\n\n\\strut\n\n\\vfill\n\n"..year.."\n\n\\blank[2cm]\n\nKalender\n\n\\blank[2cm]\n\n\\strut\n\n\\stopalignment\n\n
+\\page\n\n\\switchtobodyfont[20pt]\n\n\\strut\n\n\\vfill\n\n% \\midaligned{\\externalfigure[january][width=.9\\textwidth]}\n\n
+% \\setupbackgrounds[page] [background=color,backgroundcolor=orange]\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Januar}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+-- calculate day of week for 1/1, according to Babwani's formula
+-- (see http://www.geocities.com/sohaelbabwani/algorithm.html )
+
+myyear = math.abs(year)
+
+if myyear &lt; 2000 then n,y = 19,(myyear - 1900)
+else n,y = 20,(myyear - 2000)
+end
+
+if leap_year == true then
+janfirst = math.mod((math.floor((5 * y) / 4) + 6 + 1 - (2 * (math.mod(n,4)))),7)
+else
+janfirst = math.mod((math.floor((5 * y) / 4) + 0 + 1 - (2 * (math.mod(n,4)))),7)
+end
+
+if janfirst == 0 then janfirst = 7 end
+if janfirst == 1 then janfirst = 8 end
+
+janindent = janfirst - 1
+
+for jan = 1,janindent do outfile:write("\\NC ") end
+
+if janfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("{\\bf 1} ") end 
+
+for day = 2,31 do
+   if leap_year == true then
+   weekday = math.mod((math.floor((5 * y) / 4) + 6 + day - (2 * (math.mod(n,4)))),7)
+   else
+   weekday = math.mod((math.floor((5 * y) / 4) + 0 + day - (2 * (math.mod(n,4)))),7)
+   end
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   elseif day == 6 then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[february][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n
+\\midaligned{\\sc Februar}\n\n\\placetable[bottom][none]{none}{\n
+\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+if leap_year == true then
+febult,febvar = 29,2
+else febult,febvar = 28,3
+end
+
+febfirst = math.mod((math.floor((5 * y) / 4) + febvar + 1 - (2 * (math.mod(n,4)))),7)
+
+if febfirst == 0 then febfirst = 7 end
+if febfirst == 1 then febfirst = 8 end
+
+febindent = febfirst - 1
+
+for feb = 1,febindent do outfile:write("\\NC ") end
+
+if febfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end 
+
+for day = 2,febult do
+   weekday = math.mod((math.floor((5 * y) / 4) + febvar + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[march][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc M&auml;rz}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+marfirst = math.mod((math.floor((5 * y) / 4) + 3 + 1 - (2 * (math.mod(n,4)))),7)
+
+if marfirst == 0 then marfirst = 7 end
+if marfirst == 1 then marfirst = 8 end
+
+marindent = marfirst - 1
+
+for mar = 1,marindent do outfile:write("\\NC ") end
+
+if marfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 3 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   elseif goodfridaymonth == 3 and day == goodfriday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif eastermondaymonth == 3 and day == eastermonday then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[april][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc April}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+aprfirst = math.mod((math.floor((5 * y) / 4) + 6 + 1 - (2 * (math.mod(n,4)))),7)
+
+if aprfirst == 0 then aprfirst = 7 end
+if aprfirst == 1 then aprfirst = 8 end
+
+aprindent = aprfirst - 1
+
+for apr = 1,aprindent do outfile:write("\\NC ") end
+
+if aprfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,30 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 6 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   elseif goodfridaymonth == 4 and day == goodfriday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif eastermondaymonth == 4 and day == eastermonday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif ascensionmonth == 4 and day == ascensionday then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[may][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Mai}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+mayfirst = math.mod((math.floor((5 * y) / 4) + 1 + 1 - (2 * (math.mod(n,4)))),7)
+
+if mayfirst == 0 then mayfirst = 7 end
+if mayfirst == 1 then mayfirst = 8 end
+
+mayindent = mayfirst - 1
+
+for may = 1,mayindent do outfile:write("\\NC ") end
+
+if mayfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("{\\bf 1} ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 1 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   elseif ascensionmonth == 5 and day == ascensionday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif corpusmonth == 5 and day == corpusday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif pentecostmonth == 5 and day == pentecostmonday then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[june][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Juni}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+junfirst = math.mod((math.floor((5 * y) / 4) + 4 + 1 - (2 * (math.mod(n,4)))),7)
+
+if junfirst == 0 then junfirst = 7 end
+if junfirst == 1 then junfirst = 8 end
+
+junindent = junfirst - 1
+
+for jun = 1,junindent do outfile:write("\\NC ") end
+
+if junfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,30 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 4 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n")
+   elseif ascensionmonth == 6 and day == ascensionday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif corpusmonth == 6 and day == corpusday then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif pentecostmonth == 6 and day == pentecostday then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[july][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Juli}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+julfirst = math.mod((math.floor((5 * y) / 4) + 6 + 1 - (2 * (math.mod(n,4)))),7)
+
+if julfirst == 0 then julfirst = 7 end
+if julfirst == 1 then julfirst = 8 end
+
+julindent = julfirst - 1
+
+for jul = 1,julindent do outfile:write("\\NC ") end
+
+if julfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 6 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[august][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc August}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+augfirst = math.mod((math.floor((5 * y) / 4) + 2 + 1 - (2 * (math.mod(n,4)))),7)
+
+if augfirst == 0 then augfirst = 7 end
+if augfirst == 1 then augfirst = 8 end
+
+augindent = augfirst - 1
+
+for aug = 1,augindent do outfile:write("\\NC ") end
+
+if augfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 2 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[september][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc September}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+sepfirst = math.mod((math.floor((5 * y) / 4) + 5 + 1 - (2 * (math.mod(n,4)))),7)
+
+if sepfirst == 0 then sepfirst = 7 end
+if sepfirst == 1 then sepfirst = 8 end
+
+sepindent = sepfirst - 1
+
+for sep = 1,sepindent do outfile:write("\\NC ") end
+
+if sepfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,30 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 5 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[october][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Oktober}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+octfirst = math.mod((math.floor((5 * y) / 4) + 0 + 1 - (2 * (math.mod(n,4)))),7)
+
+if octfirst == 0 then octfirst = 7 end
+if octfirst == 1 then octfirst = 8 end
+
+octindent = octfirst - 1
+
+for oct = 1,octindent do outfile:write("\\NC ") end
+
+if octfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 0 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   elseif day == 3 then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[november][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc November}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+novfirst = math.mod((math.floor((5 * y) / 4) + 3 + 1 - (2 * (math.mod(n,4)))),7)
+
+if novfirst == 0 then novfirst = 7 end
+if novfirst == 1 then novfirst = 8 end
+
+novindent = novfirst - 1
+
+for nov = 1,novindent do outfile:write("\\NC ") end
+
+if novfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("{\\bf 1} ") end
+
+for day = 2,30 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 3 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\page\n\n% \\setupbackgrounds[page] [background=color,backgroundcolor=darkred]\n\n
+% \\midaligned{\\externalfigure[december][width=.66\\textwidth]}\n\n\\strut\n\n\\vfill\n\n\\midaligned{\\sc Dezember}\n\n
+\\placetable[bottom][none]{none}{\n\\starttabulate[|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|rw(4mm)|]\n")
+
+decfirst = math.mod((math.floor((5 * y) / 4) + 5 + 1 - (2 * (math.mod(n,4)))),7)
+
+if decfirst == 0 then decfirst = 7 end
+if decfirst == 1 then decfirst = 8 end
+
+decindent = decfirst - 1
+
+for dec = 1,decindent do outfile:write("\\NC ") end
+
+if decfirst == 8 then outfile:write("{\\bf 1} \\NC \\NR\n")
+else outfile:write("1 ") end
+
+for day = 2,31 do
+   weekday = math.mod((math.floor((5 * y) / 4) + 5 + day - (2 * (math.mod(n,4)))),7)
+   if weekday == 1 then outfile:write("\\NC {\\bf "..day.."} \\NC \\NR\n") 
+   elseif day == 25 then outfile:write("\\NC {\\bf "..day.."} ")
+   elseif day == 26 then outfile:write("\\NC {\\bf "..day.."} ")
+   else  outfile:write("\\NC "..day.." ") end
+end
+
+outfile:write("\n\\stoptabulate\n}\n\n\\stoptext\n")
+</pre>
+    <p>--<a href="../../User:Thomas.html" title="User:Thomas">Thomas</a> 21:56, 1 January 2007 (CET)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.005 seconds
+Real time usage: 0.006 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 16638/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2289-1!canonical and timestamp 20260109212423 and revision id 38818
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Calendar_script">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

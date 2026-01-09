@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Processing lists&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Processing_lists" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Processing lists
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1100&diff=40496">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>See <a href="Tutorials/System_Macros/Comma_Separated_Lists.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists">Comma Separated Lists</a> for details of lists in ConTeXt
+</p>
+    <h2>
+     <span class="mw-headline" id="Processing_a_comma-separated_list_of_values">
+      Processing a comma-separated list of values
+     </span>
+    </h2>
+    <p>Suppose you defined a command like this one somewhere in your document:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\IHaveTo</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span>I have to <span class="brx">#</span>1 on <span class="brx">#</span>2.<span class="cs">\par</span><span class="br">}</span>
+<span class="cs">\IHaveTo</span><span class="br">{</span>tidy up<span class="br">}</span><span class="br">{</span>Monday<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/a155f9b8c4c62d49deda9d94f498423b.webp" width="216">
+     </li>
+    </ul>
+    <p>But sometimes you have to repeat some task more than once. In this case you can define a new command:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\IHaveTo</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span>I have to <span class="brx">#</span>1 on <span class="brx">#</span>2.<span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\MyMumOrderedMeTo</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="cs">\IHaveTo</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\MyMumOrderedMeTo</span><span class="brx">[</span>Monday,Wednesday,Saturday<span class="brx">]</span><span class="br">{</span>tidy up<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="58" src="../wikiteximage/0cf70e40514095916cd6c445aa73b43e.webp" width="239">
+     </li>
+    </ul>
+    <p>In case a command <tt>\IHaveTo</tt> is already defined in a slightly different way:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\IHaveTo</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span>I have to <span class="brx">#</span>2 on <span class="brx">#</span>1.<span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\MyMumOrderedMeTo</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\begingroup</span>
+   <span class="cs">\def</span><span class="cs">\processitem</span><span class="brx">#</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\IHaveTo</span><span class="brx">[</span><span class="brx">#</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs">\processitem</span>
+   <span class="cs">\endgroup</span><span class="br">}</span>
+
+<span class="cs">\MyMumOrderedMeTo</span><span class="brx">[</span>Monday,Wednesday,Saturday<span class="brx">]</span><span class="br">{</span>tidy up<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="58" src="../wikiteximage/95046081470390d884239a5516e13279.webp" width="239">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Processing_a_dash-separated_list_of_values">
+      Processing a dash-separated list of values
+     </span>
+    </h2>
+    <p>Sometimes you have more work to do than just that boring stuff at home. And as it is quite important as well, you don't want to loose your time enumerating all of the tasks. Being able to do something like
+</p>
+    <pre class="tex"><span class="cs">\IHaveToDoTheTasks</span><span class="brx">[</span>1-4,7,9-11<span class="brx">]</span><span class="br">{</span>until tomorrow<span class="br">}</span>
+</pre>
+    <p>may sound like a good idea.
+</p>
+    <p>Suppose you already defined:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\IHaveToDoTheTask</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span>The task <span class="brx">#</span>1 has to be done <span class="brx">#</span>2.<span class="cs">\par</span><span class="br">}</span>
+</pre>
+    <p>You have to define some macros first (thanks to Taco!):
+</p>
+    <pre class="tex"><span class="comment">% a few auxiliary core macros are needed to uncompress the list.</span>
+<span class="comment">%</span>
+<span class="comment">% \uncompresslist is the twin of the already existing \compresslist</span>
+<span class="comment">% which works in the other direction (syst-new)</span>
+<span class="comment">%</span>
+<span class="cs"><span class="systemcs">\unprotect</span></span>
+
+<span class="comment">% I guess this function is already available but couldnt find it...</span>
+<span class="comment">%</span>
+<span class="cs">\def</span><span class="cs">\apptomac</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\ifx</span><span class="brx">#</span>1<span class="cs">\empty</span><span class="cs">\def</span><span class="brx">#</span>1<span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="cs">\else</span> <span class="cs">\@EA</span><span class="cs">\def</span><span class="cs">\@EA</span><span class="brx">#</span>1<span class="cs">\@EA</span><span class="br">{</span><span class="brx">#</span>1,<span class="brx">#</span>2<span class="br">}</span><span class="cs">\fi</span><span class="br">}</span>
+
+<span class="comment">% the next macro does this:</span>
+<span class="comment">%</span>
+<span class="comment">% \itemwithdash&lt;&lt;9-11&gt;&gt;- =&gt; \dorecurse {&lt;&lt;1+11-9&gt;&gt;}</span>
+<span class="comment">%     {\apptomac\uncompressedlist&lt;&lt;9-1+\recurselevel&gt;&gt;}</span>
+<span class="comment">%</span>
+<span class="comment">% (the 1+ and -1 are needed to solve a counter offset.)</span>
+<span class="cs">\def</span><span class="cs">\itemwithdash</span><span class="brx">#</span>1-<span class="brx">#</span>2-<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\@EA</span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="cs">\@EA</span>
+    <span class="br">{</span><span class="cs">\the</span><span class="cs">\numexpr</span> 1+<span class="brx">#</span>2-<span class="brx">#</span>1<span class="cs">\relax</span><span class="br">}</span><span class="comment">%</span>
+    <span class="br">{</span><span class="cs">\@EA</span><span class="cs">\apptomac</span><span class="cs">\@EA</span><span class="cs">\uncompressedlist</span><span class="cs">\@EA</span>
+      <span class="br">{</span><span class="cs">\the</span><span class="cs">\numexpr</span> <span class="brx">#</span>1-1+<span class="cs"><span class="systemcs">\recurselevel</span></span><span class="cs">\relax</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+
+<span class="comment">% top level. The result will be in \uncompressedlist</span>
+<span class="cs">\def</span><span class="cs">\uncompresslist</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\def</span><span class="cs">\uncompressedlist</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs">\def</span><span class="cs">\processitem</span><span class="brx">#</span><span class="brx">#</span>1<span class="comment">%</span>
+     <span class="br">{</span><span class="cs"><span class="systemcs">\doifinstringelse</span></span><span class="br">{</span>-<span class="br">}</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span>1<span class="br">}</span>
+       <span class="br">{</span><span class="cs">\itemwithdash</span><span class="brx">#</span><span class="brx">#</span>1-<span class="br">}</span>
+       <span class="br">{</span><span class="cs">\apptomac</span><span class="cs">\uncompressedlist</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs">\processitem</span> <span class="br">}</span>
+
+<span class="cs">\protect</span>
+</pre>
+    <p>And then you're ready to define
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\IHaveToDoTheTasks</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs">\begingroup</span>
+   <span class="cs">\uncompresslist</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="comment">% &lt;= Yeah!</span>
+   <span class="cs">\def</span><span class="cs">\processitem</span><span class="brx">#</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\IHaveToDoTheTask</span><span class="brx">[</span><span class="brx">#</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\processcommacommand</span></span><span class="brx">[</span><span class="cs">\uncompressedlist</span><span class="brx">]</span><span class="cs">\processitem</span>
+   <span class="cs">\endgroup</span><span class="br">}</span>
+</pre>
+    <p>Guess what! Your <tt>\IHaveToDoTheTasks[1-4,7,9-11]{until tomorrow}</tt> results in:
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/75c2517c16abfa27b92317dd46af3bea.webp" width="55">
+     </li>
+    </ul>
+    <p>So - what are you still waiting for? Go back to work and do them right away!
+</p>
+    <h3>
+     <span class="mw-headline" id="Comments">
+      Comments
+     </span>
+    </h3>
+    <p>The code for processing dash-separated lists resulted from thread <a class="external autonumber" href="http://archive.contextgarden.net/thread/20050704.151237.f815d89d.html" rel="nofollow">[1]</a> and will be used in some modules such as <a href="../Document_layout_and_layers/Presentations/Raw_steps_module.html" title="Document layout and layers/Presentations/Raw steps module">Raw steps module</a>. It would be nice if processing dash-separated lists of values would make it into the ConTeXt core.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072911
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.058 seconds
+Real time usage: 0.097 seconds
+Preprocessor visited node count: 50/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9448/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1100-1!canonical and timestamp 20260110072911 and revision id 40496
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Processing_lists">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

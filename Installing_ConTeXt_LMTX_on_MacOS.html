@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Installing ConTeXt LMTX on MacOS&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Installing_ConTeXt_LMTX_on_MacOS" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Installing ConTeXt LMTX on MacOS
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5079&diff=42655">2026-01-07</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Since a few users have encountered difficulties in installing, and updating to, beta releases of <a class="mw-redirect" href="Introduction/Installation.html" title="Input and compilation/Installation">ConTeXt LMTX</a> on macOS, below we describe an installation procedure for macOS. For other platforms the procedures are more or less analogous.
+</p>
+    <h2>
+     <span class="mw-headline" id="Installing_LMTX_on_MacOS">
+      Installing LMTX on MacOS
+     </span>
+    </h2>
+    <p>First download either <a class="external text" href="http://lmtx.pragma-ade.nl/install-lmtx/context-osx-64.zip" rel="nofollow">context-osx-64.zip</a> (older Macs with an intel cpu) or <a class="external text" href="http://lmtx.pragma-ade.nl/install-lmtx/context-osx-arm64.zip" rel="nofollow">context-osx-arm64.zip</a> (newer Macs with an Apple Mx cpu). Put the unzipped <code>context-osx-64/</code> or <code>context-osx-arm64/</code> folder wherever you wish&mdash;for instance, in your home directory. Feel free to also rename it, e.g. into <code>lmtx</code>. Thus the path to your future LMTX directory will be <code><b>~/lmtx/</b></code> (from now on, this is what we assume).
+</p>
+    <p>Open a Terminal window (<code>Terminal.app</code> is found in <code>/Applications/Utilities/</code>). In the Terminal window type
+</p>
+    <pre>cd <b>~/lmtx/</b>
+</pre>
+    <p>Then you should be able to execute the command
+</p>
+    <pre>sh install.sh
+</pre>
+    <p>After that, if everything goes smoothly, a complete functioning tree of LMTX, complete with dozens of manuals, will be installed in <code><b>~/lmtx/</b></code>. Whenever you want to update your installation of LMTX, it is enough to go to that directory in Terminal & run the installation script again:
+</p>
+    <pre>sh install.sh
+</pre>
+    <h2>
+     <span class="mw-headline" id="Running_LMTX_from_the_Terminal">
+      Running LMTX from the Terminal
+     </span>
+    </h2>
+    <p>If you want to run LMTX from the Terminal interface in any directory, you should add the path of your installation to $PATH by adding this to your <code>.bashrc</code> (10.14 and earlier) or <code>.zshenv</code> (10.15 and later) (or another configuration file, depending on your flavor of shell interface).
+</p>
+    <p>For intel cpus, use:
+</p>
+    <pre>export PATH=$PATH:<b>~/lmtx/</b>tex/texmf-osx-64/bin
+</pre>
+    <p>For Apple M&lt;x&gt; cpus, use:
+</p>
+    <pre>export PATH=$PATH:<b>~/lmtx/</b>tex/texmf-osx-arm64/bin
+</pre>
+    <p><i>Reminder: if you have installed <code>lmtx</code> elsewhere, please replace the segment <code><b>~/lmtx/</b></code> in the above code with the path to that directory.</i>
+</p>
+    <p>In principle, once your PATH has been modified, typing in a Terminal window
+</p>
+    <pre>which context
+</pre>
+    <p>or 
+</p>
+    <pre>context --version
+</pre>
+    <p>you should get the path to the ConTeXt binary and its version. If this is the case, then you can typeset a file named <code>myfile.tex</code> from the Terminal by typing:
+</p>
+    <pre>context myfile.tex
+</pre>
+    <hr>
+    <p>It may happen that for some reason not everything goes smoothly & you cannot typeset any document. In that case, try typing in a Terminal window:
+</p>
+    <pre>which luametatex
+</pre>
+    <p>in order to see whether <code><b>~/lmtx/</b>tex/texmf-osx-64/bin/luametatex</code> (or <code><b>~/lmtx/</b>tex/texmf-osx-arm64/bin/luametatex</code>) is present. If it is not, the download is incomplete.
+</p>
+    <p>If <code>luametatex</code> is present, in the Terminal type:
+</p>
+    <pre>luametatex --version
+</pre>
+    <p>and see whether it says, among other things:
+</p>
+    <pre>Functionality&nbsp;: level 20260106
+</pre>
+    <p>(here <code>20260106</code> is the date stamp of <code>luametatex</code>; this will change over time, of course). If not, there might be an issue with the files you have downloaded.
+</p>
+    <p>If there is no problem with the executable binary itself, in <code><b>~/lmtx/</b>tex/</code>, remove the directory <code>texmf-cache/</code>, then in the Terminal run:
+</p>
+    <pre>mtxrun --generate
+</pre>
+    <p>After that, in principle, the directory <code>texmf-cache/</code> should be present again.
+</p>
+    <p>If this is the case, in the Terminal window type:
+</p>
+    <pre>context --make --all
+</pre>
+    <p>If everything goes nicely, you should be able to see LMTX functioning.
+</p>
+    <h2>
+     <span class="mw-headline" id="Running_LMTX_from_TeXShop">
+      Running LMTX from TeXShop
+     </span>
+    </h2>
+    <p>Alternatively, you could use a TeX editor such as <a class="external text" href="https://pages.uoregon.edu/koch/texshop/obtaining.html" rel="nofollow">TeXShop</a>. Once TeXShop is installed, go to <code>~/Library/TeXShop/Engine/</code>, create a new file named <code>ConTeXt LMTX.engine</code>, open it in your preferred text editor, and add the following lines:
+</p>
+    <pre>#!/bin/bash
+export PATH=$PATH:<b>~/lmtx/</b>tex/texmf-osx-64/bin
+<b>~/lmtx/</b>tex/texmf-osx-64/bin/mtxrun --autogenerate --script context --directives="system.showerror" --autopdf "$1" --purgeall
+</pre>
+    <p><i>Reminder: if you have installed <code>lmtx/</code> elsewhere, please replace the segment <code><b>~/lmtx/</b></code> in the above code with the path to that directory.), and use <code>texmf-osx-arm64</code> instead of <code>texmf-osx-64</code> if you are on a newer Mac with an Apple Mx cpu</i>
+</p>
+    <p>Save & close the file. 
+</p>
+    <p>If you want to use LMTX as your default TeX typesetter in TeXShop, go to TeXShop -&gt; Preferences, then under the tab Typesetting, in the Default Command section, choose the radio button "Command listed below", then type <code>ConTeXt LMTX</code> below that.
+</p>
+    <hr>
+    <table cellspacing="0" class="navbox" style=";">
+     <tbody>
+      <tr>
+       <td style="padding:2px;">
+<table cellspacing="0" class="nowraplinks collapsible expanded" style="width:100%;background:transparent;color:inherit;;">
+
+<tbody><tr>
+<th class="navbox-title" colspan="2" style=";"><div style="float:left; width:6em;text-align:left;"> <span class="noprint plainlinks navbar" style><span style="white-space:nowrap;word-spacing:-.12em;"><a href="Template:Installation_navbox.html" title="Template:Installation navbox"><span style=";;border:none;" title="View this template">v</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a href="Template_talk:Installation_navbox.html" title="Template talk:Installation navbox"><span style=";;border:none;" title="Discuss this template">d</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a class="external text" href="index.php?title=Template:Installation_navbox&action=edit" rel="nofollow"><span style=";;border:none;" title="Edit this template">e</span></a></span></span>
+ </div> <span style="font-size:110%;"> Installation</span>
+</th></tr>
+<tr style="height:2px;">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">General
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="mw-redirect" href="Introduction/Installation.html" title="Input and compilation/Installation">ConTeXt LMTX Installation</a></li>
+<li><a href="TeX_Distributions.html" title="TeX Distributions">TeX Distributions</a></li>
+<li><a href="Related_Programs.html" title="Related Programs">Related Programs</a></li>
+<li><a href="InstallationPreviousMethods.html" title="InstallationPreviousMethods">Previous installation methods (until 2015)</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">TeX distributions
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="ConTeXt_Standalone.html" title="ConTeXt Standalone">ConTeXt Standalone (before LMTX)</a></li>
+<li><a class="mw-redirect" href="TeX_Live_2011.html" title="TeX Live">TeX Live</a> (<a class="new" href="index.php?title=TeX_Live_2019&action=edit&redlink=1" title="TeX Live 2019 (page does not exist)">2019</a>)  (<a href="TeX_Live_2011.html" title="TeX Live 2011">2011</a>) (<a href="TeX_Live_2010.html" title="TeX Live 2010">2010</a>) (<a href="TeX_Live_2009.html" title="TeX Live 2009">2009</a>)</li>
+<li><a href="MikTeX.html" title="MikTeX">MikTeX</a></li>
+<li><a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a></li>
+<li><a href="Aleph.html" title="Aleph">Aleph</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Operating systems
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<table cellspacing="0" class="nowraplinks navbox-subgroup" style="width:100%;;;;">
+<tbody><tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Linux</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Ubuntu.html" title="Ubuntu">Ubuntu</a></li>
+<li><a href="Debian_installation.html" title="Debian installation">Debian installation</a></li>
+<li><a href="Debian_TeXlive_install.html" title="Debian TeXlive install">Debian TeXlive install</a></li>
+<li><a href="OpenBSD_installation.html" title="OpenBSD installation">OpenBSD installation</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Windows</div>
+</td>
+<td class="navbox-list navbox-even" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Windows_Installation.html" title="Windows Installation">Windows Installation</a></li>
+<li><a href="Windows_Installation_new.html" title="Windows Installation new">Windows Installation new</a></li>
+<li><a href="Simple_Windows_Installation.html" title="Simple Windows Installation">Simple Windows Installation</a></li>
+<li><a href="Windows_10_64_bit_Installation_2019.html" title="Windows 10 64 bit Installation 2019">Windows 10 64 bit Installation 2019</a></li>
+<li><a href="Windows_10_64_bit_Installation_2019_--_how_to_install_from_TeXlive.html" title="Windows 10 64 bit Installation 2019 -- how to install from TeXlive">Windows 10 64 bit Installation 2019 -- how to install from TeXlive</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Mac</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="mw-selflink selflink">Installing ConTeXt LMTX on MacOS</a></li>
+<li><a href="Mac_Installation.html" title="Mac Installation">Installing ConTeXt MkIV on MacOS (before LMTX)</a></li></ul></div>
+</td></tr></tbody></table></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Integrating editors with ConTeXt
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Input_and_compilation/Text_editors.html" title="Input and compilation/Text editors">Text Editors</a></li>
+<li><a href="Input_and_compilation/Text_editors/SyncTeX.html" title="Input and compilation/Text editors/SyncTeX">SyncTeX</a></li></ul></div>
+</td></tr></tbody></table>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212428
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.052 seconds
+Real time usage: 0.064 seconds
+Preprocessor visited node count: 945/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 21931/2097152 bytes
+Template argument size: 8833/2097152 bytes
+Highest expansion depth: 12/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   42.327      1 -total
+ 82.13%   34.763      1 Template:Installation_navbox
+ 76.29%   32.292      1 Template:navbox
+ 32.30%   13.670      1 Template:Navbox_subgroup
+ 21.89%    9.266      1 Template:Navbox
+ 12.00%    5.078      1 Template:navbar
+ 11.60%    4.908     27 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5079-1!canonical and timestamp 20260109212428 and revision id 42655
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Installing_ConTeXt_LMTX_on_MacOS">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

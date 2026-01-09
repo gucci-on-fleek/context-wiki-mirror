@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/Typing/Verbatim with LuaTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/Typing/Verbatim_with_LuaTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/Typing/Verbatim with LuaTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2719&diff=41451">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Here are some verb-*.lua  files for syntax highlighting source code or configuration files. The provided files are based on the tex/context/base/verb-*.lua from the ConTeXt distribution and he verb-cpp.lua files posted by Shen Chen in <a class="external autonumber" href="http://archive.contextgarden.net/message/20081002.173802.460c46fe.en.html" rel="nofollow">[1]</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Python">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Python
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Apache_httpd.conf">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Apache httpd.conf
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#zc.buildout_config_files">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         zc.buildout config files
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Sample_Page">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Sample Page
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Python">
+      Python
+     </span>
+    </h2>
+    <p>The verb-py.lua file distinguishes between the following five states:
+</p>
+    <ul>
+     <li>
+      all statements, repeats, conditionals and operators
+     </li>
+     <li>
+      strings (multi line comment with
+      <code>' ' '</code>
+      or
+      <code>"""</code>
+      are supported)
+     </li>
+     <li>
+      preconditions (import, from, as)
+     </li>
+     <li>
+      comments
+     </li>
+     <li>
+      builtins
+     </li>
+    </ul>
+    <pre>-- filename&nbsp;: verb-py.lua
+-- comment  : Syntax highlighting for Python files.
+--            Used original tex/context/base/verb-*.lua files,
+--            verb-cpp.lua posted by Shen Chen to the NTG-context
+--            list (http://archive.contextgarden.net/message/20081002.173802.460c46fe.en.html)
+--            and vim syntax files as starting points.
+-- author   : Dra&zcaron;en Bai&cacute;
+if not buffers                  then buffers                  = { } end
+if not buffers.visualizers      then buffers.visualizers      = { } end
+if not buffers.visualizers.py   then buffers.visualizers.py   = { } end
+
+buffers.visualizers.py.in_py_raw_string = false
+
+buffers.visualizers.py.categories = {}
+
+buffers.visualizers.py.delimiters = {
+    '@', '%', '^', '&', '*', '(', ')', '-', '+', 
+    '=', '|', '\\', '/', '{', '}', '[', ']', ':', ';', '"', 
+    '\'', '&lt;', '&gt;', ',', '.', '?', ' ', '#' 
+}
+
+buffers.visualizers.py.colors = {
+    "prettyone",   -- statements, repeats, conditionals and operators
+    "prettytwo",   -- strings
+    "prettythree", -- preconditions
+    "prettyfour",  -- comments
+    "prettyfive"   -- builtins
+}
+
+buffers.visualizers.py.categories.statements = {
+    'assert',
+    'break',
+    'continue',
+    'del',
+    'except', 'exec',
+    'finally',
+    'global',
+    'lambda',
+    'pass', 'print',
+    'raise', 'return',
+    'try',
+    'with',
+    'yield',
+    'def', 'class'
+}
+
+buffers.visualizers.py.categories.repeats = {
+    'for', 'while'
+}
+
+buffers.visualizers.py.categories.conditionals = {
+    'if', 'elif', 'else',
+}
+
+buffers.visualizers.py.categories.operators = {
+    'and', 'in', 'is', 'not', 'or'
+}
+
+buffers.visualizers.py.categories.precondits = {
+    'import', 'from', 'as'
+}
+
+buffers.visualizers.py.categories.builtins = {
+     '__import__', 
+     'abs', 'apply', 
+     'bool', 'buffer', 
+     'callable', 'chr', 'classmethod', 'cmp', 'coerce', 'compile', 'complex', 
+     'delattr', 'dict', 'dir', 'divmod', 
+     'enumerate', 'Ellipsis', 'eval', 'execfile', 
+     'False', 'file', 'filter', 'float', 'frozenset', 
+     'getattr', 'globals', 
+     'hasattr', 'hash', 'help', 'hex', 
+     'id', 'input', 'int', 'intern', 'isinstance', 'issubclass', 'iter', 
+     'len', 'list', 'locals', 'long', 
+     'map', 'max', 'min', 
+     'None', 'NotImplemented', 
+     'object', 'oct', 'open', 'ord', 
+     'pow', 'property', 
+     'range', 'raw_input', 'reduce', 'reload', 'repr', 'reversed', 'round', 
+     'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super',
+     'True', 'tuple', 'type', 
+     'unichr', 'unicode', 
+     'vars', 
+     'xrange', 
+     'zip'
+}
+
+buffers.visualizers.py.words = { }
+
+for k,v in pairs(buffers.visualizers.py.categories) do
+    for _,w in pairs(v) do
+        buffers.visualizers.py.words[w] = k
+    end
+end
+
+buffers.visualizers.py.styles = { }
+-- Uncomment the following lines to enable different
+-- styles for each state
+-- buffers.visualizers.py.styles.statements = "\\bf "
+-- buffers.visualizers.py.styles.repeats = "\\bi "
+-- buffers.visualizers.py.styles.conditionals = "\\bi "
+-- buffers.visualizers.py.styles.operators = "\\bi "
+-- buffers.visualizers.py.styles.precondits = "\\bf "
+-- buffers.visualizers.py.styles.comments = "\\it "
+-- buffers.visualizers.py.styles.strings = "\\bi "
+
+function buffers.flush_py_word(state, word, result)
+    if #word&gt;0 then
+        local id = buffers.visualizers.py.words[word]
+        if id == 'precondits' then
+            state = buffers.change_state(3,state,result)
+            if buffers.visualizers.py.styles[id] then
+                result[#result+1] = buffers.visualizers.py.styles[id] .. buffers.escaped(word)
+            else
+                result[#result+1] = buffers.escaped(word)
+            end
+            state = buffers.finish_state(state,result)
+            return state
+        elseif id == 'builtins' then
+            state = buffers.change_state(5,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        elseif id then
+          state = buffers.change_state(1,state,result)
+          if buffers.visualizers.py.styles[id] then
+              result[#result+1] = buffers.visualizers.py.styles[id] .. buffers.escaped(word)
+          else
+              result[#result+1] = buffers.escaped(word)
+          end
+            state = buffers.finish_state(state,result)
+            return state
+        else
+            result[#result+1] = buffers.escaped(word)
+            return state
+        end
+    else
+        state = buffers.finish_state(state,result)
+        return state
+    end
+end
+
+
+function buffers.visualizers.py.flush_line(str,nested)
+    local i, result , word = 1, { }, ""
+    local state = 0
+    local delimiters=buffers.visualizers.py.delimiters
+    local is_delimiter = false
+    local in_string = false
+  
+    buffers.currentcolors = buffers.visualizers.py.colors
+  
+    while i &lt;= #str do
+        c=string.sub(str,i,i)
+        if buffers.visualizers.py.in_py_raw_string then
+            if c=="\'" and string.sub(str,i,i+2)=="\'\'\'" then
+                -- without the next line the triple quotes won't be colored
+                -- correctly if they appear in the beginning of a line
+                state = buffers.change_state(2,state,result)
+                result[#result+1] = buffers.escaped(string.sub(str,i,i+2))
+                i=i+2
+                buffers.visualizers.py.in_py_raw_string=false
+                state = buffers.finish_state(state,result)
+            elseif c=="\"" and string.sub(str,i,i+2)=="\"\"\"" then
+                -- without the next line the triple quotes won't be colored
+                -- correctly if they appear in the beginning of a line
+                state = buffers.change_state(2,state,result)
+                result[#result+1] = buffers.escaped(string.sub(str,i,i+2))
+                i=i+2
+                buffers.visualizers.py.in_py_raw_string=false
+                state = buffers.finish_state(state,result)
+            else
+                state = buffers.change_state(2,state,result)
+                result[#result+1] = buffers.escaped_chr(c)
+            end
+        elseif in_string then
+            if c=="\\" then
+                result[#result+1] = buffers.escaped(string.sub(str,i,i+1))
+                i=i+1
+            elseif c=="\"" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_string=false
+                state = buffers.finish_state(state,result)
+            elseif c=="\'" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_string=false
+                state = buffers.finish_state(state,result)
+            else
+                result[#result+1] = buffers.escaped_chr(c)
+            end
+        else
+            for _,v in ipairs(delimiters) do
+                if  c==v then
+                    is_delimiter = true
+                end
+            end
+            if is_delimiter then
+                if c==" " then
+                    state = buffers.flush_py_word(state,word,result)
+                    result[#result+1] = "\\obs "
+                elseif (c=="\'") and string.sub(str,i,i+2)=="\'\'\'" then
+                    state = buffers.flush_py_word(state,word,result)
+                    buffers.visualizers.py.in_py_raw_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i,i+1))
+                    i=i+1
+                elseif (c=="\"") and string.sub(str,i,i+2)=="\"\"\"" then
+                    state = buffers.flush_py_word(state,word,result)
+                    buffers.visualizers.py.in_py_raw_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i,i+1))
+                    i=i+1
+                elseif (c=="#") then
+                    state = buffers.flush_py_word(state,word,result)
+                    state = buffers.change_state(4,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i))
+                    i=#str
+                elseif (c=="\"") and not in_string then
+                    state = buffers.flush_py_word(state,word,result)
+                    in_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                elseif (c=="\'") and not in_string then
+                    state = buffers.flush_py_word(state,word,result)
+                    in_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                elseif (c==".") and (#word==0 or string.find(string.sub(word,1,1),'%d')) then
+                   word = word .. c
+                    is_delimiter=false
+                else
+                    state = buffers.flush_py_word(state,word,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                end
+                if is_delimiter then
+                    word = ""
+                    is_delimiter=false
+                end
+            else
+              word = word .. c
+            end
+        end
+        i=i+1
+    end
+    state = buffers.flush_py_word(state,word,result)
+    buffers.flush_result(result,false)
+end
+</pre>
+    <h2>
+     <span class="mw-headline" id="Apache_httpd.conf">
+      Apache httpd.conf
+     </span>
+    </h2>
+    <p>The verb-apa.lua file distinguishes between the following five states:
+</p>
+    <ul>
+     <li>
+      declarations
+     </li>
+     <li>
+      strings
+     </li>
+     <li>
+      sections (like
+      <code>&lt;Directory&gt;</code>
+      and
+      <code>&lt;/Directory&gt;</code>
+      )
+     </li>
+     <li>
+      comments
+     </li>
+     <li>
+      options
+     </li>
+    </ul>
+    <pre>-- filename&nbsp;: verb-apa.lua
+-- comment  : Syntax highlighting for Apache config files.
+--            Used original tex/context/base/verb-*.lua files,
+--            verb-cpp.lua posted by Shen Chen to the NTG-context
+--            list (http://archive.contextgarden.net/message/20081002.173802.460c46fe.en.html)
+--            and vim syntax files as starting points.
+-- author   : Dra&zcaron;en Bai&cacute;
+if not buffers                  then buffers                  = { } end
+if not buffers.visualizers      then buffers.visualizers      = { } end
+if not buffers.visualizers.apa  then buffers.visualizers.apa  = { } end
+
+buffers.visualizers.apa.categories = {}
+
+buffers.visualizers.apa.delimiters = {
+    '"', '\'', ',', '.', '?', ' ', '#', '*', '&gt;' 
+}
+
+buffers.visualizers.apa.colors = {
+    "prettyone",   -- declarations
+    "prettytwo",   -- strings
+    "prettythree", -- sections
+    "prettyfour",  -- comments
+    "prettyfive"   -- options
+}
+
+buffers.visualizers.apa.categories.declarations_core = {
+    'AcceptFilter', 'AcceptMutex', 'AcceptPathInfo', 'AccessFileName', 'AddDefaultCharset', 'AllowEncodedSlashes',
+    'AllowOverride', 'AssignUserId', 'AuthName', 'AuthType', 
+    'CGIMapExtension', 'ChildPerUserId', 'ContentDigest', 'CoreDumpDirectory', 
+    'DefaultType', 'DocumentRoot', 
+    'EnableExceptionHook', 'EnableMMAP', 'EnableSendfile', 'ErrorDocument', 'ErrorLog', 
+    'FileETag', 'ForceType', 
+    'GracefulShutdownTimeout', 'Group', 
+    'HostNameLookups', 
+    'IdentityCheck', 'Include', 
+    'KeepAlive', 'KeepAliveTimeout', 
+    'LimitInternalRecursion', 'LimitRequestBody', 'LimitRequestFields', 'LimitRequestFieldsize', 'LimitRequestLine', 
+    'LimitXMLRequestBody', 'Listen', 'ListenBacklog', 'LockFile',
+    'LogLevel', 
+    'MaxClients', 'MaxKeepAliveRequests', 'MaxMemFree', 'MaxRequestsPerChild', 'MaxSpareServers', 'MaxSpareThreads',
+    'MaxSpareThreadsPerChild', 'MaxThreads', 'MinSpareServers',
+    'MinSpareThreads', 
+    'NameVirtualHost', 'NumServers', 
+    'Options', 
+    'PidFile', 
+    'Require', 'RLimitCPU', 'RLimitMEM', 'RLimitNPROC', 
+    'Satisfy', 'ScoreBoardFile', 'ScriptInterpreterSource', 'SendBufferSize', 'ServerAdmin', 'ServerAlias', 'ServerLimit',
+    'ServerName', 'ServerPath', 'ServerRoot', 'ServerSignature', 'ServerTokens',
+    'SetHandler', 'SetInputFilter', 'SetOutputFilter', 'StartServers', 'StartThreads', 
+    'ThreadLimit', 'ThreadsPerChild', 'ThreadStackSize', 'TimeOut', 'TraceEnable', 
+    'UseCanonicalName', 'User', 
+    'Win32DisableAcceptEx'
+}
+
+buffers.visualizers.apa.categories.declarations_mod = {
+    -- mod_actions
+    'Action', 'Script',
+    -- mod_alias
+    'Alias', 'AliasMatch', 'Redirect', 'RedirectMatch', 'RedirectTemp', 'RedirectPermanent', 'ScriptAlias', 'ScriptAliasMatch',
+    -- mod_auth_basic
+    'AuthBasicAuthoritative', 'AuthBasicProvider',
+    -- mod_auth_digest
+    'AuthDigestAlgorithm', 'AuthDigestDomain', 'AuthDigestNcCheck', 'AuthDigestNonceFormat', 'AuthDigestNonceLifetime',
+    'AuthDigestProvider', 'AuthDigestQop', 'AuthDigestShmemSize',
+    -- mod_authn_anon
+    'Anonymous', 'Anonymous_Authoritative', 'Anonymous_LogEmail', 'Anonymous_MustGiveEmail', 'Anonymous_NoUserID',
+    'Anonymous_VerifyEmail',
+    -- mod_authn_dbd
+    'AuthDBDUserPWQuery', 'AuthDBDUserRealmQuery',
+    -- mod_authn_dbm
+    'AuthDBMType', 'AuthDBMUserFile',
+    -- mod_authn_default
+    'AuthDefaultAuthoritative',
+    -- mod_authn_file
+    'AuthUserFile',
+    -- mod_authnz_ldap
+    'AuthLDAPBindDN', 'AuthLDAPBindPassword', 'AuthLDAPCharsetConfig', 'AuthLDAPCompareDNOnServer',
+    'AuthLDAPDereferenceAliases', 'AuthLDAPGroupAttribute',
+    'AuthLDAPGroupAttributeIsDN', 'AuthLDAPRemoteUserAttribute', 'AuthLDAPRemoteUserIsDN', 'AuthLDAPUrl',
+    'AuthzLDAPAuthoritative',
+    -- mod_authz_dbm
+    'AuthDBMGroupFile', 'AuthzDBMAuthoritative', 'AuthzDBMType',
+    -- mod_authz_default
+    'AuthzDefaultAuthoritative',
+    -- mod_authz_groupfile
+    'AuthGroupFile', 'AuthzGroupFileAuthoritative',
+    -- mod_authz_host
+    'Allow', 'Deny', 'Order',
+    -- mod_authz_owner
+    'AuthzOwnerAuthoritative',
+    -- mod_authz_user
+    'AuthzUserAuthoritative',
+    -- mod_autoindex
+    'AddAlt', 'AddAltByEncoding', 'AddAltByType', 'AddDescription', 'AddIcon', 'AddIconByEncoding', 'AddIconByType',
+    'DefaultIcon', 'HeaderName', 'IndexHeadInsert', 'IndexIgnore',
+    'IndexOptions', 'IndexOrderDefault', 'IndexStyleSheet', 'ReadmeName',
+    -- mod_cache
+    'CacheDefaultExpire', 'CacheDisable', 'CacheEnable', 'CacheIgnoreCacheControl', 'CacheIgnoreHeaders',
+    'CacheIgnoreNoLastMod', 'CacheIgnoreQueryString', 'CacheLastModifiedFactor',
+    'CacheMaxExpire', 'CacheStoreNoStore', 'CacheStorePrivate',
+    -- mod_cern_meta
+    'MetaDir', 'MetaFiles', 'MetaSuffix',
+    -- mod_cgi and mod_cgid
+    'ScriptLog', 'ScriptLogBuffer', 'ScriptLogLength', 'ScriptSock',
+    -- mod_charset_lite
+    'CharsetDefault', 'CharsetOptions', 'CharsetSourceEnc',
+    -- mod_dav
+    'Dav', 'DavDepthInfinity', 'DavMinTimeout',
+    -- mod_dav_fs
+    'DavLockDB',
+    -- mod_dav_lock
+    'DavGenericLockDB',
+    -- mod_dbd
+    'DBDExptime', 'DBDKeep', 'DBDMax', 'DBDMin', 'DBDParams', 'DBDPersist', 'DBDPrepareSQL', 'DBDriver',
+    -- mod_deflate
+    'DeflateBufferSize', 'DeflateCompressionLevel', 'DeflateFilterNote', 'DeflateMemLevel', 'DeflateWindowSize',
+    -- mod_dir
+    'DirectoryIndex', 'DirectorySlash',
+    -- mod_disk_cache
+    'CacheDirLength', 'CacheDirLevels', 'CacheMaxFileSize', 'CacheMinFileSize', 'CacheRoot',
+    -- mod_dumpio
+    'DumpIOInput', 'DumpIOLogLevel', 'DumpIOOutput',
+    -- mod_echo
+    'ProtocolEcho',
+    -- mod_env
+    'PassEnv', 'SetEnv', 'UnsetEnv',
+    -- mod_example
+    'Example',
+    -- mod_expires
+    'ExpiresActive', 'ExpiresByType', 'ExpiresDefault',
+    -- mod_ext_filter
+    'ExtFilterDefine', 'ExtFilterOptions',
+    -- mod_file_cache
+    'CacheFile', 'MMapFile',
+    -- mod_filter
+    'FilterChain', 'FilterDeclare', 'FilterProtocol', 'FilterProvider', 'FilterTrace',
+    -- mod_headers
+    'Header', 'RequestHeader',
+    -- mod_ident
+    'IdentityCheck', 'IdentityCheckTimeout',
+    -- mod_imagemap
+    'ImapMenu', 'ImapDefault', 'ImapBase',
+    -- mod_include
+    'SSIEnableAccess', 'SSIEndTag', 'SSIErrorMsg', 'SSIStartTag', 'SSITimeFormat', 'SSIUndefinedEcho', 'XBitHack',
+    -- mod_info
+    'AddModuleInfo',
+    -- mod_isapi
+    'ISAPIAppendLogToErrors', 'ISAPIAppendLogToQuery', 'ISAPICacheFile', 'ISAIPFakeAsync', 'ISAPILogNotSupported', 'ISAPIReadAheadBuffer',
+    -- mod_ldap
+    'LDAPCacheEntries', 'LDAPCacheTTL', 'LDAPConnectionTimeout', 'LDAPOpCacheEntries', 'LDAPOpCacheTTL',
+    'LDAPSharedCacheFile', 'LDAPSharedCacheSize', 'LDAPTrustedClientCert',
+    'LDAPTrustedGlobalCert', 'LDAPTrustedMode', 'LDAPVerifyServerCert',
+    -- mod_log_config
+    'BufferedLogs', 'CookieLog', 'CustomLog', 'LogFormat', 'TransferLog',
+    -- mod_log_forensic
+    'ForensicLog',
+    -- mod_mem_cache
+    'MCacheMaxObjectCount', 'MCacheMaxObjectSize', 'MCacheMaxStreamingBuffer', 'MCacheMinObjectSize',
+    'MCacheRemovalAlgorithm', 'MCacheSize',
+    -- mod_mime
+    'AddCharset', 'AddEncoding', 'AddHandler', 'AddInputFilter', 'AddLanguage', 'AddOutputFilter', 'AddType', 'DefaultLanguage',
+    'ModMimeUsePathInfo', 'MultiviewsMatch', 'RemoveCharset',
+    'RemoveEncoding', 'RemoveHandler', 'RemoveInputFilter', 'RemoveLanguage', 'RemoveOutputFilter', 'RemoveType', 'TypesConfig',
+    -- mod_mime_magic
+    'MimeMagicFile',
+    -- mod_negotiation
+    'CacheNegotiatedDocs', 'ForceLanguagePriority', 'LanguagePriority',
+    -- mod_nw_ssl
+    '', 'NWSSLTrustedCerts', 'NWSSLUpgradeable', 'SecureListen',
+    -- mod_proxy
+    'AllowCONNECT', 'BalancerMember', 'NoProxy', 'ProxyBadHeader', 'ProxyBlock', 'ProxyDomain', 'ProxyErrorOverride',
+    'ProxyFtpDirCharset', 'ProxyIOBufferSize', 'ProxyMaxForwards', 'ProxyPass',
+    'ProxyPassInterpolateEnv', 'ProxyPassMatch', 'ProxyPassReverse', 'ProxyPassReverseCookieDomain', 'ProxyPassReverseCookiePath',
+    'ProxyPreserveHost', 'ProxyReceiveBufferSize', 'ProxyRemote',
+    'ProxyRemoteMatch', 'ProxyRequests', 'ProxySet', 'ProxyStatus', 'ProxyTimeout', 'ProxyVia',
+    -- mod_rewrite
+    'RewriteBase', 'RewriteCond', 'RewriteEngine', 'RewriteLock', 'RewriteLog', 'RewriteLogLevel', 'RewriteMap', 'RewriteOptions', 'RewriteRule',
+    -- mod_setenvif
+    'BrowserMatch', 'BrowserMatchNoCase', 'SetEnvIf', 'SetEnvIfNoCase',
+    -- mod_so
+    'LoadFile', 'LoadModule',
+    -- mod_speling
+    'CheckCaseOnly', 'CheckSpelling',
+    -- mod_ssl
+    'SSLCACertificateFile', 'SSLCACertificatePath', 'SSLCADNRequestFile', 'SSLCADNRequestPath', 'SSLCARevocationFile',
+    'SSLCARevocationPath', 'SSLCertificateChainFile', 'SSLCertificateFile',
+    'SSLCertificateKeyFile', 'SSLCipherSuite', 'SSLCryptoDevice', 'SSLEngine', 'SSLHonorCipherOrder', 'SSLMutex', 'SSLOptions',
+    'SSLPassPhraseDialog', 'SSLProtocol', 'SSLProxyCACertificateFile', 'SSLProxyCACertificatePath', 'SSLProxyCARevocationFile',
+    'SSLProxyCARevocationPath', 'SSLProxyCipherSuite', 'SSLProxyEngine',
+    'SSLProxyMachineCertificateFile', 'SSLProxyMachineCertificatePath',
+    'SSLProxyProtocol', 'SSLProxyVerify', 'SSLProxyVerifyDepth', 'SSLRandomSeed', 'SSLRenegBufferSize', 'SSLRequire',
+    'SSLRequireSSL', 'SSLSessionCache', 'SSLSessionCacheTimeout', 'SSLUserName',
+    'SSLVerifyClient', 'SSLVerifyDepth',
+    -- mod_status
+    'ExtendedStatus', 'SeeRequestTail',
+    -- mod_substitute
+    'Substitute',
+    -- mod_suexec
+    'SuexecUserGroup',
+    -- mod_userdir
+    'UserDir',
+    -- mod_usertrack
+    'CookieDomain', 'CookieExpires', 'CookieName', 'CookieStyle', 'CookieTracking',
+    -- mod_vhost_alias
+    'VirtualDocumentRoot', 'VirtualDocumentRootIP', 'VirtualScriptAlias', 'VirtualScriptAliasIP'
+}
+
+buffers.visualizers.apa.categories.options = {
+    -- core
+    'INode', 'MTime', 'Size',
+    'Any', 'All', 'On', 'Off', 'Double', 'EMail', 'DNS', 'Min', 'Minimal', 'OS', 'Prod', 'ProductOnly', 'Full',
+    'emerg', 'alert', 'crit', 'error', 'warn', 'notice', 'info', 'debug',
+    'registry', 'script', 'inetd', 'standalone',
+    'user', 'group',
+    'flock', 'fcntl', 'sysvsem', 'pthread',
+    -- mod_alias
+    'permanent', 'temp', 'seeother', 'gone',
+    -- mod_auth_digest
+    'none', 'auth', 'auth-int', 'MD5-sess',
+    -- mod_auth_dbm
+    'default', 'SDBM', 'GDBM', 'NDBM', 'DB',
+    -- mod_authz_host
+    'from',
+    -- mod_authnz_ldap
+    'always', 'never', 'searching', 'finding',
+    'ldap-user', 'ldap-group', 'ldap-dn', 'ldap-attribute', 'ldap-filter',
+    -- mod_autoindex
+    'DescriptionWidth', 'FancyIndexing', 'FoldersFirst', 'IconHeight', 'IconsAreLinks', 'IconWidth', 'NameWidth',
+    'ScanHTMLTitles', 'SuppressColumnSorting', 'SuppressDescription',
+    'SuppressHTMLPreamble', 'SuppressLastModified', 'SuppressSize', 'TrackModified',
+    'Ascending', 'Descending', 'Name', 'Date', 'Description',
+    'IgnoreClient', 'IgnoreCase', 'ShowForbidden', 'SuppresRules',
+    -- mod_charset_lite
+    'DebugLevel', 'ImplicitAdd', 'NoImplicitAdd',
+    -- mod_ext_filter
+    'PreservesContentLength', 'LogStderr', 'NoLogStderr',
+    -- mod_headers
+    'set', 'unset', 'append', 'add',
+    -- mod_imagemap
+    'formatted', 'semiformatted', 'unformatted',
+    'nocontent', 'referer', 'map',
+    -- mod_ldap
+    'CA_DER', 'CA_BASE64', 'CA_CERT7_DB', 'CA_SECMOD', 'CERT_DER', 'CERT_BASE64', 'CERT_KEY3_DB',
+    'CERT_NICKNAME', 'CERT_PFX', 'KEY_DER', 'KEY_BASE64', 'KEY_PFX',
+    -- mod_mime
+    'NegotiatedOnly', 'Filters', 'Handlers',
+    -- mod_rewrite
+    'inherit',
+    -- mod_ssl
+    'builtin', 'sem',
+    'optional', 'optional_no_ca',
+    'file', 'exec', 'egd', 'dbm', 'shm',
+    'SSLv2', 'SSLv3', 'TLSv1', 'kRSA', 'kHDr', 'kDHd', 'kEDH', 'aNULL', 'aRSA', 'aDSS', 'aRH', 'eNULL', 'DES', '3DES',
+    'RC2', 'RC4', 'IDEA', 'MD5', 'SHA1', 'SHA', 'EXP', 'EXPORT40', 'EXPORT56', 'LOW',
+    'MEDIUM', 'HIGH', 'RSA', 'DH', 'EDH', 'ADH', 'DSS', 'NULL',
+    -- mod_usertrack
+    'Netscape', 'Cookie', 'Cookie2', 'RFC2109', 'RFC2965'
+}
+
+
+buffers.visualizers.apa.categories.sections = {
+    '&lt;Directory', '&lt;/Directory', '&lt;DirectoryMatch', '&lt;/DirectoryMatch', '&lt;Files', '&lt;/Files',
+    '&lt;FilesMatch', '&lt;/FilesMatch', '&lt;IfModule', '&lt;/IfModule', 
+    '&lt;IfDefine', '&lt;/IfDefine', '&lt;Location', '&lt;/Location', '&lt;LocationMatch', '&lt;/LocationMatch',
+    '&lt;VirtualHost', '&lt;/VirtualHost', '&lt;ProxyMatch', '&lt;/ProxyMatch'
+}
+buffers.visualizers.apa.words = { }
+
+for k,v in pairs(buffers.visualizers.apa.categories) do
+    for _,w in pairs(v) do
+        buffers.visualizers.apa.words[w] = k
+    end
+end
+
+function buffers.flush_apa_word(state, word, result)
+    if #word&gt;0 then
+        local id = buffers.visualizers.apa.words[word]
+        if id == 'sections' then
+            state = buffers.change_state(1,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        elseif id == 'options' then
+            state = buffers.change_state(5,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        elseif id then
+            state = buffers.change_state(3,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        else
+            result[#result+1] = buffers.escaped(word)
+            return state
+        end
+    else
+        state = buffers.finish_state(state,result)
+        return state
+    end
+end
+
+
+function buffers.visualizers.apa.flush_line(str,nested)
+    local i, result , word = 1, { }, ""
+    local state = 0
+    local delimiters=buffers.visualizers.apa.delimiters
+    local is_delimiter = false
+    local in_string = false
+  
+    buffers.currentcolors = buffers.visualizers.apa.colors
+  
+    while i &lt;= #str do
+        c=string.sub(str,i,i)
+  
+        if in_string then
+            if c=="\\" then
+                result[#result+1] = buffers.escaped(string.sub(str,i,i+1))
+                i=i+1
+            elseif c=="\"" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_string=false
+                state = buffers.finish_state(state,result)
+            elseif c=="\'" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_string=false
+                state = buffers.finish_state(state,result)
+            else
+                result[#result+1] = buffers.escaped_chr(c)
+            end
+        else
+            for _,v in ipairs(delimiters) do
+                if  c==v then
+                    is_delimiter = true
+                end
+            end
+            if is_delimiter then
+                if c==" " then
+                    state = buffers.flush_apa_word(state,word,result)
+                    result[#result+1] = "\\obs "
+                elseif (c=="#") then
+                    state = buffers.flush_apa_word(state,word,result)
+                    state = buffers.change_state(4,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i))
+                    i=#str
+                elseif (c=="\"") and not in_string then
+                    state = buffers.flush_apa_word(state,word,result)
+                    in_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                elseif (c=="\'") and not in_string then
+                    state = buffers.flush_apa_word(state,word,result)
+                    in_string = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                elseif (c=="&gt;") and not in_string then
+                    state = buffers.flush_apa_word(state,word,result)
+                    state = buffers.change_state(1,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                elseif (c==".") and (#word==0 or string.find(string.sub(word,1,1),'%d')) then
+                    word = word .. c
+                    is_delimiter=false
+                else
+                    state = buffers.flush_apa_word(state,word,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                end
+                if is_delimiter then
+                    word = ""
+                    is_delimiter=false
+                end
+            else
+                word = word .. c
+            end
+        end
+        i=i+1
+    end
+    state = buffers.flush_apa_word(state,word,result)
+    buffers.flush_result(result,false)
+end
+</pre>
+    <h2>
+     <span class="mw-headline" id="zc.buildout_config_files">
+      zc.buildout config files
+     </span>
+    </h2>
+    <p>The verb-py.cfg file distinguishes between the following four states:
+</p>
+    <ul>
+     <li>
+      sections
+     </li>
+     <li>
+      variables
+     </li>
+     <li>
+      keywords
+     </li>
+     <li>
+      comments
+     </li>
+    </ul>
+    <pre>-- filename&nbsp;: verb-cfg.lua
+-- comment  : Syntax highlighting for zc.buildout config files.
+--            Used original tex/context/base/verb-*.lua files,
+--            verb-cpp.lua posted by Shen Chen to the NTG-context
+--            list (http://archive.contextgarden.net/message/20081002.173802.460c46fe.en.html)
+--            and vim syntax files as starting points.
+-- author   : Dra&zcaron;en Bai&cacute;
+if not buffers                  then buffers                  = { } end
+if not buffers.visualizers      then buffers.visualizers      = { } end
+if not buffers.visualizers.cfg  then buffers.visualizers.cfg  = { } end
+
+buffers.visualizers.cfg.categories = {}
+
+buffers.visualizers.cfg.delimiters = {
+    '"', '\'', ' ', '#', '*', '&gt;' ,'=', '[', ']', '{', '}', '$'
+}
+
+buffers.visualizers.cfg.colors = {
+    "prettyone",   -- sections
+    "prettytwo",   -- variables
+    "prettythree", -- keywords
+    "prettyfour"   -- comments
+}
+
+buffers.visualizers.cfg.categories.keywords = {
+    'additional-fake-eggs', 
+    'client1-address', 'client2-address', 'command', 
+    'debug-mode', 'deprecation-warnings', 'develop', 'download-cache',
+    'effective-user', 'eggs', 'eggs-directory', 'environment-vars', 'event-log', 'extends', 'extra-paths', 
+    'fake-zope-eggs', 'find-links', 
+    'http-address', 
+    'instance-clone', 'interpreter', 
+    'lock-file', 
+    'nested-packages', 'newest', 
+    'parts', 'pid-file', 'primary-port', 'products', 
+    'recipe', 
+    'scripts', 'socket-name', 'sudo-command', 
+    'unzip', 'update-command', 'url', 'urls', 'user', 
+    'verbose-security', 'version-suffix-packages', 'versions', 
+    'z2-log', 'zcml', 'zeo-address', 'zeo-client', 'zeo-log', 'zope-directory', 'zope2-location'
+}
+
+buffers.visualizers.cfg.words = { }
+
+for k,v in pairs(buffers.visualizers.cfg.categories) do
+    for _,w in pairs(v) do
+        buffers.visualizers.cfg.words[w] = k
+    end
+end
+
+function buffers.flush_cfg_word(state, word, result)
+    if #word&gt;0 then
+        local id = buffers.visualizers.cfg.words[word]
+        if id == 'keywords' then
+            state = buffers.change_state(3,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        elseif id then
+            state = buffers.change_state(3,state,result)
+            result[#result+1] = buffers.escaped(word)
+            state = buffers.finish_state(state,result)
+            return state
+        else
+            result[#result+1] = buffers.escaped(word)
+            return state
+        end
+    else
+        state = buffers.finish_state(state,result)
+        return state
+    end
+end
+
+
+function buffers.visualizers.cfg.flush_line(str,nested)
+    local i, result , word = 1, { }, ""
+    local state = 0
+    local delimiters=buffers.visualizers.cfg.delimiters
+    local is_delimiter = false
+    local in_variable = false
+    local in_section = false
+    buffers.currentcolors = buffers.visualizers.cfg.colors
+
+    while i &lt;= #str do
+        c=string.sub(str,i,i)
+
+        if in_variable then
+            if c=="}" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_variable=false
+                state = buffers.finish_state(state,result)
+            else
+                result[#result+1] = buffers.escaped_chr(c)
+            end
+        elseif in_section then
+            if c=="]" then
+                result[#result+1] = buffers.escaped_chr(c)
+                in_section=false
+                state = buffers.finish_state(state,result)
+            else
+                result[#result+1] = buffers.escaped_chr(c)
+            end
+        else
+            for _,v in ipairs(delimiters) do
+                if  c==v then
+                    is_delimiter = true
+                end
+            end
+            if is_delimiter then
+                if c==" " then
+                    state = buffers.flush_cfg_word(state,word,result)
+                    result[#result+1] = "\\obs "
+                elseif (c=="#") then
+                    state = buffers.flush_cfg_word(state,word,result)
+                    state = buffers.change_state(4,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i))
+                    i=#str
+                elseif (c=="$") and string.sub(str,i,i+1)=="${" then
+                    state = buffers.flush_cfg_word(state,word,result)
+                    in_variable = true
+                    state = buffers.change_state(2,state,result)
+                    result[#result+1] = buffers.escaped(string.sub(str,i,i+1))
+                    i=i+1
+                elseif (c=="[") and not in_section then
+                    state = buffers.flush_cfg_word(state,word,result)
+                    in_section = true
+                    state = buffers.change_state(1,state,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                else
+                    state = buffers.flush_cfg_word(state,word,result)
+                    result[#result+1] = buffers.escaped_chr(c)
+                end
+                if is_delimiter then
+                    word = ""
+                    is_delimiter=false
+                end
+            else
+                word = word .. c
+            end
+        end
+    i=i+1
+    end
+    state = buffers.flush_cfg_word(state,word,result)
+    buffers.flush_result(result,false)
+end
+</pre>
+    <h2>
+     <span class="mw-headline" id="Sample_Page">
+      Sample Page
+     </span>
+    </h2>
+    <p>Here is an example how to use these files:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>colorprettyone<span class="brx">]</span>  <span class="brx">[</span>r<span class="brx">=</span>.9, g<span class="brx">=</span>.0, b<span class="brx">=</span>.0<span class="brx">]</span> <span class="comment">% red</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>colorprettytwo<span class="brx">]</span>  <span class="brx">[</span>r<span class="brx">=</span>.0, g<span class="brx">=</span>.8, b<span class="brx">=</span>.0<span class="brx">]</span> <span class="comment">% green</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>colorprettythree<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>.0, g<span class="brx">=</span>.0, b<span class="brx">=</span>.9<span class="brx">]</span> <span class="comment">% blue</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>colorprettyfour<span class="brx">]</span> <span class="brx">[</span>s<span class="brx">=</span>0.60<span class="brx">]</span>           <span class="comment">% gray</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>colorprettyfive<span class="brx">]</span> <span class="brx">[</span>orange<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definepalet</span></span><span class="brx">[</span>colorpretty<span class="brx">]</span>
+            <span class="brx">[</span>prettyone<span class="brx">=</span>colorprettyone,
+            prettytwo<span class="brx">=</span>colorprettytwo,
+            prettythree<span class="brx">=</span>colorprettythree,
+            prettyfour<span class="brx">=</span>colorprettyfour,
+            prettyfive<span class="brx">=</span>colorprettyfive<span class="brx">]</span>
+<span class="comment">% Apache httpd.conf listings</span>
+<span class="cs">\installprettytype</span><span class="brx">[</span>APA<span class="brx">]</span><span class="brx">[</span>APA<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetyping</span></span>     <span class="brx">[</span>APA<span class="brx">]</span>           <span class="brx">[</span>option<span class="brx">=</span>APA<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definepalet</span></span>      <span class="brx">[</span>APAcolorpretty<span class="brx">]</span><span class="brx">[</span>colorpretty<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuptyping</span></span>      <span class="brx">[</span>APA<span class="brx">]</span>           <span class="brx">[</span>bodyfont<span class="brx">=</span>10pt<span class="brx">]</span>
+<span class="comment">% Python listings</span>
+<span class="cs">\installprettytype</span><span class="brx">[</span>PY<span class="brx">]</span><span class="brx">[</span>PY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetyping</span></span>     <span class="brx">[</span>PY<span class="brx">]</span>            <span class="brx">[</span>option<span class="brx">=</span>PY<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definepalet</span></span>      <span class="brx">[</span>PYcolorpretty<span class="brx">]</span> <span class="brx">[</span>colorpretty<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuptyping</span></span>      <span class="brx">[</span>PY<span class="brx">]</span>            <span class="brx">[</span>bodyfont<span class="brx">=</span>10pt<span class="brx">]</span>
+<span class="comment">% buildout.cfg listings</span>
+<span class="cs">\installprettytype</span><span class="brx">[</span>CFG<span class="brx">]</span><span class="brx">[</span>CFG<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetyping</span></span>     <span class="brx">[</span>CFG<span class="brx">]</span>           <span class="brx">[</span>option<span class="brx">=</span>CFG<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definepalet</span></span>      <span class="brx">[</span>CFGcolorpretty<span class="brx">]</span><span class="brx">[</span>colorpretty<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuptyping</span></span>      <span class="brx">[</span>CFG<span class="brx">]</span>           <span class="brx">[</span>bodyfont<span class="brx">=</span>10pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>httpd.conf sample<span class="br">}</span>
+<span class="cs">\startAPA</span>
+<virtualhost *>
+    ServerName www.example.com
+    ErrorLog /var/log/apache2/error.log
+    LogLevel error
+    CustomLog /var/log/apache2/access.log combinedio
+
+    RewriteEngine On
+    RewriteLog /var/log/apache2/rewrite.log
+
+    <span class="brx">#</span> allow access to ZMI only from local network
+    <locationmatch manage>
+        Order Deny,Allow
+        Deny from all
+        Allow from 10.
+    </locationmatch>
+</virtualhost>
+<span class="cs">\stopAPA</span>
+
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>Python sample<span class="br">}</span>
+<span class="cs">\startPY</span>
+<span class="brx">#</span>!/usr/local/bin/python
+
+import os.path, sys
+
+<span class="brx">#</span> Just a comment
+foo <span class="brx">=</span> os.environ.get<span class="brx">(</span>'FOO'<span class="brx">)</span>
+bar <span class="brx">=</span> os.environ.get<span class="brx">(</span>'BAR'<span class="brx">)</span>
+
+if foo:
+    foo <span class="brx">=</span> os.path.realpath<span class="brx">(</span>foobar<span class="brx">)</span>
+elif bar:
+    bar <span class="brx">=</span> os.path.realpath<span class="brx">(</span>bar<span class="brx">)</span>
+else:
+    print &gt;&gt; sys.stderr, '''
+    FOO or BAR need to be set!
+    '''
+
+<span class="brx">#</span> Another comment
+def test_foobar_title<span class="brx">(</span>self<span class="brx">)</span>: 
+    nothing_special <span class="brx">=</span> getattr<span class="brx">(</span>self.types, 'FooBar'<span class="brx">)</span> 
+<span class="cs">\stopPY</span>
+
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>buildout.cfg sample<span class="br">}</span>
+<span class="cs">\startCFG</span>
+<span class="brx">#</span> Use this section to install and configure a Zope
+<span class="brx">#</span> Enterprise Objects server.
+<span class="brx">#</span> For options see http://pypi.python.org/pypi/plone.recipe.zope2zeoserver
+<span class="brx">[</span>zeoserver<span class="brx">]</span>
+recipe <span class="brx">=</span> plone.recipe.zope2zeoserver
+zope2-location <span class="brx">=</span> $<span class="br">{</span>zope2:location<span class="br">}</span>
+zeo-address <span class="brx">=</span> $<span class="br">{</span>buildout:zeo-address<span class="br">}</span>
+effective-user <span class="brx">=</span> zeo
+<span class="brx">#</span> Put the log, pid and socket files in var/zeoserver
+zeo-log     <span class="brx">=</span> $<span class="br">{</span>buildout:directory<span class="br">}</span>/var/zeoserver/zeoserver.log
+pid-file    <span class="brx">=</span> $<span class="br">{</span>buildout:directory<span class="br">}</span>/var/zeoserver/zeoserver.pid
+socket-name <span class="brx">=</span> $<span class="br">{</span>buildout:directory<span class="br">}</span>/var/zeoserver/zeo.zdsock
+<span class="cs">\stopCFG</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212438
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.061 seconds
+Preprocessor visited node count: 30/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 39303/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2719-1!canonical and timestamp 20260109212438 and revision id 41451
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/Typing/Verbatim_with_LuaTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

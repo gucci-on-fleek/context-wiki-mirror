@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Layers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Layers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Layers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1814&diff=41911">2025-01-25</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#My_first_Layer">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         My first Layer
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Placement">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Placement
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Understanding_.22location.22_and_.22corner.22">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Understanding "location" and "corner"
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#An_example_to_make_this_clear">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           An example to make this clear
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#An_example:_placing_a_logo_to_the_top_right_corner_of_the_page">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           An example: placing a logo to the top right corner of the page
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Example:_exact_overlay_of_page_text_and_layer_text">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Example: exact overlay of page text and layer text
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#State">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         State
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Layers_on_top">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Layers on top
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Line_breaking_and_fixed_size">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Line breaking and fixed size
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Place_labels_on_pictures">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Place labels on pictures
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Use_dynamic_content">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Use dynamic content
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Layers_and_the_delayed_font_mechanism">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Layers and the delayed font mechanism
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Layers_in_fitting_pages">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         Layers in fitting pages
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#See_Also">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         See Also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p><b>Layers</b> are ConTeXt's mechanism for absolute positioning of elements and other advanced techniques like switching elements on and off. There&rsquo;s still <b>no manual about them</b>.
+</p>
+    <h2>
+     <span class="mw-headline" id="My_first_Layer">
+      My first Layer
+     </span>
+    </h2>
+    <p>Define a layer that takes the whole page
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>  <span class="comment">% name of the layer</span>
+    <span class="brx">[</span>x<span class="brx">=</span>0mm, y<span class="brx">=</span>0mm,  <span class="comment">% from upper left corner of paper</span>
+     width<span class="brx">=</span><span class="cs">\paperwidth</span>, height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span> <span class="comment">% let the layer cover the full paper</span>
+</pre>
+    <p>Now you can put something in that layer:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>	<span class="comment">% name of the layer</span>
+    <span class="brx">[</span>hoffset<span class="brx">=</span>1cm, voffset<span class="brx">=</span>1cm<span class="brx">]</span>  <span class="comment">% placement (from upper left corner of the layer)</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>on, width<span class="brx">=</span>3cm, height<span class="brx">=</span>2cm<span class="brx">]</span><span class="br">{</span>LAYER<span class="br">}</span><span class="br">}</span>  <span class="comment">% the actual contents of the layer</span>
+</pre>
+    <p>Activate the layer as a background:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>mybg<span class="brx">]</span>
+</pre>
+    <p>This command makes the contents of the layer appear only once after the background is activated. If you want to repeat the contents of the layer on each page, use the option <code>repeat=yes</code> in the <tt><a href="../Command/definelayer.html" title="Command/definelayer">\definelayer</a></tt> command. Then the contents of the layer will be shown on every page. You can add to these contents by a new <tt><a href="../Command/setlayer.html" title="Command/setlayer">\setlayer</a></tt>[mybg] command. To clear the accumulated contents use <tt><a href="../Command/resetlayer.html" title="Command/resetlayer">\resetlayer</a></tt>[mybg]. To make the layer appear on each page, so that it can be populated with different content, set the option <code>state=repeat</code> in <tt><a href="../Command/setupbackgrounds.html" title="Command/setupbackgrounds">\setupbackgrounds</a></tt>.
+</p>
+    <p>Now you can test the whole thing:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A10<span class="brx">]</span><span class="brx">[</span>A9,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>2UP<span class="brx">]</span> <span class="comment">% two pages side by side</span>
+<span class="cs"><span class="documentcs">\showframe</span></span> <span class="comment">% show entire pages</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>	<span class="comment">% name of the layer</span>
+    <span class="brx">[</span>x<span class="brx">=</span>0mm, y<span class="brx">=</span>0mm,	<span class="comment">% from upper left corner of paper</span>
+     width<span class="brx">=</span><span class="cs">\paperwidth</span>, height<span class="brx">=</span><span class="cs">\paperheight</span>, <span class="comment">% let the layer cover the full paper</span>
+     <span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>mybg<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>	<span class="comment">% name of the layer</span>
+    <span class="brx">[</span>hoffset<span class="brx">=</span>0.2cm, voffset<span class="brx">=</span>0.2cm<span class="brx">]</span>  <span class="comment">% placement (from upper left corner of the layer)</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>on, width<span class="brx">=</span>2cm, height<span class="brx">=</span>1cm<span class="brx">]</span><span class="br">{</span>LAYER<span class="br">}</span><span class="br">}</span>  <span class="comment">% the actual contents of the layer</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span><span class="br">}</span> <span class="comment">% for testing, to get 2 pages, 1st with layer, 2nd without</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="219" src="../wikiteximage/8c516e7186d0598e7a1566dd648f93f7.webp" width="307">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Placement">
+      Placement
+     </span>
+    </h2>
+    <p>There are several possibilities for defining the placement of layer content:
+</p>
+    <ul>
+     <li>
+      x, y&nbsp;: offset from upper left corner of paper [=the current block; can sometimes be the text area instead of the page/paper!]
+     </li>
+     <li>
+      hoffset, voffset&nbsp;: offset from upper left corner of layer
+     </li>
+     <li>
+      corner&nbsp;: reference point, something like
+      <code>{left, top}</code>
+     </li>
+     <li>
+      location&nbsp;: alignment of the element relative to the corner, something like
+      <code>{right, bottom}</code>
+     </li>
+     <li>
+      preset&nbsp;: a named location, see below
+     </li>
+    </ul>
+    <p>There are some "presets" for paper edge placement:
+</p>
+    <pre class="tex"><span class="comment">% These four are defined by ConTeXt!</span>
+<span class="cs"><span class="systemcs">\definelayerpreset</span></span>	<span class="brx">[</span>lefttop<span class="brx">]</span>	<span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>, location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\definelayerpreset</span></span>	<span class="brx">[</span>righttop<span class="brx">]</span>	<span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span>, location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\definelayerpreset</span></span>	<span class="brx">[</span>leftbottom<span class="brx">]</span>	<span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span>, location<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="systemcs">\definelayerpreset</span></span>	<span class="brx">[</span>rightbottom<span class="brx">]</span>	<span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span>, location<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Similarly you can define your own presets.
+</p>
+    <h3>
+     <span id='Understanding_"location"_and_"corner"'>
+     </span>
+     <span class="mw-headline" id="Understanding_.22location.22_and_.22corner.22">
+      Understanding "location" and "corner"
+     </span>
+    </h3>
+    <p>The layer is divided into a 2x2 matrix of squares, where 'x' is the center. 
+This gets you a total of 3x3=9 different corners.
+</p>
+    <pre>o---o---o
+|   |   |
+o---x---o
+|   |   |
+o---o---o
+</pre>
+    <p>Now you choose one 'corner' (the reference point) for the placement of the content. The content is placed in relation to this point. 
+The chosen 'corner' c is our new 'center point' (only for placement) now.
+</p>
+    <p>With 'location' you define where (in relation to 'corner') the content is placed. 
+Again you have nine different corners to choose from.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span> <span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>14pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupframed</span></span>
+  <span class="brx">[</span>frame<span class="brx">=</span>on,
+   location<span class="brx">=</span>top,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0.5pt,
+   strut<span class="brx">=</span>yes,
+   width<span class="brx">=</span>0.4<span class="cs">\paperwidth</span>,
+   height<span class="brx">=</span>0.4<span class="cs">\paperheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+   height<span class="brx">=</span><span class="cs">\paperheight</span>,
+   corner<span class="brx">=</span><span class="br">{</span>middle,middle<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>framecolor<span class="brx">=</span>middlered<span class="brx">]</span><span class="br">{</span>right,top<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>framecolor<span class="brx">=</span>middleyellow<span class="brx">]</span><span class="br">{</span>left,top<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>framecolor<span class="brx">=</span>middlemagenta<span class="brx">]</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>framecolor<span class="brx">=</span>middlecyan<span class="brx">]</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="br">}</span>
+
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,mybg<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>lightgray<span class="brx">]</span>
+<span class="br">{</span>You have text in the foreground,
+and the layer is placed above.<span class="cs">\\</span>
+For this example, the corner is defined
+with the options<span class="br">}</span> middle,middle.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../wikiteximage/0c9e033b46b083545e8a4dca29ec876d.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="An_example_to_make_this_clear">
+      An example to make this clear
+     </span>
+    </h3>
+    <p>Specifications <code>corner={top,right},location={bottom,right}</code> will place content in the area L (outside the original layer). 
+Think about the 'corner' c as a magnetic grid point, where the content snaps to. 
+The 'location' defines, from which direction we approach the point c.
+</p>
+    <ul>
+     <li>
+      x = layer center point
+     </li>
+     <li>
+      c = corner 'top,right'
+     </li>
+     <li>
+      d = location 'bottom right'
+     </li>
+     <li>
+      L = location (area)
+     </li>
+    </ul>
+    <pre>        o---o---o
+        |   |   |
+----o---c---o
+|   |   |   L   |
+----x---o---d
+|   |   |
+---------
+</pre>
+    <h3>
+     <span class="mw-headline" id="An_example:_placing_a_logo_to_the_top_right_corner_of_the_page">
+      An example: placing a logo to the top right corner of the page
+     </span>
+    </h3>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span>
+  <span class="brx">[</span>Logo<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span>,
+   x<span class="brx">=</span><span class="cs">\paperwidth</span>,y<span class="brx">=</span>0mm,
+   hoffset<span class="brx">=</span>-5mm,voffset<span class="brx">=</span>5mm,
+  <span class="brx">]</span>
+ 
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>Logo<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>3cm,height<span class="brx">=</span>1cm,background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>lightgray<span class="brx">]</span><span class="br">{</span>Logo...<span class="br">}</span><span class="br">}</span>
+ 
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>Logo<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="comment">%\showframe</span>
+
+  Some text...
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/30f450406ae23b994e1a753b3f6695f8.webp" width="874">
+     </li>
+    </ul>
+    <p>Often it makes sense to use a preset (e.g. "lefttop") and move the contents with "hoffset" and "voffset" (positive values move into the page, negative values move into the outer borders).
+</p>
+    <h3>
+     <span class="mw-headline" id="Example:_exact_overlay_of_page_text_and_layer_text">
+      Example: exact overlay of page text and layer text
+     </span>
+    </h3>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>148mm,height<span class="brx">=</span>52mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span> <span class="comment">% 52 x 74 mm</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>2,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>topspace<span class="brx">=</span>2mm,        <span class="comment">% Vertically</span>
+   height<span class="brx">=</span>48mm,
+   header<span class="brx">=</span>5mm,
+   headerdistance<span class="brx">=</span>3mm,
+   footer<span class="brx">=</span>5mm,
+   footerdistance<span class="brx">=</span>3mm,
+   backspace<span class="brx">=</span>12mm,      <span class="comment">% Horizontally</span>
+   width<span class="brx">=</span>50mm,
+   margin<span class="brx">=</span>6mm,
+   margindistance<span class="brx">=</span>3mm,
+   grid<span class="brx">=</span>yes<span class="brx">]</span>            <span class="comment">% Required</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>20pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>transparentred<span class="brx">]</span>  <span class="brx">[</span>r<span class="brx">=</span>1,t<span class="brx">=</span>.5,a<span class="brx">=</span>1<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupframed</span></span>
+  <span class="brx">[</span>frame<span class="brx">=</span>off,
+   location<span class="brx">=</span>top,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0.pt,
+   strut<span class="brx">=</span>yes,
+   align<span class="brx">=</span><span class="br">{</span>flushleft,tolerant<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+  <span class="brx">[</span>x<span class="brx">=</span>0mm, y<span class="brx">=</span>0mm,width<span class="brx">=</span><span class="cs">\paperwidth</span>, height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+    <span class="brx">[</span>hoffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\backspace</span><span class="brx">)</span><span class="cs">\relax</span>,
+     voffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\topspace</span>+<span class="cs">\headerheight</span>+<span class="cs">\headerdistance</span><span class="brx">)</span><span class="cs">\relax</span>,<span class="brx">]</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>foregroundcolor<span class="brx">=</span>transparentred<span class="brx">]</span>
+     <span class="br">{</span>Example A fo<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>mybg<span class="brx">]</span>
+    <span class="brx">[</span>hoffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\backspace</span><span class="brx">)</span><span class="cs">\relax</span>,,
+     voffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\topspace</span>+<span class="cs">\headerheight</span>+<span class="cs">\headerdistance</span>+2<span class="cs">\baselineskip</span><span class="brx">)</span><span class="cs">\relax</span>,<span class="brx">]</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>foregroundcolor<span class="brx">=</span>transparentred<span class="brx">]</span>
+     <span class="br">{</span>Example B fo<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span> <span class="brx">[</span><span class="br">{</span><span class="cs">\tfxx</span><span class="cs">\ss</span> without layer<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>middleyellow<span class="brx">]</span>
+  <span class="br">{</span>Example A of<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>foregroundcolor<span class="brx">=</span>darkcyan<span class="brx">]</span>
+  <span class="br">{</span>Example B of<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span> <span class="brx">[</span><span class="br">{</span><span class="cs">\tfxx</span><span class="cs">\ss</span> with layer<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,mybg<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>middleyellow<span class="brx">]</span>
+  <span class="br">{</span>Example A of<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>foregroundcolor<span class="brx">=</span>darkcyan<span class="brx">]</span>
+  <span class="br">{</span>Example B of<span class="cs">\\</span> <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>see on the second page when the transparent red text of the layer is stacked (and see the check based on 'of' VS 'fo' for the layer):
+</p>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../wikiteximage/7e64d07553aaf6803d74913c662dc771.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="State">
+      State
+     </span>
+    </h2>
+    <p>The available options for the "state" of a layer are:
+</p>
+    <ul>
+     <li>
+      start: layer appears only on the current page
+     </li>
+     <li>
+      stop: layer doesn't show up
+     </li>
+     <li>
+      repeat: layer prints on all pages
+     </li>
+     <li>
+      next: layer appears on the following page
+     </li>
+     <li>
+      continue: layer appears on all pages except the first
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Layers_on_top">
+      Layers on top
+     </span>
+    </h2>
+    <p>Usually, layers are in the background of your page (or text area). But sometimes you need your layer content on top of the regular content. Then you must set the foreground as one of the backgrounds like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>mybacklayer,foreground,myfrontlayer<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The order of backgrounds from left to right is from bottom to top.
+</p>
+    <h2>
+     <span class="mw-headline" id="Line_breaking_and_fixed_size">
+      Line breaking and fixed size
+     </span>
+    </h2>
+    <p>You may experience cases where the defined size of your layer is ignored and you can&rsquo;t get linebreaking or multiple lines at all.
+This is due to <tt><a href="../Command/setlayer.html" title="Command/setlayer">\setlayer</a></tt> using <tt><a class="new" href="../index.php?title=Command/hbox&action=edit&redlink=1.html" title="Command/hbox (page does not exist)">\hbox</a></tt> internally. You can work around the problem using <tt><a href="../Command/setlayerframed.html" title="Command/setlayerframed">\setlayerframed</a></tt>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>AddressBg<span class="brx">]</span><span class="brx">[</span>
+    x<span class="brx">=</span>20mm, y<span class="brx">=</span>30mm, 
+    width<span class="brx">=</span>65mm, height<span class="brx">=</span>30mm, 
+    state<span class="brx">=</span>start<span class="brx">]</span> <span class="comment">% size is ignored!</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>paper<span class="brx">]</span><span class="brx">[</span>
+    setups<span class="brx">=</span>ALayer, 
+    background<span class="brx">=</span>AddressBg, 
+    state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\strut</span></span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> ALayer
+    <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>AddressBg<span class="brx">]</span>           <span class="comment">% Change this to \setlayerframed to get it to work</span>
+        <span class="brx">[</span>width<span class="brx">=</span>65mm, height<span class="brx">=</span>30mm,
+         frame<span class="brx">=</span>off,
+         hoffset<span class="brx">=</span>0mm, voffset<span class="brx">=</span>0mm,
+         align<span class="brx">=</span>right<span class="brx">]</span>                    <span class="comment">% You must set align to get multiple lines!</span>
+        <span class="br">{</span>
+            PRAGMA Advanced Document Engineering<span class="cs"><span class="documentcs">\crlf</span></span>
+            Mr. Hans Hagen <span class="brx">(</span>the wizard who wrote it all, <span class="cs"><span class="documentcs">\CONTEXT</span></span>\ and everything else, 
+                with the help of his little elves<span class="brx">)</span><span class="cs"><span class="documentcs">\crlf</span></span>
+            Ridderstraat 27<span class="cs"><span class="documentcs">\crlf</span></span>
+            8061GH Hasselt<span class="cs"><span class="documentcs">\crlf</span></span>
+            THE NETHERLANDS
+        <span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/ad4307756a3b7eefed3e383f74701dfc.webp" width="620">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Place_labels_on_pictures">
+      Place labels on pictures
+     </span>
+    </h2>
+    <p>Layers can be used to put labels on pictures, alternative ways can be found in the <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/details.pdf" title="manual:details.pdf"> Details</a> manual
+(see also <a href="../Graphics_and_media/Boxes_and_stacking_mechanisms/Collectors.html" title="Graphics and media/Boxes and stacking mechanisms/Collectors">Collectors</a>).
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,default<span class="br">}</span><span class="brx">]</span>
+<span class="comment">% (necessary for the wiki conTeXt live processor)</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span>  <span class="brx">[</span>figure<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="systemcs">\overlaywidth</span></span>,height<span class="brx">=</span><span class="cs"><span class="systemcs">\overlayheight</span></span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>figure<span class="brx">]</span><span class="brx">[</span><span class="br">{</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>figure<span class="br">}</span><span class="cs"><span class="documentcs">\tightlayer</span></span><span class="brx">[</span>figure<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> figure
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span>
+  <span class="brx">[</span>figure<span class="brx">]</span>
+  <span class="brx">[</span>preset<span class="brx">=</span>rightbottom,
+   x<span class="brx">=</span>.25<span class="cs"><span class="systemcs">\layerwidth</span></span>,
+   y<span class="brx">=</span>.25<span class="cs"><span class="systemcs">\layerheight</span></span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\green</span> HERE<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span>
+  <span class="brx">[</span>figure<span class="brx">]</span>
+  <span class="brx">[</span>preset<span class="brx">=</span>leftbottom,
+   x<span class="brx">=</span>.15<span class="cs"><span class="systemcs">\layerwidth</span></span>,
+   y<span class="brx">=</span>.35<span class="cs"><span class="systemcs">\layerheight</span></span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\red</span> THERE<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,figure<span class="br">}</span>,width<span class="brx">=</span>4cm,height<span class="brx">=</span>3cm<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/4a69d6f75eb9d9b2a88e2afeb9184fcf.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Use_dynamic_content">
+      Use dynamic content
+     </span>
+    </h2>
+    <p>The content of layer is fixed after your set it and will appear in the same way on each page.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span>
+  <span class="brx">[</span>pagenumber<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+   height<span class="brx">=</span><span class="cs">\paperheight</span>,
+   preset<span class="brx">=</span>middle,
+   state<span class="brx">=</span>repeat<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span><span class="br">{</span>Page <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>pagenumber<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span><span class="br">}</span> <span class="comment">% Every page will say "Page 1"</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>This is not always what you desire like in the example above, where on each page the current page number should be shown and not the number from the first page.
+</p>
+    <p>To recalculate the content on each new page you have to enclose the <tt><a href="../Command/setlayer.html" title="Command/setlayer">\setlayer</a></tt> settings within <tt><a href="../Command/startsetups.html" title="Command/startsetups">\startsetups</a></tt> ... <tt><a class="new" href="../index.php?title=Command/stopsetups&action=edit&redlink=1.html" title="Command/stopsetups (page does not exist)">\stopsetups</a></tt> and
+write <code>\setupbackgrounds[page][setups=setupname,background=layername]</code> in your document.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span>
+  <span class="brx">[</span>pagenumber<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+   height<span class="brx">=</span><span class="cs">\paperheight</span>,
+   preset<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> layer
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span><span class="br">{</span>Page <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>setups<span class="brx">=</span>layer,background<span class="brx">=</span>pagenumber<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span><span class="br">}</span> <span class="comment">% You get "Page 1, Page 2" etc.</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a href="../Input_and_compilation/Setups.html" title="Input and compilation/Setups">Setups</a>, by design, ignore the spaces inside them, so use <tt><a href="../Command/space.html" title="Command/space">\space</a></tt>, <tt><a href="../Command/crlf.html" title="Command/crlf">\crlf</a></tt>, <tt><a class="new" href="../index.php?title=Command/par&action=edit&redlink=1.html" title="Command/par (page does not exist)">\par</a></tt>, etc., to request spaces, or use <tt><a class="new" href="../index.php?title=Command/startrawsetups&action=edit&redlink=1.html" title="Command/startrawsetups (page does not exist)">\startrawsetups</a></tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span>
+  <span class="brx">[</span>pagenumber<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+   height<span class="brx">=</span><span class="cs">\paperheight</span>,
+   preset<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> layer
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>middle<span class="brx">]</span><span class="br">{</span>Page Number: <span class="cs">\par</span> <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>setups<span class="brx">=</span>layer,background<span class="brx">=</span>pagenumber<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span><span class="br">}</span> <span class="comment">% You get "Page 1, Page 2" etc.</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Another solution for dynamic content was given by Wolfgang on the mailing list on February 21, 2012. He writes: <i>Here is a slightly different version which is better when you need more dynamic layers.</i>
+</p>
+    <pre class="tex">
+
+<span class="cs"><span class="stylecs">\definelayer</span></span>  <span class="brx">[</span>pagenumber<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="systemcs">\overlaywidth</span></span>,height<span class="brx">=</span><span class="cs"><span class="systemcs">\overlayheight</span></span>,preset<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\texsetup</span></span><span class="br">{</span>layer<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> layer
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span><span class="br">{</span>Page <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\tightlayer</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>setups<span class="brx">=</span>layer,background<span class="brx">=</span>pagenumber<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <h2>
+     <span class="mw-headline" id="Layers_and_the_delayed_font_mechanism">
+      Layers and the delayed font mechanism
+     </span>
+    </h2>
+    <p><b>TL;DR: Setup your fonts before your layers.</b>
+</p>
+    <p>Until some years ago the Latin Modern font was always automatically
+loaded, regardless of the users choice of font. Font loading takes a
+considerable amount of time (check the stats at the end of a context
+run to get an idea). This led to the question:
+</p>
+    <p>&ldquo;Why start loading a big, complex font like Latin Modern before we
+know which font the user actually wants to use and waste several
+seconds on it, just to start loading the users choice afterwards?&rdquo;
+</p>
+    <p>The answer was:
+</p>
+    <p>&rdquo;We delay loading the font until we know which font the user wants
+to use. If the user doesn't tell us, then we fall back to Latin
+Modern.&rdquo;
+</p>
+    <p>The body font is set up in the setup area (the part above
+<code>\starttext</code>). That, in turn, means that when having reached
+<code>\starttext</code>, the users choice of font is known and can be loaded. It
+is more efficient if a font other then Latin Modern is used.
+</p>
+    <p>One drawback is that typeset text in the setup area has no font
+setup and will fall back to Latin Modern Mono. Usually no text is
+typeset in the setup area. However, layers are an exception and
+a font needs to be set up beforehand.
+</p>
+    <h2>
+     <span class="mw-headline" id="Layers_in_fitting_pages">
+      Layers in fitting pages
+     </span>
+    </h2>
+    <p>Fitting pages have no fixed dimensions, but they are taken from their content. Layers require dimensions to be placed on the page.
+</p>
+    <p>Hans provided two alternative methods to do it: 
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+   <span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>hi<span class="brx">]</span>
+
+   <span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>background<span class="brx">=</span>hi<span class="brx">]</span>
+     <span class="cs">\setbox</span><span class="cs">\scratchbox</span><span class="cs">\hbox</span><span class="cs"><span class="documentcs">\framed</span></span>
+       <span class="brx">[</span>frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span>middle<span class="brx">]</span>
+       <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span><span class="br">{</span>tufte<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+     <span class="cs"><span class="stylecs">\setuplayer</span></span>
+       <span class="brx">[</span>hi<span class="brx">]</span>
+       <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\wd</span><span class="cs">\scratchbox</span>,height<span class="brx">=</span><span class="cs">\htdp</span><span class="cs">\scratchbox</span><span class="brx">]</span>
+     <span class="cs"><span class="documentcs">\setlayer</span></span>
+       <span class="brx">[</span>hi<span class="brx">]</span><span class="brx">[</span>preset<span class="brx">=</span>middle<span class="brx">]</span>
+       <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>green<span class="brx">]</span><span class="br">{</span>there<span class="br">}</span><span class="br">}</span>
+     <span class="cs">\box</span><span class="cs">\scratchbox</span>
+   <span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+
+   <span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>hi<span class="brx">]</span>
+
+   <span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>background<span class="brx">=</span>hi<span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\defineoverlay</span></span>
+       <span class="brx">[</span>hi<span class="brx">]</span>
+       <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span> <span class="brx">[</span>frame<span class="brx">=</span>off, offset<span class="brx">=</span>overlay, width<span class="brx">=</span><span class="cs"><span class="systemcs">\overlaywidth</span></span>, height<span class="brx">=</span><span class="cs"><span class="systemcs">\overlayheight</span></span><span class="brx">]</span>
+           <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>red<span class="brx">]</span><span class="br">{</span>there<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="documentcs">\framed</span></span>
+       <span class="brx">[</span>frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span>middle,background<span class="brx">=</span>hi<span class="brx">]</span>
+       <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span><span class="br">{</span>tufte<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+   <span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="See_Also">
+      See Also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Layers are  on of the
+      <a href="../Graphics_and_media/Boxes_and_stacking_mechanisms.html" title="Graphics and media/Boxes and stacking mechanisms">
+       Stacking mechanisms
+      </a>
+      , there is also
+      <a href="../Graphics_and_media/Boxes_and_stacking_mechanisms/Overlays.html" title="Graphics and media/Boxes and stacking mechanisms/Overlays">
+       Overlays
+      </a>
+      and
+      <a href="../Graphics_and_media/Boxes_and_stacking_mechanisms/Collectors.html" title="Graphics and media/Boxes and stacking mechanisms/Collectors">
+       Collectors
+      </a>
+     </li>
+     <li>
+      An example,
+      <a href="Layers/Alternating_backgrounds_and_repeating_layers.html" title="Document layout and layers/Layers/Alternating backgrounds and repeating layers">
+       Alternating backgrounds and repeating layers
+      </a>
+      like Watermarks (2007). For a somewhat different example, based on overlays, see
+      <a href="../Graphics_and_media/Boxes_and_stacking_mechanisms/Draft_watermark_example.html" title="Graphics and media/Boxes and stacking mechanisms/Draft watermark example">
+       Draft Watermark example
+      </a>
+     </li>
+     <li>
+      Some applications in the
+      <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/details.pdf" title="manual:details.pdf">
+       Details
+      </a>
+      manual
+     </li>
+     <li>
+      <a href="../Input_and_compilation/Sample_documents.html" title="Input and compilation/Sample documents">
+       Sample documents
+      </a>
+      :
+      <a href="../Input_and_compilation/Sample_documents/BusinessCard.html" title="Input and compilation/Sample documents/BusinessCard">
+       BusinessCard
+      </a>
+      and
+      <a href="../Input_and_compilation/Sample_documents/Letter_style.html" title="Input and compilation/Sample documents/Letter style">
+       Letter style
+      </a>
+     </li>
+     <li>
+      Source:
+      <a class="extiw" href="http://source.contextgarden.net/pack-lyr.mkii" title="source:pack-lyr.mkii">
+       pack-lyr.mkii
+      </a>
+      or
+      <a class="extiw" href="http://source.contextgarden.net/pack-lyr.mkiv" title="source:pack-lyr.mkiv">
+       pack-lyr.mkiv
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://www.mail-archive.com/ntg-context@ntg.nl/msg67469.html" rel="nofollow">
+       Layer vs. overlay
+      </a>
+      by Wolfgang
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupbackgrounds.html" title="Command/setupbackgrounds">
+        \setupbackgrounds
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/definelayer.html" title="Command/definelayer">
+        \definelayer
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../Command/setuplayer.html" title="Command/setuplayer">
+        \setuplayer
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setlayer.html" title="Command/setlayer">
+        \setlayer
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../Command/setlayerframed.html" title="Command/setlayerframed">
+        \setlayerframed
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> We need a lot of documentation and samples for this complicated subject. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212411
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.172 seconds
+Real time usage: 0.351 seconds
+Preprocessor visited node count: 351/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1976/2097152 bytes
+Template argument size: 442/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 36097/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  222.014      1 -total
+  7.12%   15.797      1 Template:todo
+  5.11%   11.334     19 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1814-1!canonical and timestamp 20260109212410 and revision id 41911
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Layers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

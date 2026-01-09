@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Running Lua code externally&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Running_Lua_code_externally" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Running Lua code externally
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3432&diff=40734">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Normal_Lua_preloading">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Normal Lua preloading
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Library_dependencies">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Library dependencies
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Standard_library_loading_order">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Standard library loading order
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#See_also">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Normal_Lua_preloading">
+      Normal Lua preloading
+     </span>
+    </h2>
+    <p>When Context starts up in normal (TeX) mode, it loads a number of
+<a class="new" href="../index.php?title=ConTeXt_and_Lua_programming/LuaTeX&action=edit&redlink=1.html" title="ConTeXt and Lua programming/LuaTeX (page does not exist)">LuaTeX</a> libraries in addition to the format itself.
+In order to use these libraries <i>outside</i> the typesetting
+environment (e.g. when debugging Lua code etc.), scripts can be
+directly executed via <tt>mtxrun</tt>. Assuming that the Lua file
+called <em>dummy.lua</em> is in the working directory. the
+correct syntax would be
+</p>
+    <pre>$ mtxrun --script dummy.lua
+</pre>
+    <p>The libraries preloaded by <tt>mtxrun</tt> are a subset of those
+available during a Context run. 
+In their loading order, they are
+</p>
+    <pre>'l-string.lua', 'l-lpeg.lua',    'l-table.lua',   'l-io.lua',     'l-number.lua',
+'l-set.lua',    'l-os.lua',      'l-file.lua',    'l-md5.lua',    'l-url.lua',
+'l-dir.lua',    'l-boolean.lua', 'l-unicode.lua', 'l-math.lua',
+
+'util-tab.lua', 'util-sto.lua',  'util-mrg.lua',  'util-lua.lua', 'util-prs.lua',
+'util-fmt.lua', 'util-deb.lua',
+
+'trac-inf.lua', 'trac-set.lua',  'trac-log.lua',  'trac-pro.lua',
+
+'luat-env.lua',
+
+'lxml-tab.lua', 'lxml-lpt.lua',  'lxml-mis.lua',  'lxml-aux.lua', 'lxml-xml.lua',
+
+'data-ini.lua', 'data-exp.lua',  'data-env.lua',  'data-tmp.lua', 'data-met.lua',
+'data-res.lua', 'data-pre.lua',  'data-inp.lua',  'data-out.lua', 'data-fil.lua',
+'data-con.lua', 'data-use.lua',  'data-zip.lua',  'data-tre.lua', 'data-crl.lua',
+'data-lua.lua', 'data-aux.lua',  'data-tmf.lua',  'data-lst.lua',
+
+'luat-sta.lua', 'luat-fmt.lua',
+</pre>
+    <p>Thus, Context&rsquo;s elaborate <a href="Extensions_to_the_Lua_IO_library/String_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation">string</a> and
+<a href="Extensions_to_the_Lua_IO_library/Table_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/Table manipulation">table</a> libraries, along with other useful
+stuff, are present as though it were an ordinary <i>MkIV</i> session.
+</p>
+    <h2>
+     <span class="mw-headline" id="Library_dependencies">
+      Library dependencies
+     </span>
+    </h2>
+    <p>Context is <i>huge</i>.
+When quick-testing code that will eventually make it into your
+next module or something, a desired library may not be available
+with <tt>mtxrun --script</tt>.
+One workaround for missing functionality is -- relying on the
+filename database
+(as recommended <a class="external text" href="http://archive.contextgarden.net/message/20110216.225915.e3337d40.en.html" rel="nofollow">by Hans</a>) --
+adding the file manually e.g.
+</p>
+    <pre>dofile(resolvers.findfile("yourfile.lua"))
+</pre>
+    <p>Only a small number of Context&rsquo;s Lua libraries are
+self-contained.
+Most of them reference others, which is especially true of the
+utility functions of the <tt>l-*</tt> and <tt>luat-*</tt>
+namespaces.
+For instance, in order to get the module-related code from
+<tt>luat-lib.lua</tt> working, <tt>luat-cod.lua</tt> and
+<tt>luat-sto.lua</tt> have to be initialized first.
+</p>
+    <pre>dofile(resolvers.findfile("luat-cod.lua"))
+dofile(resolvers.findfile("luat-sto.lua"))
+dofile(resolvers.findfile("luat-ini.lua"))
+</pre>
+    <h2>
+     <span class="mw-headline" id="Standard_library_loading_order">
+      Standard library loading order
+     </span>
+    </h2>
+    <p>As it is not always clear which file relies on which to be
+present, it is natural to check in what order they are loaded
+by Context.
+The table below lists how the <tt>*.mkiv</tt> files that are
+called by the format (i.e. <tt>context.mkiv</tt>) reference their
+corresponding <tt>*.lua</tt> files.
+</p>
+    <table cellpadding="10" style="border:2px solid #f0f0ff">
+     <tbody>
+      <tr>
+       <td>n
+</td>
+       <th style="background:#f0f0ff;">
+        TeX-File
+       </th>
+       <th>
+        Lua Dependencies
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/luat-bas.mkiv" title="source:luat-bas.mkiv">luat-bas.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/l-string.lua" title="source:l-string.lua">l-string.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-lpeg.lua" title="source:l-lpeg.lua">l-lpeg.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-boolean.lua" title="source:l-boolean.lua">l-boolean.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-number.lua" title="source:l-number.lua">l-number.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-math.lua" title="source:l-math.lua">l-math.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-table.lua" title="source:l-table.lua">l-table.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-os.lua" title="source:l-os.lua">l-os.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-file.lua" title="source:l-file.lua">l-file.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-md5.lua" title="source:l-md5.lua">l-md5.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-dir.lua" title="source:l-dir.lua">l-dir.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-unicode.lua" title="source:l-unicode.lua">l-unicode.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-url.lua" title="source:l-url.lua">l-url.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-set.lua" title="source:l-set.lua">l-set.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/l-dimen.lua" title="source:l-dimen.lua">l-dimen.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/luat-lib.mkiv" title="source:luat-lib.mkiv">luat-lib.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/util-str.lua" title="source:util-str.lua">util-str.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-tab.lua" title="source:util-tab.lua">util-tab.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-pck.lua" title="source:util-pck.lua">util-pck.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-seq.lua" title="source:util-seq.lua">util-seq.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-prs.lua" title="source:util-prs.lua">util-prs.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-fmt.lua" title="source:util-fmt.lua">util-fmt.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-deb.lua" title="source:util-deb.lua">util-deb.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/util-sto.lua" title="source:util-sto.lua">util-sto.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/trac-inf.lua" title="source:trac-inf.lua">trac-inf.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/trac-set.lua" title="source:trac-set.lua">trac-set.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/trac-log.lua" title="source:trac-log.lua">trac-log.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-exp.lua" title="source:data-exp.lua">data-exp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-env.lua" title="source:data-env.lua">data-env.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-tmp.lua" title="source:data-tmp.lua">data-tmp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-met.lua" title="source:data-met.lua">data-met.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-res.lua" title="source:data-res.lua">data-res.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-inp.lua" title="source:data-inp.lua">data-inp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-out.lua" title="source:data-out.lua">data-out.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-fil.lua" title="source:data-fil.lua">data-fil.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-pre.lua" title="source:data-pre.lua">data-pre.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-tex.lua" title="source:data-tex.lua">data-tex.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-vir.lua" title="source:data-vir.lua">data-vir.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-bin.lua" title="source:data-bin.lua">data-bin.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-zip.lua" title="source:data-zip.lua">data-zip.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-tre.lua" title="source:data-tre.lua">data-tre.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-lua.lua" title="source:data-lua.lua">data-lua.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-ctx.lua" title="source:data-ctx.lua">data-ctx.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-con.lua" title="source:data-con.lua">data-con.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-use.lua" title="source:data-use.lua">data-use.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/data-aux.lua" title="source:data-aux.lua">data-aux.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-cbk.lua" title="source:luat-cbk.lua">luat-cbk.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-run.lua" title="source:luat-run.lua">luat-run.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-fio.lua" title="source:luat-fio.lua">luat-fio.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-cnf.lua" title="source:luat-cnf.lua">luat-cnf.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-lua.lua" title="source:luat-lua.lua">luat-lua.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-sto.lua" title="source:luat-sto.lua">luat-sto.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-ini.lua" title="source:luat-ini.lua">luat-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-env.lua" title="source:luat-env.lua">luat-env.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-exe.lua" title="source:luat-exe.lua">luat-exe.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-iop.lua" title="source:luat-iop.lua">luat-iop.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-bwc.lua" title="source:luat-bwc.lua">luat-bwc.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/luat-mac.lua" title="source:luat-mac.lua">luat-mac.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-tab.lua" title="source:lxml-tab.lua">lxml-tab.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-lpt.lua" title="source:lxml-lpt.lua">lxml-lpt.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-xml.lua" title="source:lxml-xml.lua">lxml-xml.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-aux.lua" title="source:lxml-aux.lua">lxml-aux.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-mis.lua" title="source:lxml-mis.lua">lxml-mis.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/catc-ini.mkiv" title="source:catc-ini.mkiv">catc-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/catc-ini.lua" title="source:catc-ini.lua">catc-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>4
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/cldf-ini.mkiv" title="source:cldf-ini.mkiv">cldf-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/cldf-ini.lua" title="source:cldf-ini.lua">cldf-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>5
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/syst-lua.mkiv" title="source:syst-lua.mkiv">syst-lua.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/syst-lua.lua" title="source:syst-lua.lua">syst-lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>6
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/syst-con.mkiv" title="source:syst-con.mkiv">syst-con.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/syst-con.lua" title="source:syst-con.lua">syst-con.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>7
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/supp-fil.mkiv" title="source:supp-fil.mkiv">supp-fil.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/supp-fil.lua" title="source:supp-fil.lua">supp-fil.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>8
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/char-ini.mkiv" title="source:char-ini.mkiv">char-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/char-def.lua" title="source:char-def.lua">char-def.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/char-ini.lua" title="source:char-ini.lua">char-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/char-cmp.lua" title="source:char-cmp.lua">char-cmp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/char-map.lua" title="source:char-map.lua">char-map.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/char-tex.lua" title="source:char-tex.lua">char-tex.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>9
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/char-utf.mkiv" title="source:char-utf.mkiv">char-utf.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/char-utf.lua" title="source:char-utf.lua">char-utf.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>10
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/char-act.mkiv" title="source:char-act.mkiv">char-act.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/char-act.lua" title="source:char-act.lua">char-act.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>11
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-ini.mkiv" title="source:mult-ini.mkiv">mult-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-ini.lua" title="source:mult-ini.lua">mult-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>12
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/mult-chk.mkiv" title="source:mult-chk.mkiv">mult-chk.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-chk.lua" title="source:mult-chk.lua">mult-chk.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>13
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-aux.mkiv" title="source:mult-aux.mkiv">mult-aux.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-aux.lua" title="source:mult-aux.lua">mult-aux.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>14
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/cldf-int.mkiv" title="source:cldf-int.mkiv">cldf-int.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mult-clm.lua" title="source:mult-clm.lua">mult-clm.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>15
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/toks-ini.mkiv" title="source:toks-ini.mkiv">toks-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/toks-ini.lua" title="source:toks-ini.lua">toks-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>16
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/attr-ini.mkiv" title="source:attr-ini.mkiv">attr-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-ini.lua" title="source:attr-ini.lua">attr-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>17
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-ini.mkiv" title="source:node-ini.mkiv">node-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/node-ini.lua" title="source:node-ini.lua">node-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-res.lua" title="source:node-res.lua">node-res.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-dir.lua" title="source:node-dir.lua">node-dir.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-aux.lua" title="source:node-aux.lua">node-aux.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-tst.lua" title="source:node-tst.lua">node-tst.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-tra.lua" title="source:node-tra.lua">node-tra.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-tsk.lua" title="source:node-tsk.lua">node-tsk.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-tex.lua" title="source:node-tex.lua">node-tex.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-pro.lua" title="source:node-pro.lua">node-pro.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-shp.lua" title="source:node-shp.lua">node-shp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-ser.lua" title="source:node-ser.lua">node-ser.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-ext.lua" title="source:node-ext.lua">node-ext.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-inj.lua" title="source:node-inj.lua">node-inj.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-typ.lua" title="source:node-typ.lua">node-typ.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-acc.lua" title="source:node-acc.lua">node-acc.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>18
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/node-fin.mkiv" title="source:node-fin.mkiv">node-fin.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-fin.lua" title="source:node-fin.lua">node-fin.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>19
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-mig.mkiv" title="source:node-mig.mkiv">node-mig.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-mig.lua" title="source:node-mig.lua">node-mig.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>20
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/node-par.mkiv" title="source:node-par.mkiv">node-par.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-par.lua" title="source:node-par.lua">node-par.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>21
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-env.mkiv" title="source:core-env.mkiv">core-env.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-env.lua" title="source:core-env.lua">core-env.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>22
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/back-ini.mkiv" title="source:back-ini.mkiv">back-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/back-ini.lua" title="source:back-ini.lua">back-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>23
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-col.mkiv" title="source:attr-col.mkiv">attr-col.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-col.lua" title="source:attr-col.lua">attr-col.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>24
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/attr-lay.mkiv" title="source:attr-lay.mkiv">attr-lay.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-lay.lua" title="source:attr-lay.lua">attr-lay.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>25
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-neg.mkiv" title="source:attr-neg.mkiv">attr-neg.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-neg.lua" title="source:attr-neg.lua">attr-neg.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>26
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/attr-eff.mkiv" title="source:attr-eff.mkiv">attr-eff.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/attr-eff.lua" title="source:attr-eff.lua">attr-eff.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>27
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/trac-tex.mkiv" title="source:trac-tex.mkiv">trac-tex.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/trac-tex.lua" title="source:trac-tex.lua">trac-tex.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>28
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/trac-deb.mkiv" title="source:trac-deb.mkiv">trac-deb.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/trac-lmx.lua" title="source:trac-lmx.lua">trac-lmx.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/trac-deb.lua" title="source:trac-deb.lua">trac-deb.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>29
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/blob-ini.mkiv" title="source:blob-ini.mkiv">blob-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/blob-ini.lua" title="source:blob-ini.lua">blob-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>30
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/supp-box.mkiv" title="source:supp-box.mkiv">supp-box.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/supp-box.lua" title="source:supp-box.lua">supp-box.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>31
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/supp-ran.mkiv" title="source:supp-ran.mkiv">supp-ran.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/supp-ran.lua" title="source:supp-ran.lua">supp-ran.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>32
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/core-con.mkiv" title="source:core-con.mkiv">core-con.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-con.lua" title="source:core-con.lua">core-con.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>33
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/regi-ini.mkiv" title="source:regi-ini.mkiv">regi-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/regi-ini.lua" title="source:regi-ini.lua">regi-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>34
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/lang-ini.mkiv" title="source:lang-ini.mkiv">lang-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/lang-ini.lua" title="source:lang-ini.lua">lang-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lang-def.lua" title="source:lang-def.lua">lang-def.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>35
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lang-lab.mkiv" title="source:lang-lab.mkiv">lang-lab.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/lang-lab.lua" title="source:lang-lab.lua">lang-lab.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lang-txt.lua" title="source:lang-txt.lua">lang-txt.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>36
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/core-uti.mkiv" title="source:core-uti.mkiv">core-uti.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-uti.lua" title="source:core-uti.lua">core-uti.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>37
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-two.mkiv" title="source:core-two.mkiv">core-two.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-two.lua" title="source:core-two.lua">core-two.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>38
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/colo-ini.mkiv" title="source:colo-ini.mkiv">colo-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/colo-ini.lua" title="source:colo-ini.lua">colo-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/colo-icc.lua" title="source:colo-icc.lua">colo-icc.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>39
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-bck.mkiv" title="source:node-bck.mkiv">node-bck.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-bck.lua" title="source:node-bck.lua">node-bck.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>40
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/lang-url.mkiv" title="source:lang-url.mkiv">lang-url.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lang-url.lua" title="source:lang-url.lua">lang-url.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>41
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lang-wrd.mkiv" title="source:lang-wrd.mkiv">lang-wrd.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lang-wrd.lua" title="source:lang-wrd.lua">lang-wrd.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>42
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/symb-ini.mkiv" title="source:symb-ini.mkiv">symb-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/symb-ini.lua" title="source:symb-ini.lua">symb-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>43
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/sort-ini.mkiv" title="source:sort-ini.mkiv">sort-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/sort-ini.lua" title="source:sort-ini.lua">sort-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/sort-lan.lua" title="source:sort-lan.lua">sort-lan.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>44
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/pack-rul.mkiv" title="source:pack-rul.mkiv">pack-rul.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/pack-rul.lua" title="source:pack-rul.lua">pack-rul.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>45
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lxml-ini.mkiv" title="source:lxml-ini.mkiv">lxml-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/lxml-tex.lua" title="source:lxml-tex.lua">lxml-tex.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lxml-dir.lua" title="source:lxml-dir.lua">lxml-dir.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>46
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/lxml-sor.mkiv" title="source:lxml-sor.mkiv">lxml-sor.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/lxml-sor.lua" title="source:lxml-sor.lua">lxml-sor.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>47
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-ini.mkiv" title="source:strc-ini.mkiv">strc-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-ini.lua" title="source:strc-ini.lua">strc-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>48
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-tag.mkiv" title="source:strc-tag.mkiv">strc-tag.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-tag.lua" title="source:strc-tag.lua">strc-tag.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>49
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-doc.mkiv" title="source:strc-doc.mkiv">strc-doc.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-doc.lua" title="source:strc-doc.lua">strc-doc.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>50
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-num.mkiv" title="source:strc-num.mkiv">strc-num.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-num.lua" title="source:strc-num.lua">strc-num.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>51
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-mar.mkiv" title="source:strc-mar.mkiv">strc-mar.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-mar.lua" title="source:strc-mar.lua">strc-mar.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>52
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-prc.mkiv" title="source:strc-prc.mkiv">strc-prc.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-prc.lua" title="source:strc-prc.lua">strc-prc.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>53
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-lst.mkiv" title="source:strc-lst.mkiv">strc-lst.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-lst.lua" title="source:strc-lst.lua">strc-lst.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>54
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-pag.mkiv" title="source:strc-pag.mkiv">strc-pag.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-pag.lua" title="source:strc-pag.lua">strc-pag.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>55
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-ref.mkiv" title="source:strc-ref.mkiv">strc-ref.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/strc-ref.lua" title="source:strc-ref.lua">strc-ref.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-ref.lua" title="source:node-ref.lua">node-ref.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>56
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-reg.mkiv" title="source:strc-reg.mkiv">strc-reg.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-reg.lua" title="source:strc-reg.lua">strc-reg.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>57
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-lev.mkiv" title="source:strc-lev.mkiv">strc-lev.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-lev.lua" title="source:strc-lev.lua">strc-lev.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>58
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/spac-hor.mkiv" title="source:spac-hor.mkiv">spac-hor.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/spac-hor.lua" title="source:spac-hor.lua">spac-hor.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>59
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/spac-ver.mkiv" title="source:spac-ver.mkiv">spac-ver.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/spac-ver.lua" title="source:spac-ver.lua">spac-ver.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>60
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/anch-pos.mkiv" title="source:anch-pos.mkiv">anch-pos.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/anch-pos.lua" title="source:anch-pos.lua">anch-pos.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>61
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/pack-obj.mkiv" title="source:pack-obj.mkiv">pack-obj.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/pack-obj.lua" title="source:pack-obj.lua">pack-obj.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>62
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-itm.mkiv" title="source:strc-itm.mkiv">strc-itm.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-itm.lua" title="source:strc-itm.lua">strc-itm.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>63
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-syn.mkiv" title="source:strc-syn.mkiv">strc-syn.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-syn.lua" title="source:strc-syn.lua">strc-syn.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>64
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/core-sys.mkiv" title="source:core-sys.mkiv">core-sys.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-sys.lua" title="source:core-sys.lua">core-sys.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>65
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-flt.mkiv" title="source:page-flt.mkiv">page-flt.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-flt.lua" title="source:page-flt.lua">page-flt.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>66
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-flt.mkiv" title="source:strc-flt.mkiv">strc-flt.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-flt.lua" title="source:strc-flt.lua">strc-flt.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>67
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-lin.mkiv" title="source:page-lin.mkiv">page-lin.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-lin.lua" title="source:page-lin.lua">page-lin.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>68
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/core-job.mkiv" title="source:core-job.mkiv">core-job.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-job.lua" title="source:core-job.lua">core-job.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>69
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-ini.mkiv" title="source:buff-ini.mkiv">buff-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-ini.lua" title="source:buff-ini.lua">buff-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>70
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/buff-ver.mkiv" title="source:buff-ver.mkiv">buff-ver.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-ver.lua" title="source:buff-ver.lua">buff-ver.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>71
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-par.mkiv" title="source:buff-par.mkiv">buff-par.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-par.lua" title="source:buff-par.lua">buff-par.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>72
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/buff-imp-tex.mkiv" title="source:buff-imp-tex.mkiv">buff-imp-tex.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-tex.lua.lua" title="source:buff-imp-tex.lua.lua">buff-imp-tex.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>73
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-mp.mkiv" title="source:buff-imp-mp.mkiv">buff-imp-mp.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-mp.lua.lua" title="source:buff-imp-mp.lua.lua">buff-imp-mp.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>74
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/buff-imp-lua.mkiv" title="source:buff-imp-lua.mkiv">buff-imp-lua.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-lua.lua.lua" title="source:buff-imp-lua.lua.lua">buff-imp-lua.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>75
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-xml.mkiv" title="source:buff-imp-xml.mkiv">buff-imp-xml.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-xml.lua.lua" title="source:buff-imp-xml.lua.lua">buff-imp-xml.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>76
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/buff-imp-parsed-xml.mkiv" title="source:buff-imp-parsed-xml.mkiv">buff-imp-parsed-xml.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/buff-imp-parsed-xml.lua.lua" title="source:buff-imp-parsed-xml.lua.lua">buff-imp-parsed-xml.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>77
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-blk.mkiv" title="source:strc-blk.mkiv">strc-blk.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-blk.lua" title="source:strc-blk.lua">strc-blk.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>78
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/scrn-int.mkiv" title="source:scrn-int.mkiv">scrn-int.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/scrn-int.lua" title="source:scrn-int.lua">scrn-int.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>79
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-bkm.mkiv" title="source:strc-bkm.mkiv">strc-bkm.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-bkm.lua" title="source:strc-bkm.lua">strc-bkm.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>80
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/tabl-tbl.mkiv" title="source:tabl-tbl.mkiv">tabl-tbl.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/tabl-tbl.lua.lua" title="source:tabl-tbl.lua.lua">tabl-tbl.lua.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>81
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/java-ini.mkiv" title="source:java-ini.mkiv">java-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/java-ini.lua" title="source:java-ini.lua">java-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>82
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/char-enc.mkiv" title="source:char-enc.mkiv">char-enc.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/char-enc.lua" title="source:char-enc.lua">char-enc.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>83
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/font-ini.mkiv" title="source:font-ini.mkiv">font-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/font-clr.lua" title="source:font-clr.lua">font-clr.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/node-fnt.lua" title="source:node-fnt.lua">node-fnt.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-enc.lua" title="source:font-enc.lua">font-enc.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-syn.lua" title="source:font-syn.lua">font-syn.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-log.lua" title="source:font-log.lua">font-log.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-tfm.lua" title="source:font-tfm.lua">font-tfm.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-enh.lua" title="source:font-enh.lua">font-enh.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-afm.lua" title="source:font-afm.lua">font-afm.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-lua.lua" title="source:font-lua.lua">font-lua.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-cid.lua" title="source:font-cid.lua">font-cid.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-ott.lua" title="source:font-ott.lua">font-ott.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otf.lua" title="source:font-otf.lua">font-otf.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otd.lua" title="source:font-otd.lua">font-otd.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-oti.lua" title="source:font-oti.lua">font-oti.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otb.lua" title="source:font-otb.lua">font-otb.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otn.lua" title="source:font-otn.lua">font-otn.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-ota.lua" title="source:font-ota.lua">font-ota.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otp.lua" title="source:font-otp.lua">font-otp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-otc.lua" title="source:font-otc.lua">font-otc.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-oth.lua" title="source:font-oth.lua">font-oth.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-vf.lua" title="source:font-vf.lua">font-vf.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-def.lua" title="source:font-def.lua">font-def.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-ctx.lua" title="source:font-ctx.lua">font-ctx.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-xtx.lua" title="source:font-xtx.lua">font-xtx.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-gds.lua" title="source:font-gds.lua">font-gds.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-fbk.lua" title="source:font-fbk.lua">font-fbk.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-ext.lua" title="source:font-ext.lua">font-ext.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-pat.lua" title="source:font-pat.lua">font-pat.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/font-chk.lua" title="source:font-chk.lua">font-chk.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>84
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/font-col.mkiv" title="source:font-col.mkiv">font-col.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/font-col.lua" title="source:font-col.lua">font-col.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>85
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-cln.mkiv" title="source:typo-cln.mkiv">typo-cln.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-cln.lua" title="source:typo-cln.lua">typo-cln.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>86
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/typo-spa.mkiv" title="source:typo-spa.mkiv">typo-spa.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-spa.lua" title="source:typo-spa.lua">typo-spa.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>87
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-krn.mkiv" title="source:typo-krn.mkiv">typo-krn.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-krn.lua" title="source:typo-krn.lua">typo-krn.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>88
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/typo-dir.mkiv" title="source:typo-dir.mkiv">typo-dir.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-dir.lua" title="source:typo-dir.lua">typo-dir.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>89
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-brk.mkiv" title="source:typo-brk.mkiv">typo-brk.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-brk.lua" title="source:typo-brk.lua">typo-brk.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>90
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/typo-cap.mkiv" title="source:typo-cap.mkiv">typo-cap.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-cap.lua" title="source:typo-cap.lua">typo-cap.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>91
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-dig.mkiv" title="source:typo-dig.mkiv">typo-dig.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-dig.lua" title="source:typo-dig.lua">typo-dig.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>92
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/typo-rep.mkiv" title="source:typo-rep.mkiv">typo-rep.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/typo-rep.lua" title="source:typo-rep.lua">typo-rep.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>93
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/type-ini.mkiv" title="source:type-ini.mkiv">type-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/type-ini.lua" title="source:type-ini.lua">type-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>94
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/scrp-ini.mkiv" title="source:scrp-ini.mkiv">scrp-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/scrp-ini.lua" title="source:scrp-ini.lua">scrp-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/scrp-cjk.lua" title="source:scrp-cjk.lua">scrp-cjk.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>95
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mlib-ctx.mkiv" title="source:mlib-ctx.mkiv">mlib-ctx.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/mlib-run.lua" title="source:mlib-run.lua">mlib-run.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/mlib-ctx.lua" title="source:mlib-ctx.lua">mlib-ctx.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>96
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/meta-ini.mkiv" title="source:meta-ini.mkiv">meta-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-ini.lua" title="source:meta-ini.lua">meta-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>97
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-tex.mkiv" title="source:meta-tex.mkiv">meta-tex.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-tex.lua" title="source:meta-tex.lua">meta-tex.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>98
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/meta-fun.mkiv" title="source:meta-fun.mkiv">meta-fun.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-fun.lua" title="source:meta-fun.lua">meta-fun.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>99
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-str.mkiv" title="source:page-str.mkiv">page-str.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/page-str.lua" title="source:page-str.lua">page-str.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>100
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/math-ini.mkiv" title="source:math-ini.mkiv">math-ini.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/math-ini.lua" title="source:math-ini.lua">math-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-dim.lua" title="source:math-dim.lua">math-dim.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-ent.lua" title="source:math-ent.lua">math-ent.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-ext.lua" title="source:math-ext.lua">math-ext.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-vfu.lua" title="source:math-vfu.lua">math-vfu.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-map.lua" title="source:math-map.lua">math-map.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-noa.lua" title="source:math-noa.lua">math-noa.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/math-tag.lua" title="source:math-tag.lua">math-tag.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>101
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-mat.mkiv" title="source:strc-mat.mkiv">strc-mat.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-mat.lua" title="source:strc-mat.lua">strc-mat.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>102
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/chem-ini.mkiv" title="source:chem-ini.mkiv">chem-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/chem-ini.lua" title="source:chem-ini.lua">chem-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>103
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/chem-str.mkiv" title="source:chem-str.mkiv">chem-str.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/chem-str.lua" title="source:chem-str.lua">chem-str.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>104
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/node-rul.mkiv" title="source:node-rul.mkiv">node-rul.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-rul.lua" title="source:node-rul.lua">node-rul.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>105
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-spl.mkiv" title="source:node-spl.mkiv">node-spl.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/node-spl.lua" title="source:node-spl.lua">node-spl.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>106
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/strc-not.mkiv" title="source:strc-not.mkiv">strc-not.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/strc-not.lua" title="source:strc-not.lua">strc-not.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>107
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/grph-inc.mkiv" title="source:grph-inc.mkiv">grph-inc.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/grph-inc.lua" title="source:grph-inc.lua">grph-inc.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/grph-fil.lua" title="source:grph-fil.lua">grph-fil.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/grph-u3d.lua" title="source:grph-u3d.lua">grph-u3d.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/grph-swf.lua" title="source:grph-swf.lua">grph-swf.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>108
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/grph-raw.mkiv" title="source:grph-raw.mkiv">grph-raw.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/grph-raw.lua" title="source:grph-raw.lua">grph-raw.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>109
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/bibl-bib.mkiv" title="source:bibl-bib.mkiv">bibl-bib.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/bibl-bib.lua" title="source:bibl-bib.lua">bibl-bib.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>110
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/bibl-tra.mkiv" title="source:bibl-tra.mkiv">bibl-tra.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/bibl-tra.lua" title="source:bibl-tra.lua">bibl-tra.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>111
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/task-ini.mkiv" title="source:task-ini.mkiv">task-ini.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/task-ini.lua" title="source:task-ini.lua">task-ini.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>112
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/cldf-ver.mkiv" title="source:cldf-ver.mkiv">cldf-ver.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/cldf-ver.lua" title="source:cldf-ver.lua">cldf-ver.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>113
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/cldf-com.mkiv" title="source:cldf-com.mkiv">cldf-com.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/cldf-com.lua" title="source:cldf-com.lua">cldf-com.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/cldf-ver.lua" title="source:cldf-ver.lua">cldf-ver.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>114
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/core-ctx.mkiv" title="source:core-ctx.mkiv">core-ctx.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/core-ctx.lua" title="source:core-ctx.lua">core-ctx.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>115
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/back-pdf.mkiv" title="source:back-pdf.mkiv">back-pdf.mkiv</a>
+</td>
+       <td>
+<ul><li><a class="extiw" href="http://source.contextgarden.net/lpdf-ini.lua" title="source:lpdf-ini.lua">lpdf-ini.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-col.lua" title="source:lpdf-col.lua">lpdf-col.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-xmp.lua" title="source:lpdf-xmp.lua">lpdf-xmp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-nod.lua" title="source:lpdf-nod.lua">lpdf-nod.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-mis.lua" title="source:lpdf-mis.lua">lpdf-mis.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-ano.lua" title="source:lpdf-ano.lua">lpdf-ano.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-ren.lua" title="source:lpdf-ren.lua">lpdf-ren.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-grp.lua" title="source:lpdf-grp.lua">lpdf-grp.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-wid.lua" title="source:lpdf-wid.lua">lpdf-wid.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-fld.lua" title="source:lpdf-fld.lua">lpdf-fld.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-u3d.lua" title="source:lpdf-u3d.lua">lpdf-u3d.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-swf.lua" title="source:lpdf-swf.lua">lpdf-swf.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-tag.lua" title="source:lpdf-tag.lua">lpdf-tag.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-fmt.lua" title="source:lpdf-fmt.lua">lpdf-fmt.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-epd.lua" title="source:lpdf-epd.lua">lpdf-epd.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/lpdf-epa.lua" title="source:lpdf-epa.lua">lpdf-epa.lua</a></li>
+<li><a class="extiw" href="http://source.contextgarden.net/back-pdf.lua" title="source:back-pdf.lua">back-pdf.lua</a></li></ul>
+</td>
+      </tr>
+      <tr>
+       <td>116
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/mlib-pdf.mkiv" title="source:mlib-pdf.mkiv">mlib-pdf.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mlib-pdf.lua" title="source:mlib-pdf.lua">mlib-pdf.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>117
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mlib-pps.mkiv" title="source:mlib-pps.mkiv">mlib-pps.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/mlib-pps.lua" title="source:mlib-pps.lua">mlib-pps.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>118
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/grph-epd.mkiv" title="source:grph-epd.mkiv">grph-epd.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/grph-epd.lua" title="source:grph-epd.lua">grph-epd.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>119
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-pdf.mkiv" title="source:meta-pdf.mkiv">meta-pdf.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/meta-pdf.lua" title="source:meta-pdf.lua">meta-pdf.lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>120
+</td>
+       <td style="background:#fafaff"><a class="extiw" href="http://source.contextgarden.net/back-exp.mkiv" title="source:back-exp.mkiv">back-exp.mkiv</a>
+</td>
+       <td><a class="extiw" href="http://source.contextgarden.net/back-exp.lua.lua" title="source:back-exp.lua.lua">back-exp.lua.lua</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="new" href="../index.php?title=ConTeXt_and_Lua_programming/LuaTeX&action=edit&redlink=1.html" title="ConTeXt and Lua programming/LuaTeX (page does not exist)">
+       LuaTeX
+      </a>
+      .
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110073539
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.072 seconds
+Real time usage: 0.344 seconds
+Preprocessor visited node count: 417/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1101/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3432-1!canonical and timestamp 20260110073539 and revision id 40734
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Running_Lua_code_externally">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

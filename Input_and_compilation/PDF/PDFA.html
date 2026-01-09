@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/PDF/PDFA&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDFA" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/PDF/PDFA
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4857&diff=40753">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Using <code>mkiv</code> one can create PDF/A compliant outputs. The format PDF/A, where A stands for Archive, is a format supposed to be sustainable for archiving purposes (see <a class="external free" href="http://en.wikipedia.org/?title=PDF/A" rel="nofollow">http://en.wikipedia.org/?title=PDF/A</a>). See also a paper by Luigi Scarso on the issue of creating PDF/A file with <code>mkiv</code>: <a class="external free" href="http://www.ntg.nl/maps/41/08.pdf" rel="nofollow">http://www.ntg.nl/maps/41/08.pdf</a>.
+</p>
+    <p>A complete list of PDF formats which can be created can be found in <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lpdf-fmt.lua" rel="nofollow">lpdf-fmt.lua</a>.
+</p>
+    <p>In ConTeXt mkiv, in order to create such a compliant PDF/A file, one can do as follows: first install (or check that they are present) the following color profiles files
+</p>
+    <pre class="tex">default_cmyk.icc
+default_gray.icc
+default_rgb.icc
+ISOcoated_v2_300_eci.icc
+</pre>
+    <p>into  
+</p>
+    <p><code>tex/texmf-context/colors/icc/profiles</code> 
+</p>
+    <p>of your Context standalone directory. The <code>default_*.icc</code> files are part of <code>ghostscript</code> and the file <code>ISOcoated_v2_300_eci.icc</code> can be found at:  <a class="external free" href="http://www.eci.org/en/downloads" rel="nofollow">http://www.eci.org/en/downloads</a>.
+</p>
+    <p>Next add the following commands at the top of your file:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>TITLE,
+   subtitle<span class="brx">=</span>SUBTITLE,
+   author<span class="brx">=</span>AUTHOR,
+   keyword<span class="brx">=</span><span class="br">{</span><span class="br">{</span>KEYWORD1, KEYWORD2<span class="br">}</span>, KEYWORD3<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%% For PDF/A</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>
+format<span class="brx">=</span><span class="br">{</span>pdf/a-1b:2005<span class="br">}</span>, <span class="comment">% or pdf/a-1a:2005</span>
+profile<span class="brx">=</span><span class="br">{</span>default_cmyk.icc,default_rgb.icc,default_gray.icc<span class="br">}</span>,
+intent<span class="brx">=</span>ISO coated v2 300<span class="cs"><span class="documentcs">\letterpercent</span></span><span class="cs"><span class="stylecs">\space</span></span> <span class="brx">(</span>ECI<span class="brx">)</span><span class="brx">]</span>
+
+<span class="comment">%% Tagged PDF</span>
+<span class="comment">%% method=auto ==&gt; default tags by Adobe</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs">\setupstructure</span><span class="brx">[</span>state<span class="brx">=</span>start,method<span class="brx">=</span>auto<span class="brx">]</span>
+</pre>
+    <p>and typeset your file as usual: you'll get a PDF file which is compliant with the requirements of PDF/A-1a or PDF/A-1b, according to what you have chosen to do. 
+</p>
+    <p>A short example is:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>TITLE,
+   subtitle<span class="brx">=</span>SUBTITLE,
+   author<span class="brx">=</span>AUTHOR,
+   keyword<span class="brx">=</span><span class="br">{</span><span class="br">{</span>KEYWORD1, KEYWORD2<span class="br">}</span>, KEYWORD3<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%% For PDF/A</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>
+format<span class="brx">=</span><span class="br">{</span>pdf/a-1b:2005<span class="br">}</span>, <span class="comment">% or pdf/a-1a:2005</span>
+profile<span class="brx">=</span><span class="br">{</span>default_cmyk.icc,default_rgb.icc,default_gray.icc<span class="br">}</span>,
+intent<span class="brx">=</span>ISO coated v2 300<span class="cs"><span class="documentcs">\letterpercent</span></span><span class="cs"><span class="stylecs">\space</span></span> <span class="brx">(</span>ECI<span class="brx">)</span><span class="brx">]</span>
+
+<span class="comment">%% Tagged PDF</span>
+<span class="comment">%% method=auto ==&gt; default tags by Adobe</span>
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>export<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs">\setupstructure</span><span class="brx">[</span>state<span class="brx">=</span>start,method<span class="brx">=</span>auto<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="brx">[</span>chap:testing<span class="brx">]</span><span class="br">{</span>Testing<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>middle<span class="brx">]</span><span class="brx">[</span>fig:foo<span class="brx">]</span>
+  <span class="br">{</span>This is an image<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow.jpg<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Beware: when figures and other PDF files are included into your file (for instance here <code>cow.jpg</code>) those files may create difficulties for PDF/A compliance, and sometimes they have to be treated separately.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212422
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.040 seconds
+Real time usage: 0.055 seconds
+Preprocessor visited node count: 44/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 273/2097152 bytes
+Template argument size: 124/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4382/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   36.638      1 -total
+ 20.29%    7.432      7 Template:code
+ 17.36%    6.362      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4857-1!canonical and timestamp 20260109212422 and revision id 40753
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDFA">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

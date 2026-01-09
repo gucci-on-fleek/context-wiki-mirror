@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Key_Value_Assignments" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2158&diff=42451">2025-07-04</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Comma_Separated_Lists.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists">Comma Separated Lists</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="User_Interaction.html" title="ConTeXt and Lua programming/Tutorials/System Macros/User Interaction">User Interaction</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Assignments">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Assignments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Defining_macros_in_Lua">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Defining macros in Lua
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Multi-pass_data">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Multi-pass data
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Storing_data">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Storing data
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Retrieving_data">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Retrieving data
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Technical_properties">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Technical properties
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Assignments">
+      Assignments
+     </span>
+    </h2>
+    <p>Assignments are the backbone of ConTeXt. Abhorred by the concept of style file hacking, we took a considerable effort in building a parameterized system. Unfortunately there is a price to pay in terms of speed. Compared to other packages and taking the functionality of ConTeXt into account, the total size of the format file is still very acceptable. Now how are these assignments done.
+</p>
+    <p>Assignments can be realized with:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doassign</span></span><span class="brx">[</span>label<span class="brx">]</span><span class="brx">[</span>variable<span class="brx">=</span>value<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\undoassign</span></span><span class="brx">[</span>label<span class="brx">]</span><span class="brx">[</span>variable<span class="brx">=</span>value<span class="brx">]</span>
+</pre>
+    <p>and:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doassignempty</span></span><span class="brx">[</span>label<span class="brx">]</span><span class="brx">[</span>variable<span class="brx">=</span>value<span class="brx">]</span>
+</pre>
+    <p>These macros are a syntactic rewrite for the 'set', 'clear' and 'initialize' actions:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\labelvariable</span><span class="br">{</span>value<span class="br">}</span>      <span class="comment">% \doassign</span>
+<span class="cs">\def</span><span class="cs">\labelvariable</span><span class="br">{</span><span class="br">}</span>           <span class="comment">% \undoassign</span>
+<span class="cs"><span class="systemcs">\doifundefined</span></span><span class="br">{</span><span class="cs">\labelvariable</span><span class="br">}</span>
+   <span class="br">{</span><span class="cs">\def</span><span class="cs">\labelvariable</span><span class="br">{</span>value<span class="br">}</span><span class="br">}</span> <span class="comment">% \doassignempty</span>
+</pre>
+    <p>Using the assignment commands directly is not our ideal of user friendly interfacing, so we take some further steps.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span> <span class="brx">[</span>label<span class="brx">]</span> <span class="brx">[</span>...<span class="brx">=</span>...,...<span class="brx">=</span>...<span class="brx">]</span>
+</pre>
+    <p>Again, the label identifies the category a variable belongs to. The second argument can be a comma separated list of assignments. Duplicates are allowed, later appearances overrule earlier ones.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span>
+  <span class="brx">[</span>demo<span class="brx">]</span>
+  <span class="brx">[</span>alfa<span class="brx">=</span>1,
+   beta<span class="brx">=</span>2<span class="brx">]</span>
+</pre>
+    <p>is equivalent to
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\demoalfa</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\demobeta</span><span class="br">{</span>2<span class="br">}</span>
+</pre>
+    <p>Some explanation of the inner workings of ConTeXt is in order here to make sure the source is understandable for readers, since the actual internal usage is a bit more complex than this.
+</p>
+    <p>In the pre-multi-lingual (simple) stadium ConTeXt took the next approach. With these definitions (that are mainly there to conserve TeX's string space):
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="protectedcs">\??demo</span> <span class="br">{</span>@@demo<span class="br">}</span>
+<span class="cs">\def</span><span class="protectedcs">\!!width</span> <span class="br">{</span>width<span class="br">}</span>
+<span class="cs">\def</span><span class="protectedcs">\!!height</span> <span class="br">{</span>height<span class="br">}</span>
+</pre>
+    <p>calling
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span>
+  <span class="brx">[</span><span class="protectedcs">\??demo</span><span class="brx">]</span>
+  <span class="brx">[</span><span class="protectedcs">\!!width</span><span class="brx">=</span>one,
+   <span class="protectedcs">\!!height</span><span class="brx">=</span>2<span class="brx">]</span>
+</pre>
+    <p>lead to:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\@@demowidth</span><span class="br">{</span>one<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\@@demoheight</span><span class="br">{</span>2<span class="br">}</span>
+</pre>
+    <p>Because we want to be able to distinguish the <code>!!</code> pre-tagged user supplied variables from internal counterparts, we will introduce a slightly different tag in the multi-lingual modules. There we will use <code>c!</code> or <code>v!</code>, depending on the context.
+</p>
+    <p>The call will typically somewhat look like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getparameters</span></span>
+  <span class="brx">[</span><span class="protectedcs">\??demo</span><span class="brx">]</span>
+  <span class="brx">[</span><span class="protectedcs">\c!width</span><span class="brx">=</span><span class="protectedcs">\v!one</span>,
+   <span class="protectedcs">\c!height</span><span class="brx">=</span>2<span class="brx">]</span>
+</pre>
+    <p>In the dutch interface, this would (e.g.) expand into:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\@@demobreedte</span><span class="br">{</span>een<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\@@demohoogte</span><span class="br">{</span>2<span class="br">}</span>
+</pre>
+    <p>but in the english interface it would become:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\@@demowidth</span><span class="br">{</span>one<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\@@demoheight</span><span class="br">{</span>2<span class="br">}</span>
+</pre>
+    <p>ConTeXt continues to function, because it never uses the explicit expansion, anywhere. It always relies on the <code>\s!</code> and <code>\v!</code> definitions (remember I told you not to touch them? this is why.)
+</p>
+    <p>Sometimes we explicitly want variables to default to an empty string, so we welcome:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\getemptyparameters</span></span> <span class="brx">[</span>label<span class="brx">]</span> <span class="brx">[</span>...<span class="brx">=</span>...,...<span class="brx">=</span>...<span class="brx">]</span>
+</pre>
+    <p>Some ConTeXt commands take their default setups from others. All commands that are  able to provide backgrounds or rules around some content, for instance, default to the standard command for ruled boxes. In situations like this we can use:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\copyparameters</span></span> <span class="brx">[</span>to-label<span class="brx">]</span> <span class="brx">[</span>from-label<span class="brx">]</span> <span class="brx">[</span>name1,name2,...<span class="brx">]</span>
+</pre>
+    <p>For instance
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\copyparameters</span></span>
+  <span class="brx">[</span><span class="protectedcs">\??internal</span><span class="brx">]</span><span class="brx">[</span><span class="protectedcs">\??external</span><span class="brx">]</span>
+  <span class="brx">[</span><span class="protectedcs">\c!width</span>,<span class="protectedcs">\c!height</span><span class="brx">]</span>
+</pre>
+    <p>Leads to (english version):
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\@@internalwidth</span>  <span class="br">{</span><span class="cs">\@@externalwidth</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\@@internalheight</span> <span class="br">{</span><span class="cs">\@@externalheight</span><span class="br">}</span>
+</pre>
+    <p>A lot of ConTeXt commands take optional arguments, for instance:
+</p>
+    <pre class="tex"><span class="cs">\dothisorthat</span><span class="brx">[</span>alfa,beta<span class="brx">]</span>
+<span class="cs">\dothisorthat</span><span class="brx">[</span>first<span class="brx">=</span>foo,second<span class="brx">=</span>bar<span class="brx">]</span>
+<span class="cs">\dothisorthat</span><span class="brx">[</span>alfa,beta<span class="brx">]</span><span class="brx">[</span>first<span class="brx">=</span>foo,second<span class="brx">=</span>bar<span class="brx">]</span>
+</pre>
+    <p>Although a combined solution is possible, we prefer a separation between argument keywords  and parameter assignments. The next command takes care of propper handling of such multi-faced commands.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\doifassignmentelse</span></span> <span class="br">{</span>...<span class="br">}</span> <span class="br">{</span>then ...<span class="br">}</span> <span class="br">{</span>else ...<span class="br">}</span>
+</pre>
+    <p>A slightly different approach is <code>\checkparameters</code>, which also checks on the presence of a <code>=</code>, just like the previous macro.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\checkparameters</span></span><span class="brx">[</span>argument<span class="brx">]</span>
+</pre>
+    <p>The boolean <code>\ifparameters</code> can be used afterwards to verify that there were assignments in the supplied argument.
+</p>
+    <h2>
+     <span class="mw-headline" id="Defining_macros_in_Lua">
+      Defining macros in Lua
+     </span>
+    </h2>
+    <p>The easiest version of defining macros with key=value parameters is using <code>interfaces.implement</code> in Lua:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+interfaces.implement <span class="br">{</span>
+  name      <span class="brx">=</span> "MyMacro",
+  public    <span class="brx">=</span> true,
+  arguments <span class="brx">=</span> <span class="br">{</span> "hash" <span class="br">}</span>,
+  actions   <span class="brx">=</span> function<span class="brx">(</span>t<span class="brx">)</span>
+    print<span class="brx">(</span>inspect<span class="brx">(</span>t<span class="brx">)</span><span class="brx">)</span>
+    context<span class="brx">(</span>t.text<span class="brx">)</span>
+  end
+<span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\MyMacro</span><span class="brx">[</span>text<span class="brx">=</span>Hello World<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Multi-pass_data">
+      Multi-pass data
+     </span>
+    </h2>
+    <p>Sometimes, typesetting requires information that is not available until later on in the document. An example would be printing the total number of pages on the first page of the document. The solution is multi-pass data: data that is saved (in the <code>.tuc</code> file) in one pass, and retrieved and used in a later pass. This section explains how to store and retrieve such data across passes.
+</p>
+    <h3>
+     <span class="mw-headline" id="Storing_data">
+      Storing data
+     </span>
+    </h3>
+    <pre class="tex"><span class="comment">% To define a dataset.</span>
+<span class="cs"><span class="systemcs">\definedataset</span></span><span class="brx">[</span>cats<span class="brx">]</span>
+
+<span class="comment">% The first anonymous key-value table is saved at point 1 in the cats dataset.</span>
+<span class="comment">% (The dataset is itself a key-value table, too.)</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>cats<span class="brx">]</span><span class="brx">[</span>name<span class="brx">=</span>Gus, job<span class="brx">=</span>Theatre Cat<span class="brx">]</span>
+
+<span class="comment">% The next anonymous table is saved at point 2 </span>
+<span class="comment">% (Regardless of intervening named tables)</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>cats<span class="brx">]</span><span class="brx">[</span>scene<span class="brx">=</span>crime, name<span class="brx">=</span>Macavity, is<span class="brx">=</span>not there<span class="brx">]</span>
+
+<span class="comment">% To save a table by name, add the name in between the dataset and the table</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>cats<span class="brx">]</span><span class="brx">[</span>culprit<span class="brx">]</span><span class="brx">[</span>name<span class="brx">=</span>Mungojerry<span class="brx">]</span>
+
+<span class="comment">% Named tables can be overwritten</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>cats<span class="brx">]</span><span class="brx">[</span>culprit<span class="brx">]</span><span class="brx">[</span>name<span class="brx">=</span>Rumpleteaser<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Retrieving_data">
+      Retrieving data
+     </span>
+    </h3>
+    <p>In contrast to the other mentioned commands, the arguments of
+<tt><a href="../../../Command/datasetvariable.html" title="Command/datasetvariable">\datasetvariable</a></tt> are delimited by braces instead of
+brackets. The reasoning is that this command is about producing text rather than setting values.
+</p>
+    <pre class="tex"><span class="comment">% Retrieving a named value</span>
+The name of the culprit was <span class="cs"><span class="systemcs">\datasetvariable</span></span><span class="br">{</span>cats<span class="br">}</span><span class="br">{</span>culprit<span class="br">}</span><span class="br">{</span>name<span class="br">}</span>.
+
+<span class="comment">% Retrieving an anonymous value --- Macavity, in this case.</span>
+<span class="cs"><span class="systemcs">\datasetvariable</span></span><span class="br">{</span>cats<span class="br">}</span><span class="br">{</span>2<span class="br">}</span><span class="br">{</span>name<span class="br">}</span>.
+</pre>
+    <h3>
+     <span class="mw-headline" id="Technical_properties">
+      Technical properties
+     </span>
+    </h3>
+    <ul>
+     <li>
+      The tables of key-value pairs are stored as Lua tables in a
+      <code>.tuc</code>
+      file. They look like this:
+     </li>
+    </ul>
+    <pre>utilitydata.job.datasets.collected={
+ ["mydata"]={
+  {                  -- this table is indexed at position 1 in mydata
+   ["key"]="value", 
+  }, 
+  ["named"]={        -- this table is indexed at position "named" in mydata
+   ["key_in_named_table"]="value", 
+  },
+ },
+ ["myotherdata"]={
+  {                  -- this table is indexed at position 1 in myotherdata
+   ["key"]=["othervalue"]
+  },
+ },
+}
+</pre>
+    <ul>
+     <li>
+      Adding the option
+      <code>[delay=yes]</code>
+      to a
+      <tt>
+       <a href="../../../Command/definedataset.html" title="Command/definedataset">
+        \definedataset
+       </a>
+      </tt>
+      call ensures that the following three entries are present in every table saved with
+      <tt>
+       <a href="../../../Command/setdataset.html" title="Command/setdataset">
+        \setdataset
+       </a>
+      </tt>
+      :
+      <code>index</code>
+      ,
+      <code>order</code>
+      , and
+      <code>realpage</code>
+      .
+     </li>
+    </ul>
+    <ul>
+     <li>
+      <ul>
+       <li>
+        The entries
+        <code>index</code>
+        and
+        <code>order</code>
+        seem to have the same number: a table written by the first
+        <tt>
+         <a href="../../../Command/setdataset.html" title="Command/setdataset">
+          \setdataset
+         </a>
+        </tt>
+        call has
+        <code>index=1</code>
+        and
+        <code>order=1</code>
+        , and so on. Tables may be overwritten, of course.
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <ul>
+     <li>
+      <ul>
+       <li>
+        The entry
+        <code>realpage</code>
+        contains the real page number (so every page is counted, numbered or not) of the page TeX was working on when it encountered the
+        <tt>
+         <a href="../../../Command/setdataset.html" title="Command/setdataset">
+          \setdataset
+         </a>
+        </tt>
+        call.
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% Create the dataset `mydata`</span>
+<span class="cs"><span class="systemcs">\definedataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>delay<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="comment">% index=1, realpage=2</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>goldfish<span class="brx">]</span><span class="brx">[</span>colour<span class="brx">=</span>gold<span class="brx">]</span>
+
+<span class="comment">% index=2, realpage=1</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>silverfish<span class="brx">]</span><span class="brx">[</span>type<span class="brx">=</span>insect<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>yes<span class="brx">]</span>
+
+<span class="comment">% index=3, realpage=2; overwrites previous goldfish table.</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>goldfish<span class="brx">]</span><span class="brx">[</span>type<span class="brx">=</span>fish<span class="brx">]</span>
+
+<span class="comment">% Results in the following Lua table in the .tuc file</span>
+<span class="comment">% ["mydata"]={</span>
+<span class="comment">%  ["goldfish"]={</span>
+<span class="comment">%   ["type"]="fish",</span>
+<span class="comment">%   ["index"]=3,</span>
+<span class="comment">%   ["order"]=3,</span>
+<span class="comment">%   ["realpage"]=2,</span>
+<span class="comment">%  },</span>
+<span class="comment">%  ["goldfish"]={</span>
+<span class="comment">%   ["type"]="insect",</span>
+<span class="comment">%   ["index"]=2,</span>
+<span class="comment">%   ["order"]=2,</span>
+<span class="comment">%   ["realpage"]=1,</span>
+<span class="comment">%  },</span>
+<span class="comment">% }</span>
+</pre>
+    <ul>
+     <li>
+      Keys or values cannot contain commas.
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% This does not work</span>
+<span class="cs"><span class="systemcs">\definedataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>name<span class="brx">=</span>"Bond, James Bond"<span class="brx">]</span>
+
+<span class="comment">% Results in </span>
+<span class="comment">% ["mydata"]={</span>
+<span class="comment">%  {</span>
+<span class="comment">%   ["name"]="\"Bond", </span>
+<span class="comment">%   ["James Bond\""]="",</span>
+<span class="comment">%  },</span>
+<span class="comment">% }</span>
+</pre>
+    <ul>
+     <li>
+      Single keys are stored as empty values.
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="systemcs">\definedataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>mydata<span class="brx">]</span><span class="brx">[</span>A4,landscape<span class="brx">]</span>
+
+<span class="comment">% Results in </span>
+<span class="comment">% ["mydata"]={</span>
+<span class="comment">%  {</span>
+<span class="comment">%   ["A4"]="", </span>
+<span class="comment">%   ["landscape"]="",</span>
+<span class="comment">%  },</span>
+<span class="comment">% }</span>
+</pre>
+    <ul>
+     <li>
+      Values can store commands; the command is stored as a string, and expanded at the moment of retrieval.
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% Create a macro</span>
+<span class="cs">\def</span><span class="cs">\mytitle</span><span class="br">{</span>peanut butter<span class="br">}</span>
+
+<span class="comment">% Store a command that uses that macro in a variable.</span>
+<span class="cs"><span class="systemcs">\definedataset</span></span><span class="brx">[</span>looks<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\setdataset</span></span><span class="brx">[</span>looks<span class="brx">]</span><span class="brx">[</span>narrower<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="cs">\margintitle</span><span class="br">{</span><span class="cs">\mytitle</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% Redefine that macro</span>
+<span class="cs">\def</span><span class="cs">\mytitle</span><span class="br">{</span>cheese<span class="br">}</span>
+
+<span class="comment">% The margintitle is 'cheese', not 'peanut butter'.</span>
+<span class="cs"><span class="stylecs">\setupnarrower</span></span><span class="brx">[</span>before<span class="brx">=</span><span class="cs"><span class="systemcs">\datasetvariable</span></span><span class="br">{</span>looks<span class="br">}</span><span class="br">{</span>narrower<span class="br">}</span><span class="br">{</span>before<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startnarrower</span></span>
+    sandwich
+<span class="cs"><span class="documentcs">\stopnarrower</span></span>
+</pre>
+    <p>&lt; <b>Prev:</b> <a href="Comma_Separated_Lists.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Comma Separated Lists">Comma Separated Lists</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="User_Interaction.html" title="ConTeXt and Lua programming/Tutorials/System Macros/User Interaction">User Interaction</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.065 seconds
+Real time usage: 0.113 seconds
+Preprocessor visited node count: 198/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 462/2097152 bytes
+Template argument size: 116/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 15405/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   10.635      1 -total
+ 77.48%    8.240      5 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2158-1!canonical and timestamp 20260109212409 and revision id 42451
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Key_Value_Assignments">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

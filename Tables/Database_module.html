@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Tables/Database module&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Tables/Database_module" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Tables/Database module
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1934&diff=39943">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> more examples and explanation <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Inline">
+      Inline
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>scale<span class="brx">=</span>0.8<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>database<span class="brx">]</span>
+
+<span class="cs">\defineseparatedlist</span>
+  <span class="brx">[</span>MyTable<span class="brx">]</span>
+  <span class="brx">[</span>separator<span class="brx">=</span>tab,
+   left<span class="brx">=</span><span class="cs"><span class="documentcs">\bTD</span></span>,right<span class="brx">=</span><span class="cs">\eTD</span>,
+   first<span class="brx">=</span><span class="cs"><span class="documentcs">\bTR</span></span>,last<span class="brx">=</span><span class="cs">\eTR</span>,
+   before<span class="brx">=</span><span class="cs"><span class="documentcs">\bTABLE</span></span>,after<span class="brx">=</span><span class="cs">\eTABLE</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>each<span class="brx">]</span><span class="brx">[</span>align<span class="brx">=</span>flushright,width<span class="brx">=</span>2.5cm,align<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>r<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>gray<span class="brx">]</span>
+<span class="cs">\startMyTable</span>
+Cows	Total	Milking	Pregnant
+01/1995	1709	1449	260
+01/1996	1713	1444	269
+01/1997	1606	1387	219
+01/1998	1634	1416	218
+11/1998	1558	1350	208
+11/1999	1520	1307	212
+11/2000	1475	1285	190
+11/2001	1496	1345	151
+11/2002	1498	1338	160
+11/2003	1492	1324	169
+11/2004	1457	1295	161
+11/2005	1421	1263	158
+<span class="cs">\stopMyTable</span>
+
+<span class="comment">%load from a file</span>
+<span class="comment">%\processseparatedfile[TSV][cows.tsv]</span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="331" src="../wikiteximage/be9585d091e742d0db58e5a201a95c77.webp" width="594">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Data_from_File">
+      Data from File
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>database<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\defineseparatedlist</span>
+ <span class="brx">[</span>test<span class="brx">]</span>
+ <span class="brx">[</span>separator<span class="brx">=</span>space, <span class="comment">% tab</span>
+  before<span class="brx">=</span><span class="cs"><span class="documentcs">\bTABLE</span></span>,after<span class="brx">=</span><span class="cs">\eTABLE</span>,
+  first<span class="brx">=</span><span class="cs"><span class="documentcs">\bTR</span></span>,last<span class="brx">=</span><span class="cs">\eTR</span>,
+  left<span class="brx">=</span><span class="cs"><span class="documentcs">\bTD</span></span>,right<span class="brx">=</span><span class="cs">\eTD</span><span class="brx">]</span>
+
+<span class="cs">\processdatabasefile</span><span class="brx">[</span>test<span class="brx">]</span><span class="brx">[</span>csv.csv<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Links">
+      Links
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.physik.uni-freiburg.de/~doerr/exceltex/index.en.html" rel="nofollow">
+       exceltex
+      </a>
+      - LaTeX package to fetch data from Excel documents (
+      <a class="external text" href="http://www.rubygarden.org/ruby?ScriptingExcel" rel="nofollow">
+       Scripting Excel article
+      </a>
+      )
+     </li>
+     <li>
+      <a class="external text" href="http://tug.ctan.org/cgi-bin/ctanPackageInformation.py?id=tab4tex" rel="nofollow">
+       tab4tex
+      </a>
+      - Preprocessor for LaTeX tabular environments
+     </li>
+     <li>
+      <a class="external text" href="../images/e/ee/csv.pdf" rel="nofollow">
+       <i>
+        Creating tables using CSV (comma&ndash;separated values)
+       </i>
+      </a>
+      : My Way by Mojca Miklavec.
+     </li>
+     <li>
+      <a class="external text" href="http://www.ntg.nl/maps/42/12.pdf" rel="nofollow">
+       <i>
+        Using ConTeXt with Databases
+       </i>
+      </a>
+      by Thomas A. Schmitz (article in NTG-MAPS about XML and SQL databases).
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212435
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.031 seconds
+Real time usage: 0.045 seconds
+Preprocessor visited node count: 30/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 320/2097152 bytes
+Template argument size: 29/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3551/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   12.592      1 Template:todo
+100.00%   12.592      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1934-1!canonical and timestamp 20260109212435 and revision id 39943
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Tables/Database_module">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

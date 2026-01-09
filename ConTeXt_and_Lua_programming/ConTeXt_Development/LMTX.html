@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/ConTeXt Development/LMTX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/LMTX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/ConTeXt Development/LMTX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5399&diff=42362">2025-03-19</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Since April 2019, there is a new implementation of ConTeXt, named <b>ConTeXt LMTX</b>. It is tuned for <a class="new" href="../../index.php?title=LuaMetaTeX&action=edit&redlink=1" title="LuaMetaTeX (page does not exist)">LuaMetaTeX</a>, the lean and mean successor of the <a href="LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a> engine.
+</p>
+    <p>From Hans&rsquo; introductory article in TUGBoat:
+</p>
+    <dl>
+     <dd>
+      More than decade after introducing the ConTeXt version for LuaTeX, flagged
+      <a href="Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">
+       Mark IV
+      </a>
+      (the version known as
+      <a href="Mark_II.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark II">
+       Mark II
+      </a>
+      ran under more traditional TeX engines), it is time for something new. As MkVI, MkIX and MkXI are already taken for special variants of MkIV files a new acronym was coined: LMTX. Such a sequence of letters must sound somewhat fancy but it actually has a meaning, or better: it has several. One is that it stands for LuaMetaTeX, an indication of an engine to be used. But one can also think of the components that make up ConTeXt code: Lua, MetaPost, TeX, and XML. But once it is clear to a user what (s)he is dealing with, it can also indicate a &ldquo;Lean and Mean TeX eXperience&rdquo;.
+     </dd>
+    </dl>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#The_LuaMetaTeX_engine">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         The LuaMetaTeX engine
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#The_LMTX_distribution">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         The LMTX distribution
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#How_to_check_for_newer_versions.3F">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         How to check for newer versions?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#LMTX_doesn.E2.80.99t_update.3F">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         LMTX doesn&rsquo;t update?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Further_reading">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Further reading
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="The_LuaMetaTeX_engine">
+      The LuaMetaTeX engine
+     </span>
+    </h2>
+    <p>The big difference between LMTX and all previous versions of ConTeXt is that LMTX uses a compilation and scripting engine that is specifically developed with ConTeXt in mind: LuaMetaTeX (the executable is named <code>luametatex</code>). This new engine builds heavily on the LuaTeX engine, but it has been optimised heavily for ConTeXt use:
+</p>
+    <ul>
+     <li>
+      There are no external dependencies except for thee core
+      <code>libc</code>
+      and
+      <code>libm</code>
+      runtimes.
+     </li>
+     <li>
+      There is no PDF backend code, all PDF generation is handled by ConTeXt&rsquo;s Lua code.
+     </li>
+     <li>
+      There is no
+      <code>fontloader</code>
+      lua interface library, (OpenType) font loading is handled by ConTeXt&rsquo;s Lua code.
+     </li>
+     <li>
+      There are no
+      <code>img</code>
+      and
+      <code>pdf</code>
+      (poppler-based) Lua interface libraries (the latter is replaced by the leaner dedicated library
+      <code>epdf</code>
+      ).
+     </li>
+     <li>
+      Various extensions have been made to other Lua interface libraries.
+     </li>
+    </ul>
+    <p>When it comes to typesetting, <code>luametatex</code> is (at least for now) 100% compatible with LuaTeX &gt; 1.0.
+</p>
+    <h2>
+     <span class="mw-headline" id="The_LMTX_distribution">
+      The LMTX distribution
+     </span>
+    </h2>
+    <p>Some extra scripting extensions in the engine have made it much easier to produce a standalone distribution of ConTeXt that is not only compact, but also capable of partial updates. See <a class="mw-redirect" href="../../Introduction/Installation.html" title="Input and compilation/Installation">Installation</a> for the new installation and update process.
+</p>
+    <p>Of course the new distribution defaults to running LMTX. But it can still process input using LuaTeX (<a href="Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">ConTeXt_and_Lua_programming/ConTeXt_Development/Mark IV</a>) as well. You can do this by running
+</p>
+    <pre>  context --luatex
+</pre>
+    <p>This works because the distribution contains all of the <a href="Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">ConTeXt_and_Lua_programming/ConTeXt_Development/Mark IV</a> source code as well as a <code>luatex</code> binary.
+</p>
+    <p>The new installation no longer contains the <a href="Mark_II.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark II">ConTeXt_and_Lua_programming/ConTeXt_Development/Mark II</a> source code or binaries, and is therefore unable to run it. 
+</p>
+    <h2>
+     <span id="How_to_check_for_newer_versions?">
+     </span>
+     <span class="mw-headline" id="How_to_check_for_newer_versions.3F">
+      How to check for newer versions?
+     </span>
+    </h2>
+    <p>You might check for newer versions with the following command (in <i>Unix</i>):
+</p>
+    <pre> curl -I http://www.pragma-ade.nl/context/latest/cont-tmf.zip 2&gt;&1 | grep Last-Modified
+</pre>
+    <p>Your installed version is displayed with the following commands:
+</p>
+    <pre> context --version && luametatex --version
+</pre>
+    <h2>
+     <span id="LMTX_doesn&rsquo;t_update?">
+     </span>
+     <span class="mw-headline" id="LMTX_doesn.E2.80.99t_update.3F">
+      LMTX doesn&rsquo;t update?
+     </span>
+    </h2>
+    <p>The install script (<code>install.bat</code> or <code>install.sh</code>) doesn&rsquo;t update itself. 
+</p>
+    <p>This is the reason why a new version may have been released, but your installed LMTX might not update.
+</p>
+    <p>If the install script has been changed, you need to replace it manually with the newest version before updating your LMTX installation.
+</p>
+    <ul>
+     <li>
+      Hans' introductory
+      <a class="external text" href="https://tug.org/TUGboat/tb40-1/tb124hagen-lmtx.pdf" rel="nofollow">
+       article
+      </a>
+      in TUGBoat 40:1.
+     </li>
+     <li>
+      The official page
+      <b>
+       <a class="external text" href="http://www.pragma-ade.nl/install.htm" rel="nofollow">
+        Installing CONTEXT LMTX
+       </a>
+      </b>
+      is hosted by Pragma-Ade, which also provides
+      <ul>
+       <li>
+        a 2 pages
+        <b>
+         <a class="external text" href="http://lmtx.pragma-ade.nl/install-lmtx/installation.pdf" rel="nofollow">
+          installation guide
+         </a>
+        </b>
+        ,
+       </li>
+       <li>
+        a 1 page
+        <a class="external text" href="http://distribution.contextgarden.net/current/context/experimental/doc/context/documents/general/leaflets/leaflet-context.pdf" rel="nofollow">
+         leaflet for ConTeXt LMTX
+        </a>
+       </li>
+       <li>
+        a 1 page
+        <a class="external text" href="http://distribution.contextgarden.net/current/context/experimental/doc/context/documents/general/leaflets/leaflet-luametatex.pdf" rel="nofollow">
+         leaflet for LuaMetaTeX
+        </a>
+        .
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212406
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.017 seconds
+Real time usage: 0.049 seconds
+Preprocessor visited node count: 38/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 189/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:5399-1!canonical and timestamp 20260109212406 and revision id 42362
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/LMTX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,2258 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Extensions to the Lua IO library/Table manipulation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library/Table_manipulation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Extensions to the Lua IO library/Table manipulation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3413&diff=41489">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Preliminary_information">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Preliminary information
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Overview">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Overview
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Examples_.28read_this_first.21.29">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Examples (read this first!)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Extensions_to_the_table_library">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Extensions to the table library
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#table.strip.28table_t.29">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           table.strip(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#table.keys.28table_t.29">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           table.keys(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#table.sortedkeys.28table_t.29">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           table.sortedkeys(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#table.sortedhashkeys.28table_t.29">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           table.sortedhashkeys(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#table.sortedhash.28table_t.29_.7C_table.sortedpairs.28table_t.29">
+          <span class="tocnumber">
+           2.5
+          </span>
+          <span class="toctext">
+           table.sortedhash(
+           <i>
+            table
+           </i>
+           t) | table.sortedpairs(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#table.append.28table_t.2C_table_list.29">
+          <span class="tocnumber">
+           2.6
+          </span>
+          <span class="toctext">
+           table.append(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            table
+           </i>
+           list)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#table.prepend.28table_t.2C_table_list.29">
+          <span class="tocnumber">
+           2.7
+          </span>
+          <span class="toctext">
+           table.prepend(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            table
+           </i>
+           list)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#table.merge.28table_t.2C_args.29">
+          <span class="tocnumber">
+           2.8
+          </span>
+          <span class="toctext">
+           table.merge(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            args
+           </i>
+           )
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#table.merged.28args.29">
+          <span class="tocnumber">
+           2.9
+          </span>
+          <span class="toctext">
+           table.merged(
+           <i>
+            args
+           </i>
+           )
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#table.imerge.28table_t.2C_args.29">
+          <span class="tocnumber">
+           2.10
+          </span>
+          <span class="toctext">
+           table.imerge(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            args
+           </i>
+           )
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#table.imerged.28table_t.2C_args.29">
+          <span class="tocnumber">
+           2.11
+          </span>
+          <span class="toctext">
+           table.imerged(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            args
+           </i>
+           )
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#table.fastcopy.28table_t.2C_.5Bboolean_meta.5D.29">
+          <span class="tocnumber">
+           2.12
+          </span>
+          <span class="toctext">
+           table.fastcopy(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            boolean
+           </i>
+           meta])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#table.copy.28table_t.2C_.5Btable_tables.5D.29">
+          <span class="tocnumber">
+           2.13
+          </span>
+          <span class="toctext">
+           table.copy(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            table
+           </i>
+           tables])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#table.tohash.28table_t.2C_.5Bany_value.5D.29">
+          <span class="tocnumber">
+           2.14
+          </span>
+          <span class="toctext">
+           table.tohash(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            any
+           </i>
+           value])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#table.fromhash.28table_t.29">
+          <span class="tocnumber">
+           2.15
+          </span>
+          <span class="toctext">
+           table.fromhash(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#table.serialize.28table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">
+          <span class="tocnumber">
+           2.16
+          </span>
+          <span class="toctext">
+           table.serialize(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            string
+           </i>
+           |
+           <i>
+            int
+           </i>
+           |
+           <i>
+            boolean
+           </i>
+           name,] [
+           <i>
+            boolean
+           </i>
+           reduce,] [
+           <i>
+            boolean
+           </i>
+           noquotes,] [
+           <i>
+            boolean
+           </i>
+           hex])
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-21">
+           <a href="#name">
+            <span class="tocnumber">
+             2.16.1
+            </span>
+            <span class="toctext">
+             name
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-22">
+           <a href="#reduce">
+            <span class="tocnumber">
+             2.16.2
+            </span>
+            <span class="toctext">
+             reduce
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-23">
+           <a href="#noquotes">
+            <span class="tocnumber">
+             2.16.3
+            </span>
+            <span class="toctext">
+             noquotes
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-24">
+           <a href="#hexify">
+            <span class="tocnumber">
+             2.16.4
+            </span>
+            <span class="toctext">
+             hexify
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-25">
+           <a href="#Customization">
+            <span class="tocnumber">
+             2.16.5
+            </span>
+            <span class="toctext">
+             Customization
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-26">
+           <a href="#Limitations">
+            <span class="tocnumber">
+             2.16.6
+            </span>
+            <span class="toctext">
+             Limitations
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#table.tohandle.28function_handle.2C_table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">
+          <span class="tocnumber">
+           2.17
+          </span>
+          <span class="toctext">
+           table.tohandle(
+           <i>
+            function
+           </i>
+           handle,
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            string
+           </i>
+           |
+           <i>
+            int
+           </i>
+           |
+           <i>
+            boolean
+           </i>
+           name,] [
+           <i>
+            boolean
+           </i>
+           reduce,] [
+           <i>
+            boolean
+           </i>
+           noquotes,] [
+           <i>
+            boolean
+           </i>
+           hex])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#table.tofile.28string_filename.2C_string_root.2C_string_name.2C_boolean_reduce.2C_boolean_noquotes.2C_boolean_hex.29">
+          <span class="tocnumber">
+           2.18
+          </span>
+          <span class="toctext">
+           table.tofile(
+           <i>
+            string
+           </i>
+           filename,
+           <i>
+            string
+           </i>
+           root,
+           <i>
+            string
+           </i>
+           name,
+           <i>
+            boolean
+           </i>
+           reduce,
+           <i>
+            boolean
+           </i>
+           noquotes,
+           <i>
+            boolean
+           </i>
+           hex)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-29">
+         <a href="#table.flattened.28table_t.2C_.5Btable_f.2C.5D_.5Bint_depth.5D.29">
+          <span class="tocnumber">
+           2.19
+          </span>
+          <span class="toctext">
+           table.flattened(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            table
+           </i>
+           f,] [
+           <i>
+            int
+           </i>
+           depth])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-30">
+         <a href="#table.are_equal.28table_t1.2C_table_t2.2C_.5Bint_start.2C.5D_.5Bint_stop.5D.29">
+          <span class="tocnumber">
+           2.20
+          </span>
+          <span class="toctext">
+           table.are_equal(
+           <i>
+            table
+           </i>
+           t1,
+           <i>
+            table
+           </i>
+           t2, [
+           <i>
+            int
+           </i>
+           start,] [
+           <i>
+            int
+           </i>
+           stop])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#table.identical.28table_t1.2C_table_t2.29">
+          <span class="tocnumber">
+           2.21
+          </span>
+          <span class="toctext">
+           table.identical(
+           <i>
+            table
+           </i>
+           t1,
+           <i>
+            table
+           </i>
+           t2)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#table.compact.28table_t.29">
+          <span class="tocnumber">
+           2.22
+          </span>
+          <span class="toctext">
+           table.compact(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-33">
+         <a href="#table.contains.28table_t.2C_any_value.29">
+          <span class="tocnumber">
+           2.23
+          </span>
+          <span class="toctext">
+           table.contains(
+           <i>
+            table
+           </i>
+           t,
+           <i>
+            any
+           </i>
+           value)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#table.count.28table_t.29">
+          <span class="tocnumber">
+           2.24
+          </span>
+          <span class="toctext">
+           table.count(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-35">
+         <a href="#table.swapped.28table_t1.2C_.5Btable_t2.5D.29">
+          <span class="tocnumber">
+           2.25
+          </span>
+          <span class="toctext">
+           table.swapped(
+           <i>
+            table
+           </i>
+           t1, [
+           <i>
+            table
+           </i>
+           t2])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-36">
+         <a href="#table.reversed.28table_t.29">
+          <span class="tocnumber">
+           2.26
+          </span>
+          <span class="toctext">
+           table.reversed(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#table.sequenced.28table_t.2C_.5Bstring_separator.2C.5D_.5Bboolean_simple.5D.29">
+          <span class="tocnumber">
+           2.27
+          </span>
+          <span class="toctext">
+           table.sequenced(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            string
+           </i>
+           separator,] [
+           <i>
+            boolean
+           </i>
+           simple])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-38">
+         <a href="#table.print.28table_t.2C_.5B....5D.29">
+          <span class="tocnumber">
+           2.28
+          </span>
+          <span class="toctext">
+           table.print(
+           <i>
+            table
+           </i>
+           t, [...])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-39">
+         <a href="#table.sub.28table_t.2C_.5Bint_start.2C.5D_.5Bint_stop.5D.29">
+          <span class="tocnumber">
+           2.29
+          </span>
+          <span class="toctext">
+           table.sub(
+           <i>
+            table
+           </i>
+           t, [
+           <i>
+            int
+           </i>
+           start,] [
+           <i>
+            int
+           </i>
+           stop])
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-40">
+         <a href="#table.is_empty.28table_t.29">
+          <span class="tocnumber">
+           2.30
+          </span>
+          <span class="toctext">
+           table.is_empty(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-41">
+         <a href="#table.has_one_entry.28table_t.29">
+          <span class="tocnumber">
+           2.31
+          </span>
+          <span class="toctext">
+           table.has_one_entry(
+           <i>
+            table
+           </i>
+           t)
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-42">
+       <a href="#Legacy_Lua.3C.3D5.1">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Legacy Lua&lt;=5.1
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-43">
+         <a href="#Fallback_iterators">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Fallback iterators
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-44">
+         <a href="#unpack.28.29">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           unpack()
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-45">
+       <a href="#Further_information">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Further information
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Preliminary_information">
+      Preliminary information
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h3>
+    <p>In ConTeXt, the vanilla Lua <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#5.5" rel="nofollow">table library</a>
+is extended by a number of convenience features for more common
+tasks.
+In order to get a first impression of the added functionality you
+can generate a list:
+</p>
+    <pre>local cnt = 1
+for key,val in next,table do
+    print(string.format("[%2i]  %19s: '%s'", cnt,key,type(table[key])))
+    cnt = cnt + 1
+end
+</pre>
+    <p>Compare this to Lua&rsquo;s and LuaTeX&rsquo;s standard <i>table</i> implementation.
+</p>
+    <p>The <i>main file</i> of ConTeXt&rsquo;s table library is
+<a class="extiw" href="http://source.contextgarden.net/l-table.lua" title="source:l-table.lua"><tt>l-table.lua</tt></a>.
+Visit there for the exact function definitions and Hans&lsquo;s
+original annotations.
+If one or more examples do not work as expected it is very likely
+that a change has been introduced in a recent release.
+Feel free to wikify it yourself or ask for wikification on the
+<a href="../../Community_and_web_resources#Mailing_lists.html" title="Community and web resources">mailing lists</a>.
+</p>
+    <h3>
+     <span id="Examples_(read_this_first!)">
+     </span>
+     <span class="mw-headline" id="Examples_.28read_this_first.21.29">
+      Examples (read this first!)
+     </span>
+    </h3>
+    <p>For the examples to work, your test scripts should define the
+following dummies:
+</p>
+    <pre>--- Numerically indexed table
+testarray = { } 
+for cnt=1,tonumber(arg[1]) or 100, 1 do
+    testarray[cnt] = cnt 
+end
+
+--- One-dimensional array of strings
+alpha = {
+    "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m",
+    "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
+}
+
+--- Nested array of strings and arrays of strings
+alpha_nested = {
+    {"a", "b", "c"}, "d", "e", {"f", {"g", "h", {"i"}, "j"}}, "k", "l", {"m"},
+    {"n", "o"}, "p", {{{"q", "r"}, {"s", {"t"}}, "u", {"v", "w"}}, "x"}, "y", "z"
+}
+
+--- Hash table
+anagrams = {
+    ["Taht si crreoct"] = "That is correct",
+    ["I stom certainly od"] = "I most certainly do",
+    ["Revy chum so"] = "Very much so",
+    ["Hamrag"] = "Graham",
+    ["Bumcreland"] = "Cumberland",
+    ["Staht sit sepreicly"] = "That&rsquo;s it precisely",
+    ["Sey, sey"] = "Yes, yes",
+    ["Ta the mnemot"] = "At the moment",
+    ["The Mating of the Wersh"] = "The Taming of the Shrew",
+    ["Malliwi Rapesheake"] = "William Shakespeare",
+    ["Two Netlemeg of Verona"] = "Two Gentlemen of Verona",
+    ["The Chamrent of Venice"] = "The Merchant of Venice",
+    ["My dingkom for a shroe!"] = "My kingdom for a horse",
+    ["Ring Kichard the Thrid"] = "King Richard the Third", -- That's not an anagram, that's a spoonerism.
+}
+
+--- Conflation of hash and numerically indexed table
+mixed = {
+      [1]    = "one",
+     ["2"]   = "two",
+      [3]    = "three",
+     ["4"]   = "four",
+      [5]    = "five",
+     ["6"]   = "six",
+      [7]    = "seven",
+     ["8"]   = "eight",
+      [9]    = "nine",
+    ["10"]   = "ten",
+     [10]    = "ten",
+    ["11"]   = "eleven",
+     [11]    = "eleven",
+}
+</pre>
+    <p>Those will be used throughout this tutorial.
+</p>
+    <p>In order to use ConTeXt&rsquo;s Lua extensions with TeXlua without the
+comparatively huge TeX overhead you will want to run your scripts
+with the <tt>mtxrun</tt> loader:
+</p>
+    <pre>$mtxrun --script my_script.lua
+</pre>
+    <p>Of course, sometimes TeX processing is needed even in the
+following demonstrations.
+The most convenient way to do this in ConTeXt are <tt>.cld</tt>
+files (&ldquo;<a href="../ConTeXt_Lua_Documents_CLD.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD">ConTeXt Lua Documents</a>&rdquo;), which are preferable to
+<tt>\[start|stop]luacode</tt> or <tt>\ctxlua</tt> when dealing
+predominantly with Lua code.
+</p>
+    <h2>
+     <span class="mw-headline" id="Extensions_to_the_table_library">
+      Extensions to the
+      <tt>
+       table
+      </tt>
+      library
+     </span>
+    </h2>
+    <h3>
+     <span id="table.strip(table_t)">
+     </span>
+     <span class="mw-headline" id="table.strip.28table_t.29">
+      <tt>
+       table.strip(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Strips every string in an array <i>t</i> of its leading and trailing
+whitespace and returns a new array.
+If this operation should result in an empty string (i.e. the
+input string was all-whitespace), then it is dropped.
+This method fails with tables that contain non-string elements.
+</p>
+    <pre>irregular = {
+    -- lots of spacy strings
+    "     Johann ", " Gambolputty ", "   de         ", "          von", "Ausfern     ",
+    "schplenden  ", "schlitter    ", "crasscrenbon  ", "fried        ", "     digger ",
+    "   dingle   ", "  dangle     ", "   dongle     ", "dungle       ", "   burstein ",
+    "        von ", "     knacker ", "  thrasher    ", " apple       ", "  banger    ",
+    "horowitz    ", "ticolensic   ", "      grander ", "   knotty    ", "spelltinkle ",
+    "grandlich   ", "grumblemeyer ", "spelterwasser ", "kurstlich    ", "himbleeisen ",
+    "  bahnwagen ", "  gutenabend ", "     bitte    ", "         ein ", "n&uuml;rnburger  ",
+    " bratwustle ", " gerspurten  ", "       mitz   ", "weimache     ", "      luber ",
+    "  hundsfut  ", "gumberaber   ", "  sh&ouml;nedanker ", "kalbsfleisch ", "mittler     ",
+    "aucher      ", "       von   ", " Hautkopft    ", "of           ", "    Ulm     ",
+}
+
+-- iterate over the stripped version
+for n,name in next, table.strip(irregular) do
+    io.write("&gt;&gt;"..name.."&lt;&lt; "..(n&nbsp;% 5 == 0 and "\n" or ""))
+end
+</pre>
+    <h3>
+     <span id="table.keys(table_t)">
+     </span>
+     <span class="mw-headline" id="table.keys.28table_t.29">
+      <tt>
+       table.keys(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns an array of all the keys in dictionary <i>t</i>.
+(This amounts to the index when used on arrays.)
+</p>
+    <pre>for n, key in next,table.keys(anagrams) do
+    io.write((n%3==0 and "\n" or n~=1 and " | " or "")..key)
+end
+</pre>
+    <h3>
+     <span id="table.sortedkeys(table_t)">
+     </span>
+     <span class="mw-headline" id="table.sortedkeys.28table_t.29">
+      <tt>
+       table.sortedkeys(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a <i>sorted</i> array of all the keys in table <i>t</i>.
+The comparer used for sorting will treat everything as a string
+iff the compared values are of mixed type (cf. example [1]).
+In general this means that you will be fine as long as you avoid
+stuffing indices along with number hashes together in <i>t</i>, lest
+the order will end up confused depending on what type an element
+is compared with in what order (cf.  example [2]).
+</p>
+    <pre>--- Example [1]
+for n,key in next,table.sortedkeys(anagrams) do
+    io.write(string.format("[%2i] &ldquo;%24s&rdquo; -&gt; &ldquo;%s&rdquo;\n", n, key, anagrams[key]))
+end
+
+--- Example [2]
+for n,key in next,table.sortedkeys(mixed) do
+    io.write(string.format("[%2i] [%2s] (t:%6s) -&gt; &ldquo;%s&rdquo;\n", n, key, type(key), mixed[key]))
+end
+</pre>
+    <h3>
+     <span id="table.sortedhashkeys(table_t)">
+     </span>
+     <span class="mw-headline" id="table.sortedhashkeys.28table_t.29">
+      <tt>
+       table.sortedhashkeys(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a sorted array of all the keys in table <i>t</i>.
+The difference to <a href="#table.sortedkeys.28table_t.29"><tt>table.sortedkeys</tt></a>
+is that it relies on the <i>standard Lua comparer</i> which means
+that it will fail on mixed-type table indices.
+As long as you stick with homogenous tables,
+<tt>table.sortedhashkeys</tt> will be the faster choice.
+</p>
+    <pre>for n,key in next,table.sortedhashkeys(anagrams) do
+    io.write(string.format("[%2i] &ldquo;%24s&rdquo; -&gt; &ldquo;%s&rdquo;\n", n, key, anagrams[key]))
+end
+
+for n,key in next,table.sortedhashkeys(alpha) do
+    io.write(string.format("[%2i] &ldquo;%2s&rdquo;\n", n, key ))
+end
+</pre>
+    <h3>
+     <span id="table.sortedhash(table_t)_|_table.sortedpairs(table_t)">
+     </span>
+     <span class="mw-headline" id="table.sortedhash.28table_t.29_.7C_table.sortedpairs.28table_t.29">
+      <tt>
+       table.sortedhash(
+       <i>
+        table
+       </i>
+       t) | table.sortedpairs(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns an iterator over an array as returned by
+<a href="#table.sortedkeys.28table_t.29"><tt>table.sortedkeys</tt></a>.
+This is a shortcut for the primary usecase of
+<tt>table.sortedkeys</tt>.
+If <i>t</i> is <tt>nil</tt> (or empty) this will safely pass.
+</p>
+    <pre>local n = 1
+for key,value in table.sortedhash(mixed) do
+    io.write(string.format("[%2i] [%2s] -&gt; &ldquo;%s&rdquo;\n", n, key, value))
+    n = n + 1
+end
+</pre>
+    <h3>
+     <span id="table.append(table_t,_table_list)">
+     </span>
+     <span class="mw-headline" id="table.append.28table_t.2C_table_list.29">
+      <tt>
+       table.append(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        table
+       </i>
+       list)
+      </tt>
+     </span>
+    </h3>
+    <p>Appends all numerically indexed elements of <i>list</i> to <i>t</i>;
+this will ignore discontinuously numbered elements as well as
+hashes.
+(Comparable to Python&rsquo;s
+<a class="external text" href="http://docs.python.org/tutorial/datastructures.html#more-on-lists" rel="nofollow"><tt>list.extend</tt></a>.)
+</p>
+    <pre>for i,elm in next,table.append(alpha, alpha_nested) do
+    local current = type(elm) == "string" and elm or type(elm)
+    io.write(i.."-&gt;"..current..(i%5==0 and ",\n" or ", "))
+end
+</pre>
+    <h3>
+     <span id="table.prepend(table_t,_table_list)">
+     </span>
+     <span class="mw-headline" id="table.prepend.28table_t.2C_table_list.29">
+      <tt>
+       table.prepend(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        table
+       </i>
+       list)
+      </tt>
+     </span>
+    </h3>
+    <p>Complement to <a href="#table.append.28table_t.2C_list.29"><tt>table.append</tt></a>;
+returns an array with all numerically indexed elements of
+<i>list</i> prepended to <i>t</i>.
+</p>
+    <pre>for i,elm in next,table.prepend(alpha, alpha_nested) do
+    local current = type(elm) == "string" and elm or type(elm)
+    io.write(i.."-&gt;"..current..(i%5==0 and ",\n" or ", "))
+end
+</pre>
+    <p><i>NB</i>: this might distort the initial order of elements in the
+resulting array.
+Thus, you should not rely on the <tt>next</tt> function to
+iterate over this array as it might yield unwanted results.
+(Cf. the <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-next" rel="nofollow">Warning</a>
+in the Lua manual.)
+Use numeric <tt>for</tt> instead.
+</p>
+    <pre>local t1 = { "a", "b", "c", "d", "e" }
+local t2 = { "f", "g", "h", "i", "j" }
+
+local t12 = table.prepend(t1,t2)
+for i,elm in next,t12 do
+    print(i,elm)
+end
+</pre>
+    <h3>
+     <span id="table.merge(table_t,_args)">
+     </span>
+     <span class="mw-headline" id="table.merge.28table_t.2C_args.29">
+      <tt>
+       table.merge(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        args
+       </i>
+       )
+      </tt>
+     </span>
+    </h3>
+    <p>Takes a target table <i>t</i> and a number of tables and returns
+their union.
+The order of the tables in <i>args</i> is significant as previously
+existing entries will be overwritten by those from later tables.
+<i>NB</i>: <tt>table.merge</tt> is an <i>in-place</i> operation on the
+first argument <i>t</i>.
+If you want to keep <i>t</i> intact, an empty (new) table or <i>nil</i>
+has to be supplied as first argument.
+(Or consider using <a href="#table.merged.28args.29"><tt>table.merged</tt></a>
+instead.)
+</p>
+    <pre>for n, elm in next, table.merge({ }, alpha, mixed, alpha_nested) do
+    io.write(string.format("[%2i] &ldquo;%s&rdquo;\n", n, tostring(elm)))
+end
+</pre>
+    <h3>
+     <span id="table.merged(args)">
+     </span>
+     <span class="mw-headline" id="table.merged.28args.29">
+      <tt>
+       table.merged(
+       <i>
+        args
+       </i>
+       )
+      </tt>
+     </span>
+    </h3>
+    <p>Returns the union of all tables in <i>args</i>.
+In contrast to <a href="#table.merge.28table_t.2C_args.29"><tt>table.merge</tt></a>
+this <i>creates</i> a new table and leaves the arguments as they
+were.
+</p>
+    <pre>for n, elm in next, table.merged(alpha, mixed, alpha_nested) do
+    io.write(string.format("[%2i] &ldquo;%s&rdquo;\n", n, tostring(elm)))
+end
+print(table.identical(table.merge({ }, alpha,mixed), table.merged(alpha,mixed)))
+</pre>
+    <h3>
+     <span id="table.imerge(table_t,_args)">
+     </span>
+     <span class="mw-headline" id="table.imerge.28table_t.2C_args.29">
+      <tt>
+       table.imerge(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        args
+       </i>
+       )
+      </tt>
+     </span>
+    </h3>
+    <p>As <a href="#table.merge.28table_t.2C_args.29"><tt>table.merge</tt></a>,
+but processes only <i>numerically indexed</i> elements.
+</p>
+    <pre>for n, elm in next, table.imerge({ }, mixed, alpha) do
+    io.write(string.format("[%s] &ldquo;%s&rdquo;", n, tostring(elm)))
+    io.write((n%5==0 and "\n" or ", "))
+end
+</pre>
+    <h3>
+     <span id="table.imerged(table_t,_args)">
+     </span>
+     <span class="mw-headline" id="table.imerged.28table_t.2C_args.29">
+      <tt>
+       table.imerged(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        args
+       </i>
+       )
+      </tt>
+     </span>
+    </h3>
+    <p>As <a href="#table.merged.28args.29"><tt>table.merged</tt></a>, but
+processes only <i>numerically indexed</i> elements.
+</p>
+    <pre>print(table.identical(table.merged(alpha, mixed), table.imerged(alpha, mixed)))
+for n, elm in next, table.imerged(alpha, mixed) do
+    io.write(string.format("[%s] &ldquo;%s&rdquo;", n, tostring(elm)))
+    io.write((n%5==0 and "\n" or ", "))
+end
+</pre>
+    <h3>
+     <span id="table.fastcopy(table_t,_[boolean_meta])">
+     </span>
+     <span class="mw-headline" id="table.fastcopy.28table_t.2C_.5Bboolean_meta.5D.29">
+      <tt>
+       table.fastcopy(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        boolean
+       </i>
+       meta])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a deep copy of <i>t</i>.
+<i>meta</i> toggles copying of metatables (default: no).
+This method does not recurse into tables on the <i>key</i> side.
+</p>
+    <pre>local t = table.fastcopy(alpha_nested)
+print(table.identical(t, alpha_nested))
+t[1] = "Albatross!"
+for i=1,#t do
+    io.write(string.format("[%2i]  %16s&nbsp;: %s\n", i, tostring(alpha_nested[i]), tostring(t[i])))
+end
+</pre>
+    <h3>
+     <span id="table.copy(table_t,_[table_tables])">
+     </span>
+     <span class="mw-headline" id="table.copy.28table_t.2C_.5Btable_tables.5D.29">
+      <tt>
+       table.copy(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        table
+       </i>
+       tables])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a deep copy of <i>t</i>.
+Recurses into keys of type <i>table</i> as well.
+The optional second argument <i>tables</i> works as kind of a cache
+for table references; this way it can be reused when several
+tables with similar content have to be copied.
+The metatable of <i>t</i> is always copied.
+</p>
+    <pre>local t1, t2 = { "foo" }, { "bar" }
+local f1, f2 = function () return "Spam" end, function () return "Baked Beans" end
+
+local tf1 = { [t1] = t2, [f1] = f2 }
+local cache = { }
+
+local tf2 = table.copy(tf1, cache)
+
+io.write(string.format("equal: %s, same: %s\n",
+                       tostring(table.are_equal(tf1,tf2)),
+                       tostring(table.identical(tf1,tf2)))
+        )
+
+for k,v in next,tf2   do print(k   , v   ) end
+for k,v in next,cache do print(k[1], v[1]) end
+</pre>
+    <h3>
+     <span id="table.tohash(table_t,_[any_value])">
+     </span>
+     <span class="mw-headline" id="table.tohash.28table_t.2C_.5Bany_value.5D.29">
+      <tt>
+       table.tohash(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        any
+       </i>
+       value])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a hashtable with all the values of <i>t</i> as indices,
+their values set to <i>value</i>.
+The default for <i>value</i> is <i>true</i> but it can be anything;
+<i>nil</i> resolves as <i>true</i>.
+</p>
+    <pre>local a_hash = table.tohash(alpha, "Notlob")
+
+local n = 1
+for k,v in next,a_hash do
+    io.write(string.format("&ldquo;%s&rdquo;: %s", k, tostring(v))..(n%5==0 and ",\n" or ", "))
+    n = n + 1
+end
+</pre>
+    <h3>
+     <span id="table.fromhash(table_t)">
+     </span>
+     <span class="mw-headline" id="table.fromhash.28table_t.29">
+      <tt>
+       table.fromhash(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns an array of all the keys in dictionary <i>t</i>, unless
+their corresponding value is <i>false</i> or <i>nil</i>.
+</p>
+    <pre>local woody = {
+    antelope    = false, bound       = true, caribou     = true,
+    gorn        = true,  intercourse = true, leap        = false,
+    litterbin   = false, ocelot      = true, sausage     = true,
+    tin         = false, vole        = true, wasp        = true,
+    yowling     = true,
+}
+
+local inv_woody = table.fromhash(woody)
+for i=1,#inv_woody do
+    local elm = inv_woody[i]
+    io.write(string.format("[%i:%11s]", i, elm)..(i%3==0 and ",\n" or ",   "))
+end
+</pre>
+    <h3>
+     <span id="table.serialize(table_t,_[string|int|boolean_name,]_[boolean_reduce,]_[boolean_noquotes,]_[boolean_hex])">
+     </span>
+     <span class="mw-headline" id="table.serialize.28table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">
+      <tt>
+       table.serialize(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        string
+       </i>
+       |
+       <i>
+        int
+       </i>
+       |
+       <i>
+        boolean
+       </i>
+       name,] [
+       <i>
+        boolean
+       </i>
+       reduce,] [
+       <i>
+        boolean
+       </i>
+       noquotes,] [
+       <i>
+        boolean
+       </i>
+       hex])
+      </tt>
+     </span>
+    </h3>
+    <p><a class="external text" href="http://en.wikipedia.org/wiki/Serialization" rel="nofollow">Serializes</a> an
+arbitrary Lua table <i>t</i> into a string.
+The return value is 100% valid Lua code and as such can then be
+directly processed by the interpreter by evaluating it with
+<a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-loadstring" rel="nofollow"><tt>loadstring</tt></a>.
+It is also possible to save it to a file and load it into the
+running session on the fly, as ConTeXt does it with respect to
+<tt>.tuc</tt> files.
+Note that even <i>functions</i> are serialized correctly, albeit in
+a not quite human readable manner.
+</p>
+    <pre>local separator = function ()
+    io.write("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n")
+end
+
+local tf = {
+    ["Tree"]     = function () return "The larch" end,
+    ["Nice Guy"] = function () return "Nudge nudge" end,
+}
+
+print(table.serialize(alpha))
+separator()
+print(table.serialize(alpha_nested))
+separator()
+print(table.serialize(mixed))
+separator()
+print(table.serialize(tf))
+separator()
+print(table.serialize(anagrams))
+</pre>
+    <h4>
+     <span class="mw-headline" id="name">
+      <tt>
+       name
+      </tt>
+     </span>
+    </h4>
+    <p>The parameter <i>name</i> can be a string, an integer or a boolean
+expression.
+The values <i>false</i> and <i>nil</i> cause the string to be
+prefixless, thus it cannot be directly evaluated as-is.
+If <i>true</i> or the string <i>return</i>, then the return value is
+prefixed with <tt>return</tt> which enables it to be directly
+processed.
+</p>
+    <pre>--- How to access a serialized tab from within the same session.
+local teststr = table.serialize(anagrams, true) -- 'name == true' prepends *return*
+local test = assert(loadstring(teststr))()
+print(type(test),table.serialize(test))
+</pre>
+    <p>Any other string as value will be prepended as variable name,
+making the output conform to standard Lua initialization syntax.
+</p>
+    <pre>--- This serializes a table and then creates another table from
+--- the resulting string.
+assert(loadstring(table.serialize(mixed, "tabula_mixta")))()
+print(table.serialize(tabula_mixta))
+</pre>
+    <p>An integer will cause the result to be numerically indexed instead.
+If the parameter <i>hexify</i> is non-[<i>nil</i>|<i>false</i>], then the index
+number is converted to hex first, as are all the other index
+values.
+</p>
+    <pre>print(table.serialize(mixed, 42))
+print(table.serialize(mixed, 42, false, false, true))
+</pre>
+    <h4>
+     <span class="mw-headline" id="reduce">
+      <tt>
+       reduce
+      </tt>
+     </span>
+    </h4>
+    <p>If non-[<i>nil</i>|<i>false</i>], string values that are valid number
+expressions are automatically typecast to <tt>number</tt>.
+</p>
+    <pre>local tab = {
+    ["a"] = "1",
+    ["b"] = "2",
+    ["c"] = "5",
+}
+print(table.serialize(tab, true, false, false, false))
+print(table.serialize(tab, true, true,  false, false))
+</pre>
+    <h4>
+     <span class="mw-headline" id="noquotes">
+      <tt>
+       noquotes
+      </tt>
+     </span>
+    </h4>
+    <p>Determines whether or not to resort to Lua&rsquo;s syntactic sugar
+regarding the hash table notation.
+This will leave keys of type <tt>string</tt> unquoted whenever
+this is possible (i.e. unless they are reserved words or contain
+spaces.)
+</p>
+    <pre>print(table.serialize(anagrams, false, false, false, true))
+print(table.serialize(anagrams, false, false, true, true))
+</pre>
+    <h4>
+     <span class="mw-headline" id="hexify">
+      <tt>
+       hexify
+      </tt>
+     </span>
+    </h4>
+    <p>If non-[<i>nil</i>|<i>false</i>], keys, indices and values of type
+<tt>number</tt> will be converted to hexadecimal representation.
+<i>NB</i>: This has no effect on numbers which are reduced from
+strings (see example).
+</p>
+    <pre>local series = { 0, 1, 1, 2, 3, 5, 8, 13, "21" }
+print(table.serialize(series, false, false, false, true))
+print(table.serialize(series, false, true,  false, true)) -- no effect
+print(table.serialize(mixed,  false, false, false, true))
+</pre>
+    <h4>
+     <span class="mw-headline" id="Customization">
+      Customization
+     </span>
+    </h4>
+    <p>There are three switches that allow for controlling what table
+content is to be serialized: <tt>table.serialize_functions</tt>,
+<tt>table.serialize_compact</tt>, and
+<tt>table.serialize_inline</tt>.
+</p>
+    <p><tt>table.serialize_functions</tt>, if either <i>nil</i> or
+<i>false</i>, will prevent functions from being serialized.
+The string <i>function</i> will be returned in their place.
+(Default: <i>true</i>.)
+</p>
+    <pre>local f = function () return "Throatwobbler Mangrove" end
+local g = function () return "Luxury Yacht"           end
+
+local t = {[1] = f, [2] = g}
+
+print(table.serialize(t))
+table.serialize_functions = false
+print(table.serialize(t))
+</pre>
+    <p><tt>table.serialize_compact</tt>, if unset, will cause arrays to
+be serialized in verbose <tt>[n] = elm</tt> notation instead of
+plain comma-separated element listing.
+(Default: <i>true</i>.)
+</p>
+    <pre>print(table.serialize(alpha))
+table.serialize_compact = false
+print(table.serialize(alpha))
+</pre>
+    <p><tt>table.serialize_inline</tt>, if unset, prevents the output
+of the <i>deepest nesting level</i> of arrays from being compressed
+onto a single line.
+This results in more verbose output.
+(Default: <i>true</i>.)
+</p>
+    <pre>print(table.serialize(alpha_nested))
+table.serialize_inline = false
+print(table.serialize(alpha_nested))
+</pre>
+    <h4>
+     <span class="mw-headline" id="Limitations">
+      Limitations
+     </span>
+    </h4>
+    <p><tt>table.serialize</tt> throws an error if <i>t</i> contains
+functions or tables as keys.
+</p>
+    <pre>--- The following code creates an error.
+local f1, f2 = function () return "Conquistador" end, function () return "Instant Coffee" end
+local t1, t2 = { "Conquistador" }, { "Instant Leprosy" }
+
+local tf12 = { [f1] = f2 }
+local tt12 = { [t1] = t2 }
+
+print(table.serialize(tf12)) -- has function-type key
+print(table.serialize(tt12)) -- has table as key
+</pre>
+    <h3>
+     <span id="table.tohandle(function_handle,_table_t,_[string|int|boolean_name,]_[boolean_reduce,]_[boolean_noquotes,]_[boolean_hex])">
+     </span>
+     <span class="mw-headline" id="table.tohandle.28function_handle.2C_table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">
+      <tt>
+       table.tohandle(
+       <i>
+        function
+       </i>
+       handle,
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        string
+       </i>
+       |
+       <i>
+        int
+       </i>
+       |
+       <i>
+        boolean
+       </i>
+       name,] [
+       <i>
+        boolean
+       </i>
+       reduce,] [
+       <i>
+        boolean
+       </i>
+       noquotes,] [
+       <i>
+        boolean
+       </i>
+       hex])
+      </tt>
+     </span>
+    </h3>
+    <p>Same as
+<a href="#table.serialize.28table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29"><tt>table.serialize(&hellip;)</tt></a>,
+except that it redirects its output to the handle specified as
+first argument.
+(Default handle is the <i>print</i> function.)
+</p>
+    <pre>--- Setup a stream.
+local fname = "./testfile.lua"
+local f = io.open(fname, "w")
+--- Create a handle and serialize some array into it.
+local h = function(str) f:write(str) return end
+table.tohandle(h, alpha, true)
+f:close()
+
+--- Load the array from the file again and verify its content.
+local array = dofile(fname)
+print(table.serialize(array))
+</pre>
+    <h3>
+     <span id="table.tofile(string_filename,_string_root,_string_name,_boolean_reduce,_boolean_noquotes,_boolean_hex)">
+     </span>
+     <span class="mw-headline" id="table.tofile.28string_filename.2C_string_root.2C_string_name.2C_boolean_reduce.2C_boolean_noquotes.2C_boolean_hex.29">
+      <tt>
+       table.tofile(
+       <i>
+        string
+       </i>
+       filename,
+       <i>
+        string
+       </i>
+       root,
+       <i>
+        string
+       </i>
+       name,
+       <i>
+        boolean
+       </i>
+       reduce,
+       <i>
+        boolean
+       </i>
+       noquotes,
+       <i>
+        boolean
+       </i>
+       hex)
+      </tt>
+     </span>
+    </h3>
+    <p><a href="#table.serialize.28table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">Serializes</a>
+the table <i>root</i> and writes it to file <i>filename</i>.
+Use with care, as this will overwrite any content of the file.
+</p>
+    <pre>local fname = "./test_alpha.lua"
+table.tofile(fname, alpha, true)
+
+alpha = nil
+print(alpha)
+alpha = dofile(fname)
+print(table.serialize(alpha))
+</pre>
+    <h3>
+     <span id="table.flattened(table_t,_[table_f,]_[int_depth])">
+     </span>
+     <span class="mw-headline" id="table.flattened.28table_t.2C_.5Btable_f.2C.5D_.5Bint_depth.5D.29">
+      <tt>
+       table.flattened(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        table
+       </i>
+       f,] [
+       <i>
+        int
+       </i>
+       depth])
+      </tt>
+     </span>
+    </h3>
+    <p>Removes any nesting from array <i>t</i>.
+Optionally, a target table <i>f</i> may be specified that the
+flattened elements are appended to.
+The third argument allows for restricting the maximum recursion
+level.
+Elements beyond this level will remain untouched by the
+flattener.
+</p>
+    <pre>local fl = table.flattened(alpha_nested)
+--- Try this instead:
+-- local fl = table.flattened(alpha_nested, alpha)
+
+for i=1,#fl do
+    io.write(string.format("[%2d] = &laquo;%s&raquo;,", i, fl[i])..(i%5==0 and "\n" or "  "))
+end
+
+print("\n" ..
+      "Is it the same as the non-nested variant? -- " ..
+      tostring(table.identical(alpha, fl)))
+</pre>
+    <h3>
+     <span id="table.are_equal(table_t1,_table_t2,_[int_start,]_[int_stop])">
+     </span>
+     <span class="mw-headline" id="table.are_equal.28table_t1.2C_table_t2.2C_.5Bint_start.2C.5D_.5Bint_stop.5D.29">
+      <tt>
+       table.are_equal(
+       <i>
+        table
+       </i>
+       t1,
+       <i>
+        table
+       </i>
+       t2, [
+       <i>
+        int
+       </i>
+       start,] [
+       <i>
+        int
+       </i>
+       stop])
+      </tt>
+     </span>
+    </h3>
+    <p>For arrays, checks if <i>t1</i> and <i>t2</i> have the same elements
+and order.
+Recurses into subtables.
+The optional arguments define a slice of both arrays to be
+checked, defaulting to the first and last element respectively.
+<i>NB</i>: As the check for identical length always precedes the
+other tests, tables of unequal length will be reported as unequal
+even though the requested subsets might match.
+</p>
+    <pre>local a1, a2 = { "a", "b" }, { "a", "c" }
+print(table.are_equal(a1, a2))
+a1[2] = "c"
+print(table.are_equal(a1, a2))
+
+--- Subslice handling: a3 == a4 but a3 ~= a5.
+local a3 = { "e", "f", "g", "h" }
+local a4 = { "h", "f", "g", "e" }
+local a5 = { "h", "f", "g", "e", "i" }
+print(table.are_equal(a3, a4, 2, 3))
+print(table.are_equal(a3, a5, 2, 3))
+</pre>
+    <h3>
+     <span id="table.identical(table_t1,_table_t2)">
+     </span>
+     <span class="mw-headline" id="table.identical.28table_t1.2C_table_t2.29">
+      <tt>
+       table.identical(
+       <i>
+        table
+       </i>
+       t1,
+       <i>
+        table
+       </i>
+       t2)
+      </tt>
+     </span>
+    </h3>
+    <p>For hashtables, checks if <i>t2</i> contains the same key-value
+pairs as <i>t1</i>.
+Recurses into subtables.
+</p>
+    <p><i>NB</i>: <tt>table.identical</tt> is asymmetric, therefore the
+<i>order</i> in which both tables are given is significant!
+<i>t2</i> is treated as <i>identical</i> to <i>t1</i> whenever it contains
+the same value as <i>t1</i> for each key in <i>t1</i>.
+Conversely this means that there is <i>no check</i> at all for
+whether <i>t2</i> might contain additional elements that are not in
+<i>t1</i>.
+Thus, if you need to match the contents of two dictionaries, you
+might want to check if <i>t2</i> is <i>identical</i> to <i>t1</i> as well.
+</p>
+    <pre>local t1 = { a = "a", b = "b" }
+local t2 = { c = "c", d = "d" }
+local t3 = { a = "a", b = "b", c = "c" }
+
+--- Weird: t1 == t3 but t3 ~= t1.
+print(table.identical(t1, t2))
+print(table.identical(t1, t3))
+print(table.identical(t3, t1))
+</pre>
+    <h3>
+     <span id="table.compact(table_t)">
+     </span>
+     <span class="mw-headline" id="table.compact.28table_t.29">
+      <tt>
+       table.compact(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>In-place operation removing empty tables from the array <i>t</i>.
+</p>
+    <pre>local t = { { "a" }, { b = "b" }, { c = nil }, { }, { "e" } }
+print(table.serialize(t))
+table.compact(t)
+print(table.serialize(t))
+</pre>
+    <h3>
+     <span id="table.contains(table_t,_any_value)">
+     </span>
+     <span class="mw-headline" id="table.contains.28table_t.2C_any_value.29">
+      <tt>
+       table.contains(
+       <i>
+        table
+       </i>
+       t,
+       <i>
+        any
+       </i>
+       value)
+      </tt>
+     </span>
+    </h3>
+    <p>For a given element <i>value</i>, returns the index of <i>value</i> in
+array <i>t</i>, else if <i>value</i> is not in <i>t</i>, returns <i>nil</i>.
+Because of the iteration method used internally,
+<tt>table.contains</tt> does not work with hash tables (always
+returning false).
+</p>
+    <p><i>NB</i>: How <i>nil</i>&rsquo;ed values are handled depends on the table
+initialization.
+In <i>hash</i>-style numerically indexed tables any values after the
+lowest-indexed <i>nil</i> will be treated as non-existant, whereas
+<i>array</i>-style initialization will prevent them from being
+ignored (see example).
+This means that tables which are supposedly
+<a href="#table.are_equal.28table_t1.2C_table_t2.2C_.5Bint_start.2C.5D_.5Bint_stop.5D.29">equal</a>
+or
+<a href="#table.identical.28table_t1.2C_table_t2.29">identical</a>
+can behave differently&nbsp;&hellip;
+</p>
+    <pre>print(table.contains(alpha, "h"))
+
+--- Ineffective with hashes.
+local t = { a = "a", b = "b" }
+print(table.contains(t, "b"))
+
+--- Lose ends to watch:
+local u = { [1] = "a", [2] = "b", [3] = "c" }
+local v = { "a", "b", "c" }
+print(table.identical(u,v),   table.are_equal(u,v))
+
+print(table.contains(u, "c"), table.contains(v, "c"))
+u[2], v[2] = nil, nil
+print(table.contains(u, "c"), table.contains(v, "c"))
+</pre>
+    <h3>
+     <span id="table.count(table_t)">
+     </span>
+     <span class="mw-headline" id="table.count.28table_t.29">
+      <tt>
+       table.count(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Non-recursively counts the elements of table <i>t</i>, irrespective
+of their being hashes or indices.
+</p>
+    <pre>print(table.count(alpha))
+print(table.count(alpha_nested))
+print(table.count(anagrams))
+print(table.count(mixed))
+</pre>
+    <h3>
+     <span id="table.swapped(table_t1,_[table_t2])">
+     </span>
+     <span class="mw-headline" id="table.swapped.28table_t1.2C_.5Btable_t2.5D.29">
+      <tt>
+       table.swapped(
+       <i>
+        table
+       </i>
+       t1, [
+       <i>
+        table
+       </i>
+       t2])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a table with all key-value pairs in <i>t1</i> transposed.
+The optional second argument is a table <i>t2</i> for those pairs to
+be merged into.
+The pairs of <i>t2</i> themselves will not be transposed.
+If <i>t2</i> is given and some of <i>t1</i>&rsquo;s values occur as keys in
+<i>t2</i>, the ones from <i>t1</i> take precedence.
+</p>
+    <pre>for k,v in next, table.swapped (anagrams) do
+    io.write(string.format("%25s =&gt; %s\n", k,v))
+end
+
+for k,v in next, table.swapped (alpha) do
+    io.write(string.format("%s =&gt; %2d\n", k,v))
+end
+
+local n = 1
+local beta = { a = "A", b = "B", c = "C" }
+for k,v in next, table.swapped (alpha, beta) do
+--for k,v in next, table.swapped (beta, alpha) do
+    io.write(string.format("%2s =&gt; %2s", k,v)..(n%5==0 and "\n" or ",   "))
+    n = n+1
+end
+</pre>
+    <h3>
+     <span id="table.reversed(table_t)">
+     </span>
+     <span class="mw-headline" id="table.reversed.28table_t.29">
+      <tt>
+       table.reversed(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a table with all consecutively indexed entries of <i>t</i>
+in reverse order.
+This ignores any non-numerically indexed content of <i>t</i>.
+</p>
+    <pre>local rev = table.reversed(alpha)
+for i=1,#rev do
+    io.write(rev[i])
+end
+</pre>
+    <h3>
+     <span id="table.sequenced(table_t,_[string_separator,]_[boolean_simple])">
+     </span>
+     <span class="mw-headline" id="table.sequenced.28table_t.2C_.5Bstring_separator.2C.5D_.5Bboolean_simple.5D.29">
+      <tt>
+       table.sequenced(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        string
+       </i>
+       separator,] [
+       <i>
+        boolean
+       </i>
+       simple])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a formatted string containing all the pairs in hash
+table <i>t</i>, sorted alpha-numerically by keys and concatenated
+using <i>separator</i> (default: &ldquo;<tt> | </tt>&rdquo;).
+The third argument, if non-[<i>nil</i>|<i>false</i>] enables
+exceptions:
+</p>
+    <ul>
+     <li>
+      for pairs with
+      <i>
+       true
+      </i>
+      as value, the key will be inserted as-is;
+     </li>
+     <li>
+      pairs with the value
+      <i>
+       false
+      </i>
+      ,
+      <i>
+       nil
+      </i>
+      , or the empty string will be skipped.
+     </li>
+    </ul>
+    <p>(Cf.
+<a href="#table.serialize.28table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29">serialization</a>.)
+</p>
+    <pre>local t = {
+    e = false, g = true,  h = true,  j = false,
+    a = true,  b = false, c = false, d = true,
+}
+
+print("[booleans 1]&gt; "..table.sequenced(t    , " * "       ).."\n") -- custom delimiter
+print("[booleans 2]&gt; "..table.sequenced(t    , " * " , true).."\n") -- &ldquo;simple&rdquo; mode
+print("[alpha]     &gt; "..table.sequenced(alpha              ).."\n") -- using defaults
+print("[mixed]     &gt; "..table.sequenced(mixed, " &gt;&lt; ", true).."\n") -- simple mode ineffective
+</pre>
+    <h3>
+     <span id="table.print(table_t,_[...])">
+     </span>
+     <span class="mw-headline" id="table.print.28table_t.2C_.5B....5D.29">
+      <tt>
+       table.print(
+       <i>
+        table
+       </i>
+       t, [...])
+      </tt>
+     </span>
+    </h3>
+    <p>Equivalent to
+<a href="#table.tohandle.28function_handle.2C_table_t.2C_.5Bstring.7Cint.7Cboolean_name.2C.5D_.5Bboolean_reduce.2C.5D_.5Bboolean_noquotes.2C.5D_.5Bboolean_hex.5D.29"><tt>table.tohandle</tt></a>
+with <i>print</i> as first argument; see there for a list of all
+optional arguments.
+</p>
+    <pre>table.print(mixed)
+table.serialize_functions = false
+table.print(xml)
+table.print(table)
+</pre>
+    <h3>
+     <span id="table.sub(table_t,_[int_start,]_[int_stop])">
+     </span>
+     <span class="mw-headline" id="table.sub.28table_t.2C_.5Bint_start.2C.5D_.5Bint_stop.5D.29">
+      <tt>
+       table.sub(
+       <i>
+        table
+       </i>
+       t, [
+       <i>
+        int
+       </i>
+       start,] [
+       <i>
+        int
+       </i>
+       stop])
+      </tt>
+     </span>
+    </h3>
+    <p>Returns a slice of array <i>t</i> beginning from <i>start</i> and
+ending with <i>stop</i>.
+<i>NB</i>: Flagged as <i>obsolete</i> in the source.
+</p>
+    <pre>print(table.serialize(table.sub(alpha,        4, 10)))
+print(table.serialize(table.sub(alpha_nested, 4,  7)))
+</pre>
+    <h3>
+     <span id="table.is_empty(table_t)">
+     </span>
+     <span class="mw-headline" id="table.is_empty.28table_t.29">
+      <tt>
+       table.is_empty(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns <i>true</i> if <i>t</i> is [<i>nil</i>|<i>false</i>] or an empty
+table.
+</p>
+    <pre>print(table.is_empty(alpha))
+print(table.is_empty({ }))
+print(table.is_empty(false))
+print(table.is_empty(nil))
+</pre>
+    <h3>
+     <span id="table.has_one_entry(table_t)">
+     </span>
+     <span class="mw-headline" id="table.has_one_entry.28table_t.29">
+      <tt>
+       table.has_one_entry(
+       <i>
+        table
+       </i>
+       t)
+      </tt>
+     </span>
+    </h3>
+    <p>Returns <i>true</i> if <i>t</i> is a table with exactly one element
+(hash or indexed).
+</p>
+    <pre>print(table.has_one_entry(alpha))
+print(table.has_one_entry({"Fear"}))
+print(table.has_one_entry({[2] = "Surprise"}))
+print(table.has_one_entry({["three"] = "Ruthless Efficiency"}))
+</pre>
+    <h2>
+     <span id="Legacy_Lua&lt;=5.1">
+     </span>
+     <span class="mw-headline" id="Legacy_Lua.3C.3D5.1">
+      Legacy Lua&lt;=5.1
+     </span>
+    </h2>
+    <p>Starting from version 5.2 some changes have been introduced in
+the standard Lua libraries.
+ConTeXt somewhat accommodates for this fact in order to ensure
+backwards compatibility after LuaTeX switches to the next
+version.
+</p>
+    <h3>
+     <span class="mw-headline" id="Fallback_iterators">
+      Fallback iterators
+     </span>
+    </h3>
+    <p>Lua up to version 5.1 provided two standard iterators for tables:
+<tt>ipairs()</tt> to traverse arrays and <tt>pairs()</tt> for
+hashes.
+(<a class="external autonumber" href="http://www.lua.org/manual/5.1/manual.html#pdf-ipairs" rel="nofollow">[1]</a>,
+<a class="external autonumber" href="http://www.lua.org/manual/5.1/manual.html#pdf-pairs" rel="nofollow">[2]</a>)
+At least <tt>ipairs</tt>&rsquo;s existence will terminate with the next
+minor release (5.2 at the time of this writing), so in order for
+legacy code to work with future versions of LuaTeX, ConTeXt has
+fallback definitions for both iterators.
+Their code is equivalent to the
+<a class="external text" href="http://www.lua.org/pil/7.3.html" rel="nofollow">definitions</a>
+given by Roberto in the Lua handbook.
+</p>
+    <p>Thus, you may have to rewrite your code to make it work properly
+with <a class="external text" href="http://www.lua.org/work/" rel="nofollow">upcoming vanilla Lua</a> interpreters.
+But your LuaTeX code written for ConTeXt will be guaranteed to
+continue to work until Hans decides to drop backward
+compatibility at some point far into the future.
+</p>
+    <pre>for n, elm in ipairs(testarray) do
+    if n&nbsp;% 10 == 0 then io.write(elm .. " -- ") end 
+end
+</pre>
+    <p>This example will continue to work, but keep in mind that
+<tt>ipairs()</tt> by definition involves lots of function calls
+and, consequently, will lose any comparison to other iteration
+methods with respect to performance.
+Apart from the <tt>next()</tt> iterator, for enumerable
+(<i>nil</i>-terminated) arrays the numeric <tt>for &hellip; do &hellip; end</tt>
+loop with the table length cached locally is the fastest way and
+should be preferred over <tt>ipairs()</tt> under most
+circumstances.
+</p>
+    <pre>do
+    local max = #testarray
+    for n=1, max do
+        local elm = testarray[n]
+        if n&nbsp;% 10 == 0 then io.write(elm .. " -- ") end
+    end
+end
+</pre>
+    <h3>
+     <span id="unpack()">
+     </span>
+     <span class="mw-headline" id="unpack.28.29">
+      <tt>
+       unpack()
+      </tt>
+     </span>
+    </h3>
+    <p>The handy function <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-unpack" rel="nofollow"><tt>unpack()</tt></a>
+will be part of the <tt>table</tt> library after
+<a class="external text" href="http://www.lua.org/work/doc/manual.html#8" rel="nofollow">release 5.2</a>.
+However, ConTeXt conveniently makes it accessible in the global
+environment as well (and, until the library update has taken
+place, it creates <tt>table.unpack()</tt> too, so new-style code
+can already be written prior to the actual transition).
+</p>
+    <p>This said, the following snippet will work out of the box with
+<tt>context</tt>/<tt>mtxrun</tt> but not Lua v.5.1:
+</p>
+    <pre>local array = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m"}
+print (unpack(array))
+print (table.unpack(array))
+</pre>
+    <h2>
+     <span class="mw-headline" id="Further_information">
+      Further information
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.gammon.com.au/forum/?id=6036" rel="nofollow">
+       Introduction to Lua tables for beginners.
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://lua-users.org/wiki/TablesTutorial" rel="nofollow">
+       Item, from the Lua wiki.
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://lua-users.org/wiki/TableLibraryTutorial" rel="nofollow">
+       Lua standard table library documentation.
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://lua-users.org/wiki/TableSerialization" rel="nofollow">
+       Other means of serialization from the Lua wiki.
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125241
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.066 seconds
+Real time usage: 0.202 seconds
+Preprocessor visited node count: 394/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13174/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3413-1!canonical and timestamp 20260109125241 and revision id 41489
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library/Table_manipulation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

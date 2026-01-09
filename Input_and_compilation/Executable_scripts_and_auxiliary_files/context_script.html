@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Executable scripts and auxiliary files/context script&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Executable_scripts_and_auxiliary_files/context_script" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Executable scripts and auxiliary files/context script
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4774&diff=42288">2025-02-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The <b><code>context</code></b> script has the following main uses:
+</p>
+    <ul>
+     <li>
+      compiling ConTeXt MkIV documents; and
+     </li>
+     <li>
+      recompiling the ConTeXt core format after changing a source file.
+     </li>
+    </ul>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Compiling">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Compiling
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Lists">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Lists
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Basic_options">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Basic options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Expert_options">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Expert options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Special_options">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Special options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Remaking_the_format">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Remaking the format
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Noteworthy_remarks">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Noteworthy remarks
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#--run">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           --run
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#--autopdf">
+          <span class="tocnumber">
+           7.2
+          </span>
+          <span class="toctext">
+           --autopdf
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#--purgeall">
+          <span class="tocnumber">
+           7.3
+          </span>
+          <span class="toctext">
+           --purgeall
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#--path.3Dlist">
+          <span class="tocnumber">
+           7.4
+          </span>
+          <span class="toctext">
+           --path=list
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#--result">
+          <span class="tocnumber">
+           7.5
+          </span>
+          <span class="toctext">
+           --result
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#--errors">
+          <span class="tocnumber">
+           7.6
+          </span>
+          <span class="toctext">
+           --errors
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#--find">
+          <span class="tocnumber">
+           7.7
+          </span>
+          <span class="toctext">
+           --find
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#ctxfile_to_store_preferences">
+          <span class="tocnumber">
+           7.8
+          </span>
+          <span class="toctext">
+           ctxfile to store preferences
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Compiling">
+      Compiling
+     </span>
+    </h2>
+    <p>To compile a document <code>myfile.tex</code>, simply pass it as an argument to <code>context</code>:
+</p>
+    <pre>context <i>myfile.tex</i>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Lists">
+      Lists
+     </span>
+    </h2>
+    <p>Tables in the following sections may reference a "list" parameter to the command-line option. In such cases, the value may be a comma-separated list enclosed in straight single- or double-quotes. For example:
+</p>
+    <pre>context --environment="setups,styles,classes" <i>myfile.tex</i>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Basic_options">
+      Basic options
+     </span>
+    </h2>
+    <p>The following table lists common command-line options:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td>--run
+</td>
+       <td>process (one or more) files (default action)
+</td>
+      </tr>
+      <tr>
+       <td>--make
+</td>
+       <td>create context formats
+</td>
+      </tr>
+      <tr>
+       <td>--ctx=name
+</td>
+       <td>use ctx file (process management specification)
+</td>
+      </tr>
+      <tr>
+       <td>--noctx
+</td>
+       <td>ignore ctx directives and flags
+</td>
+      </tr>
+      <tr>
+       <td>--interface
+</td>
+       <td>use specified user interface (default: en)
+</td>
+      </tr>
+      <tr>
+       <td>--autopdf
+</td>
+       <td>close pdf file in viewer and start pdf viewer afterwards
+</td>
+      </tr>
+      <tr>
+       <td>--purge
+</td>
+       <td>purge files either or not after a run (--pattern=...)
+</td>
+      </tr>
+      <tr>
+       <td>--purgeall
+</td>
+       <td>purge all files either or not after a run (--pattern=...)
+</td>
+      </tr>
+      <tr>
+       <td>--usemodule=list
+</td>
+       <td>load the given module or style, normally part of the distribution
+</td>
+      </tr>
+      <tr>
+       <td>--environment=list
+</td>
+       <td>load the given environment file first (document styles)
+</td>
+      </tr>
+      <tr>
+       <td>--mode=list
+</td>
+       <td>enable given the modes (conditional processing in styles)
+</td>
+      </tr>
+      <tr>
+       <td>--path=list
+</td>
+       <td>also consult the given paths when files are looked for
+</td>
+      </tr>
+      <tr>
+       <td>--arguments=list
+</td>
+       <td>set variables that can be consulted during a run (key/value pairs), for example:
+<p><code>context --bodyfont=pagella test_argument.tex</code>
+with the following <code>test_argument.tex</code> file:
+</p>
+<pre class="tex"><span class="cs"><span class="systemcs">\doifdocumentargument</span></span>
+  <span class="br">{</span>bodyfont<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span><span class="cs"><span class="systemcs">\getdocumentargument</span></span><span class="br">{</span>bodyfont<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+This document uses
+<span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\doifdocumentargumentelse</span></span>
+  <span class="br">{</span>bodyfont<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\getdocumentargument</span></span><span class="br">{</span>bodyfont<span class="br">}</span><span class="br">}</span>
+  <span class="br">{</span>Latin Modern<span class="br">}</span><span class="br">}</span>
+as bodyfont.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+<p>For LUA, you can access it through the environment.arguments table.
+</p>
+<pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+context<span class="brx">(</span>environment.arguments.bodyfont<span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+</td>
+      </tr>
+      <tr>
+       <td>--randomseed=number
+</td>
+       <td>set the randomseed
+</td>
+      </tr>
+      <tr>
+       <td>--result=name
+</td>
+       <td>rename the resulting output to the given name
+</td>
+      </tr>
+      <tr>
+       <td>--trackers=list
+</td>
+       <td>set tracker variables (show list with --showtrackers)
+</td>
+      </tr>
+      <tr>
+       <td>--directives=list
+</td>
+       <td>set directive variables (show list with --showdirectives)
+</td>
+      </tr>
+      <tr>
+       <td>--silent=list
+</td>
+       <td>disable logcatgories (show list with --showlogcategories)
+</td>
+      </tr>
+      <tr>
+       <td>--strip
+</td>
+       <td>strip Lua code (only meant for production where no errors are expected)
+</td>
+      </tr>
+      <tr>
+       <td>--errors=list
+</td>
+       <td>show errors at the end of a run, quit when in list (also when --silent)
+</td>
+      </tr>
+      <tr>
+       <td>--htmlerrorpage
+</td>
+       <td>generate html error page instead (optional: =scite)
+</td>
+      </tr>
+      <tr>
+       <td>--noconsole
+</td>
+       <td>disable logging to the console (logfile only)
+</td>
+      </tr>
+      <tr>
+       <td>--nodummy
+</td>
+       <td>don't create a dummy file (can confuse pdf viewers that keep file in view)
+</td>
+      </tr>
+      <tr>
+       <td>--purgeresult
+</td>
+       <td>purge result file before run
+</td>
+      </tr>
+      <tr>
+       <td>--find=string
+</td>
+       <td>search for the given pattern in the documentation sources
+</td>
+      </tr>
+      <tr>
+       <td>--forcexml
+</td>
+       <td>force xml stub
+</td>
+      </tr>
+      <tr>
+       <td>--forcecld
+</td>
+       <td>force cld (context lua document) stub
+</td>
+      </tr>
+      <tr>
+       <td>--forcelua
+</td>
+       <td>force lua stub (like texlua)
+</td>
+      </tr>
+      <tr>
+       <td>--forcemp
+</td>
+       <td>force mp stub
+</td>
+      </tr>
+      <tr>
+       <td>--arrange
+</td>
+       <td>run extra imposition pass, given that the style sets up imposition
+</td>
+      </tr>
+      <tr>
+       <td>--noarrange
+</td>
+       <td>ignore imposition specifications in the style
+</td>
+      </tr>
+      <tr>
+       <td>--pages
+</td>
+       <td>report pagenumbers of names pages and list references (--page=... or --page=...)
+</td>
+      </tr>
+      <tr>
+       <td>--jit
+</td>
+       <td>use luajittex with jit turned off (only use the faster virtual machine)
+</td>
+      </tr>
+      <tr>
+       <td>--jiton
+</td>
+       <td>use luajittex with jit turned on (in most cases not faster, even slower)
+</td>
+      </tr>
+      <tr>
+       <td>--once
+</td>
+       <td>only run once (no multipass data file is produced)
+</td>
+      </tr>
+      <tr>
+       <td>--runs
+</td>
+       <td>process at most this many times
+</td>
+      </tr>
+      <tr>
+       <td>--forcedruns
+</td>
+       <td>process this many times (permits for optimization trial runs)
+</td>
+      </tr>
+      <tr>
+       <td>--batchmode
+</td>
+       <td>run without stopping and do not show messages on the console
+</td>
+      </tr>
+      <tr>
+       <td>--nonstopmode
+</td>
+       <td>run without stopping
+</td>
+      </tr>
+      <tr>
+       <td>--nosynctex
+</td>
+       <td>never initializes synctex (for production runs)
+</td>
+      </tr>
+      <tr>
+       <td>--synctex
+</td>
+       <td>run with synctex enabled (better use \setupsynctex[state=start]
+</td>
+      </tr>
+      <tr>
+       <td>--nodates
+</td>
+       <td>omit runtime dates in pdf file (optional value: a number (this 1970 offset time) or string "YYYY-MM-DD HH:MM")
+</td>
+      </tr>
+      <tr>
+       <td>--nocompression
+</td>
+       <td>forcefully turns off compression in the backend
+</td>
+      </tr>
+      <tr>
+       <td>--trailerid
+</td>
+       <td>alternative trailer id (or constant one)
+</td>
+      </tr>
+      <tr>
+       <td>--generate
+</td>
+       <td>generate file database etc. (as luatools does)
+</td>
+      </tr>
+      <tr>
+       <td>--paranoid
+</td>
+       <td>do not descend to .. and ../..
+</td>
+      </tr>
+      <tr>
+       <td>--version
+</td>
+       <td>report installed context version
+</td>
+      </tr>
+      <tr>
+       <td>--global
+</td>
+       <td>assume given file present elsewhere
+</td>
+      </tr>
+      <tr>
+       <td>--nofile
+</td>
+       <td>use dummy file as jobname
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Expert_options">
+      Expert options
+     </span>
+    </h2>
+    <p>The following table lists additional command-line options:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td>--touch
+</td>
+       <td>update context version number (also provide --expert, optionally provide --basepath)
+</td>
+      </tr>
+      <tr>
+       <td>--nostatistics
+</td>
+       <td>omit runtime statistics at the end of the run
+</td>
+      </tr>
+      <tr>
+       <td>--profile
+</td>
+       <td>profile job (use: mtxrun --script profile --analyze)
+</td>
+      </tr>
+      <tr>
+       <td>--timing
+</td>
+       <td>generate timing and statistics overview
+</td>
+      </tr>
+      <tr>
+       <td>--keeptuc
+</td>
+       <td>keep previous tuc files (jobname-tuc-[run].tmp)
+</td>
+      </tr>
+      <tr>
+       <td>--keeplog
+</td>
+       <td>keep previous log files (jobname-log-[run].tmp)
+</td>
+      </tr>
+      <tr>
+       <td>--lmtx
+</td>
+       <td>force lmtx mode (when available)
+</td>
+      </tr>
+      <tr>
+       <td>--overloadmode=error,warning,0--6,255
+</td>
+       <td>enable csname overload checking
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Special_options">
+      Special options
+     </span>
+    </h2>
+    <p>The following table lists command-line options that are not commonly used:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td>--pdftex
+</td>
+       <td>process file with texexec using pdftex
+</td>
+      </tr>
+      <tr>
+       <td>--xetex
+</td>
+       <td>process file with texexec using xetex
+</td>
+      </tr>
+      <tr>
+       <td>--mkii
+</td>
+       <td>process file with texexec
+</td>
+      </tr>
+      <tr>
+       <td>--pipe
+</td>
+       <td>do not check for file and enter scroll mode (--dummyfile=whatever.tmp)
+</td>
+      </tr>
+      <tr>
+       <td>--sandbox
+</td>
+       <td>process file in a limited environment
+</td>
+      </tr>
+      <tr>
+       <td>--addbinarypath
+</td>
+       <td>prepend the (found) binarypath to runners
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Remaking_the_format">
+      Remaking the format
+     </span>
+    </h2>
+    <p>When you change one of ConTeXt's core files &ndash; as a temporary patch, or to try out something new, or for whatever reason &ndash; the change won't take effect immediately. Instead, you must first recompile ConTeXt, a process known as '(re)making the format'. In fact, ConTeXt has several formats: the English-language interface is a separate format from the English or the Persian one. 
+</p>
+    <p>To make all formats:
+</p>
+    <pre>context --make
+</pre>
+    <p>To make just the format for a single interface language:
+</p>
+    <pre>context --make cont-en    # English
+context --make cont-uk    # British English
+context --make cont-de    # German
+context --make cont-fr    # French
+context --make cont-nl    # Dutch
+context --make cont-cs    # Czech
+context --make cont-it    # Italian
+context --make cont-ro    # Romanian
+context --make cont-pe    # Farsi (Persian)
+</pre>
+    <p>This section provides additional information for command-line options.
+</p>
+    <h2>
+     <span class="mw-headline" id="--run">
+      --run
+     </span>
+    </h2>
+    <p>Process one or more files; this is the default action and may be omitted.
+</p>
+    <h2>
+     <span class="mw-headline" id="--autopdf">
+      --autopdf
+     </span>
+    </h2>
+    <p>Reopen the generated PDF file in the system's default PDF file viewer after recompiling a document.
+</p>
+    <h2>
+     <span class="mw-headline" id="--purgeall">
+      --purgeall
+     </span>
+    </h2>
+    <p>Delete all build artifacts generated during compiling of a document, such as <i>.tuc</i> and <i>.log</i> files.
+</p>
+    <h2>
+     <span id="--path=list">
+     </span>
+     <span class="mw-headline" id="--path.3Dlist">
+      --path=list
+     </span>
+    </h2>
+    <p>Provide a comma-separated list of paths for ConTeXt to search when processing. For example:
+</p>
+    <pre>context --path="$HOME/writing/common/styles,$HOME/writing/amazing-novel/styles"
+</pre>
+    <h2>
+     <span class="mw-headline" id="--result">
+      --result
+     </span>
+    </h2>
+    <p>Changes the output document file name. ConTeXt creates the output document file in the current working directory; this option cannot create or move the output document in a different directory. Instead, change the working directory before running ConTeXt and use the <i>--path</i> option to configure where ConTeXt searches for files to process.
+</p>
+    <h2>
+     <span class="mw-headline" id="--errors">
+      --errors
+     </span>
+    </h2>
+    <p>ConTeXt is sometimes quite liberal when it comes to non-syntactical errors in the source files. Missing fonts, missing characters in a font, missing references do not automatically abort a run or exit with a non-successful return value. To report possible issues, either compile with <code>--errors</code> or use
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabledirectives</span></span>
+  <span class="brx">[</span>logs.errors<span class="brx">]</span>
+</pre>
+    <p>in the source file. Example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="comment">%% missing figure</span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>nonexistent<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Compiling with <code>context --noconsole --silent --nostatistics file.tex</code> would result in no output (as well as a successful return value). If, on the other hand, compiled with <code>context --noconsole --silent --nostatistics --errors file.tex</code> the output would be:
+</p>
+    <pre class="tex">error logging   &gt; start possible issues
+graphics        &gt; start missing figures
+graphics        &gt;       foo
+graphics        &gt; stop missing figures
+error logging   &gt; stop possible issues
+</pre>
+    <p>The return value would still be zero (success), though. To have the return value reflect possible found issues, patterns can be used. Example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabledirectives</span></span>
+  <span class="brx">[</span>logs.errors<span class="brx">=</span>*<span class="brx">]</span>
+</pre>
+    <p>Alternatively the patterns can be provided as a compile switch <code>--errors='*'</code>. The quotes are required to prevent shell expansion. With these options, the <code>context</code> would return 1 (failure) if problems are found. 
+</p>
+    <p>Note that only some of the problems are reported, some of which might not be critical and other, possibly critical problems, are not detected.
+</p>
+    <h2>
+     <span class="mw-headline" id="--find">
+      --find
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <code>find</code>
+      &nbsp;: Beginning with ConTeXt version 2024.02.22, the following new option
+      <code>find</code>
+      can be used to check a command in the sources:
+      <pre class="tex">context --find<span class="brx">=</span>"%<span class="cs"><span class="documentcs">\starttabulate</span></span>"</pre>
+      In this example the result will be a list of the files and line numbers where the command
+      <tt>
+       <a href="../../Command/starttabulate.html" title="Command/starttabulate">
+        \starttabulate
+       </a>
+      </tt>
+      appears.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="ctxfile_to_store_preferences">
+      ctxfile to store preferences
+     </span>
+    </h2>
+    <p>Beginning with <code>ConTeXt version 2013.09.03 10:22</code>, there is a new possibility to pass such options when typesetting, both with a Terminal command line or a dedicated editor such as <code>TeXShop</code> on Mac OS X, or <code>TeXWorks</code> on Mac OS X or Windows.
+In order to use this new capability of ConTeXt, one can create a file named for instance 
+</p>
+    <pre> my-preferences.ctx </pre>
+    <p>which contains for instance the following lines:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">?xml version='1.0' standalone='yes'?</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">ctx:job</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">ctx:message</span><span class="br">&gt;</span>default flags<span class="br">&lt;</span><span class="name">/ctx:message</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">ctx:flags</span><span class="br">&gt;</span>
+       <span class="br">&lt;</span><span class="name">ctx:flag</span><span class="br">&gt;</span>purgeall<span class="br">&lt;</span><span class="name">/ctx:flag</span><span class="br">&gt;</span>
+       <span class="br">&lt;</span><span class="name">ctx:flag</span><span class="br">&gt;</span>synctex=zipped<span class="br">&lt;</span><span class="name">/ctx:flag</span><span class="br">&gt;</span>
+   <span class="br">&lt;</span><span class="name">/ctx:flags</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/ctx:job</span><span class="br">&gt;</span>
+</pre>
+    <p>This file has to be put for instance in your 
+</p>
+    <pre> texmf-local/tex/context </pre>
+    <p>directory. Then on top of the file  my-jobname.tex one has to say:
+</p>
+    <pre>&nbsp;% ctxfile=my-preferences </pre>
+    <p>in order to pass all the optional flags contained in <code>my-preferences.ctx</code> to the mkiv engine.
+By having several <code>preferences.ctx</code> files, one can have different environments for the typesetting.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212420
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.075 seconds
+Preprocessor visited node count: 136/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 277/2097152 bytes
+Template argument size: 114/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3674/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   14.876      1 -total
+ 53.82%    8.007      7 Template:code
+ 32.79%    4.878      1 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4774-1!canonical and timestamp 20260109212420 and revision id 42288
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Executable_scripts_and_auxiliary_files/context_script">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

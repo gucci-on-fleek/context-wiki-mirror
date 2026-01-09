@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Boxes and stacking mechanisms/Collectors&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Collectors" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Boxes and stacking mechanisms/Collectors
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2663&diff=41300">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Collectors are an alternative to <a href="Overlays.html" title="Graphics and media/Boxes and stacking mechanisms/Overlays">Overlays</a> that can be used to build-up composite objects; they are like <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">Layers</a>, but not for whole pages but only for single objects (e.g. images).
+</p>
+    <p>See the <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/details.pdf" title="manual:details.pdf"> details</a> manual for further explanations.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <p>Adding labels to a figure.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,default<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecollector</span></span><span class="brx">[</span>example<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span> 
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>
+     <span class="brx">[</span>width<span class="brx">=</span>4cm,frame<span class="brx">=</span>on<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>3<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\composedcollector</span></span><span class="br">{</span>example<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="174" src="../../wikiteximage/5b4fc90f746f47c2a5418301687a1c94.webp" width="239">
+     </li>
+    </ul>
+    <p>There is no confusion if the added text is placed within the first object. However,
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span>
+  <span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,default<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecollector</span></span><span class="brx">[</span>example2<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example2<span class="brx">]</span> 
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>
+   <span class="brx">[</span>width<span class="brx">=</span>4cm,frame<span class="brx">=</span>on<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example2<span class="brx">]</span> 
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example2<span class="brx">]</span> 
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example2<span class="brx">]</span> 
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>,
+  location<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>3<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example2<span class="brx">]</span> 
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="br">{</span>4<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\composedcollector</span></span><span class="br">{</span>example2<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="277" src="../../wikiteximage/3ba6170ca7e49a7ba7960bf48e813f50.webp" width="293">
+     </li>
+    </ul>
+    <p>Notice that the size of the collected object grows as text is added.
+As a consequence, the positions of the corners get redefined as the bounding box grows.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_-_copyright_labels_on_images">
+      Example - copyright labels on images
+     </span>
+    </h2>
+    <p>Some journals credit the name of the artist / photographer / copyright owner of an image by printing the text running up the side of the image. I wanted to do this so that the figure caption could be used purely to describe the image.
+</p>
+    <p>In this example the cow is drawn with the figure caption below as normal and with the copyright text running upwards along the edge of the right-hand edge of the image. And if you want to fine tune the space between the image and the text then it's easy to \framed the text and play around with the size and offsets.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecollector</span></span><span class="brx">[</span>example<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>
+   <span class="brx">[</span>width<span class="brx">=</span>0.8<span class="cs">\textwidth</span>,frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setcollector</span></span> <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span>,
+   location<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>90<span class="brx">]</span>
+     <span class="br">{</span><span class="cs">\tfx</span> <span class="cs">\copyright</span> A great artist<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\placefigure</span></span>
+  <span class="brx">[</span> <span class="brx">]</span>
+  <span class="brx">[</span>fig:cow<span class="brx">]</span>
+  <span class="br">{</span>A fine figure of a cow<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\composedcollector</span></span><span class="br">{</span>example<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../../wikiteximage/7789ca9eefe902999768d2c3c0cdcd63.webp" width="620">
+     </li>
+    </ul>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> We need more documentation and examples for this complicated subject. <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">
+       Layers
+      </a>
+      &ndash;
+      <a href="../../Category:Command/Layers.html" title="Category:Command/Layers">
+       Category:Command/Layers
+      </a>
+     </li>
+     <li>
+      <a href="Overlays.html" title="Graphics and media/Boxes and stacking mechanisms/Overlays">
+       Overlays
+      </a>
+      &ndash;
+      <a href="../../Category:Command/Overlays.html" title="Category:Command/Overlays">
+       Category:Command/Overlays
+      </a>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/definecollector.html" title="Command/definecollector">
+        \definecollector
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/setcollector.html" title="Command/setcollector">
+        \setcollector
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/composedcollector.html" title="Command/composedcollector">
+        \composedcollector
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110072918
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.072 seconds
+Real time usage: 0.120 seconds
+Preprocessor visited node count: 67/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 673/2097152 bytes
+Template argument size: 157/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 8986/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   30.998      1 -total
+ 54.87%   17.008      1 Template:todo
+ 43.14%   13.371      3 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2663-1!canonical and timestamp 20260110072917 and revision id 41300
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Collectors">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

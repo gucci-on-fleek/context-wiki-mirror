@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Collections of tips and tricks&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Collections_of_tips_and_tricks" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Collections of tips and tricks
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7172&diff=42163">2025-02-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Font_switches_at_the_beginning_of_a_paragraph">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Font switches at the beginning of a paragraph
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Overstrike_and_microtypography">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Overstrike and microtypography
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Latin_Modern_and_.5Cem">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Latin Modern and \em
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Mnemonic_font_switches_.5Ctypeface.2C_.5Cboldface.2C_.5Cswapface_and_interaction_with_font_styles">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Mnemonic font switches \typeface, \boldface, \swapface and interaction with font styles
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Font_Coloring">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Font Coloring
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#_See_also">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Font_switches_at_the_beginning_of_a_paragraph">
+      Font switches at the beginning of a paragraph
+     </span>
+    </h2>
+    <p>
+Placing a font switch at the beginning of a paragraph can sometimes generate unexpected side-effects. This can be avoided by forcing horizontal mode before any font change: </p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\dontleavehmode</span></span><span class="br">{</span><span class="cs">\bf</span> Warning!<span class="br">}</span> Care must be taken when a font switch is used at the beginning of a paragraph.<span class="cs">\par</span></pre>
+    <h2>
+     <span class="mw-headline" id="Overstrike_and_microtypography">
+      Overstrike and microtypography
+     </span>
+    </h2>
+    <p>The canonical way is <code>\overstrike{text}</code>. However, it you're using microtypography with <code>\setupalign[hz,hanging]</code> expect the rule to be placed over the character (with the Latin Modern fonts you should not have this problem, experienced with Linux Libertine and mkiv). This is not what is expected. The workaround is to put the overstriked text in a <code>\inframed[frame=off]{}</code>. 
+</p>
+    <p>E.g.
+</p>
+    <pre class="tex">bla bla bla <span class="cs"><span class="documentcs">\inframed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\overstrike</span></span><span class="br">{</span>striked<span class="br">}</span><span class="br">}</span> bla bla
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="22" src="../wikiteximage/e22669e916afc507f8b969d502449dd2.webp" width="195">
+     </li>
+    </ul>
+    <p>Disabling mycrotypography also works, but probably not desiderable. 
+</p>
+    <pre>\setupalign[nothanging,nohz]
+\strikeout{text}
+\setupalign[hanging,hz]
+</pre>
+    <h2>
+     <span id="Latin_Modern_and_\em">
+     </span>
+     <span class="mw-headline" id="Latin_Modern_and_.5Cem">
+      Latin Modern and
+      <tt>
+       <a href="../Command/em.html" title="Command/em">
+        \em
+       </a>
+      </tt>
+     </span>
+    </h2>
+    <p>ConTeXt uses the Latin Modern fonts by default; these fonts look
+similar to the original Computer Modern fonts, but have a much larger
+character repertoire.  As it happens, in the Latin Modern (and Computer
+Modern) fonts, the slanted font does not stand out from the
+upright font enough for some tastes; so, many people prefer to use the
+italic font for emphasis. To do that use 
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definebodyfontenvironment</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>em<span class="brx">=</span>italic<span class="brx">]</span>
+</pre>
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="54" src="../wikiteximage/930de1a7eb6b29b2cd06e657affefa30.webp" width="29"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>NOTE:</b>  For Opentype fonts, italic correction needs to be set using
+<pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>itlc<span class="brx">=</span>yes<span class="brx">]</span></pre> 
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span id="Mnemonic_font_switches_\typeface,_\boldface,_\swapface_and_interaction_with_font_styles">
+     </span>
+     <span class="mw-headline" id="Mnemonic_font_switches_.5Ctypeface.2C_.5Cboldface.2C_.5Cswapface_and_interaction_with_font_styles">
+      Mnemonic font switches
+      <tt>
+       <a class="new" href="../index.php?title=Command/typeface&action=edit&redlink=1.html" title="Command/typeface (page does not exist)">
+        \typeface
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../Command/boldface.html" title="Command/boldface">
+        \boldface
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../index.php?title=Command/swapface&action=edit&redlink=1.html" title="Command/swapface (page does not exist)">
+        \swapface
+       </a>
+      </tt>
+      and interaction with font styles
+     </span>
+    </h2>
+    <p>You may also use <tt><a class="new" href="../index.php?title=Command/typeface&action=edit&redlink=1.html" title="Command/typeface (page does not exist)">\typeface</a></tt> for normal,<tt><a href="../Command/boldface.html" title="Command/boldface">\boldface</a></tt> for bold and <tt><a class="new" href="../index.php?title=Command/swapface&action=edit&redlink=1.html" title="Command/swapface (page does not exist)">\swapface</a></tt> for slanted/italic.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Link with <tt><a href="../Command/em.html" title="Command/em">\em</a></tt>?  <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|l|f<span class="br">{</span><span class="cs">\tf</span><span class="br">}</span>l|f<span class="br">{</span><span class="cs">\it</span><span class="br">}</span>l|f<span class="br">{</span><span class="cs">\sl</span><span class="br">}</span>l|f<span class="br">{</span><span class="cs">\bf</span><span class="br">}</span>l|f<span class="br">{</span><span class="cs">\bi</span><span class="br">}</span>l|f<span class="br">{</span><span class="cs">\bs</span><span class="br">}</span>l|<span class="brx">]</span>
+<span class="cs">\NC</span>                <span class="cs">\NC</span> <span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>tf<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>it<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>sl<span class="br">}</span> <span class="cs">\NC</span>
+<span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>bf<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>bi<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\tttf</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>bs<span class="br">}</span> <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs">\NC</span>                <span class="cs">\NC</span>           Text <span class="cs">\NC</span>           Text <span class="cs">\NC</span>           Text <span class="cs">\NC</span>
+Text <span class="cs">\NC</span>           Text <span class="cs">\NC</span>           Text <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>em<span class="br">}</span>       <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span>
+<span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\em</span></span>       Text <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>boldface<span class="br">}</span> <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span>
+<span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\boldface</span></span> Text <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>typeface<span class="br">}</span> <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span>
+<span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\typeface</span></span> Text <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs">\NC</span> <span class="cs"><span class="documentcs">\tex</span></span><span class="br">{</span>swapface<span class="br">}</span> <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span>
+<span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span> <span class="cs"><span class="documentcs">\swapface</span></span> Text <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs"><span class="documentcs">\stoptabulate</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="122" src="../wikiteximage/4bc3b592f8ad6e48e56940ad850fcb37.webp" width="406">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Font_Coloring">
+      Font Coloring
+     </span>
+    </h2>
+    <p><i>From Jano Kul February 2021&lrm;, and Hraban July 2022&lrm;</i>
+</p>
+    <p>For detailed explanation of font goodies read <a class="external text" href="http://www.pragma-ade.nl/general/manuals/fonts-mkiv.pdf" rel="nofollow">fonts-mkiv.pdf</a> manual. Here are some examples of font goodies usage.
+</p>
+    <p>This a simplified example of goodies-002.tex from <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/Test_suite.html" title="ConTeXt and Lua programming/ConTeXt Development/Test suite">Test suite</a> (goodie file of the test is <tt>demo.lfg</tt> in the distribution).
+</p>
+    <p>Create a goodie file *.lfg, for example:
+</p>
+    <pre class="tex">-- name the file fontcolor-greek.lfg
+return <span class="br">{</span>
+    name <span class="brx">=</span> "FontColor",
+    comment <span class="brx">=</span> "An example of font coloring.",
+    colorschemes <span class="brx">=</span> <span class="br">{</span>
+        default <span class="brx">=</span> <span class="br">{</span>
+            <span class="brx">[</span>1<span class="brx">]</span> <span class="brx">=</span> <span class="br">{</span>
+                force <span class="brx">=</span> true,
+                list  <span class="brx">=</span> <span class="br">{</span>
+                    "0x01F40:0x01FD6",
+                    "0x0590:0x05FF",
+                <span class="br">}</span>
+            <span class="br">}</span>,
+        <span class="br">}</span>,
+    <span class="br">}</span>,
+<span class="br">}</span>
+</pre>
+    <p>where "0x0370:0x03FF" and "0x01F40:0x01FD6" are unicode blocks for greek and antient greek. You can also list single character or the adobename of the character from <tt>char-def.lua</tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>demo-colored<span class="brx">]</span>
+  <span class="brx">[</span>goodies<span class="brx">=</span>fontcolor-greek,
+   colorscheme<span class="brx">=</span>default,
+   featureset<span class="brx">=</span>default<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>dejavu<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>5mm<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\setfontfeature</span></span><span class="br">{</span>demo-colored<span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\start</span></span><span class="cs">\resetfontcolorscheme</span>    from ὀ&rho;&phi;&alpha;&nu;ῖ&omicron;&sigmaf;, thus<span class="cs"><span class="documentcs">\stop</span></span><span class="cs">\par</span>
+    <span class="cs"><span class="documentcs">\start</span></span><span class="cs">\setfontcolorscheme</span>  <span class="brx">[</span>1<span class="brx">]</span> from ὀ&rho;&phi;&alpha;&nu;ῖ&omicron;&sigmaf;, thus<span class="cs"><span class="documentcs">\stop</span></span><span class="cs">\par</span>
+    <span class="cs"><span class="documentcs">\start</span></span><span class="cs">\setfontcolorscheme</span>  <span class="brx">[</span>2<span class="brx">]</span> from ὀ&rho;&phi;&alpha;&nu;ῖ&omicron;&sigmaf;, thus<span class="cs"><span class="documentcs">\stop</span></span><span class="cs">\par</span>
+    <span class="cs"><span class="documentcs">\start</span></span><span class="cs">\setfontcolorscheme</span>  <span class="brx">[</span>3<span class="brx">]</span> from ὀ&rho;&phi;&alpha;&nu;ῖ&omicron;&sigmaf;, thus<span class="cs"><span class="documentcs">\stop</span></span><span class="cs">\par</span>
+    <span class="cs"><span class="documentcs">\start</span></span><span class="cs">\resetfontcolorscheme</span>    from ὀ&rho;&phi;&alpha;&nu;ῖ&omicron;&sigmaf;, thus<span class="cs"><span class="documentcs">\stop</span></span><span class="cs">\par</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="_See_also">
+      See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Collections_of_tips_and_tricks/Building_a_font_catalogue.html" title="Characters words and fonts/Collections of tips and tricks/Building a font catalogue">
+       Building a font catalogue
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109124546
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.064 seconds
+Real time usage: 0.519 seconds
+Preprocessor visited node count: 167/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1222/2097152 bytes
+Template argument size: 239/2097152 bytes
+Highest expansion depth: 6/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10254/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   76.442      1 -total
+ 44.61%   34.097      1 Template:todo
+ 33.20%   25.376      1 Template:note
+ 16.84%   12.872      8 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7172-1!canonical and timestamp 20260109124546 and revision id 42163
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Collections_of_tips_and_tricks">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

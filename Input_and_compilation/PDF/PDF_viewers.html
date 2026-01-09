@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/PDF/PDF viewers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_viewers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/PDF/PDF viewers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6660&diff=40755">2025-01-15</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>At the <a class="external text" href="https://meeting.contextgarden.net/2021/programme.shtml" rel="nofollow">2021 meeting</a> we were discussing what we as TeX users can do about the unfortunate state of open source PDF viewers, esp. on Linux, and that <a class="external text" href="https://group.contextgarden.net" rel="nofollow">context group</a> could sponsor development. Unfortunately this discussion had no productive results. So let&rsquo;s try this again and compile some important points as a basis:
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Wishlist">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Wishlist
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#no_priority:">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           no priority:
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#more_ideas:">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           more ideas:
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Software">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Software
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Funding">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Funding
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Sources">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Sources
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Wishlist">
+      Wishlist
+     </span>
+    </h2>
+    <p>Since PDF files and viewers can have a wide spectrum of features, let&rsquo;s define what we&rsquo;re after, grouped by purpose:
+</p>
+    <ul>
+     <li>
+      in
+      <b>
+       general
+      </b>
+      :
+      <ul>
+       <li>
+        PDF 2.0 compatible
+       </li>
+       <li>
+        proper color and transparency display (respect color profiles)
+       </li>
+       <li>
+        limited JavaScript support (no modification, no file operations)
+       </li>
+       <li>
+        search
+       </li>
+       <li>
+        update on file change (configurable)
+       </li>
+       <li>
+        keyboard control for as much as possible (but also menus/menubars)
+       </li>
+       <li>
+        sidebar for bookmarks/ToC
+       </li>
+       <li>
+        <a href="../Text_editors/SyncTeX.html" title="Input and compilation/Text editors/SyncTeX">
+         SyncTeX
+        </a>
+        support
+       </li>
+       <li>
+        accessibility (e.g. alternative text must work)
+       </li>
+       <li>
+        access to file attachments (lower priority)
+       </li>
+      </ul>
+     </li>
+     <li>
+      for
+      <b>
+       presentations
+      </b>
+      :
+      <ul>
+       <li>
+        presentation mode (full screen, no visible controls, on one monitor/beamer of choice)
+       </li>
+       <li>
+        JS for controlling optional content groups (OCGs,
+        <a href="PDF_viewer_layers.html" title="Input and compilation/PDF/PDF viewer layers">
+         PDF viewer layers
+        </a>
+        )
+       </li>
+       <li>
+        inner- and inter-document links must work
+       </li>
+       <li>
+        multimedia support at least via links (suggestion: use &ldquo;plain Rich Media&rdquo; approach with OS&rsquo; default player)
+       </li>
+       <li>
+        transition effects not necessary (but if the developer has fun including them, go on)
+       </li>
+      </ul>
+     </li>
+     <li>
+      for
+      <b>
+       forms
+      </b>
+      :
+      <ul>
+       <li>
+        fill in
+       </li>
+       <li>
+        print documents with/without form contents
+       </li>
+       <li>
+        same-ID fields on different pages must be synchronized
+       </li>
+       <li>
+        custom checkmarks/radiobuttons should work & display correctly
+       </li>
+       <li>
+        <a href="../../Widgets#JavaScript.html" title="Widgets">
+         JS
+        </a>
+        for calculations and validation
+       </li>
+      </ul>
+     </li>
+     <li>
+      for
+      <b>
+       annotations
+      </b>
+      (correction workflow; generally just nice to have):
+      <ul>
+       <li>
+        similar to Adobe/Foxit Reader
+       </li>
+      </ul>
+     </li>
+     <li>
+      for
+      <b>
+       development/debugging
+      </b>
+      :
+      <ul>
+       <li>
+        show metadata (incl. XMP), e.g. in a sidebar or dialog
+       </li>
+       <li>
+        show fonts metadata (inclusion etc.)
+       </li>
+       <li>
+        show
+        <a href="PDF_boxes.html" title="Input and compilation/PDF/PDF boxes">
+         PDF boxes
+        </a>
+        (MediaBox, CropBox, TrimBox, BleedBox, ArtBox) as colored frames, switchable via preferences and menu (bar) item
+       </li>
+       <li>
+        check for
+        <a href="../PDF.html" title="Input and compilation/PDF">
+         PDF/A and PDF/X
+        </a>
+        compliance would be nice (integrate
+        <a class="external text" href="https://github.com/veraPDF/veraPDF-apps" rel="nofollow">
+         VeraPDF
+        </a>
+        ?)
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="no_priority:">
+      no priority:
+     </span>
+    </h3>
+    <ul>
+     <li>
+      view other file formats like XPS etc.
+     </li>
+     <li>
+      any changes to the document (but would be nice):
+      <ul>
+       <li>
+        extract/replace/add pages
+       </li>
+       <li>
+        downsampling of images
+       </li>
+       <li>
+        change metadata
+       </li>
+      </ul>
+     </li>
+     <li>
+      export to other formats
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="more_ideas:">
+      more ideas:
+     </span>
+    </h3>
+    <ul>
+     <li>
+      support Lua as a scripting language in PDF, like JavaScript
+     </li>
+     <li>
+      rulers / auxiliary lines to check geometry
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Software">
+      Software
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://opensource.org/licenses" rel="nofollow">
+       FOSS license
+      </a>
+     </li>
+     <li>
+      suggestion by Hans: based on
+      <a class="external text" href="https://mupdf.com" rel="nofollow">
+       MuPDF
+      </a>
+      , even if it&rsquo;s controlled by the Artifex company, since it&rsquo;s good code and there&rsquo;s also
+      <a class="external text" href="https://mujs.com" rel="nofollow">
+       MuJS
+      </a>
+      .
+     </li>
+     <li>
+      another candidate would be
+      <a class="external text" href="https://okular.kde.org" rel="nofollow">
+       Okular
+      </a>
+      , since that&rsquo;s the open source viewer that supports most of the wanted features.
+     </li>
+     <li>
+      <a class="external text" href="https://github.com/mozilla/pdf.js" rel="nofollow">
+       pdf.js
+      </a>
+      , included in Firefox (as well as other browsers, editor plugins etc.) already meets most criteria.
+     </li>
+     <li>
+      should at least work on Windows, MacOS (preferably 10.14+), Linux and *BSD; iOS & Android versions would be nice
+     </li>
+     <li>
+      could use our
+      <a class="external text" href="https://build.contextgarden.net" rel="nofollow">
+       build farm
+      </a>
+     </li>
+     <li>
+      how about (long term) support?
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Funding">
+      Funding
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Context group will provide some funds.
+     </li>
+     <li>
+      There was a discussion about fundraising at the 2022 meeting. (Will check back.)
+     </li>
+     <li>
+      DANTE only funds nonpersonnel costs and won&rsquo;t support projects that are not directly TeX-related.
+     </li>
+     <li>
+      Ask
+      <a class="external text" href="https://overleaf.com" rel="nofollow">
+       Overleaf
+      </a>
+      WRT extensions for pdf.js
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Sources">
+      Sources
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Michal Vlasak&rsquo;s
+      <a class="external text" href="https://dspace.cvut.cz/handle/10467/95065" rel="nofollow">
+       bachelor thesis
+      </a>
+      about multimedia in PDF (in Czech);
+      <a class="external text" href="https://meeting.contextgarden.net/2021/talks/2021-09-22/multimedia-context-presentation.pdf" rel="nofollow">
+       presentation of the results
+      </a>
+      (in English)
+     </li>
+     <li>
+      <a href="../../User:Hraban.html" title="User:Hraban">
+       Hraban
+      </a>
+      (
+      <a class="new" href="../../index.php?title=User_talk:Hraban&action=edit&redlink=1" title="User talk:Hraban (page does not exist)">
+       talk
+      </a>
+      )&rsquo;s
+      <a class="external text" href="https://meeting.contextgarden.net/2021/talks/2021-09-22/pdfviewers.ods" rel="nofollow">
+       overview of PDF viewer features
+      </a>
+      on Linux and MacOS (ODS table in German)
+     </li>
+     <li>
+      <a class="external text" href="https://blog.mozilla.org/attack-and-defense/2021/10/14/implementing-form-filling-and-accessibility-in-the-firefox-pdf-viewer/" rel="nofollow">
+       Mozilla about pdf.js
+      </a>
+      (forms incl. JS & XFA, Tagged PDF)
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.058 seconds
+Preprocessor visited node count: 23/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6660-1!canonical and timestamp 20260109212423 and revision id 40755
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDF_viewers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Chromatograms with MetaPost&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Chromatograms_with_MetaPost" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Chromatograms with MetaPost
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=797&diff=41389">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Input_and_compilation/Sample_documents.html" title="Input and compilation/Sample documents">Sample documents</a>
+</p>
+    <p>The \Chromato macro is an example application for the positioning environment. I've written it for my brother, who is writing a thesis in <a href="../../Chemistry.html" title="Chemistry">Chemistry</a>.
+</p>
+    <pre class="tex"><span class="cs">\newdimen</span><span class="cs">\Width</span> <span class="cs">\newdimen</span><span class="cs">\Height</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\Chromato</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\setbox</span><span class="cs">\scratchbox</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0.6<span class="cs">\makeupwidth</span><span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuppositioning</span></span><span class="brx">[</span>unit<span class="brx">=</span>pt<span class="brx">]</span> <span class="cs">\Width</span><span class="brx">=</span><span class="cs">\wd</span><span class="cs">\scratchbox</span> <span class="cs">\Height</span><span class="brx">=</span><span class="cs">\ht</span><span class="cs">\scratchbox</span>
+  <span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>fig:<span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\startpositioning</span></span>
+    <span class="cs"><span class="documentcs">\position</span></span><span class="brx">(</span>0,0<span class="brx">)</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0.6<span class="cs">\makeupwidth</span><span class="brx">]</span><span class="br">}</span><span class="brx">#</span>3<span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\stoppositioning</span></span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\LRposition</span><span class="br">{</span><span class="cs">\edef</span><span class="cs">\YPos</span><span class="br">{</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="comment">%</span>
+        <span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">#</span>1pt/100<span class="brx">)</span><span class="br">}</span><span class="cs">\Height</span> - 0.1<span class="cs">\baselineskip</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\position</span></span><span class="brx">(</span><span class="brx">#</span>2,<span class="cs">\YPos</span><span class="brx">)</span><span class="br">{</span><span class="cs">\vbox</span> to 2pt<span class="br">{</span><span class="cs">\vss</span><span class="br">{</span><span class="cs">\hbox</span> to 0pt<span class="br">{</span><span class="brx">#</span>3<span class="br">}</span><span class="cs">\vss</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>4<span class="brx">]</span><span class="cs">\Lbrace</span><span class="br">{</span><span class="cs">\LRposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>0<span class="br">{</span><span class="cs">\hss</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>90<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+      $<span class="cs"><span class="documentcs">\overbrace</span></span><span class="br">{</span><span class="cs">\hskip</span><span class="brx">#</span>2<span class="cs">\Height</span><span class="br">}</span>^<span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>270<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="br">}</span>$<span class="br">}</span><span class="cs">\hskip</span><span class="brx">#</span>3em<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>4<span class="brx">]</span><span class="cs">\Rbrace</span><span class="br">{</span><span class="cs">\LRposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\Width</span><span class="br">}</span><span class="br">}</span><span class="br">{</span><span class="cs">\hskip</span><span class="brx">#</span>3em
+    <span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>270<span class="brx">]</span><span class="br">{</span>$<span class="cs"><span class="documentcs">\overbrace</span></span><span class="br">{</span><span class="cs">\hskip</span><span class="brx">#</span>2<span class="cs">\Height</span><span class="br">}</span>^<span class="br">{</span><span class="comment">%</span>
+        <span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>90<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="br">}</span>$<span class="br">}</span><span class="cs">\hss</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\Lpfeil</span><span class="br">{</span><span class="cs">\LRposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>0<span class="br">{</span><span class="cs">\hss</span><span class="br">{</span><span class="cs"><span class="documentcs">\tx</span></span><span class="brx">#</span>2<span class="br">}</span> $<span class="cs">\rightarrow</span>$<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\Rpfeil</span><span class="br">{</span><span class="cs">\LRposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\Width</span><span class="br">}</span><span class="br">}</span><span class="br">{</span>$<span class="cs">\leftarrow</span>$ <span class="cs"><span class="documentcs">\tx</span></span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\Oposition</span><span class="br">{</span><span class="cs">\edef</span><span class="cs">\XPos</span><span class="br">{</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="comment">%</span>
+      <span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">#</span>1pt/100<span class="brx">)</span><span class="br">}</span><span class="cs">\Width</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\position</span></span><span class="brx">(</span><span class="cs">\XPos</span>,-<span class="cs"><span class="systemcs">\withoutpt</span></span><span class="br">{</span><span class="cs">\the</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">#</span>2<span class="cs">\baselineskip</span><span class="brx">)</span><span class="br">}</span><span class="brx">)</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs">\hbox</span> to 0pt<span class="br">{</span><span class="cs">\hss</span><span class="brx">#</span>3<span class="cs">\hss</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\Oben</span><span class="br">{</span><span class="cs">\Oposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>0.8<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\tx</span></span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\Obrace</span><span class="br">{</span><span class="cs">\Oposition</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>2.5<span class="br">}</span><span class="br">{</span>$<span class="cs"><span class="documentcs">\overbrace</span></span><span class="br">{</span><span class="cs">\hskip</span><span class="brx">#</span>2<span class="cs">\Width</span><span class="br">}</span>^<span class="br">{</span><span class="cs">\hbox</span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span><span class="br">}</span>$<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\Chromato</span><span class="br">{</span>ecolizeit<span class="br">}</span><span class="br">{</span>Expression der rekombinanten Fucosyltransferase~V in
+  <span class="br">{</span><span class="cs">\it</span> E.~coli<span class="br">}</span>.<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+<span class="cs">\Oben</span>5<span class="br">{</span>BRS<span class="br">}</span> <span class="cs">\Oben</span><span class="br">{</span>15<span class="br">}</span>1 <span class="cs">\Oben</span><span class="br">{</span>26<span class="br">}</span>2 <span class="cs">\Oben</span><span class="br">{</span>38<span class="br">}</span>3 <span class="cs">\Oben</span><span class="br">{</span>50<span class="br">}</span>4
+<span class="cs">\Oben</span><span class="br">{</span>61<span class="br">}</span>5 <span class="cs">\Oben</span><span class="br">{</span>72<span class="br">}</span>6 <span class="cs">\Oben</span><span class="br">{</span>83<span class="br">}</span>7 <span class="cs">\Oben</span><span class="br">{</span>94<span class="br">}</span>8
+<span class="cs">\Obrace</span><span class="br">{</span>49<span class="br">}</span><span class="br">{</span>0.68<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\tx</span></span>1--7<span class="br">}</span>
+<span class="cs">\Lpfeil</span><span class="br">{</span>12<span class="br">}</span><span class="br">{</span>97\,kDa<span class="br">}</span> <span class="cs">\Lpfeil</span><span class="br">{</span>20<span class="br">}</span><span class="br">{</span>66\,kDA<span class="br">}</span>
+<span class="cs">\Lpfeil</span><span class="br">{</span>32<span class="br">}</span><span class="br">{</span>45\,kDa<span class="br">}</span> <span class="cs">\Lpfeil</span><span class="br">{</span>52<span class="br">}</span><span class="br">{</span>31\,kDa<span class="br">}</span>
+<span class="cs">\Lbrace</span><span class="br">{</span>40<span class="br">}</span><span class="br">{</span>0.8<span class="br">}</span><span class="br">{</span>4<span class="br">}</span>A <span class="cs">\Lbrace</span><span class="br">{</span>90<span class="br">}</span><span class="br">{</span>0.2<span class="br">}</span><span class="br">{</span>0.1<span class="br">}</span>B
+<span class="cs">\Rpfeil</span><span class="br">{</span>29<span class="br">}</span><span class="br">{</span>FucT~V<span class="br">}</span> <span class="cs">\Rpfeil</span><span class="br">{</span>87<span class="br">}</span><span class="br">{</span>FucT~V<span class="br">}</span>
+<span class="cs">\Rpfeil</span><span class="br">{</span>40<span class="br">}</span>1 <span class="cs">\Rpfeil</span><span class="br">{</span>80<span class="br">}</span>2 <span class="cs">\Rbrace</span><span class="br">{</span>60<span class="br">}</span><span class="br">{</span>0.4<span class="br">}</span>3<span class="br">{</span><span class="cs"><span class="documentcs">\txx</span></span>1--2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>(A <a class="new" href="../../index.php?title=Special:Upload&wpDestFile=chromatograms.tex" title="chromatograms.tex">downloadable version</a> of the macro is also available.)
+</p>
+    <p>The resulting figure looks like this, though you'll have to imagine the graphic.  The output with the graphic included can be downloaded <a class="internal" href="../../images/d/dd/Chromato.pdf" title="Chromato.pdf">here, in pdf form</a>.
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="13" src="../../wikiteximage/019679fede60ab3ec0f3cba6456865a9.webp" width="55">
+     </li>
+    </ul>
+    <p>You can download the chromato module from <a class="external free" href="http://pmrb.free.fr/work/OS/ConTeXt/" rel="nofollow">http://pmrb.free.fr/work/OS/ConTeXt/</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.074 seconds
+Real time usage: 0.214 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13642/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:797-1!canonical and timestamp 20260109212415 and revision id 41389
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Chromatograms_with_MetaPost">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/ConTeXt Lua Documents CLD&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Lua_Documents_CLD" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/ConTeXt Lua Documents CLD
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2777&diff=40519">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><b>ConTeXt Lua Documents</b> (CLD) are way to access TeX from inside Lua scripts; they provide means to typeset documents using little to no TeX code at all.
+This makes them especially helpful for automated content generation and scripting.
+Internally, the Lua commands are mapped onto their ConTeXt and TeX counterparts.
+Knowledge of the latter is, therefore, a prerequisite to writing CLDs.
+If you ever dreamed of proper typesetting without backslashes galore, here is where to start at.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Basic_reading">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Basic reading
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#An_Example">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         An Example
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Nesting_1:_Functions">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Nesting 1: Functions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Nesting_2:_Delayed">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Nesting 2: Delayed
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Setting_up_Header_Texts">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Setting up Header Texts
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Basic_reading">
+      Basic reading
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/general/manuals/cld-mkiv.pdf" rel="nofollow">
+       The CLD manual
+      </a>
+      by Hans Hagen.
+     </li>
+     <li>
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/cldf-ini.lua" rel="nofollow">
+       cldf-ini.lua
+      </a>
+      : the entry point for the
+      <b>
+       cldf-*
+      </b>
+      files that contain the CLD implementation.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="An_Example">
+      An Example
+     </span>
+    </h2>
+    <p>Writing CLDs is straightforward although there are some pitfalls.
+Suppose we want to typeset the following minimal example:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\placefigure</span></span> <span class="br">{</span>none<span class="br">}</span> <span class="br">{</span><span class="comment">%                                                                                                     </span>
+  <span class="cs"><span class="documentcs">\framed</span></span> <span class="brx">[</span>frame<span class="brx">=</span>on, align<span class="brx">=</span>middle<span class="brx">]</span> <span class="br">{</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\input</span></span> knuth
+  <span class="br">}</span><span class="comment">%</span>
+<span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/5e2e15b883c677218b971cb5e43ceeb5.webp" width="874">
+     </li>
+    </ul>
+    <p>As <em>CLD</em> this will require more verbosity because nesting -- in the present example a <code>framed</code> inside a <code>placefigure</code> -- has to be expressed through functions.
+Optional and key-value style arguments are expressed as arrays and dictionaries respectively, which is a transparent representation of their ConTeXt ancestors.
+Mandatory (grouped) arguments are given either as strings or as functions.
+</p>
+    <h3>
+     <span class="mw-headline" id="Nesting_1:_Functions">
+      Nesting 1: Functions
+     </span>
+    </h3>
+    <p>The following example shows two ways of rewriting the above TeX code: the first one closely resembles its structure while the second calls the function <code>test</code> from inside the <code>placefigure</code> macro.
+</p>
+    <pre>context.placefigure(
+    "none",
+    function()
+        context.framed( {
+            frame="on",
+            align="middle"
+        },  
+            function() context.input("knuth") end 
+        )   
+    end 
+)
+
+context.par()
+
+function text ()
+    context.framed( {
+            frame="on",
+            align="middle"
+        },  
+        function() context.input("knuth") end 
+    )   
+end
+
+context.placefigure(
+    "none",
+    function () text() end                                                                                                 
+)
+
+</pre>
+    <h3>
+     <span class="mw-headline" id="Nesting_2:_Delayed">
+      Nesting 2: Delayed
+     </span>
+    </h3>
+    <p>An alternative to the function encapsulation is provided by 
+the <tt>context.delayed.f()</tt> method.
+This way execution of the <tt>\input</tt> 
+command is prevented until <tt>\placefigure</tt> is passed to TeX,
+the obvious advantage being that the source code follows the
+original TeX code and that it eliminates the need to create
+a separate function.
+</p>
+    <pre>context.placefigure(
+    "none",
+    function()
+        context.framed( {
+            frame="on",
+            align="middle"
+        },  
+            context.delayed.input("knuth")
+        )
+    end 
+)
+</pre>
+    <h2>
+     <span class="mw-headline" id="Setting_up_Header_Texts">
+      Setting up Header Texts
+     </span>
+    </h2>
+    <p>As already shown in the section about Nesting 1: Functions also context.setupheadertexts needs to be called with functions. On top of this we need to know, that once context.setupheadertexts is executed it is not frozen. This makes it necessary, that we need to add "return true" inside each used function() call. This makes sure that the called function stays around until the run is finished.
+</p>
+    <p>A complete setup of header texts in a double-sided ConTeXt Lua Document could look then like this
+</p>
+    <pre>context.setupheadertexts(
+  {function()
+     context.getmarking({"chapter"})
+     return true
+   end
+  },
+  {function()
+     context.pagenumber()
+     return true
+   end
+  },
+  {function()
+     context.getmarking({"section"})
+     return true
+   end
+  },
+  {function()
+     context.pagenumber()
+     return true
+   end
+  })
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212406
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.016 seconds
+Real time usage: 0.028 seconds
+Preprocessor visited node count: 41/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 82/2097152 bytes
+Template argument size: 24/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2150/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    3.657      1 Template:src
+100.00%    3.657      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2777-1!canonical and timestamp 20260109212406 and revision id 40519
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Lua_Documents_CLD">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

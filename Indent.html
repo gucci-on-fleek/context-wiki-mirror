@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Indent&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Indent" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Indent
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3447&diff=37772">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>On this page I will put some info about using indent.
+</p>
+    <p>Standard no indentation is used:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/e610ea74d6ca7e365ec68371d4b7a64f.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+When you want indentation you use:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/923d2f62d071858fecb6b854a9b5ecb7.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+When you do not want indentation on the first paragraph you use:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium,next<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/2bf5bf340ec2031c4dc93f1a7c97c655.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+The only problem is that when using context instead of texexec the paragraph after a blank is not seen as a first paragraph:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium,next<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/8901b87623d04455b02a8eb8f0ea2bb4.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+This can be solved in the following way:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium,next<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>fancybreak<span class="brx">]</span>
+
+<span class="cs">\definefancybreak</span><span class="brx">[</span>myblank<span class="brx">]</span><span class="brx">[</span>indentnext<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs">\myblank</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/d6fdf1eae1a0ed24eb87c74a7e453c1b.webp" width="874">
+     </li>
+    </ul>
+    <p><br>
+We have the same problem with a flowchart:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\runMPgraphicsfalse</span>
+  <span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>chart<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium,next<span class="brx">]</span>
+
+<span class="cs">\startFLOWchart</span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="cs">\startFLOWcell</span>
+    <span class="cs">\location</span>   <span class="br">{</span>1,1<span class="br">}</span>
+    <span class="cs">\name</span>       <span class="br">{</span>start<span class="br">}</span>
+    <span class="cs">\shape</span>      <span class="br">{</span>loop<span class="br">}</span>
+    <span class="cs">\text</span>       <span class="br">{</span>Start<span class="br">}</span>
+  <span class="cs">\stopFLOWcell</span>
+<span class="cs">\stopFLOWchart</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs">\FLOWchart</span><span class="brx">[</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="wikiteximage/9dbd4a7e779214a19733ca1b1d9c7ae0.webp" width="55">
+     </li>
+    </ul>
+    <p><br>
+This can be solved in the following way:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\runMPgraphicsfalse</span>
+  <span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>chart<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,medium,next<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>flowchart<span class="brx">]</span><span class="brx">[</span>default<span class="brx">=</span>force,indentnext<span class="brx">=</span>no<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcaption</span></span><span class="brx">[</span>flowchart<span class="brx">]</span><span class="brx">[</span>number<span class="brx">=</span>none<span class="brx">]</span>
+
+<span class="cs">\startFLOWchart</span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="cs">\startFLOWcell</span>
+    <span class="cs">\location</span>   <span class="br">{</span>1,1<span class="br">}</span>
+    <span class="cs">\name</span>       <span class="br">{</span>start<span class="br">}</span>
+    <span class="cs">\shape</span>      <span class="br">{</span>loop<span class="br">}</span>
+    <span class="cs">\text</span>       <span class="br">{</span>Start<span class="br">}</span>
+  <span class="cs">\stopFLOWcell</span>
+<span class="cs">\stopFLOWchart</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs">\placeflowchart</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\FLOWchart</span><span class="brx">[</span>test<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="wikiteximage/b8d729ab1010c6e54e6d4363e0b5b4bc.webp" width="55">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212419
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.026 seconds
+Real time usage: 0.129 seconds
+Preprocessor visited node count: 28/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6508/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3447-1!canonical and timestamp 20260109212419 and revision id 37772
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Indent">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

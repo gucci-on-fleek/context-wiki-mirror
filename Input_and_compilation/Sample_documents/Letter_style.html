@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Letter style&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Letter_style" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Letter style
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=717&diff=38808">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../Sample_documents.html" title="Input and compilation/Sample documents">Sample documents</a>
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Wolfgang.27s_Letter_Module">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Wolfgang's Letter Module
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#German_Letter_style">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         German Letter style
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Another_Approach">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Another Approach
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Another_Simple_Style">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Another Simple Style
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Letterhead">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Letterhead
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Modern_CV_like_cover_letter">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Modern CV like cover letter
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="Wolfgang's_Letter_Module">
+     </span>
+     <span class="mw-headline" id="Wolfgang.27s_Letter_Module">
+      Wolfgang's Letter Module
+     </span>
+    </h2>
+    <p><a class="new" href="../../index.php?title=Letter&action=edit&redlink=1" title="Letter (page does not exist)">Letter</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="German_Letter_style">
+      German Letter style
+     </span>
+    </h2>
+    <p>The following is thought to be a(n early version of a) template for DIN (Deutsches Institut f&uuml;r Normung, German Standardization Institute) conforming letters. Using some provided commands, it should be easy to set sender and receiver addresses for window envelopes, include text or a logo at the top, and contact information to the right of the window space.
+</p>
+    <p>If you want to use it, save the following as <tt>letterstyle.tex</tt> and follow the usage instructions.  A downloadable version is available <a class="new" href="../../index.php?title=Special:Upload&wpDestFile=letterstyle.tex" title="letterstyle.tex">here</a>.
+</p>
+    <p><b>Beware:</b> This style redefines <tt><a class="mw-redirect" href="../../Command/_section.html" title="Command/subject">\subject</a></tt> as letter subject line and thus disables header setup!
+</p>
+    <pre class="tex"><span class="comment">%</span>
+<span class="comment">% Style (environment) for writing letters</span>
+<span class="comment">%</span>
+<span class="comment">% (c) 2004 Holger Sch&ouml;ner hfsch@cs.tu-berlin.de</span>
+<span class="comment">% with contributions from Stefan Bunzel</span>
+<span class="comment">%</span>
+<span class="comment">% Feel free to use as you like. If modified, please remove the above</span>
+<span class="comment">% copyright notice.</span>
+<span class="comment">%</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">% Usage:</span>
+<span class="comment">%</span>
+<span class="comment">% \environment letterstyle</span>
+<span class="comment">% \starttext</span>
+<span class="comment">% \letter{<string>}</string></span>
+<span class="comment">% \setdate{(string)}</span>
+<span class="comment">% \place{(string)}</span>
+<span class="comment">% \shortsender{(one-line address of sender)}</span>
+<span class="comment">% \disposal{(orders)}</span>
+<span class="comment">% \addressee{(address of receiver; use \\ and \| for new lines)}</span>
+<span class="comment">%&nbsp;% Block with information about sender on the right hand side (name, phone,</span>
+<span class="comment">%&nbsp;% fax, email, etc.). (key) is set flush right in a very small font (by</span>
+<span class="comment">%&nbsp;% default, see \keystyle) and specifies the type of information, and (value)</span>
+<span class="comment">%&nbsp;% is the actual information.</span>
+<span class="comment">% \senderone{(key)}{(value)}</span>
+<span class="comment">% \sendertwo{(key)}{(value)}</span>
+<span class="comment">% ...</span>
+<span class="comment">% \sendernine{(key)}{(value)}</span>
+<span class="comment">% \addfirstheaderlayer[corner={top,left},location={bottom,right}]{\framed[width=\overlaywidth,height=\logoboxheight,frame=off]{}}</span>
+<span class="comment">% \headercontent{(text)}		% Text placed in the header of every page except the first</span>
+<span class="comment">% \addheaderlayer[corner={top,left},location={bottom,right}]{}</span>
+<span class="comment">% \footercontent{(text)}		% Text placed in the footer of every page</span>
+<span class="comment">% \addfooterlayer[corner={bottom,right},location={top,left}]{}</span>
+<span class="comment">% \subject{(subject)}</span>
+<span class="comment">% \greeting{(greetings formulation)}</span>
+<span class="comment">% \signature{(name)}</span>
+<span class="comment">% \attachments{(text)}</span>
+<span class="comment">%</span>
+<span class="comment">% ----------------------------------------------------------------------------</span>
+<span class="comment">% Modes:</span>
+<span class="comment">% demo:		Set an example letter specified at the end of this file for</span>
+<span class="comment">% 		test/demo purposes.</span>
+<span class="comment">% nofold:	Determines whether folding marks are set or not. By default,</span>
+<span class="comment">% 		they are printed; using this mode they are left out.</span>
+<span class="comment">%</span>
+<span class="comment">% Set modes by using</span>
+<span class="comment">% 	texexec -pdf --mode=(mode1,mode2,...) (file)</span>
+<span class="comment">% 	or specify \enablemode[(mode)] in your input (before including the style)</span>
+<span class="comment">%</span>
+<span class="comment">% ----------------------------------------------------------------------------</span>
+<span class="comment">% There are some nasty tricks involved here; e.g. I could not find a cleaner</span>
+<span class="comment">% way to specify a header which is to be used for only one page and has a</span>
+<span class="comment">% different height than that of the following ...</span>
+<span class="comment">%</span>
+<span class="comment">% I'd be glad about any hints for improvement of this style!</span>
+<span class="comment">%</span>
+
+<span class="cs"><span class="documentcs">\startenvironment</span></span> letterstyle
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">% Default values</span>
+
+<span class="comment">% Standard Dimensions</span>
+<span class="cs">\def</span><span class="cs">\firstpageheaderheight</span><span class="br">{</span>9.5cm<span class="br">}</span>
+<span class="comment">%\def\firstpagetextheight{8.0cm}</span>
+<span class="cs">\def</span><span class="cs">\normalheaderheight</span><span class="br">{</span>1.0cm<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\logoboxheight</span><span class="br">{</span>3.4cm<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\normaltextheight</span><span class="br">{</span>27.4cm<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\normalfooterheight</span><span class="br">{</span>1.0cm<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\sendervalwidth</span><span class="br">{</span>5.05cm<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\senderkeywidth</span><span class="br">{</span>1.85cm<span class="br">}</span>
+
+<span class="comment">%% Standard Styles</span>
+<span class="cs">\def</span><span class="cs">\keystyle</span><span class="br">{</span><span class="cs">\tfxx</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\valstyle</span><span class="br">{</span><span class="br">}</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">% Initializations</span>
+
+<span class="cs">\def</span><span class="cs">\\</span><span class="br">{</span><span class="cs">\vskip</span>0mm<span class="br">}</span>
+<span class="cs">\def</span>\|<span class="br">{</span><span class="cs">\vskip</span>1.5ex<span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\letterdate</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\letterplace</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettershortsender</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\letterdisposal</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\letteraddressee</span><span class="br">{</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\lettersenderkeyone</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalone</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeytwo</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervaltwo</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeythree</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalthree</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeyfour</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalfour</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeyfive</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalfive</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeysix</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalsix</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeyseven</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalseven</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeyeight</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervaleight</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersenderkeynine</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\lettersendervalnine</span><span class="br">{</span><span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\letterheadertext</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\letterfootertext</span><span class="br">{</span><span class="br">}</span>
+
+<span class="comment">%=============================================================================</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>location<span class="brx">=</span>doublesided<span class="brx">]</span>
+<span class="comment">%\setuppagenumbering[alternative=doublesided]</span>
+<span class="comment">%\setuppagenumbering[alternative={singlesided,doublesided}]</span>
+<span class="comment">%\setuppagenumbering[alternative=singlesided}]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="brx">]</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% Header and footer initializations</span>
+
+<span class="comment">%% Start of a new letter; heading text is used only in an optional table of contents</span>
+<span class="cs">\def</span><span class="cs">\letter</span><span class="brx">#</span>1<span class="br">{</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>reset<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>reset<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs">\letterhead</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>firstheaderlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>reset<span class="brx">]</span><span class="comment">%</span>
+  <span class="br">}</span>
+<span class="cs"><span class="stylecs">\definehead</span></span><span class="brx">[</span>letterhead<span class="brx">]</span><span class="brx">[</span>title<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span> <span class="brx">[</span>letterhead<span class="brx">]</span><span class="brx">[</span>
+  placehead<span class="brx">=</span>empty,
+  before<span class="brx">=</span><span class="br">{</span><span class="comment">%</span>
+    <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>firstpagelayoutsetup<span class="br">}</span><span class="comment">%</span>
+    <span class="br">}</span>,
+  after<span class="brx">=</span>,
+  header<span class="brx">=</span>firstpageheader,
+  page<span class="brx">=</span>firstpagebreak,
+  coupling<span class="brx">=</span>title<span class="brx">]</span>
+
+<span class="comment">%% Making empty pages completely empty (no page numbers):</span>
+<span class="cs"><span class="stylecs">\definepagebreak</span></span>
+  <span class="brx">[</span>firstpagebreak<span class="brx">]</span>
+  <span class="brx">[</span>yes,header,footer,right<span class="brx">]</span> <span class="comment">% yes instead of emtpy taken from the sources page-ini.tex line 1611</span>
+
+<span class="comment">%% Layout of first page</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> firstpagelayoutsetup
+  <span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+    backspace<span class="brx">=</span>2.46cm,topspace<span class="brx">=</span>1.2cm,
+    top<span class="brx">=</span>0cm,bottom<span class="brx">=</span>0cm,topdistance<span class="brx">=</span>0cm,bottomdistance<span class="brx">=</span>0cm,
+    header<span class="brx">=</span><span class="cs">\firstpageheaderheight</span>,footer<span class="brx">=</span><span class="cs">\normalfooterheight</span>,headerdistance<span class="brx">=</span>0cm,footerdistance<span class="brx">=</span>0cm,
+    leftedge<span class="brx">=</span>0cm,rightedge<span class="brx">=</span>0cm,leftedgedistance<span class="brx">=</span>0cm,rightedgedistance<span class="brx">=</span>0cm,
+    leftmargin<span class="brx">=</span>1.5cm,rightmargin<span class="brx">=</span>1.5cm,leftmargindistance<span class="brx">=</span>0.42cm,rightmargindistance<span class="brx">=</span>0.42cm,
+    width<span class="brx">=</span>16.5cm,height<span class="brx">=</span><span class="cs">\normaltextheight</span>,
+    <span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+<span class="comment">% Layout of other pages</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> normalpagelayoutsetup
+  <span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+    backspace<span class="brx">=</span>2.46cm,topspace<span class="brx">=</span>1.2cm,
+    top<span class="brx">=</span>0cm,bottom<span class="brx">=</span>0cm,topdistance<span class="brx">=</span>0cm,bottomdistance<span class="brx">=</span>0cm,
+    header<span class="brx">=</span><span class="cs">\normalheaderheight</span>,footer<span class="brx">=</span><span class="cs">\normalfooterheight</span>,headerdistance<span class="brx">=</span>0cm,footerdistance<span class="brx">=</span>0cm,
+    leftedge<span class="brx">=</span>0cm,rightedge<span class="brx">=</span>0cm,leftedgedistance<span class="brx">=</span>0cm,rightedgedistance<span class="brx">=</span>0cm,
+    leftmargin<span class="brx">=</span>1.5cm,rightmargin<span class="brx">=</span>1.5cm,leftmargindistance<span class="brx">=</span>0.42cm,rightmargindistance<span class="brx">=</span>0.42cm,
+    width<span class="brx">=</span>16.5cm,
+    height<span class="brx">=</span><span class="cs">\normaltextheight</span>,textheight<span class="brx">=</span><span class="cs">\normaltextheight</span>,
+    <span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%% Header for first pages</span>
+<span class="cs"><span class="stylecs">\definetext</span></span><span class="brx">[</span>firstpageheader<span class="brx">]</span><span class="brx">[</span>header<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>firstpagesetup<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> firstpagesetup
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>firstpageintrosetup<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>foldingmarkslayersetup<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\headerheight</span>,
+    background<span class="brx">=</span><span class="br">{</span>firstpagelayer,firstheaderlayer<span class="br">}</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+    <span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%% Header for other pages</span>
+<span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>normalpagelayoutsetup<span class="br">}</span>
+<span class="cs"><span class="systemcs">\appendtoks</span></span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>normalpagelayoutsetup<span class="br">}</span><span class="cs">\to</span><span class="cs">\everyaftershipout</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> normalheadersetups
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>normalheaderlayersetup<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\headerheight</span>,
+    background<span class="brx">=</span>normalheaderlayer,frame<span class="brx">=</span>off<span class="brx">]</span>
+    <span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>normalheadersetups<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%% Footer for all pages</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> allpagefootersetup
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>allpagefooterlayersetup<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\footerheight</span>,
+    background<span class="brx">=</span>allpagefooterlayer,frame<span class="brx">=</span>off<span class="brx">]</span>
+    <span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>allpagefootersetup<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% First page header setups</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\firstpageheaderheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> firstpageintrosetup
+  <span class="comment">%% Logo frame</span>
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+    <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>,location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span>3.4cm,width<span class="brx">=</span><span class="cs"><span class="systemcs">\overlaywidth</span></span>,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none<span class="brx">]</span>
+    <span class="br">{</span><span class="br">}</span>
+  <span class="comment">%% Short sender frame</span>
+  <span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettershortsender</span><span class="br">}</span><span class="br">{</span>
+    <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+      <span class="brx">[</span>y<span class="brx">=</span>3.8cm,location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+      <span class="brx">[</span>height<span class="brx">=</span>0.3cm,width<span class="brx">=</span>8cm,frame<span class="brx">=</span>off,bottomframe<span class="brx">=</span>on,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>right,lohi<span class="br">}</span><span class="brx">]</span>
+      <span class="br">{</span><span class="cs">\tfxx</span> <span class="cs">\lettershortsender</span><span class="br">}</span><span class="br">}</span><span class="br">{</span>
+    <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+      <span class="brx">[</span>y<span class="brx">=</span>3.8cm,location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+      <span class="brx">[</span>height<span class="brx">=</span>0.3cm,width<span class="brx">=</span>8cm,frame<span class="brx">=</span>off,bottomframe<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>right,lohi<span class="br">}</span><span class="brx">]</span>
+      <span class="br">{</span><span class="cs">\tfxx</span> <span class="cs">\lettershortsender</span><span class="br">}</span><span class="br">}</span>
+  <span class="comment">%% Addressee frame</span>
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+    <span class="brx">[</span>y<span class="brx">=</span>4.1cm,location<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span>3.6cm,width<span class="brx">=</span>8cm,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>right,top<span class="br">}</span><span class="brx">]</span>
+    <span class="br">{</span>
+      <span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\letterdisposal</span><span class="br">}</span><span class="br">{</span><span class="cs">\vskip</span>1.0ex<span class="cs">\letterdisposal</span><span class="br">}</span><span class="br">{</span><span class="br">}</span>
+      <span class="cs">\vskip</span>1.5ex
+      <span class="cs">\letteraddressee</span>
+    <span class="br">}</span>
+  <span class="comment">%% Sender frame</span>
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+    <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right<span class="br">}</span>,y<span class="brx">=</span>4.1cm,location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span>4.6cm,width<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\senderkeywidth</span>+<span class="cs">\sendervalwidth</span><span class="brx">)</span>,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>	<span class="comment">% [height=4.6cm,width=6.4cm,frame=off,offset=none,align={left,top}]</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>sendertablesetup<span class="br">}</span><span class="br">}</span>
+  <span class="comment">%% Date field</span>
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>firstpagelayer<span class="brx">]</span>
+    <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right<span class="br">}</span>,y<span class="brx">=</span>8.7cm,location<span class="brx">=</span><span class="br">{</span>left,bottom<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span>0.5cm,width<span class="brx">=</span><span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\senderkeywidth</span>+<span class="cs">\sendervalwidth</span><span class="brx">)</span>,align<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span>,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none<span class="brx">]</span>	<span class="comment">% [height=0.5cm,width=6.4cm,align={left,top},frame=off,offset=none]</span>
+    <span class="br">{</span>
+      <span class="cs"><span class="documentcs">\bTABLE</span></span>
+      <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span>
+      <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\senderkeywidth</span>,align<span class="brx">=</span>left<span class="brx">]</span>	<span class="comment">% width: std 1.85cm</span>
+      <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\sendervalwidth</span>,align<span class="brx">=</span>right<span class="brx">]</span>	<span class="comment">% width: std 4.55cm</span>
+      <span class="comment">%\setupTABLE[y][maxheight=1ex]</span>
+      <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span>
+        <span class="br">{</span><span class="cs">\keystyle</span><span class="cs"><span class="documentcs">\translate</span></span><span class="brx">[</span>en<span class="brx">=</span>date,de<span class="brx">=</span>Datum<span class="brx">]</span>:<span class="br">}</span>
+      <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span>
+        <span class="cs">\valstyle</span>
+        <span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\letterplace</span><span class="br">}</span>
+          <span class="br">{</span><span class="cs">\letterplace</span>,<span class="cs"><span class="documentcs">\translate</span></span><span class="brx">[</span>en<span class="brx">=</span>, de<span class="brx">=</span><span class="brx">]</span>\ <span class="br">}</span><span class="br">{</span><span class="br">}</span>
+        <span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\letterdate</span><span class="br">}</span><span class="br">{</span><span class="cs">\letterdate</span><span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span>	<span class="comment">% \currentdate[weekday,month,day,{, },year]</span>
+      <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+      <span class="cs">\eTABLE</span>
+    <span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%% Table with sender information</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> sendertablesetup
+  <span class="cs"><span class="documentcs">\bTABLE</span></span>
+  <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\senderkeywidth</span>,align<span class="brx">=</span>left<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupTABLE</span></span><span class="brx">[</span>x<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\sendervalwidth</span>,align<span class="brx">=</span>right<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeyone</span><span class="br">}</span>  <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeyone</span>:<span class="br">}</span>  <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalone</span>   <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeytwo</span><span class="br">}</span>  <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeytwo</span>:<span class="br">}</span>  <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervaltwo</span>   <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeythree</span><span class="br">}</span><span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeythree</span>:<span class="br">}</span><span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalthree</span> <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeyfour</span><span class="br">}</span> <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeyfour</span>:<span class="br">}</span> <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalfour</span>  <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeyfive</span><span class="br">}</span> <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeyfive</span>:<span class="br">}</span> <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalfive</span>  <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeysix</span><span class="br">}</span>  <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeysix</span>:<span class="br">}</span>  <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalsix</span>   <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeyseven</span><span class="br">}</span><span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeyseven</span>:<span class="br">}</span><span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalseven</span> <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeyeight</span><span class="br">}</span><span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeyeight</span>:<span class="br">}</span><span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervaleight</span> <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="systemcs">\doiftextelse</span></span><span class="br">{</span><span class="cs">\lettersenderkeynine</span><span class="br">}</span> <span class="br">{</span><span class="cs">\keystyle</span><span class="cs">\lettersenderkeynine</span>:<span class="br">}</span> <span class="br">{</span><span class="br">}</span> <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> <span class="cs">\valstyle</span><span class="cs">\lettersendervalnine</span>  <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+  <span class="cs">\eTABLE</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% First page header setups</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>firstheaderlayer<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\logoboxheight</span>,width<span class="brx">=</span><span class="cs"><span class="systemcs">\overlaywidth</span></span><span class="brx">]</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% Normal page header setups</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\normalheaderheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> normalheaderlayersetup
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span>
+    <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>top,left<span class="br">}</span>,location<span class="brx">=</span><span class="br">{</span>bottom,right<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span><span class="cs">\normalheaderheight</span>,width<span class="brx">=</span><span class="cs">\makeupwidth</span>,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>high,middle<span class="br">}</span><span class="brx">]</span>
+    <span class="br">{</span><span class="cs">\letterheadertext</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% Footer setups</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span><span class="cs">\footerheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> allpagefooterlayersetup
+  <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span>
+    <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>right,bottom<span class="br">}</span>,location<span class="brx">=</span><span class="br">{</span>left,top<span class="br">}</span><span class="brx">]</span>
+    <span class="brx">[</span>height<span class="brx">=</span><span class="cs">\footerheight</span>,width<span class="brx">=</span><span class="cs">\makeupwidth</span>,frame<span class="brx">=</span>off,offset<span class="brx">=</span>none,align<span class="brx">=</span><span class="br">{</span>low,middle<span class="br">}</span><span class="brx">]</span>
+    <span class="br">{</span><span class="cs">\letterfootertext</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% Folding marks on left</span>
+
+<span class="cs"><span class="stylecs">\startnotmode</span></span><span class="brx">[</span>nofold<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>rightpage<span class="brx">]</span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>start,background<span class="brx">=</span>foldingmarkslayer<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopnotmode</span></span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>repeat<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> foldingmarkslayersetup
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>10.7cm, x<span class="brx">=</span>0.5cm,align<span class="brx">=</span><span class="br">{</span>lohi,right<span class="br">}</span><span class="brx">]</span><span class="br">{</span>---<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>14.85cm,x<span class="brx">=</span>0.5cm,align<span class="brx">=</span><span class="br">{</span>lohi,right<span class="br">}</span><span class="brx">]</span><span class="br">{</span>--<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>20.2cm, x<span class="brx">=</span>0.5cm,align<span class="brx">=</span><span class="br">{</span>lohi,right<span class="br">}</span><span class="brx">]</span><span class="br">{</span>---<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">%=============================================================================</span>
+<span class="comment">%% Commonly used letter parts</span>
+
+<span class="comment">% Date; if not used, current date is inserted</span>
+<span class="cs">\def</span><span class="cs">\setdate</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letterdate</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Place, for the date line</span>
+<span class="cs">\def</span><span class="cs">\place</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letterplace</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Short sender information for address window in envelope</span>
+<span class="cs">\def</span><span class="cs">\shortsender</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettershortsender</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Order</span>
+<span class="cs">\def</span><span class="cs">\disposal</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letterdisposal</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Address of receiver of the letter</span>
+<span class="cs">\def</span><span class="cs">\addressee</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letteraddressee</span><span class="br">{</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>	<span class="comment">% \let\crlf=\\ </span>
+<span class="comment">% Information about sender</span>
+<span class="cs">\def</span><span class="cs">\senderone</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeyone</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalone</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\sendertwo</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeytwo</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervaltwo</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\senderthree</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeythree</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalthree</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\senderfour</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeyfour</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalfour</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\senderfive</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeyfive</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalfive</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\sendersix</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeysix</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalsix</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\senderseven</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeyseven</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalseven</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\sendereight</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeyeight</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervaleight</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\sendernine</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs">\def</span><span class="cs">\lettersenderkeynine</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\def</span><span class="cs">\lettersendervalnine</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Subject line</span>
+<span class="cs">\def</span><span class="cs"><span class="documentcs">\subject</span></span><span class="brx">#</span>1<span class="br">{</span><span class="br">{</span><span class="cs">\bf</span> <span class="brx">#</span>1<span class="br">}</span><span class="cs">\vskip</span>2ex<span class="br">}</span>
+<span class="comment">% Signature: Name, Position</span>
+<span class="cs">\def</span><span class="cs">\greeting</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\testpage</span></span><span class="brx">[</span>8<span class="brx">]</span><span class="cs">\vskip</span>1ex<span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="comment">% Signature: Name, Position</span>
+<span class="cs">\def</span><span class="cs">\signature</span><span class="brx">#</span>1<span class="br">{</span><span class="br">{</span><span class="cs">\let</span><span class="cs">\\</span><span class="brx">=</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="cs">\vskip</span>8ex<span class="cs">\vtop</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="comment">% Attachments included</span>
+<span class="cs">\def</span><span class="cs">\attachments</span><span class="brx">#</span>1<span class="br">{</span><span class="br">{</span><span class="cs">\let</span><span class="cs">\\</span><span class="brx">=</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="cs">\vskip</span>3ex<span class="br">{</span><span class="br">{</span><span class="cs">\bf</span><span class="cs"><span class="documentcs">\translate</span></span><span class="brx">[</span>en<span class="brx">=</span>Attachments, de<span class="brx">=</span>Anlagen<span class="brx">]</span>:<span class="br">}</span><span class="cs">\\</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="comment">%% First header</span>
+<span class="comment">%\def\resetfirstheaderlayer{\setuplayer[firstheaderlayer][state=reset]}</span>
+<span class="cs">\def</span><span class="cs">\addfirstheaderlayer</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+<span class="comment">%  \setuplayer[firstheaderlayer][state=repeat]%</span>
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>firstheaderlayer<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+  <span class="br">}</span>
+
+<span class="comment">%% Header</span>
+<span class="cs">\def</span><span class="cs">\letterheadertext</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\headercontent</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letterheadertext</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\resetheaderlayer</span><span class="br">{</span><span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>reset<span class="brx">]</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\addheaderlayer</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\def</span><span class="cs">\letterheadertext</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>repeat<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>normalheaderlayer<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+  <span class="br">}</span>
+
+<span class="comment">%% Footer</span>
+<span class="cs">\def</span><span class="cs">\letterfootertext</span><span class="br">{</span><span class="cs"><span class="documentcs">\translate</span></span><span class="brx">[</span>en<span class="brx">=</span>page, de<span class="brx">=</span>Seite<span class="brx">]</span>~<span class="cs"><span class="stylecs">\pagenumber</span></span>/<span class="cs">\totalnumberofpages</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\footercontent</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\def</span><span class="cs">\letterfootertext</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\resetfooterlayer</span><span class="br">{</span><span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>reset<span class="brx">]</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\addfooterlayer</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\def</span><span class="cs">\letterfootertext</span><span class="br">{</span><span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\setuplayer</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>repeat<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>allpagefooterlayer<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="comment">%</span>
+  <span class="br">}</span>
+
+<span class="comment">%=============================================================================</span>
+<span class="cs"><span class="documentcs">\stopenvironment</span></span>
+
+<span class="comment">%=============================================================================</span>
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>demo<span class="brx">]</span>
+
+<span class="comment">% Necessary, if you want to print folding marks only on odd pages</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span><span class="br">{</span>singlesided,doublesided<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% \input letterstyle</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\letter</span><span class="br">{</span>Example Letter<span class="br">}</span>
+<span class="comment">%\setdate{(string)}</span>
+<span class="cs">\place</span><span class="br">{</span>Berlin<span class="br">}</span>
+
+<span class="cs">\shortsender</span><span class="br">{</span>My Name $<span class="cs">\cdot</span>$ My Street 123 $<span class="cs">\cdot</span>$ 12345 My Town<span class="br">}</span>
+<span class="cs">\disposal</span><span class="br">{</span>confidential<span class="br">}</span>
+<span class="cs">\addressee</span><span class="br">{</span>Mr. Example<span class="cs">\\</span> Test Drive 99\| 98765 Other Town<span class="br">}</span>
+
+<span class="cs">\senderone</span><span class="br">{</span>tel.<span class="br">}</span><span class="br">{</span>+49 30 12345678<span class="br">}</span>
+<span class="cs">\sendertwo</span><span class="br">{</span>email<span class="br">}</span><span class="br">{</span>xyz@abc.com<span class="br">}</span>
+
+<span class="comment">%\addfirstheaderlayer[corner={top,left},location={bottom,right}]{\framed[width=\overlaywidth,height=\logoboxheight,frame=off]{}}</span>
+<span class="cs">\headercontent</span><span class="br">{</span><span class="cs">\hfill</span> test letter, page <span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+<span class="comment">%\addheaderlayer[corner={top,left},location={bottom,right}]{}</span>
+<span class="cs">\footercontent</span><span class="br">{</span>From MyName<span class="cs">\hfill</span> To Mr. Example<span class="br">}</span>
+<span class="comment">%\addfooterlayer[corner={bottom,right},location={top,left}]{}</span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>What do you think about the Letterstyle?<span class="br">}</span>
+
+Dear Reader,
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>11<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte<span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs">\greeting</span><span class="br">{</span>Best regards,<span class="br">}</span>
+<span class="cs">\signature</span><span class="br">{</span>My Name<span class="br">}</span>
+
+<span class="cs">\attachments</span><span class="br">{</span>The Letterstyle<span class="br">}</span>
+
+<span class="comment">%-----------------------------------------------------------------------------</span>
+<span class="comment">% Necessary to suppress emtpy last page in doublesided pagenumbering mode</span>
+<span class="cs">\installpagebreakhandler</span><span class="br">{</span>last<span class="br">}</span><span class="br">{</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Another_Approach">
+      Another Approach
+     </span>
+    </h2>
+    <p>Here is an alternative to the approach suggested by Holger. My university introduced a new official letterhead some months ago, and I was quite impressed to see that they even provided a LaTeX class for it. Of course, there was no ConTeXt support, so I decided to do it myself. My aim was merely to copy the official style, so my approach is far less fancy than the one before: you get a letter with a logo in the upper right corner, fields for information about the sender (assuming that the sender sits in a department of a university), and commands for the parts of a typical letter. 
+</p>
+    <p>Instructions: copy the code below into a file, modify the generic information provided there to your needs, and save this file somewhere where ConTeXt can find it (the canonical place would be $HOMETEXMF/tex/context/third) as t-letterhead.tex. See below for usage instructions.
+</p>
+    <pre class="tex"><span class="cs">\protect</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span> <span class="comment">% or [letter][letter]; in that case, you'll have to fidget with the dimensions</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>header<span class="brx">=</span>0mm,topspace<span class="brx">=</span>20mm,backspace<span class="brx">=</span>22mm,footer<span class="brx">=</span>0mm,width<span class="brx">=</span>160mm<span class="brx">]</span> <span class="comment">% margins etc.</span>
+
+<span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span> <span class="comment">% or whatever you prefer</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span> <span class="comment">% in case you want any colored output</span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span> <span class="comment">% or whatever you prefer</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>modern,8pt<span class="brx">]</span> <span class="comment">% this is the small bodyfont for the letterhead; we'll change to a bigger size for the actual letter later</span>
+
+<span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>0pt<span class="brx">]</span><span class="br">}</span>,after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>0pt<span class="brx">]</span><span class="br">}</span><span class="brx">]</span> <span class="comment">% there's a tabular, and I don't want any blank lines around it</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span> 
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>myletter<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>1mm,y<span class="brx">=</span>1mm,width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span>22mm<span class="brx">]</span> <span class="comment">% The elements of the letterhead are defined as layers. This first layer contains  the logo; you'll have to</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>myletter<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>104mm,y<span class="brx">=</span>11mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>Logo<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>56mm,height<span class="brx">=</span>20mm<span class="brx">]</span><span class="br">}</span>  <span class="comment">%  supplyan image file yourself.</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>myuni<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>1mm,y<span class="brx">=</span>1mm,width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span>24mm<span class="brx">]</span>  <span class="comment">% Second layer: Small column, right-aligned, with name of university and your name, in a narrow column</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>myuni<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>110.5mm,y<span class="brx">=</span>42mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>50mm,height<span class="brx">=</span>22mm,frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="systemcs">\lbox</span></span> to  <span class="comment">% below the logo.</span>
+  35mm<span class="br">{</span><span class="cs">\ss</span> Name<span class="cs">\\</span> of My University <span class="cs">\\</span> <span class="brx">(</span>My Town<span class="brx">)</span> <span class="cs">\\</span>
+    <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span> <span class="cs">\\</span> <span class="br">{</span><span class="cs">\bf</span> My Name<span class="br">}</span> <span class="cs">\\</span> Supreme Headmaster<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>dept<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>1mm,y<span class="brx">=</span>1mm,width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span>24mm<span class="brx">]</span> <span class="comment">% Third layer, left-aligned, opposite layer 2. This column contains you contact information and the date.</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>dept<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>163mm,y<span class="brx">=</span>42mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>40mm,height<span class="brx">=</span>22mm,frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="systemcs">\rbox</span></span>
+to 35mm<span class="br">{</span><span class="cs">\ss</span> Faculty of <span class="cs">\\</span> Arts and Sciences <span class="cs">\\</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*line<span class="brx">]</span> <span class="cs">\\</span> Department of <span class="cs">\\</span> High Energe Metaphysics<span class="cs">\\</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*line<span class="brx">]</span><span class="cs">\\</span> 33 Main Street <span class="cs">\\</span> Capital, DC 12345 <span class="cs">\\</span> <span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|lw<span class="brx">(</span>4mm<span class="brx">)</span>|lw<span class="brx">(</span>36mm<span class="brx">)</span>|<span class="brx">]</span>
+<span class="cs">\NC</span> Tel.: <span class="cs">\NC</span> <span class="brx">(</span>123<span class="brx">)</span> 456-7890 <span class="cs">\NC</span><span class="cs">\NR</span> <span class="cs">\NC</span> Fax.: <span class="cs">\NC</span> <span class="brx">(</span>098<span class="brx">)</span> 7654-321 <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs"><span class="documentcs">\stoptabulate</span></span> <span class="cs">\\</span> Administrator: Highly Efficient <span class="cs">\\</span>
+<span class="cs"><span class="documentcs">\starttabulate</span></span><span class="brx">[</span>|lw<span class="brx">(</span>4mm<span class="brx">)</span>|lw<span class="brx">(</span>36mm<span class="brx">)</span>|<span class="brx">]</span> <span class="cs">\NC</span> Tel.: <span class="cs">\NC</span> <span class="brx">(</span>012<span class="brx">)</span> 345-6789 <span class="cs">\NC</span><span class="cs">\NR</span>
+<span class="cs"><span class="documentcs">\stoptabulate</span></span> <span class="cs">\\</span> mymail@myaddress<span class="cs">\\</span> www.my.website.edu <span class="cs">\\</span> <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*line<span class="brx">]</span><span class="cs">\\</span> Mytown,
+<span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>send<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>0mm,y<span class="brx">=</span>1mm,width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span>15mm<span class="brx">]</span> <span class="comment">% Fourth layer: one line, in fine print, that contains a short sender address; will be on top of the</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>send<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>9.4mm,y<span class="brx">=</span>44mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>100mm,height<span class="brx">=</span>13mm,frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs">\ss</span>  <span class="comment">%  envelope's window.</span>
+    <span class="cs">\vii</span> <span class="br">{</span><span class="cs">\bf</span> My University<span class="br">}</span> $<span class="cs">\cdot</span>$ My Name $<span class="cs">\cdot</span>$
+    Dept. of Metaphysics $<span class="cs">\cdot</span>$ Capital, DC 12345<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startuniqueMPgraphic</span></span><span class="br">{</span>fold<span class="br">}</span>
+fill unitsquare scaled 1mm withcolor blue&nbsp;;
+<span class="cs"><span class="stylecs">\stopuniqueMPgraphic</span></span>    
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>repeat<span class="brx">]</span> <span class="comment">% Fifth layer: the folding marks</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>101mm, x<span class="brx">=</span>11mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>fold<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>147mm, x<span class="brx">=</span>11mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>fold<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>foldingmarkslayer<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>55mm, x<span class="brx">=</span>11mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>fold<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span> <span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foldingmarkslayer,myletter,myuni,dept,send<span class="br">}</span><span class="brx">]</span> <span class="comment">% Make all layers active for page.</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\addressee</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>23*medium<span class="brx">]</span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>11pt<span class="brx">]</span><span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>none<span class="brx">]</span><span class="brx">#</span>1<span class="br">}</span> <span class="comment">% Defines field for receiver's address and places it at right position.</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\lettersubject</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>3*line<span class="brx">]</span><span class="br">{</span><span class="cs">\bf</span> Re: <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span> <span class="comment">% Subject line, in bold face.</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\letteropening</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">#</span>1<span class="br">}</span> <span class="comment">% opening...</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\letterbody</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>medium<span class="brx">]</span><span class="brx">#</span>1<span class="br">}</span> <span class="comment">% the main body</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\letterclosing</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>line<span class="brx">]</span><span class="brx">#</span>1<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>3*line<span class="brx">]</span><span class="br">}</span> <span class="comment">% and the closing formula</span>
+
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>right<span class="brx">]</span> <span class="comment">% I prefer letters with a ragged right, but you don't have to...</span>
+
+<span class="cs">\ss</span> <span class="comment">% I want the sans font for the entire letter, but of course you can change to \tt or \rm, if you want</span>
+
+<span class="cs"><span class="systemcs">\unprotect</span></span>
+
+</pre>
+    <p>Here's an example how this module can be used:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>t-letterhead<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\addressee</span><span class="br">{</span>Prof.<span class="cs"><span class="documentcs">\crlf</span></span>
+Heinrich Seltsam<span class="cs"><span class="documentcs">\crlf</span></span>
+Dept. of Physics<span class="cs"><span class="documentcs">\crlf</span></span>
+University of Southern Wyoming <span class="cs"><span class="documentcs">\crlf</span></span>
+123 Einstein Str.<span class="cs"><span class="documentcs">\crlf</span></span>
+Scumbag, WY 76543<span class="br">}</span>
+
+<span class="cs">\lettersubject</span><span class="br">{</span>My New Letterstyle<span class="br">}</span>
+
+<span class="cs">\letteropening</span><span class="br">{</span>Estimated Colleague,<span class="br">}</span>
+
+<span class="cs">\letterbody</span><span class="br">{</span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte<span class="cs">\par</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\letterclosing</span><span class="br">{</span>Sincerely Yours<span class="br">}</span>
+
+Larry
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Any feedback welcome. I'm not sure if the \long\defs for the several parts of the letters are very elegant and would be grateful if some of the moew knowledgeable folks could suggest something better. But overall, I like the simplicity of this style.
+</p>
+    <h2>
+     <span class="mw-headline" id="Another_Simple_Style">
+      Another Simple Style
+     </span>
+    </h2>
+    <pre class="tex"><span class="comment">%Context Environment for a basic Full Block Letter with Letterhead</span>
+<span class="cs"><span class="stylecs">\enableregime</span></span> <span class="brx">[</span>utf<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span> <span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="comment">%==============Setup Page Layout======================</span>
+<span class="cs">\def</span><span class="cs">\MyPageNumber</span><span class="brx">#</span>1<span class="comment">%</span>
+   <span class="br">{</span><span class="br">{</span>--~Page <span class="brx">#</span>1 / <span class="cs">\lastpage</span>~--<span class="br">}</span><span class="br">}</span><span class="comment">%use lastpage for total page count</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>footer,middle<span class="br">}</span>,command<span class="brx">=</span><span class="cs">\MyPageNumber</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>letter<span class="brx">]</span><span class="brx">[</span>letter<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>palatino,10pt,rm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>
+   topspace<span class="brx">=</span>1.7in,
+   backspace<span class="brx">=</span>1.5in,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>.25in,
+   width<span class="brx">=</span>5.5in,
+   height<span class="brx">=</span>8.55in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>logo<span class="brx">]</span><span class="brx">[</span>letterheadLG<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span>.7in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+   <span class="brx">[</span>page<span class="brx">]</span>
+   <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>Letterhead,NextPgHead<span class="br">}</span>,state<span class="brx">=</span>repeat<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>Letterhead<span class="brx">]</span>
+   <span class="brx">[</span>x<span class="brx">=</span>1.5in,y<span class="brx">=</span>1in,width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span>.7in,state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>Letterhead<span class="brx">]</span>
+   <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>top,left<span class="br">}</span>,location<span class="brx">=</span><span class="br">{</span>bottom,right<span class="br">}</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+   <span class="brx">[</span>offset<span class="brx">=</span>none,frame<span class="brx">=</span>off<span class="brx">]</span>
+   <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>logo<span class="brx">]</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>NextPgHead<span class="brx">]</span>
+   <span class="brx">[</span>x<span class="brx">=</span>1.5in,y<span class="brx">=</span>1in,width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span>.7in,state<span class="brx">=</span>continue<span class="brx">]</span>
+
+
+<span class="comment">%==============Setup Paragraph Formatting==============</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>no,medium,next<span class="brx">]</span>
+
+<span class="comment">%=================Define Letter Elements==================</span>
+
+<span class="cs">\defineblank</span><span class="brx">[</span>FourLines<span class="brx">]</span><span class="brx">[</span>4*line,flexible<span class="brx">]</span>
+<span class="cs">\defineblank</span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="brx">[</span>1*line,flexible<span class="brx">]</span>
+
+<span class="cs">\def</span><span class="cs">\Regarding</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\setgvariables</span></span><span class="brx">[</span>Letter<span class="brx">]</span><span class="brx">[</span>val<span class="brx">=</span><span class="br">{</span>Re: <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span>Re: <span class="brx">#</span>1<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\RecNameVal</span><span class="br">{</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\RecName</span><span class="brx">#</span>1<span class="br">{</span>
+   <span class="cs">\def</span><span class="cs">\RecNameVal</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+   <span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>NextPgHead<span class="brx">]</span>
+      <span class="brx">[</span>corner<span class="brx">=</span><span class="br">{</span>top,left<span class="br">}</span>,location<span class="brx">=</span><span class="br">{</span>bottom,right<span class="br">}</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+      <span class="brx">[</span>offset<span class="brx">=</span>none,frame<span class="brx">=</span>off<span class="brx">]</span>
+      <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off,width<span class="brx">=</span><span class="cs">\makeupwidth</span>,height<span class="brx">=</span>.7in,align<span class="brx">=</span><span class="br">{</span>right,high<span class="br">}</span><span class="brx">]</span><span class="comment">%</span>
+         <span class="br">{</span><span class="br">{</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span> <span class="cs">\RecNameVal</span><span class="cs">\par</span>
+         <span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="cs"><span class="documentcs">\date</span></span><span class="cs">\par</span>
+         <span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>Letter<span class="br">}</span><span class="br">{</span>val<span class="br">}</span><span class="cs">\par</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+   <span class="brx">#</span>1<span class="br">}</span>
+
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\MailingNote</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\WORD</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\par</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs">\long</span><span class="cs">\def</span><span class="cs">\Disposition</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\WORD</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Opening</span><span class="br">{</span><span class="brx">#</span>1:<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Closing</span><span class="br">{</span><span class="brx">#</span>1,<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>FourLines<span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Signature</span><span class="br">{</span><span class="brx">#</span>1<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\Enclosures</span><span class="br">{</span><span class="cs"><span class="systemcs">\doifelse</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>Enclosure<span class="br">}</span><span class="br">{</span>Enclosures: <span class="brx">#</span>1<span class="br">}</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="stylecs">\definedescription</span></span><span class="brx">[</span>CC<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>left,distance<span class="brx">=</span>-.75in<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Sender<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startlines</span></span><span class="br">}</span>,after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stoplines</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>FourLines<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Notes<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startlines</span></span><span class="br">}</span>,after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stoplines</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Recipient<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startlines</span></span><span class="br">}</span>,after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stoplines</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Body<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\startlines</span></span><span class="br">}</span>,after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stoplines</span></span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>OneLine<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+
+<span class="comment">%=============Define Quotes====================</span>
+<span class="comment">%just use \Qt{} and all nesting should be taken care of</span>
+<span class="cs"><span class="stylecs">\definedelimitedtext</span></span><span class="brx">[</span>Qt<span class="brx">]</span><span class="brx">[</span>quotation<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupdelimitedtext</span></span>
+  <span class="brx">[</span>Qt<span class="brx">]</span>
+  <span class="brx">[</span>1<span class="brx">]</span>
+  <span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>leftquotation<span class="brx">]</span><span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>rightquotation<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupdelimitedtext</span></span>
+  <span class="brx">[</span>Qt<span class="brx">]</span>
+  <span class="brx">[</span>2<span class="brx">]</span>
+  <span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>leftquote<span class="brx">]</span><span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>rightquote<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupdelimitedtext</span></span>
+  <span class="brx">[</span>Qt<span class="brx">]</span>
+  <span class="brx">[</span>3<span class="brx">]</span>
+  <span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>leftquotation<span class="brx">]</span><span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>rightquotation<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%To create blockquotes use \startextract \stopextract</span>
+<span class="cs">\defineblank</span><span class="brx">[</span>ExtractDistance<span class="brx">]</span><span class="brx">[</span>3pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Extract<span class="brx">]</span><span class="brx">[</span>
+   style<span class="brx">=</span>italic,
+   before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>ExtractDistance<span class="brx">]</span>
+      <span class="cs"><span class="stylecs">\setupnarrower</span></span><span class="brx">[</span>left<span class="brx">=</span>1.5pc,right<span class="brx">=</span>1.5pc<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\startnarrower</span></span><span class="brx">[</span>left,right<span class="brx">]</span>
+      <span class="cs">\noindent</span><span class="br">}</span>,
+   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\stopnarrower</span></span>
+      <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>ExtractDistance<span class="brx">]</span>
+      <span class="cs">\indenting</span><span class="brx">[</span>next<span class="brx">]</span><span class="br">}</span><span class="brx">]</span><span class="comment">%Don't indent the immediately following paragraph, but do indent later ones.</span>
+
+<span class="comment">%==================Define Enumerations===========================</span>
+<span class="cs"><span class="stylecs">\defineitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="comment">%Use with \startOutline ... \item ... \stopOutline</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>R<span class="brx">]</span><span class="comment">%First level, Roman Numerals</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>A<span class="brx">]</span><span class="comment">%Second Level, A,B,C etc.</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>3<span class="brx">]</span><span class="brx">[</span>n<span class="brx">]</span><span class="comment">%Third level, Numberd</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>4<span class="brx">]</span><span class="brx">[</span>r<span class="brx">]</span><span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,right<span class="brx">=</span><span class="brx">)</span>,stopper<span class="brx">=</span><span class="brx">]</span><span class="comment">%Fourth level, lowercase roman</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Outline<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="brx">[</span>m<span class="brx">]</span><span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,right<span class="brx">=</span><span class="brx">)</span>,stopper<span class="brx">=</span><span class="brx">]</span><span class="comment">%Fifth level, lowercase numbered</span>
+
+<span class="cs"><span class="stylecs">\defineitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="comment">%Use with \startBullet ... \item ... \stopBullet</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="comment">%First level</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="comment">%Second Level</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>3<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="comment">%Third level</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>4<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span><span class="comment">%Fourth level</span>
+<span class="cs"><span class="stylecs">\setupitemgroup</span></span><span class="brx">[</span>Bullet<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span><span class="brx">[</span>2<span class="brx">]</span><span class="comment">%Fifth level</span>
+</pre>
+    <p>And how to use it:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\environment</span></span> basicLetterEnv
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startSender</span>
+Company Name
+Your Name, Your Title
+1234 AnyStreet
+City, ST 75098
+Phone: 123-456-7890
+Email: asdf@asdf.com
+Web: www.asdf.com
+<span class="cs"><span class="documentcs">\date</span></span>
+<span class="cs">\Regarding</span><span class="br">{</span>The subject of this letter<span class="br">}</span>
+<span class="cs">\stopSender</span>
+
+<span class="cs">\startNotes</span>
+<span class="cs">\MailingNote</span><span class="br">{</span>Certified Mail<span class="br">}</span><span class="comment">%Mailing Notations:Certified,AirMail, Priority...</span>
+<span class="cs">\Disposition</span><span class="br">{</span>Confidential<span class="br">}</span><span class="comment">%Disposition: Confidential, personal ...</span>
+<span class="cs">\stopNotes</span>
+
+<span class="cs">\startRecipient</span>
+<span class="cs">\RecName</span><span class="br">{</span>First Last Name<span class="br">}</span>
+Company Name
+4567 ThisStreet
+City, US 12345
+<span class="cs">\stopRecipient</span>
+
+<span class="cs">\Opening</span><span class="br">{</span>Dear First Name<span class="br">}</span>
+
+<span class="cs">\startBody</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span>
+  <span class="br">{</span>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Cras tellus.
+   Proin fringilla euismod elit. Donec eleifend purus sed eros. Fusce quis
+   diam. Donec euismod nisl non dui. Donec eu odio. Nam congue risus in
+   eros commodo elementum. Duis dolor. Etiam luctus mauris ut mi. Vivamus
+   vitae sem eu justo pretium ullamcorper. Aliquam ac mauris posuere justo
+   molestie interdum. Nullam eleifend leo quis justo. Suspendisse tortor
+   risus, porta a, hendrerit in, facilisis at, lectus.<span class="cs">\par</span><span class="br">}</span>
+<span class="cs">\stopBody</span>
+
+<span class="cs">\Closing</span><span class="br">{</span>Sincerely<span class="br">}</span>
+
+
+<span class="cs">\Signature</span><span class="br">{</span>Your Name, General Counsel<span class="br">}</span>
+
+<span class="cs">\Enclosures</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs">\startCC</span><span class="br">{</span>CC:<span class="br">}</span>
+A Name<span class="cs">\par</span>
+Another Name<span class="cs">\par</span>
+File
+<span class="cs">\stopCC</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Letterhead">
+      Letterhead
+     </span>
+    </h2>
+    <p>The following style was presented in the PracTeX Journal by Joseph Hogg, you find the article under the following link:
+</p>
+    <ul>
+     <li>
+      <a class="external free" href="http://www.tug.org/pracjourn/2006-3/hogg/" rel="nofollow">
+       http://www.tug.org/pracjourn/2006-3/hogg/
+      </a>
+     </li>
+    </ul>
+    <pre class="tex"><span class="comment">% Context file for letterhead</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>letter<span class="brx">]</span><span class="brx">[</span>letter<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>height<span class="brx">=</span>9in,backspace<span class="brx">=</span>80pt,location<span class="brx">=</span>middle<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>serif,12pt<span class="brx">]</span> <span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="comment">% Set up addressee here, From and Date</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Toperson</span><span class="br">{</span>A. U. Thor<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Totitle</span><span class="br">{</span>Editor<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Tocompany</span><span class="br">{</span>Great <span class="cs"><span class="documentcs">\TeX</span></span>\ Journal<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Tostreet</span><span class="br">{</span>P. O. Box 3.1415926<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\TocityStateZip</span><span class="br">{</span><span class="cs"><span class="documentcs">\TeX</span></span> town, 67890-12345<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Tocountry</span><span class="br">{</span>USA<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Fromperson</span><span class="br">{</span>Ben Lee User<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\Mydate</span><span class="br">{</span><span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span>
+<span class="comment">% End addressee, From and Date</span>
+<span class="cs"><span class="stylecs">\setupheader</span></span><span class="brx">[</span>state<span class="brx">=</span>none<span class="brx">]</span> <span class="cs"><span class="stylecs">\setupfooter</span></span><span class="brx">[</span>state<span class="brx">=</span>empty<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span><span class="brx">[</span><span class="br">{</span><span class="cs">\ssx</span> <span class="br">{</span><span class="cs">\Mydate</span><span class="br">}</span> --- <span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> from<span class="br">}</span>
+      <span class="br">{</span><span class="cs">\Fromperson</span><span class="br">}</span> <span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> to<span class="br">}</span> <span class="br">{</span><span class="cs">\Toperson</span><span class="br">}</span> --- page <span class="br">{</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+      of <span class="br">{</span><span class="cs">\totalnumberofpages</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+<span class="comment">%\showframe</span>
+<span class="comment">%\showboxes</span>
+<span class="comment">%\showsetups</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="comment">% Heading</span>
+<span class="br">{</span><span class="cs">\ssb</span> Ben Lee User<span class="br">}</span> <span class="cs">\hfill</span> <span class="br">{</span><span class="cs">\ssx</span> voice: <span class="brx">(</span>123<span class="brx">)</span> 456-7890<span class="br">}</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="br">{</span><span class="cs">\ssx</span> P. O.
+Box 2.718281<span class="br">}</span> <span class="cs">\hfill</span> <span class="br">{</span><span class="cs">\ssx</span> fax: <span class="brx">(</span>123<span class="brx">)</span> 456-7891<span class="br">}</span><span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="br">{</span><span class="cs">\ssx</span> Punktown, 12345-67890<span class="br">}</span> <span class="cs">\hfill</span> <span class="br">{</span><span class="cs">\ssx</span> email: ben.lee.user@tex.edu<span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\textrule</span></span> <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>10*medium<span class="brx">]</span>
+<span class="comment">% Address</span>
+<span class="cs">\Toperson</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="cs">\Totitle</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="cs">\Tocompany</span><span class="cs"><span class="documentcs">\crlf</span></span> <span class="cs">\Tostreet</span><span class="cs"><span class="documentcs">\crlf</span></span>
+<span class="cs">\TocityStateZip</span><span class="comment">%\crlf</span>
+<span class="comment">%\Tocountry</span>
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>8*medium<span class="brx">]</span> <span class="cs"><span class="documentcs">\textrule</span></span>
+<span class="comment">% Letter</span>
+<span class="cs">\hfill</span><span class="cs">\Mydate</span> <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span>
+
+Dear Thor:
+
+Here's a setup for a business or personal letter that produces a
+letterhead and the addressee's information on the letter. This allows
+the sender to use envelopes with windows to avoid separately addressing
+envelopes. I usually print a dozen or so of these envelopes with my
+return address in advance.
+
+Vertical spacing of addresses and other features is controlled by the
+<span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>..<span class="brx">]</span><span class="br">}</span> command. I experiment with this depending on the
+number of lines in the address or where I want to place horizontal
+lines.
+
+<span class="comment">% Jump to a new page to see the footer</span>
+I'll jump to a new page to illustrate the footer for the second and
+subsequent pages. <span class="cs"><span class="documentcs">\page</span></span>
+
+There is no footer on the first page and no page number. Many letters
+are only one page long. But on those with two or more pages, it is
+useful to have page numbers and other identifying information.
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span>
+
+Very truly yours,
+
+<span class="brx">[</span>signature space<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>4*big<span class="brx">]</span>
+
+Ben Lee User
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Thanks to all those who contributed the original suggestions, they have been a great inspiration!
+</p>
+    <p><a href="../../User:Thomas.html" title="User:Thomas">Thomas</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Modern_CV_like_cover_letter">
+      Modern CV like cover letter
+     </span>
+    </h2>
+    <p>This example is separated into 2 files&nbsp;: the environment file and a letter sample. Layout was made based on swiss standards for cover letters.
+</p>
+    <p>In the letter it is possible to specify the following options&nbsp;:
+</p>
+    <ul>
+     <li>
+      full name of recipient (not to be provided if unknown)
+     </li>
+     <li>
+      gender of recipient (not to be provided if full name wasn't given)
+     </li>
+     <li>
+      if the sender address has to be put in an international format
+     </li>
+    </ul>
+    <p>Here is the letter sample&nbsp;:
+</p>
+    <pre class="tex"><span class="comment">% ENGLISH, TO MALE RECIPIENT</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\fullname</span><span class="br">{</span>John Smith<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\gender</span><span class="br">{</span>male<span class="br">}</span>
+
+<span class="comment">%&nbsp;% FRENCH, TO FEMALE RECIPIENT</span>
+<span class="comment">% \mainlanguage[fr]</span>
+<span class="comment">% \def\fullname{Jeanne Petit}</span>
+<span class="comment">% \def\gender{female}</span>
+
+<span class="comment">%&nbsp;% ENGLISH, TO UNKNOWN RECIPIENT, INTERNATIONAL</span>
+<span class="comment">% \mainlanguage[en]</span>
+<span class="comment">% \define\international</span>
+
+<span class="cs"><span class="documentcs">\environment</span></span> <span class="br">{</span>cover-letter-env<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\startletter</span><span class="brx">[</span>toaddress<span class="brx">=</span><span class="br">{</span>Enterprise <span class="cs">\\</span> Street <span class="cs">\\</span> City <span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>date<span class="br">}</span><span class="br">}</span>,
+             subject<span class="brx">=</span><span class="br">{</span>Application for the role of <span class="cs"><span class="documentcs">\quote</span></span><span class="br">{</span>C++ embedded systems engineer<span class="br">}</span> posted on Jobup<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupindenting</span></span><span class="brx">[</span>yes,small<span class="brx">]</span>
+
+I am an electronic engineer specialized on software development of embedded systems and your job offer caught my attention.
+
+...
+
+Thank you in advance for your time and consideration and blablabla. I look forward to hearing from you.
+
+<span class="cs">\stopletter</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>And, finally, here is the environment file&nbsp;:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\secondwordtmp</span><span class="brx">#</span>1 <span class="brx">#</span>2<span class="cs">\relax</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\secondword</span><span class="brx">#</span>1<span class="br">{</span><span class="cs">\expandafter</span><span class="cs">\secondwordtmp</span><span class="brx">#</span>1<span class="cs">\relax</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\startenvironment</span></span> cover_letter
+
+  <span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>letter<span class="brx">]</span>
+  <span class="cs">\useletterstyle</span><span class="brx">[</span>swiss<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\usesymbols</span></span><span class="brx">[</span>mvs<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupsymbolset</span></span><span class="brx">[</span>martinvogel 2<span class="brx">]</span>
+
+  <span class="cs">\def</span><span class="cs">\lastname</span><span class="br">{</span><span class="cs">\secondword</span><span class="br">{</span><span class="cs">\fullname</span><span class="br">}</span><span class="br">}</span>
+
+  <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>greetings<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\rightaligned</span></span><span class="br">{</span>Yours sincerely,<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>greetings<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+  <span class="cs"><span class="systemcs">\doifdefinedelse</span></span> <span class="br">{</span>fullname<span class="br">}</span>
+    <span class="br">{</span><span class="cs">\def</span><span class="cs">\to_name</span><span class="br">{</span><span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span><span class="cs">\gender</span>:title<span class="br">}</span> <span class="cs">\fullname</span><span class="br">{</span><span class="br">}</span><span class="br">}</span><span class="br">}</span> <span class="comment">% hack temp</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>male:title<span class="brx">=</span>Mr, female:title<span class="brx">=</span>Ms,
+			   date<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>7mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> <span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>opening<span class="brx">=</span><span class="br">{</span><span class="br">{</span>Dear <span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span><span class="cs">\gender</span>:title<span class="br">}</span> <span class="cs">\lastname</span><span class="br">{</span><span class="br">}</span>,<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>male:title<span class="brx">=</span>M., female:title<span class="brx">=</span>Mme,
+			   male:longtitle<span class="brx">=</span>Monsieur, female:longtitle<span class="brx">=</span>Madame,
+			   date<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>7mm<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\em</span></span> Fribourg, le <span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>opening<span class="brx">=</span><span class="br">{</span><span class="br">{</span><span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span><span class="cs">\gender</span>:longtitle<span class="br">}</span>,<span class="br">}</span><span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>HR<span class="brx">=</span><span class="br">{</span>Human Resources<span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>HR<span class="brx">=</span><span class="br">{</span>Ressources humaines<span class="br">}</span><span class="brx">]</span>
+     <span class="cs">\def</span><span class="cs">\to_name</span><span class="br">{</span><span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>HR<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>opening<span class="brx">=</span><span class="br">{</span><span class="br">{</span>Dear Hiring Manager,<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>opening<span class="brx">=</span><span class="br">{</span><span class="br">{</span>Madame, Monsieur,<span class="br">}</span><span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+  <span class="cs">\def</span><span class="cs">\CH</span><span class="br">{</span><span class="br">}</span>
+  <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>country<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\doifdefined</span></span> <span class="br">{</span>international<span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>en<span class="brx">]</span> <span class="brx">[</span>country<span class="brx">=</span><span class="br">{</span><span class="br">{</span>, Switzerland<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\setuplabeltext</span></span> <span class="brx">[</span>fr<span class="brx">]</span> <span class="brx">[</span>country<span class="brx">=</span><span class="br">{</span><span class="br">{</span>, Suisse<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+     <span class="cs">\def</span><span class="cs">\CH</span><span class="br">{</span>CH-<span class="br">}</span><span class="br">}</span>
+
+  <span class="cs"><span class="systemcs">\doif</span></span> <span class="br">{</span><span class="cs"><span class="systemcs">\currentlanguage</span></span><span class="br">}</span> <span class="br">{</span>fr<span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\setcharacterspacing</span></span><span class="brx">[</span>frenchpunctuation<span class="brx">]</span><span class="br">}</span>
+
+  <span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>sans, 12pt<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>big<span class="brx">]</span>
+
+<span class="cs">\setuplettersection</span>
+  <span class="brx">[</span>reference,date,specialnotation,closing<span class="brx">]</span>
+  <span class="brx">[</span>leftmargin<span class="brx">=</span>.55<span class="cs">\textwidth</span><span class="brx">]</span>
+
+  <span class="cs">\setupletterlayer</span><span class="brx">[</span>head<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>left,
+                          y<span class="brx">=</span>16mm,
+                          style<span class="brx">=</span>slanted,
+                          color<span class="brx">=</span>darkgray<span class="brx">]</span>
+  <span class="cs">\setupletterlayer</span><span class="brx">[</span>backaddress<span class="brx">]</span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+  <span class="cs">\setupletterlayer</span><span class="brx">[</span>address<span class="brx">]</span><span class="brx">[</span>preset<span class="brx">=</span>lefttop,
+                             x<span class="brx">=</span>.7<span class="cs">\textwidth</span><span class="brx">]</span>
+
+  <span class="cs">\setupletterlayer</span><span class="brx">[</span>reference<span class="brx">]</span><span class="brx">[</span>y<span class="brx">=</span>7cm<span class="brx">]</span>
+  <span class="cs">\setuplettertext</span><span class="brx">[</span>date<span class="brx">=</span><span class="brx">]</span>
+
+  <span class="cs">\setupletterlayout</span><span class="brx">[</span>firstpage<span class="brx">]</span><span class="brx">[</span>topspace<span class="brx">=</span>9.5cm<span class="brx">]</span>
+
+  <span class="cs">\setupletterdescription</span><span class="brx">[</span>enclosure,postscript<span class="brx">]</span><span class="brx">[</span>headstyle<span class="brx">=</span>boldslanted<span class="brx">]</span>
+  <span class="cs">\setuplettersection</span><span class="brx">[</span>appendices<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span>slanted,color<span class="brx">=</span>darkgray,spacebefore<span class="brx">=</span><span class="br">{</span>samepage,5*line<span class="br">}</span><span class="brx">]</span>
+  <span class="cs">\setupletterstyle</span><span class="brx">[</span>fromname,toname<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span>bold<span class="brx">]</span> <span class="comment">% Bug&nbsp;: ne fonctionne pas pour toname&nbsp;!</span>
+  <span class="cs">\setuplettertext</span><span class="brx">[</span>postscript<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>black<span class="brx">]</span><span class="br">{</span>PS: <span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+
+  <span class="cs">\setupletter</span>
+    <span class="brx">[</span>fromname<span class="brx">=</span><span class="br">{</span>My Name<span class="br">}</span>,
+    fromaddress<span class="brx">=</span><span class="br">{</span>Street 1<span class="cs">\\</span><span class="cs">\CH</span><span class="br">{</span><span class="br">}</span>1700 My-City<span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>country<span class="br">}</span><span class="br">}</span>,
+    fromphone<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>Mobilefone<span class="brx">]</span> +41 98 765 43 21<span class="cs">\\</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>Telephone<span class="brx">]</span> +41 12 345 67 89<span class="br">}</span>,
+    frommail<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="brx">[</span>Letter<span class="brx">]</span> my_email@address.com<span class="br">}</span>,
+    toname<span class="brx">=</span><span class="br">{</span><span class="cs">\to_name</span><span class="br">{</span><span class="br">}</span><span class="br">}</span>,
+    opening<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>opening<span class="br">}</span><span class="br">}</span>,
+    date<span class="brx">=</span>,
+    closing<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>greetings<span class="br">}</span><span class="br">}</span>,
+    signature<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span>My Name<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stopenvironment</span></span>
+</pre>
+    <p>And here is the PDF document generated after compilation: <a href="../../File:modern-cv-cover-letter.pdf" title="File:modern-cv-cover-letter.pdf">File:modern-cv-cover-letter.pdf</a>.
+</p>
+    <p>Remark&nbsp;: there are still 1 or 2 hacks in the environment file, but I don't know how to make them better as I am not very experimented with ConTeXt, TeX and the use of the letter module.
+</p>
+    <p>Jonas Baggett
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109125301
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.341 seconds
+Real time usage: 1.685 seconds
+Preprocessor visited node count: 70/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 74/2097152 bytes
+Template argument size: 14/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 121257/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   35.410      1 Template:cmd
+100.00%   35.410      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:717-1!canonical and timestamp 20260109125259 and revision id 38808
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Letter_style">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

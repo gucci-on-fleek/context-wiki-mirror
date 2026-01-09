@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TeX Live 2011&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TeX_Live_2011" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TeX Live 2011
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3459&diff=41614">2025-02-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Running_MkII">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Running MkII
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Enabling_other_MkII_interfaces">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Enabling other MkII interfaces
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Running_MkIV">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Running MkIV
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#MkIV_cache_location">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         MkIV cache location
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#ConTeXt_2011.05.18_changes">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         ConTeXt 2011.05.18 changes
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>This page is about the 2011 version of TeX Live. See <a href="TeX_Live_2010.html" title="TeX Live 2010">TeX Live 2010</a> and <a href="TeX_Live_2009.html" title="TeX Live 2009">TeX Live 2009</a> for a previous versions.
+</p>
+    <p>The ConTeXt in TeX Live 2011 is <a class="new" href="index.php?title=Context_2011.05.18&action=edit&redlink=1" title="Context 2011.05.18 (page does not exist)"> 2011.05.18</a> with a few small changes. Both ConTeXt MkII and MkIV work out the box.
+</p>
+    <p>The <i>scheme-context</i> installs <i>collection-context</i> and <i>collection-metapost</i>. This brings in quite a few font families, but we did not want to automatically install all font packages, so you may need to install a few by hand with <tt>tlmgr</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Running_MkII">
+      Running MkII
+     </span>
+    </h2>
+    <p>The English interface for both pdftex and xetex is automatically managed by <tt>fmtutil</tt>. 
+Just run 
+</p>
+    <pre> $ texexec &lt;myfile&gt;
+</pre>
+    <p>to compile documents using pdfTeX, or 
+</p>
+    <pre> $ texexec --engine=xetex &lt;myfile&gt;
+</pre>
+    <p>for XeTeX.
+</p>
+    <h3>
+     <span class="mw-headline" id="Enabling_other_MkII_interfaces">
+      Enabling other MkII interfaces
+     </span>
+    </h3>
+    <p>You will need write permissions to TEXMFSYSVAR to enable the other context language interfaces. So if you cannot
+do the following steps below, point your local administrator to this page and kindly ask him/her to run the
+commands below for you.
+</p>
+    <p>Adding extra context interfaces follows the same rules as for any other local format. The process is a little 
+complicated because the normal <code>fmtutil.cnf</code> may be overwritten by package updates, and therefore a local file has to be created.
+</p>
+    <p>1. Look for the commented cont-<i>XX</i> lines in <code>fmtutil.cnf</code>. Use
+</p>
+    <pre> $ kpsewhich fmtutil.cnf
+</pre>
+    <p>to find its exact location. You only need the commented lines, there is no need to copy anything else.
+</p>
+    <p>2. Create or edit the file <code>$TEXMFLOCAL/web2c/fmtutil-local.cnf</code>.  <code>$TEXMFLOCAL</code> is something like <code>/usr/local/texlive/texmf-local</code>, you can use
+</p>
+    <pre> $ kpsewhich --expand-var '$TEXMFLOCAL'
+</pre>
+    <p>to find the exact location. 
+</p>
+    <p>3. Put the commented cont-'XX' lines you found in step 1 into the <code>fmtutil-local.cnf</code> file. 
+If you want xetex formats as well, make a copy of each line replacing <code>pdftex</code> with <code>xetex</code>. Then uncomment these lines, save the file, and exit the editor. 
+</p>
+    <p>After this, the <code>$TEXMFLOCAL/web2c/fmtutil-local.cnf</code> (or the new section of it, if it preexisted) should look like this:
+</p>
+    <pre> cont-de pdftex cont-usr.tex -8bit *cont-de.ini
+ cont-de xetex cont-usr.tex -8bit *cont-de.ini
+ cont-fr pdftex cont-usr.tex -8bit *cont-fr.ini
+ cont-fr xetex cont-usr.tex -8bit *cont-fr.ini
+ cont-it pdftex cont-usr.tex -8bit *cont-it.ini
+ cont-it xetex cont-usr.tex -8bit *cont-it.ini
+ cont-nl pdftex cont-usr.tex -8bit *cont-nl.ini
+ cont-nl xetex cont-usr.tex -8bit *cont-nl.ini
+ cont-ro pdftex cont-usr.tex -8bit *cont-ro.ini
+ cont-ro xetex cont-usr.tex -8bit *cont-ro.ini
+</pre>
+    <p>4. If you created a new file, now run 
+</p>
+    <pre>  # mktexlsr
+</pre>
+    <p>to make sure the file will be found by the TeX Live system.
+</p>
+    <p>5. Now run
+</p>
+    <pre>  # tlmgr generate fmtutil
+</pre>
+    <p>This merges the info from the TeX Live distribution with the <code>fmtutil-local.cnf</code>.
+</p>
+    <p>6. Now to generate the newly enabled ConTeXt MkII formats, run
+</p>
+    <pre>  # fmtutil-sys --all
+</pre>
+    <p>from now on, the extra formats will be auto-renewed whenever context updates are installed via <code>tlmgr</code>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Running_MkIV">
+      Running MkIV
+     </span>
+    </h2>
+    <p>Just run 
+</p>
+    <pre> $ context &lt;myfile&gt;
+</pre>
+    <p>to compile documents. 
+</p>
+    <p>Post-installation, any files that are installed via <code>tlmgr</code> will automatically be found. 
+However, because MkIV does not use the kpathsea library, some setup will be required whenever you install new 
+files manually (without using <code>tlmgr</code>). After each such installation, each MkIV user must run:
+</p>
+    <pre> context --generate
+</pre>
+    <p>to refresh the ConTeXt disk cache data.
+</p>
+    <h2>
+     <span class="mw-headline" id="MkIV_cache_location">
+      MkIV cache location
+     </span>
+    </h2>
+    <p>ConTeXt MkIV will read from all paths mentioned in <code>TEXMFCACHE</code> (whose value in TeX Live is <code>$TEXMSYSVAR;$TEXMFVAR</code>) and writes to the first path in that list that is writable. 
+</p>
+    <p><code>TEXMFVAR</code> in standard TeX Live is <code>~/.texlive2011/texmf-var</code> (in MacTeX: <code>~/Library/texlive/2011/texmf-var</code>), so this is where the file cache will be stored for ordinary users. If you are unhappy with that, you can set the environment variable <tt>TEXMFCACHE</tt> to your preferred location.
+</p>
+    <p>While reading, the last found match will take precedence in the case of duplicated cache data.
+</p>
+    <h2>
+     <span class="mw-headline" id="ConTeXt_2011.05.18_changes">
+      ConTeXt 2011.05.18 changes
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Because the copyright of the
+      <i>
+       koeielogos
+      </i>
+      and
+      <i>
+       koeieletters
+      </i>
+      fonts does not allow modifications, the relevant files are not included (this was also the case in previous years).
+     </li>
+     <li>
+      The files from
+      <a class="new" href="index.php?title=cont-mpd.zip&action=edit&redlink=1" title="cont-mpd.zip (page does not exist)">
+       cont-mpd.zip
+      </a>
+      are in the package
+      <i>
+       mptopdf
+      </i>
+      . The
+      <i>
+       context
+      </i>
+      package depends on
+      <i>
+       mptopdf
+      </i>
+      , so installation is automatic.
+     </li>
+     <li>
+      The symbol fonts from Janusz Nowacki are in the package
+      <i>
+       jmn
+      </i>
+      . The
+      <i>
+       context
+      </i>
+      package depends on
+      <i>
+       jmn
+      </i>
+      , so installation is automatic.
+     </li>
+     <li>
+      Mojca and Taco applied a few hot-fixes for some bugs:
+      <ul>
+       <li>
+        solve many issues with spaces in installation paths
+       </li>
+       <li>
+        changed (extended) the search path for
+        <i>
+         texmfcnf.lua
+        </i>
+       </li>
+       <li>
+        fix the handling of non-cached paths (like TEXMFHOME)
+       </li>
+       <li>
+        renamed the font
+        <i>
+         lmmath
+        </i>
+        into
+        <i>
+         lmmath-regular
+        </i>
+       </li>
+       <li>
+        a patch for grid typesetting
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <ul>
+     <li>
+      post-release changes
+      <ul>
+       <li>
+        remove a few files (forgotten lefovers from older releases)
+       </li>
+       <li>
+        rename
+        <code>fmvr8x.tfm</code>
+        -&gt;
+        <code>umvs.tfm</code>
+        and delete
+        <code>fmvr8x.tfm</code>
+       </li>
+       <li>
+        rename
+        <code>poltawski-<i>enc</i>.map</code>
+        -&gt;
+        <code>ap-<i>enc</i>.map</code>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <table cellspacing="0" class="navbox" style=";">
+     <tbody>
+      <tr>
+       <td style="padding:2px;">
+<table cellspacing="0" class="nowraplinks collapsible expanded" style="width:100%;background:transparent;color:inherit;;">
+
+<tbody><tr>
+<th class="navbox-title" colspan="2" style=";"><div style="float:left; width:6em;text-align:left;"> <span class="noprint plainlinks navbar" style><span style="white-space:nowrap;word-spacing:-.12em;"><a href="Template:Installation_navbox.html" title="Template:Installation navbox"><span style=";;border:none;" title="View this template">v</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a href="Template_talk:Installation_navbox.html" title="Template talk:Installation navbox"><span style=";;border:none;" title="Discuss this template">d</span></a><span style=";;border:none;"> <b>&middot;</b> </span><a class="external text" href="index.php?title=Template:Installation_navbox&action=edit" rel="nofollow"><span style=";;border:none;" title="Edit this template">e</span></a></span></span>
+ </div> <span style="font-size:110%;"> Installation</span>
+</th></tr>
+<tr style="height:2px;">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">General
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a class="mw-redirect" href="Introduction/Installation.html" title="Input and compilation/Installation">ConTeXt LMTX Installation</a></li>
+<li><a href="TeX_Distributions.html" title="TeX Distributions">TeX Distributions</a></li>
+<li><a href="Related_Programs.html" title="Related Programs">Related Programs</a></li>
+<li><a href="InstallationPreviousMethods.html" title="InstallationPreviousMethods">Previous installation methods (until 2015)</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">TeX distributions
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="ConTeXt_Standalone.html" title="ConTeXt Standalone">ConTeXt Standalone (before LMTX)</a></li>
+<li><a class="mw-redirect" href="." title="TeX Live">TeX Live</a> (<a class="new" href="index.php?title=TeX_Live_2019&action=edit&redlink=1" title="TeX Live 2019 (page does not exist)">2019</a>)  (<a class="mw-selflink selflink">2011</a>) (<a href="TeX_Live_2010.html" title="TeX Live 2010">2010</a>) (<a href="TeX_Live_2009.html" title="TeX Live 2009">2009</a>)</li>
+<li><a href="MikTeX.html" title="MikTeX">MikTeX</a></li>
+<li><a class="mw-redirect" href="XeTeX_-_Old_Content.html" title="XeTeX">XeTeX</a></li>
+<li><a href="Aleph.html" title="Aleph">Aleph</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Operating systems
+</td>
+<td class="navbox-list navbox-odd hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<table cellspacing="0" class="nowraplinks navbox-subgroup" style="width:100%;;;;">
+<tbody><tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Linux</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Ubuntu.html" title="Ubuntu">Ubuntu</a></li>
+<li><a href="Debian_installation.html" title="Debian installation">Debian installation</a></li>
+<li><a href="Debian_TeXlive_install.html" title="Debian TeXlive install">Debian TeXlive install</a></li>
+<li><a href="OpenBSD_installation.html" title="OpenBSD installation">OpenBSD installation</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Windows</div>
+</td>
+<td class="navbox-list navbox-even" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Windows_Installation.html" title="Windows Installation">Windows Installation</a></li>
+<li><a href="Windows_Installation_new.html" title="Windows Installation new">Windows Installation new</a></li>
+<li><a href="Simple_Windows_Installation.html" title="Simple Windows Installation">Simple Windows Installation</a></li>
+<li><a href="Windows_10_64_bit_Installation_2019.html" title="Windows 10 64 bit Installation 2019">Windows 10 64 bit Installation 2019</a></li>
+<li><a href="Windows_10_64_bit_Installation_2019_--_how_to_install_from_TeXlive.html" title="Windows 10 64 bit Installation 2019 -- how to install from TeXlive">Windows 10 64 bit Installation 2019 -- how to install from TeXlive</a></li></ul></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";padding-left:0em;padding-right:0em;;"><div style="padding:0em 0.75em;">Mac</div>
+</td>
+<td class="navbox-list navbox-odd" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Installing_ConTeXt_LMTX_on_MacOS.html" title="Installing ConTeXt LMTX on MacOS">Installing ConTeXt LMTX on MacOS</a></li>
+<li><a href="Mac_Installation.html" title="Mac Installation">Installing ConTeXt MkIV on MacOS (before LMTX)</a></li></ul></div>
+</td></tr></tbody></table></div>
+</td></tr>
+<tr style="height:2px">
+<td>
+</td></tr>
+<tr>
+<td class="navbox-group" style=";;">Integrating editors with ConTeXt
+</td>
+<td class="navbox-list navbox-even hlist" style="text-align:left;border-left:2px solid #fdfdfd; width:100%;padding:0px;;;"><div style="padding:0em 0.25em">
+<ul><li><a href="Input_and_compilation/Text_editors.html" title="Input and compilation/Text editors">Text Editors</a></li>
+<li><a href="Input_and_compilation/Text_editors/SyncTeX.html" title="Input and compilation/Text editors/SyncTeX">SyncTeX</a></li></ul></div>
+</td></tr></tbody></table>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212437
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.054 seconds
+Real time usage: 0.097 seconds
+Preprocessor visited node count: 807/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 21179/2097152 bytes
+Template argument size: 8432/2097152 bytes
+Highest expansion depth: 12/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   65.544      1 Template:Installation_navbox
+100.00%   65.544      1 -total
+ 82.32%   53.959      1 Template:navbox
+ 22.94%   15.036      1 Template:Navbox_subgroup
+ 20.92%   13.713      1 Template:navbar
+ 13.68%    8.969      1 Template:Navbox
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3459-1!canonical and timestamp 20260109212437 and revision id 41614
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TeX_Live_2011">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

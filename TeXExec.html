@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   TeXExec&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/TeXExec" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    TeXExec
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=955&diff=29007">2021-11-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> On this page I'd like to see some texexec trickery and explanations. --<a href="User:Patrick_Gundlach.html" title="User:Patrick Gundlach">pg</a> <i>(See: <a href="Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="54" src="wikiteximage/930de1a7eb6b29b2cd06e657affefa30.webp" width="29"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>NOTE:</b> This page documents the Perl version of TeXExec, which has (relatively recently) been replaced by a ruby re-implementation
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Command-Line_Options">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Command-Line Options
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Some_features_explained_in_detail">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Some features explained in detail
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#autopdf">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           autopdf
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#nonstopmode">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           nonstopmode
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#mpgraphic">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           mpgraphic
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Examples">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Produce_dvi_output">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Produce dvi output
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Select_n_pages_from_a_pdf_file">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Select n pages from a pdf file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Split_pdf_file">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Split pdf file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Combine_two_or_more_PDF_files_into_one_file">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           Combine two or more PDF files into one file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Concatenate_two_or_more_PDF_files_into_one_file">
+          <span class="tocnumber">
+           3.5
+          </span>
+          <span class="toctext">
+           Concatenate two or more PDF files into one file
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Check_the_status_of_various_scripts">
+          <span class="tocnumber">
+           3.6
+          </span>
+          <span class="toctext">
+           Check the status of various scripts
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#TeXTools">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         TeXTools
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h3>
+     <span class="mw-headline" id="Command-Line_Options">
+      Command-Line Options
+     </span>
+    </h3>
+    <table>
+     <tbody>
+      <tr>
+       <td>--alone
+</td>
+       <td>bypass utilities (e.g. fmtutil for non-standard fmt)
+</td>
+      </tr>
+      <tr>
+       <td>--arrange
+</td>
+       <td>process and arrange
+</td>
+      </tr>
+      <tr>
+       <td>--automprun
+</td>
+       <td>MetaPost at runtime when needed
+</td>
+      </tr>
+      <tr valign="top">
+       <td>--autopdf
+</td>
+       <td>Open the pdf viewer after the texexec run. <a href="#autopdf">See below</a>.
+</td>
+      </tr>
+      <tr>
+       <td>--batch
+</td>
+       <td>run in batch mode (don't pause)
+</td>
+      </tr>
+      <tr>
+       <td>--centerpage
+</td>
+       <td>center the page on the paper
+</td>
+      </tr>
+      <tr>
+       <td>--color
+</td>
+       <td>enable color (when not yet enabled)
+</td>
+      </tr>
+      <tr>
+       <td>--environment=name
+</td>
+       <td>load some environments first. Name is: list of environments
+</td>
+      </tr>
+      <tr>
+       <td>--fast
+</td>
+       <td>skip as much as possible
+</td>
+      </tr>
+      <tr valign="top">
+       <td>--figures=(a|b|c)
+</td>
+       <td>typeset figure directory
+<dl><dt>a&nbsp;</dt>
+<dd>room for corrections</dd>
+<dt>b&nbsp;</dt>
+<dd>just graphics</dd>
+<dt>c&nbsp;</dt>
+<dd>one (cropped) per page</dd></dl>
+</td>
+      </tr>
+      <tr>
+       <td>--final
+</td>
+       <td>add a final run without skipping
+</td>
+      </tr>
+      <tr>
+       <td>--format=name
+</td>
+       <td>fmt file. name: format file (memory dump)
+</td>
+      </tr>
+      <tr>
+       <td>--help
+</td>
+       <td>show this or more, e.g. '--help interface'
+</td>
+      </tr>
+      <tr>
+       <td>--input=name
+</td>
+       <td>input file (if used). name: filename
+</td>
+      </tr>
+      <tr>
+       <td>--interface=(cz|de|en|it|nl|uk)
+</td>
+       <td>user interface
+</td>
+      </tr>
+      <tr>
+       <td>--language=lang
+</td>
+       <td>main hyphenation language. lang: standard abbreviation
+</td>
+      </tr>
+      <tr>
+       <td>--listing
+</td>
+       <td>produce a verbatim listing
+</td>
+      </tr>
+      <tr>
+       <td>--make
+</td>
+       <td>build format files
+</td>
+      </tr>
+      <tr>
+       <td>--mode=list
+</td>
+       <td>running mode. list: modes to set
+</td>
+      </tr>
+      <tr>
+       <td>--module
+</td>
+       <td>typeset tex/pl/mp module
+</td>
+      </tr>
+      <tr>
+       <td>--mpgraphic
+</td>
+       <td>process mp file to stand-alone graphics
+</td>
+      </tr>
+      <tr>
+       <td>--mpformat=name
+</td>
+       <td>mem file. name: format file (memory dump)
+</td>
+      </tr>
+      <tr>
+       <td>--mptex
+</td>
+       <td>run an MetaPost plus btex-etex cycle
+</td>
+      </tr>
+      <tr>
+       <td>--mpxtex
+</td>
+       <td>generatet an MetaPostmpx file
+</td>
+      </tr>
+      <tr>
+       <td>--noarrange
+</td>
+       <td>process but ignore arrange
+</td>
+      </tr>
+      <tr>
+       <td>--nomp
+</td>
+       <td>don't run MetaPost at all
+</td>
+      </tr>
+      <tr>
+       <td>--nomprun
+</td>
+       <td>don't run MetaPost at runtime
+</td>
+      </tr>
+      <tr>
+       <td>--nonstop
+</td>
+       <td>run in non stop mode (don't pause)
+</td>
+      </tr>
+      <tr>
+       <td>--once
+</td>
+       <td>run TeX only once (no TeXUtil either)
+</td>
+      </tr>
+      <tr valign="top">
+       <td>--output
+</td>
+       <td>specials to use. Can be one of
+<dl><dt>dvipdfm</dt>
+<dd>Mark Wicks' dvi to pdf converter</dd>
+<dt>dvipdfmx&nbsp;</dt>
+<dd>Jin-Hwan Cho's extended dvipdfm</dd>
+<dt>dvips</dt>
+<dd>Thomas Rokicky's dvi to ps converter</dd>
+<dt>dvipsone&nbsp;</dt>
+<dd>YandY's dvi to ps converter</dd>
+<dt>dviwindo&nbsp;</dt>
+<dd>YandY's windows previewer</dd>
+<dt>pdftex</dt>
+<dd>Han The Than's pdf backend</dd></dl>
+</td>
+      </tr>
+      <tr>
+       <td>--pages=(even|odd|x,y:z)
+</td>
+       <td>pages to output. x,y:z: pages x and y to z
+</td>
+      </tr>
+      <tr>
+       <td>--paperformat=(AB|A:B|A*B)
+</td>
+       <td>paper input and output format.  a4a3: A4 printed on A3, a5a4: A5 printed on A4
+</td>
+      </tr>
+      <tr>
+       <td>--paperoffset=dim
+</td>
+       <td>extra offset
+</td>
+      </tr>
+      <tr>
+       <td>--passon
+</td>
+       <td>switches to pass to TeX (--src for MikTeX)
+</td>
+      </tr>
+      <tr>
+       <td>--path=string
+</td>
+       <td>document source path. string: path
+</td>
+      </tr>
+      <tr>
+       <td>--pdf
+</td>
+       <td>produce PDF directly using pdf(e)tex
+</td>
+      </tr>
+      <tr>
+       <td>--pdfarrange
+</td>
+       <td>arrange pdf pages
+</td>
+      </tr>
+      <tr>
+       <td>--pdfcombine
+</td>
+       <td>combine pages to one page
+</td>
+      </tr>
+      <tr>
+       <td>--pdfcopy
+</td>
+       <td>scale pages down/up
+</td>
+      </tr>
+      <tr>
+       <td>--pdfselect
+</td>
+       <td>select pdf pages
+</td>
+      </tr>
+      <tr>
+       <td>--pdfsplit
+</td>
+       <td>split pdf file into pages
+</td>
+      </tr>
+      <tr>
+       <td>--print=(up|down)
+</td>
+       <td>page imposition scheme.  down=2 rotated pages per sheet doubleside,  up=2 pages per sheet doublesided
+</td>
+      </tr>
+      <tr>
+       <td>--result=filename
+</td>
+       <td>resulting file will have that filename
+</td>
+      </tr>
+      <tr>
+       <td>--runs=n
+</td>
+       <td>maximum number of TeX runs. n: number of runs
+</td>
+      </tr>
+      <tr>
+       <td>--screensaver
+</td>
+       <td>turn graphic file into a (pdf) full screen file
+</td>
+      </tr>
+      <tr>
+       <td>--setfile
+</td>
+       <td>load environment (batch) file
+</td>
+      </tr>
+      <tr>
+       <td>--silent
+</td>
+       <td>minimize (status) messages
+</td>
+      </tr>
+      <tr>
+       <td>--suffix=string
+</td>
+       <td>resulting file suffix. string: suffix
+</td>
+      </tr>
+      <tr>
+       <td>--tex=name
+</td>
+       <td>TeX binary. name: binary of executable
+</td>
+      </tr>
+      <tr>
+       <td>--texroot=path
+</td>
+       <td>root of tex trees. path: tex root
+</td>
+      </tr>
+      <tr>
+       <td>--textree=path
+</td>
+       <td>additional texmf tree to be used. path: subpath of tex root
+</td>
+      </tr>
+      <tr>
+       <td>--texutil
+</td>
+       <td>force TeXUtil run
+</td>
+      </tr>
+      <tr>
+       <td>--usemodule=name
+</td>
+       <td>load some modules first  name: list of modules
+</td>
+      </tr>
+      <tr>
+       <td>--verbose
+</td>
+       <td>shows some additional info
+</td>
+      </tr>
+      <tr>
+       <td>--version
+</td>
+       <td>display various version information
+</td>
+      </tr>
+      <tr>
+       <td>--xmlfilter=name
+</td>
+       <td>apply XML filter.  name: list of filters
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Some_features_explained_in_detail">
+      Some features explained in detail
+     </span>
+    </h3>
+    <h4>
+     <span class="mw-headline" id="autopdf">
+      autopdf
+     </span>
+    </h4>
+    <p>Currently works only on Windows and Linux. On Mac OS X there is no way to do this for Acrobat Reader 7.0 and Preview.app in a sophisticated way (= keep view), since they are not (apple-)scriptable. You can use TeXniscope, TeXshop or iTeXMac that does that automatically.
+</p>
+    <h4>
+     <span class="mw-headline" id="nonstopmode">
+      nonstopmode
+     </span>
+    </h4>
+    <p>Useful when running texexec from an editor and do not want it to stop for errors.
+</p>
+    <h4>
+     <span class="mw-headline" id="mpgraphic">
+      mpgraphic
+     </span>
+    </h4>
+    <pre>texexec --mpgraphic file.mp
+</pre>
+    <p>creates a temporary tex file, with
+</p>
+    <pre class="tex"><span class="cs">\setoutput</span><span class="brx">[</span>pdftex<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="comment">% Some lines for font maps</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+<span class="cs">\convertMPtoPDF</span><span class="br">{</span>file.1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span>
+<span class="cs">\convertMPtoPDF</span><span class="br">{</span>file.2<span class="br">}</span><span class="br">{</span>1<span class="br">}</span><span class="br">{</span>1<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+
+<span class="comment">% etc....</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>So, in the end you get a single pdf with each figure on different page.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Produce_dvi_output">
+      Produce dvi output
+     </span>
+    </h3>
+    <p>By default <code>--dvi</code> also produces a ps file. If you just want a dvi file
+</p>
+    <pre> texexec --dvi test --nobackend
+</pre>
+    <h3>
+     <span class="mw-headline" id="Select_n_pages_from_a_pdf_file">
+      Select n pages from a pdf file
+     </span>
+    </h3>
+    <pre> texexec --pdfselect --select=1:5 blabla.pdf
+</pre>
+    <h3>
+     <span class="mw-headline" id="Split_pdf_file">
+      Split pdf file
+     </span>
+    </h3>
+    <pre> texexec --pdfsplit somefile.pdf
+</pre>
+    <h3>
+     <span class="mw-headline" id="Combine_two_or_more_PDF_files_into_one_file">
+      Combine two or more PDF files into one file
+     </span>
+    </h3>
+    <pre> texexec --pdfcombine --nobanner --result=result.pdf 1.pdf 2.pdf
+</pre>
+    <h3>
+     <span class="mw-headline" id="Concatenate_two_or_more_PDF_files_into_one_file">
+      Concatenate two or more PDF files into one file
+     </span>
+    </h3>
+    <pre> texexec --pdfcopy --result=result.pdf 1.pdf 2.pdf
+</pre>
+    <h3>
+     <span class="mw-headline" id="Check_the_status_of_various_scripts">
+      Check the status of various scripts
+     </span>
+    </h3>
+    <pre> texexec --check 
+</pre>
+    <p>This should give an output like
+</p>
+    <pre> TeXExec | current distribution: web2c
+ TeXExec | context source date: 2006.10.27 15:16
+ TeXExec | format path: E:/isoimage/usr/local/context/tex/texmf-mswin/web2c/unsetengine E:/isoimage/usr/local/context/tex/texmf-mswin/web2c
+ TeXExec | start of analysis
+ TeXExec | processing document 'texexec'
+ TeXExec | tex processing method: context
+ TeXExec | writing option file texexec.top
+ TeXExec | using randomseed 1306
+ TeXExec | tex engine: pdftex
+ TeXExec | tex format: cont-en
+ TeXExec | progname: context
+</pre>
+    <pre> This is pdfTeX, Version 3.141592-1.40.0-beta-20060213 (Web2c 7.5.5)
+  \write18 enabled.
+  (e:\isoimage\usr\local\context\tex\texmf-local/web2c/natural.tcx)
+ entering extended mode
+ (./texexec.tex
+</pre>
+    <pre> ConTeXt  ver: 2006.10.27 15:16 MK II  fmt: 2006.10.29  int: english/english
+ language        : language en is active
+ system          : cont-new loaded
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-new.tex
+ systems         : beware: some patches loaded from cont-new.tex
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-new.mkii))
+ system          : cont-old loaded
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-old.tex
+ loading         : Context Old Macros
+ )
+ system          : cont-fil loaded
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-fil.tex
+ loading         : Context File Synonyms
+ )
+ system          : cont-sys loaded
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/user/cont-sys.tex)
+ bodyfont        : 12pt rm is loaded
+ language        : patterns nl-&gt;texnansi:texnansi-&gt;1-&gt;2:3 nl-&gt;ec:ec-&gt;2-&gt;2:3 fr-&gt;
+ texnansi:texnansi-&gt;3-&gt;2:3 fr-&gt;ec:ec-&gt;4-&gt;2:3 de-&gt;texnansi:texnansi-&gt;5-&gt;2:3 de-&gt;e
+ c:ec-&gt;6-&gt;2:3 it-&gt;texnansi:texnansi-&gt;7-&gt;2:3 it-&gt;ec:ec-&gt;8-&gt;2:3 pt-&gt;texnansi:texna
+ nsi-&gt;9-&gt;2:3 pt-&gt;ec:ec-&gt;10-&gt;2:3 hr-&gt;ec:ec-&gt;11-&gt;2:3 pl-&gt;pl0:pl0-&gt;12-&gt;2:3 pl-&gt;ec:e
+ c-&gt;13-&gt;2:3 pl-&gt;qx:qx-&gt;14-&gt;2:3 cz-&gt;il2:il2-&gt;15-&gt;2:3 cz-&gt;ec:ec-&gt;16-&gt;2:3 sk-&gt;il2:i
+ l2-&gt;17-&gt;2:3 sk-&gt;ec:ec-&gt;18-&gt;2:3 sl-&gt;ec:ec-&gt;19-&gt;2:3 ru-&gt;t2a:t2a-&gt;21-&gt;2:3 en-&gt;ec:e
+ c-&gt;22-&gt;2:3 uk-&gt;ec:ec-&gt;23-&gt;2:3 us-&gt;ec:ec-&gt;24-&gt;2:3 agr-&gt;agr:agr-&gt;25-&gt;2:3 da-&gt;ec:e
+ c-&gt;26-&gt;2:3 sv-&gt;ec:ec-&gt;27-&gt;2:3 af-&gt;ec:ec-&gt;28-&gt;2:3 no-&gt;ec:ec-&gt;29-&gt;2:3 deo-&gt;ec:ec-
+ &gt;30-&gt;2:3 es-&gt;ec:ec-&gt;31-&gt;2:3 ca-&gt;ec:ec-&gt;32-&gt;2:3 la-&gt;ec:ec-&gt;33-&gt;2:3 ro-&gt;ec:ec-&gt;34
+ -&gt;2:3 tr-&gt;ec:ec-&gt;35-&gt;2:3 fi-&gt;ec:ec-&gt;37-&gt;2:3 hu-&gt;ec:ec-&gt;38-&gt;2:3 loaded
+ specials        : tex,postscript,rokicki loaded
+ system          : texexec.top loaded
+ (./texexec.top
+ specials        : loading definition file tpd
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-tpd.tex
+ specials        : loading definition file fdf
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-fdf.tex
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-fdf.mkii))
+ specials        : fdf loaded
+ )
+ specials        : fdf,tpd loaded
+ )
+ systems         : system commands are enabled
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/sort-def.tex)
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/sort-lan.tex)
+ systems         : begin file texexec at line 1
+ fonts           : resetting map file list
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-empty.map}
+ fonts           : using map file: texnansi-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/texnans
+ i-public-lm.map}
+ fonts           : using map file: original-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-base.map}
+ fonts           : using map file: ec-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/ec-publ
+ ic-lm.map}
+ fonts           : using map file: ec-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/ec-base
+ .map}
+ fonts           : using map file: original-ams-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-ams-base.map}
+ fonts           : using map file: original-ams-euler
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-ams-euler.map}
+ fonts           : using map file: original-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-public-lm.map}
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/pdfr-ec.tex)
+ [1.1]
+ systems         : end file texexec at line 3
+  ){e:\isoimage\usr\local\context\tex\texmf/fonts/enc/dvips/lm/lm-ec.enc}&lt;e:\iso
+ image\usr\local\context\tex\texmf/fonts/type1/public/lm/lmr12.pfb&gt;
+ Output written on texexec.pdf (1 page, 23276 bytes).
+ Transcript written on texexec.log.
+ TeXExec | runtime: 0.47
+</pre>
+    <pre> TeXExec | processing document 'texexec'
+ TeXExec | tex processing method: context
+ TeXExec | writing option file texexec.top
+ TeXExec | using randomseed 498
+ TeXExec | tex engine: pdftex
+ TeXExec | tex format: cont-nl
+ TeXExec | progname: context
+ This is pdfTeX, Version 3.141592-1.40.0-beta-20060213 (Web2c 7.5.5)
+  \write18 enabled.
+  (e:\isoimage\usr\local\context\tex\texmf-local/web2c/natural.tcx)
+ entering extended mode
+ (./texexec.tex
+</pre>
+    <pre> ConTeXt  ver: 2006.10.27 15:16 MK II  fmt: 2006.10.29  int: dutch/dutch
+ taal            : taal nl is actief
+ systeem         : cont-new geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-new.tex
+ systems         : beware: some patches loaded from cont-new.tex
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-new.mkii))
+ systeem         : cont-old geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-old.tex
+ loading         : Context Old Macros
+ )
+ systeem         : cont-fil geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/cont-fil.tex
+ loading         : Context File Synonyms
+ )
+ systeem         : cont-sys geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/user/cont-sys.tex)
+ korps           : 12pt rm wordt geladen
+ taal            : patronen nl-&gt;texnansi:texnansi-&gt;1-&gt;2:2 nl-&gt;ec:ec-&gt;2-&gt;2:2 fr-&gt;
+ texnansi:texnansi-&gt;3-&gt;2:2 fr-&gt;ec:ec-&gt;4-&gt;2:2 de-&gt;texnansi:texnansi-&gt;5-&gt;2:2 de-&gt;e
+ c:ec-&gt;6-&gt;2:2 it-&gt;texnansi:texnansi-&gt;7-&gt;2:2 it-&gt;ec:ec-&gt;8-&gt;2:2 pt-&gt;texnansi:texna
+ nsi-&gt;9-&gt;2:2 pt-&gt;ec:ec-&gt;10-&gt;2:2 hr-&gt;ec:ec-&gt;11-&gt;2:2 pl-&gt;pl0:pl0-&gt;12-&gt;2:2 pl-&gt;ec:e
+ c-&gt;13-&gt;2:2 pl-&gt;qx:qx-&gt;14-&gt;2:2 cz-&gt;il2:il2-&gt;15-&gt;2:2 cz-&gt;ec:ec-&gt;16-&gt;2:2 sk-&gt;il2:i
+ l2-&gt;17-&gt;2:2 sk-&gt;ec:ec-&gt;18-&gt;2:2 sl-&gt;ec:ec-&gt;19-&gt;2:2 ru-&gt;t2a:t2a-&gt;21-&gt;2:2 en-&gt;ec:e
+ c-&gt;22-&gt;2:2 uk-&gt;ec:ec-&gt;23-&gt;2:2 us-&gt;ec:ec-&gt;24-&gt;2:2 agr-&gt;agr:agr-&gt;25-&gt;2:2 da-&gt;ec:e
+ c-&gt;26-&gt;2:2 sv-&gt;ec:ec-&gt;27-&gt;2:2 af-&gt;ec:ec-&gt;28-&gt;2:2 no-&gt;ec:ec-&gt;29-&gt;2:2 deo-&gt;ec:ec-
+ &gt;30-&gt;2:2 es-&gt;ec:ec-&gt;31-&gt;2:2 ca-&gt;ec:ec-&gt;32-&gt;2:2 la-&gt;ec:ec-&gt;33-&gt;2:2 ro-&gt;ec:ec-&gt;34
+ -&gt;2:2 tr-&gt;ec:ec-&gt;35-&gt;2:2 fi-&gt;ec:ec-&gt;37-&gt;2:2 hu-&gt;ec:ec-&gt;38-&gt;2:2 geladen
+ specials        : tex,postscript,rokicki geladen
+ systeem         : texexec.top geladen
+ (./texexec.top
+ specials        : definitiefile tpd wordt geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-tpd.tex
+ specials        : definitiefile fdf wordt geladen
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-fdf.tex
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/spec-fdf.mkii))
+ specials        : fdf geladen
+ )
+ specials        : fdf,tpd geladen
+ )
+ systems         : system commands are enabled
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/sort-def.tex)
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/sort-lan.tex)
+ systems         : begin file texexec at line 1
+ fonts           : resetting map file list
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-empty.map}
+ fonts           : using map file: texnansi-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/texnans
+ i-public-lm.map}
+ fonts           : using map file: original-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-base.map}
+ fonts           : using map file: ec-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/ec-publ
+ ic-lm.map}
+ fonts           : using map file: ec-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/ec-base
+ .map}
+ fonts           : using map file: original-ams-base
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-ams-base.map}
+ fonts           : using map file: original-ams-euler
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-ams-euler.map}
+ fonts           : using map file: original-public-lm
+ {e:\isoimage\usr\local\context\tex\texmf-local/fonts/map/pdftex/context/origina
+ l-public-lm.map}
+ (e:\isoimage\usr\local\context\tex\texmf-local/tex/context/base/pdfr-ec.tex)
+ [1.1]
+ systems         : end file texexec at line 3
+  ){e:\isoimage\usr\local\context\tex\texmf/fonts/enc/dvips/lm/lm-ec.enc}&lt;e:\iso
+ image\usr\local\context\tex\texmf/fonts/type1/public/lm/lmr12.pfb&gt;
+ Output written on texexec.pdf (1 page, 23276 bytes).
+ Transcript written on texexec.log.
+ TeXExec | runtime: 0.441
+ TeXExec | end of analysis
+</pre>
+    <pre> TeXExec | 
+ TeXExec | TeXExec | version 6.2.0 - 1997-2006 - PRAGMA ADE/POD
+ TeXExec | TeXUtil   | version 9.1.0 - 1997-2005 - PRAGMA ADE/POD
+ TeXExec | CtxTools | version 1.3.3 - 2004/2006 - PRAGMA ADE/POD
+ TeXExec | 
+ TeXExec | testing interface en
+ TeXExec | pdfTeX Version 3.141592-1.40.0-beta-20060213 (Web2c 7.5.5)
+ TeXExec | ConTeXt ver: 2006.10.27 15:16 MK II fmt: 2006.10.29 int: english/english
+ TeXExec | 
+ TeXExec | testing interface nl
+ TeXExec | pdfTeX Version 3.141592-1.40.0-beta-20060213 (Web2c 7.5.5)
+ TeXExec | ConTeXt ver: 2006.10.27 15:16 MK II fmt: 2006.10.29 int: dutch/dutch
+</pre>
+    <h2>
+     <span class="mw-headline" id="TeXTools">
+      TeXTools
+     </span>
+    </h2>
+    <p><i>(should be moved on a separate page, but it's stil almost empty anyway)</i>
+</p>
+    <p>To update your TeX tree to the most recent version of kurier fonts for example, you can use
+</p>
+    <pre>textools --updatetree kurier-tex e:\tex\texmf
+</pre>
+    <p>with <code>kurier-tex</code> being the new content for your old TEXMF tree (if it were) located under <code>e:\tex\texmf</code> (change folder names accordingly).
+This will tell you what will be updated, merged and deleted (use <code>--force</code> to really do it)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212436
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.037 seconds
+Real time usage: 0.111 seconds
+Preprocessor visited node count: 64/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 733/2097152 bytes
+Template argument size: 221/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1445/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   40.700      1 -total
+ 60.59%   24.660      1 Template:note
+ 39.07%   15.902      1 Template:todo
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:955-1!canonical and timestamp 20260109212436 and revision id 29007
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/TeXExec">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Boxes and stacking mechanisms/Overlays&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Overlays" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Boxes and stacking mechanisms/Overlays
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=736&diff=41920">2025-01-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Defining">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Defining
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Using">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Using
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Overlays_vs._Layers">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Overlays vs. Layers
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Overlays">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Overlays
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Layers">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Layers
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Example_of_circled_numbers">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Example of circled numbers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#See_Also">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         See Also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p>Overlays are predefined snippets that you can stack on each other. In contrast to <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">Layers</a>, which regard whole pages, overlays mostly are only single pictures, words or the like.
+</p>
+    <h2>
+     <span class="mw-headline" id="Defining">
+      Defining
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>reference name<span class="brx">]</span><span class="brx">[</span>commands<span class="brx">]</span>
+</pre>
+    <p>Better put your commands in braces.
+</p>
+    <h2>
+     <span class="mw-headline" id="Using">
+      Using
+     </span>
+    </h2>
+    <p>You can use defined overlays anywhere there is a <tt>background</tt> option.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>14pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>tea<span class="brx">]</span>
+  <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>darkgreen<span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\ss</span><span class="cs">\bf</span> GREEN TEA<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>8em,
+   background<span class="brx">=</span>tea, 
+   align<span class="brx">=</span><span class="br">{</span>middle,hilo<span class="br">}</span>,
+   style<span class="brx">=</span>italicface<span class="brx">]</span>
+  <span class="br">{</span>today
+   <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span>
+   for sale<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="87" src="../../wikiteximage/7e4216ca71e77049922035e6bef41d52.webp" width="235">
+     </li>
+    </ul>
+    <p>You can use this also with pictures. See also <a href="../../Logos.html" title="Logos">logos</a>.
+</p>
+    <p>Another use for overlays is for adding a graphic to every page to indicate chapters (sometimes known as a <a href="Thumb_index.html" title="Graphics and media/Boxes and stacking mechanisms/Thumb index">thumb index</a>).
+</p>
+    <h2>
+     <span class="mw-headline" id="Overlays_vs._Layers">
+      Overlays vs. Layers
+     </span>
+    </h2>
+    <p>Overlays and Layers are different mechanisms, which are powerful when combined.
+</p>
+    <h3>
+     <span class="mw-headline" id="Overlays">
+      Overlays
+     </span>
+    </h3>
+    <p>ConTeXt has an overlay environment that can be used in the text to stack the arguments on the same spot. In the example below, each new element is placed on top of the previous element.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>80pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\middlered</span>   m<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\middlegreen</span> a<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\middleblue</span>  l<span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="203" src="../../wikiteximage/13ed1c8329cf0d7f7afa16ccaf922514.webp" width="141">
+     </li>
+    </ul>
+    <p>Without the \strut argument each argument is horizontally and vertically centered:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>80pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startoverlay</span></span>
+  <span class="br">{</span><span class="cs">\middlered</span>   m<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\middlegreen</span> a<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\middleblue</span>  l<span class="br">}</span>
+<span class="cs"><span class="systemcs">\stopoverlay</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="121" src="../../wikiteximage/507aedefcc2ece34bf1c9fc95bc154f6.webp" width="141">
+     </li>
+    </ul>
+    <p>Overlays are created with the \defineoverlay command, which takes an overlay name and content. The overlays are then applied to a \framed command or the background to the page the textblock, header, and so forth.
+</p>
+    <p>The next example shows two overlays (&ldquo;behind&rdquo; and &ldquo;before&rdquo;), which are activated in the frame with a background key.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLbehind<span class="brx">]</span>
+  <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+     <span class="brx">[</span>height<span class="brx">=</span>1cm, width<span class="brx">=</span>4cm,
+      color<span class="brx">=</span>middlecyan<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLbefore<span class="brx">]</span>
+  <span class="brx">[</span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+      <span class="brx">[</span>height<span class="brx">=</span>4cm, width<span class="brx">=</span>1cm,
+       color<span class="brx">=</span>middlered<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>5cm,
+   height<span class="brx">=</span>5cm,
+   background<span class="brx">=</span><span class="br">{</span>color, OLbehind,
+              foreground,OLbefore<span class="br">}</span>,
+   backgroundcolor<span class="brx">=</span>middleblue<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+     <span class="brx">[</span>width<span class="brx">=</span>3cm,height<span class="brx">=</span>3cm,
+      color<span class="brx">=</span>middleyellow<span class="brx">]</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="298" src="../../wikiteximage/9a4e1327bf0fd10592c35d28aa7666e3.webp" width="298">
+     </li>
+    </ul>
+    <p>The arguments of the background key used two names in addition to the &ldquo;behind&rdquo; and &ldquo;before&rdquo; overlays. The first name is &ldquo;color&rdquo;, which is needed when using the backgroundcolor key to put a color in the entire frame's area. The second is &ldquo;foreground&rdquo;, which can place overlays *before* the content of the frame because &ldquo;foreground&rdquo; is the frame text itself.
+</p>
+    <p>The overlay environment and overlay mechanism for \framed are similar.
+</p>
+    <p>The methods to set them because in the first case you set the content for each level which the argument in braces ({&hellip;}{&hellip;}) and in the second case you define them first with \defineoverlay and set the order in the background key.
+</p>
+    <h3>
+     <span class="mw-headline" id="Layers">
+      Layers
+     </span>
+    </h3>
+    <p>With layers the content from each command can be positioned at a certain horizontal and vertical position. The following example creates a new layer and set three texts. The texts are placed in the page using the \flushlayer command.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>test<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>1.5cm,y<span class="brx">=</span>3cm<span class="brx">]</span><span class="br">{</span>ONE<span class="br">}</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>test<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>4cm,y<span class="brx">=</span>1.0cm<span class="brx">]</span><span class="br">{</span>TWO<span class="br">}</span>
+<span class="cs"><span class="documentcs">\setlayer</span></span><span class="brx">[</span>test<span class="brx">]</span><span class="brx">[</span>x<span class="brx">=</span>2cm,y<span class="brx">=</span>4.5cm<span class="brx">]</span><span class="br">{</span>THREE<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\flushlayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/51d053e7d9359046a2f133260bdf13fa.webp" width="438">
+     </li>
+    </ul>
+    <p>When you put new some text after \flushlayer would be surprised because it would end put on the following page but you shouldn&rsquo;t wonder about this because layers have nothing to do with the page background or foreground.
+</p>
+    <p>What makes the layer and overlay mechanism is interesting is when you combine them and put the \flushlayer command in a overlay which does now place the texts before or after the content of a frame. With my next example we&rsquo;re finally in the process to combine them.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="stylecs">\definelayer</span></span> <span class="brx">[</span>behindtext<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definelayer</span></span> <span class="brx">[</span>beforetext<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>text<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>behindtext,
+   foreground,beforetext<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+  <span class="brx">[</span>behindtext<span class="brx">]</span>
+  <span class="brx">[</span>x<span class="brx">=</span>-1cm,y<span class="brx">=</span>.75ex<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>darkred<span class="brx">]</span><span class="br">{</span>Behind<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+  <span class="brx">[</span>beforetext<span class="brx">]</span>
+  <span class="brx">[</span>x<span class="brx">=</span>+2cm,y<span class="brx">=</span>.75ex<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>middleyellow<span class="brx">]</span><span class="br">{</span>Before<span class="br">}</span><span class="br">}</span>
+
+The Text!
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+  <span class="brx">[</span>behindtext<span class="brx">]</span>
+  <span class="brx">[</span>x<span class="brx">=</span>5cm,y<span class="brx">=</span>4cm<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>darkred<span class="brx">]</span><span class="br">{</span>More background text!<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+  <span class="brx">[</span>beforetext<span class="brx">]</span>
+  <span class="brx">[</span>x<span class="brx">=</span>3cm,y<span class="brx">=</span>8cm<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span>middleyellow<span class="brx">]</span><span class="br">{</span>More foreground text!<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../../wikiteximage/48e8a108c575f6f8dae9ceedf25086a0.webp" width="438">
+     </li>
+    </ul>
+    <p><br>
+When you look at the example you can see that haven't created a overlay for layer even though I said you need it to put the layer after the text. This isn&rsquo;t necessary because when you create a new layer context does also create a overlay with the same name in which the layer is placed. The other question is how you can place overlays on the text/page when I told before overalls can only be placed on frame, this is possible because all page elements (textblock, header, footer and even the page and paper itself) are frames. Even though these elements are frames they don&rsquo;t provide all the options from \framed because they are a special version with less functionality.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example_of_circled_numbers">
+      Example of circled numbers
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% Solution A - a framed that uses an overlay as background ==========</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPtextcircle<span class="br">}</span>
+  path p;
+  p&nbsp;:<span class="brx">=</span> fullcircle xscaled OverlayWidth
+                  yscaled OverlayWidth;
+  setbounds currentpicture to p&nbsp;;
+<span class="comment">%  p:= p shifted (0,StrutDepth/2.7);</span>
+  draw p withpen pencircle scaled 0.25pt
+         withcolor OverlayLineColor;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>OLtextcircle<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPtextcircle<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>textcircledA<span class="brx">]</span>
+  <span class="brx">[</span>
+   frame<span class="brx">=</span>off,
+   strut<span class="brx">=</span>yes,
+   rulethickness<span class="brx">=</span>0.0pt,
+   background<span class="brx">=</span>OLtextcircle,
+   framecolor<span class="brx">=</span>darkblue,
+   location<span class="brx">=</span>top,<span class="brx">]</span>
+
+<span class="comment">% Solution B - same with fixed dimensions ===========================</span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>textcircledB<span class="brx">]</span>
+  <span class="brx">[</span>textcircledA<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span>1.75em,
+   framecolor<span class="brx">=</span>darkred,<span class="brx">]</span>
+
+<span class="comment">% Solution C - a framed with radius =================================</span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>textcircledC<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span>1.5em,
+   frame<span class="brx">=</span>on,
+   strut<span class="brx">=</span>yes,
+   rulethickness<span class="brx">=</span>0.25pt,
+   framecolor<span class="brx">=</span>darkgreen,
+   offset<span class="brx">=</span>1pt,
+   location<span class="brx">=</span>top,
+   corner<span class="brx">=</span>round,
+   radius<span class="brx">=</span>.5em,<span class="brx">]</span>
+
+<span class="comment">% ===================================================================</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella, 14pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\dostepwiserecurse</span></span><span class="br">{</span>0<span class="br">}</span><span class="br">{</span>150<span class="br">}</span><span class="br">{</span>20<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+  <span class="brx">#</span>1 <span class="brx">=</span> <span class="cs">\textcircledA</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span> <span class="brx">=</span> <span class="cs">\textcircledB</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span> <span class="brx">=</span> <span class="cs">\textcircledC</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\\</span><span class="br">}</span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="377" src="../../wikiteximage/8e2e8d4b171db65bd33174333eaa3a9b.webp" width="301">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="See_Also">
+      See Also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun#Overlays.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">
+       Overlay tutorial
+      </a>
+     </li>
+     <li>
+      <a href="../../Document_structure_and_headlines/Tutorials#Example_of_how_to_set_up_a_chapter_page.html" title="Document structure and headlines/Tutorials">
+       Example of how to set up a chapter page
+      </a>
+     </li>
+     <li>
+      <a href="../../Category:Command/Overlays.html" title="Category:Command/Overlays">
+       Category:Command/Overlays
+      </a>
+     </li>
+     <li>
+      <a href="../../Document_layout_and_layers/Layers.html" title="Document layout and layers/Layers">
+       Layers
+      </a>
+      &ndash;
+      <a href="../../Category:Command/Layers.html" title="Category:Command/Layers">
+       Category:Command/Layers
+      </a>
+     </li>
+     <li>
+      <a href="Collectors.html" title="Graphics and media/Boxes and stacking mechanisms/Collectors">
+       Collectors
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212415
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.065 seconds
+Real time usage: 0.096 seconds
+Preprocessor visited node count: 64/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13683/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:736-1!canonical and timestamp 20260109212415 and revision id 41920
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Boxes_and_stacking_mechanisms/Overlays">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

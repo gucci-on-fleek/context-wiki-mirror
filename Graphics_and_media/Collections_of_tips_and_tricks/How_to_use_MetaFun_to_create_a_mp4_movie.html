@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/How to use MetaFun to create a mp4 movie&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/How_to_use_MetaFun_to_create_a_mp4_movie" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/How to use MetaFun to create a mp4 movie
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6863&diff=41696">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Tutorial">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Tutorial
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#More_animated_objects">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         More animated objects
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Showcase_of_the_finished_project">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Showcase of the finished project
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>If you wish to make an animation in your document, see the <a href="../../Document_layout_and_layers/Presentations/Animation.html" title="Document layout and layers/Presentations/Animation">Animation</a> page. This page will explain how to use <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaFun</a> to create a mp4 movie. Such movie can be embedded in a presentation, put on YouTube, etc, this will be a real movie&nbsp;! 
+</p>
+    <p>The steps involved to realize such a movie are to (1) make a pdf such as each page is a frame of the movie, (2) convert the pdf pages to jpeg images, (3) assemble these images into a mp4 movie. 
+</p>
+    <h2>
+     <span class="mw-headline" id="Tutorial">
+      Tutorial
+     </span>
+    </h2>
+    <p>An animation is simply a series of images shown in order, one at a time. The number of images per unit of time determines the speed of the movie, a factor usually referred to as the <i>framerate</i>. For instance, if we generate 300 images, we can create a 10-second movie at 30 frames per second, or a 20-second movie at 15 frames per second.
+</p>
+    <p>This tutorial will design and animate a movie showing particles moving along circles. The different images needed for the animation will be pages from the same PDF. The general structure of the code is as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>300<span class="br">}</span><span class="br">{</span> <span class="comment">% Each of the 300 images</span>
+    <span class="cs"><span class="documentcs">\startMPpage</span></span>
+      <span class="comment">% Insert here code to draw an image</span>
+    <span class="cs"><span class="documentcs">\stopMPpage</span></span>
+  <span class="br">}</span> 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>An <i>MPpage</i> has the size of the bounding box of all combined objects on the current page, so if objects move within the page, the page size will change. A solution to maintain control is to introduce a frame, which we can visualize as a camera frame. In the following, we refer to this frame as <code>TheFrame</code>. We can keep this frame fixed while subjects move within it, or we can keep subjects steady and move the frame, or even do both! In fact, if we think of a real camera, this is exactly the same concept. Let's consider a fixed square frame here&nbsp;:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startMPpage</span></span>
+  path TheFrame&nbsp;;
+  TheFrame&nbsp;:<span class="brx">=</span> fullsquare scaled 80&nbsp;;
+  <span class="comment">% the code... </span>
+  setbounds currentpicture to TheFrame&nbsp;;
+<span class="cs"><span class="documentcs">\stopMPpage</span></span>
+</pre>
+    <p>It is a good idea to perform declarations and calculations only once, and therefore, to place them in <code>MPinclusions</code> before the drawings are actually done. Since we intend to move a particle along a path, the position of the particle depends on the current frame. This information will be stored in the variable <code>currentframe</code>. In the simplest case, the current frame corresponds to the value of the loop <code>dorecurse</code>, which can be accessed using <code>currentframe&nbsp;:= #1;</code>. The position of the object will be determined by <code>currentframe/TotalNbFrames</code> along the path. Now, we are ready for the complete code&nbsp;:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\startMPinclusions</span></span>
+ path TheFrame&nbsp;; TheFrame&nbsp;:<span class="brx">=</span> fullsquare scaled 80&nbsp;;
+ path ThePath , TheObject , ObjectInMovement&nbsp;; 
+ ThePath   :<span class="brx">=</span> fullcircle scaled 50&nbsp;;
+ TheObject&nbsp;:<span class="brx">=</span> fullcircle scaled 8&nbsp;;
+ TotalNbFrames&nbsp;:<span class="brx">=</span> 300&nbsp;;
+<span class="cs"><span class="stylecs">\stopMPinclusions</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>300<span class="br">}</span><span class="br">{</span> 
+<span class="cs"><span class="documentcs">\startMPpage</span></span>
+  currentframe&nbsp;:<span class="brx">=</span> <span class="brx">#</span>1; 
+  ObjectInMovement&nbsp;:<span class="brx">=</span> TheObject shifted 
+    <span class="brx">(</span>point <span class="brx">(</span>currentframe/TotalNbFrames<span class="brx">)</span> along ThePath <span class="brx">)</span>;
+  draw ThePath withcolor blue&nbsp;;
+  fill ObjectInMovement withcolor red&nbsp;;
+  setbounds currentpicture to TheFrame&nbsp;;
+<span class="cs"><span class="documentcs">\stopMPpage</span></span> <span class="br">}</span> 
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Here are some excerpts of this file (frame number in magenta in the top-left of each image):
+</p>
+    <p><a class="image" href="../../File:Project1_a-0.jpg"><img alt="Project1 a-0.jpg" decoding="async" height="150" src="../../images/thumb/2/2f/Project1_a-0.webp" width="150"></a>
+<a class="image" href="../../File:Project1_a-1.jpg"><img alt="Project1 a-1.jpg" decoding="async" height="150" src="../../images/thumb/a/aa/Project1_a-1.webp" width="150"></a>
+<a class="image" href="../../File:Project1_a-2.jpg"><img alt="Project1 a-2.jpg" decoding="async" height="150" src="../../images/thumb/0/00/Project1_a-2.webp" width="150"></a>
+<a class="image" href="../../File:Project1_a-3.jpg"><img alt="Project1 a-3.jpg" decoding="async" height="150" src="../../images/thumb/0/0c/Project1_a-3.webp" width="150"></a>
+</p>
+    <p>Now that we have a PDF file, we need to convert the PDF pages to JPG images. This can be easily done with external tools like ImageMagick (<a class="external free" href="https://imagemagick.org" rel="nofollow">https://imagemagick.org</a>), a free open-source software for manipulating digital images. Once installed on your system, the command
+</p>
+    <pre class="tex">convert myfile.pdf p_<span class="comment">%03d.jpg</span>
+</pre>
+    <p>will convert the 300 pages of <code>myfile.pdf</code> to 300 images named <code>p_000.jpg</code>, <code>p_001.jpg</code>, ..., <code>p_299.jpg</code>. The next step is to assemble the images into a movie, which is done with the free <i>ffmpeg</i> (<a class="external free" href="https://ffmpeg.org" rel="nofollow">https://ffmpeg.org</a>) tool. The command
+</p>
+    <pre>ffmpeg -y -r 30 -i JPGdir/p_%03d.jpg -c:v libx264 
+       -pix_fmt yuv420p  Movie-a.mp4
+</pre>
+    <p>will assemble the JPG files at a framerate of 30 images per second (option <code>-r 30</code>) into a QuickTime MP4 movie named <i>myMovie.mp4</i>.
+</p>
+    <p><video controls height="300" src="https://wiki.contextgarden.net/images/b/b2/Project1-A.mp4" style="max-width: 100%; max-height: 100%; width: 300px; height: 300px;" width="300"><a href="../../File:Project1-A.mp4">https://wiki.contextgarden.net/File:Project1-A.mp4</a></video>
+</p>
+    <p>For an overview, here's the complete script for a Unix-like system. After producing the PDF with Context (line 1), we create a temporary folder named <code>JPGdir</code> (line 2), convert the PDF to a series of JPG images in the created folder (line 3), create a QuickTime MP4 movie from the JPG images (lines 4-5), clean up (line 6), and finally, open the movie (line 7)&nbsp;:
+</p>
+    <pre>context --once Project1-A.tex
+mkdir JPGdir
+convert Project1-A.pdf JPGdir/p_%03d.jpg 
+ffmpeg -y -r 30 -i JPGdir/p_%03d.jpg -c:v libx264 
+       -pix_fmt yuv420p  Movie-a.mp4
+rm JPGdir/*.jpg&nbsp;; rmdir JPGdir
+open Project1-A.mp4
+</pre>
+    <p>A note about the definition of the picture: although the conversion from PDF to JPG could be made at any resolution with ImageMagick, the default density is 72 dpi. This means that if the size of the PDF page is 15 inches by 15 inches (equivalent to 1080 pixels by 1080 pixels, or 38.1 cm by 38.1 cm at a definition of 72 dpi), the resulting image will also be 1080 pixels by 1080 pixels. Therefore, if the intention is to create a UHD video, add the following line at the end of the code (before the <code>\stopMPpage</code>):
+</p>
+    <pre>currentpicture&nbsp;:= currentpicture xysized (4096,2160);
+</pre>
+    <p>The number of frames needed for a movie can be large. For example, consider a five-minute movie at 30 frames per second: we would need 5 x 60 x 30 = 9,000 frames. If there are a lot of calculations for each frame, this could pose an issue. Therefore, during development, it could be useful to speed up the the processes&nbsp;: sometimes, it's possible to speed up or adjust the timing. For instance, assume the instruction <code>currentframe&nbsp;:= #1;</code> in the preceding code is changed to:
+</p>
+    <pre class="tex">currentframe&nbsp;:<span class="brx">=</span> <span class="brx">(</span><span class="brx">#</span>1-1<span class="brx">)</span>*100&nbsp;;
+if currentframe <span class="brx">=</span><span class="brx">=</span> 0: currentframe&nbsp;:<span class="brx">=</span> 1; fi;
+</pre>
+    <p>The first page of the file will correspond to frame 1, the second to frame 100, the third to frame 200, and the last one, the fourth, to frame 300. This allows us to obtain a rough idea of the movie without generating every single page. However,  this approach is not always feasible.
+</p>
+    <h2>
+     <span class="mw-headline" id="More_animated_objects">
+      More animated objects
+     </span>
+    </h2>
+    <p>Let's make things more interesting by adding more moving elements, says a lot of particles moving along several circles in a random fashion. If the positions of the animated objects are deterministic, such as a function of time (<code>f(time)</code>) as shown in our first example, there is no difficulty in calculating the positions and drawing the object at these positions, something like:
+</p>
+    <pre class="tex"> ObjectPosition&nbsp;:<span class="brx">=</span> f<span class="brx">(</span>time<span class="brx">)</span>&nbsp;;
+ draw Object shifted ObjectPosition&nbsp;;
+</pre>
+    <p>But the introduction of randomness will complicate things a bit: the position of a particular particle at a given time (i.e., a given frame) depends on the position at a previous time. There are two solutions:
+</p>
+    <ul>
+     <li>
+      Calculate the positions of the particles for frame one, draw the particles, update the positions at the end of the
+      <code>MPPage</code>
+      , and continue to the next frame. The drawback is that we cannot generate any frame we need: to build frame 200, we need to draw the 199 previous frames. Advantage: memory is preserved.
+     </li>
+     <li>
+      Calculate the positions of all particles for all frames once, in the
+      <code>MPinclusions</code>
+      preamble. The advantage is that we can thereafter generate any frame we need, which can be useful for debugging for example (i.e., generate frame 10, 11, 12, or 100, 200, and 300). Drawback: all these positions take up some memory.
+     </li>
+    </ul>
+    <p>Let's take the second solution for simplicity.  First off, let's define two tiny but useful macros; the first one gives a random random according to a uniform distribution between two limits, and the second one a random color in certain domain: 
+</p>
+    <pre class="tex">vardef ranuni<span class="brx">(</span>expr mini , maxi <span class="brx">)</span> <span class="brx">=</span>
+	uniformdeviate <span class="brx">(</span>maxi - mini<span class="brx">)</span> + mini 
+enddef&nbsp;;
+
+vardef randomcolor <span class="brx">=</span>
+  <span class="brx">(</span>ranuni<span class="brx">(</span>0.1,0.8<span class="brx">)</span>,ranuni<span class="brx">(</span>0,0.01<span class="brx">)</span>,ranuni<span class="brx">(</span>0.2,0.8<span class="brx">)</span><span class="brx">)</span>
+enddef&nbsp;;
+</pre>
+    <p>On each circle <i>c</i> (<code>c=1,...,nbcircles</code>), we will define some objects <i>o</i> (<code>o=1,...,nbObjects[c]</code>) (called sometimes particles here), so the total number of objects is <code>O = nbObjects[1] + nbObjects[2]+...+nbObjects[nbcircles]</code>. Each object <i>o</i> on circle <i>c</i> will have at time <i>t</i> the position <code>Position[c][o][t]</code>. This position, express as a number in [0,1] is a coordinate along the path <code>ThePath[c]</code>. The position at time 1 is chosen randomly along the path <i>c</i>, and then will be calculated for each time <i>t</i> from the position at time <i>t-1</i>. Each object will have its own <code>deplacement</code>, which depends on the length of the circle modified by random factor. Lastly, to distinguish easily particles in the following figures, we will assign a random color to each one&nbsp;: <code>TheColor[c][o]</code>
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startMPinclusions</span></span>
+TotalNbFrames&nbsp;:<span class="brx">=</span> 300&nbsp;;
+
+path ThePath<span class="brx">[</span><span class="brx">]</span> , TheObject<span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>&nbsp;;
+numeric Position<span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>&nbsp;; 
+color TheColor<span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>&nbsp;;
+nbcircles&nbsp;:<span class="brx">=</span> 3&nbsp;;
+for c<span class="brx">=</span>1 upto nbcircles&nbsp;:
+  ThePath<span class="brx">[</span>c<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled <span class="brx">(</span>c*20<span class="brx">)</span>&nbsp;;
+  nbObjects<span class="brx">[</span>c<span class="brx">]</span>&nbsp;:<span class="brx">=</span> floor<span class="brx">(</span>arclength<span class="brx">(</span>ThePath<span class="brx">[</span>c<span class="brx">]</span><span class="brx">)</span>*0.05<span class="brx">)</span>&nbsp;;
+  for o<span class="brx">=</span>1 upto nbObjects<span class="brx">[</span>c<span class="brx">]</span>&nbsp;:
+    TheObject<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span>&nbsp;:<span class="brx">=</span> fullcircle scaled ranuni<span class="brx">(</span>2,7<span class="brx">)</span>&nbsp;; 
+    Position<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span><span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> uniformdeviate<span class="brx">(</span>1<span class="brx">)</span>&nbsp;;
+    deplacement&nbsp;:<span class="brx">=</span> <span class="brx">(</span>arclength<span class="brx">(</span>ThePath<span class="brx">[</span>c<span class="brx">]</span><span class="brx">)</span>/30000<span class="brx">)</span>
+            *ranuni<span class="brx">(</span>0.9,1.1<span class="brx">)</span>; 
+    TheColor<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span>&nbsp;:<span class="brx">=</span> randomcolor&nbsp;;
+    for t<span class="brx">=</span>2 upto TotalNbFrames&nbsp;:
+      Position<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span><span class="brx">[</span>t<span class="brx">]</span>&nbsp;:<span class="brx">=</span>
+         Position<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span><span class="brx">[</span>t-1<span class="brx">]</span> + deplacement;
+    endfor;
+  endfor;
+endfor;
+
+<span class="cs"><span class="stylecs">\stopMPinclusions</span></span>
+</pre>
+    <p>Now that all the calculations have been completed, we just need to draw these objects:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startMPpage</span></span>
+currentframe&nbsp;:<span class="brx">=</span> <span class="brx">#</span>1;
+  
+for c<span class="brx">=</span>1 upto nbcircles&nbsp;:
+  draw ThePath<span class="brx">[</span>c<span class="brx">]</span> withcolor blue&nbsp;;
+  for o<span class="brx">=</span>1 upto nbObjects<span class="brx">[</span>c<span class="brx">]</span>&nbsp;:
+    fill TheObject<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span> shifted 
+      <span class="brx">(</span>point Position<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span><span class="brx">[</span>currentframe<span class="brx">]</span> 
+      along ThePath<span class="brx">[</span>c<span class="brx">]</span><span class="brx">)</span> 
+      withcolor TheColor<span class="brx">[</span>c<span class="brx">]</span><span class="brx">[</span>o<span class="brx">]</span>&nbsp;;
+  endfor;
+endfor;
+ 
+setbounds currentpicture to TheFrame&nbsp;;
+
+<span class="cs"><span class="documentcs">\stopMPpage</span></span>
+</pre>
+    <p>Here is the movie&nbsp;: 
+<video controls height="500" src="https://wiki.contextgarden.net/images/1/16/Project1-B.mp4" style="max-width: 100%; max-height: 100%; width: 500px; height: 500px;" width="500"><a href="../../File:Project1-B.mp4">https://wiki.contextgarden.net/File:Project1-B.mp4</a></video>
+</p>
+    <h2>
+     <span class="mw-headline" id="Showcase_of_the_finished_project">
+      Showcase of the finished project
+     </span>
+    </h2>
+    <p>We can make things more interesting by adding a lot of particles, having a moving frame, add some music,..., and increase the definition  to  2160x2160 (you can go full-screen!)&nbsp;: 
+</p>
+    <p><video controls height="500" src="https://wiki.contextgarden.net/images/1/14/Project1-C2-2160.mp4" style="max-width: 100%; max-height: 100%; width: 500px; height: 500px;" width="500"><a href="../../File:Project1-C2-2160.mp4">https://wiki.contextgarden.net/File:Project1-C2-2160.mp4</a></video>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212422
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.063 seconds
+Real time usage: 5.751 seconds
+Preprocessor visited node count: 80/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7617/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6863-1!canonical and timestamp 20260109212416 and revision id 41696
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/How_to_use_MetaFun_to_create_a_mp4_movie">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

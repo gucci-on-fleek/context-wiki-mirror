@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/SQL example&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/SQL_example" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/SQL example
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3461&diff=40587">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#PostgreSQL">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         PostgreSQL
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#CLD">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         CLD
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Sample_output">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Sample output
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#LuaLaTeX">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         LuaLaTeX
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="PostgreSQL">
+      PostgreSQL
+     </span>
+    </h2>
+    <pre class="tex">CREATE TABLE contacts <span class="brx">(</span>
+nr            integer,
+name          text,
+email         text,
+year          integer,
+PRIMARY KEY <span class="brx">(</span>nr, name<span class="brx">)</span>
+<span class="brx">)</span>;
+
+INSERT INTO contacts
+<span class="brx">(</span>nr, name, email, year<span class="brx">)</span>
+VALUES
+<span class="brx">(</span> 1, 'Jose das Couves', 'jose@couves.com'           , 2011<span class="brx">)</span>,
+<span class="brx">(</span> 2, 'Manoel Joaquim' , 'manoel.joaquim@cafundo.com', 2011<span class="brx">)</span>,
+<span class="brx">(</span> 3, 'Maria das Dores', 'maria@dores.com'           , 2011<span class="brx">)</span>;
+</pre>
+    <h2>
+     <span class="mw-headline" id="CLD">
+      CLD
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+require "luasql.postgres"
+
+local user <span class="brx">=</span> "reviczky"      -- SQL username
+local password <span class="brx">=</span> "password"  -- SQL password
+local database <span class="brx">=</span> "context"   -- database name
+local host <span class="brx">=</span> "localhost"     -- localhost by default
+local port <span class="brx">=</span> "5433"          -- 5432 by default
+
+local function sqlinfo<span class="brx">(</span><span class="brx">)</span> -- returns SQL connection data
+  return "user:     " .. user ..     "<span class="cs">\string</span><span class="cs">\\</span>crlf "
+      .. "password: " .. password .. "<span class="cs">\string</span><span class="cs">\\</span>crlf "
+      .. "database: " .. database .. "<span class="cs">\string</span><span class="cs">\\</span>crlf "
+      .. "host:     " .. host ..     "<span class="cs">\string</span><span class="cs">\\</span>crlf "
+      .. "port:     " .. port ..     "<span class="cs">\string</span><span class="cs">\\</span>crlf<span class="cs">\string</span><span class="cs">\\</span>par"
+end
+
+local function sql<span class="brx">(</span>sqlquery,sqlvar<span class="brx">)</span>
+  local env <span class="brx">=</span> assert<span class="brx">(</span>luasql.postgres<span class="brx">(</span><span class="brx">)</span><span class="brx">)</span>
+  local con <span class="brx">=</span> assert<span class="brx">(</span>env:connect<span class="brx">(</span>database,user,password,host,port<span class="brx">)</span><span class="brx">)</span>
+
+  local cur <span class="brx">=</span> assert<span class="brx">(</span>con:execute<span class="brx">(</span>sqlquery<span class="brx">)</span><span class="brx">)</span>
+  local result <span class="brx">=</span> cur:fetch<span class="brx">(</span><span class="br">{</span><span class="br">}</span>,"a"<span class="brx">)</span>
+  local colnames <span class="brx">=</span> cur:getcolnames<span class="brx">(</span><span class="brx">)</span>
+
+  local nextmatch,sqlarr <span class="brx">=</span> 0,<span class="br">{</span> <span class="br">}</span>
+  while result do
+    sqlarr<span class="brx">[</span>nextmatch<span class="brx">]</span> <span class="brx">=</span> result<span class="brx">[</span>sqlvar<span class="brx">]</span>
+    result <span class="brx">=</span> cur:fetch<span class="brx">(</span>result,"a"<span class="brx">)</span>
+    nextmatch <span class="brx">=</span> nextmatch + 1
+  end
+
+  cur:close<span class="brx">(</span><span class="brx">)</span>
+  con:close<span class="brx">(</span><span class="brx">)</span>
+  env:close<span class="brx">(</span><span class="brx">)</span>
+
+  return sqlarr
+end
+
+context.starttext<span class="brx">(</span><span class="brx">)</span>
+context.bf<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>sqlinfo<span class="brx">(</span><span class="brx">)</span><span class="brx">)</span> context.tf<span class="brx">(</span><span class="brx">)</span> -- SQL info
+
+local selectquery <span class="brx">=</span> "SELECT * FROM contacts WHERE year<span class="brx">=</span>2011" -- SQL QUERY
+local var1 <span class="brx">=</span> sql<span class="brx">(</span>selectquery,"name"<span class="brx">)</span>
+local var2 <span class="brx">=</span> sql<span class="brx">(</span>selectquery,"email"<span class="brx">)</span>
+
+context.setupTABLE<span class="brx">(</span><span class="br">{</span>"r"<span class="br">}</span>,<span class="br">{</span>"1"<span class="br">}</span>,<span class="br">{</span>style<span class="brx">=</span>"bold"<span class="br">}</span><span class="brx">)</span>
+context.setupTABLE<span class="brx">(</span><span class="br">{</span>"r"<span class="br">}</span>,<span class="br">{</span>"odd"<span class="br">}</span>,<span class="br">{</span>background<span class="brx">=</span>"color",backgroundcolor<span class="brx">=</span>"middlegray"<span class="br">}</span><span class="brx">)</span>
+context.bTABLE<span class="brx">(</span><span class="brx">)</span>
+  context.bTR<span class="brx">(</span><span class="brx">)</span>
+    context.bTD<span class="brx">(</span><span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span> context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>"Name:"<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span> context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>"E-mail:"<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+  context.eTR<span class="brx">(</span><span class="brx">)</span>
+  for currow<span class="brx">=</span>0,<span class="brx">#</span>var1 do
+    context.bTR<span class="brx">(</span><span class="brx">)</span>
+      context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>currow+1<span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span> context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>var1<span class="brx">[</span>currow<span class="brx">]</span><span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span> context.bTD<span class="brx">(</span><span class="brx">)</span> context<span class="brx">(</span>var2<span class="brx">[</span>currow<span class="brx">]</span><span class="brx">)</span> context.eTD<span class="brx">(</span><span class="brx">)</span>
+    context.eTR<span class="brx">(</span><span class="brx">)</span>
+  end
+context.eTABLE<span class="brx">(</span><span class="brx">)</span>
+
+context.stoptext<span class="brx">(</span><span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Sample_output">
+      Sample output
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="118" src="../wikiteximage/f6bf246ea9fb77751b13a056a385cd87.webp" width="168">
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="103" src="../wikiteximage/b3c4afc133d631fe1561cfc2cedbbf60.webp" width="365">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="LuaLaTeX">
+      LuaLaTeX
+     </span>
+    </h2>
+    <p><a class="external text" href="http://robitex.wordpress.com/2011/02/22/postgresql-gestisce-i-dati-lualatex-li-stampa/" rel="nofollow">robitex.wordpress.com</a> (italian)
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212408
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.046 seconds
+Real time usage: 0.089 seconds
+Preprocessor visited node count: 31/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6808/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3461-1!canonical and timestamp 20260109212408 and revision id 40587
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/SQL_example">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

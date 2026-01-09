@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   References notes and floats/PDF annotations&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/References_notes_and_floats/PDF_annotations" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    References notes and floats/PDF annotations
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7066&diff=42120">2025-02-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="PDF_navigation.html" title="References notes and floats/PDF navigation">PDF navigation</a> | <a href="../Widgets.html" title="Widgets">Widgets</a> &gt;
+</p>
+    <p>This page collects a few PDF specialties that have similar attributes. They don&rsquo;t work with all PDF readers, and we can&rsquo;t demonstrate them here.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Comments">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Comments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Markup">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Markup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Attachments">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Attachments
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Other">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Other
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Comments">
+      Comments
+     </span>
+    </h2>
+    <p>You know these sticky litte yellow notes? Also in PDFs? Here&rsquo;s how you use them with ConTeXt:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcomment</span></span><span class="brx">[</span>
+  symbol<span class="brx">=</span>Note,
+  location<span class="brx">=</span>inmargin,
+<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>knuth<span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\startcomment</span></span><span class="brx">[</span>author<span class="brx">=</span>Editor<span class="brx">]</span>
+You should shorten this paragraph!
+<span class="cs"><span class="documentcs">\stopcomment</span></span>
+</pre>
+    <ul>
+     <li>
+      See
+      <tt>
+       <a href="../Command/setupcomment.html" title="Command/setupcomment">
+        \setupcomment
+       </a>
+      </tt>
+      for options (they don&rsquo;t need to be yellow stickers).
+     </li>
+     <li>
+      Instead of
+      <tt>
+       <a class="mw-redirect" href="../Command/_startcomment.html" title="Command/startcomment">
+        \startcomment
+       </a>
+       [options
+      </tt>
+      contents
+      <tt>
+       \stopcomment
+      </tt>
+      you can also use
+      <tt>
+       <a class="mw-redirect" href="../Command/_comment.html" title="Command/comment">
+        \comment
+       </a>
+       [options]{contents
+      </tt>
+      }.
+     </li>
+     <li>
+      If you don&rsquo;t move the comment into the margin (or edge), it takes space in the text flow. (It really shouldn&rsquo;t.)
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Markup">
+      Markup
+     </span>
+    </h2>
+    <p>Now it would be nice if we also could use the text marker tool. Here&rsquo;s how:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabledirectives</span></span><span class="brx">[</span>backend.pdf.fixhighlight<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>pdfhighlight:Editor<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>.8,g<span class="brx">=</span>1,b<span class="brx">=</span>1<span class="brx">]</span>
+
+Text <span class="cs">\PDFhighlight</span><span class="brx">[</span>Editor<span class="brx">]</span><span class="brx">[</span>Please shorten!<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\samplefile</span></span><span class="br">{</span>knuth<span class="br">}</span><span class="br">}</span> Text
+</pre>
+    <ul>
+     <li>
+      This was added in ConTeXt LMTX 2024-09-17.
+     </li>
+     <li>
+      The
+      <tt>
+       <a class="new" href="../index.php?title=Command/PDFhighlight&action=edit&redlink=1.html" title="Command/PDFhighlight (page does not exist)">
+        \PDFhighlight
+       </a>
+       [author][commend]{visible contents
+      </tt>
+      } command is only activated by
+      <tt>
+       <a href="../Command/enabledirectives.html" title="Command/enabledirectives">
+        \enabledirectives
+       </a>
+       [backend.pdf.fixhighlight]
+      </tt>
+      , since the implementation of this feature in PDF viewers (including Acrobat) contradicts the PDF specification, two coordinates are swapped. See also
+      <a class="external text" href="http://www.pragma-ade.nl/general/manuals/musings-viewers.pdf" rel="nofollow">
+       musings-viewers
+      </a>
+      .
+     </li>
+     <li>
+      Define a color with the prefix
+      <tt>
+       pdfhighlight:
+      </tt>
+      and the name of the author.
+     </li>
+     <li>
+      This highlight works differently from e.g.
+      <tt>
+       <a href="../Command/_bar.html" title="Command/ bar">
+        \_bar
+       </a>
+      </tt>
+      (
+      <span class="plainlinks">
+       <a class="external text" href="http://www.tug.org/utilities/plain/cseq.html#underbar-rp" rel="nofollow">
+        <tt>
+         \underbar
+        </tt>
+       </a>
+       <span class="plainlinks">
+        etc.) in that the highlight is a PDF annotation and not part of the text or design.
+       </span>
+      </span>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Attachments">
+      Attachments
+     </span>
+    </h2>
+    <p>You can add files to your PDF (see <a href="Tutorials#Attachment.html" title="References notes and floats/Tutorials">Attachment</a>)
+</p>
+    <h2>
+     <span class="mw-headline" id="Other">
+      Other
+     </span>
+    </h2>
+    <p>Acrobat allows several other annotations, e.g. multimedia comments. Probably nobody uses them, and ConTeXt doesn&rsquo;t support them.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212433
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.031 seconds
+Preprocessor visited node count: 110/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 827/2097152 bytes
+Template argument size: 228/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1440/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   13.060      1 -total
+ 40.19%    5.249      6 Template:cmd
+ 39.31%    5.134      1 Template:tex
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7066-1!canonical and timestamp 20260109212433 and revision id 42120
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/References_notes_and_floats/PDF_annotations">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

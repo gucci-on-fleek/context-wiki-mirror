@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   math calligraphic&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/math_calligraphic" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    math calligraphic
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4847&diff=35162">2024-05-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Using_math_calligraphic_or_script_fonts_in_mkiv">
+      Using math calligraphic or script fonts in mkiv
+     </span>
+    </h2>
+    <p>In mkii it is possible to replace the standard calligraphic (alias script) math fonts with rsfs (Ralph Smith's Formal Script fonts): see the dedicated page on this wiki <a class="external autonumber" href="http://wiki.contextgarden.net/rsfs" rel="nofollow">[1]</a>.
+</p>
+    <p>However this old method does not work in mkiv where there is a more robust way to use any opentype or truetype font. Indeed in mkiv it is rather easy to specify any such font to be used for the calligraphic (alias script) math fonts.
+For instance let us assume that we want to use math calligraphic fonts from Asana Math, while other glyphs come from Latin Modern. To do so, use the following setups:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefallbackfamily</span></span><span class="brx">[</span>mainface<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>Asana Math<span class="brx">]</span><span class="brx">[</span>range<span class="brx">=</span><span class="br">{</span>uppercasescript,lowercasescript<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>Latin Modern<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span> <span class="brx">[</span>Latin Modern Math<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>mainface<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+$<span class="br">{</span><span class="cs">\cal</span> ABCDEFGHIJKLMNOPQRSTUVWXYZ<span class="br">}</span>$
+
+$<span class="br">{</span><span class="cs">\cal</span> abcdefghijklmnopqrstuvwxyz<span class="br">}</span>$
+
+The space of distributions on $<span class="cs">\Omega</span>$ is denoted by $<span class="br">{</span><span class="cs">\cal</span> D<span class="br">}</span>'<span class="brx">(</span><span class="cs">\Omega</span><span class="brx">)</span>$, while $<span class="br">{</span><span class="cs">\cal</span> S<span class="br">}</span><span class="brx">(</span><span class="br">{</span><span class="cs">\Bbb</span> R<span class="br">}</span>^n<span class="brx">)</span>$ is the space of Schwartz functions, and $<span class="br">{</span><span class="cs">\cal</span> S<span class="br">}</span>'<span class="brx">(</span><span class="br">{</span><span class="cs">\Bbb</span> R<span class="br">}</span>^n<span class="brx">)</span>$ is its dual.
+<span class="cs"><span class="documentcs">\startformula</span></span>
+<span class="cs">\langle</span> T,<span class="cs">\phi</span> <span class="cs">\rangle_</span><span class="br">{</span><span class="br">{</span><span class="cs">\cal</span> D<span class="br">}</span>'<span class="brx">(</span><span class="cs">\Omega</span><span class="brx">)</span>,<span class="br">{</span><span class="cs">\cal</span> D<span class="br">}</span><span class="brx">(</span><span class="cs">\Omega</span><span class="brx">)</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopformula</span></span>
+The set of admissible controls is denoted by $<span class="br">{</span><span class="cs">\cal</span> U<span class="br">}</span>_<span class="br">{</span><span class="cs">\rm</span> ad<span class="br">}</span>$.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Here, the command
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefallbackfamily</span></span><span class="brx">[</span>mainface<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>Asana Math<span class="brx">]</span><span class="brx">[</span>range<span class="brx">=</span><span class="br">{</span>uppercasescript,lowercasescript<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>tells mkiv that the fallback font for mainface in math mode comes from Asana Math, as far as the slots of lowercase and uppercase calligraphic (or script) glyphs are concerned.
+</p>
+    <p>If one wishes to use for instance Palatino instead of Latin Modern as the text font, as well as the font used in math mode, it is enough to replace the two lines
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>Latin Modern<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span> <span class="brx">[</span>Latin Modern Math<span class="brx">]</span>
+</pre>
+    <p>with
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>TeX Gyre Pagella<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span> <span class="brx">[</span>mainface<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span> <span class="brx">[</span>TeX Gyre Pagella Math<span class="brx">]</span>
+</pre>
+    <p>since &laquo;&nbsp;Palatino&nbsp;&raquo; is in fact an alias for TeX Gyre Pagella.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212442
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.024 seconds
+Preprocessor visited node count: 14/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4512/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4847-1!canonical and timestamp 20260109212442 and revision id 35162
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/math_calligraphic">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

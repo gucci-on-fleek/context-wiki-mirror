@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document layout and layers/Headers and footers&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_layout_and_layers/Headers_and_footers" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document layout and layers/Headers and footers
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=859&diff=41499">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Headers_with_centered_content">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Headers with centered content
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#How_to_get_a_line_under_the_header">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         How to get a line under the header
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Using_capitals">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Using capitals
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Marginal_headings_and_centered_headings">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Marginal headings and centered headings
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Skipping_headers_or_footers">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Skipping headers or footers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Substituting_a_shorter_lemma_for_a_section_header">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Substituting a shorter lemma for a
+         <i>
+          section
+         </i>
+         header
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Examples">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Nice_classic_design">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           Nice classic design
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Further_reading">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         Further reading
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Headers_with_centered_content">
+      Headers with centered content
+     </span>
+    </h2>
+    <p>ConTeXt offers the possibility to have mirrored headers (for odd and even pages); content can be in two parts, at the inner and outer margin of each page. But how do you get a header that will have one part of its content centered and one part in the outer margin? (This is a common setup for books: chapter title centered, page number in outer margin.) Hans posted this solution to the list:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text a<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text b<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text a<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\rlap</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\llap</span></span><span class="br">{</span>whatever<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text b<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\rlap</span></span><span class="br">{</span>whatever<span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>section<span class="brx">]</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\llap</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+</pre>
+    <p>The use of the TeX macros <tt><a class="new" href="../index.php?title=Command/rlap&action=edit&redlink=1.html" title="Command/rlap (page does not exist)">\rlap</a></tt> and <tt><a class="new" href="../index.php?title=Command/llap&action=edit&redlink=1.html" title="Command/llap (page does not exist)">\llap</a></tt> allows centering of content. Note that <tt><a href="../Command/pagenumber.html" title="Command/pagenumber">\pagenumber</a></tt> gets you the number prior to conversion; if you're using <tt><a href="../Command/setupuserpagenumber.html" title="Command/setupuserpagenumber">\setupuserpagenumber</a></tt>[numberconversion=...] then you'll want to use <tt><a href="../Command/userpagenumber.html" title="Command/userpagenumber">\userpagenumber</a></tt> instead.
+</p>
+    <h2>
+     <span class="mw-headline" id="How_to_get_a_line_under_the_header">
+      How to get a line under the header
+     </span>
+    </h2>
+    <p>with <tt><a href="../Command/setupheader.html" title="Command/setupheader">\setupheader</a></tt>
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheader</span></span><span class="brx">[</span>after<span class="brx">=</span><span class="cs">\hrule</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>headerdistance<span class="brx">=</span>5mm<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\ConTeXt</span></span>\ is fun<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../wikiteximage/e43ebc03b8603e32b98e5908654c6bed.webp" width="438">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Using_capitals">
+      Using capitals
+     </span>
+    </h2>
+    <p>In the previous example, the chapter title and the section title were fetched with the macro <tt><a href="../Command/getmarking.html" title="Command/getmarking">\getmarking</a></tt> which wraps around <tt><a class="new" href="../index.php?title=Command/fetchmark&action=edit&redlink=1.html" title="Command/fetchmark (page does not exist)">\fetchmark</a></tt>. 
+However, in case you need a raw version of the mark, say for instance to put it uppercase, you may use this setup instead:
+</p>
+    <pre class="tex">
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text a<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\rlap</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs">\uppercase</span><span class="br">{</span><span class="cs"><span class="stylecs">\fetchmark</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>first<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\llap</span></span><span class="br">{</span>whatever<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text b<span class="brx">]</span>
+  <span class="cs"><span class="systemcs">\rlap</span></span><span class="br">{</span>whatever<span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\expanded</span></span><span class="br">{</span><span class="cs">\uppercase</span><span class="br">{</span><span class="cs"><span class="stylecs">\fetchmark</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>first<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+  <span class="cs">\hfill</span>
+  <span class="cs"><span class="systemcs">\llap</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+</pre>
+    <p><br>
+You can replace <tt><a class="new" href="../index.php?title=Command/uppercase&action=edit&redlink=1.html" title="Command/uppercase (page does not exist)">\uppercase</a></tt> by <tt><a href="../Command/WORD.html" title="Command/WORD">\WORD</a></tt> and so on.
+</p>
+    <h2>
+     <span class="mw-headline" id="Marginal_headings_and_centered_headings">
+      Marginal headings and centered headings
+     </span>
+    </h2>
+    <p>The following file gives a way to achieve marginal and centered headings for doublesided documents. Experiment to achieve other effects!
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">
+
+<span class="comment">% output=pdf interface=en</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A5<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+
+<span class="cs">\newdimen</span><span class="cs">\Margin</span>
+<span class="cs">\Margin</span><span class="brx">=</span>3cm
+
+<span class="cs">\newdimen</span><span class="cs">\MarginRaise</span>
+<span class="cs">\MarginRaise</span><span class="brx">=</span>56ex
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>width<span class="brx">=</span>middle,
+             height<span class="brx">=</span>middle,
+             footer<span class="brx">=</span>3<span class="cs"><span class="systemcs">\bodyfontsize</span></span>,
+             header<span class="brx">=</span><span class="cs"><span class="systemcs">\bodyfontsize</span></span>,
+             headerdistance<span class="brx">=</span><span class="cs"><span class="systemcs">\bodyfontsize</span></span>,
+             bottom<span class="brx">=</span>3<span class="cs"><span class="systemcs">\bodyfontsize</span></span>,
+             location<span class="brx">=</span><span class="br">{</span>middle,doublesided<span class="br">}</span>,
+             margin<span class="brx">=</span><span class="cs">\Margin</span>,
+             marking<span class="brx">=</span>on<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided,
+                    location<span class="brx">=</span><span class="br">{</span>footer,middle<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuptexttexts</span></span><span class="brx">[</span>margin<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text a<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text b<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuptext</span></span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tf</span>,state<span class="brx">=</span>high<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text a<span class="brx">]</span>
+<span class="cs">\raise</span><span class="cs">\MarginRaise</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs">\vtop</span><span class="br">{</span><span class="cs">\hsize</span><span class="brx">=</span><span class="cs">\Margin</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\startalignment</span></span><span class="brx">[</span>right<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\stopalignment</span></span>
+<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text b<span class="brx">]</span>
+<span class="cs">\raise</span><span class="cs">\MarginRaise</span><span class="cs">\hbox</span><span class="br">{</span><span class="cs">\vtop</span><span class="br">{</span><span class="cs">\hsize</span><span class="brx">=</span><span class="cs">\Margin</span><span class="comment">%</span>
+  <span class="cs"><span class="documentcs">\startalignment</span></span><span class="brx">[</span>left<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>section<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\stopalignment</span></span>
+<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setupbottomtexts</span></span><span class="brx">[</span>pagenumber<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbottom</span></span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tf</span>,state<span class="brx">=</span>high<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span><span class="comment">%</span>
+<span class="brx">[</span><span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text c<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>text d<span class="br">}</span><span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfooter</span></span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tf</span>,
+               state<span class="brx">=</span>high<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text c<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\raise</span>2<span class="cs"><span class="systemcs">\bodyfontsize</span></span><span class="cs">\hbox</span><span class="br">{</span><span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>text d<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\raise</span>2<span class="cs"><span class="systemcs">\bodyfontsize</span></span><span class="cs">\hbox</span><span class="br">{</span><span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs">\setupinmargin</span><span class="brx">[</span>align<span class="brx">=</span>inner,
+               style<span class="brx">=</span><span class="cs">\tfx</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\showframe</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>Chapter Knuth Testing<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>Section Knuth Testing<span class="br">}</span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>20<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="cs">\par</span>\ <span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1754" src="../wikiteximage/5e7e7a1ceea9cae3f1a52ccdc8450402.webp" width="1240">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Skipping_headers_or_footers">
+      Skipping headers or footers
+     </span>
+    </h2>
+    <p>You can suppress or bypass a header or footer on a chapter page like this:
+</p>
+    <pre class="tex"><span class="comment">% with header=high the text area of the page will extend up </span>
+<span class="comment">% into the space where the header normaly sits</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>header<span class="brx">=</span>high,footer<span class="brx">=</span>none<span class="brx">]</span> 
+
+<span class="comment">% header=empty leaves the header area intact, </span>
+<span class="comment">% but does not fill it with any text</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>header<span class="brx">=</span>empty,footer<span class="brx">=</span>none<span class="brx">]</span> 
+</pre>
+    <p>Works only if the head title starts a new page. Since section does not do this by default, then you must write
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>yes,header<span class="brx">=</span>high,footer<span class="brx">=</span>none<span class="brx">]</span>
+</pre>
+    <p>The options for 'header=' and 'footer=' are none,empty,high,nomarking.
+</p>
+    <h2>
+     <span class="mw-headline" id="Substituting_a_shorter_lemma_for_a_section_header">
+      Substituting a shorter lemma for a
+      <i>
+       section
+      </i>
+      header
+     </span>
+    </h2>
+    <p>Given a global setup such as
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="comment">%</span>
+<span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span>
+</pre>
+    <p>Sometimes the <i>section</i> title is too long to fit in the header. Instead of manually inserting a new \setupheadertexts comamnd you may use something like
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startsection</span></span>
+   <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Here is a section title too long to fit in the header<span class="br">}</span>,
+    marking<span class="brx">=</span><span class="br">{</span>Here is a section title<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Similarly, you can send shorter lemmas to the table of contents or to bookmarks. So the relevant keys include
+</p>
+    <pre class="tex">title marking list bookmark
+</pre>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Nice_classic_design">
+      Nice classic design
+     </span>
+    </h3>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex">
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> <span class="brx">[</span>footer:leftpage<span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\prefixedpagenumber</span></span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="systemcs">\undepthed</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+         <span class="brx">[</span>
+             width<span class="brx">=</span><span class="cs"><span class="stylecs">\linewidth</span></span>,
+             height<span class="brx">=</span><span class="cs"><span class="systemcs">\strutht</span></span>,
+             depth<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs">\footerheight</span>+<span class="cs">\bottomspace</span><span class="cs">\relax</span>,
+         <span class="brx">]</span><span class="br">}</span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="stylecs">\labeltext</span></span><span class="br">{</span>chapter<span class="br">}</span> <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapternumber<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> <span class="brx">[</span>footer:rightpage<span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="systemcs">\undepthed</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+         <span class="brx">[</span>
+             width<span class="brx">=</span><span class="cs"><span class="stylecs">\linewidth</span></span>,
+             height<span class="brx">=</span><span class="cs"><span class="systemcs">\strutht</span></span>,
+             depth<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs">\footerheight</span>+<span class="cs">\bottomspace</span><span class="cs">\relax</span>,
+         <span class="brx">]</span><span class="br">}</span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="stylecs">\prefixedpagenumber</span></span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\setuplabeltext</span></span>
+     <span class="brx">[</span>en<span class="brx">]</span>
+     <span class="brx">[</span>chapter<span class="brx">=</span>Chapter<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+     <span class="brx">[</span>chapter<span class="brx">]</span>
+     <span class="brx">[</span>bodypartlabel<span class="brx">=</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span>
+     <span class="brx">[</span><span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>footer:rightpage<span class="br">}</span><span class="brx">]</span>
+     <span class="brx">[</span><span class="cs"><span class="stylecs">\directsetup</span></span><span class="br">{</span>footer:leftpage<span class="br">}</span><span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span>
+     <span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span>First chapter<span class="brx">]</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span> <span class="brx">[</span>title<span class="brx">=</span>Second chapter<span class="brx">]</span>
+     <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/32f0c68873a486053d50fa000735e83e.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Further_reading">
+      Further reading
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Document_structure_and_headlines/Headlines_formatting#Empty_the_headers_of_pages_preceding_a_new_chapter.html" title="Document structure and headlines/Headlines formatting">
+       Empty the headers of pages preceding a new chapter
+      </a>
+      , see pages dedicated to formatting of headlines.
+     </li>
+     <li>
+      <a href="../Document_structure_and_headlines/Section_numbering#Page_numbering_in_words.html" title="Document structure and headlines/Section numbering">
+       Page numbering in words
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212411
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.150 seconds
+Real time usage: 0.309 seconds
+Preprocessor visited node count: 196/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 836/2097152 bytes
+Template argument size: 188/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19892/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   47.107      1 -total
+ 21.88%   10.306     10 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:859-1!canonical and timestamp 20260109212410 and revision id 41499
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_layout_and_layers/Headers_and_footers">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

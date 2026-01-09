@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   pm39 tree sitter parser&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/pm39_tree_sitter_parser" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    pm39 tree sitter parser
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6631&diff=33502">2022-04-23</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Notes and such about the Tree-Sitter ConTeXt parser.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Features">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Features
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Document_Areas">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Document Areas
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Commands">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Groups">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Groups
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Inline_Math">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Inline Math
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Inclusions">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Inclusions
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#Code_Inclusions">
+            <span class="tocnumber">
+             1.5.1
+            </span>
+            <span class="toctext">
+             Code Inclusions
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#Typing_Environment_Inclusions">
+            <span class="tocnumber">
+             1.5.2
+            </span>
+            <span class="toctext">
+             Typing Environment Inclusions
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Other_Things">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           Other Things
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#Future_Directions">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Future Directions
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Features">
+      Features
+     </span>
+    </h2>
+    <p>Version 0.6 of the <code>tree-sitter-context_en</code> parser supports the following features:
+</p>
+    <h3>
+     <span class="mw-headline" id="Document_Areas">
+      Document Areas
+     </span>
+    </h3>
+    <p>If document start(text, component) and stop(text, component) commands exit in the document, the parser will build a tree with preamble, main, and postamble nodes. Dividing the document this way makes it easier for tools (that may want to ignore the postamble, for example).
+</p>
+    <p>If no start- or stop- commands exist in the document, all content is contained in a main node.
+</p>
+    <h3>
+     <span class="mw-headline" id="Commands">
+      Commands
+     </span>
+    </h3>
+    <p>The parser tokenizes commands into:
+</p>
+    <ul>
+     <li>
+      name
+     </li>
+     <li>
+      zero or more option blocks (square brackets with keywords)
+     </li>
+     <li>
+      zero or more settings blocks (square brackets with key=val pairs)
+     </li>
+     <li>
+      zero or more scopes (curly braces after the command)
+     </li>
+    </ul>
+    <p>Settings are further tokenized into keys and values, with values able to contain other tokens (more commands, etc.).
+</p>
+    <h3>
+     <span class="mw-headline" id="Groups">
+      Groups
+     </span>
+    </h3>
+    <p>The parser understands the following types of groupings:
+</p>
+    <ul>
+     <li>
+      Brace groups (starting with "{" or "\bgroup", and ending with "}" or "\egroup")
+     </li>
+     <li>
+      "Command" groups (starting with "\start" and ending with "\stop")
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Inline_Math">
+      Inline Math
+     </span>
+    </h3>
+    <p>The parser supports minimal handling of inline math.
+</p>
+    <p>(Future work: more math support!)
+</p>
+    <h3>
+     <span class="mw-headline" id="Inclusions">
+      Inclusions
+     </span>
+    </h3>
+    <h4>
+     <span class="mw-headline" id="Code_Inclusions">
+      Code Inclusions
+     </span>
+    </h4>
+    <p>The parser supports marking the following inclusions for inlined code:
+</p>
+    <ul>
+     <li>
+      luacode
+     </li>
+     <li>
+      tikzcode
+     </li>
+     <li>
+      MPinclusions
+     </li>
+     <li>
+      useMPgraphic
+     </li>
+     <li>
+      reuseableMPgraphic
+     </li>
+     <li>
+      MPcode
+     </li>
+     <li>
+      MPpage
+     </li>
+     <li>
+      staticMPfigure
+     </li>
+    </ul>
+    <p>Note that the parser will make these areas for external parsing, but nothing will happen if the external parser isn't available.
+</p>
+    <p>(As of this writing, an external parser exists for Lua, but not for MetaPost or TiKz.)
+</p>
+    <h4>
+     <span class="mw-headline" id="Typing_Environment_Inclusions">
+      Typing Environment Inclusions
+     </span>
+    </h4>
+    <p>The parser supports marking the following typing environments:
+</p>
+    <ul>
+     <li>
+      MetaPost
+     </li>
+     <li>
+      Lua
+     </li>
+     <li>
+      HTML
+     </li>
+     <li>
+      CSS
+     </li>
+     <li>
+      XML
+     </li>
+     <li>
+      PARSEDXML
+     </li>
+    </ul>
+    <p>...and a generic typing inclusion.
+</p>
+    <h3>
+     <span class="mw-headline" id="Other_Things">
+      Other Things
+     </span>
+    </h3>
+    <p>The parser marks commands relating to project structure.
+</p>
+    <p>The parser marks escaped characters (and will complain about unescaped characters that should be, except in special circumstances.)
+</p>
+    <p>The parser should be line-ending agnostic.
+</p>
+    <h2>
+     <span class="mw-headline" id="Future_Directions">
+      Future Directions
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Parse and include more of the document structure in the syntax tree? (Reflect chapters, sections, etc. in the syntax tree? What to do about user-defined headings?)
+     </li>
+     <li>
+      Table support for the parser? (which model(s)?)
+     </li>
+     <li>
+      Better math support?
+     </li>
+     <li>
+      Better programming support? (Explicitly tag things like loop and branch commands?)
+     </li>
+     <li>
+      More inclusions? (Markdown?)
+     </li>
+     <li>
+      Other ConTeXt interface languages?
+     </li>
+     <li>
+      Should the parser be more strict about what's allowed in the preamble?
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212442
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.010 seconds
+Real time usage: 0.012 seconds
+Preprocessor visited node count: 30/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:6631-1!canonical and timestamp 20260109212442 and revision id 33502
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/pm39_tree_sitter_parser">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

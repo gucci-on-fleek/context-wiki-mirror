@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Environments/Paragraph referencing&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Environments/Paragraph_referencing" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Environments/Paragraph referencing
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4579&diff=38440">2025-01-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>(This module is currently not in die distribution. Until it is, you can download it from <a class="external text" href="http://zenlima.com/context/t-pararef-0.8.2.zip" rel="nofollow">here</a>).
+</p>
+    <p>The <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/ruid=1253027735/action=view/id=64" rel="nofollow">pararef</a> module understands a paragraph as a full closed block of one thought. This means that inside a paragraph enumerations, formulas etc. can appear. That is why a paragraph must be defined manually via <code>\startParagraph</code> and <code>\stopParagraph</code>.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Paragraphs">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Paragraphs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#References">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Text_part_divider">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Text part divider
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Settings">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Settings
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Paragraphs">
+      Paragraphs
+     </span>
+    </h2>
+    <p>Each paragraph gets numbered started by each title. In order to link to a paragraph it can be reference by the optional parameter <code>reference=...</code> as a text reference.
+</p>
+    <p>One or more paragraphs can be summarized by a low level title which is displayed as a margin note (margin title) via the optional parameter <code>title=...</code>.
+</p>
+    <pre class="tex"> <span class="cs">\startParagraph</span><span class="brx">[</span>reference<span class="brx">=</span>...,title<span class="brx">=</span>...<span class="brx">]</span>
+ ...
+ <span class="cs">\stopParagraph</span>
+</pre>
+    <p>Here how a single paragraph with a title looks like:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pararef<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs">\startParagraph</span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Paragraph heading<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs">\stopParagraph</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:t-pararef-1.jpg"><img alt="t-pararef-1.jpg" decoding="async" height="188" src="../../images/e/ea/t-pararef-1.webp" width="606"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <p>Now the more practical part: the paragraph referencing. To reference to an paragraph the package pararef makes use of the <a href="../../References_notes_and_floats/Crossref_module.html" title="References notes and floats/Crossref module">crossref</a> module.
+</p>
+    <p>Here a simple usage example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pararef<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Lorem ipsum<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Dolor sit<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\startParagraph</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte 
+<span class="cs">\stopParagraph</span>
+
+<span class="cs">\startParagraph</span><span class="brx">[</span>reference<span class="brx">=</span>ref1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte 
+<span class="cs">\stopParagraph</span>
+
+<span class="cs">\startParagraph</span>
+Here are two references to destinations on the same page:
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>nowhite<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> ref1 should be: para. 1.1/2 and is: <span class="cs">\crossref</span><span class="brx">[</span>label<span class="brx">=</span><span class="br">{</span>para.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> ref2 should be: sec. 1.2 and is: <span class="cs">\crossref</span><span class="brx">[</span>label<span class="brx">=</span><span class="br">{</span>sec.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+Here is one references with brakets:
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>nowhite<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> ref1 should be: <span class="brx">(</span>para. 1.1/2<span class="brx">)</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span>,label<span class="brx">=</span><span class="br">{</span>para.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+<span class="cs">\stopParagraph</span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Amet<span class="br">}</span>,reference<span class="brx">=</span>ref2<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+
+<span class="cs">\startParagraph</span>
+Here are two references to destinations on an other page:
+<span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>nowhite<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> ref1 should be: para. 1.1/2 on page 1 and is: <span class="cs">\crossref</span><span class="brx">[</span>label<span class="brx">=</span><span class="br">{</span>para.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> ref2 should be: sec. 1.2 on page 1 and is: <span class="cs">\crossref</span><span class="brx">[</span>label<span class="brx">=</span><span class="br">{</span>sec.<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+<span class="cs">\stopParagraph</span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:t-pararef-2.jpg"><img alt="t-pararef-2.jpg" decoding="async" height="620" src="../../images/c/cd/t-pararef-2.webp" width="611"></a>
+<a class="image" href="../../File:t-pararef-3.jpg"><img alt="t-pararef-3.jpg" decoding="async" height="186" src="../../images/6/64/t-pararef-3.webp" width="585"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Text_part_divider">
+      Text part divider
+     </span>
+    </h2>
+    <p>Each section (subsection, subsubsection etc.) has mostly three parts:
+</p>
+    <ul>
+     <li>
+      introduction part,
+     </li>
+     <li>
+      one or several main parts and
+     </li>
+     <li>
+      summary part.
+     </li>
+    </ul>
+    <p>Each part contains one or more paragraphs. To make the logic parts visible the parts are divided by a line <code>\textpartdivider</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pararef<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Lorem ipsum<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\startParagraph</span>
+Some introduction text <span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs">\stopParagraph</span>
+
+<span class="cs">\textpartdivider</span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>3<span class="br">}</span><span class="br">{</span>
+<span class="cs">\startParagraph</span>
+Some main theme text <span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs">\stopParagraph</span>
+<span class="br">}</span>
+
+<span class="cs">\textpartdivider</span>
+
+<span class="cs">\startParagraph</span>
+Some section summarizing text <span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs">\stopParagraph</span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Doloris sit<span class="br">}</span><span class="brx">]</span>
+...
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:t-pararef-4.jpg"><img alt="t-pararef-4.jpg" decoding="async" height="924" src="../../images/b/be/t-pararef-4.webp" width="607"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Settings">
+      Settings
+     </span>
+    </h2>
+    <p>In pararef the colors can be set via two paramters:
+</p>
+    <ul>
+     <li>
+      <code>textpartdividerColor</code>
+      for the color of the line and
+     </li>
+     <li>
+      <code>paragraphNumberColor</code>
+      for the number of the paragraph.
+     </li>
+    </ul>
+    <p>They are defined as parameters of the module:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pararef<span class="brx">]</span><span class="brx">[</span>textpartdividerColor<span class="brx">=</span>...,paragraphNumberColor<span class="brx">=</span>...<span class="brx">]</span>
+...
+</pre>
+    <p>For now the color and style of the paragraph title has to be set via the normal outer margin settings.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212438
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.042 seconds
+Real time usage: 0.121 seconds
+Preprocessor visited node count: 40/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7298/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4579-1!canonical and timestamp 20260109212438 and revision id 38440
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Environments/Paragraph_referencing">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

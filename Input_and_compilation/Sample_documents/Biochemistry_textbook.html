@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/Biochemistry textbook&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Biochemistry_textbook" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/Biochemistry textbook
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2609&diff=38850">2025-01-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>J&ouml;rg Hagmann
+</p>
+    <hr>
+    <p>I wrote a biochemistry textbook in ConTeXt and would like to share the code. There is nothing special in it, but it might be useful to beginners. The book was compiled in Mk II, of course. Anything slightly non-trivial was contributed by experts, especially Wolfgang. You can download 8 sample pages from "<a class="external free" href="http://www.repetitorium-biochemie.ch/Downloads/hagmann_biochemistry.pdf" rel="nofollow">http://www.repetitorium-biochemie.ch/Downloads/hagmann_biochemistry.pdf</a>".
+</p>
+    <p><br>
+<b>Encoding</b>. I wrote in Emacs, encoding the text in iso-latin-1:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span> <span class="brx">[</span>il1<span class="brx">]</span>
+</pre>
+    <p><b>Language specific stuff</b>. The book is written in German. By default, German quotes would show up as something like ,some text', quotations would be between ", the first one at the bottom of the line, the second one high (don't know how to show that here). I wanted "English" quotes and <a class="external text" href="http://en.wikipedia.org/wiki/Guillemet" rel="nofollow">guillemets</a> for quotations:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuplanguage</span></span><span class="brx">[</span>de<span class="brx">]</span> 
+<span class="brx">[</span>leftquote<span class="brx">=</span><span class="cs"><span class="stylecs">\upperleftsinglesixquote</span></span>,rightquote<span class="brx">=</span><span class="cs"><span class="stylecs">\upperrightsinglesixquote</span></span>,
+leftquotation<span class="brx">=</span><span class="cs">\leftguillemot</span>,rightquotation<span class="brx">=</span><span class="cs">\rightguillemot</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span> <span class="brx">[</span>de<span class="brx">]</span>
+</pre>
+    <p><b>Fonts</b>. I proposed LinLibertine, but the publisher thought that too "unorthodox". Too bad, but here's the setup for Times:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>times<span class="brx">]</span><span class="brx">[</span>ec<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>times,11pt<span class="brx">]</span>
+</pre>
+    <p><b>Greek</b>. I used the greek module. You can write "real" Greek, with all the accents, like this: \greek{p'anta &lt;re~i} (See Maps article by Willi Egger):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>greek<span class="brx">]</span>
+</pre>
+    <p><b>Units</b>. Units like &micro;g, mg etc. can be consistently set with the units module (see Contextgarden page). But I found that, sometimes, the character sizes didn't match well with the text (different font, I suppose?), and I therefore often simply used "mg" instead of "\Milli\Gram" etc.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>units<span class="brx">]</span>
+</pre>
+    <p><b>Colours</b>. I used two kinds of red: "red", which is predefined, and a lighter red I defined myself. Colors need to be "set up":
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcolor</span></span><span class="brx">[</span>rgb<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>lightred<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>1,g<span class="brx">=</span>0.85,b<span class="brx">=</span>0.85<span class="brx">]</span>
+</pre>
+    <p><b>Papersize</b>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>MyBook<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>17cm,height<span class="brx">=</span>24cm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>MyBook<span class="brx">]</span><span class="brx">[</span>MyBook<span class="brx">]</span> <span class="comment">% Prints on paper the size of MyBook</span>
+<span class="comment">%\setuppapersize[MyBook][A4] %Would print MyBook-size pages on A4 paper</span>
+</pre>
+    <p><b>Layout</b>. I know that the following layout is not as generous as it should be, but this is what the publisher wanted; the wide cutspace is needed for margin figures:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>location<span class="brx">=</span>middle,
+  topspace<span class="brx">=</span>1.3cm,
+  width<span class="brx">=</span>middle,
+  cutspace<span class="brx">=</span>4.5cm,
+  rightmargindistance<span class="brx">=</span>0.4cm,
+  leftmargindistance<span class="brx">=</span>0.2cm,
+  backspace<span class="brx">=</span>1.2cm,
+  height<span class="brx">=</span>fit,
+  rightmargin<span class="brx">=</span>2.5cm,
+  leftmargin<span class="brx">=</span>1cm,
+  bottomspace<span class="brx">=</span>2cm,
+  footer<span class="brx">=</span>0.8cm,
+  setup<span class="brx">=</span>strict<span class="brx">]</span>
+</pre>
+    <p><b>Manual adaptations of the layout</b>. Because of the nature of the text (many itemizations, figures, tables and such), I had to manually adjust the number of lines on some pages, e.g.:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\adaptlayout</span></span><span class="brx">[</span>14<span class="brx">]</span><span class="brx">[</span>lines<span class="brx">=</span>+1<span class="brx">]</span>
+</pre>
+    <p><b>Displaying frames etc.</b>. In order to know what you are doing, comment/uncomment the following 4 lines:
+</p>
+    <pre class="tex"><span class="comment">% \showgrid</span>
+<span class="comment">% \showframe</span>
+<span class="comment">% \showsetups</span>
+<span class="comment">% \showlayout</span>
+</pre>
+    <p><b>Page numbering</b>. Sorry---no headers or footers. Just simple page number at bottom centre.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided,location<span class="brx">=</span>footer<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheader</span></span><span class="brx">[</span>state<span class="brx">=</span>none<span class="brx">]</span>
+</pre>
+    <p><b>Tolerance</b>. This was one of the first suggestions I got to a question I asked. Didn't change it nor play with it:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuptolerance</span></span><span class="brx">[</span>tolerant, stretch<span class="brx">]</span>
+</pre>
+    <p><b>Paragraphs</b>. The paragraphs are not indented, but separated by whitespace:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+</pre>
+    <p><b>Footnotes</b>. I used symbols for footnotes (conversion), starting with the same symbol on a new page:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupfootnotes</span></span><span class="brx">[</span>way<span class="brx">=</span>bypage, conversion<span class="brx">=</span>set 2<span class="brx">]</span>
+</pre>
+    <p><b>Chapters and sections</b>. Don't remember what this was for:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepagebreak</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>yes,footer,right<span class="brx">]</span>
+</pre>
+    <p><b>Bookchapters</b>. Red chapter number, set off from title text by a vertical bar. Chapters always start on a right (odd) page. If the even page preceding it is empty, there should be no page number. I tried "before={\ifodd\realpageno\else\page[empty]\fi}" which works if "page=yes"; but it messed up other things, so I ended up by removing page numbers manually in "Acrobat".
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\BookchapterCommand</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off,rightframe<span class="brx">=</span>on<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>1<span class="cs"><span class="stylecs">\space</span></span><span class="br">}</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="stylecs">\space</span></span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>command<span class="brx">=</span><span class="cs">\BookchapterCommand</span>,page<span class="brx">=</span>chapter,numbercolor<span class="brx">=</span>red,alternative<span class="brx">=</span>inmargin<span class="brx">]</span>
+</pre>
+    <p><b>New</b>: This and the following definitions don't work with recent (mkIV) versions of context. Instead, use
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\YourCommand</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off, etc...code as before<span class="br">}</span>
+</pre>
+    <p><b>Section titles</b>. Red numbers and black title on top of a gray background. The problem was long titles: how to get the text properly aligned (if you don't do anything, the text of the second line will be left-aligned, under the section number). The solution was provided by Wolfgang Schuster (but see "New" above):
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\SectionCommand</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span>
+     <span class="brx">[</span>frame<span class="brx">=</span>off,
+      width<span class="brx">=</span><span class="cs">\textwidth</span>,
+      align<span class="brx">=</span><span class="br">{</span>right<span class="br">}</span>,
+      background<span class="brx">=</span>color,
+      backgroundcolor<span class="brx">=</span>lightgray<span class="brx">]</span>
+     <span class="br">{</span><span class="cs">\hbox</span> to.011<span class="cs">\textwidth</span><span class="br">{</span><span class="br">}</span><span class="cs">\hbox</span> to.05<span class="cs">\textwidth</span><span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="brx">#</span>1<span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span>
+      <span class="cs">\vtop</span><span class="br">{</span><span class="cs">\hsize</span><span class="cs">\dimexpr</span><span class="cs">\hsize</span>-.061<span class="cs">\textwidth</span>-1em<span class="cs">\relax</span><span class="cs"><span class="systemcs">\begstrut</span></span><span class="brx">#</span>2
+<span class="cs">\endstrut</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>command<span class="brx">=</span><span class="cs">\SectionCommand</span>,numbercolor<span class="brx">=</span>red<span class="brx">]</span>
+</pre>
+    <p><b>Subsections</b>. "sans serif" on a gray background, but no numbering. The publisher wanted some distance between the left and the beginning of the subsection text, so I used Wolfgang's trick again (but see "New" above):
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\SubsectionCommand</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="comment">%</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span>
+     <span class="brx">[</span>frame<span class="brx">=</span>off,
+      width<span class="brx">=</span><span class="cs">\textwidth</span>,
+      align<span class="brx">=</span><span class="br">{</span>right<span class="br">}</span>,
+      background<span class="brx">=</span>color,
+      backgroundcolor<span class="brx">=</span>lightgray<span class="brx">]</span>
+     <span class="br">{</span><span class="cs">\hbox</span> to.011<span class="cs">\textwidth</span><span class="br">{</span><span class="cs"><span class="stylecs">\strut</span></span><span class="brx">#</span>1<span class="br">}</span><span class="cs">\vtop</span><span class="br">{</span><span class="cs">\hsize</span><span class="cs">\dimexpr</span><span class="cs">\hsize</span>-.011<span class="cs">\textwidth</span>-1em<span class="cs">\relax</span><span class="cs"><span class="systemcs">\begstrut</span></span><span class="brx">#</span>2
+<span class="cs">\endstrut</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>command<span class="brx">=</span><span class="cs">\SubsectionCommand</span>,number<span class="brx">=</span>no,style<span class="brx">=</span><span class="cs">\ss</span><span class="brx">]</span>
+</pre>
+    <p><b>Subsubsections</b>. Italic, no distance between subsubsection title and following paragraph. There is also an attempt to avoid subsubsection titles on the last line of a page, but if I remember correctly that didn't (always?) work:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsubsection<span class="brx">]</span><span class="brx">[</span>command<span class="brx">=</span>,style<span class="brx">=</span>slanted,number<span class="brx">=</span>no,before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span><span class="br">}</span>,before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\testpage</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="br">}</span>,after<span class="brx">=</span><span class="cs">\nowhitespace</span><span class="brx">]</span>
+</pre>
+    <p><b>Legends</b>. More space after the legends:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupfloats</span></span><span class="brx">[</span>spaceafter<span class="brx">=</span>3*medium<span class="brx">]</span>
+</pre>
+    <p><b>Tables I</b>. I used Tables (\starttables ... \stoptables), simply because that was the first method I encountered. This is how I set up fontsize of the tables and the captions. "\setupinterlinespace" adjusts the interlinespace of the captions to the (smaller) fontsize (here, the exact distance was what the publisher wanted; otherwise "\setupinterlinespace" without any specifications is enough).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuptables</span></span><span class="brx">[</span>bodyfont<span class="brx">=</span>small<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcaption</span></span><span class="brx">[</span>table<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="br">{</span><span class="cs">\ssx</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>line<span class="brx">=</span>2.5ex<span class="brx">]</span><span class="br">}</span>,align<span class="brx">=</span>left<span class="brx">]</span>
+</pre>
+    <p><b>Tables II</b>. Tables of width &lt;0.5 times textwidth are automatically placed at the inner margin (Instructions can be found in "Details.pdf").
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>table<span class="brx">]</span><span class="brx">[</span>criterium<span class="brx">=</span>0.5<span class="cs">\textwidth</span>,default<span class="brx">=</span>inner<span class="brx">]</span>
+</pre>
+    <p><b>Figures I</b>. Same story as tables.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcaption</span></span><span class="brx">[</span>figure<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span><span class="br">{</span><span class="cs">\ssx</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>line<span class="brx">=</span>2.5ex<span class="brx">]</span><span class="br">}</span>,align<span class="brx">=</span>left<span class="brx">]</span>
+</pre>
+    <p><b>Figurs II</b>. Figures and tables larger than textwidth (maximum: textwidth + marginwidth + what's between them) should stick out into the (outer, wide) margin:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>Bigfigure<span class="brx">]</span><span class="brx">[</span>Bigfigures<span class="brx">]</span><span class="brx">[</span>figure<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>Bigfigure<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>inner<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>Bigtable<span class="brx">]</span><span class="brx">[</span>Bigtables<span class="brx">]</span><span class="brx">[</span>table<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>Bigtable<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>inner<span class="brx">]</span>
+</pre>
+    <p><b>Figures III</b>. I had many figures in the outer margin (unnumbered, unlabelled). But some were a bit too wide (&gt;2.5cm); I wanted them filling the margin and sticking into the text; I called them "vignettes":
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>vignette<span class="brx">]</span><span class="brx">[</span>figure<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>vignette<span class="brx">]</span><span class="brx">[</span>leftmargindistance<span class="brx">=</span>-<span class="cs">\outermargintotal</span>,rightmargindistance<span class="brx">=</span>-<span class="cs">\outermargintotal</span>,default<span class="brx">=</span><span class="br">{</span>outer,none,low<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupcaption</span></span><span class="brx">[</span>vignette<span class="brx">]</span><span class="brx">[</span>number<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <p><b>Framed texts</b>. I had three types of framed text which I named "Story", "MySummary" and "Oddity". You put the text between "\startStory...\stopStory" etc. You can see what they look like in the pdf files:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>Story<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\setupbackground</span></span><span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tfx</span>,background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>white,frame<span class="brx">=</span>on,framecorner<span class="brx">=</span>rectangular,framecolor<span class="brx">=</span>black,rulethickness<span class="brx">=</span>0.5pt,topoffset<span class="brx">=</span>0.25cm,bottomoffset<span class="brx">=</span>0.25cm,leftoffset<span class="brx">=</span>0.25cm,rightoffset<span class="brx">=</span>0.25cm,before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span><span class="br">}</span><span class="brx">]</span><span class="cs"><span class="documentcs">\startbackground</span></span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>10pt<span class="brx">]</span><span class="br">}</span>,after<span class="brx">=</span><span class="cs"><span class="documentcs">\stopbackground</span></span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>MySummary<span class="brx">]</span><span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\setupbackground</span></span><span class="brx">[</span>background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>lightgray,backgroundcorner<span class="brx">=</span>rectangular,frame<span class="brx">=</span>off,topoffset<span class="brx">=</span>0.3cm,bottomoffset<span class="brx">=</span>0.3cm,leftoffset<span class="brx">=</span>0.5cm,rightoffset<span class="brx">=</span>0.5cm,before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span><span class="br">}</span><span class="brx">]</span><span class="cs"><span class="documentcs">\startbackground</span></span><span class="cs">\Zus</span><span class="br">}</span>,after<span class="brx">=</span><span class="cs"><span class="documentcs">\stopbackground</span></span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineframedtext</span></span><span class="brx">[</span>Oddity<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>0.75<span class="cs">\textwidth</span>,background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>lightred,frame<span class="brx">=</span>off,framecorner<span class="brx">=</span>round,frameradius<span class="brx">=</span>0.5cm,backgroundcorner<span class="brx">=</span>round,style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+</pre>
+    <p><b>Text in the margin</b>. sans serif, smaller size and leftaligned(!). Again: "\setupinterlinespace".
+</p>
+    <pre class="tex"><span class="cs">\setupinmargin</span><span class="brx">[</span>align<span class="brx">=</span>right,style<span class="brx">=</span><span class="cs">\ss</span><span class="cs">\tfx</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">]</span>
+</pre>
+    <p><b>Itemizations</b>. The publisher wanted them left(!)aligned:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupitemize</span></span><span class="brx">[</span>align<span class="brx">=</span>right<span class="brx">]</span>
+</pre>
+    <p><b>Appendices</b>. The setups go between "\startsectionblockenvironment[appendix]...\stopsectionblockenvironment".
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startsectionblockenvironment</span></span><span class="brx">[</span>appendix<span class="brx">]</span>
+</pre>
+    <p><b>Appendices</b>. One of the appendices consisted of endless lists of diseases with the corresponding enzyme defects. A case for "\starttabulate...\stoptabulate", leftaligned:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuptabulate</span></span><span class="brx">[</span>align<span class="brx">=</span>right,split<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p><b>Chapters, sections, etc.</b> Appendices got characters instead of numbers (A, B, etc.). The design made use of the setups defined above, with some differences (numbering, e.g.).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepagebreak</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>yes,footer,right<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>bodypartconversion<span class="brx">=</span>Character,page<span class="brx">=</span>chapter<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsection<span class="brx">]</span><span class="brx">[</span>command<span class="brx">=</span><span class="cs">\SectionCommand</span>,number<span class="brx">=</span>yes,numbercolor<span class="brx">=</span>red<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>subsubsection<span class="brx">]</span><span class="brx">[</span>number<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p><b>Appendix figures</b>. I wanted the Figures in the appendix framed, but not numbered:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>BigFramedFigure<span class="brx">]</span><span class="brx">[</span>BigFramedFigures<span class="brx">]</span><span class="brx">[</span>figure<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>BigFramedFigure<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>inner,frame<span class="brx">=</span>on,offset<span class="brx">=</span>2pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefloat</span></span><span class="brx">[</span>FramedFigure<span class="brx">]</span><span class="brx">[</span>FramedFigures<span class="brx">]</span><span class="brx">[</span>figure<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfloat</span></span><span class="brx">[</span>FramedFigure<span class="brx">]</span><span class="brx">[</span>frame<span class="brx">=</span>on,offset<span class="brx">=</span>2pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\stopsectionblockenvironment</span></span>
+</pre>
+    <p><b>Index</b>. The following code will produce an index with red, capital characters heading the beginning of a new section. (Try it, if you don't know what I mean).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupregister</span></span><span class="brx">[</span>index<span class="brx">]</span><span class="brx">[</span>color<span class="brx">=</span>red,alternative<span class="brx">=</span>A<span class="brx">]</span>
+</pre>
+    <p><b>Table of contents</b>. Chapters and sections only, looks (more or less) as follows:
+<b>3 Glycolysis and Gluconeogenesis........ 31</b>
+3.1 Glycolysis ............................ 31
+3.2 Gluconeogenesis ....................... 35
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span><span class="brx">[</span>content<span class="brx">]</span><span class="brx">[</span>level<span class="brx">=</span>2,alternative<span class="brx">=</span>c<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplist</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>style<span class="brx">=</span>bold<span class="brx">]</span>
+</pre>
+    <p><b>Input files</b>. The path to the (pdf) figures, the names of the figures, and additional stuff such as width were defined in file. So were some definitions I'm using for othere projects:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\input</span></span> ../path/to/figures_book.tex
+<span class="cs"><span class="documentcs">\input</span></span> ../path/to/Mydefinitions
+</pre>
+    <p><b>Organisation of the project</b>. I realise that there are sophisticated ways of organising "projects", but I didn't bother. I simply stuffed the single chapters between \starttext ... \stoptext. The file "index.tex" contains the following text: <code>\chapter{Index}\switchtobodyfont[10pt]\placeindex</code>. The rest of my setupfile therefore looks as follows:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startfrontmatter</span></span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>conversion<span class="brx">=</span>romannumerals<span class="brx">]</span> <span class="comment">% Pages of TOC etc numbered i, ii, etc.</span>
+<span class="cs"><span class="documentcs">\completecontent</span></span>
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/acknowledgments.tex
+<span class="cs"><span class="documentcs">\stopfrontmatter</span></span>
+<span class="cs"><span class="documentcs">\startbodymatter</span></span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>conversion<span class="brx">=</span><span class="brx">]</span>
+<span class="comment">% \setuppagenumber[number=5]  % mkii</span>
+<span class="cs"><span class="systemcs">\setcounter</span></span><span class="brx">[</span>userpage<span class="brx">]</span><span class="brx">[</span>5<span class="brx">]</span>      <span class="comment">% mkiv</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/chapter_1.tex
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/chapter_2.tex
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/chapter_3.tex
+<span class="comment">% ... etc.</span>
+
+<span class="cs"><span class="documentcs">\stopbodymatter</span></span>
+
+<span class="cs"><span class="documentcs">\startappendices</span></span>
+<span class="cs"><span class="stylecs">\setupcombinedlist</span></span><span class="brx">[</span>content<span class="brx">]</span><span class="brx">[</span>level<span class="brx">=</span>1<span class="brx">]</span><span class="comment">% sections etc. of appendices not in TOC</span>
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/appendix_1.tex
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/appendix_1.tex
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/appendix_1.tex
+<span class="comment">% ... etc.</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> /path/to/index.tex
+<span class="cs"><span class="documentcs">\stopappendices</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.071 seconds
+Real time usage: 0.128 seconds
+Preprocessor visited node count: 112/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 23740/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2609-1!canonical and timestamp 20260109212423 and revision id 38850
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/Biochemistry_textbook">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

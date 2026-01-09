@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   FO Page Layout&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/FO_Page_Layout" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    FO Page Layout
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=942&diff=31837">2020-09-22</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Physical_Page_Dimensions">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Physical Page Dimensions
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Page_Layout">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Page Layout
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Changing_Layouts_for_First.2C_Odd_and_Even_Pages">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Changing Layouts for First, Odd and Even Pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#First_Page">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           First Page
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Odd_and_Even_Pages">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Odd and Even Pages
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Creating_Headers_and_Footers">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Creating Headers and Footers
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Simple_Headers_and_Footers">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           Simple Headers and Footers
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#Controlling_the_Placement_of_Headers_and_Footers">
+            <span class="tocnumber">
+             5.1.1
+            </span>
+            <span class="toctext">
+             Controlling the Placement of Headers and Footers
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Changing_Headers_and_Footers_for_the_Firstpage">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           Changing Headers and Footers for the Firstpage
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#Formatting_Text_in_Headers_and_Footers">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Formatting Text in Headers and Footers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Summary">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Summary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#To_Do">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         To Do
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>In FO, one sets up paper size and dimensions at the start of a
+document and then later calls on these setups. The most
+straightforward way to accomplish the same thing in ConTeXt is to
+break the documents into parts, and define page dimensions and
+layout at each part.
+</p>
+    <p>First, let's look at page setup in FO for comparisons' sake:
+</p>
+    <pre>&lt;fo:simple-page-master  
+  master-name="first"
+  page-height="11in"   
+  page-width="8.5in"
+  margin-top="0.5in"   
+  margin-bottom="0.5in"
+  margin-left="1in"  
+  margin-right="1in"&gt;
+
+   &lt;!--set up room for a  header--&gt;
+   &lt;fo:region-body margin-top="1.0in"/&gt;
+
+&lt;/fo:simple-page-master&gt;
+</pre>
+    <p>Note how both page dimensions (the physical height of a page) and
+the layout (the margins) are contained in the simple-page-master
+element. In ConTeXt, these two qualities are separate.
+</p>
+    <h2>
+     <span class="mw-headline" id="Physical_Page_Dimensions">
+      Physical Page Dimensions
+     </span>
+    </h2>
+    <p>Let's build different layouts in a ConTeXt document, starting
+from top to bottom.
+</p>
+    <p>First, let's start with the basic document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop, way<span class="brx">=</span>bytext<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+</pre>
+    <p>The <tt>\part tells</tt> ConTeXt to break a document into the
+largest division, forcing a page break.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\part</span></span><span class="br">{</span><span class="br">}</span>
+</pre>
+    <p>Now we'll define the page size for the first part of the
+document. (Note that part can refer to any generic division; use
+part for the main divisions, when you want to change page
+layout.)
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>firstPart<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>8.5in, height<span class="brx">=</span>11in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>firstPart<span class="brx">]</span>
+</pre>
+    <p>We'll add some dummy text&nbsp;:
+</p>
+    <pre class="tex">Some text for our first part.
+</pre>
+    <p>Let's repeat what we already did, altering our page height from
+11 to 10 inches.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\part</span></span><span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>secondPart<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>8.5in, height<span class="brx">=</span>11in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>secondPart<span class="brx">]</span>
+Text for second part.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Page_Layout">
+      Page Layout
+     </span>
+    </h2>
+    <p>We still haven't set up other page qualities like margins. Let's
+do this now, all at once:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\part</span></span><span class="br">{</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>firstdPart<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>8.5in, height<span class="brx">=</span>11in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>firstPart<span class="brx">]</span>
+
+<span class="comment">% define layout for first part</span>
+<span class="cs"><span class="stylecs">\definelayout</span></span><span class="brx">[</span>
+    topspace<span class="brx">=</span>.5in, 
+    bottomspace<span class="brx">=</span>.5in,
+    cutspace<span class="brx">=</span>1in,
+    backspace<span class="brx">=</span>1in, 
+    header<span class="brx">=</span>2in, 
+    footer<span class="brx">=</span>2in, 
+    rightmargin<span class="brx">=</span>1in, 
+    leftmargin<span class="brx">=</span>1in,
+    width<span class="brx">=</span>5in, 
+    height<span class="brx">=</span>10in, 
+ <span class="brx">]</span>
+
+Text for first part.
+</pre>
+    <p>The "topspace" value refers to the space at the very top of a
+page, and is roughly equivalent to the "margin-top" attribute in
+FO. The "bottompace" value refers to the space at the very bottom
+of a page, and is roughly equivalent to the "margin-bottom"
+attribute in FO. The "backspace" value indicates the space in the
+left of the page and is roughly equivalent to "margin-left"
+attribute in FO. The "cutspace" value indicates the space in the
+left of the page and is roughly equivalent to "margin-left"
+attribute in FO. No text will occur in either one of these
+regions.
+</p>
+    <p>If you pages are not double sided (not part of a book), the
+"backspace" value will determine how much space occurs between
+the left edge of the paper and any text. It always touches the
+"leftmargin" region. If you have a double sided layout, the
+"backspace" value will flip from right to left side of your
+pages, but will always be in the gutter, or the spine of a book
+that is bound.
+</p>
+    <p>The values ConTeXt "header", "footer" "leftmargin" and
+"rightmargin" are roughly equal to the FO &lt;fo:region-body
+margin-top="2in"/&gt;, &lt;fo:region-body region-after="2in"/&gt;,
+&lt;fo:region-body region-start="1in"/&gt;, and &lt;fo:region-body
+region-end="1in"/&gt; respectively. Like their FO counterparts, the
+ConTeXt values set up margins at the top, bottom, left, and right
+of the page for marginal notes.
+</p>
+    <p>The values "leftmargin" and "rightmargin" have no affect on the
+actual width of the body text. You could set "leftmargin" to 5in,
+and your body text would not change its width. When you set
+width to 5 inches, the width of your body text will in fact be 5
+inches. (This contrasts with height, as I explain below.) If you
+the sum of your "backspace", margins, and width exceed the total
+page width, your layout will not work.
+</p>
+    <p>In contrast, the "header" and "footer" do change the overall
+height of your body text. If you increased the header by one
+inch, your body text would be 1 inch smaller. The height actually
+refers to the total height of the toppace, header, body text,
+footer, and bottomspace. If you set the header to 2 inches, and
+set the footer to 2 inches, and set the height to 4 inches, then
+the actual body height would be:
+</p>
+    <p>4 - 2 - 2 = 0 (!)
+</p>
+    <p>You would have no room for your body text at all. If you meant to
+set your body height to 4 inches, you would set height to 8
+inches (2 + 2 + 4 = 8).
+</p>
+    <table style="border:1px solid #DDDDDD">
+     <caption>
+      FO ConTeXt conversions for physical page layouts
+     </caption>
+     <tbody>
+      <tr style="background-color:#DDDDDD">
+       <th>
+        FO
+       </th>
+       <th>
+        ConTeXt
+       </th>
+      </tr>
+      <tr>
+       <td>
+<pre>&lt;fo:simple-page-master margin-top="x"&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> topspace<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr style="background-color:#EEEEEE">
+       <td>
+<pre>&lt;fo:simple-page-master margin-bottom="x"&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> bottomspace<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr>
+       <td>
+<pre>&lt;simple-page-master margin-left="x"&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> backspace<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr style="background-color:#EEEEEE">
+       <td>
+<pre>&lt;simple-page-master margin-right="x"&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> cutspace<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr>
+       <td>
+<pre>&lt;fo:region-body margin-top="x"/&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> headerdistance<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr style="background-color:#EEEEEE">
+       <td>
+<pre>&lt;fo:region-before extent="x"/&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> header<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr>
+       <td>
+<pre>&lt;fo:region-after extent="x"/&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> footer<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr style="background-color:#EEEEEE">
+       <td>
+<pre>&lt;fo:region-start extent="x"/&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> left-margin<span class="brx">=</span>x</pre> </td>
+      </tr>
+      <tr>
+       <td>
+<pre>&lt;fo:region-after extent="x"/&gt;</pre> </td>
+       <td>
+<pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span> right-margin<span class="brx">=</span>x</pre> </td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span id="Changing_Layouts_for_First,_Odd_and_Even_Pages">
+     </span>
+     <span class="mw-headline" id="Changing_Layouts_for_First.2C_Odd_and_Even_Pages">
+      Changing Layouts for First, Odd and Even Pages
+     </span>
+    </h2>
+    <p>FO lets you create different pages sizes and layouts for the
+first page, and for odd and even pages. Here is how to do the
+same in ConTeXt
+</p>
+    <h3>
+     <span class="mw-headline" id="First_Page">
+      First Page
+     </span>
+    </h3>
+    <p>In order to define different physical dimensions for your first
+page, use "1" as your first option:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="brx">[</span>
+    topspace<span class="brx">=</span>.5in,     <span class="comment">% the space at the very top of the page</span>
+    backspace<span class="brx">=</span>2in,     <span class="comment">% the space in the gutter </span>
+    header<span class="brx">=</span>2in,        <span class="comment">% the space for headers</span>
+    footer<span class="brx">=</span>2in,        <span class="comment">% the space for footers</span>
+    leftmargin<span class="brx">=</span>1in,    <span class="comment">% the space for margin notes</span>
+    rightmargin<span class="brx">=</span>1.5in, <span class="comment">% the space for right margin notes</span>
+    width<span class="brx">=</span>3in,         <span class="comment">% the width of the body text</span>
+    height<span class="brx">=</span>7in         <span class="comment">% the height of the body text</span>
+<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Odd_and_Even_Pages">
+      Odd and Even Pages
+     </span>
+    </h3>
+    <p>If you simply want to mirror odd and even pages, put this command
+at the top of your document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided, state<span class="brx">=</span>stop<span class="brx">]</span>
+</pre>
+    <p>For more flexibility, you can add a position argument to your
+<tt>\definelayout</tt> command.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayout</span></span><span class="brx">[</span>odd<span class="brx">]</span>
+             <span class="brx">[</span>backspace<span class="brx">=</span>1in,
+              cutspace<span class="brx">=</span>1.25in,
+              width<span class="brx">=</span>middle,
+              height<span class="brx">=</span>9in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definelayout</span></span><span class="brx">[</span>even<span class="brx">]</span>
+             <span class="brx">[</span>backspace<span class="brx">=</span>1in,
+              cutspace<span class="brx">=</span>1.25in,
+              width<span class="brx">=</span>middle,
+              height<span class="brx">=</span>8in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span> <span class="comment">% needed to add this or the first page wouldn't format</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>12<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> dawkins <span class="cs">\par</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Creating_Headers_and_Footers">
+      Creating Headers and Footers
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Simple_Headers_and_Footers">
+      Simple Headers and Footers
+     </span>
+    </h3>
+    <p>In FO, you create headers and footers with the static-content
+element:
+</p>
+    <pre>&lt;fo:static-content
+  flow-name="even-page"&gt;
+  Title
+&lt;/fo:static-content&gt;
+</pre>
+    <p>With ConTeXt, we place headers and footers in the body of the
+text wherever we want them with the commands
+<tt>\setupheadertexts</tt> and <tt>\setupfootertexts</tt>. These
+commands takes 4 arguments, the first for the left margin on odd
+pages, the second for the right margin on odd pages, the third
+for the left margin on even pages, and the fourth for the right
+margin on even pages. For simplicity's sake, let's leave the
+middle two options empty, so we get headers and footers on the
+even and odd pages, naturally alligned with the left margin,
+allowing us to think of the header and footer as one block of
+text.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span>left<span class="brx">(</span>even<span class="brx">)</span> header<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>right<span class="brx">(</span>odd<span class="brx">)</span> header<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span><span class="brx">[</span>left<span class="brx">(</span>even<span class="brx">)</span> footer<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>right<span class="brx">(</span>odd<span class="brx">)</span> footer<span class="brx">]</span>
+</pre>
+    <p>Since headers and footers will apper on whatever page you issue
+these commands, we must define header and footer text after we
+issue the <tt>\part</tt> command. If we don't, and ConTeXt needs
+to put blank pages at the end of a part, these blank pages will
+erronously contain the headings from the new part.
+</p>
+    <h4>
+     <span class="mw-headline" id="Controlling_the_Placement_of_Headers_and_Footers">
+      Controlling the Placement of Headers and Footers
+     </span>
+    </h4>
+    <p>The <tt>\setupheader</tt> and <tt>\setupfooter</tt> commands give
+us some control over header and footer placement. If we want a
+completely eliminate a header or footer for just one page, we use
+this command in conjunction with the <tt>state=high</tt> option,
+which not only eliminates the text of the header or footer, but
+the space it occupieds as well, pushing the body text into the
+header or footer region:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupheader</span></span><span class="brx">[</span>state<span class="brx">=</span>high<span class="brx">]</span> 
+<span class="cs"><span class="stylecs">\setupfooter</span></span><span class="brx">[</span>state<span class="brx">=</span>high<span class="brx">]</span>
+</pre>
+    <p>Other values for "state" are "stop", which stops the placement of
+headers and footers; "start", which starts them again if they
+have been stopped; "empty", which preserves the space for the
+header or footer but does not show the text; and none, which
+completely eliminates both the space and the text for a header or
+foooter.
+</p>
+    <p>We'll not use the <tt>\setupheader</tt> command in this tutorial,
+instead relying on other methods.
+</p>
+    <h3>
+     <span class="mw-headline" id="Changing_Headers_and_Footers_for_the_Firstpage">
+      Changing Headers and Footers for the Firstpage
+     </span>
+    </h3>
+    <p>We have already seen how we place a different header on odd and
+even pages. To start a different header or footer on the first
+page, we need the <tt>\setuphead</tt> command. The command
+determines the placement of text on the first page of a division
+in a document, such as part. We will use this command in
+conjunction with a <tt>\definetext</tt> command in this way:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definetext</span></span><span class="brx">[</span>partStart1<span class="brx">]</span><span class="brx">[</span>header<span class="brx">]</span><span class="brx">[</span>Part Header<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>part<span class="brx">]</span><span class="brx">[</span>header<span class="brx">=</span>partStart1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\part</span></span><span class="br">{</span><span class="br">}</span>
+</pre>
+    <p>For our sake, the <tt>\definetext</tt> command takes three
+options. The first is a name you choose to give it. The second is
+the postion. The third is the text itself.
+</p>
+    <p>Once we set up the defintion for the text, we recall it in the
+very next line in the <tt>header=partStart1</tt> option.
+</p>
+    <p>Note how we pace the definition for the header before we issue
+the <tt>\part</tt> command. This contrast with all the other
+formatting commands we use for page layout, which come after the
+<tt>\part</tt> command.
+</p>
+    <h2>
+     <span class="mw-headline" id="Formatting_Text_in_Headers_and_Footers">
+      Formatting Text in Headers and Footers
+     </span>
+    </h2>
+    <p>We'll need special commands to format our text in headers and
+footers. In order to make justify text left or right, we'll use
+the <tt>\hfill</tt> command. The <tt>\hfill</tt> command tells
+ConTeXt to fill in as much space horizontal space as possible.
+</p>
+    <pre class="tex"><span class="comment">% force the odd header to the right and the even header to the left</span>
+<span class="comment">% (where it would appear, anyway).</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="cs">\hfill</span> left<span class="brx">(</span>odd<span class="brx">)</span> header<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>right<span class="brx">(</span>even<span class="brx">)</span> header
+<span class="cs">\hfill</span><span class="brx">]</span>
+
+<span class="comment">% an hfill command on either side of the word middle </span>
+<span class="comment">% forces the word to be centered</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span>left <span class="cs">\hfill</span> middle <span class="cs">\hfill</span> right<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span> <span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>right header<span class="brx">]</span>
+</pre>
+    <p>Since ConTeXt won't allow us to create paragraphs in headers and
+footers as we would in normal text, we need the <tt>\vbox</tt>
+command if we want more than one line in a header or footer. The
+command <tt>\vbox</tt> stands for vertical box, the basic
+paragraph unit that ConTeXt uses behind the scenes. In order to
+break a line inside a <tt>\vbox</tt>, we use <tt>\vskip</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Summary">
+      Summary
+     </span>
+    </h2>
+    <ul>
+     <li>
+      We use the
+      <tt>
+       \part
+      </tt>
+      command to change page formatting, or put another way, to start a new run of pages.
+     </li>
+     <li>
+      Unlike FO, which defines page formatting at the start of a document, ConTeXt formatting commands are placed in the vicinity of
+      <tt>
+       \part
+      </tt>
+      .
+     </li>
+     <li>
+      We use
+      <tt>
+       \definelayout
+      </tt>
+      to set both the physical properties of a page as well as its layout.
+     </li>
+     <li>
+      We place the
+      <tt>
+       \setuphead
+      </tt>
+      command before the
+      <tt>
+       \part
+      </tt>
+      command. We place all other commands after
+      <tt>
+       \part
+      </tt>
+      .
+     </li>
+     <li>
+      The
+      <tt>
+       \setuphead
+      </tt>
+      command allows us to control the headers and footers for a new run of pages.
+     </li>
+     <li>
+      We use the
+      <tt>
+       \vbox
+      </tt>
+      and
+      <tt>
+       \hfill
+      </tt>
+      commands to format text within a header or footer.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="To_Do">
+      To Do
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Find out if there is a corresponding value of footerdistance in FO.
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212414
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.040 seconds
+Real time usage: 0.085 seconds
+Preprocessor visited node count: 209/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10465/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:942-1!canonical and timestamp 20260109212413 and revision id 31837
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/FO_Page_Layout">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

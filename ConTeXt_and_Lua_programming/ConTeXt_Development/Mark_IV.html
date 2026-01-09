@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/ConTeXt Development/Mark IV&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_IV" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/ConTeXt Development/Mark IV
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2487&diff=41047">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introducing_Mark_IV">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introducing Mark IV
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Mark_VI">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Mark VI
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Installation_and_maintenance">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Installation and maintenance
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Troubleshooting">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Troubleshooting
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Sample_code">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Sample code
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Lua_core">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           Lua core
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Fonts_and_typescripts">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           Fonts and typescripts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#More_sample_code">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           More sample code
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introducing_Mark_IV">
+      Introducing Mark IV
+     </span>
+    </h2>
+    <p>Mark IV is the name of the <a href="LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a>-aware part of ConTeXt; that is, when you use ConTeXt over the LuaTeX engine instead of PDFTeX or XeTeX. You run it with
+</p>
+    <pre>context filename
+</pre>
+    <p>There are fundamental differences between Mark IV and Mark II that you should be aware of. Many parts of ConTeXt have been redesigned from scratch making extensive use of the Lua programming language. And that is besides the heavy use of LuaTeX-only features in MkIV. As a result, there are a few intentional incompatibilities between the two ConTeXt versions. See <a href="Mark_II_-_Mark_IV_differences.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark II - Mark IV differences">Mark II - Mark IV differences</a> for these details.
+</p>
+    <p>The first public beta has been released on the 6th of August, 2007. Currently the easiest way to try it out is to install <a href="../../ConTeXt_Standalone.html" title="ConTeXt Standalone">ConTeXt Standalone</a>.
+</p>
+    <p>It takes advantage of the amazing capabilities of LuaTeX and opens up a whole new world of possibilities, in particular with fonts.
+</p>
+    <p>In the distribution the MkIV files have suffix 'mkiv'. There are also files with suffix 'mkvi' and more will follow. The most significant difference is that these files use a different (and still somewhat experimental) syntax.
+</p>
+    <h3>
+     <span class="mw-headline" id="Mark_VI">
+      Mark VI
+     </span>
+    </h3>
+    <p>Mark VI is <i>identical to Mark IV</i> in every respect, except that when you define a new macro you can give parameters names instead of numbers. This make programming a great deal more pleasant. For example, instead of
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\colortext</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">#</span>2<span class="comment">%</span>
+   <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>you can write
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\colortext</span><span class="brx">[</span><span class="brx">#</span>color<span class="brx">]</span><span class="brx">#</span>text<span class="comment">%</span>
+   <span class="br">{</span><span class="cs"><span class="documentcs">\color</span></span><span class="brx">[</span><span class="brx">#</span>color<span class="brx">]</span><span class="br">{</span><span class="brx">#</span>text<span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>To use Mark VI, add the comment <code>% macros=mkvi</code> as the first line of your file, or save the file with a <code>.mkvi</code> extension.
+</p>
+    <h2>
+     <span class="mw-headline" id="Installation_and_maintenance">
+      Installation and maintenance
+     </span>
+    </h2>
+    <p>The Mark IV code needs to be configured before it is usable. <a href="../../Running_Mark_IV.html" title="Running Mark IV">This page</a> explains how to do that. 
+</p>
+    <h2>
+     <span class="mw-headline" id="Troubleshooting">
+      Troubleshooting
+     </span>
+    </h2>
+    <p>The environment variable TEXINPUTS has to be empty or unset. If not, you can get errors about "file/module/whatever not found".
+</p>
+    <p>TEXINPUTS can *always* be a problem and really should not be used at all any more. It is a historical environment variable from the nineties, and it overrules just about every path in a modern texmf tree.
+</p>
+    <p>If you need something special, use TEXMFLOCAL or TEXMFPROJECT instead.
+</p>
+    <h2>
+     <span class="mw-headline" id="Sample_code">
+      Sample code
+     </span>
+    </h2>
+    <p>Here are some examples of cool stuff you can do with Mark IV.
+</p>
+    <h3>
+     <span class="mw-headline" id="Lua_core">
+      Lua core
+     </span>
+    </h3>
+    <p>The first thing you will want to test are the lua functions. Try
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>a <span class="brx">=</span> 1.5&nbsp;; b <span class="brx">=</span> 1.8&nbsp;; c <span class="brx">=</span> a*b&nbsp;; tex.print<span class="brx">(</span>c<span class="brx">)</span>&nbsp;;<span class="br">}</span>
+</pre>
+    <p>or the equivalent:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startlua</span></span>
+a <span class="brx">=</span> 1.5
+b <span class="brx">=</span> 1.8
+c <span class="brx">=</span> a*b
+tex.print<span class="brx">(</span>c<span class="brx">)</span>
+<span class="cs"><span class="systemcs">\stoplua</span></span>
+</pre>
+    <p>You can also do more elaborate calculations with the lua <code>math</code> library:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>tex.print<span class="brx">(</span>"$<span class="cs">\string</span><span class="cs">\\</span>sqrt<span class="br">{</span>2<span class="br">}</span> <span class="brx">=</span> " .. math.sqrt<span class="brx">(</span>2<span class="brx">)</span> .. "$"<span class="brx">)</span><span class="br">}</span>
+</pre>
+    <p>Note that the above works with any flavour of LuaTeX; nothing is actually ConTeXt-specific (except for <tt><a href="../../Command/ctxlua.html" title="Command/ctxlua">\ctxlua</a></tt> and <tt><a href="../../Command/startlua.html" title="Command/startlua">\startlua</a></tt>/<tt><a class="new" href="../../index.php?title=Command/stoplua&action=edit&redlink=1.html" title="Command/stoplua (page does not exist)">\stoplua</a></tt>).
+</p>
+    <h3>
+     <span class="mw-headline" id="Fonts_and_typescripts">
+      Fonts and typescripts
+     </span>
+    </h3>
+    <p>This is detailed in <a href="../../Characters_words_and_fonts/Fonts_in_LuaTeX.html" title="Characters words and fonts/Fonts in LuaTeX">Characters words and fonts/Fonts in LuaTeX</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="More_sample_code">
+      More sample code
+     </span>
+    </h3>
+    <p>Other examples of Lua(TeX) code are to be found on <a href="../../User:Luigi.scarso#Luatex_examples" title="User:Luigi.scarso">Luigi's user page</a> as well as <a class="external text" href="http://luatex.bluwiki.com/" rel="nofollow">http://luatex.bluwiki.com/</a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212406
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.025 seconds
+Real time usage: 0.041 seconds
+Preprocessor visited node count: 102/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 266/2097152 bytes
+Template argument size: 60/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2035/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   11.450      1 -total
+ 37.57%    4.302      3 Template:cmd
+ 33.08%    3.788      2 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2487-1!canonical and timestamp 20260109212406 and revision id 41047
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_IV">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Drawing graphs and diagrams/Pgfplot&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/Pgfplot" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Drawing graphs and diagrams/Pgfplot
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2664&diff=41396">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../../Input_and_compilation/Modules.html" title="Input and compilation/Modules">Modules</a> | <a href="../../Graphics_and_media.html" title="Graphics and media">Graphics and media</a> | <a href="../../Mathematics.html" title="Mathematics">Mathematics</a> &gt;
+</p>
+    <p><a class="external text" href="http://pgfplots.sourceforge.net/" rel="nofollow">Pgfplots</a> is a data plotting package based on <a class="external text" href="http://pgf.sourceforge.net" rel="nofollow">PGF/TikZ</a>.
+It is now included as a (third party) <a class="external text" href="http://modules.contextgarden.net" rel="nofollow">module</a> 
+for ConTeXt (with <a class="external text" href="http://modules.contextgarden.net/TikZ" rel="nofollow">TikZ</a>)
+</p>
+    <p>An alternative package is <a href="graph_module.html" title="Graphics and media/Drawing graphs and diagrams/graph module">graph module</a> using <a href="../Tutorials/Graphical_programming_with_MetaPost_and_MetaFun.html" title="Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun">MetaPost and MetaFun</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <p>(Data on low-temperature thermal expansion coefficients downloaded from <a class="external autonumber" href="http://cryogenics.nist.gov/" rel="nofollow">[1]</a>).
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>tikz<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>pgfplots<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\starttikzpicture</span>
+        <span class="cs">\startaxis</span><span class="brx">[</span>     xmin<span class="brx">=</span>0,xmax<span class="brx">=</span>300,
+                        title<span class="brx">=</span>http://cryogenics.nist.gov/,
+                        xlabel<span class="brx">=</span>$T$ <span class="brx">(</span>K<span class="brx">)</span>,
+                        ylabel<span class="brx">=</span>$<span class="brx">(</span>L-L_<span class="br">{</span>293<span class="br">}</span><span class="brx">)</span>/L_<span class="br">{</span>293<span class="br">}</span>$,
+                        legend style<span class="brx">=</span><span class="br">{</span>at<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>0.95,0.05<span class="brx">)</span><span class="br">}</span>,anchor<span class="brx">=</span>south east<span class="br">}</span>,
+                        width<span class="brx">=</span>16cm <span class="brx">]</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>red<span class="brx">]</span> plot file <span class="br">{</span>sapphire.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>sapphire<span class="br">}</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>green<span class="brx">]</span> plot file <span class="br">{</span>Be.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>Be<span class="br">}</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>blue<span class="brx">]</span> plot file <span class="br">{</span>BeCu.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>BeCu<span class="br">}</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>cyan<span class="brx">]</span> plot file <span class="br">{</span>SS304.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>SS304<span class="br">}</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>magenta<span class="brx">]</span> plot file <span class="br">{</span>Al6061-T6.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>Al6061-T6<span class="br">}</span>
+                <span class="cs">\addplot</span><span class="brx">[</span>mark<span class="brx">=</span>none,color<span class="brx">=</span>orange<span class="brx">]</span> plot file <span class="br">{</span>nylon.dat<span class="br">}</span>;
+                <span class="cs">\addlegendentry</span><span class="br">{</span>nylon<span class="br">}</span>
+        <span class="cs">\stopaxis</span>
+<span class="cs">\stoptikzpicture</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:Pgfplot_example.png"><img alt="Pgfplot example.png" decoding="async" height="566" src="../../images/8/8b/Pgfplot_example.webp" width="647"></a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212417
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.019 seconds
+Real time usage: 0.026 seconds
+Preprocessor visited node count: 11/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3759/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2664-1!canonical and timestamp 20260109212417 and revision id 41396
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Drawing_graphs_and_diagrams/Pgfplot">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

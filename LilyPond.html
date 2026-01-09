@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LilyPond&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LilyPond" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LilyPond
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1039&diff=40175">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="Graphics_and_media.html" title="Graphics and media">Graphics and media</a> | <a href="Graphics_and_media/Tutorials/Using_graphics.html" title="Graphics and media/Tutorials/Using graphics">Using graphics</a> &gt;
+</p>
+    <p><a class="external text" href="http://lilypond.org" rel="nofollow">LilyPond</a> is a great music engraver, and you can include LilyPond in ConTeXt source using <a class="external text" href="https://github.com/adityam/filter" rel="nofollow">the filter module</a> with some setup. This is different from using the lilypond-book preprocessor with LaTeX. (For LaTeX there&rsquo;s also a package that works similar to our ConTeXt setup here: <a class="external text" href="https://github.com/jperon/lyluatex" rel="nofollow">lyluatex</a>.)
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Simple_Filter_Setup">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Simple Filter Setup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Multi_Page_Filter_Setup">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Multi Page Filter Setup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#LilyPond_Settings">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         LilyPond Settings
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Sample_Include_File">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Sample Include File
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Named_Buffers">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Named Buffers
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Automatical_width_adaption">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Automatical width adaption
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Example">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#Too_many_open_files">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Too many open files
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Simple_Filter_Setup">
+      Simple Filter Setup
+     </span>
+    </h2>
+    <p>This works with ConTeXt MkII and MkIV, but takes only the first page of multi-pages scores, and you must create the folder "lilytemp" manually:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\readPDFfile</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>filter<span class="brx">]</span>
+<span class="cs">\defineexternalfilter</span><span class="brx">[</span>lilypond<span class="brx">]</span>
+	<span class="brx">[</span>continue<span class="brx">=</span>yes,
+	readcommand<span class="brx">=</span><span class="cs">\readPDFfile</span>,
+	directory<span class="brx">=</span>lilytemp/, <span class="comment">% directory for LilyPond's files</span>
+	output<span class="brx">=</span><span class="br">{</span><span class="cs">\externalfilterbasefile</span>.pdf<span class="br">}</span>,
+	filtercommand<span class="brx">=</span><span class="br">{</span>lilypond -dtall-page-formats<span class="brx">=</span>pdf -dseparate-page-formats<span class="brx">=</span>pdf -o"lilytemp/<span class="cs">\externalfilterbasefile</span>" "<span class="cs">\externalfilterinputfile</span>"<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Multi_Page_Filter_Setup">
+      Multi Page Filter Setup
+     </span>
+    </h2>
+    <p>This uses Lua and therefore only works with ConTeXt MkIV and up. It includes all pages of multi-page scores.
+It doesn&rsquo;t look into the complete (multi-page) PDF, but reads a "-system.count" auxiliary file written by LilyPond that contains the number of systems (pages) and includes the single-system PDFs.
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\LILYTEMP</span><span class="br">{</span>lilytemp<span class="br">}</span> <span class="comment">% name of folder for LilyPond/buffer files</span>
+
+<span class="cs">\def</span><span class="cs">\ParseLilypondFile</span><span class="brx">#</span>1<span class="comment">% #1 is the name of the output file</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>thirddata.parselilypondfile<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+ thirddata <span class="brx">=</span> thirddata or <span class="br">{</span><span class="br">}</span>
+ 
+ -- create temp folder if missing
+ if not lfs.isdir<span class="brx">(</span>"<span class="cs">\LILYTEMP</span>"<span class="brx">)</span> then
+   lfs.mkdir<span class="brx">(</span>"<span class="cs">\LILYTEMP</span>"<span class="brx">)</span>
+ end
+ 
+ function thirddata.parselilypondfile<span class="brx">(</span>name<span class="brx">)</span>
+   -- include all systems <span class="brx">(</span>pages<span class="brx">)</span>
+   -- name is like <span class="cs">\LILYTEMP</span>/mainfile-temp-lilypond-21.pdf
+   logs.report<span class="brx">(</span>"LILYPOND","name<span class="brx">=</span>'" .. name .. "'"<span class="brx">)</span>
+   local scname <span class="brx">=</span> string.gsub<span class="brx">(</span>name, '<span class="comment">%.pdf$', '-systems.count')</span>
+   local syco <span class="brx">=</span> tonumber<span class="brx">(</span>io.loaddata<span class="brx">(</span>scname<span class="brx">)</span><span class="brx">)</span> or 0
+   
+   for nr <span class="brx">=</span> 1, syco do
+     logs.report<span class="brx">(</span>"LILYPOND","including system no." .. nr<span class="brx">)</span>
+     context<span class="brx">(</span>"<span class="cs">\\</span>externalfigure<span class="brx">[</span>" .. string.gsub<span class="brx">(</span>name, '<span class="comment">%.pdf$', '-' .. nr) .. "]")</span>
+   end
+ end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>filter<span class="brx">]</span>
+<span class="cs">\defineexternalfilter</span><span class="brx">[</span>lilypond<span class="brx">]</span>
+	<span class="brx">[</span>continue<span class="brx">=</span>yes,
+        cache<span class="brx">=</span>yes,
+	readcommand<span class="brx">=</span><span class="cs">\ParseLilypondFile</span>,
+	directory<span class="brx">=</span><span class="cs">\LILYTEMP</span>/,
+	output<span class="brx">=</span><span class="br">{</span><span class="cs">\externalfilterbasefile</span>.pdf<span class="br">}</span>,
+	filtercommand<span class="brx">=</span><span class="br">{</span>lilypond -dtall-page-formats<span class="brx">=</span>pdf -dseparate-page-formats<span class="brx">=</span>pdf -daux-files -o"<span class="cs">\LILYTEMP</span>/<span class="cs">\externalfilterbasefile</span>/" "<span class="cs">\externalfilterinputfile</span>"<span class="br">}</span>,<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="LilyPond_Settings">
+      LilyPond Settings
+     </span>
+    </h2>
+    <p>Collect your LilyPond settings in a .ly file, put it in your lilytemp directory and include it from within your lilypond block like this:
+</p>
+    <pre class="tex"><span class="cs">\startlilypond</span>
+<span class="cs">\include</span> "mysettings.ly"
+...
+<span class="cs">\stoplilypond</span>
+</pre>
+    <p>You can avoid this \include line following <a class="external text" href="http://modules.contextgarden.net/dl/t-filter/doc/context/third/filter/filter.txt" rel="nofollow">filter module documentation</a>, section "Prepend and append text".
+In short: you can inline your complete LilyPond settings or at least the include line:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>lilypond::settings<span class="brx">]</span>
+<span class="cs">\include</span> "mysettings.ly"
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs">\defineexternalfilter</span><span class="brx">[</span>lilypond<span class="brx">]</span><span class="brx">[</span>
+	...
+	bufferbefore<span class="brx">=</span><span class="br">{</span>lilypond::settings<span class="br">}</span>,
+	...<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Sample_Include_File">
+      Sample Include File
+     </span>
+    </h3>
+    <p>"mysettings.ly" could look like this:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\version</span></span> "2.24.0"
+<span class="brx">#</span><span class="brx">(</span>ly:set-option <span class="brx">(</span>quote no-point-and-click<span class="brx">)</span><span class="brx">)</span>
+<span class="brx">#</span><span class="brx">(</span>set-global-staff-size 14<span class="brx">)</span>
+
+<span class="comment">% --- start of setup for single-line output files ---</span>
+<span class="comment">% from lilypond-book-preamble.ly</span>
+<span class="brx">#</span><span class="brx">(</span>define default-toplevel-book-handler
+  print-book-with-defaults-as-systems <span class="brx">)</span>
+
+<span class="brx">#</span><span class="brx">(</span>define toplevel-book-handler
+  <span class="brx">(</span>lambda <span class="brx">(</span> . rest<span class="brx">)</span>
+  <span class="brx">(</span>set! output-empty-score-list <span class="brx">#</span>f<span class="brx">)</span>
+  <span class="brx">(</span>apply print-book-with-defaults rest<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+
+<span class="brx">#</span><span class="brx">(</span>define toplevel-music-handler
+  <span class="brx">(</span>lambda <span class="brx">(</span> . rest<span class="brx">)</span>
+   <span class="brx">(</span>apply collect-music-for-book rest<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+
+<span class="brx">#</span><span class="brx">(</span>define toplevel-score-handler
+  <span class="brx">(</span>lambda <span class="brx">(</span> . rest<span class="brx">)</span>
+   <span class="brx">(</span>apply collect-scores-for-book rest<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+
+<span class="brx">#</span><span class="brx">(</span>define toplevel-text-handler
+  <span class="brx">(</span>lambda <span class="brx">(</span> . rest<span class="brx">)</span>
+   <span class="brx">(</span>apply collect-scores-for-book rest<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+
+<span class="brx">#</span><span class="brx">(</span>set! output-empty-score-list <span class="brx">#</span>t<span class="brx">)</span>
+
+<span class="comment">% --- stop single-line setup ---</span>
+
+<span class="cs">\paper</span> <span class="br">{</span>
+	<span class="brx">#</span><span class="brx">(</span>define dump-extents <span class="brx">#</span>t<span class="brx">)</span>
+	indent <span class="brx">=</span> 0<span class="cs">\mm</span>
+	ragged-bottom <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>t
+	ragged-last-bottom <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>t
+	print-page-number <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+	line-width <span class="brx">=</span> 120<span class="cs">\mm</span>
+	oddFooterMarkup  <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+	oddHeaderMarkup  <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+	bookTitleMarkup  <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+	scoreTitleMarkup <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+<span class="br">}</span>
+
+<span class="cs">\layout</span> <span class="br">{</span>
+	<span class="brx">#</span><span class="brx">(</span>layout-set-staff-size 14<span class="brx">)</span> <span class="comment">% beware, this resets fonts!</span>
+	<span class="comment">% set fonts for rm / ss / tt </span>
+	<span class="brx">#</span><span class="brx">(</span>define fonts <span class="brx">(</span>make-pango-font-tree "TeX Gyre Schola" "LMSans10" "LMTypewriter10 Regular" <span class="brx">(</span>/ 14 20<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+ 	<span class="cs">\context</span> <span class="br">{</span> <span class="cs">\Score</span>
+		<span class="cs">\remove</span> "Bar_number_engraver"
+		<span class="cs">\override</span> PaperColumn <span class="brx">#</span>'keep-inside-line <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>t
+ 	<span class="br">}</span>
+        <span class="comment">% some example settings</span>
+	<span class="cs">\context</span> <span class="br">{</span> <span class="cs">\Staff</span>
+  		<span class="cs">\override</span> TimeSignature <span class="brx">#</span>'style <span class="brx">=</span> <span class="brx">#</span>'numbered
+ 	<span class="br">}</span>
+	<span class="cs">\context</span> <span class="br">{</span> <span class="cs">\ChordNames</span>
+		chordChanges <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>t
+		majorSevenSymbol <span class="brx">=</span> <span class="cs">\markup</span><span class="br">{</span> 7+ <span class="br">}</span>
+	<span class="br">}</span>
+<span class="br">}</span>
+</pre>
+    <p>Please look up the meaning of settings in <a class="external text" href="http://lilypond.org/doc/v2.24/Documentation/web/manuals" rel="nofollow">LilyPond&rsquo;s great documentation</a>!
+</p>
+    <p>If you&rsquo;d like to exchange measures like text width between ConTeXt and LilyPond, you could write those into the LilyPond buffer (see below).
+</p>
+    <p>To give LilyPond measures to ConTeXt, you would need to write them into a temp file (using Scheme) and read that in again (using Lua).
+For the time being this is left as an exercise to the user.&nbsp;;)
+</p>
+    <p>Unfortunately you can&rsquo;t define LilyPond&rsquo;s text (lyrics) size with an absolute value, but only relative to staff size.
+</p>
+    <h2>
+     <span class="mw-headline" id="Named_Buffers">
+      Named Buffers
+     </span>
+    </h2>
+    <p>Normally, your LilyPond snippets just get a running number. If you re-order your scores, each one gets re-rendered.
+</p>
+    <p>You can avoid that if you name your LilyPond snippets: just add <tt>[name=myfunnyname]</tt> to <tt><a class="new" href="index.php?title=Command/startlilypond&action=edit&redlink=1.html" title="Command/startlilypond (page does not exist)">\startlilypond</a></tt>.
+</p>
+    <p>If you have just one LilyPond part per component (e.g. songs in a songbook), you could use <tt>[name=\currentcomponent]</tt>.
+</p>
+    <h2>
+     <span class="mw-headline" id="Automatical_width_adaption">
+      Automatical width adaption
+     </span>
+    </h2>
+    <p>If you want to set your note line width automatically to your current text width, try this:
+</p>
+    <pre> -- this goes after "create temp folder"
+ io.savedata("\LILYTEMP/texsettings.ly", "\\paper { line-width = " .. 
+	string.gsub(number.todimen(tex.dimen.textwidth),"pt","\\pt") .. " } \n")
+</pre>
+    <p>and then adapt your snippets or preamble buffer:
+</p>
+    <pre class="tex"><span class="cs">\include</span> "../mysettings.ly"
+<span class="cs">\include</span> "texsettings.ly"
+</pre>
+    <p>You must comment/delete the "line-width" setting in mysettings.ly, otherwise it won&rsquo;t work.
+</p>
+    <h2>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h2>
+    <p>Here's an example of placing score snippets in the body of the text, with fonts in the score & body matching:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\LILYTEMP</span><span class="br">{</span>lilytemp<span class="br">}</span> <span class="comment">% name of folder for LilyPond/buffer files</span>
+
+<span class="cs">\def</span><span class="cs">\ParseLilypondFile</span><span class="brx">#</span>1<span class="comment">% #1 is the name of the output file</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>thirddata.parselilypondfile<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+ thirddata <span class="brx">=</span> thirddata or <span class="br">{</span><span class="br">}</span>
+
+ -- create temp folder if missing
+ if not lfs.isdir<span class="brx">(</span>"<span class="cs">\LILYTEMP</span>"<span class="brx">)</span> then
+   lfs.mkdir<span class="brx">(</span>"<span class="cs">\LILYTEMP</span>"<span class="brx">)</span>
+ end
+
+ function thirddata.parselilypondfile<span class="brx">(</span>name<span class="brx">)</span>
+   -- include all systems <span class="brx">(</span>pages<span class="brx">)</span>
+   -- name is like <span class="cs">\LILYTEMP</span>/mainfile-temp-lilypond-21.pdf
+   logs.report<span class="brx">(</span>"LILYPOND","name<span class="brx">=</span>'" .. name .. "'"<span class="brx">)</span>
+   local scname <span class="brx">=</span> string.gsub<span class="brx">(</span>name, '<span class="comment">%.pdf$', '-systems.count')</span>
+   local syco <span class="brx">=</span> tonumber<span class="brx">(</span>io.loaddata<span class="brx">(</span>scname<span class="brx">)</span><span class="brx">)</span> or 0
+
+   for nr <span class="brx">=</span> 1, syco do
+     logs.report<span class="brx">(</span>"LILYPOND","including system no." .. nr<span class="brx">)</span>
+     context<span class="brx">(</span>"<span class="cs">\\</span>setupfloats<span class="brx">[</span>location<span class="brx">=</span>right,frame<span class="brx">=</span>off<span class="brx">]</span><span class="cs">\\</span>placefigure<span class="brx">[</span>none<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs">\\</span>externalfigure<span class="brx">[</span>" .. string.gsub<span class="brx">(</span>name, '<span class="comment">%.pdf$', '-' .. nr) .. "]}")</span>
+   end
+ end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>filter<span class="brx">]</span>
+<span class="cs">\defineexternalfilter</span><span class="brx">[</span>lilypond<span class="brx">]</span>
+  <span class="brx">[</span>continue<span class="brx">=</span>yes,
+        cache<span class="brx">=</span>yes,
+  readcommand<span class="brx">=</span><span class="cs">\ParseLilypondFile</span>,
+  directory<span class="brx">=</span><span class="cs">\LILYTEMP</span>/,
+  output<span class="brx">=</span><span class="br">{</span><span class="cs">\externalfilterbasefile</span>.pdf<span class="br">}</span>,
+  filtercommand<span class="brx">=</span><span class="br">{</span>lilypond -dtall-page-formats<span class="brx">=</span>pdf -dseparate-page-formats<span class="brx">=</span>pdf -daux-files -o"<span class="cs">\LILYTEMP</span>/<span class="cs">\externalfilterbasefile</span>" "<span class="cs">\externalfilterinputfile</span>"<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span><span class="brx">[</span>textwidth<span class="brx">=</span>6in<span class="brx">]</span> <span class="comment">% matches line-width below</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>main<span class="brx">]</span><span class="brx">[</span>protrusion<span class="brx">=</span>quality, expansion<span class="brx">=</span>quality<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfamily</span></span><span class="brx">[</span>mainface<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>Adobe Jenson Pro<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span>main<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>mainface,13pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>hz,hanging<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+
+<span class="cs">\startlilypond</span>
+
+<span class="cs">\layout</span><span class="br">{</span>
+  indent<span class="brx">=</span>0<span class="cs">\mm</span>
+  ragged-right <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+<span class="br">}</span>
+<span class="cs">\paper</span>  <span class="br">{</span>
+myStaffSize <span class="brx">=</span> <span class="brx">#</span>20
+  <span class="brx">#</span><span class="brx">(</span>define fonts
+    <span class="brx">(</span>make-pango-font-tree "Adobe Jenson Pro"
+                          "Myriad Pro"
+                          "Myriad Pro"
+<span class="brx">(</span>/ myStaffSize 20<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+line-width<span class="brx">=</span>6<span class="cs"><span class="documentcs">\in</span></span>
+  oddFooterMarkup<span class="brx">=</span><span class="brx">#</span><span class="brx">#</span>f
+  oddHeaderMarkup<span class="brx">=</span><span class="brx">#</span><span class="brx">#</span>f
+  bookTitleMarkup <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+  scoreTitleMarkup <span class="brx">=</span> <span class="brx">#</span><span class="brx">#</span>f
+ <span class="br">}</span>
+melody <span class="brx">=</span> <span class="cs">\relative</span> c'' <span class="br">{</span>
+  <span class="cs">\clef</span> treble
+  <span class="cs">\key</span> c <span class="cs">\major</span>
+  <span class="cs">\time</span> 4/4
+
+  a b c d
+<span class="br">}</span>
+
+text <span class="brx">=</span> <span class="cs">\lyricmode</span> <span class="br">{</span>
+Aaa Bee Cee Dee
+<span class="br">}</span>
+
+upper <span class="brx">=</span> <span class="cs">\relative</span> c'' <span class="br">{</span>
+  <span class="cs">\clef</span> treble
+  <span class="cs">\key</span> c <span class="cs">\major</span>
+  <span class="cs">\time</span> 2/4
+
+  a4 b c d
+<span class="br">}</span>
+
+lower <span class="brx">=</span> <span class="cs">\relative</span> c <span class="br">{</span>
+  <span class="cs">\clef</span> bass
+  <span class="cs">\key</span> c <span class="cs">\major</span>
+  <span class="cs">\time</span> 2/4
+
+  a2 c
+<span class="br">}</span>
+
+<span class="cs">\score</span> <span class="br">{</span>
+  &lt;&lt;
+    <span class="cs">\new</span> Voice <span class="brx">=</span> "mel" <span class="br">{</span> <span class="cs">\autoBeamOff</span> <span class="cs">\melody</span> <span class="br">}</span>
+    <span class="cs">\new</span> Lyrics <span class="cs">\lyricsto</span> mel <span class="cs">\text</span>
+    <span class="cs">\new</span> PianoStaff &lt;&lt;
+      <span class="cs">\new</span> Staff <span class="brx">=</span> "upper" <span class="cs">\upper</span>
+      <span class="cs">\new</span> Staff <span class="brx">=</span> "lower" <span class="cs">\lower</span>
+    &gt;&gt;
+  &gt;&gt;
+  <span class="cs">\layout</span> <span class="br">{</span>
+    <span class="cs">\context</span> <span class="br">{</span> <span class="cs">\Staff</span> <span class="cs">\RemoveEmptyStaves</span> <span class="br">}</span>
+  <span class="br">}</span>
+<span class="br">}</span>
+
+<span class="cs">\stoplilypond</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Too_many_open_files">
+      Too many open files
+     </span>
+    </h2>
+    <p>With bigger projects and the above setup you might run into "too many open files" errors, at least in older Linux, OSX and other Unix-like OSes.
+Ask your shell about the open files maximum and set it higher:
+</p>
+    <pre> $ ulimit -n
+ 256
+ $ ulimit -S -n 2048
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212430
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.052 seconds
+Real time usage: 0.083 seconds
+Preprocessor visited node count: 73/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 98/2097152 bytes
+Template argument size: 26/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 18344/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    3.959      1 Template:cmd
+100.00%    3.959      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1039-1!canonical and timestamp 20260109212430 and revision id 40175
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LilyPond">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

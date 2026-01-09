@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Example of photo page layout&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Example_of_photo_page_layout" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Example of photo page layout
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2171&diff=41322">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The following creates a 10x10in page with four pictures on it in a nice grid.  You can change the size of the page and the image sizes will adjust as well.  The images can be scaled, cropped, and moved behind the display frame.  There is probably easier ways to do this, but I needed a way that would work with our web service.  This captured all the parts we needed in a generic way.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% output=pdftex</span>
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>imb<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>10in,height<span class="brx">=</span>10in<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>imb<span class="brx">]</span><span class="brx">[</span>imb<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided, location<span class="brx">=</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>backspace<span class="brx">=</span>1.25in,
+  cutspace<span class="brx">=</span>1.0in,
+  width<span class="brx">=</span>fit,
+  topspace<span class="brx">=</span>.25in,
+  bottomspace<span class="brx">=</span>.25in,
+  header<span class="brx">=</span>1.0in,
+  footer<span class="brx">=</span>1.0in,
+  height<span class="brx">=</span>fit<span class="brx">]</span>
+
+<span class="cs">\newdimen</span><span class="cs">\spacebetween</span> <span class="cs">\spacebetween</span> <span class="brx">=</span> 0.5in
+<span class="cs">\newdimen</span><span class="cs">\imagewidth</span>   <span class="cs">\imagewidth</span>   <span class="brx">=</span> 6in
+<span class="cs">\newdimen</span><span class="cs">\imageheight</span>  <span class="cs">\imageheight</span>  <span class="brx">=</span> 4.5in
+
+<span class="comment">%my cow.jpg image was 6in x 4.5in @300dpi</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>imagea<span class="brx">]</span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\imagewidth</span>,height<span class="brx">=</span><span class="cs">\imageheight</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>imageb<span class="brx">]</span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\imagewidth</span>,height<span class="brx">=</span><span class="cs">\imageheight</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>imagec<span class="brx">]</span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\imagewidth</span>,height<span class="brx">=</span><span class="cs">\imageheight</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\useexternalfigure</span></span><span class="brx">[</span>imaged<span class="brx">]</span><span class="brx">[</span>cow.pdf<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs">\imagewidth</span>,height<span class="brx">=</span><span class="cs">\imageheight</span>,frame<span class="brx">=</span>off<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">% slot a</span>
+<span class="cs">\newdimen</span><span class="cs">\slotawidth</span>   <span class="cs">\slotawidth</span>  <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperwidth</span>-<span class="cs">\innerspacewidth</span>-<span class="cs">\outerspacewidth</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotaheight</span>  <span class="cs">\slotaheight</span> <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperheight</span>-<span class="cs">\headerheight</span>-<span class="cs">\footerheight</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotatop</span>     <span class="cs">\slotatop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\headerheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotaleft</span>    <span class="cs">\slotaleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\innerspacewidth</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipatop</span>     <span class="cs">\clipatop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.416666666666<span class="cs">\imageheight</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotaheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipaleft</span>    <span class="cs">\clipaleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.302083333333<span class="cs">\imagewidth</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotawidth</span><span class="brx">)</span>
+
+<span class="comment">% slot b</span>
+<span class="cs">\newdimen</span><span class="cs">\slotbwidth</span>   <span class="cs">\slotbwidth</span>  <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperwidth</span>-<span class="cs">\innerspacewidth</span>-<span class="cs">\outerspacewidth</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotbheight</span>  <span class="cs">\slotbheight</span> <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperheight</span>-<span class="cs">\headerheight</span>-<span class="cs">\footerheight</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotbtop</span>     <span class="cs">\slotbtop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\headerheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotbleft</span>    <span class="cs">\slotbleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\innerspacewidth</span>+<span class="cs">\slotawidth</span>+<span class="cs">\spacebetween</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipbtop</span>     <span class="cs">\clipbtop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>1.1<span class="cs">\imageheight</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotaheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipbleft</span>    <span class="cs">\clipbleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>1.05<span class="cs">\imagewidth</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotawidth</span><span class="brx">)</span>
+
+<span class="comment">% slot c</span>
+<span class="cs">\newdimen</span><span class="cs">\slotcwidth</span>   <span class="cs">\slotcwidth</span> 	<span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperwidth</span>-<span class="cs">\innerspacewidth</span>-<span class="cs">\outerspacewidth</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotcheight</span>  <span class="cs">\slotcheight</span> <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperheight</span>-<span class="cs">\headerheight</span>-<span class="cs">\footerheight</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotctop</span>     <span class="cs">\slotctop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\headerheight</span>+<span class="cs">\slotaheight</span>+<span class="cs">\spacebetween</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotcleft</span>    <span class="cs">\slotcleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\innerspacewidth</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipctop</span>     <span class="cs">\clipctop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.58<span class="cs">\imageheight</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotaheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipcleft</span>    <span class="cs">\clipcleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.52<span class="cs">\imagewidth</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotawidth</span><span class="brx">)</span>
+
+<span class="comment">% slot d</span>
+<span class="cs">\newdimen</span><span class="cs">\slotdwidth</span>   <span class="cs">\slotdwidth</span>  <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperwidth</span>-<span class="cs">\innerspacewidth</span>-<span class="cs">\outerspacewidth</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotdheight</span>  <span class="cs">\slotdheight</span> <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="brx">(</span><span class="cs">\paperheight</span>-<span class="cs">\headerheight</span>-<span class="cs">\footerheight</span>-<span class="cs">\spacebetween</span><span class="brx">)</span>/2<span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotdtop</span>     <span class="cs">\slotdtop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\headerheight</span>+<span class="cs">\slotbheight</span>+<span class="cs">\spacebetween</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\slotdleft</span>    <span class="cs">\slotdleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span><span class="cs">\innerspacewidth</span>+<span class="cs">\slotcwidth</span>+<span class="cs">\spacebetween</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipdtop</span>     <span class="cs">\clipdtop</span>    <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.583333333333<span class="cs">\imageheight</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotdheight</span><span class="brx">)</span>
+<span class="cs">\newdimen</span><span class="cs">\clipdleft</span>    <span class="cs">\clipdleft</span>   <span class="brx">=</span> <span class="cs">\dimexpr</span><span class="brx">(</span>.697916666666<span class="cs">\imagewidth</span><span class="brx">)</span>-<span class="brx">(</span>.5<span class="cs">\slotdwidth</span><span class="brx">)</span>
+
+<span class="cs"><span class="stylecs">\strut</span></span>
+<span class="cs"><span class="stylecs">\definelayer</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+	 height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>background<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\slotatop</span>,
+	 hoffset<span class="brx">=</span><span class="cs">\slotaleft</span>,
+	 preset<span class="brx">=</span>lefttop,
+	 width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+	 height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+	<span class="br">{</span><span class="cs"><span class="documentcs">\clip</span></span><span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\clipatop</span>,
+           hoffset<span class="brx">=</span><span class="cs">\clipaleft</span>,
+           width<span class="brx">=</span><span class="cs">\slotawidth</span>,
+           height<span class="brx">=</span><span class="cs">\slotaheight</span><span class="brx">]</span>
+           <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>1,sy<span class="brx">=</span>1<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>90<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>imagea<span class="brx">]</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\slotbtop</span>,
+	 hoffset<span class="brx">=</span><span class="cs">\slotbleft</span>,
+	 preset<span class="brx">=</span>lefttop,
+	 width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+	 height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+	<span class="br">{</span><span class="cs"><span class="documentcs">\clip</span></span><span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\clipbtop</span>,
+           hoffset<span class="brx">=</span><span class="cs">\clipbleft</span>,
+           width<span class="brx">=</span><span class="cs">\slotbwidth</span>,
+           height<span class="brx">=</span><span class="cs">\slotbheight</span><span class="brx">]</span>
+           <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>2,sy<span class="brx">=</span>2<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>0<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>imageb<span class="brx">]</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\slotctop</span>,
+	 hoffset<span class="brx">=</span><span class="cs">\slotcleft</span>,
+	 preset<span class="brx">=</span>lefttop,
+	 width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+	 height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+	<span class="br">{</span><span class="cs"><span class="documentcs">\clip</span></span><span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\clipctop</span>,
+           hoffset<span class="brx">=</span><span class="cs">\clipcleft</span>,
+           width<span class="brx">=</span><span class="cs">\slotcwidth</span>,
+           height<span class="brx">=</span><span class="cs">\slotcheight</span><span class="brx">]</span>
+           <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>1,sy<span class="brx">=</span>1<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>0<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>imagec<span class="brx">]</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\setlayer</span></span>
+	<span class="brx">[</span>page<span class="brx">]</span>
+	<span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\slotdtop</span>,
+	 hoffset<span class="brx">=</span><span class="cs">\slotdleft</span>,
+	 preset<span class="brx">=</span>lefttop,
+	 width<span class="brx">=</span><span class="cs">\paperwidth</span>,
+	 height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+	<span class="br">{</span><span class="cs"><span class="documentcs">\clip</span></span><span class="brx">[</span>voffset<span class="brx">=</span><span class="cs">\clipdtop</span>,
+           hoffset<span class="brx">=</span><span class="cs">\clipdleft</span>,
+           width<span class="brx">=</span><span class="cs">\slotdwidth</span>,
+           height<span class="brx">=</span><span class="cs">\slotdheight</span><span class="brx">]</span>
+           <span class="br">{</span><span class="cs"><span class="documentcs">\scale</span></span><span class="brx">[</span>sx<span class="brx">=</span>1,sy<span class="brx">=</span>1<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>35<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>imaged<span class="brx">]</span><span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>imaged<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1500" src="../../wikiteximage/26f3521bfc0d834688afc0a70f7e0fbd.webp" width="1500">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.072 seconds
+Real time usage: 0.173 seconds
+Preprocessor visited node count: 4/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 19502/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2171-1!canonical and timestamp 20260109212416 and revision id 41322
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Example_of_photo_page_layout">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Text blocks/Typography/Reviewing hyphenation&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Text_blocks/Typography/Reviewing_hyphenation" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Text blocks/Typography/Reviewing hyphenation
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2682&diff=41646">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#The_Problem">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         The Problem
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Potential_Solutions">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Potential Solutions
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#PDF_viewers">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           PDF viewers
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#A_ConTeXt_solution">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           A ConTeXt solution
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Adobe_Acrobat_.2F_Javascript">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Adobe Acrobat / Javascript
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#Features">
+            <span class="tocnumber">
+             2.3.1
+            </span>
+            <span class="toctext">
+             Features
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#Limitations">
+            <span class="tocnumber">
+             2.3.2
+            </span>
+            <span class="toctext">
+             Limitations
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#The_code">
+            <span class="tocnumber">
+             2.3.3
+            </span>
+            <span class="toctext">
+             The code
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="The_Problem">
+      The Problem
+     </span>
+    </h2>
+    <p>We have a situation where hyphenation is an issue, due to a 2-column
+layout where the columns are not very wide. We've done a lot of tweaking
+of settings for hyphenation and interword spacing, and the result seems
+pretty good. In particular, there are not many cases of consecutive
+lines that end with hyphens, and not many cases where a hyphenation
+occurs over a right-hand page break. The few cases that exist, we have
+been fixing manually by using <code>\hbox{...}</code> to prevent hyphenation at the
+trouble spot.
+</p>
+    <p>But the hyphenation is by nature somewhat volatile, so whenever we
+change something we would like to be able to easily recheck the hyphenation.
+And our book is over 1200 pages, so it would be very helpful to have
+tools to make the checking more efficient.
+</p>
+    <h2>
+     <span class="mw-headline" id="Potential_Solutions">
+      Potential Solutions
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="PDF_viewers">
+      PDF viewers
+     </span>
+    </h3>
+    <p>One tool we found was the "evince" PDF viewer in Linux, which highlights
+all search results at once. So you can search for "-", and it will
+highlight all hyphens, which makes it easier to scan the PDF visually
+for hyphenation problems.
+</p>
+    <p>Still, this approach has its limitations... our layout domain experts
+don't have Linux machines: "evince" is not preinstalled and it is still a manual task.
+</p>
+    <p>"evince" Windows binaries: <a class="external free" href="http://live.gnome.org/Evince/Downloads" rel="nofollow">http://live.gnome.org/Evince/Downloads</a>
+(We are still looking into Okular, which is available for Windows at <a class="external free" href="http://windows.kde.org" rel="nofollow">http://windows.kde.org</a>)
+</p>
+    <h3>
+     <span class="mw-headline" id="A_ConTeXt_solution">
+      A ConTeXt solution
+     </span>
+    </h3>
+    <p>Another approach we wondered about was having TeX highlight the
+hyphenations... e.g. have it change the background color to yellow or red, when
+outputting a word that's dynamically broken/hyphenated. (Rather like we
+have TeX output red grid lines to help with debugging layout.)
+I think we would also want to highlight static hyphens that occur at the
+end of a line, as in "Niger-<br>
+Congo," because they have a similar visual impact. Possibly using a
+different color.
+</p>
+    <p>This would be an ideal solution, I think, but we don't know how to have
+TeX detect when a word gets dynamically hyphenated. (I made some inquiries on the NTG list to this effect. The response was that it would be not difficult to implement this in mkiv, but it could not be done in mkii. And we are not free to move to mkiv at this time.)
+</p>
+    <h3>
+     <span id="Adobe_Acrobat_/_Javascript">
+     </span>
+     <span class="mw-headline" id="Adobe_Acrobat_.2F_Javascript">
+      Adobe Acrobat / Javascript
+     </span>
+    </h3>
+    <p>Another possibility is using javascript in Adobe
+Acrobat Pro to automatically find and highlight end-of-line (and end-of-page) hyphens.
+That is the approach where we had most success. The features and limitations are described below, and the javascript code is attached.
+</p>
+    <h4>
+     <span class="mw-headline" id="Features">
+      Features
+     </span>
+    </h4>
+    <ul>
+     <li>
+      In Acrobat Pro, load a PDF and select "Highlight Hyphens" from the Tools menu to begin the highlighting. The first part of each word that is line-broken with a hyphen is highlighted.
+     </li>
+     <li>
+      The javascript console window shows progress.
+     </li>
+     <li>
+      The console reports number of hyphens (actually, words line-broken with a hyphen) on each page.
+     </li>
+     <li>
+      The resulting highlighted PDF can be saved including the highlights.
+     </li>
+     <li>
+      The saved, highlighted PDF can be viewed with highlights using Adobe Reader (does not require Acrobat Pro).
+     </li>
+    </ul>
+    <p>The resulting PDF looks something like this:
+</p>
+    <p><a class="image" href="../../File:Highlight-hyphens-scrshot.png"><img alt="Highlight-hyphens-scrshot.png" decoding="async" height="158" src="../../images/d/d1/Highlight-hyphens-scrshot.webp" width="106"></a>
+</p>
+    <h4>
+     <span class="mw-headline" id="Limitations">
+      Limitations
+     </span>
+    </h4>
+    <ul>
+     <li>
+      Slow. A representative test showed 0.07 pages per second (14 seconds per page!) That would mean about 5 hours for our book.
+     </li>
+     <li>
+      The resulting PDF file grows by about 25%.
+     </li>
+     <li>
+      Sometimes the highlighting function stops with an error ("Internal error" / "General error") after about 30 pages. We don't know why but maybe it could be avoided by only doing a limited number of pages at a time.
+     </li>
+    </ul>
+    <h4>
+     <span class="mw-headline" id="The_code">
+      The code
+     </span>
+    </h4>
+    <p>The following two javascript files are to be placed in the Acrobat javascripts folder, e.g. C:\Program Files\Adobe\Acrobat 9.0\Acrobat\Javascripts, and then Acrobat is restarted.
+</p>
+    <p><b><code>add-hyphen-menu.js</code></b> adds a menu item for "Highlight Hyphens..." on the Tools menu.
+</p>
+    <pre>// Add a menu item for "Highlight Hyphens"
+
+app.addMenuItem({
+    cName: "Highlight Hyphens...",
+    cParent: "Tools",
+    cExec: "highlightHyphens()"
+});
+</pre>
+    <p><b><code>findAndAnnot.js</code></b> defines the function that finds line-broken words and highlights the first "quad" of each.
+</p>
+    <pre>// Find and highlight all words that are line-broken with "-"
+// Lars Huttar, lars_huttar@sil.org, 2009-02-04
+
+function highlightHyphens() {
+    console.show(); // show console, for debugging.
+    console.println('entered highlightFinalHyphens()');
+
+    var word, numWords, q;
+    var count = 0;
+    var startTime = (new Date()).getTime();
+    var startPage = 0; // may want to specify page range
+    var hyphThisPage;
+
+    for (var i = startPage; i &lt; this.numPages; i++) {
+        hyphThisPage = 0;
+        numWords = this.getPageNumWords(i);
+        for (var j = 0; j &lt; numWords; j++) {
+            word = this.getPageNthWord(i, j, false); // don't strip punctuation!
+		// console.println('word ' + j + ': ' + word);
+            // was: if (word.charAt(word.length - 1) == '-') {
+            // Don't highlight single hyphens (which are common in headers/footers)
+            //  and which tend to come in as "- ";
+            // Also, words that are line-broken with hyphens (tend to?) come in as
+            //  a single word with medial hyphen, e.g. "vari-eties", whereas those that
+            //  have a non-breaking hyphen come in as multiple words, e.g. "day-" "to-" "day".
+            //  So don't highlight words whose only hyphen is at the end.
+            // We don't expect any word breaks with one character before the hyphen, e.g. "C-ontinent",
+            //  but if there were any we'd want to know about it!
+            if ((word.length &gt; 2 || (word.length &gt; 1 && word.charAt(0)&nbsp;!= '-'))) {
+                ind = word.indexOf('-');
+                if (ind &gt; 0 && ind &lt; word.length - 1) {
+                    hyphThisPage++;
+                    console.println('page ' + (i+1) + '/' + this.numPages + ' word: ' + word);
+                    q = this.getPageNthWordQuads(i, j);
+                    // The following call throws an exception in Reader; we don't have the right to manipulate comments,
+                    // unless such has been enabled on this PDF using LiveCycle.
+                    this.addAnnot({page: i, type: "Highlight", quads: new Array(q[0]) }); // highlight only the first quad
+                }
+            }
+        }
+        console.println('page ' + (i+1) + '/' + this.numPages + ': ' + hyphThisPage + ' hyphens');
+    }
+    var nPages = this.numPages - startPage;
+    var endTime = (new Date()).getTime();
+    console.println('Completed ' + nPages + ' pages in ' + ((endTime - startTime)/1000.0).toFixed(2) + ' sec. ('
+        + ((nPages + 0.0) * 1000 / (endTime - startTime)).toFixed(2) + ' pages/sec)');
+}
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.025 seconds
+Preprocessor visited node count: 30/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 2751/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2682-1!canonical and timestamp 20260109212440 and revision id 41646
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Text_blocks/Typography/Reviewing_hyphenation">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

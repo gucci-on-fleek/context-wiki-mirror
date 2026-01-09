@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/CD booklet&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/CD_booklet" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/CD booklet
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2604&diff=41589">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><b>Beware: This page is very old, code might not work any more.</b>
+</p>
+    <p>On this page I will describe the lessons learned while setting a CD booklet.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Fit_a_text_into_a_box">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Fit a text into a box
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Float_text_around_a_picture_inside_a_layer">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Float text around a picture inside a layer
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Use_Delicious_OTF_font_with_luatex_.2F_mkiv">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Use Delicious OTF font with luatex / mkiv
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Protrusion_with_mkiv">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Protrusion with mkiv
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Pages_with_layers_only">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Pages with layers only
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Fit_a_text_into_a_box">
+      Fit a text into a box
+     </span>
+    </h2>
+    <p><a class="image" href="../../File:CD08-Titel.png"><img alt="CD08-Titel.png" decoding="async" height="119" src="../../images/thumb/6/65/CD08-Titel.webp" width="120"></a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Float_text_around_a_picture_inside_a_layer">
+      Float text around a picture inside a layer
+     </span>
+    </h2>
+    <p><a class="image" href="../../File:CD08-p11.png"><img alt="CD08-p11.png" decoding="async" height="119" src="../../images/thumb/4/43/CD08-p11.webp" width="120"></a>
+</p>
+    <p>Floating Text around a picture inside any vbox environment is not possible and so the next two examples show text that runs through the graphical element.
+</p>
+    <p>The variant with a simple framedtext
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>text<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>left,none<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>height<span class="brx">=</span>1cm<span class="brx">]</span><span class="br">{</span>graphic<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span>
+<span class="cs"><span class="documentcs">\startframedtext</span></span><span class="brx">[</span>width<span class="brx">=</span>0.8<span class="cs">\textwidth</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>text<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>And the variant with layers:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>text<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placefigure</span></span><span class="brx">[</span>left,none<span class="brx">]</span><span class="br">{</span><span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>height<span class="brx">=</span>1cm<span class="brx">]</span><span class="br">{</span>graphic<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="brx">[</span>preset<span class="brx">=</span>middle<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span>0.6<span class="cs">\textwidth</span>,align<span class="brx">=</span>normal<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>text<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startstandardmakeup</span></span>
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>But as always with ConTeXt: Hans to the rescue! He has just some time before my trials made a nice macro available in cont-new.tex with the adequate name \starthangaround. With this macro it is quite easy to float the text around the graphic. You only has to change the buffer-code:
+</p>
+    <pre class="tex"><span class="comment">% MkII code! Doesn&rsquo;t work any more.</span>
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>text<span class="brx">]</span>
+<span class="cs">\starthangaround</span><span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>height<span class="brx">=</span>1cm<span class="brx">]</span><span class="br">{</span>graphic<span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+<span class="cs">\stophangaround</span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+</pre>
+    <h2>
+     <span id="Use_Delicious_OTF_font_with_luatex_/_mkiv">
+     </span>
+     <span class="mw-headline" id="Use_Delicious_OTF_font_with_luatex_.2F_mkiv">
+      Use Delicious OTF font with luatex / mkiv
+     </span>
+    </h2>
+    <p>Get the typescript for the <a class="external text" href="http://www.josbuivenga.demon.nl/delicious.html" rel="nofollow">Delicious fonts</a>: <a href="../../Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts/Exljbris_typescript#Delicious.html" title="Characters words and fonts/Examples of font installation and of typescripts/Exljbris typescript">Exljbris typescript#Delicious</a>
+</p>
+    <p>Then type:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>delicious<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>delicious,ss,10pt<span class="brx">]</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Protrusion_with_mkiv">
+      Protrusion with mkiv
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="Pages_with_layers_only">
+      Pages with layers only
+     </span>
+    </h2>
+    <p>When using ConTeXt for designing some work that is not primarily focused on continuous text, it is most likely that your pages are composed of different layers only and don't contain any <i>normal</i> text.  Only defining the layers and filling them with your content is not enough to make them appear on the page. So this easy approach doesn't work:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span><span class="cs">\paperwidth</span>,height<span class="brx">=</span><span class="cs">\paperheight</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\setlayerframed</span></span><span class="brx">[</span>test<span class="brx">]</span>
+  <span class="brx">[</span>preset<span class="brx">=</span>middle<span class="brx">]</span>
+  <span class="brx">[</span>width<span class="brx">=</span>0.6<span class="cs">\textwidth</span>,align<span class="brx">=</span>normal<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte <span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>test<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>We expect the frame with tufte just in the middle of the page. With \setupbackgrounds we have positioned our layer. But no output is generated since the OTR (Output Routine) is invoked. And because there is no content on the page (and the background is no content) an empty page will be generated.
+</p>
+    <p>There are some possibilities to invoke the OTR. Inside <code>\starttext \stoptext</code> call one of the following:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\page</span></span><span class="brx">[</span>empty<span class="brx">]</span>
+</pre>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startstandardmakeup</span></span>
+<span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
+</pre>
+    <p>If you haven't defined you own pagelayout, the following invocations of the OTR just use the standard layout that has a pagenumber in the headerline
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\dontleavehmode</span></span>
+</pre>
+    <pre class="tex"><span class="cs">\null</span>
+</pre>
+    <p>The last alternative is just to use
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\flushlayer</span></span><span class="brx">[</span>test<span class="brx">]</span>
+</pre>
+    <p>(You can discard the background definition then) But this places the layer relative to the textarea and not as intended to the pagearea.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.058 seconds
+Real time usage: 0.084 seconds
+Preprocessor visited node count: 56/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 6380/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2604-1!canonical and timestamp 20260109212423 and revision id 41589
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/CD_booklet">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

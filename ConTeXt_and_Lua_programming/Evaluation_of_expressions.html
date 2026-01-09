@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Evaluation of expressions&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Evaluation_of_expressions" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Evaluation of expressions
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2680&diff=40501">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>ConTeXt implements extensions from eTeX including the evaluation of expressions
+(quoted from the <a class="external text" href="http://www.ntg.nl/maps/20/38.pdf" rel="nofollow">eTeX manual</a>):
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Expressions">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Expressions
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#More_on_evaluating_expressions_in_ConTeXt">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         More on evaluating expressions in ConTeXt
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#LuaTeX">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         LuaTeX
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Expressions">
+      Expressions
+     </span>
+    </h2>
+    <p>eTeX introduces the notion of expressions of type number, dimen, glue, or
+muglue, that can be used whenever a quantity of that type is needed. Such
+expressions are evaluated by eTeX's scanning mechanism; they are initiated
+by one of the commands <code>\numexpr</code>, <code>\dimexpr</code>,
+<code>\glueexpr</code>, or <code>\muexpr</code>
+(determining the type <i>t</i>) and terminated by <code>\relax</code> (which
+will be absorbed by the scanning mechanism). An expression consists of one
+or more terms of the same type to be added or subtracted; a term of type <i>t</i>
+consists of a factor of that type, optionally multiplied and/or
+divided by numeric factors; finally a factor of type <i>t</i> is either a
+parenthesized subexpression or a quantity (number, etc.) of that type.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>It has been pointed out that
+the only important thing for <code>\dimexpr</code> is to write the dimen value
+as first value after the <code>\dimexpr</code> command and then the numeric values.
+Notice that the following expression is also valid:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupexternalfigures</span></span><span class="brx">[</span>location<span class="brx">=</span><span class="br">{</span>local,default<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placesidebyside</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>.4<span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span>
+ <span class="br">{</span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>.4<span class="cs">\textwidth</span>,height<span class="brx">=</span><span class="cs">\dimexpr</span>.4<span class="cs">\textwidth</span>*200/275<span class="cs">\relax</span><span class="brx">]</span>
+  <span class="br">{</span><span class="cs">\vbox</span><span class="br">{</span>this is a cow-sized box<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="184" src="../wikiteximage/8edd2ccd4c6427775776d9dd9540c3a7.webp" width="502">
+     </li>
+    </ul>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Add some more illustrative examples. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="More_on_evaluating_expressions_in_ConTeXt">
+      More on evaluating expressions in ConTeXt
+     </span>
+    </h2>
+    <p>Whereas the eTeX <code>\dimexpr</code> is quite useful,
+one must be aware of its limitations arising from how integer arithmetic is performed within TeX.
+Following a discussion on the ConTeXt mailing list,
+<a class="external free" href="http://archive.contextgarden.net/thread/20090323.122228.af43852e.en.html" rel="nofollow">http://archive.contextgarden.net/thread/20090323.122228.af43852e.en.html</a>
+this will be illustrated through a pedagogical example (including, as a bonus, a few handy tricks):
+</p>
+    <hr>
+    <p><i>Our question today is how to divide two dimension and compare their result with the result of another division. To do this, we first assign values to four dimensions. Then, we will try using eTeX functions with ConTeXt; the following example should work:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\dimen</span>4<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>6<span class="brx">=</span>30pt
+
+<span class="cs">\ifdim</span><span class="cs">\dimexpr</span><span class="cs">\dimen</span>0/<span class="cs">\dimen</span>2<span class="cs">\relax</span>&lt;<span class="cs">\dimexpr</span><span class="cs">\dimen</span>4/<span class="cs">\dimen</span>6<span class="cs">\relax</span>
+     The second fraction is greater.
+<span class="cs">\else</span>
+     The first fraction is greater.
+<span class="cs">\fi</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/0263c584bce06a83e2590f6171ecdd5e.webp" width="204">
+     </li>
+    </ul>
+    <p><i>This appears to work, but does it really? What will be the result if the second fraction were to be greater:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\dimen</span>4<span class="brx">=</span>15pt
+<span class="comment">%\dimen6=30pt</span>
+<span class="cs">\dimen</span>6<span class="brx">=</span>15pt
+
+<span class="cs">\ifdim</span><span class="cs">\dimexpr</span><span class="cs">\dimen</span>0/<span class="cs">\dimen</span>2<span class="cs">\relax</span>&lt;<span class="cs">\dimexpr</span><span class="cs">\dimen</span>4/<span class="cs">\dimen</span>6<span class="cs">\relax</span>
+     The second fraction is now greater.
+<span class="cs">\else</span>
+     The first fraction is still greater.
+<span class="cs">\fi</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/0ea3667915c46eebf026c3b69d852ccc.webp" width="236">
+     </li>
+    </ul>
+    <p><i>What is going on here? The result is weird and unexpected. Why did this happen? Is TeX broken? Let's take a closer look at the real values of the dimensions and their results after division:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\the</span><span class="cs">\dimen</span>0<span class="br">{</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="16" src="../wikiteximage/a8e92650b4e607caf753ee4e05c3f6d1.webp" width="47">
+     </li>
+    </ul>
+    <p><i>which has a real internal value of</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\number</span><span class="cs">\dimen</span>0<span class="br">{</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="15" src="../wikiteximage/a5deb4db6cf84d38152000a409193efa.webp" width="53">
+     </li>
+    </ul>
+    <p><i>in scaled points. Only the second integer value (in scaled points) is important for our calculation.</i>
+<i>We also need to know the internal value of the second dimension:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\number</span><span class="cs">\dimen</span>2
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="14" src="../wikiteximage/0a1bd21b093d01148885d0ac9eca729f.webp" width="60">
+     </li>
+    </ul>
+    <p><i>Finally, we would like to know the result of the division of these two numbers:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\number</span><span class="cs">\dimexpr</span><span class="cs">\dimen</span>0/<span class="cs">\dimen</span>2<span class="cs">\relax</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="14" src="../wikiteximage/3476957a3ec3f252ca72cb3509f320d0.webp" width="10">
+     </li>
+    </ul>
+    <p><i>The result of the integer division is 1 (rather than the decimal 0.75); This illustrates that the result of dividing two numbers that are nearly equal within TeX is not very useful. We can get around this by multiplying the numerators by some large factor, assuring that the evaluated fractions remain integer:</i>
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\dimen</span>4<span class="brx">=</span>15pt
+<span class="comment">%\dimen6=30pt</span>
+<span class="cs">\dimen</span>6<span class="brx">=</span>15pt
+
+<span class="cs">\ifdim</span><span class="cs">\dimexpr</span>100<span class="cs">\dimen</span>0/<span class="cs">\dimen</span>2<span class="cs">\relax</span>&lt;<span class="cs">\dimexpr</span>100<span class="cs">\dimen</span>4/<span class="cs">\dimen</span>6<span class="cs">\relax</span>
+     The second fraction is now greater.
+<span class="cs">\else</span>
+     The first fraction is still greater.
+<span class="cs">\fi</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/45e1e950edc0a252259cc4b8de4463cf.webp" width="258">
+     </li>
+    </ul>
+    <p>The important point to keep in mind is that TeX performs <b>integer</b> arithmetic in units of scaled points.
+Therefore, one must be careful, especially when using divisions that may lead to integer rounding.
+</p>
+    <h2>
+     <span class="mw-headline" id="LuaTeX">
+      LuaTeX
+     </span>
+    </h2>
+    <p><i>Alternatively, we can use luaTeX to reliably get the correct result. The <code>tex.dimen</code> command allows us to access the <code>\dimen</code> register from TeX in Lua.</i>
+</p>
+    <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\dimen</span>4<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>6<span class="brx">=</span>30pt
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+if tex.dimen<span class="brx">[</span>0<span class="brx">]</span> / tex.dimen<span class="brx">[</span>2<span class="brx">]</span> &lt; tex.dimen<span class="brx">[</span>4<span class="brx">]</span> / tex.dimen<span class="brx">[</span>6<span class="brx">]</span> then
+     tex.sprint<span class="brx">(</span>"The second fraction is greater."<span class="brx">)</span>
+else
+     tex.sprint<span class="brx">(</span>"The first fraction is greater."<span class="brx">)</span>
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/96df3a27a1a66705b7461f555ca16eb7.webp" width="204">
+     </li>
+    </ul>
+    <p><i>and</i>
+</p>
+    <pre class="tex"><span class="cs">\dimen</span>0<span class="brx">=</span>15pt
+<span class="cs">\dimen</span>2<span class="brx">=</span>20pt
+<span class="cs">\dimen</span>4<span class="brx">=</span>15pt
+<span class="comment">%\dimen6=30pt</span>
+<span class="cs">\dimen</span>6<span class="brx">=</span>15pt
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+if tex.dimen<span class="brx">[</span>0<span class="brx">]</span> / tex.dimen<span class="brx">[</span>2<span class="brx">]</span> &lt; tex.dimen<span class="brx">[</span>4<span class="brx">]</span> / tex.dimen<span class="brx">[</span>6<span class="brx">]</span> then
+     tex.sprint<span class="brx">(</span>"The second fraction is now greater."<span class="brx">)</span>
+else
+     tex.sprint<span class="brx">(</span>"The first fraction is still greater."<span class="brx">)</span>
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="17" src="../wikiteximage/330ee4a09e00bdc8f7f838f566e03b09.webp" width="258">
+     </li>
+    </ul>
+    <p><i>The output is now correct in both cases without making use of any tricks.</i>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212407
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.046 seconds
+Real time usage: 0.170 seconds
+Preprocessor visited node count: 74/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 326/2097152 bytes
+Template argument size: 36/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7652/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   26.152      1 Template:todo
+100.00%   26.152      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2680-1!canonical and timestamp 20260109212407 and revision id 40501
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Evaluation_of_expressions">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

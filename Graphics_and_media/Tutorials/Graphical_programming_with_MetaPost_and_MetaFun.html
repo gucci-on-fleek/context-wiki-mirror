@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Tutorials/Graphical_programming_with_MetaPost_and_MetaFun" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Tutorials/Graphical programming with MetaPost and MetaFun
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=761&diff=41922">2025-01-26</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Using_MetaPost_in_ConTeXt">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Using MetaPost in ConTeXt
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Commonly_used_commands">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Commonly used commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Testing_plain_MetaPost_or_mtxrun">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Testing plain MetaPost or mtxrun
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Text_in_MetaPost">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Text in MetaPost
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Color">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         Color
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#Overlays">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         Overlays
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Multipage_text_and_nofmultipars">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           Multipage text and nofmultipars
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Example_of_section_headline_with_underlining_touching_the_outer_edge_of_the_page">
+          <span class="tocnumber">
+           7.2
+          </span>
+          <span class="toctext">
+           Example of section headline with underlining touching the outer edge of the page
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Example_for_page_background">
+          <span class="tocnumber">
+           7.3
+          </span>
+          <span class="toctext">
+           Example for page background
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#MetaPost_documentation">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         MetaPost documentation
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Official">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           Official
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#Introductions_and_guides">
+          <span class="tocnumber">
+           8.2
+          </span>
+          <span class="toctext">
+           Introductions and guides
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#ConTeXt_meetings">
+          <span class="tocnumber">
+           8.3
+          </span>
+          <span class="toctext">
+           ConTeXt meetings
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#Older_content">
+          <span class="tocnumber">
+           8.4
+          </span>
+          <span class="toctext">
+           Older content
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>MetaPost is a graphical programming language, based on Donald Knuth's MetaFont.
+</p>
+    <p>MetaPost is ConTeXt's native graphics language. MetaFun is a MetaPost module by Hans Hagen that adds a lot of extra features; it is enabled by default, so one could say that MetaFun is ConTeXt's default dialect of MetaPost.
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_MetaPost_in_ConTeXt">
+      Using MetaPost in ConTeXt
+     </span>
+    </h2>
+    <p>MetaPost can be directly inserted anywhere with <tt><a href="../../Command/startMPcode.html" title="Command/startMPcode">\startMPcode</a></tt>.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs">\def</span><span class="cs">\mycolor</span><span class="br">{</span>.625red<span class="br">}</span>
+Here is a red circle 
+<span class="cs"><span class="documentcs">\startMPcode</span></span>
+  fill fullcircle scaled 20pt withcolor <span class="cs">\mycolor</span>;
+<span class="cs"><span class="documentcs">\stopMPcode</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="44" src="../../wikiteximage/28940db2a31fe9e82865fdf07b38b1c7.webp" width="186">
+     </li>
+    </ul>
+    <p>With <tt><a href="../../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">\startuseMPgraphic</a></tt> you can also  you define a piece of graphics code that is processed anew every time the graphic is placed with <tt><a href="../../Command/useMPgraphic.html" title="Command/useMPgraphic">\useMPgraphic</a></tt>.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>name<span class="br">}</span>
+  fill fullcircle scaled 20pt withcolor <span class="cs">\mycolor</span>;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs">\def</span><span class="cs">\mycolor</span><span class="br">{</span>.625red<span class="br">}</span>
+Here is a red circle <span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>name<span class="br">}</span>
+
+<span class="cs">\def</span><span class="cs">\mycolor</span><span class="br">{</span>.625blue<span class="br">}</span>
+Here is a blue circle <span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>name<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="88" src="../../wikiteximage/a66f915920aaf5688cf0f51e36a16a0a.webp" width="193">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Commonly_used_commands">
+      Commonly used commands
+     </span>
+    </h2>
+    <dl>
+     <dt>
+      reusableMPgraphic
+     </dt>
+     <dd>
+      For graphics that are the same every time, it is better to use
+      <tt>
+       <a href="../../Command/startreusableMPgraphic.html" title="Command/startreusableMPgraphic">
+        \startreusableMPgraphic
+       </a>
+      </tt>
+      :
+      <b>
+       the graphic is compiled only once
+      </b>
+      , and the one resulting picture can be placed at various points with
+      <tt>
+       <a href="../../Command/reuseMPgraphic.html" title="Command/reuseMPgraphic">
+        \reuseMPgraphic
+       </a>
+      </tt>
+      .
+     </dd>
+     <dt>
+      uniqueMPgraphic&nbsp;
+     </dt>
+     <dd>
+      dynamic graphics that are
+      <b>
+       recompiled when parameters change
+      </b>
+      (width, height, depth, background color, line color) (
+      <tt>
+       <a href="../../Command/startuniqueMPgraphic.html" title="Command/startuniqueMPgraphic">
+        \startuniqueMPgraphic
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../../Command/uniqueMPgraphic.html" title="Command/uniqueMPgraphic">
+        \uniqueMPgraphic
+       </a>
+      </tt>
+      ).
+     </dd>
+    </dl>
+    <hr>
+    <dl>
+     <dt>
+      staticMPfigure
+     </dt>
+     <dd>
+      The
+      <tt>
+       <a href="../../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">
+        \startuseMPgraphic
+       </a>
+      </tt>
+      series of commands were designed for using MetaPost for drawing fancy frames and backgrounds and not for using
+      <i>
+       stand-alone
+      </i>
+      graphics for a document.
+      <tt>
+       <a href="../../Command/startstaticMPfigure.html" title="Command/startstaticMPfigure">
+        \startstaticMPfigure
+       </a>
+      </tt>
+      <b>
+       creates a separate pdf file
+      </b>
+      containing the graphic. This pdf can be included in the document using
+      <tt>
+       <a href="../../Command/usestaticMPfigure.html" title="Command/usestaticMPfigure">
+        \usestaticMPfigure
+       </a>
+      </tt>
+      . ConTeXt is clever enough to recompile the resulting MetaPost file only if something inside the
+      <tt>
+       <a href="../../Command/startstaticMPfigure.html" title="Command/startstaticMPfigure">
+        \startstaticMPfigure
+       </a>
+      </tt>
+      has changed.
+     </dd>
+    </dl>
+    <hr>
+    <dl>
+     <dt>
+      MPinclusions
+     </dt>
+     <dd>
+      Inside, one can specify MetaPost files to
+      <i>
+       input
+      </i>
+      , and also define MetaPost functions (
+      <tt>
+       <a href="../../Command/startMPinclusions.html" title="Command/startMPinclusions">
+        \startMPinclusions
+       </a>
+      </tt>
+      )
+     </dd>
+     <dt>
+      MPinstance
+     </dt>
+     <dd>
+      used to set up MetaPost invocations with particular features. One use case could be to select a sans serif font for all MetaPost labels (
+      <tt>
+       <a href="../../Command/defineMPinstance.html" title="Command/defineMPinstance">
+        \defineMPinstance
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../../Command/setupMPinstance.html" title="Command/setupMPinstance">
+        \setupMPinstance
+       </a>
+      </tt>
+      ).
+     </dd>
+    </dl>
+    <hr>
+    <dl>
+     <dt>
+      MPpage
+     </dt>
+     <dd>
+      produces a page a containing MetaPost graphic. The page is just large enough to contain the graphic. The resulting pdf is self-contained (it has all the fonts embedded). This is useful if you want to send the figure to a coauthor or a journal (
+      <tt>
+       <a class="mw-redirect" href="../../Command/_startfittingpage.html" title="Command/startMPpage">
+        \startMPpage
+       </a>
+      </tt>
+      ).
+     </dd>
+    </dl>
+    <h2>
+     <span class="mw-headline" id="Testing_plain_MetaPost_or_mtxrun">
+      Testing plain MetaPost or mtxrun
+     </span>
+    </h2>
+    <p>To test whether MetaPost is installed on your system, create a file called <code>test.mp</code>:
+</p>
+    <pre class="tex">beginfig<span class="brx">(</span>1<span class="brx">)</span>
+fill fullcircle scaled 3cm withcolor red&nbsp;;
+endfig&nbsp;;
+end&nbsp;;
+</pre>
+    <p>apply MetaPost on the test file
+</p>
+    <p><code>
+mpost test.mp
+</code>
+</p>
+    <p>That should create a postscript file <code>test.1</code>. Open test.1 with a postscript viewer like Ghostview, Okular, &hellip; You should see a red disk. To generate a pdf named <code>test.1</code>:
+</p>
+    <p><code>
+mptopdf test.mp
+</code>
+</p>
+    <p>With a working ConTeXt distribution you should be able to get a pdf with
+<code>
+mtxrun --script metapost test.mp
+</code>
+</p>
+    <h2>
+     <span class="mw-headline" id="Text_in_MetaPost">
+      Text in MetaPost
+     </span>
+    </h2>
+    <p>Text that is typeset using <code>textext</code> or <code>btex &hellip; etex</code> adapts to the body font. However, when <code>label("Foo", pair)</code> or <code>"Foo" infont defaultfont</code> is used, which is not the recommended way, the text is typeset using the font <code>MetafunDefault</code>, which can be changed if desired. Example:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs"><span class="documentcs">\startMPcode</span></span>
+     label<span class="brx">(</span>"Foo", origin<span class="brx">)</span>;
+     draw textext<span class="brx">(</span>"Bar"<span class="brx">)</span> yshifted -LineHeight;
+  <span class="cs"><span class="documentcs">\stopMPcode</span></span>
+
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span>
+    <span class="brx">[</span>MetafunDefault<span class="brx">]</span>
+    <span class="brx">[</span>Bold*default<span class="brx">]</span>
+
+  <span class="cs"><span class="stylecs">\switchtobodyfont</span></span> <span class="brx">[</span>pagella, 18pt<span class="brx">]</span>
+
+  <span class="cs"><span class="documentcs">\startMPcode</span></span>
+     label<span class="brx">(</span>"Foo", origin<span class="brx">)</span>;
+     draw textext<span class="brx">(</span>"Foo"<span class="brx">)</span> yshifted -LineHeight;
+  <span class="cs"><span class="documentcs">\stopMPcode</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>Gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/836cfb0d64af30a0a02ea74209e53766.webp" width="438">
+     </li>
+    </ul>
+    <p>The recommended way to typeset text is to use the <code>textext</code> macro and change the font using <tt><a href="../../Command/defineMPinstance.html" title="Command/defineMPinstance">\defineMPinstance</a></tt> or  <tt><a href="../../Command/setupMPinstance.html" title="Command/setupMPinstance">\setupMPinstance</a></tt>  (&lt;-- see for example).
+</p>
+    <h2>
+     <span class="mw-headline" id="Color">
+      Color
+     </span>
+    </h2>
+    <p><a href="../../Color/Color_in_MetaPost.html" title="Color/Color in MetaPost">Color in MetaPost</a> describes how to get color mixtures, TeX colors, and transparent effects in MetaPost graphics.
+</p>
+    <h2>
+     <span class="mw-headline" id="Overlays">
+      Overlays
+     </span>
+    </h2>
+    <p>Sooner or later you will want to play with <tt><a href="../../Command/framed.html" title="Command/framed">\framed</a></tt> <tt><a href="../../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">\startuseMPgraphic</a></tt> (and MP family's commands) and <tt><a href="../../Command/defineoverlay.html" title="Command/defineoverlay">\defineoverlay</a></tt>. 
+</p>
+    <p>Let's start with an quick one.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>18pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>lineColor<span class="brx">]</span>
+  <span class="brx">[</span>h<span class="brx">=</span>a53a27<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>lineMP<span class="br">}</span>
+  numeric w, h;
+  w&nbsp;:<span class="brx">=</span> OverlayWidth&nbsp;;
+  h&nbsp;:<span class="brx">=</span> OverlayHeight&nbsp;;
+  draw <span class="brx">(</span><span class="brx">(</span>0,0<span class="brx">)</span> -- <span class="brx">(</span>w,0<span class="brx">)</span> -- 
+        <span class="brx">(</span>w,h<span class="brx">)</span> -- <span class="brx">(</span>0,h<span class="brx">)</span> -- cycle<span class="brx">)</span>
+    withpen pencircle
+    scaled <span class="brx">(</span>h/20<span class="brx">)</span>
+    withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>lineColor<span class="br">}</span>
+    dashed evenly&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>lineOL<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>lineMP<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>lined<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>lineOL,
+   frame<span class="brx">=</span>off,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+This is <span class="cs">\lined</span><span class="br">{</span><span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span> fun!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/89c9c6bd8a5a4245eeae2316dc3abf60.webp" width="438">
+     </li>
+    </ul>
+    <p>But then, we can have fun with MetaPost
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>18pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>bubbleColor<span class="brx">]</span>
+  <span class="brx">[</span>h<span class="brx">=</span>ffaa00<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>bubbleMP<span class="br">}</span>
+  numeric w, h;
+  w&nbsp;:<span class="brx">=</span> OverlayWidth&nbsp;;
+  h&nbsp;:<span class="brx">=</span> OverlayHeight&nbsp;;
+  for i<span class="brx">=</span>1 upto 750&nbsp;:
+    draw <span class="brx">(</span> <span class="brx">(</span>normaldeviate+0.5<span class="brx">)</span>*w/3.5,
+           <span class="brx">(</span>normaldeviate+0.5<span class="brx">)</span>*h/3.5<span class="brx">)</span>
+      withpen pencircle
+      scaled <span class="brx">(</span><span class="brx">(</span>abs<span class="brx">(</span>uniformdeviate 1<span class="brx">)</span><span class="brx">)</span>*<span class="brx">(</span>h/10<span class="brx">)</span><span class="brx">)</span>
+      withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>bubbleColor<span class="br">}</span>
+      withtransparency <span class="brx">(</span>1,0.5 + <span class="brx">(</span>uniformdeviate 0.5<span class="brx">)</span><span class="brx">)</span>&nbsp;;
+  endfor&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>bubbleOL<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>bubbleMP<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>bubbled<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>bubbleOL,
+   frame<span class="brx">=</span>off,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+This is <span class="cs">\bubbled</span><span class="br">{</span><span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span> fun!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="307" src="../../wikiteximage/78a79406e40f40bad9f7960ea8fa16c1.webp" width="438">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Multipage_text_and_nofmultipars">
+      Multipage text and nofmultipars
+     </span>
+    </h3>
+    <p>The basic&nbsp;:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm, height<span class="brx">=</span>74mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A8<span class="brx">]</span> <span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>6pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>lineColor<span class="brx">]</span>      <span class="brx">[</span>h<span class="brx">=</span>aaaaaa<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPtextframe<span class="br">}</span>
+begingroup;
+  for i<span class="brx">=</span>1 upto nofmultipars&nbsp;:            <span class="comment">% HERE! for each block</span>
+    draw <span class="brx">(</span> <span class="brx">(</span>ulcorner multipars<span class="brx">[</span>i<span class="brx">]</span><span class="brx">)</span> --    <span class="comment">% Upper Left corner</span>
+           <span class="brx">(</span>llcorner multipars<span class="brx">[</span>i<span class="brx">]</span><span class="brx">)</span> <span class="brx">)</span>     <span class="comment">% Lower Left corner</span>
+         withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>lineColor<span class="br">}</span>
+         withpen pensquare scaled 2pt;
+  endfor&nbsp;;
+endgroup;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>
+  <span class="brx">[</span>TextFrame<span class="brx">]</span>
+  <span class="brx">[</span>mp<span class="brx">=</span>MPtextframe,
+   location<span class="brx">=</span>paragraph<span class="brx">]</span>
+   
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Text before.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>\
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text inbetween.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>\
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text after.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/cd053f6728c120b452d79aa29b1af7b4.webp" width="921">
+     </li>
+    </ul>
+    <p>Then, you can play with it:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm, height<span class="brx">=</span>74mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A8<span class="brx">]</span> <span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>6pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>lineColorStart<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>ffaa00<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>lineColor<span class="brx">]</span>      <span class="brx">[</span>h<span class="brx">=</span>aaaaaa<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>lineColorEnd<span class="brx">]</span>   <span class="brx">[</span>h<span class="brx">=</span>aa00ff<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>textframe<span class="br">}</span>
+begingroup;
+  for i<span class="brx">=</span>1 upto nofmultipars&nbsp;:
+    draw <span class="brx">(</span> <span class="brx">(</span>ulcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-2mm, +1mm<span class="brx">)</span><span class="brx">)</span> --
+           <span class="brx">(</span>llcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-2mm, -1mm<span class="brx">)</span><span class="brx">)</span> <span class="brx">)</span>
+         withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>lineColor<span class="br">}</span>
+         withpen pensquare scaled 2pt;
+
+    if multilocs<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> 1:                                   <span class="comment">% HERE 1 = first block</span>
+         draw <span class="brx">(</span> <span class="brx">(</span>ulcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-2mm,   +1mm<span class="brx">)</span><span class="brx">)</span> --
+                <span class="brx">(</span>ulcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-0.5mm, +1mm<span class="brx">)</span><span class="brx">)</span> <span class="brx">)</span>
+         withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>lineColorStart<span class="br">}</span>
+         withpen pensquare scaled 2pt;
+    fi;
+
+    if multilocs<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> 3:                                   <span class="comment">% HERE 3 = last block</span>
+         draw <span class="brx">(</span> <span class="brx">(</span>llcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-2mm,   -1mm<span class="brx">)</span><span class="brx">)</span> --
+                <span class="brx">(</span>llcorner multipars<span class="brx">[</span>i<span class="brx">]</span> shifted <span class="brx">(</span>-0.5mm, -1mm<span class="brx">)</span><span class="brx">)</span> <span class="brx">)</span>
+         withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>lineColorEnd<span class="br">}</span>
+         withpen pensquare scaled 2pt;
+    fi;
+
+<span class="comment">% if one_piece_multi_par&nbsp;: is also available</span>
+
+  endfor&nbsp;;
+endgroup;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>
+  <span class="brx">[</span>TextFrame<span class="brx">]</span>
+  <span class="brx">[</span>mp<span class="brx">=</span>textframe,
+   location<span class="brx">=</span>paragraph<span class="brx">]</span>
+   
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Text before.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>\
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text inbetween.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>\
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text after.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/cbc9388dfc0830f417ad978a33af6c96.webp" width="921">
+     </li>
+    </ul>
+    <p>Intermediate parts can be identified with (<code>multilocs[i] == 3:</code>).
+Actually, with LMTX it's even clearer using <code>multikind</code> equal to  <code>"single"</code> or <code>"first"</code> or <code>"middle"</code> or <code>"last"</code>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm, height<span class="brx">=</span>148mm<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A8<span class="brx">]</span> <span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>6pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>tolerant<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupwhitespace</span></span><span class="brx">[</span>line<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>FillColorA<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>aaaaaa<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>FillColorB<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>ffaa00<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>FillColorC<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>00ffaa<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>FillColorD<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>aa00ff<span class="brx">]</span>
+
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>textframe<span class="br">}</span>
+begingroup;
+  for i<span class="brx">=</span>1 upto nofmultipars&nbsp;:
+    if     multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> "single":
+         fill multipars<span class="brx">[</span>i<span class="brx">]</span> withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>FillColorA<span class="br">}</span>;
+    elseif multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> "first":
+         fill multipars<span class="brx">[</span>i<span class="brx">]</span> withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>FillColorB<span class="br">}</span>;
+    elseif multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> "middle":
+         fill multipars<span class="brx">[</span>i<span class="brx">]</span> withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>FillColorC<span class="br">}</span>;
+    elseif multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span><span class="brx">=</span> "last":
+         fill multipars<span class="brx">[</span>i<span class="brx">]</span> withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>FillColorD<span class="br">}</span>;
+    fi;
+  endfor&nbsp;;
+endgroup;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>
+  <span class="brx">[</span>TextFrame<span class="brx">]</span>
+  <span class="brx">[</span>mp<span class="brx">=</span>textframe,
+   location<span class="brx">=</span>paragraph<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Text before.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>
+A very short paragraph.
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text inbetween 1.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text inbetween 2.
+
+<span class="cs"><span class="documentcs">\starttextbackground</span></span><span class="brx">[</span>TextFrame<span class="brx">]</span>\
+<span class="cs"><span class="documentcs">\input</span></span> knuth <span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stoptextbackground</span></span>
+
+Text after.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../../wikiteximage/2a415985df3d6272334a6c0b4de7b54c.webp" width="921">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Example_of_section_headline_with_underlining_touching_the_outer_edge_of_the_page">
+      Example of section headline with underlining touching the outer edge of the page
+     </span>
+    </h3>
+    <p>Remark the use of:
+</p>
+    <ul>
+     <li>
+      <code>OnRightPage</code>
+      to test if we are on a Right page
+      <ul>
+       <li>
+        remark:
+        <code>CurrentColumn</code>
+        also exists.
+       </li>
+      </ul>
+     </li>
+     <li>
+      <code>OverlayBox</code>
+      to get the path corresponding to the OverlayBox
+     </li>
+     <li>
+      <code>llcorner</code>
+      to access to lower left corner of the path, and
+      <code>lrcorner</code>
+     </li>
+     <li>
+      <code>rightenlarged</code>
+      and
+      <code>leftenlarged</code>
+     </li>
+     <li>
+      <code>CutSpace</code>
+      ,
+      <code>TextWidth</code>
+      to access tjhe associated layout's dimensions
+     </li>
+     <li>
+      <code>bbwidth</code>
+      , to get the width of the path given in parameter
+     </li>
+     <li>
+      <code>setbounds &hellip; to &hellip;</code>
+      , to set the bounding box (if not, the MetaPost figure, which is just an horizontal line, will be align with the center of the OverlayBox, see the demo after).
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% Specific to wiki settings</span>
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm,height<span class="brx">=</span>74mm<span class="brx">]</span> <span class="comment">% A8: 52 x 74</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+
+<span class="comment">% Demo starts here</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>LeftColor<span class="brx">]</span>  <span class="brx">[</span>h<span class="brx">=</span>ffaa00<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>RightColor<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>00aaff<span class="brx">]</span>
+
+<span class="comment">% MetaPost</span>
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyFrame<span class="br">}</span>
+  if OnRightPage:
+    draw <span class="brx">(</span>llcorner <span class="brx">(</span>OverlayBox<span class="brx">)</span><span class="brx">)</span> --
+         <span class="brx">(</span>lrcorner <span class="brx">(</span>OverlayBox
+          rightenlarged
+          <span class="brx">(</span>TextWidth - <span class="brx">(</span>bbwidth OverlayBox<span class="brx">)</span> + CutSpace<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+        withpen pensquare scaled 1pt
+        withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>RightColor<span class="br">}</span>;
+  else:
+    draw <span class="brx">(</span>llcorner <span class="brx">(</span>OverlayBox leftenlarged CutSpace<span class="brx">)</span><span class="brx">)</span> --
+         <span class="brx">(</span>lrcorner <span class="brx">(</span>OverlayBox<span class="brx">)</span><span class="brx">)</span>
+        withpen pensquare scaled 1pt
+        withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>LeftColor<span class="br">}</span>;
+  fi;
+  setbounds currentpicture to OverlayBox;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="comment">% Use Metapost within an Overlay</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyFrame<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyFrame<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% Use the Overlay for a framed environment</span>
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>MyFrame<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>OLMyFrame,
+   frame<span class="brx">=</span>off,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="comment">% Use the framed environment within an headline command</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MySection</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\MyFrame</span><span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Use the headline command within a section setup</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MySection</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 2<span class="brx">]</span>
+world&nbsp;!
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 3<span class="brx">]</span>
+world&nbsp;!
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/dc31adb5bfaf715b4fa3bed9aed42e9f.webp" width="921">
+     </li>
+    </ul>
+    <p>If you forget to setup  the bounding box of the MetaPost figure with <code>setbounds</code>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% Specific to wiki settings</span>
+<span class="cs"><span class="stylecs">\definepapersize</span></span><span class="brx">[</span>sheet<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>156mm,height<span class="brx">=</span>74mm<span class="brx">]</span> <span class="comment">% A8: 52 x 74</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>sheet<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppaper</span></span><span class="brx">[</span>nx<span class="brx">=</span>3,ny<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuparranging</span></span><span class="brx">[</span>XY<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\showframe</span></span><span class="brx">[</span>edge<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+
+<span class="comment">% Demo starts here</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>alternative<span class="brx">=</span>doublesided<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>LeftColor<span class="brx">]</span>  <span class="brx">[</span>h<span class="brx">=</span>ffaa00<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span> <span class="brx">[</span>RightColor<span class="brx">]</span> <span class="brx">[</span>h<span class="brx">=</span>00aaff<span class="brx">]</span>
+
+<span class="comment">% MetaPost</span>
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyFrame<span class="br">}</span>
+  if OnRightPage:
+    draw <span class="brx">(</span>llcorner <span class="brx">(</span>OverlayBox<span class="brx">)</span><span class="brx">)</span> --
+         <span class="brx">(</span>lrcorner <span class="brx">(</span>OverlayBox
+          rightenlarged
+          <span class="brx">(</span>TextWidth - <span class="brx">(</span>bbwidth OverlayBox<span class="brx">)</span> + CutSpace<span class="brx">)</span><span class="brx">)</span><span class="brx">)</span>
+        withpen pensquare scaled 1pt
+        withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>RightColor<span class="br">}</span>;
+  else:
+    draw <span class="brx">(</span>llcorner <span class="brx">(</span>OverlayBox leftenlarged CutSpace<span class="brx">)</span><span class="brx">)</span> --
+         <span class="brx">(</span>lrcorner <span class="brx">(</span>OverlayBox<span class="brx">)</span><span class="brx">)</span>
+        withpen pensquare scaled 1pt
+        withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>LeftColor<span class="br">}</span>;
+  fi;
+<span class="comment">%   setbounds currentpicture to OverlayBox;   % &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; INSERTED MISTAKE HERE &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="comment">% Use Metapost within an Overlay</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyFrame<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyFrame<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">% Use the Overlay for a framed environment</span>
+<span class="cs"><span class="stylecs">\defineframed</span></span>
+  <span class="brx">[</span>MyFrame<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>OLMyFrame,
+   frame<span class="brx">=</span>off,
+   offset<span class="brx">=</span>0pt,
+   rulethickness<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="comment">% Use the framed environment within an headline command</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MySection</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\MyFrame</span><span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Use the headline command within a section setup</span>
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MySection</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 1<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 2<span class="brx">]</span>
+world&nbsp;!
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\page</span></span>
+<span class="cs"><span class="documentcs">\startsection</span></span><span class="brx">[</span>title<span class="brx">=</span>Hello Page 3<span class="brx">]</span>
+world&nbsp;!
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/73adbe7f5e1c04b384999b12f648e882.webp" width="921">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Example_for_page_background">
+      Example for page background
+     </span>
+    </h3>
+    <p>Remark the use of:
+</p>
+    <ul>
+     <li>
+      <code>Field[&hellip;][&hellip;]</code>
+      to get the path corresponding to the layout area
+     </li>
+     <li>
+      <code>StartPage</code>
+      and
+      <code>StopPage</code>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/setupbackgrounds.html" title="Command/setupbackgrounds">
+        \setupbackgrounds
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span>
+StartPage&nbsp;;
+  path Main&nbsp;;
+  Main&nbsp;:<span class="brx">=</span> Field<span class="brx">[</span>Text<span class="brx">]</span><span class="brx">[</span>Text<span class="brx">]</span> enlarged 1mm;
+  pickup pencircle scaled 1pt&nbsp;;
+  fill Page withcolor .625white&nbsp;;
+  fill Main withcolor .850white&nbsp;;
+  draw Main withcolor .625red&nbsp;;
+StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>OLMyPage<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>MPMyPage<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>OLMyPage<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Hello <span class="cs"><span class="documentcs">\ConTeXt</span></span>\&nbsp;!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/86f6df4172a4fa16a53610f44ef0fac8.webp" width="307">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="MetaPost_documentation">
+      MetaPost documentation
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Official">
+      Official
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://www.tug.org/metapost.html" rel="nofollow">
+       MetaPost home page
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://gitlab.lisn.upsaclay.fr/texlive/metapost" rel="nofollow">
+       MetaPost development repository
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.tug.org/docs/metapost/mpman.pdf" rel="nofollow">
+       A User's Manual for MetaPost
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Introductions_and_guides">
+      Introductions and guides
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://github.com/thruston/Drawing-with-Metapost" rel="nofollow">
+       Drawing with Metapost
+      </a>
+      from Toby Thurston (2024)
+      <ul>
+       <li>
+        This project provides a document that discusses how to draw technical diagrams with John Hobby's Metapost language. It includes over 200 illustrations created with Metapost, complete with source code as inspiration and examples. The intended level is for intermediate to advanced users rather than complete beginners.
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a class="external text" href="https://metapost.gutenberg-asso.fr" rel="nofollow">
+       MetaPost examples catalogue
+      </a>
+      from association GUTenberg
+     </li>
+     <li>
+      <a class="external text" href="https://melusine.eu.org/syracuse/metapost/" rel="nofollow">
+       MetaPost a manual
+      </a>
+      , on Syracuse a French User Group
+     </li>
+     <li>
+      <a class="external text" href="http://www.tug.org/pracjourn/2006-4/henderson/henderson.pdf" rel="nofollow">
+       A Beginner's Guide to METAPOST for Creating High-Quality Graphics
+      </a>
+      by Troy Henderson (2006)
+     </li>
+     <li>
+      <a class="external text" href="http://maps.aanhet.net/maps/pdf/32_14.pdf" rel="nofollow">
+       Learning METAPOST by doing
+      </a>
+      , from Andr&eacute; Heck (2005), and
+      <a class="external text" href="http://maps.aanhet.net/maps/pdf/32_15.pdf" rel="nofollow">
+       solutions
+      </a>
+      .
+      <ul>
+       <li>
+        <a class="external text" href="https://staff.fnwi.uva.nl/a.j.p.heck/Courses/mptut.pdf" rel="nofollow">
+         mirror
+        </a>
+        .
+       </li>
+      </ul>
+     </li>
+     <li>
+      <a class="external text" href="https://mirror.gutenberg-asso.fr/tex.loria.fr/prod-graph/cheno-metapost1999.pdf" rel="nofollow">
+       Une introduction &agrave; MetaPost
+      </a>
+      Laurent Ch&eacute;no, May 1999, also
+      <a class="external text" href="http://pauillac.inria.fr/~cheno/metapost/metapost.pdf" rel="nofollow">
+       here
+      </a>
+      .
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="ConTeXt_meetings">
+      ConTeXt meetings
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://www.gust.org.pl/bachotex/2024-pl/presentations/hhagen-msundqvist-3-2024.pdf" rel="nofollow">
+       MetaPost news
+      </a>
+      (2024)
+     </li>
+     <li>
+      <a class="external text" href="https://meeting.contextgarden.net/2022/talks/taco/mp-control-talk.pdf" rel="nofollow">
+       Metapost control structures
+      </a>
+      (conditions and loops) September 12&ndash;18, 2022
+     </li>
+     <li>
+      <a class="external text" href="https://meeting.contextgarden.net/2022/talks/taco/mp-picture-talk.pdf" rel="nofollow">
+       MetaPost pictures
+      </a>
+      (with colors) September 12&ndash;18, 2022
+     </li>
+     <li>
+      <a class="external text" href="https://meeting.contextgarden.net/2021/talks/2021-09-21/mp-paths-talk.pdf" rel="nofollow">
+       Metapost paths and pairs
+      </a>
+      (and pens and transforms) September 21, 2021
+     </li>
+     <li>
+      <a class="external text" href="https://meeting.contextgarden.net/2008/talks/2008-08-22-hartmut-metapost/mptut-context2008.pdf" rel="nofollow">
+       MetaPost for Beginners
+      </a>
+      Hartmut Henkel, August 2008, try to remove Showstoppers for beginners.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Older_content">
+      Older content
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="extiw" href="http://www.pragma-ade.nl/general/manuals/mmakempy.pdf" title="manual:mmakempy.pdf">
+       MakeMPY
+      </a>
+      : create MetaPost outlines (by Pragma)
+     </li>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/general/sources/mptopdf.pdf" rel="nofollow">
+       MPtoPDF
+      </a>
+      : create PDF from MetaPost (by Pragma)
+     </li>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/show-gra.pdf" rel="nofollow">
+       a few examples of MetaPost graphics
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="http://www.pragma-ade.nl/articles/art-puzz.pdf" rel="nofollow">
+       Puzzling graphics in MetaPost
+      </a>
+      (article)
+     </li>
+     <li>
+      <a class="external text" href="http://www.ntg.nl/maps/25/15.pdf" rel="nofollow">
+       metapost metafun. Hans Hagen at MAPS
+      </a>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260110073558
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.112 seconds
+Real time usage: 1.799 seconds
+Preprocessor visited node count: 365/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 2286/2097152 bytes
+Template argument size: 657/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 37032/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  735.265      1 -total
+  8.36%   61.453      1 Template:code
+  6.00%   44.106     21 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:761-1!canonical and timestamp 20260110073556 and revision id 41922
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Tutorials/Graphical_programming_with_MetaPost_and_MetaFun">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Emoji and symbols/Symbolset&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Emoji_and_symbols/Symbolset" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Emoji and symbols/Symbolset
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4969&diff=41789">2025-01-19</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>One can create a symbol set with a specific font by using the commands <code>\startsymbolset</code> --- <code>\stopsymbolset</code>.
+Here is an example which creates the &laquo;&nbsp;dangerous bend&nbsp;&raquo; used by Donald Kunth with his font <code>manfnt</code>.
+</p>
+    <p>Once a <code>symbolset</code> has been declared and set up, one can use the declared symbols (for instance here <code>dbend</code>) with the command <code>\symbol{dbend</code>}, or imbed it in other commands.
+</p>
+    <p>In order to find which slot represents a desired glyph, one may look at the afm file and then by trial and error find the correct address&hellip; (in our example the file is <code>manfnt.afm</code>). For instance we have found that <code>n:char_7e</code> represents the dangerous bend, while <code>n:char_79</code> represents a broken arrow.
+</p>
+    <pre class="tex"><span class="comment">% First we declare the font where the symbols have to be found</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>bends<span class="brx">]</span><span class="brx">[</span>file:manfnt.afm<span class="brx">]</span>
+
+<span class="comment">% Then we declare a proper set of symbols:</span>
+<span class="cs"><span class="stylecs">\startsymbolset</span></span> <span class="brx">[</span>Dangerous Bends<span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definesymbol</span></span> <span class="brx">[</span>dbend<span class="brx">]</span>   <span class="brx">[</span><span class="cs"><span class="stylecs">\resolvedglyphdirect</span></span><span class="br">{</span>bends<span class="br">}</span><span class="br">{</span>n:char_7e<span class="br">}</span><span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definesymbol</span></span> <span class="brx">[</span>lhdbend<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="stylecs">\resolvedglyphdirect</span></span><span class="br">{</span>bends<span class="br">}</span><span class="br">{</span>n:char_7f<span class="br">}</span><span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>brokenarrow<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\resolvedglyphdirect</span></span><span class="br">{</span>bends<span class="br">}</span><span class="br">{</span>n:char_79<span class="br">}</span><span class="brx">]</span>
+	<span class="cs"><span class="stylecs">\definesymbol</span></span><span class="brx">[</span>pentastar<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\resolvedglyphdirect</span></span><span class="br">{</span>bends<span class="br">}</span><span class="br">{</span>n:char_1e<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsymbolset</span></span>
+
+<span class="comment">% Here we say which symbolset is to be used:</span>
+<span class="cs"><span class="stylecs">\setupsymbolset</span></span> <span class="brx">[</span>Dangerous Bends<span class="brx">]</span>
+
+<span class="comment">% One can use the symbols directly with the command \symbol</span>
+<span class="comment">% or imbed it in other commands.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\dbend</span><span class="br">{</span><span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\ddbend</span><span class="br">{</span><span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\dddbend</span><span class="br">{</span><span class="cs"><span class="documentcs">\inmargin</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Here we use the symbols directly: <span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>dbend<span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span> <span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>lhdbend<span class="br">}</span>.
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>brokenarrow<span class="br">}</span><span class="cs"><span class="stylecs">\quad</span></span> <span class="cs"><span class="documentcs">\symbol</span></span><span class="br">{</span>pentastar<span class="br">}</span>.
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs">\dbend</span> This result is difficult to prove.
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs">\ddbend</span> This result is more difficult to prove.
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span>
+<span class="cs">\dddbend</span> This result is even more difficult to prove.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109213621
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.023 seconds
+Real time usage: 0.034 seconds
+Preprocessor visited node count: 49/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 207/2097152 bytes
+Template argument size: 90/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5373/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    5.421      1 -total
+ 88.02%    4.772      9 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4969-1!canonical and timestamp 20260109213621 and revision id 41789
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Emoji_and_symbols/Symbolset">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

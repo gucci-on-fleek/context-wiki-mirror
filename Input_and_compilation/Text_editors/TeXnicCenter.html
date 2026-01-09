@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Text editors/TeXnicCenter&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/TeXnicCenter" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Text editors/TeXnicCenter
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2168&diff=38560">2025-01-09</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="54" src="../../wikiteximage/930de1a7eb6b29b2cd06e657affefa30.webp" width="29"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>NOTE:</b>  This page is outdated and needs to be updated
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Adapting_TeXnicCenter_for_processing_ConTeXt_documents">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Adapting TeXnicCenter for processing ConTeXt documents
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#With_Adobe_Acrobat_Reader">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           With Adobe Acrobat Reader
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#With_SumatraPDF">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           With SumatraPDF
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Cleaning_up">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Cleaning up
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Adapting_TeXnicCenter_for_processing_ConTeXt_documents">
+      Adapting TeXnicCenter for processing ConTeXt documents
+     </span>
+    </h2>
+    <p>You can build and view a ConTeXt document in <a class="external text" href="http://www.toolscenter.org/" rel="nofollow">TeXnicCenter</a> as follows:
+</p>
+    <ul>
+     <li>
+      Follow the instructions for
+      <a href="../../Windows_Installation.html" title="Windows Installation">
+       installing ConTeXt under Windows
+      </a>
+      .
+     </li>
+     <li>
+      Make sure that ruby and perl are in your PATH
+      <i>
+       (Start menu -&gt; Settings -&gt; Control Panel -&gt; System -&gt; Advanced -&gt; Environment Variables; then edit PATH)
+      </i>
+      . In my system (root = C:\ConTeXt) the first items are: C:\ConTeXt\usr\local\context\ruby\bin; C:\ConTeXt\usr\local\context\ruby\lib; C:\ConTeXt\usr\local\context\perl\bin; C:\ConTeXt\usr\local\context\perl\lib
+     </li>
+     <li>
+      Start TeXnicCenter. From the menu select: Build -&gt; Define Output Profiles.
+     </li>
+     <li>
+      Add a Profile with the name ConTeXt.
+     </li>
+     <li>
+      Check "Run (La)TeX in this profile".
+     </li>
+     <li>
+      Under "Path to the (La)TeX compiler" enter:
+     </li>
+    </ul>
+    <pre>C:\ConTeXt\usr\local\context\tex\setuptex.bat & C:\ConTeXt\usr\local\context\tex\texmf-mswin\bin\texmfstart
+</pre>
+    <p>If you have another root, then change C:\ConTeXt accordingly.
+</p>
+    <ul>
+     <li>
+      Under "Command line arguments to pass to the compiler" enter:
+     </li>
+    </ul>
+    <pre>texexec.rb, the parameters and "%bm" for the file to be compiled.
+</pre>
+    <p>In my case this line reads as follows:<br>
+</p>
+    <pre>texexec.rb --bat --nonstop --pdf --interface=nl --color "%bm" 
+</pre>
+    <p>Now your ConTeXt file should compile after selecting "Build -&gt; Build" from the menu or pressing Ctrl+F7 or clicking on the corresponding toolbar icon.
+</p>
+    <h3>
+     <span class="mw-headline" id="With_Adobe_Acrobat_Reader">
+      With Adobe Acrobat Reader
+     </span>
+    </h3>
+    <ul>
+     <li>
+      For installing Acrobat Reader as your viewer again select: Build -&gt; Define Output Profiles.
+     </li>
+     <li>
+      Select the tab "Viewer".
+     </li>
+     <li>
+      Under "Path of Executable" you enter the path to the program AcroRd32.exe
+     </li>
+     <li>
+      Under "View project's output" select: "DDE command".
+     </li>
+     <li>
+      The Command should be: [DocOpen("%bm.pdf")][FileOpen("%bm.pdf")]
+     </li>
+     <li>
+      Server is "acroview" and Topic: "control"
+     </li>
+     <li>
+      Same choices for "Forward Search" and "Close document before running (La)TeX", except for the Command which in the latter case should be: [DocClose("%bm.pdf")]
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="With_SumatraPDF">
+      With SumatraPDF
+     </span>
+    </h3>
+    <p>With SumatraPDF you get forward and inverse search capabilities. To enable them, you have to adjust the texexec arguments accordingly and add the "--synctex=-1" option:
+</p>
+    <pre>texexec.rb --batch --nonstop --pdf --interface=en --color "%bm" --synctex=-1
+</pre>
+    <ul>
+     <li>
+      In the Viewer tab enter in the field for the executable path
+     </li>
+    </ul>
+    <pre>"C:\Program Files\SumatraPDF\SumatraPDF.exe" -reuse-instance <br> -inverse-search "\"C:\Program Files\TeXnicCenter\TEXCNTR.EXE\" /ddecmd \"[goto('%f', '%l')]\""
+</pre>
+    <ul>
+     <li>
+      Under 'View Project's output':
+     </li>
+    </ul>
+    <pre>select DDE-command
+Command: [Open("%bm.pdf",0,1,1)]
+Server: SUMATRA
+Topic: control
+</pre>
+    <ul>
+     <li>
+      Under 'Forward search':
+     </li>
+    </ul>
+    <pre>Select option 'DDE command'
+Command: [ForwardSearch("%bm.pdf","%Wc",%l,0,0,0)]
+Server: SUMATRA
+Topic: control
+</pre>
+    <ul>
+     <li>
+      Under 'Close document before running (La)TeX':
+     </li>
+    </ul>
+    <pre>Select 'Do not close'
+</pre>
+    <h3>
+     <span class="mw-headline" id="Cleaning_up">
+      Cleaning up
+     </span>
+    </h3>
+    <p>Automatically deleting unnecessary auxiliary files after compilation is realised as follows:
+</p>
+    <ul>
+     <li>
+      Select: Build -&gt; Define Output Profiles.
+     </li>
+     <li>
+      Select the tab "Postprocessor".
+     </li>
+     <li>
+      Create a new item "cleanup" by clicking on the first icon after the text "Postprocessors to run after the (La)TeX-compiler".
+     </li>
+     <li>
+      In the edit line after "Executable" enter:
+      <br>
+     </li>
+    </ul>
+    <pre>C:\ConTeXt\usr\local\context\tex\setuptex.bat & C:\ConTeXt\usr\local\context\tex\texmf-mswin\bin\texmfstart.exe
+</pre>
+    <p>And in the edit line after "Arguments" enter:
+</p>
+    <pre>texutil.rb --purgeall.
+</pre>
+    <p>If you have another root, then change C:\ConTeXt accordingly.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212427
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.030 seconds
+Real time usage: 0.065 seconds
+Preprocessor visited node count: 22/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 268/2097152 bytes
+Template argument size: 46/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 135/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   40.530      1 Template:note
+100.00%   40.530      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2168-1!canonical and timestamp 20260109212427 and revision id 38560
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Text_editors/TeXnicCenter">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Extensions to the Lua IO library&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Extensions to the Lua IO library
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3339&diff=40576">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt;<a href="Extensions_to_the_Lua_IO_library/String_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/String manipulation">String manipulation</a> | <a href="Extensions_to_the_Lua_IO_library/Table_manipulation.html" title="ConTeXt and Lua programming/Extensions to the Lua IO library/Table manipulation">Table manipulation</a> &gt;
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#io.loaddata.28filename.2C_.5Btextmode.5D.29">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         io.loaddata(filename, [textmode])
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#io.savedata.28filename.2C_data.2C_.5Bseparator.5D.29">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         io.savedata(filename, data, [separator])
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#io.exists.28filename.29">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         io.exists(filename)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#io.size.28filename.29">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         io.size(filename)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#io.noflines.28object.29">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         io.noflines(object)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#io.characters.28object.2C_.5Bgroup.5D.29">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         io.characters(object, [group])
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#io.bytes.28object.2C_.5Bgroup.5D.29">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         io.bytes(object, [group])
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#io.ask.28question.2C_.5Bdefault.2C_.5Boptions.5D.5D.29">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         io.ask(question, [default, [options]])
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#io.readnumber.28object.2C_.5Boffset.2C.5D_count.29">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         io.readnumber(object, [offset,] count)
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#io.readstring.28object.2C_.5Boffset.2C.5D_length.29">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         io.readstring(object, [offset,] length)
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>The module <tt><a class="extiw" href="http://source.contextgarden.net/l-io.lua" title="source:l-io.lua">l-io.lua</a></tt> provides a few functions that extend
+the plain Lua io library with respect to file handling in general,
+and the reading of binary data in particular.
+</p>
+    <p><i>Note</i>: 
+Some of the examples contain disk write instructions.
+Therefore it is essential that you run context somewhere safe 
+in your directory tree where they can't harm.
+</p>
+    <h2>
+     <span id="io.loaddata(filename,_[textmode])">
+     </span>
+     <span class="mw-headline" id="io.loaddata.28filename.2C_.5Btextmode.5D.29">
+      io.loaddata(filename, [textmode])
+     </span>
+    </h2>
+    <pre>f=io.open("./text.txt", "w")
+f:write("Some Text.")
+f:close()
+
+text = io.loaddata("./text.txt")
+io.write(text)
+</pre>
+    <p>A wrapper for <tt>io.open</tt>. Automatically supplies the
+<tt>"r"</tt> flag and handles opening and closing, returns the
+complete content of file <tt>filename</tt>.
+The optional argument <tt>textmode</tt> when non-nil|false
+triggers non-binary mode in 
+<a class="external text" href="http://www.cygwin.com/cygwin-ug-net/using-textbinary.html" rel="nofollow">certain operating systems</a>.
+</p>
+    <h2>
+     <span id="io.savedata(filename,_data,_[separator])">
+     </span>
+     <span class="mw-headline" id="io.savedata.28filename.2C_data.2C_.5Bseparator.5D.29">
+      io.savedata(filename, data, [separator])
+     </span>
+    </h2>
+    <pre>text = "Some Text."
+
+text = text:gsub(".\n", "").." and again "..text:lower()
+io.savedata("./moretext.txt", text)
+os.execute("cat ./moretext.txt")
+
+sometable = { "spam", "spam", "spam", "baked beans", "spam" }
+io.savedata("./moretext.txt", sometable, ",")
+os.execute("cat ./moretext.txt && echo '\n'")
+
+local function weird_write (obj)
+    for i=1,10 do
+        if i&nbsp;% 2 == 0 then
+            obj:write("But cool. ")
+        else
+            obj:write("Weird. ")
+        end
+    end
+    obj:write("\n")
+end
+
+io.savedata("./weirdtext.txt", weird_write)
+os.execute("cat ./weirdtext.txt")
+</pre>
+    <p>Writes <tt>data</tt> to file <tt>filename</tt>.
+Handles opening and closing routines automatically.
+<tt>data</tt> can be generic data, a list or a function.
+Lists are joined prior to write, using the optional
+<tt>separator</tt> as separator (nice for CSV output).
+Functions are applied to the file object.
+</p>
+    <h2>
+     <span id="io.exists(filename)">
+     </span>
+     <span class="mw-headline" id="io.exists.28filename.29">
+      io.exists(filename)
+     </span>
+    </h2>
+    <pre>print(io.exists("moretext.txt") and
+      "Yes, you're right (as usual)!" or
+      "No, you're wasting your time, Sir!")
+</pre>
+    <p>Tests for file <tt>filename</tt>'s existence and returns a boolean accordingly.
+</p>
+    <h2>
+     <span id="io.size(filename)">
+     </span>
+     <span class="mw-headline" id="io.size.28filename.29">
+      io.size(filename)
+     </span>
+    </h2>
+    <pre>check1 = io.size"moretext.txt"
+check2 = tonumber(io.popen([[du -b moretext.txt | sed -e 's/^\([0-9]*\).*/\1/']]):read("*all"))
+
+io.write("I counted "..check1.." bytes, and it's got "
+                     ..check2.." bytes according to &lsquo;du&rsquo;.\nTherefore ")
+io.write(check1 == check2 and "the size info should be reasonably accurate.\n"
+                           or "something's thoroughly wrong.\n")
+</pre>
+    <p>Returns the byte count of file <tt>filename</tt> or <tt>0</tt>
+if the file is not found.
+</p>
+    <h2>
+     <span id="io.noflines(object)">
+     </span>
+     <span class="mw-headline" id="io.noflines.28object.29">
+      io.noflines(object)
+     </span>
+    </h2>
+    <pre>f = io.popen("dmesg")
+local infolength=io.noflines(f)
+f:close()
+
+print("There's " .. infolength .. " lines in the kernel ring buffer.")
+</pre>
+    <p>Returns the line count of a file object <tt>object</tt>.
+</p>
+    <h2>
+     <span id="io.characters(object,_[group])">
+     </span>
+     <span class="mw-headline" id="io.characters.28object.2C_.5Bgroup.5D.29">
+      io.characters(object, [group])
+     </span>
+    </h2>
+    <pre>f = io.popen("cat ./moretext.txt")
+for char1, char2 in io.characters(f,2) do
+    io.write( string.format("&ldquo;%s&rdquo;, &ldquo;%s&rdquo;\n",
+                            char1,
+                            char2 or "") 
+    )
+end
+f:close()
+
+f = io.open("./moretext.txt")
+for char1, char2, char3, char4 in io.characters(f,-4) do
+    io.write( string.format("1: &ldquo;%s&rdquo;, 2: &ldquo;%s&rdquo;, 3: &ldquo;%s&rdquo;, 4: &ldquo;%s&rdquo;\n",
+                            char1,
+                            char2 or "",
+                            char3 or "",
+                            char4 or "") 
+    )
+end
+f:close()
+</pre>
+    <p>Returns an iterator over the one-byte characters of a file object
+<tt>object</tt>.
+The optional argument <tt>group</tt> accepts a signed integer
+which  determines the number and byte order of the characters
+returned simultaneously.
+Possible values are
+<tt>-4</tt>,
+<tt>-2</tt>,
+<tt>1</tt>,
+<tt>2</tt>, and
+<tt>4</tt>.
+Negative values result in the order of the characters to be reversed.
+</p>
+    <h2>
+     <span id="io.bytes(object,_[group])">
+     </span>
+     <span class="mw-headline" id="io.bytes.28object.2C_.5Bgroup.5D.29">
+      io.bytes(object, [group])
+     </span>
+    </h2>
+    <pre>f = io.open("./moretext.txt")
+for char1, char2, char3, char4 in io.bytes(f,4) do
+    io.write( string.format("1: &ldquo;%s&rdquo;, 2: &ldquo;%s&rdquo;, 3: &ldquo;%s&rdquo;, 4: &ldquo;%s&rdquo;\n",
+                            char1,
+                            char2 or "",
+                            char3 or "",
+                            char4 or "") 
+    )
+end
+f:close()
+</pre>
+    <p>Returns an iterator over the bytes of a file object.
+As with <a href="#io.characters.28object.2C_.5Bgroup.5D.29">io.characters</a>, the optional argument
+<tt>group</tt> specifies the number and order of the bytes
+returned simultaneously.
+If there fewer bytes left at the end of a file than the absolute
+of <tt>group</tt>, then the remainder is ignored.
+Thus to process the whole file make sure that its size is a
+multiple of <tt>group</tt>.
+</p>
+    <h2>
+     <span id="io.ask(question,_[default,_[options]])">
+     </span>
+     <span class="mw-headline" id="io.ask.28question.2C_.5Bdefault.2C_.5Boptions.5D.5D.29">
+      io.ask(question, [default, [options]])
+     </span>
+    </h2>
+    <pre>options = { default = "An African or European swallow?",
+            other   = { "http://www.style.org/unladenswallow/", "42" } }
+local someanswer = io.ask("What is the air speed velocity of an unladen swallow?", 
+                   options.default,
+                   options.other
+)
+
+print(someanswer == options.default and 
+      "I don't know that! /He is thrown into the chasm./" or
+      "OK, off you go!")
+</pre>
+    <p>Interrupts the program flow to wait for user input.
+Prints the string <tt>question</tt> to stdout and returns the
+string given by the user.
+If a string <tt>default</tt> is given, it is printed in brackets
+and returned if the user input is empty.
+<tt>options</tt> has to be a list of valid input strings which
+are then printed in brackets as well; no other strings are
+accepted if <tt>options</tt> is specified.
+</p>
+    <h2>
+     <span id="io.readnumber(object,_[offset,]_count)">
+     </span>
+     <span class="mw-headline" id="io.readnumber.28object.2C_.5Boffset.2C.5D_count.29">
+      io.readnumber(object, [offset,] count)
+     </span>
+    </h2>
+    <pre>io.savedata("nums.txt", "\001\001\001\001\002\002\002\002\003\003\003\003")
+
+f = io.open("nums.txt", "r")
+print(io.readnumber(f, 1))
+print(io.readnumber(f, 5, 1))
+print(io.readnumber(f, 4))
+print(io.readnumber(f, 2))
+f:close()
+</pre>
+    <p>Reads <tt>count</tt> next bytes from a file object, optionally
+starting at byte <tt>offset</tt>.
+The bytes are treated as representing a single integer which is
+then returned in base&nbsp;10.
+Valid byte counts are
+<tt>1</tt>,
+<tt>2</tt>,
+<tt>4</tt>,
+<tt>8</tt>, and
+<tt>12</tt>;
+throws an error when there are fewer bytes left from the current
+position to the end of file than <tt>count</tt>.
+</p>
+    <h2>
+     <span id="io.readstring(object,_[offset,]_length)">
+     </span>
+     <span class="mw-headline" id="io.readstring.28object.2C_.5Boffset.2C.5D_length.29">
+      io.readstring(object, [offset,] length)
+     </span>
+    </h2>
+    <pre>f = io.open("text.txt", "r")
+str = io.readstring(f, 5, 3)
+print(str)
+f:close()
+</pre>
+    <p>Returns the next <tt>length</tt> bytes from <tt>object</tt>,
+starting from the current position or, optionally, the byte
+<tt>offset</tt>.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212407
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.020 seconds
+Real time usage: 0.137 seconds
+Preprocessor visited node count: 85/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3116/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3339-1!canonical and timestamp 20260109212407 and revision id 40576
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Extensions_to_the_Lua_IO_library">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

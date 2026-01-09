@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/PDF/PDFX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDFX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/PDF/PDFX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3335&diff=38152">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span id="PDF/X">
+     </span>
+     <span class="mw-headline" id="PDF.2FX">
+      PDF/X
+     </span>
+    </h2>
+    <p>This text is a first draft and will give you only the basic information
+needed to create PDF/X compatible documents.
+More info will be made available at a later date.
+</p>
+    <p>First things first. The following parameter should be set for any PDF/X version.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span>TITLE,
+   subtitle<span class="brx">=</span>SUBTITLE,
+   author<span class="brx">=</span>AUTHOR,
+   keyword<span class="brx">=</span><span class="br">{</span><span class="br">{</span>KEYWORD1, KEYWORD2<span class="br">}</span>, KEYWORD3<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Coming to the quite simple interface.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span>
+  <span class="brx">[</span>format<span class="brx">=</span>valid pdf/x name,
+   profile<span class="brx">=</span>name.icc,
+   intent<span class="brx">=</span>name.icc,
+   level<span class="brx">=</span>compresslevel, <span class="comment">% default 3</span>
+   file<span class="brx">=</span>optional specification file,
+   option<span class="brx">=</span>always|never<span class="brx">]</span>
+</pre>
+    <p><br>
+The two parameter <tt>format</tt> and <tt>intent</tt> are sufficient for most cases.
+</p>
+    <p>The <tt>format</tt> parameter simply defines the <b>PDF/X version</b>,
+while the <tt>intent</tt> parameter sets the so called <b>output intent</b>.
+</p>
+    <p>Currently the following PDF/X versions are supported:
+</p>
+    <p><code>format =</code>
+</p>
+    <pre class="tex">                                               gray  rgb  cmyk  spot  transp. notes
+PDF/X-1a:2001  <span class="comment">% PDF Version 1.3 (Acrobat 4.x) *          *     *     </span>
+PDF/X-1a:2003  <span class="comment">% PDF Version 1.4 (Acrobat 5.x) *          *     *     </span>
+PDF/X-3:2002   <span class="comment">% PDF Version 1.3 (Acrobat 4.x) *     *    *     *</span>
+PDF/X-3:2003   <span class="comment">% PDF Version 1.4 (Acrobat 5.x) *     *    *     * </span>
+PDF/X-4        <span class="comment">% PDF Version 1.6 (Acrobat 7.x) *     *    *     *     *    PDF layers</span>
+PDF/X-4p       <span class="comment">% PDF Version 1.6 (Acrobat 7.x) *     *    *     *     *    PDF layers; ICC externally supplied</span>
+PDF/X-5g       <span class="comment">% PDF Version 1.6 (Acrobat 7.x) *     *    *     *     *    PDF layers; graphics can be outside pdf</span>
+PDF/X-5n       <span class="comment">% PDF Version 1.6 (Acrobat 7.x) *     *    *     *     *    PDF layers; ICC externally supplied</span>
+PDF/X-5pg      <span class="comment">% PDF Version 1.6 (Acrobat 7.x) *     *    *     *     *    PDF layers; p + g</span>
+</pre>
+    <ul>
+     <li>
+      PDF/X-1 uses device dependent colors, i.e. your pictures must be converted into the output color space (gray or CMYK).
+     </li>
+     <li>
+      PDF/X-3+ uses device
+      <b>
+       in
+      </b>
+      dependent colors, i.e. the color space of your pictures doesn&rsquo;t matter, but it must be defined by a color profile.
+     </li>
+     <li>
+      It makes no sense to use CMYK pictures with PDF/X-3+, because color conversions between CMYK profiles are more lossy than any RGB-to-CMYK conversion!
+     </li>
+     <li>
+      It makes sense to use PDF/X-1a:2003 for bw printing.
+     </li>
+     <li>
+      Even if they&rsquo;re allowed in X/4+, don&rsquo;t use PDF layers for print projects &ndash; your printshop will not be able to handle them.
+     </li>
+    </ul>
+    <p>Predefined output intents:
+</p>
+    <p><code>intent =</code>
+</p>
+    <pre>   Coated FOGRA39 (ISO 12647-2:2004)
+   GRACoL2006_Coated1v2.icc
+   ISO Coated v2 300% (ECI)
+   ISO Coated v2 (ECI)
+   ISOnewspaper26v4
+   ISOnewspaper26v4_gr
+   ISO Uncoated
+   ISO Uncoated Yellowish
+   ISO Web Coated
+   Japan Color 2001 Coated
+   Japan Color 2002 Newspaper
+   Japan Web Coated (Ad)
+   SNAP 2007
+   SWOP2006_Coated3v2.icc
+   SWOP2006_Coated5v2.icc
+   Uncoated FOGRA29 (ISO 12647-2:2004)
+   Web Coated FOGRA28 (ISO 12647-2:2004)
+   PSR_LWC_PLUS_V2_PT
+   PSR_LWC_STD_V2_PT
+   PSR_SC_PLUS_V2_PT
+   PSR_SC_STD_V2_PT
+   PSRgravureMF
+</pre>
+    <p><b>Which one to use?</b>
+</p>
+    <ul>
+     <li>
+      In Europe, use FOGRA profiles.
+     </li>
+     <li>
+      In the USA, use SWOP profiles.
+     </li>
+     <li>
+      In Japan, use Japan profiles.
+     </li>
+     <li>
+      Use Coated for image printing paper.
+     </li>
+     <li>
+      Use Uncoated for natural paper (e.g. "offset").
+     </li>
+     <li>
+      "Web" means "web offset", i.e. big volume printing from a roll of paper (vs. sheet paper).
+     </li>
+    </ul>
+    <p><br>
+Some examples:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span>
+  <span class="brx">[</span>format<span class="brx">=</span>PDF/X-1a:2001,
+   intent<span class="brx">=</span>SWOP2006_Coated3v2.icc<span class="brx">]</span>
+</pre>
+    <p>or
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupbackend</span></span>
+  <span class="brx">[</span>format<span class="brx">=</span>PDF/X-4,
+   intent<span class="brx">=</span><span class="br">{</span>ISO Coated v2 300<span class="cs"><span class="documentcs">\letterpercent</span></span><span class="cs"><span class="stylecs">\space</span></span> <span class="brx">(</span>ECI<span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p><br>
+<b>All remaining parameter are kind of special.</b>
+</p>
+    <p><tt>profile</tt>
+sets the ICC based default color space profile (option for color management);
+this setting is document wide and currently only one profile
+per color space is allowed
+</p>
+    <p><tt>level</tt>
+sets the PDF compress level (values of 0..9 are allowed). Normally no need to change the
+default value.
+</p>
+    <p><tt>option=always|never</tt>
+</p>
+    <pre>   <tt>always</tt>: force embedding of the output intent profile (useful only in case of PDF/X-1a)
+   <tt>never</tt>&nbsp;: don't embed the output intent profile; no useful practise
+</pre>
+    <p><tt>file</tt> 
+name of an external file with predefined color profiles
+</p>
+    <h2>
+     <span class="mw-headline" id="ICC_profiles">
+      ICC profiles
+     </span>
+    </h2>
+    <p>The predefined color profiles can be found in
+<tt>.../&lt;context-path&gt;/colors/icc/context/colorprofiles.xml|.lua.</tt>
+</p>
+    <p>This list contains the profiles recommended by the <a class="external text" href="http://www.gwg.org" rel="nofollow">GWG</a> (Ghent PDF Workgroup) in 2008,
+the set of profiles bundled with <a class="external text" href="http://pages.cs.wisc.edu/~ghost/" rel="nofollow">ghostscript</a>
+and three test only profiles from the <a class="external text" href="http://www.color.org" rel="nofollow">ICC</a> (International Color Consortium).
+</p>
+    <p><b> Ghent PDF Workgroup (GWG) recommendations: </b>
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles_v13.pdf" rel="nofollow">
+       2008 version
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://gwg.org/technical-specifications/gwg-2015-specifications/" rel="nofollow">
+       2015 version
+      </a>
+      (no profiles mentioned)
+     </li>
+    </ul>
+    <p>There are a few contradictions to the PDF/X standards (by <a class="external text" href="https://www.pdfa.org" rel="nofollow">PDF Association</a>) to assure a better quality, see the <a class="external text" href="https://www.pdfa.org/further-quality-requirements-pdfx-plus/" rel="nofollow">article by Stephan Jaeggi</a>.
+</p>
+    <p>Nearly all predefined ICC profiles are also available in the download section.
+Output intents are bound to very specific printing conditions (which vary worldwide),
+so it&rsquo;s very likely that you only need one or two ICC profiles (and not all of them).
+Therefore the profile ZIPs come in 'localized' versions.
+</p>
+    <p>GWG recommend ICC profiles 
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles.zip" rel="nofollow">(complete)</a>
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles_Europe.zip" rel="nofollow">(Europe)</a>
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles_India.zip" rel="nofollow">(India)</a>
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles_Japan.zip" rel="nofollow">(Japan)</a>
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/GWG_recommended_ICC_profiles_USA.zip" rel="nofollow">(USA)</a>
+</p>
+    <p>Probe profiles (external link):
+<a class="external text" href="http://www.color.org/probeprofile.xalter" rel="nofollow">here</a>
+</p>
+    <p>Ghostscript profiles:
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/ghostscript_ICC_profiles.zip" rel="nofollow">here</a>
+</p>
+    <p>All predefined profiles in one
+<a class="external text" href="http://dl.contextgarden.net/misc/iccprofiles/complete_ICC_profiles.zip" rel="nofollow">zip</a> file
+</p>
+    <p><b>Profile installation:</b>
+</p>
+    <p>The profiles are normally stored under
+</p>
+    <pre>   .../&lt;context-path&gt;/colors/icc/profiles
+</pre>
+    <p>All profiles in the zip archive are already located in the correct sub path,
+so you only have to unpack them right in your ConTeXt directory
+(normally <code>texmf-context</code>).
+</p>
+    <p>In case you use these profiles also with other software, it is
+possible to share them with ConTeXt. Simply set the environment
+variable <b>$ICCPROFILES</b> to that special software related directory.
+</p>
+    <p>E.g. for Adobe Acrobat on Windows Vista this special directory is
+</p>
+    <pre>   C:\Program Files (X86)\Common Files\Adobe\Color\Profiles\Recommended
+</pre>
+    <p>Store the needed profiles there (without any TeX directory) and
+set $ICCPROFILES to that path.
+</p>
+    <p>On MacOS use <code>~/Library/ColorSync/Profiles</code> for your own profiles; the following setup makes sense in <code>.bashrc</code> or <code>.profile</code>:
+</p>
+    <pre>   export ICCPROFILES="~/Library/ColorSync/Profiles//:/System/Library/ColorSync/Profiles//:/Library/Application Support/Adobe/Color/Profiles//:"
+   # /Library/ColorSync/Profiles// doesn&rsquo;t contain anything useful
+</pre>
+    <p>The double slashes at the end mean &ldquo;all subdirectories&rdquo;.
+</p>
+    <p>All you need now is a final <tt>mtxrun --generate</tt> to update the file database.
+</p>
+    <p>In case of problems you should add
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enabletrackers</span></span><span class="brx">[</span>backend.pdfx<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackend</span></span><span class="brx">[</span>...
+</pre>
+    <p>right in front of <tt><a href="../../Command/setupbackend.html" title="Command/setupbackend">\setupbackend</a></tt> to get
+all possible debugging info.
+</p>
+    <p>And that&rsquo;s it for the moment...
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212423
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.040 seconds
+Real time usage: 0.114 seconds
+Preprocessor visited node count: 43/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 94/2097152 bytes
+Template argument size: 24/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 3063/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   22.034      1 Template:cmd
+100.00%   22.034      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3335-1!canonical and timestamp 20260109212423 and revision id 38152
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/PDF/PDFX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

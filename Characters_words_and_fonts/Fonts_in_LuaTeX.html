@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Fonts in LuaTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Fonts_in_LuaTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Fonts in LuaTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2607&diff=41597">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#eeeeee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="54" src="../wikiteximage/930de1a7eb6b29b2cd06e657affefa30.webp" width="29"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>NOTE:</b> This page is not finished yet
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p><b>Please, someone, fill this page&nbsp;!</b>
+</p>
+    <p><b>This page is being reorganized</b>
+</p>
+    <p>Using <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a> as the processing engine in ConTeXt allows one to directly use fonts installed on the user's system. Instead of converting all fonts into the standard <code>.tfm</code> and <code>.vf</code> formats (as outlined in some <a href="../Documentation/This_Way_-_My_Way#MyWay.html" title="Documentation/This Way - My Way">My Way</a> documents<sup class="reference" id="cite_ref-1"><a href="#cite_note-1">[1]</a></sup><sup class="reference" id="cite_ref-2"><a href="#cite_note-2">[2]</a></sup>), LuaTeX creates these metric files automatically at run-time. This greatly simplifies font installation in ConTeXt.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#How_LuaTeX_handles_system_fonts">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         How LuaTeX handles system fonts
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Building_the_font_database">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Building the font database
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Querying_the_font_database">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Querying the font database
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Installing_new_fonts">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Installing new fonts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Missing_glyphs">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Missing glyphs
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Using_fonts">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Using fonts
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#The_standard_way:_Typescripts">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           The standard way: Typescripts
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#Installing_typescripts">
+            <span class="tocnumber">
+             2.1.1
+            </span>
+            <span class="toctext">
+             Installing typescripts
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#Loading_typescripts">
+            <span class="tocnumber">
+             2.1.2
+            </span>
+            <span class="toctext">
+             Loading typescripts
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#Very_simple_example_of_typescript">
+            <span class="tocnumber">
+             2.1.3
+            </span>
+            <span class="toctext">
+             Very simple example of typescript
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-11">
+           <a href="#Where_to_find_existing_typescripts">
+            <span class="tocnumber">
+             2.1.4
+            </span>
+            <span class="toctext">
+             Where to find existing typescripts
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-12">
+           <a href="#Usage_example">
+            <span class="tocnumber">
+             2.1.5
+            </span>
+            <span class="toctext">
+             Usage example
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-13">
+           <a href="#Combining_predefined_fonts_in_your_own_typescripts">
+            <span class="tocnumber">
+             2.1.6
+            </span>
+            <span class="toctext">
+             Combining predefined fonts in your own typescripts
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Old_contents">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Old contents
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#Good_ol.27_typescripts">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Good ol' typescripts
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#Opentype_features">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Opentype features
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#A_.28Complete.29_Typescript_Example">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           A (Complete) Typescript Example
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#Example">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           Example
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#References">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#Footnotes">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Footnotes
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="How_LuaTeX_handles_system_fonts">
+      How LuaTeX handles system fonts
+     </span>
+    </h2>
+    <p>LuaTeX can use fonts in non-TeX format (e.g. OpenType, TrueType or Type1 format) directly. When ConTeXt processes a file that uses such non-traditional fonts, the actual fonts themselves are loaded in LuaTeX's embedded section of fontforge to extract their metric information. This removes the need for tfm and vf files on your disk, but it is also a somewhat lengthy and often memory-hungry process. Fortunately, the result of that internal preprocessing are also saved inside the texmf cache. Future runs using the same font (not just this file, but all files using that particular font) can then use the cached version of the metrics instead.
+</p>
+    <p>Mac OS users should note that the current version of LuaTeX (0.60) has severe problems dealing with the new TrueType collection fonts in Snow Leopard (Mac OS 10.6). The older Mac OS .dfont format works fine nowadays.
+</p>
+    <h3>
+     <span class="mw-headline" id="Building_the_font_database">
+      Building the font database
+     </span>
+    </h3>
+    <p>You need to specify where the fonts should be looked for, by setting the <code>OSFONTDIR</code> environment variable. On Windows, this might be achieved by running
+</p>
+    <pre>set OSFONTDIR=c:/windows/fonts/
+</pre>
+    <p>if the fonts should be found in <code>c:/windows/fonts/</code>. For Unix machines,
+</p>
+    <pre>export OSFONTDIR="/usr/local/share/fonts;$HOME/.fonts"
+</pre>
+    <p>indicate that the fonts should be found in both <code>/usr/local/share/fonts</code> and <code>$HOME/.fonts</code>.
+</p>
+    <p>The font database will then be automatically generated in the next run of <code>context</code>. You can also generate it manually by typing 
+</p>
+    <pre>mtxrun --script fonts --reload
+</pre>
+    <p>The output should look like
+</p>
+    <pre>  MTXrun | fontnames: identifying tree font files with suffix otf
+  MTXrun | fontnames: identifying tree font files with suffix OTF
+  MTXrun | fontnames: 331 tree files identified, 332 hash entries added, runtime 7.653 seconds
+  MTXrun | fontnames: identifying tree font files with suffix ttf
+  MTXrun | fontnames: identifying tree font files with suffix TTF
+  MTXrun | fontnames: 17 tree files identified, 14 hash entries added, runtime 4.645 seconds
+  ...
+  MTXrun | fontnames: 94 system files identified, 94 hash entries added, runtime 0.554 seconds
+  MTXrun | fontnames: 3837 files read, 3342 normal and 49 extra entries added, 5 rejected, 3386 valid
+</pre>
+    <p>If mtxrun has problem finding the mtx-fonts.lua file, it may be necessary to regenerate ConTeXt's file database:
+</p>
+    <pre>context --generate
+</pre>
+    <h3>
+     <span class="mw-headline" id="Querying_the_font_database">
+      Querying the font database
+     </span>
+    </h3>
+    <p>The command
+</p>
+    <pre>mtxrun --script fonts --list --all --pattern=*
+</pre>
+    <p>will return the whole entries of the font database as a list, such as
+</p>
+    <pre>  ...
+  warnockprobold               WarnockPro-Bold            E:/Fonts/Warnock Pro/WarnockPro-Bold.otf
+  warnockproboldcapt           WarnockPro-BoldCapt        E:/Fonts/Warnock Pro/WarnockPro-BoldCapt.otf
+  warnockprobolddisp           WarnockPro-BoldDisp        E:/Fonts/Warnock Pro/WarnockPro-BoldDisp.otf
+  warnockproboldit             WarnockPro-BoldIt          E:/Fonts/Warnock Pro/WarnockPro-BoldIt.otf
+  warnockprobolditcapt         WarnockPro-BoldItCapt      E:/Fonts/Warnock Pro/WarnockPro-BoldItCapt.otf
+  warnockprobolditdisp         WarnockPro-BoldItDisp      E:/Fonts/Warnock Pro/WarnockPro-BoldItDisp.otf
+  warnockprobolditsubh         WarnockPro-BoldItSubh      E:/Fonts/Warnock Pro/WarnockPro-BoldItSubh.otf
+  warnockproboldsubh           WarnockPro-BoldSubh        E:/Fonts/Warnock Pro/WarnockPro-BoldSubh.otf
+  ...
+</pre>
+    <p>You can query the database against a particular pattern. For instance,
+</p>
+    <pre>mtxrun --script fonts --list --all --pattern=Delicious*
+</pre>
+    <p>will return
+</p>
+    <pre>  deliciousbold        Delicious-Bold        /usr/local/share/fonts/d/delicious_bold.otf
+  deliciousbolditalic  Delicious-BoldItalic  /usr/local/share/fonts/d/delicious_bolditalic.otf
+  deliciousheavy       Delicious-Heavy       /usr/local/share/fonts/d/delicious_heavy.otf
+  deliciousitalic      Delicious-Italic      /usr/local/share/fonts/d/delicious_italic.otf
+  deliciousroman       Delicious-Roman       /usr/local/share/fonts/d/delicious_roman.otf
+  delicioussmallcaps   Delicious-SmallCaps   /usr/local/share/fonts/d/delicious_smallcaps.otf
+</pre>
+    <p>You can get useful informations about your fonts by using the <code>--info</code> option. For instance,
+</p>
+    <pre>mtxrun --script fonts --list --info --pattern=Delicious*Roman
+</pre>
+    <p>will return
+</p>
+    <pre>  MTXrun | fontname: deliciousroman
+  MTXrun | fullname: Delicious-Roman
+  MTXrun | filename: /usr/local/share/fonts/d/delicious_roman.otf
+  MTXrun |
+  MTXrun | gpos features:
+  MTXrun |
+  MTXrun | feature  script   languages
+  MTXrun |
+  MTXrun | kern     latn     dflt
+  MTXrun |
+  MTXrun | gsub features:
+  MTXrun |
+  MTXrun | feature  script   languages
+  MTXrun |
+  MTXrun | tlig     all      all
+  MTXrun | trep     all      all
+</pre>
+    <h3>
+     <span class="mw-headline" id="Installing_new_fonts">
+      Installing new fonts
+     </span>
+    </h3>
+    <p>After installing new fonts, the font database must be rebuilt for LuaTeX to access them.
+</p>
+    <p>In current versions of Mark IV (earlier than July 2008) this is automatically done whenever a named font cannot be found.
+</p>
+    <p>You only have to do the reload manually when you have installed updates to already installed fonts that cause the font and/or file names to change. 
+This normally only happens for fonts that are still in development like <a href="../TeX_Gyre_-_Old_Content.html" title="TeX Gyre - Old Content">TeX Gyre - Old Content</a> and <a href="../Latin_Modern.html" title="Latin Modern">Latin Modern</a>.
+</p>
+    <p>You can rebuild the database manually, using the already-mentioned command
+</p>
+    <pre>mtxrun --script fonts --reload
+</pre>
+    <p>Alternatively, you can turn off the automatic rebuild of the database, by setting either of
+</p>
+    <pre>MTX.FONTS.AUTOLOAD
+MTX_FONTS_AUTOLOAD
+</pre>
+    <p>to "no".
+</p>
+    <h3>
+     <span class="mw-headline" id="Missing_glyphs">
+      Missing glyphs
+     </span>
+    </h3>
+    <p>You need to add the command <tt><a class="new" href="../index.php?title=Command/checkcharactersinfont&action=edit&redlink=1.html" title="Command/checkcharactersinfont (page does not exist)">\checkcharactersinfont</a></tt> or
+(better) <tt><a href="../Command/enabletrackers.html" title="Command/enabletrackers">\enabletrackers</a>[fonts.missing]</tt> in the preamble
+of your document.
+</p>
+    <p><tt><a class="new" href="../index.php?title=Command/replacemissingcharacters&action=edit&redlink=1.html" title="Command/replacemissingcharacters (page does not exist)">\replacemissingcharacters</a></tt> will insert boxes where missing characters are expected. The boxes adhere to font style (italics, bold) and copying the box from PDF into the text editor will insert the missing glyph, so one can see the missing character without looking at the <i>missing characters</i> section of the log file. 
+</p>
+    <p><tt><a href="../Command/enabledirectives.html" title="Command/enabledirectives">\enabledirectives</a>[logs.errors=missing characters]</tt> throws an error and quits ConTeXt. After that, all you have to do is search for <code>start missing characters:</code> in the log file.
+</p>
+    <p>In fairly recent LMTX and MkIV versions,<sup class="reference" id="cite_ref-3"><a href="#cite_note-3">[3]</a></sup> only <tt><a href="../Command/enabledirectives.html" title="Command/enabledirectives">\enabledirectives</a>[logs.errors=missing characters]</tt> and/or <tt><a class="new" href="../index.php?title=Command/replacemissingcharacters&action=edit&redlink=1.html" title="Command/replacemissingcharacters (page does not exist)">\replacemissingcharacters</a></tt> are required.
+</p>
+    <p>For example, imagine this (otherwise extreme) example:<sup class="reference" id="cite_ref-4"><a href="#cite_note-4">[4]</a></sup> 
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\enabledirectives</span></span><span class="brx">[</span>logs.errors<span class="brx">=</span>missing characters<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>agr<span class="brx">]</span>
+<span class="cs">\replacemissingcharacters</span>
+<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>2em<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> aristotle-grc
+<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="286" src="../wikiteximage/d06814cbdb6df4e5892bf7fd58f099c2.webp" width="633">
+     </li>
+    </ul>
+    <p>This particular error quits ConTeXt after the first run. The last two lines in the console are:
+</p>
+    <pre>system          &gt; status &gt; quitting due to: missing characters
+mtx-context     | fatal error: return code: 1</pre>
+    <p>Unless you check the console messages, the log file or the whole document looking for the replaced glyphs, please consider that you might miss that your PDF document may be lacking glyphs.
+</p>
+    <h2>
+     <span class="mw-headline" id="Using_fonts">
+      Using fonts
+     </span>
+    </h2>
+    <p>Handling fonts in LuaTeX can be done
+</p>
+    <ul>
+     <li>
+      in a simple but limited way, using the
+      <a href="../Simplefonts_-_Old_Content.html" title="Simplefonts - Old Content">
+       <code>simplefonts</code>
+       module
+      </a>
+      ;
+     </li>
+     <li>
+      in the standard way, using
+      <a href="../TypeScripts_-_Old_Content.html" title="TypeScripts - Old Content">
+       TypeScripts - Old Content
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="The_standard_way:_Typescripts">
+      The standard way: Typescripts
+     </span>
+    </h3>
+    <h4>
+     <span class="mw-headline" id="Installing_typescripts">
+      Installing typescripts
+     </span>
+    </h4>
+    <p>Installing typescripts consists in the following:
+</p>
+    <p>1. Copy the typescript files into either 
+</p>
+    <pre class="tex">$TEXMF/tex/texmf-fonts/tex/context/user
+$TEXMF/tex/texmf-project/tex/context/user</pre>
+    <p>2. Run <code>context --generate</code>
+</p>
+    <p>By convention, typescript files are named like <code>type-(fontname|foundry).tex</code>. 
+</p>
+    <p>It may happen that some <code>type-xx.tex</code> typescript file depends on mkiv-specific code located in a matching <code>type-xx.mkiv</code> file. In this case, both files need to be installed.
+</p>
+    <h4>
+     <span class="mw-headline" id="Loading_typescripts">
+      Loading typescripts
+     </span>
+    </h4>
+    <p>A typescript file named <code>type-xx.tex</code> should be loaded using
+</p>
+    <pre> \usetypescriptfile[type-xx]
+</pre>
+    <p>An alternative way is
+</p>
+    <pre> \usetypefile[xx]
+</pre>
+    <p>where ConTeXt prepends <code>type-</code> when it loads the file; but  
+<tt><a class="new" href="../index.php?title=Command/usetypescriptfile&action=edit&redlink=1.html" title="Command/usetypescriptfile (page does not exist)">\usetypescriptfile</a></tt> is the preferred command because it takes care of the
+<tt><a href="../Command/starttypescriptcollection.html" title="Command/starttypescriptcollection">\starttypescriptcollection</a></tt>/<tt><a class="new" href="../index.php?title=Command/stoptypescriptcollection&action=edit&redlink=1.html" title="Command/stoptypescriptcollection (page does not exist)">\stoptypescriptcollection</a></tt> environments.
+</p>
+    <h4>
+     <span class="mw-headline" id="Very_simple_example_of_typescript">
+      Very simple example of typescript
+     </span>
+    </h4>
+    <p>If you are new to typescript you might have a look at this <a href="Examples_of_font_installation_and_of_typescripts/Simple_typescript_example.html" title="Characters words and fonts/Examples of font installation and of typescripts/Simple typescript example">Simple Typescript Example</a> to get a first idea how to use it.
+</p>
+    <h4>
+     <span class="mw-headline" id="Where_to_find_existing_typescripts">
+      Where to find existing typescripts
+     </span>
+    </h4>
+    <p>Each of the typescripts below defines a keyword to use with <tt><a href="../Command/setupbodyfont.html" title="Command/setupbodyfont">\setupbodyfont</a></tt>. Usually this is the same as the name of the typescript, but there is one exception (<code>antykwa-torunska</code>)
+</p>
+    <ul>
+     <li>
+      Latin Modern (typescript name:
+      <code>modern</code>
+      ; this is the default font set)
+     </li>
+     <li>
+      Latin Modern variant (ts name:
+      <code>modernvariable</code>
+      ; LM variable typewriter for serif)
+     </li>
+     <li>
+      Postscript (ts name:
+      <code>postscript</code>
+      ; Termes for serif, Heros for sans, Cursor for mono)
+     </li>
+     <li>
+      Antykwa Toru&nacute;ska (ts name:
+      <code>antykwa-torunska</code>
+      ; only serif; defines
+      <tt>
+       antykwa
+      </tt>
+      as keyword for
+      <tt>
+       <a href="../Command/setupbodyfont.html" title="Command/setupbodyfont">
+        \setupbodyfont
+       </a>
+      </tt>
+      )
+     </li>
+     <li>
+      Iwona (ts name:
+      <code>iwona</code>
+      ; only sans serif)
+     </li>
+     <li>
+      Iwona Light, Medium and Heavy (ts names:
+      <code>iwona-light</code>
+      ,
+      <code>iwona-medium</code>
+      ,
+      <code>iwona-heavy</code>
+      ; only sans; the medium variant is a small bit heavier than a "regular" one)
+     </li>
+     <li>
+      Pagella (ts name:
+      <code>palatino</code>
+      ; only serif)
+     </li>
+     <li>
+      Termes (ts name:
+      <code>times</code>
+      ; only serif, Heros for sans)
+     </li>
+    </ul>
+    <h4>
+     <span class="mw-headline" id="Usage_example">
+      Usage example
+     </span>
+    </h4>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>palatino,18pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Hello world, I'm Pagella!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The first line seems to order ConTeXt to "install" (for the current file) the given typescript (it accepts what I have earlier called a "typescript name").  The last one starts using it (you may omit the size if you are satisfied with the default).
+</p>
+    <h4>
+     <span class="mw-headline" id="Combining_predefined_fonts_in_your_own_typescripts">
+      Combining predefined fonts in your own typescripts
+     </span>
+    </h4>
+    <p>It is also possible to combine fonts from the TeX Gyre collection in your own typescripts. The example below combines Bonum (Bookman) roman, Adventor (AvantGarde) for sans serif, Cursor (Courier) for teletype, and Euler for math. The <code>rscale=...</code> option ensures that all fonts have the same x-height. (You can lookup the relative x-heigt of a font using fontforge.)
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>Bonum<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>Bonum<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>bonum<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>Bonum<span class="brx">]</span> <span class="brx">[</span>ss<span class="brx">]</span> <span class="brx">[</span>sans<span class="brx">]</span>  <span class="brx">[</span>adventor<span class="brx">]</span>  <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>0.887<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>Bonum<span class="brx">]</span> <span class="brx">[</span>tt<span class="brx">]</span> <span class="brx">[</span>mono<span class="brx">]</span>  <span class="brx">[</span>cursor<span class="brx">]</span>    <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.163<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>Bonum<span class="brx">]</span> <span class="brx">[</span>mm<span class="brx">]</span> <span class="brx">[</span>math<span class="brx">]</span>  <span class="brx">[</span>euler<span class="brx">]</span>     <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>rscale<span class="brx">=</span>1.050<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>Bonum<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>Bonum,12pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+Hello world, I'm Bonum!
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Old_contents">
+      Old contents
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../TrueType_fonts_in_luaTeX.html" title="TrueType fonts in luaTeX">
+       TrueType fonts in luaTeX
+      </a>
+     </li>
+    </ul>
+    <h5>
+     <span id="Good_ol'_typescripts">
+     </span>
+     <span class="mw-headline" id="Good_ol.27_typescripts">
+      Good ol' typescripts
+     </span>
+    </h5>
+    <p>Of course, Mark IV allows you to use typescripts as you've always done; for example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>palatino<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>palatino,12pt<span class="brx">]</span>
+effe fietsen 2: <span class="cs"><span class="documentcs">\input</span></span> tufte $<span class="cs"><span class="documentcs">\sqrt</span></span><span class="br">{</span>2<span class="br">}</span>$ <span class="cs">\eogonek</span>
+
+<span class="cs">\sc</span> effe fietsen 2: <span class="cs"><span class="documentcs">\input</span></span> tufte $<span class="cs"><span class="documentcs">\sqrt</span></span><span class="br">{</span>2<span class="br">}</span>$ <span class="cs">\eogonek</span>
+</pre>
+    <p>That's as simple as using a traditional ConTeXt typescript!
+</p>
+    <p>But ... how is it any different, then? Well, the difference is that in Mark IV, we can use an Opentype font directly, so that what is done here: when we want to use Palatino, the <a href="../TeX_Gyre_-_Old_Content.html" title="TeX Gyre - Old Content">TeX Gyre - Old Content</a> equivalent (&ldquo;Pagella&rdquo;) is called and we can use its Opentype &ldquo;features&rdquo;; read on.
+</p>
+    <h5>
+     <span class="mw-headline" id="Opentype_features">
+      Opentype features
+     </span>
+    </h5>
+    <p>A &ldquo;feature&rdquo;, in the Opentype jargon, is a set of rules describing changes in the appearance of the text. Hmm, that's not very precise. Let's show some examples. First of all, you have to know that features are referred to by 4-letter tags, and you will see this a lot. One of them is &lsquo;smcp&lsquo;, for &ldquo;small caps&ldquo;. Let's consider the following Mark IV-only code:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>smallcaps<span class="brx">]</span><span class="brx">[</span>language<span class="brx">=</span>DFLT,script<span class="brx">=</span>latn,smcp<span class="brx">=</span>yes<span class="brx">]</span>
+<span class="cs">\font</span><span class="cs">\palasmallcaps</span><span class="brx">=</span>texgyrepagella-regular*smallcaps
+<span class="cs">\palasmallcaps</span> This is a text in small capitals.
+</pre>
+    <p>Here you basically define a (Mark IV) feature with the name &rdquo;smallcaps&rdquo;, and associate it with the (Opentype) feature &ldquo;smcp&rdquo;. You have to specify which script you want to use it with; scripts in Opentype are also tagged with four letters, and &ldquo;latn&rdquo; is of course Latin.
+</p>
+    <p>Then you define a TeX font with that feature.
+</p>
+    <p>You can see what features are defined in a particular font with the following bit of code
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\ctxlua</span></span>
+<span class="br">{</span>
+  fontname <span class="brx">=</span> 'texgyrepagella-regular.otf'
+
+  --<span class="brx">[</span><span class="brx">[</span> First read the font data.
+    This makes heavy use of some of the Mark IV code<span class="brx">]</span><span class="brx">]</span>
+  tfmdata <span class="brx">=</span> fonts.tfm.read_and_define<span class="brx">(</span>"file:" .. fontname, 655360<span class="brx">)</span>
+  font <span class="brx">=</span> tfmdata.shared.otfdata
+  if font
+  then
+    gsubfeatures <span class="brx">=</span> fonts.otf.analyze_features<span class="brx">(</span>font.gsub<span class="brx">)</span>
+    gposfeatures <span class="brx">=</span> fonts.otf.analyze_features<span class="brx">(</span>font.gpos<span class="brx">)</span>
+  end
+
+  if gsubfeatures then
+    table.sort<span class="brx">(</span>gsubfeatures<span class="brx">)</span> <span class="comment">% We want our list sorted alphabetically!</span>
+    tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>rm GSUB features: <span class="cs">\\</span>tt "<span class="brx">)</span> <span class="comment">% Beware: you don't want \rm to be interpreted by lua (\rm would yield carriage return + letter m)!</span>
+    for _, feat in ipairs<span class="brx">(</span>gsubfeatures<span class="brx">)</span>
+    do tex.sprint<span class="brx">(</span>feat<span class="brx">)</span> tex.sprint<span class="brx">(</span>' '<span class="brx">)</span>
+    end
+  else tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>rm No GSUB features"<span class="brx">)</span>
+  end
+  tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>par"<span class="brx">)</span>
+
+  if gposfeatures then
+    tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>rm GPOS features: <span class="cs">\\</span>tt "<span class="brx">)</span>
+    table.sort<span class="brx">(</span>gposfeatures<span class="brx">)</span>
+    for _, feat in ipairs<span class="brx">(</span>gposfeatures<span class="brx">)</span>
+    do tex.sprint<span class="brx">(</span>feat<span class="brx">)</span> tex.sprint<span class="brx">(</span>' '<span class="brx">)</span>
+    end
+  else tex.sprint<span class="brx">(</span>"<span class="cs">\\</span>rm No GPOS features"<span class="brx">)</span>
+  end
+<span class="br">}</span>
+</pre>
+    <p>It prints the list on the page. You'll notice there are two sets of features, each one of them defined in a different table of the Opentype font: the <code>GSUB</code> table (for Glyph SUBstitution) gives rules for replacing glyphs in certains circumstances (think of ligatures: f + i -&gt; fi); the <code>GPOS</code> table (Glyph POSititioning) gives rules for moving glyphs (think of kerning: A + V -&gt; A &lt;kerning&gt; V).
+</p>
+    <p>Incidentally, the above code gives some basic examples of LuaTeX programming, a mixture of both Lua and TeX programming with some special features (features in the general sense, not the Opentype one&nbsp;:-).
+</p>
+    <h5>
+     <span id="A_(Complete)_Typescript_Example">
+     </span>
+     <span class="mw-headline" id="A_.28Complete.29_Typescript_Example">
+      A (Complete) Typescript Example
+     </span>
+    </h5>
+    <pre class="tex"><span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sans<span class="brx">]</span> <span class="brx">[</span>franklin<span class="brx">]</span>
+
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinBookRegular<span class="brx">]</span>   <span class="brx">[</span>name:FranklinGothicBookITC-Regular<span class="brx">]</span>   <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinMediumRegular<span class="brx">]</span> <span class="brx">[</span>name:FranklinGothicMediumITC-Regular<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinDemiRegular<span class="brx">]</span>   <span class="brx">[</span>name:FranklinGothicDemiITC-Regular<span class="brx">]</span>   <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinHeavyRegular<span class="brx">]</span>  <span class="brx">[</span>name:FranklinGothicHeavyITC-Regular<span class="brx">]</span>  <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+ 
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinBookItalic<span class="brx">]</span>   <span class="brx">[</span>name:FranklinGothicBookITC-Italic<span class="brx">]</span>    <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinDemiItalic<span class="brx">]</span>   <span class="brx">[</span>name:FranklinGothicMediumITC-Italic<span class="brx">]</span>  <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinHeavyItalic<span class="brx">]</span>  <span class="brx">[</span>name:FranklinGothicDemiITC-Italic<span class="brx">]</span>    <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>FranklinMediumItalic<span class="brx">]</span> <span class="brx">[</span>name:FranklinGothicHeavyITC-Italic<span class="brx">]</span>   <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sans<span class="brx">]</span> <span class="brx">[</span>franklin<span class="brx">]</span>
+
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Sans<span class="brx">]</span>            <span class="brx">[</span>FranklinBookRegular<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansItalic<span class="brx">]</span>      <span class="brx">[</span>FranklinBookItalic<span class="brx">]</span>  <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBold<span class="brx">]</span>        <span class="brx">[</span>FranklinDemiRegular<span class="brx">]</span> <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBoldItalic<span class="brx">]</span>  <span class="brx">[</span>FranklinDemiItalic<span class="brx">]</span>  <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansSlanted<span class="brx">]</span>     <span class="brx">[</span>SansItalic<span class="brx">]</span>          <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBoldSlanted<span class="brx">]</span> <span class="brx">[</span>SansBoldItalic<span class="brx">]</span>      <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansCaps<span class="brx">]</span>        <span class="brx">[</span>Sans<span class="brx">]</span>                <span class="brx">[</span>features<span class="brx">=</span>smallcaps<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>ss<span class="brx">]</span><span class="brx">[</span>sans<span class="brx">]</span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>tt<span class="brx">]</span><span class="brx">[</span>mono<span class="brx">]</span><span class="brx">[</span>modern<span class="brx">]</span>  <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.12<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>franklin<span class="brx">]</span><span class="brx">[</span>mm<span class="brx">]</span><span class="brx">[</span>math<span class="brx">]</span><span class="brx">[</span>iwona<span class="brx">]</span>   <span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>rscale<span class="brx">=</span>1.02<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>franklin,ss,10pt<span class="brx">]</span>
+</pre>
+    <p>Just the simplest way to use an otf font &mdash;&nbsp;or any font that does appear in <tt>mtxrun --script font --list</tt>&nbsp;&mdash;&nbsp;in all the document.
+</p>
+    <p>I&rsquo;m stick here&nbsp;:
+</p>
+    <pre>\definefontfeature [myfontfeature] [method=node, kern=yes, OTHER_FEATURE_COMMA_SEPERATED]
+\definefontsynonym [MyFontRegular] [name:TheFontName-Regular][features=myfontfeature]
+\definedfont [MyFontRegular at 16pt]
+</pre>
+    <p>This doesn&rsquo;t run for my title which use &laquo;&nbsp;\tfc&nbsp;&raquo;, only for the body of the text.
+</p>
+    <ul>
+     <li>
+      \definefontfeature
+      <ul>
+       <li>
+        [myfontfeature]&nbsp;: you can use the name you want. It will be use at the next line&nbsp;;
+       </li>
+       <li>
+        the fonts feature can be found with
+        <tt>
+         otfinfo -f TheFontFile.otf
+        </tt>
+        .
+       </li>
+      </ul>
+     </li>
+     <li>
+      \definefontsynonym&nbsp;:
+      <ul>
+       <li>
+        [MyFontRegular]&nbsp;: you can use the name you want. It will be use at the next line&nbsp;;
+       </li>
+       <li>
+        The name after
+        <tt>
+         name:
+        </tt>
+        is the name given by
+        <tt>
+         mtxrun --script font --list
+        </tt>
+       </li>
+       <li>
+        The &laquo;&nbsp;name:&nbsp;&raquo; part can be replaced by
+        <tt>
+         file:TheFontFile.otf
+        </tt>
+       </li>
+      </ul>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Example">
+      Example
+     </span>
+    </h3>
+    <p>Now to access, say the regular warnock font, the following are valid.  And I ought to mention that Hans recommends the first <a class="external free" href="http://article.gmane.org/gmane.comp.tex.context/43685" rel="nofollow">http://article.gmane.org/gmane.comp.tex.context/43685</a>.
+</p>
+    <pre class="tex"> <span class="comment">% Hans recommends this format;</span>
+ <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-Regular<span class="brx">]</span>    <span class="brx">[</span>name:warnockproregular<span class="brx">]</span>  
+</pre>
+    <p>and
+</p>
+    <pre class="tex"> <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-Regular<span class="brx">]</span>    <span class="brx">[</span>name:WarnockPro-Regular<span class="brx">]</span>
+</pre>
+    <p>An entire typescript would be defined as;
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>latin-smallcaps<span class="brx">]</span><span class="brx">[</span>smallcaps<span class="brx">]</span><span class="brx">[</span>script<span class="brx">=</span>latn<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>warnockpro<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setups</span></span><span class="brx">[</span>font:fallback:sans<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-Regular<span class="brx">]</span>    <span class="brx">[</span>name:WarnockPro-Regular<span class="brx">]</span>  
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-Bold<span class="brx">]</span>       <span class="brx">[</span>name:WarnockPro-Bold<span class="brx">]</span>    
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-Italic<span class="brx">]</span>     <span class="brx">[</span>name:WarnockPro-It<span class="brx">]</span>       
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>WarnockPro-BoldItalic<span class="brx">]</span> <span class="brx">[</span>name:WarnockPro-BoldIt<span class="brx">]</span>  
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>warnockpro<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>           <span class="brx">[</span>WarnockPro-Regular<span class="brx">]</span>        <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>       <span class="brx">[</span>WarnockPro-Bold<span class="brx">]</span>           <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>     <span class="brx">[</span>WarnockPro-Italic<span class="brx">]</span>         <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span> <span class="brx">[</span>WarnockPro-BoldItalic<span class="brx">]</span>     <span class="brx">[</span>features<span class="brx">=</span>default<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifCaps<span class="brx">]</span>       <span class="brx">[</span>Serif<span class="brx">]</span>                     <span class="brx">[</span>features<span class="brx">=</span>latin-smallcaps<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="cs"><span class="stylecs">\definetypeface</span></span><span class="brx">[</span>adobe<span class="brx">]</span><span class="brx">[</span>rm<span class="brx">]</span><span class="brx">[</span>serif<span class="brx">]</span><span class="brx">[</span>warnockpro<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>adobe,11pt<span class="brx">]</span>
+
+</pre>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <ul>
+     <li>
+      Chapter
+      <a class="external text" href="http://pmrb.free.fr/contextref.pdf#aut:495" rel="nofollow">
+       <i>
+        Fonts
+       </i>
+      </a>
+      from the
+      <i>
+       ConTeXt Reference Manual
+      </i>
+      by Hans Hagen and Taco Hoekwater (September 2013).
+     </li>
+     <li>
+      <a class="external text" href="https://pragma-ade.com/general/manuals/mfonts.pdf" rel="nofollow">
+       <i>
+        Fonts in ConTeXt
+       </i>
+      </a>
+      by Hans Hagen (November 2005).
+     </li>
+     <li>
+      <a class="external text" href="https://pragma-ade.com/general/manuals/fonts-mkiv.pdf" rel="nofollow">
+       <i>
+        Fonts Out of ConteXt: Explaining LuaTeX and MkIV
+       </i>
+      </a>
+      by Hans Hagen (2016)
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Footnotes">
+      Footnotes
+     </span>
+    </h2>
+    <div class="mw-references-wrap">
+     <ol class="references">
+      <li id="cite_note-1">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-1">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        <a class="external text" href="http://dl.contextgarden.net/websitesarchive/atl/tex/OpenType.pdf" rel="nofollow">
+         OpenType in ConTeXt
+        </a>
+        by Adam Lindsay
+       </span>
+      </li>
+      <li id="cite_note-2">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-2">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        <a class="external text" href="http://dl.contextgarden.net/myway/expertfonts.pdf" rel="nofollow">
+         Installing Expert Fonts: Minion Pro
+        </a>
+        by Idris Samawi Hamid
+       </span>
+      </li>
+      <li id="cite_note-3">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-3">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        Current latest from 2023.01.15 14:04, as the time of writing.
+       </span>
+      </li>
+      <li id="cite_note-4">
+       <span class="mw-cite-backlink">
+        <a href="#cite_ref-4">
+         &uarr;
+        </a>
+       </span>
+       <span class="reference-text">
+        The relevant section of the log file from this sample would read:
+        <pre>fonts           &gt; start missing characters: /home/user/context/tex/texmf/fonts/data/gust/lm/lmroman10-regular.otf
+fonts           &gt;    2  U+003AC  ά  GREEK SMALL LETTER ALPHA WITH TONOS
+fonts           &gt;    2  U+003AD  έ  GREEK SMALL LETTER EPSILON WITH TONOS
+fonts           &gt;    2  U+003AE  ή  GREEK SMALL LETTER ETA WITH TONOS
+fonts           &gt;    2  U+003AF  ί  GREEK SMALL LETTER IOTA WITH TONOS
+fonts           &gt;    2  U+003B1  &alpha;  GREEK SMALL LETTER ALPHA
+fonts           &gt;    2  U+003B2  &beta;  GREEK SMALL LETTER BETA
+fonts           &gt;    2  U+003B3  &gamma;  GREEK SMALL LETTER GAMMA
+fonts           &gt;    2  U+003B4  &delta;  GREEK SMALL LETTER DELTA
+fonts           &gt;    2  U+003B5  &epsilon;  GREEK SMALL LETTER EPSILON
+fonts           &gt;    2  U+003B7  &eta;  GREEK SMALL LETTER ETA
+fonts           &gt;    2  U+003B8  &theta;  GREEK SMALL LETTER THETA
+fonts           &gt;    2  U+003B9  &iota;  GREEK SMALL LETTER IOTA
+fonts           &gt;    2  U+003BA  &kappa;  GREEK SMALL LETTER KAPPA
+fonts           &gt;    2  U+003BB  &lambda;  GREEK SMALL LETTER LAMDA
+fonts           &gt;    2  U+003BC  &mu;  GREEK SMALL LETTER MU
+fonts           &gt;    2  U+003BD  &nu;  GREEK SMALL LETTER NU
+fonts           &gt;    2  U+003BF  &omicron;  GREEK SMALL LETTER OMICRON
+fonts           &gt;    2  U+003C0  &pi;  GREEK SMALL LETTER PI
+fonts           &gt;    2  U+003C1  &rho;  GREEK SMALL LETTER RHO
+fonts           &gt;    2  U+003C2  &sigmaf;  GREEK SMALL LETTER FINAL SIGMA
+fonts           &gt;    2  U+003C3  &sigma;  GREEK SMALL LETTER SIGMA
+fonts           &gt;    2  U+003C4  &tau;  GREEK SMALL LETTER TAU
+fonts           &gt;    2  U+003C5  &upsilon;  GREEK SMALL LETTER UPSILON
+fonts           &gt;    2  U+003C6  &phi;  GREEK SMALL LETTER PHI
+fonts           &gt;    2  U+003C7  &chi;  GREEK SMALL LETTER CHI
+fonts           &gt;    2  U+003C8  &psi;  GREEK SMALL LETTER PSI
+fonts           &gt;    2  U+003C9  &omega;  GREEK SMALL LETTER OMEGA
+fonts           &gt;    2  U+003CC  ό  GREEK SMALL LETTER OMICRON WITH TONOS
+fonts           &gt;    2  U+003CD  ύ  GREEK SMALL LETTER UPSILON WITH TONOS
+fonts           &gt;    2  U+003CE  ώ  GREEK SMALL LETTER OMEGA WITH TONOS
+fonts           &gt;    2  U+01F00  ἀ  GREEK SMALL LETTER ALPHA WITH PSILI
+fonts           &gt;    2  U+01F04  ἄ  GREEK SMALL LETTER ALPHA WITH PSILI AND OXIA
+fonts           &gt;    2  U+01F05  ἅ  GREEK SMALL LETTER ALPHA WITH DASIA AND OXIA
+fonts           &gt;    2  U+01F10  ἐ  GREEK SMALL LETTER EPSILON WITH PSILI
+fonts           &gt;    2  U+01F14  ἔ  GREEK SMALL LETTER EPSILON WITH PSILI AND OXIA
+fonts           &gt;    2  U+01F21  ἡ  GREEK SMALL LETTER ETA WITH DASIA
+fonts           &gt;    2  U+01F22  ἢ  GREEK SMALL LETTER ETA WITH PSILI AND VARIA
+fonts           &gt;    2  U+01F27  ἧ  GREEK SMALL LETTER ETA WITH DASIA AND PERISPOMENI
+fonts           &gt;    2  U+01F30  ἰ  GREEK SMALL LETTER IOTA WITH PSILI
+fonts           &gt;    2  U+01F31  ἱ  GREEK SMALL LETTER IOTA WITH DASIA
+fonts           &gt;    2  U+01F34  ἴ  GREEK SMALL LETTER IOTA WITH PSILI AND OXIA
+fonts           &gt;    2  U+01F37  ἷ  GREEK SMALL LETTER IOTA WITH DASIA AND PERISPOMENI
+fonts           &gt;    2  U+01F41  ὁ  GREEK SMALL LETTER OMICRON WITH DASIA
+fonts           &gt;    2  U+01F44  ὄ  GREEK SMALL LETTER OMICRON WITH PSILI AND OXIA
+fonts           &gt;    2  U+01F45  ὅ  GREEK SMALL LETTER OMICRON WITH DASIA AND OXIA
+fonts           &gt;    2  U+01F50  ὐ  GREEK SMALL LETTER UPSILON WITH PSILI
+fonts           &gt;    2  U+01F51  ὑ  GREEK SMALL LETTER UPSILON WITH DASIA
+fonts           &gt;    2  U+01F54  ὔ  GREEK SMALL LETTER UPSILON WITH PSILI AND OXIA
+fonts           &gt;    2  U+01F56  ὖ  GREEK SMALL LETTER UPSILON WITH PSILI AND PERISPOMENI
+fonts           &gt;    2  U+01F61  ὡ  GREEK SMALL LETTER OMEGA WITH DASIA
+fonts           &gt;    2  U+01F65  ὥ  GREEK SMALL LETTER OMEGA WITH DASIA AND OXIA
+fonts           &gt;    2  U+01F70  ὰ  GREEK SMALL LETTER ALPHA WITH VARIA
+fonts           &gt;    2  U+01F72  ὲ  GREEK SMALL LETTER EPSILON WITH VARIA
+fonts           &gt;    2  U+01F74  ὴ  GREEK SMALL LETTER ETA WITH VARIA
+fonts           &gt;    2  U+01F78  ὸ  GREEK SMALL LETTER OMICRON WITH VARIA
+fonts           &gt;    2  U+01FA7  ᾧ  GREEK SMALL LETTER OMEGA WITH DASIA AND PERISPOMENI AND YPOGEGRAMMENI
+fonts           &gt;    2  U+01FB6  ᾶ  GREEK SMALL LETTER ALPHA WITH PERISPOMENI
+fonts           &gt;    2  U+01FBD  ᾽  GREEK KORONIS
+fonts           &gt;    2  U+01FC6  ῆ  GREEK SMALL LETTER ETA WITH PERISPOMENI
+fonts           &gt;    2  U+01FC7  ῇ  GREEK SMALL LETTER ETA WITH PERISPOMENI AND YPOGEGRAMMENI
+fonts           &gt;    2  U+01FD6  ῖ  GREEK SMALL LETTER IOTA WITH PERISPOMENI
+fonts           &gt;    2  U+01FE5  ῥ  GREEK SMALL LETTER RHO WITH DASIA
+fonts           &gt;    2  U+01FE6  ῦ  GREEK SMALL LETTER UPSILON WITH PERISPOMENI
+fonts           &gt;    2  U+01FF6  ῶ  GREEK SMALL LETTER OMEGA WITH PERISPOMENI
+fonts           &gt;    2  U+01FF7  ῷ  GREEK SMALL LETTER OMEGA WITH PERISPOMENI AND YPOGEGRAMMENI
+fonts           &gt; stop missing characters</pre>
+        Of course, this is an extreme case, since the
+        <i>
+         Latin Roman
+        </i>
+        typefaces lack Greek glyphs.
+       </span>
+      </li>
+     </ol>
+    </div>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212216
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.077 seconds
+Real time usage: 0.138 seconds
+Preprocessor visited node count: 319/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1743/2097152 bytes
+Template argument size: 522/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 24758/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   37.882      1 -total
+ 51.67%   19.575      1 Template:note
+ 14.11%    5.347     11 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2607-1!canonical and timestamp 20260109212215 and revision id 41597
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Fonts_in_LuaTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

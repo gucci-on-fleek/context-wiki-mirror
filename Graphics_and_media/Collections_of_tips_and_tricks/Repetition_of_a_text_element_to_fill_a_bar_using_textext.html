@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Repetition of a text element to fill a bar using textext&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Repetition_of_a_text_element_to_fill_a_bar_using_textext" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Repetition of a text element to fill a bar using textext
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7363&diff=41801">2025-01-19</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Imagine you want to create a frame which consists out of one glyph or a combination of different glyphs in order to make a decorative border. For this purpose a series of such elements should be placed on the bar as pictures, evenly spaced. Probably you want to have at the end of the bar a different glyph inserted as a picture too.
+</p>
+    <p>The following code is working but the last picture is not the expected glyph. One would expect 14 times the "?" and at the end of the bar a "*":
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+   <span class="cs"><span class="documentcs">\startMPpage</span></span>
+      picture PicA&nbsp;; PicA&nbsp;:<span class="brx">=</span> textext<span class="brx">(</span>"*"<span class="brx">)</span>;
+      picture PicB&nbsp;; PicB&nbsp;:<span class="brx">=</span> textext<span class="brx">(</span>"?"<span class="brx">)</span>;
+
+      numeric Step&nbsp;; Step&nbsp;:<span class="brx">=</span> 2cm div bbwidth<span class="brx">(</span>PicB<span class="brx">)</span>  ;
+
+      for i <span class="brx">=</span> 1 upto Step&nbsp;:
+         draw PicB shifted <span class="brx">(</span>i*5mm,0<span class="brx">)</span>&nbsp;;
+      endfor&nbsp;;
+      draw PicA&nbsp;;
+   <span class="cs"><span class="documentcs">\stopMPpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+      <p>Gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="12" src="../../wikiteximage/33088cb38a463b62e5c2cfd42e9db94a.webp" width="422">
+     </li>
+    </ul>
+    <p>What you get is 15 "?" but no "*"!
+</p>
+    <p>In order to get this corrected one needs to calculate the boundingbox of the "?" on beforehand. Hans Hagen provided this solution on 14-10-2014.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+   <span class="cs">\startMPcalculation</span>
+       path PicX&nbsp;; PicX&nbsp;:<span class="brx">=</span> boundingbox textext<span class="brx">(</span>"?"<span class="brx">)</span>&nbsp;;
+   <span class="cs">\stopMPcalculation</span>
+
+   <span class="cs"><span class="documentcs">\startMPpage</span></span>
+      picture PicA&nbsp;; PicA&nbsp;:<span class="brx">=</span> textext<span class="brx">(</span>"*"<span class="brx">)</span>;
+      picture PicB&nbsp;; PicB&nbsp;:<span class="brx">=</span> textext<span class="brx">(</span>"?"<span class="brx">)</span>;
+
+      numeric Step&nbsp;; Step&nbsp;:<span class="brx">=</span> 2cm div bbwidth<span class="brx">(</span>PicX<span class="brx">)</span>&nbsp;;
+      <span class="comment">% numeric Step&nbsp;; Step&nbsp;:= 2cm div bbwidth(PicB)  ;</span>
+
+      for i <span class="brx">=</span> 1 upto Step&nbsp;:
+         draw PicB shifted <span class="brx">(</span>i*5mm,0<span class="brx">)</span>&nbsp;;
+      endfor&nbsp;;
+      draw PicA&nbsp;;
+   <span class="cs"><span class="documentcs">\stopMPpage</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+      <p>Gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="12" src="../../wikiteximage/2bfda2122f8e305593498e4b23a881ee.webp" width="422">
+     </li>
+    </ul>
+    <p>Now you get 14 "?" and the "*".
+</p>
+    <h2>
+     <span class="mw-headline" id="A_Full_Example">
+      A Full Example
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span> <span class="brx">[</span>8pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>Myframe<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\reuseMPgraphic</span></span><span class="br">{</span>Frame<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A8<span class="brx">]</span><span class="brx">[</span>A8<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+   <span class="brx">[</span>topspace<span class="brx">=</span>5mm,
+    backspace<span class="brx">=</span>5mm,
+    height<span class="brx">=</span>middle,
+    width<span class="brx">=</span>middle,
+    header<span class="brx">=</span>0pt,
+    footer<span class="brx">=</span>0pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">% ======== Definition of the frame in Metafun ==========</span>
+<span class="cs">\startMPcalculation</span>
+   path PicX&nbsp;; PicX&nbsp;:<span class="brx">=</span> boundingbox textext<span class="brx">(</span>"<span class="brx">=</span>&nbsp;: <span class="brx">=</span>"<span class="brx">)</span>&nbsp;;
+<span class="cs">\stopMPcalculation</span>	
+   
+<span class="cs"><span class="stylecs">\startreusableMPgraphic</span></span><span class="br">{</span>Frame<span class="br">}</span>
+   numeric u,v,xshift,yshift,picwidth,remnant,nelements;
+
+   u&nbsp;:<span class="brx">=</span> OverlayWidth;
+   v&nbsp;:<span class="brx">=</span> OverlayHeight;
+        
+   path p,w;
+   p&nbsp;:<span class="brx">=</span> unitsquare xscaled u yscaled v;
+   w&nbsp;:<span class="brx">=</span> fullcircle scaled 8pt;
+	
+   picture Edgepic,Linepic<span class="brx">[</span><span class="brx">]</span>;
+  
+   color edgedotcolor,linelementcolorA;
+  
+   edgedotcolor       :<span class="brx">=</span> blue;
+   linelementcolorA&nbsp;:<span class="brx">=</span> red;
+
+   Linepic<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> textext<span class="brx">(</span>"<span class="cs"><span class="documentcs">\rotate</span></span><span class="brx">[</span>rotation<span class="brx">=</span>90<span class="brx">]</span><span class="br">{</span><span class="brx">=</span>&nbsp;: <span class="brx">=</span><span class="br">}</span>"<span class="brx">)</span>;
+   Linepic<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span>  textext<span class="brx">(</span>"<span class="brx">=</span>&nbsp;: <span class="brx">=</span>"<span class="brx">)</span>;
+   Edgepic    :<span class="brx">=</span> textext<span class="brx">(</span>"o"<span class="brx">)</span>;
+	
+   <span class="comment">%Calculations for the horizontal frame-element placement:</span>
+     <span class="comment">% In order to make this work, the width of the line element needs to be calculated on beforehand.</span>
+     <span class="comment">% path PicX; PicX&nbsp;:= textext(")(");</span>
+   picwidth    :<span class="brx">=</span> bbwidth<span class="brx">(</span>PicX<span class="brx">)</span>;
+   nelements&nbsp;:<span class="brx">=</span> u div picwidth;
+   remnant    :<span class="brx">=</span> u mod picwidth;
+   xshift        :<span class="brx">=</span> picwidth + remnant/nelements;	 
+
+   Linepic<span class="brx">[</span>3<span class="brx">]</span>&nbsp;:<span class="brx">=</span> Linepic<span class="brx">[</span>2<span class="brx">]</span> shifted <span class="brx">(</span>0.5*picwidth,0<span class="brx">)</span>;
+
+   for a <span class="brx">=</span> llcorner p, ulcorner p&nbsp;:
+      for i <span class="brx">=</span> 1 upto nelements&nbsp;:
+         draw Linepic<span class="brx">[</span>3<span class="brx">]</span> shifted <span class="brx">(</span><span class="brx">(</span>xpart a + <span class="brx">(</span>i-1<span class="brx">)</span>*xshift<span class="brx">)</span>,ypart a<span class="brx">)</span> withcolor linelementcolorA;
+      endfor;
+   endfor;
+	 			
+   <span class="comment">%Calculations for the vertical frame-element placement:</span>
+   picheight   :<span class="brx">=</span> bbwidth<span class="brx">(</span>PicX<span class="brx">)</span>;
+   nelements&nbsp;:<span class="brx">=</span> v div picheight;
+   remnant    :<span class="brx">=</span> v mod picheight;
+   yshift        :<span class="brx">=</span> picheight + remnant/nelements;
+	 
+   Linepic<span class="brx">[</span>4<span class="brx">]</span>:<span class="brx">=</span> Linepic<span class="brx">[</span>1<span class="brx">]</span> shifted <span class="brx">(</span>0,0.5*picheight<span class="brx">)</span>;
+	 
+   for a <span class="brx">=</span> llcorner p, lrcorner p&nbsp;:
+      for i <span class="brx">=</span> 1 upto nelements:
+         draw Linepic<span class="brx">[</span>4<span class="brx">]</span> shifted <span class="brx">(</span>xpart a,ypart a + <span class="brx">(</span>i-1<span class="brx">)</span>*yshift<span class="brx">)</span> withcolor linelementcolorA;
+      endfor;
+   endfor;
+
+   for i <span class="brx">=</span> llcorner p, lrcorner p,ulcorner p,urcorner p&nbsp;:
+      fill w shifted <span class="brx">(</span>xpart i,ypart i<span class="brx">)</span> withcolor white;
+        draw Edgepic shifted <span class="brx">(</span>xpart i,ypart i<span class="brx">)</span> withcolor edgedotcolor;
+   endfor;
+
+<span class="comment">% For frame-element positioning checking:</span>
+<span class="comment">%   draw p;</span>
+<span class="comment">%</span>
+<span class="cs"><span class="stylecs">\stopreusableMPgraphic</span></span>
+
+<span class="comment">% ==========</span>
+
+<span class="cs"><span class="documentcs">\startframedtext</span></span>
+   <span class="brx">[</span>width<span class="brx">=</span>0.8<span class="cs">\textwidth</span>,height<span class="brx">=</span>0.8<span class="cs">\textheight</span>,frame<span class="brx">=</span>off,background<span class="brx">=</span>Myframe, align<span class="brx">=</span><span class="br">{</span>middle,lohi<span class="br">}</span><span class="brx">]</span>
+      The butterfly counts not months but moments, and has time enough.
+      <span class="cs"><span class="documentcs">\blank</span></span>
+      <span class="br">{</span><span class="cs">\tfx</span> Rabindranath Tagore<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopframedtext</span></span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+
+</pre>
+      <p>Gives:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../../wikiteximage/24d65f152202604a1231955f12826a61.webp" width="307">
+     </li>
+    </ul>
+    <p>There is one important remark: The MPcalculation and the drawing itself must be inside \starttext ... \stoptext.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.053 seconds
+Preprocessor visited node count: 18/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 9010/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7363-1!canonical and timestamp 20260109212416 and revision id 41801
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Repetition_of_a_text_element_to_fill_a_bar_using_textext">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

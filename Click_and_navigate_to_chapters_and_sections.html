@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Click and navigate to chapters and sections&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Click_and_navigate_to_chapters_and_sections" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Click and navigate to chapters and sections
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2478&diff=28676">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt;&lt; <a href="HTML_and_ConTeXt.html" title="HTML and ConTeXt">HTML_and_ConTeXt</a> | <a href="HTML_to_ConTeXt.html" title="HTML to ConTeXt">HTML_to_ConTeXt</a> &gt;
+</p>
+    <p><br>
+In this example, we created new pages for chapters and sections so that each part of the document could
+be authored by a different person.  In Informl new pages are indicated by the CSS class name "existingWikiWord"
+as shown in the following figure.
+</p>
+    <p><a class="image" href="File:Wiki_prev2.jpg"><img alt="Wiki prev2.jpg" decoding="async" height="462" src="images/3/3f/Wiki_prev2.webp" width="800"></a>.
+</p>
+    <pre>&lt;p&gt;
+  &lt;a class="existingWikiWord"
+      href="http://localhost:3010/AnnRep07/pages/APCC+Research+and+Development+Projects"&gt;
+      APCC Research and Development Projects
+  &lt;/a&gt;
+&lt;/p&gt;
+
+</pre>
+    <p>Knowing this, I have used the following 'hpricot' code to click on chapter and section links to retrieve
+their contents.
+</p>
+    <pre>chapters= (doc/"p/a.existingWikiWord")
+
+# we need to navigate one more level into the web page
+# let us discover the links for that
+chapters.each do |ch|
+  chap_link = ch.attributes['href']
+  # using inner_html we can create subdirectories
+
+
+  chap_name = ch.inner_html.gsub(/\s*/,"")
+  chap_name_org = ch.inner_html
+
+  # We create chapter directories
+  system("mkdir -p #{chap_name}")
+  fil.write "\\input #{chap_name}  \n"
+  chapFil="#{chap_name}.tex"
+  `rm #{chapFil}`
+  cFil=File.new(chapFil,"a")
+  cFil.write "\\chapter{ #{chap_name_org} } \n"
+</pre>
+    <pre>  # We navigate to sections now
+  doc2=Hpricot(open(chap_link))
+  sections= (doc2/"p/a.existingWikiWord")
+  sections.each do |sc|
+    sec_link = sc.attributes['href']
+    sec_name = sc.inner_html.gsub(/\s*/,"")
+
+    secFil="#{chap_name}/#{sec_name}.tex"
+    `rm #{secFil}`
+    sFil=File.new(secFil,"a")
+    sechFil="#{chap_name}/#{sec_name}.html"
+    `rm #{sechFil}`
+    shFil=File.new(sechFil,"a")
+
+</pre>
+    <p>After navigating to sections (h1 elements in HTML) retrieve their contents
+and send it to the ruby function "scrape_page.rb" for filtering.
+</p>
+    <pre>    #  scrape_the_page(sec_link,"#{chap_name}/#{sec_name}")
+    scrape_the_page(sec_link,sFil,shFil)
+    cFil.write "\\input #{chap_name}/#{sec_name} \n"
+  end
+end
+fil.write "\\stoptext \n"
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109213622
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.015 seconds
+Real time usage: 0.017 seconds
+Preprocessor visited node count: 13/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1393/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2478-1!canonical and timestamp 20260109213622 and revision id 28676
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Click_and_navigate_to_chapters_and_sections">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

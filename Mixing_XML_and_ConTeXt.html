@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Mixing XML and ConTeXt&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Mixing_XML_and_ConTeXt" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Mixing XML and ConTeXt
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1125&diff=39551">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="Input_and_compilation/XML_source.html" title="Input and compilation/XML source">XML</a>
+</p>
+    <p>There is a simple XML vocabulary built into ConTeXt, called ContML, that enables an XHTML-like markup to be processed with little effort. This description was born from a request on the list to process XML tables, so it's best to start with that example.
+</p>
+    <p>The module, in the source tree as <a class="external text" href="http://source.contextgarden.net/tex/context/base/x-contml.tex" rel="nofollow">x-contml.tex</a>, is included as with any module:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span>        <span class="brx">[</span>contml<span class="brx">]</span>  
+</pre>
+    <p>All of the elements defined in the contml module are defined in their own XML namespace. Normally, that would mean calling elements such as <tt>&lt;context:itemize&gt;</tt>. By calling an auto-namespace, we lose some of this redundant verbosity, and also gain some elements that look very familiar to those familiar with HTML coding:
+</p>
+    <pre class="tex"><span class="cs">\autoXMLnamespace</span> <span class="brx">[</span>context<span class="brx">]</span> 
+</pre>
+    <p>We set up some colors and start out with some normal ConTeXt code before starting with XML data:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span>      <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span> <span class="comment">% not necessary, helps with example</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>Some <span class="cs"><span class="documentcs">\ConTeXt</span></span><span class="br">}</span>
+
+<span class="cs">\startXMLdata</span>
+</pre>
+    <p>The following XML fragment is then processed using the contml module:
+</p>
+    <pre class="xml"><span class="br">&lt;</span><span class="name">table frame="off" background="color" color="white" style="bold"</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">tr backgroundcolor="red"</span><span class="br">&gt;</span>   <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>some<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>XML<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/tr</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">tr backgroundcolor="blue"</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>xx<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span>   <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>xx<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span>  <span class="br">&lt;</span><span class="name">/tr</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/table</span><span class="br">&gt;</span>
+</pre>
+    <p>After closing the XML block, you can continue with normal TeX markup:
+</p>
+    <pre class="tex"><span class="cs">\stopXMLdata</span>
+I can also have normal <span class="cs"><span class="documentcs">\TeX</span></span>-like 
+<span class="cs"><span class="documentcs">\inframed</span></span><span class="brx">[</span>frame<span class="brx">=</span>off,background<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>yellow<span class="brx">]</span>
+<span class="br">{</span>markup<span class="br">}</span>.
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>The result looks a bit like this:
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="13" src="wikiteximage/29f89aced847be1e3ecd050be6f47036.webp" width="55">
+     </li>
+    </ul>
+    <p>Note that the XML block containing the table can be moved into a separate file. In this case, you would replace the section reading:
+</p>
+    <pre class="xml">\startXMLdata
+<span class="br">&lt;</span><span class="name">table frame="off" background="color" color="white"</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">tr backgroundcolor="red"</span><span class="br">&gt;</span>   <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>some<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>XML<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">/tr</span><span class="br">&gt;</span>
+ <span class="br">&lt;</span><span class="name">tr backgroundcolor="green"</span><span class="br">&gt;</span> <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>xx<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span>   <span class="br">&lt;</span><span class="name">td</span><span class="br">&gt;</span>xx<span class="br">&lt;</span><span class="name">/td</span><span class="br">&gt;</span>  <span class="br">&lt;</span><span class="name">/tr</span><span class="br">&gt;</span>
+<span class="br">&lt;</span><span class="name">/table</span><span class="br">&gt;</span>
+\stopXMLdata
+</pre>
+    <p>With:
+</p>
+    <pre class="tex"><span class="cs">\processXMLfilegrouped</span><span class="br">{</span>table.xml<span class="br">}</span>
+</pre>
+    <p>Where the <tt>table.xml</tt> file contains the XML fragment.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212432
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.019 seconds
+Preprocessor visited node count: 25/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4307/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:1125-1!canonical and timestamp 20260109212432 and revision id 39551
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Mixing_XML_and_ConTeXt">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

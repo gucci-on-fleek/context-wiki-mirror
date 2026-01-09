@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Combinations&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Combinations" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Combinations
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=839&diff=40277">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Combinations are ConTeXt's way to align several pictures (preferrably at same size):
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Combinations">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Combinations
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Image_Width">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Image Width
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Floatcombinations">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Floatcombinations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Setup">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Setup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Referencing">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Referencing
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#See_also">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         See also
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Combinations">
+      Combinations
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>x*y<span class="brx">]</span> <span class="comment">%% x=columns, y=rows</span>
+<span class="br">{</span>something<span class="br">}</span><span class="br">{</span>caption<span class="br">}</span> ...
+...
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+</pre>
+    <p>or using the newer interface:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>3, ny<span class="brx">=</span>2<span class="brx">]</span>  <span class="comment">%% 3 columns, 2 rows</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+  <span class="cs">\startcontent</span> something <span class="cs">\stopcontent</span>
+  <span class="cs">\startcaption</span> caption   <span class="cs">\stopcaption</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+
+</pre>
+    <p>means:
+</p>
+    <p>You define, how much figures in columns * rows you'd like to align.
+</p>
+    <p>You must provide one "figure something" (e.g. an <tt><a href="../Command/externalfigure.html" title="Command/externalfigure">\externalfigure</a></tt>) and a caption for every "cell".
+</p>
+    <p>The sample, from the manual, shows how to define a caption for the whole group and use it as float (see <a href="../Document_layout_and_layers/Floating_objects.html" title="Document layout and layers/Floating objects">Floating objects</a>):
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>  <span class="comment">%% sample images</span>
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>An example of a combination<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>3, ny<span class="brx">=</span>2<span class="brx">]</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> a                       <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> b                       <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> c                       <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> d                       <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> e                       <span class="cs">\stopcaption</span>
+    <span class="cs">\startcontent</span> <span class="cs"><span class="documentcs">\externalfigure</span></span> <span class="brx">[</span>dummy<span class="brx">]</span> <span class="cs">\stopcontent</span>
+    <span class="cs">\startcaption</span> f                       <span class="cs">\stopcaption</span>
+  <span class="cs"><span class="documentcs">\stopcombination</span></span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="355" src="../wikiteximage/c5bdeeb67547cf2f7bc78c3485a6339a.webp" width="624">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Image_Width">
+      Image Width
+     </span>
+    </h3>
+    <p>The image widths aren&rsquo;t calculated automatically:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>3*1<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span><span class="br">}</span><span class="br">{</span>cow<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>mill<span class="brx">]</span><span class="br">}</span><span class="br">{</span>mill<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker<span class="brx">]</span><span class="br">}</span><span class="br">{</span>hacker<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="446" src="../wikiteximage/2785390902da5defa507e451c12fcde3.webp" width="1375">
+     </li>
+    </ul>
+    <p>You could define them on your own:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>3*1<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>   <span class="brx">[</span>width<span class="brx">=</span>.3<span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>cow<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>mill<span class="brx">]</span>  <span class="brx">[</span>width<span class="brx">=</span>.3<span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>mill<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span>.3<span class="cs">\textwidth</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>hacker<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+</pre>
+    <p>But that&rsquo;s ugly and tedious. Hans did it for you in <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/grph-inc.mkxl" rel="nofollow">grph-inc.mkxl</a>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definemeasure</span></span><span class="brx">[</span>combination<span class="brx">]</span><span class="brx">[</span>
+  <span class="brx">(</span><span class="cs">\textwidth</span>
+  -<span class="cs">\effectiveleftskip</span>
+  -<span class="cs">\effectiverightskip</span>
+  -<span class="cs">\numexpr</span><span class="cs">\combinationparameter</span><span class="cs">\nx</span>-<span class="cs">\plusone</span><span class="cs">\relax</span><span class="cs">\dimexpr</span><span class="cs">\combinationparameter</span><span class="cs">\distance</span><span class="cs">\relax</span>
+  <span class="brx">)</span>/<span class="cs">\combinationparameter</span><span class="brx">]</span>
+</pre>
+    <p>So you can say:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>3*1<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>   <span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="stylecs">\measure</span></span><span class="br">{</span>combination<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>cow<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>mill<span class="brx">]</span>  <span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="stylecs">\measure</span></span><span class="br">{</span>combination<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>mill<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="stylecs">\measure</span></span><span class="br">{</span>combination<span class="br">}</span><span class="brx">]</span><span class="br">}</span><span class="br">{</span>hacker<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+</pre>
+    <p>But that&rsquo;s still tedious.
+</p>
+    <p>With the power of <tt><a href="../Command/defineexternalfigure.html" title="Command/defineexternalfigure">\defineexternalfigure</a></tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineexternalfigure</span></span><span class="brx">[</span>combination<span class="brx">]</span><span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="stylecs">\measure</span></span><span class="br">{</span>combination<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>(That&rsquo;s predefined, no need to copy!)
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\startcombination</span></span><span class="brx">[</span>3*1<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>cow<span class="brx">]</span>   <span class="brx">[</span>combination<span class="brx">]</span><span class="br">}</span><span class="br">{</span>cow<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>mill<span class="brx">]</span>  <span class="brx">[</span>combination<span class="brx">]</span><span class="br">}</span><span class="br">{</span>mill<span class="br">}</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\externalfigure</span></span><span class="brx">[</span>hacker<span class="brx">]</span><span class="brx">[</span>combination<span class="brx">]</span><span class="br">}</span><span class="br">{</span>hacker<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopcombination</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="276" src="../wikiteximage/0802b10128f52045ecb86f46d14c48c6.webp" width="624">
+     </li>
+    </ul>
+    <p>Beautiful.&nbsp;;)
+</p>
+    <h2>
+     <span class="mw-headline" id="Floatcombinations">
+      Floatcombinations
+     </span>
+    </h2>
+    <p>When combination contain floats, the command <tt><a href="../Command/startfloatcombination.html" title="Command/startfloatcombination">\startfloatcombination</a></tt> is used. Here an example using float combinations as well as subfloatnumbering that creates subfigures sharing a mutual figure prefix and an individual subfigure designator (e.g. figure 1a), figure 1b, etc.).
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span> <span class="brx">[</span>dum<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>location<span class="brx">=</span>none<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startfloatcombination</span></span> <span class="brx">[</span>nx<span class="brx">=</span>2<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Left, reference<span class="brx">=</span>ref:left, group<span class="brx">=</span>one, groupsuffix<span class="brx">=</span>a<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\externalfigure</span></span>
+    <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+    <span class="cs"><span class="documentcs">\startplacefigure</span></span> <span class="brx">[</span>title<span class="brx">=</span>Right, reference<span class="brx">=</span>ref:right, group<span class="brx">=</span>one, groupsuffix<span class="brx">=</span>b<span class="brx">]</span>
+      <span class="cs"><span class="documentcs">\externalfigure</span></span>
+    <span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+  <span class="cs"><span class="documentcs">\stopfloatcombination</span></span>
+<span class="cs"><span class="documentcs">\stopplacefigure</span></span>
+
+See <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>image<span class="br">}</span><span class="brx">[</span>ref:right<span class="brx">]</span> <span class="brx">(</span>right<span class="brx">)</span> and <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>image<span class="br">}</span><span class="brx">[</span>ref:left<span class="brx">]</span> <span class="brx">(</span>left<span class="brx">)</span>.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="189" src="../wikiteximage/90a3475ee621965c6af1e51bfddbb073.webp" width="624">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Setup">
+      Setup
+     </span>
+    </h2>
+    <p>There is the <tt><a class="mw-redirect" href="../Command/setupcombination.html" title="Command/setupcombinations">\setupcombinations</a></tt> command.
+</p>
+    <h2>
+     <span class="mw-headline" id="Referencing">
+      Referencing
+     </span>
+    </h2>
+    <p>To reference a subfigure you can provide the subfigure's caption as a second parameter to the <tt><a href="../Command/in.html" title="Command/in">\in</a></tt> command.
+</p>
+    <p>To reference the subfigure with the caption d you would write:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>figure<span class="br">}</span><span class="br">{</span>d<span class="br">}</span><span class="brx">[</span>fig:combinations<span class="brx">]</span>
+</pre>
+    <p>This would produce something like 'figure 2.4d'. The content of the second parameter simply gets appended to the end of the figure's reference-number, thus the example above would still work even if the caption would be 'd) An awesome subfigure'.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_also">
+      See also
+     </span>
+    </h2>
+    <p><a href="../Document_layout_and_layers/Floating_objects#Subfloats.html" title="Document layout and layers/Floating objects">Floating objects</a>, <tt><a href="../Command/startfloatcombination.html" title="Command/startfloatcombination">\startfloatcombination</a></tt>, <tt><a class="new" href="../index.php?title=Command/startsubfloatnumbering&action=edit&redlink=1.html" title="Command/startsubfloatnumbering (page does not exist)">\startsubfloatnumbering</a></tt>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212417
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.080 seconds
+Real time usage: 0.141 seconds
+Preprocessor visited node count: 162/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 874/2097152 bytes
+Template argument size: 260/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 13269/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   86.033      1 -total
+ 19.57%   16.840      7 Template:cmd
+  8.05%    6.927      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:839-1!canonical and timestamp 20260109212417 and revision id 40277
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Combinations">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

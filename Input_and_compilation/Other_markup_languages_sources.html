@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Other markup languages sources&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Other_markup_languages_sources" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Other markup languages sources
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7346&diff=42383">2025-03-23</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Pandoc">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Pandoc
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Converting_to_ConTeXt">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Converting to ConTeXt
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Creating_a_PDF">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Creating a PDF
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Customizing">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Customizing
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Org_Mode_and_ox-context">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Org Mode and ox-context
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Use_of_pandoc_via_the_filter_module">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Use of pandoc via the filter module
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Pandoc">
+      Pandoc
+     </span>
+    </h2>
+    <p><a class="external text" href="https://pandoc.org" rel="nofollow">Pandoc</a> can convert many markup languages to ConTeXt
+</p>
+    <ul>
+     <li>
+      <a class="external text" href="https://pandoc.org/MANUAL.html#context" rel="nofollow">
+       manual about ConTeXt
+      </a>
+      .
+     </li>
+     <li>
+      <a class="external text" href="https://pandoc.org/MANUAL.html#variables-for-context" rel="nofollow">
+       Variables for ConTeXt
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://dave.autonoma.ca/blog/2020/04/28/typesetting-markdown-part-8/" rel="nofollow">
+       An extensive example from Dave Jarvis
+      </a>
+      (2020)
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Converting_to_ConTeXt">
+      Converting to ConTeXt
+     </span>
+    </h3>
+    <p>Use the following options
+</p>
+    <ul>
+     <li>
+      <code>-t context+ntb</code>
+      for natural table format or
+      <code>-t context</code>
+      (extreme table format is default)
+     </li>
+     <li>
+      <code>-s</code>
+      for a standalone file (setup are added in the setup area). Without the output will miss some setups to be ready for ConTeXt compilation.
+     </li>
+    </ul>
+    <p><code>pandoc -s -t context+ntb input.md -o input.tex</code>
+</p>
+    <p><code>pandoc --standalone --to=context+ntb input.md --output input.tex</code>
+</p>
+    <h3>
+     <span class="mw-headline" id="Creating_a_PDF">
+      Creating a PDF
+     </span>
+    </h3>
+    <p>By default, pandoc will use LaTeX to create the PDF, which requires that a LaTeX engine be installed (see --pdf-engine below). Alternatively, pandoc can use ConTeXt, roff ms, or HTML as an intermediate format. To do this, specify an output file with a .pdf extension, as before, but <code>-t context</code> to the command line (the tool used to generate the PDF from the intermediate format may be specified using --pdf-engine).
+</p>
+    <p><code>pandoc -t context+ntb input.org -o input.pdf</code>
+</p>
+    <p>ConTeXt always produces tagged PDFs, but the quality depends on the input. The default ConTeXt markup generated by pandoc is optimized for readability and reuse, not tagging. Enable the tagging format extension to force markup that is optimized for tagging. This can be combined with the pdfa variable to generate standard-compliant PDFs. E.g.:
+</p>
+    <p><code>pandoc -s -t context+ntb+tagging -V pdfa=3a input.org --output input.pdf</code>
+</p>
+    <h3>
+     <span class="mw-headline" id="Customizing">
+      Customizing
+     </span>
+    </h3>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> demo how to use your own environment files, and to use the pandoc variables <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Org_Mode_and_ox-context">
+      Org Mode and ox-context
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="external text" href="https://github.com/Jason-S-Ross/ox-context/tree/main" rel="nofollow">
+       ox-context
+      </a>
+      is a ConTeXt exporter for
+      <a class="external text" href="https://orgmode.org" rel="nofollow">
+       Org Mode
+      </a>
+      .
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Use_of_pandoc_via_the_filter_module">
+      Use of pandoc via the filter module
+     </span>
+    </h2>
+    <p>This demo, with <a class="external text" href="https://daringfireball.net/projects/markdown/" rel="nofollow">Markdown</a> <a class="external text" href="https://orgmode.org" rel="nofollow">Org Mode</a> and <a class="external text" href="https://docutils.sourceforge.io/rst.html" rel="nofollow">reStructuredText</a>, can not be rendered on this wiki nor on <a class="external text" href="https://context-on-web.eu" rel="nofollow">context-on-web.eu</a>  server because pandoc is required. 
+</p>
+    <p>But try on your computer:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>filter<span class="brx">]</span>
+
+<span class="cs">\defineexternalfilter</span>
+  <span class="brx">[</span>markdown<span class="brx">]</span>
+  <span class="brx">[</span>filtercommand<span class="brx">=</span><span class="br">{</span>pandoc -t context -f markdown -o <span class="cs">\externalfilteroutputfile</span><span class="cs"><span class="stylecs">\space</span></span> <span class="cs">\externalfilterinputfile</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\defineexternalfilter</span>
+  <span class="brx">[</span>orgmode<span class="brx">]</span>
+  <span class="brx">[</span>filtercommand<span class="brx">=</span><span class="br">{</span>pandoc -t context -f org -o <span class="cs">\externalfilteroutputfile</span><span class="cs"><span class="stylecs">\space</span></span> <span class="cs">\externalfilterinputfile</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\defineexternalfilter</span>
+  <span class="brx">[</span>rst<span class="brx">]</span>
+  <span class="brx">[</span>filtercommand<span class="brx">=</span><span class="br">{</span>pandoc -t context -f rst -o <span class="cs">\externalfilteroutputfile</span><span class="cs"><span class="stylecs">\space</span></span> <span class="cs">\externalfilterinputfile</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">%==============================================================================</span>
+<span class="cs">\startmarkdown</span>
+<span class="brx">#</span> Heading level 1 with Markdown
+
+Text with **bold text**.
+
+<span class="brx">#</span><span class="brx">#</span> Heading level 2.1
+
+* item 1
+* item 2
+
+!<span class="brx">[</span>the GNU mascot<span class="brx">]</span><span class="brx">(</span>https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Official_gnu.svg/768px-Official_gnu.svg.png<span class="brx">)</span>
+<span class="cs">\stopmarkdown</span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+
+<span class="comment">%==============================================================================</span>
+<span class="cs">\startorgmode</span>
+* Heading level 1 with Org-mode
+
+Text with *bold text*.
+
+** Heading level 2.1
+
+- item 1
+- item 2
+
+<span class="brx">#</span>+CAPTION: the GNU mascot
+<span class="brx">[</span><span class="brx">[</span>https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Official_gnu.svg/768px-Official_gnu.svg.png<span class="brx">]</span><span class="brx">]</span>
+<span class="cs">\stoporgmode</span>
+
+<span class="cs"><span class="documentcs">\page</span></span>
+
+<span class="comment">%==============================================================================</span>
+<span class="cs">\startrst</span>
+Heading level 1 with reStructuredText
+<span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span><span class="brx">=</span>
+
+Text with **bold text**.
+
+Heading level 2.1
+-----------------
+
+-  item 1
+-  item 2
+
+.. figure::
+   https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Official_gnu.svg/768px-Official_gnu.svg.png
+
+   the GNU mascot
+<span class="cs">\stoprst</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212422
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.042 seconds
+Real time usage: 0.070 seconds
+Preprocessor visited node count: 30/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 365/2097152 bytes
+Template argument size: 75/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4380/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   19.115      1 Template:todo
+100.00%   19.115      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7346-1!canonical and timestamp 20260109212422 and revision id 42383
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Other_markup_languages_sources">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

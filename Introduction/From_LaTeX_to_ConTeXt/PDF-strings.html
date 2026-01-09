@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Introduction/From LaTeX to ConTeXt/PDF-strings&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/PDF-strings" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Introduction/From LaTeX to ConTeXt/PDF-strings
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=751&diff=42211">2025-02-10</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="../From_LaTeX_to_ConTeXt.html" title="Introduction/From LaTeX to ConTeXt">From LaTeX to ConTeXt</a>
+</p>
+    <p>Usage of PDF-Strings in LaTeX compared with ConTeXt:
+</p>
+    <h2>
+     <span class="mw-headline" id="In_LaTeX">
+      In LaTeX
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs">\documentclass</span><span class="br">{</span>article<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\ST</span><span class="br">{</span><span class="cs">\ac</span><span class="br">{</span>ST<span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\Title</span><span class="br">{</span>A <span class="cs">\emph</span><span class="br">{</span>Title<span class="br">}</span><span class="br">}</span>
+<span class="cs">\usepackage</span><span class="br">{</span>acronym<span class="br">}</span>
+<span class="cs">\usepackage</span><span class="br">{</span>hyperref<span class="br">}</span>
+<span class="cs">\hypersetup</span><span class="br">{</span>bookmarksopen<span class="brx">=</span>true,pdftitle<span class="brx">=</span><span class="cs">\Title</span><span class="br">}</span>
+<span class="cs">\begin</span><span class="br">{</span>document<span class="br">}</span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\Title</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\slshape</span> slanted<span class="br">}</span>
+first usage of <span class="cs">\ST</span>.
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\ST</span><span class="br">}</span>
+<span class="cs">\begin</span><span class="br">{</span>acronym<span class="br">}</span>
+  <span class="cs">\acro</span><span class="br">{</span>ST<span class="br">}</span><span class="br">{</span>some text<span class="br">}</span>
+<span class="cs">\end</span><span class="br">{</span>acronym<span class="br">}</span>
+<span class="cs">\end</span><span class="br">{</span>document<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="In_ConTeXt">
+      In ConTeXt
+     </span>
+    </h2>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupoutput</span></span><span class="brx">[</span>pdftex<span class="brx">]</span>
+<span class="cs"><span class="systemcs">\appendtoks</span></span> <span class="cs">\def</span><span class="cs"><span class="documentcs">\em</span></span><span class="br">{</span><span class="br">}</span><span class="cs">\def</span><span class="cs">\sl</span><span class="br">{</span><span class="br">}</span><span class="cs">\def</span><span class="cs">\Full</span><span class="brx">#</span>1<span class="br">{</span>???<span class="br">}</span> <span class="cs">\to</span> <span class="cs">\simplifiedcommands</span>
+<span class="cs">\def</span><span class="cs">\Title</span><span class="br">{</span>A <span class="cs"><span class="documentcs">\em</span></span> Title<span class="br">}</span>
+<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,title<span class="brx">=</span><span class="cs">\Title</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupinteractionscreen</span></span><span class="brx">[</span>option<span class="brx">=</span>bookmark<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definesynonyms</span></span><span class="brx">[</span>Acro<span class="brx">]</span><span class="brx">[</span>acronymes<span class="brx">]</span><span class="brx">[</span><span class="cs">\Full</span><span class="brx">]</span>
+<span class="cs">\Acro</span><span class="br">{</span>ST<span class="br">}</span><span class="br">{</span>some text<span class="br">}</span>
+<span class="cs"><span class="stylecs">\placebookmarks</span></span><span class="brx">[</span>section<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\Title</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\Full</span><span class="br">{</span>ST<span class="br">}</span><span class="br">}</span> <span class="comment">% here is still a problem...</span>
+<span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span><span class="cs">\sl</span> slanted<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212429
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.018 seconds
+Real time usage: 0.029 seconds
+Preprocessor visited node count: 15/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 4310/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:751-1!canonical and timestamp 20260109212429 and revision id 42211
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Introduction/From_LaTeX_to_ConTeXt/PDF-strings">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

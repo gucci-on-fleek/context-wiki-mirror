@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Executable scripts and auxiliary files/mtxrun script&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Executable_scripts_and_auxiliary_files/mtxrun_script" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Executable scripts and auxiliary files/mtxrun script
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4530&diff=40913">2025-01-16</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p><br>
+<tt>mtxrun</tt> is a helper script for all sorts of ConTeXt-related things, from individual runs to managing the installation tree. It is located at <tt>bin/mtxrun</tt> in the ConTeXt directory; that file is actually a merge of the scripts stored in <tt>tex/texmf-context/scripts/context/lua</tt>. 
+</p>
+    <p>One can explicitly invoke the function of one of the scripts, e.g. <tt>mtx-<i>script</i>.lua</tt>, like so.
+</p>
+    <pre>mtxrun --script <i>script</i> ...
+</pre>
+    <p>Try, especially,
+</p>
+    <pre>mtxrun --script <i>script</i> --help
+</pre>
+    <p>to see the list of that script's options.
+</p>
+    <h2>
+     <span class="mw-headline" id="See_Also">
+      See Also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../../First-setup.html" title="First-setup">
+       First-setup
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Table_of_Contents">
+      Table of Contents
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Script
+       </th>
+       <th>
+        Description
+       </th>
+      </tr>
+      <tr>
+       <td><a href="#babel">babel</a>
+</td>
+       <td>Babel Input To UTF Conversion 1.20
+</td>
+      </tr>
+      <tr>
+       <td><a href="#base">base</a>
+</td>
+       <td>ConTeXt TDS Management Tool 1.35 (aka luatools)
+</td>
+      </tr>
+      <tr>
+       <td><a href="#cache">cache</a>
+</td>
+       <td>ConTeXt & MetaTeX Cache Management 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#chars">chars</a>
+</td>
+       <td>MkII Character Table Generators 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#check">check</a>
+</td>
+       <td>Basic ConTeXt Syntax Checking 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#colors">colors</a>
+</td>
+       <td>ConTeXt Color Management 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#context">context</a>
+</td>
+       <td>ConTeXt Process Management 0.60
+</td>
+      </tr>
+      <tr>
+       <td><a href="#convert">convert</a>
+</td>
+       <td>ConTeXT Graphic Conversion Helpers 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#epub">epub</a>
+</td>
+       <td>ConTeXt EPUB Helpers 0.12
+</td>
+      </tr>
+      <tr>
+       <td><a href="#fcd">fcd</a>
+</td>
+       <td>Fast Directory Change
+</td>
+      </tr>
+      <tr>
+       <td><a href="#flac">flac</a>
+</td>
+       <td>ConTeXt Flac Helpers 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#fonts">fonts</a>
+</td>
+       <td>ConTeXt Font Database Management 0.21
+</td>
+      </tr>
+      <tr>
+       <td><a href="#grep">grep</a>
+</td>
+       <td>Simple Grepper 0.10
+<p>Patterns are lua patterns and need to be escaped accordingly.
+</p>
+</td>
+      </tr>
+      <tr>
+       <td><a href="#interface">interface</a>
+</td>
+       <td>ConTeXt Interface Related Goodies 0.13
+</td>
+      </tr>
+      <tr>
+       <td><a href="#metapost">metapost</a>
+</td>
+       <td>MetaPost to PDF processor 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#modules">modules</a>
+</td>
+       <td>ConTeXt Module Documentation Generators 1.00
+</td>
+      </tr>
+      <tr>
+       <td><a href="#package">package</a>
+</td>
+       <td>Distribution Related Goodies 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#patterns">patterns</a>
+</td>
+       <td>ConTeXt Pattern File Management 0.20
+</td>
+      </tr>
+      <tr>
+       <td><a href="#pdf">pdf</a>
+</td>
+       <td>ConTeXt PDF Helpers 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#profile">profile</a>
+</td>
+       <td>ConTeXt MkIV LuaTeX Profiler 1.00
+</td>
+      </tr>
+      <tr>
+       <td><a href="#rsync">rsync</a>
+</td>
+       <td>Rsync Helpers 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#scite">scite</a>
+</td>
+       <td>Scite Helper Script 1.00
+</td>
+      </tr>
+      <tr>
+       <td><a href="#server-ctx-fonttest">server-ctx-fonttest</a>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td><a href="#server-ctx-help">server-ctx-help</a>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td><a href="#server-ctx-startup">server-ctx-startup</a>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td><a href="#server">server</a>
+</td>
+       <td>Simple Webserver For Helpers 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#texworks">texworks</a>
+</td>
+       <td>TeXworks Startup Script 1.00
+</td>
+      </tr>
+      <tr>
+       <td><a href="#timing">timing</a>
+</td>
+       <td>
+</td>
+      </tr>
+      <tr>
+       <td><a href="#tools">tools</a>
+</td>
+       <td>Some File Related Goodies 1.01
+</td>
+      </tr>
+      <tr>
+       <td><a href="#unzip">unzip</a>
+</td>
+       <td>Simple Unzipper 0.10
+</td>
+      </tr>
+      <tr>
+       <td><a href="#update">update</a>
+</td>
+       <td>ConTeXt Minimals Updater 0.30
+</td>
+      </tr>
+      <tr>
+       <td><a href="#watch">watch</a>
+</td>
+       <td>ConTeXt Request Watchdog 1.00
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="babel">
+      babel
+     </span>
+    </h2>
+    <p>Babel Input To UTF Conversion 1.20
+</p>
+    <pre>--language=string     conversion language (e.g. greek)
+--structure=string    obey given structure (e.g. 'document', default: 'context')
+--convert             convert babel codes into utf
+</pre>
+    <h2>
+     <span class="mw-headline" id="base">
+      base
+     </span>
+    </h2>
+    <p>ConTeXt TDS Management Tool 1.35 (aka luatools)
+</p>
+    <pre>--generate        generate file database
+--variables       show configuration variables
+--configurations  show configuration order
+--expand-braces   expand complex variable
+--expand-path     expand variable (resolve paths)
+--expand-var      expand variable (resolve references)
+--show-path       show path expansion of ...
+--var-value       report value of variable
+--find-file       report file location
+--find-path       report path of file
+--make or --ini   make luatex format
+--run or --fmt=   run luatex format
+--compile         assemble and compile lua inifile
+--verbose         give a bit more info
+--all             show all found files
+--format=str      filter cf format specification (default 'tex', use 'any' for any match)
+--pattern=str     filter variables
+--trackers=list   enable given trackers
+</pre>
+    <h2>
+     <span class="mw-headline" id="cache">
+      cache
+     </span>
+    </h2>
+    <p>ConTeXt & MetaTeX Cache Management 0.10
+</p>
+    <pre>--purge               remove not used files
+--erase               completely remove cache
+--list                show cache
+
+--all                 all (not yet implemented)
+</pre>
+    <h2>
+     <span class="mw-headline" id="chars">
+      chars
+     </span>
+    </h2>
+    <p>MkII Character Table Generators 0.10
+</p>
+    <pre>--xtx                 generate xetx-*.tex (used by xetex)
+--pdf                 generate pdfr-def.tex (used by pdftex)
+--entities            generate entities table
+</pre>
+    <h2>
+     <span class="mw-headline" id="check">
+      check
+     </span>
+    </h2>
+    <p>Basic ConTeXt Syntax Checking 0.10
+</p>
+    <pre>--convert             check tex file for errors
+</pre>
+    <h2>
+     <span class="mw-headline" id="colors">
+      colors
+     </span>
+    </h2>
+    <p>ConTeXt Color Management 0.10
+</p>
+    <pre>--table               show icc table
+</pre>
+    <p>Example to list all color profiles:
+</p>
+    <pre>mtxrun --script color --table
+</pre>
+    <h2>
+     <span class="mw-headline" id="context">
+      context
+     </span>
+    </h2>
+    <p><i>See the separate article on the <code><a href="context_script.html" title="Input and compilation/Executable scripts and auxiliary files/context script">context script</a></code> script.</i>
+</p>
+    <h2>
+     <span class="mw-headline" id="convert">
+      convert
+     </span>
+    </h2>
+    <p>ConTeXT Graphic Conversion Helpers 0.10
+</p>
+    <pre>--convertall          convert all graphics on path
+--inputpath=string    original graphics path
+--outputpath=string   converted graphics path
+--watch               watch folders
+--force               force conversion (even if older)
+--delay               time between sweeps
+</pre>
+    <h2>
+     <span class="mw-headline" id="epub">
+      epub
+     </span>
+    </h2>
+    <p>ConTeXt EPUB Helpers 0.12
+</p>
+    <pre>--make                create epub zip file
+</pre>
+    <p>Example:
+</p>
+    <pre>mtxrun --script epub --make mydocument
+</pre>
+    <h2>
+     <span class="mw-headline" id="fcd">
+      fcd
+     </span>
+    </h2>
+    <p>Fast Directory Change
+</p>
+    <pre>--clear                      clear the cache
+--clear --history [entry]    clear the history
+--scan                       clear the cache and add given path(s)
+--add                        add given path(s)
+--find                       file given path (can be substring)
+--find --nohistory           file given path (can be substring) but don't use history
+--stub                       print platform stub file
+--list                       show roots of cached dirs
+--list --history             show history of chosen dirs
+--help                       show this help
+</pre>
+    <p>Usage:
+</p>
+    <pre>fcd --scan t:\
+fcd --add f:\project
+fcd [--find] whatever
+fcd --list
+</pre>
+    <h2>
+     <span class="mw-headline" id="flac">
+      flac
+     </span>
+    </h2>
+    <p>ConTeXt Flac Helpers 0.10
+</p>
+    <pre>--collect             collect albums in xml file
+</pre>
+    <p>Example:
+</p>
+    <pre>mtxrun --script flac --collect somename.flac
+mtxrun --script flac --collect --pattern="m:/music/**")
+</pre>
+    <h2>
+     <span class="mw-headline" id="fonts">
+      fonts
+     </span>
+    </h2>
+    <p>ConTeXt Font Database Management 0.21
+</p>
+    <pre>--save                save open type font in raw table
+--unpack              save a tma file in a more readale format
+
+--reload              generate new font database
+--reload --simple     generate 'luatex-fonts-names.lua' (not for context!)
+</pre>
+    <pre>--list --all                       list all installed fonts 
+--list --all --name --pattern=...  list installed fonts, filter by name (pattern), all matches
+--list --all --file --pattern=...  list installed fonts, filter by file (pattern), all matches
+--list --all --spec --filter=...   list installed fonts, filter by spec (key=value pairs, all matches
+
+--pattern=str         filter files using pattern
+--filter=list         key-value pairs
+--all                 show all found instances
+--info                give more details
+--track=list          enable trackers
+--statistics          some info about the database
+</pre>
+    <p>Examples of searches:
+</p>
+    <pre>mtxrun --script font --list somename (== --pattern=*somename*)
+
+mtxrun --script font --list --name somename
+mtxrun --script font --list --name --pattern=*somename*
+
+mtxrun --script font --list --spec somename
+mtxrun --script font --list --spec somename-bold-italic
+mtxrun --script font --list --spec --pattern=*somename*
+mtxrun --script font --list --spec --filter="fontname=somename"
+mtxrun --script font --list --spec --filter="familyname=somename,weight=bold,style=italic,width=condensed"
+mtxrun --script font --list --spec --filter="familyname=crap*,weight=bold,style=italic"
+
+mtxrun --script font --list --file somename
+mtxrun --script font --list --file --pattern=*somename*
+</pre>
+    <h2>
+     <span class="mw-headline" id="grep">
+      grep
+     </span>
+    </h2>
+    <p>Simple Grepper 0.10
+</p>
+    <pre>--pattern             search for pattern (optional)
+--count               count matches only
+--nocomment           skip lines that start with&nbsp;%% or #
+--xml                 pattern is lpath expression
+
+</pre>
+    <p>Patterns are lua patterns and need to be escaped accordingly
+</p>
+    <h2>
+     <span class="mw-headline" id="interface">
+      interface
+     </span>
+    </h2>
+    <p>ConTeXt Interface Related Goodies 0.13
+</p>
+    <pre>--interfaces          generate context interface files
+--messages            generate context message files
+--labels              generate context label files
+
+--context             equals --interfaces --messages --languages
+
+--scite               generate scite interface
+--bbedit              generate bbedit interface files
+--jedit               generate jedit interface files
+--textpad             generate textpad interface files
+--text                create text files for commands and environments
+--raw                 report commands to the console
+--check               generate check file
+
+--toutf               replace named characters by utf
+--preprocess          preprocess mkvi files to tex files [force,suffix]
+
+--suffix              use given suffix for output files
+--force               force action even when in doubt
+</pre>
+    <h2>
+     <span class="mw-headline" id="metapost">
+      metapost
+     </span>
+    </h2>
+    <p>MetaPost to PDF processor 0.10
+</p>
+    <pre>--rawmp               raw metapost run
+--metafun             use metafun instead of plain
+--latex               force --tex=latex
+--texexec             force texexec usage (mkii)
+--split               split single result file into pages
+
+</pre>
+    <p>Intended usage:
+</p>
+    <pre>mtxrun --script metapost yourfile.mp
+mtxrun --script metapost --split yourfile.mp
+</pre>
+    <h2>
+     <span class="mw-headline" id="modules">
+      modules
+     </span>
+    </h2>
+    <p>ConTeXt Module Documentation Generators 1.00
+</p>
+    <pre>--convert             convert source files (tex, mkii, mkiv, mp) to 'ted' files
+</pre>
+    <h2>
+     <span class="mw-headline" id="package">
+      package
+     </span>
+    </h2>
+    <p>Distribution Related Goodies 0.10
+</p>
+    <pre>--merge               merge 'loadmodule' into merge file
+</pre>
+    <h2>
+     <span class="mw-headline" id="patterns">
+      patterns
+     </span>
+    </h2>
+    <p>ConTeXt Pattern File Management 0.20
+</p>
+    <pre>--convert             generate context language files (mnemonic driven, if not given then all)
+--check               check pattern file (or those used by context when no file given)
+--path                source path where hyph-foo.tex files are stored
+--destination         destination path
+</pre>
+    <p>Examples of usage:
+</p>
+    <pre>mtxrun --script pattern --check hyph-*.tex
+mtxrun --script pattern --check   --path=c:/data/develop/svn-hyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns
+mtxrun --script pattern --convert --path=c:/data/develop/svn-hyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/tex --destination=e:/tmp/patterns
+mtxrun --script pattern --convert --path=c:/data/develop/svn-hyphen/trunk/hyph-utf8/tex/generic/hyph-utf8/patterns/txt --destination=e:/tmp/patterns
+</pre>
+    <h2>
+     <span class="mw-headline" id="pdf">
+      pdf
+     </span>
+    </h2>
+    <p>ConTeXt PDF Helpers 0.10
+</p>
+    <pre>--info                show some info about the given file
+--metadata            show metadata xml blob
+--fonts               show used fonts (--detail)
+</pre>
+    <h2>
+     <span class="mw-headline" id="profile">
+      profile
+     </span>
+    </h2>
+    <p>ConTeXt MkIV LuaTeX Profiler 1.00
+</p>
+    <pre>--analyze             analyze lua calls
+--trace               analyze tex calls
+</pre>
+    <h2>
+     <span class="mw-headline" id="rsync">
+      rsync
+     </span>
+    </h2>
+    <p>Rsync Helpers 0.10
+</p>
+    <pre>--job                 use given file as specification
+--dryrun              show what would happen
+--force               force run
+</pre>
+    <h2>
+     <span class="mw-headline" id="scite">
+      scite
+     </span>
+    </h2>
+    <p>Scite Helper Script 1.00
+</p>
+    <pre>--words             convert spell-*.txt into spell-*.lua
+</pre>
+    <h2>
+     <span class="mw-headline" id="server-ctx-fonttest">
+      server-ctx-fonttest
+     </span>
+    </h2>
+    <p>...text/tex/texmf-context/tex/context/base/font-ott.lua:19: attempt to index local 'fonts' (a nil value)
+</p>
+    <h2>
+     <span class="mw-headline" id="server-ctx-help">
+      server-ctx-help
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="server-ctx-startup">
+      server-ctx-startup
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="server">
+      server
+     </span>
+    </h2>
+    <p>Simple Webserver For Helpers 0.10
+</p>
+    <pre>--start               start server
+--port                port to listen to
+--root                server root
+--scripts             scripts sub path
+--index               index file
+--auto                start on own path
+</pre>
+    <h2>
+     <span class="mw-headline" id="texworks">
+      texworks
+     </span>
+    </h2>
+    <p>TeXworks Startup Script 1.00
+</p>
+    <pre>--start [--verbose]   start texworks
+--test                report what will happen
+</pre>
+    <h2>
+     <span class="mw-headline" id="timing">
+      timing
+     </span>
+    </h2>
+    <p>mtx-timing.lua:76: attempt to index field 'progress' (a nil value)
+</p>
+    <h2>
+     <span class="mw-headline" id="tools">
+      tools
+     </span>
+    </h2>
+    <p>Some File Related Goodies 1.01
+</p>
+    <pre>--disarmutfbomb       remove utf bomb if present
+    --force             remove indeed
+
+--dirtoxml              glob directory into xml
+    --pattern           glob pattern (default: *)
+    --url               url attribute (no processing)
+    --root              the root of the globbed path (default: .)
+    --output            output filename (console by default)
+    --recurse           recurse into subdirecories
+    --stripname         take pathpart of given pattern
+    --longname          set name attributes to full path name
+
+--downcase
+    --pattern           glob pattern (default: *)
+    --recurse           recurse into subdirecories
+    --force             downcase indeed
+</pre>
+    <h2>
+     <span class="mw-headline" id="unzip">
+      unzip
+     </span>
+    </h2>
+    <p>Simple Unzipper 0.10
+</p>
+    <pre>--list                list files in archive
+--junk                flatten unzipped directory structure
+--extract             extract files
+</pre>
+    <h2>
+     <span class="mw-headline" id="update">
+      update
+     </span>
+    </h2>
+    <p>ConTeXt Minimals Updater 0.30
+</p>
+    <pre>--platform=string     platform (windows, linux, linux-64, osx-intel, osx-ppc, linux-ppc)
+--server=string       repository url (rsync://contextgarden.net)
+--module=string       repository url (minimals)
+--repository=string   specify version (current, experimental)
+--context=string      specify version (current, latest, beta, yyyy.mm.dd)
+--rsync=string        rsync binary (rsync)
+--texroot=string      installation directory (not guessed for the moment)
+--engine=string       tex engine (luatex, pdftex, xetex)
+--modules=string      extra modules (can be list or 'all')
+--fonts=string        additional fonts (can be list or 'all')
+--goodies=string      extra binaries (like scite and texworks)
+--force               instead of a dryrun, do the real thing
+--update              update minimal tree
+--make                also make formats and generate file databases
+--keep                don't delete unused or obsolete files
+--state               update tree using saved state
+</pre>
+    <h2>
+     <span class="mw-headline" id="watch">
+      watch
+     </span>
+    </h2>
+    <p>ConTeXt Request Watchdog 1.00
+</p>
+    <pre>--logpath             optional path for log files
+--watch               watch given path [--delay]
+--pipe                use pipe instead of execute
+--delay               delay between sweeps
+--automachine         replace /machine/ in path /&lt;servername&gt;/
+--collect             condense log files
+--cleanup=delay       remove files in given path [--force]
+--showlog             show log data
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212420
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.021 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 138/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4530-1!canonical and timestamp 20260109212420 and revision id 40913
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Executable_scripts_and_auxiliary_files/mtxrun_script">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

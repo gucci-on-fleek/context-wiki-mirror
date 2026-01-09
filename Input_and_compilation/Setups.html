@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Setups&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Setups" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Setups
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4747&diff=42489">2025-09-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Commands">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Commands
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Examples">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#.5Cstartlines_in_setups">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         \startlines in setups
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Using_setups_for_namespaces">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Using setups for namespaces
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>Setups are a rather common variant on macros. They have two useful properties:
+</p>
+    <ul>
+     <li>
+      Spaces inside setups are ignored. This means that you can format the setup&rsquo;s contents with spaces and linebreaks for maximum readability, instead of having to write a dense macro or, worse, a long in-place definition. You can explicitly request spaces with
+      <tt>
+       <a href="../Command/space.html" title="Command/space">
+        \space
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../Command/crlf.html" title="Command/crlf">
+        \crlf
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../index.php?title=Command/par&action=edit&redlink=1.html" title="Command/par (page does not exist)">
+        \par
+       </a>
+      </tt>
+      , etc.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      If you call the setup inside a
+      <tt>
+       <a class="new" href="../index.php?title=Command/start&action=edit&redlink=1.html" title="Command/start (page does not exist)">
+        \start
+       </a>
+      </tt>
+      (just 'start') environment, any definitions made by that setup remain inside that group. This lets you define macros in a setup, and then call the setup inside a group to use the macros as 'local macros' of sorts.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Commands">
+      Commands
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/startsetups.html" title="Command/startsetups">
+        \startsetups
+       </a>
+       mysetup
+      </tt>
+      begins a setup definition (with optional brackets around
+      <tt>
+       mysetup
+      </tt>
+      )
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setup.html" title="Command/setup">
+        \setup
+       </a>
+       [mysetup]
+      </tt>
+      or
+      <tt>
+       <a href="../Command/setups.html" title="Command/setups">
+        \setups
+       </a>
+       [mysetup]
+      </tt>
+      invokes a setup or even several as a list.
+     </li>
+     <li>
+      There&rsquo;s also
+      <tt>
+       <a href="../Command/directsetup.html" title="Command/directsetup">
+        \directsetup
+       </a>
+       {mysetup
+      </tt>
+      } and
+      <tt>
+       <a href="../Command/fastsetup.html" title="Command/fastsetup">
+        \fastsetup
+       </a>
+       {mysetup
+      </tt>
+      }, these were faster in MkIV but make no sense any more in LMTX. Both take just one setup name and do less error checking.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>Here are two simple examples:
+</p>
+    <div>
+     <table border="0" cellpadding="0" cellspacing="0" style="background-color:transparent;table-layout:fixed;" width="100%">
+      <tbody>
+       <tr valign="top">
+        <td><div style="margin-right:20px;">
+<pre class="tex"><span class="comment">% Create two setups</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> doc:print
+    <span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A4<span class="brx">]</span><span class="brx">[</span>A4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> doc:screen
+    <span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>S6<span class="brx">]</span><span class="brx">[</span>S4<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">% Use one or another setup</span>
+<span class="cs"><span class="stylecs">\doifmodeelse</span></span> <span class="br">{</span>paper<span class="br">}</span> <span class="br">{</span>
+    <span class="cs"><span class="stylecs">\setup</span></span><span class="brx">[</span>doc:print<span class="brx">]</span>
+<span class="br">}</span> <span class="br">{</span>
+    <span class="cs"><span class="stylecs">\setup</span></span><span class="brx">[</span>doc:screen<span class="brx">]</span>
+<span class="br">}</span>
+</pre>
+</div>
+</td>
+        <td><div style="margin-right: 20px;">
+<pre class="tex"><span class="comment">% Set up a headertext. Whitespace is ignored</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>doc:header<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\marking</span></span><span class="brx">[</span>chapter<span class="brx">]</span>
+    <span class="cs"><span class="stylecs">\space</span></span>
+    --
+    <span class="cs"><span class="stylecs">\space</span></span>
+    <span class="cs"><span class="stylecs">\pagenumber</span></span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="comment">% Use the setup</span>
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span><span class="brx">[</span><span class="cs"><span class="stylecs">\setup</span></span><span class="br">{</span>doc:header<span class="br">}</span><span class="brx">]</span>
+</pre>
+</div>
+</td>
+       </tr>
+      </tbody>
+     </table>
+    </div>
+    <p>You can place setups almost everywhere and environment will not be affected by their execution. It is useful to wrap overlay definitions and such in setups as in (copied from <a href="Sample_documents/Colorful_CD_inlay.html" title="Input and compilation/Sample documents/Colorful CD inlay">Colorful CD inlay</a> page):
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineoverlay</span></span> <span class="brx">[</span>origin<span class="brx">]</span> <span class="brx">[</span><span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>origin<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> origin
+    <span class="cs">\vbox</span> to <span class="cs"><span class="systemcs">\overlayheight</span></span> <span class="br">{</span>
+        <span class="cs">\vfill</span><span class="cs">\tfxx</span><span class="cs"><span class="systemcs">\setstrut</span></span>
+        <span class="cs">\hsize</span><span class="cs"><span class="systemcs">\overlaywidth</span></span>
+        <span class="cs">\hfill</span> Fiona Apple<span class="cs"><span class="stylecs">\enspace</span></span> EM<span class="cs"><span class="stylecs">\enspace</span></span>2005<span class="cs"><span class="stylecs">\quad</span></span><span class="cs"><span class="stylecs">\strut</span></span><span class="cs">\endgraf</span>
+        <span class="cs">\kern</span>1ex
+    <span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+</pre>
+    <p>You can even do things like:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\startsetups</span></span> settest
+    <span class="cs">\def</span><span class="cs">\command</span><span class="br">{</span>do something with<span class="br">}</span>
+    
+    I want to <span class="cs">\command</span><span class="br">{</span><span class="br">}</span> my command.
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="documentcs">\start</span></span>
+    <span class="cs"><span class="stylecs">\setups</span></span><span class="br">{</span>settest<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stop</span></span>
+
+<span class="cs">\command</span> aaa  <span class="comment">% will give "undefined control sequence" error</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>See also an example in the tutorial for <a href="../Document_layout_and_layers/Tutorials#More_complex_header_and_footer_content_with_Setups.html" title="Document layout and layers/Tutorials">headers and footers</a>.
+</p>
+    <h2>
+     <span id="\startlines_in_setups">
+     </span>
+     <span class="mw-headline" id=".5Cstartlines_in_setups">
+      <code>\startlines</code>
+      in setups
+     </span>
+    </h2>
+    <p>Since setups ignore whitespace, <tt><a class="mw-redirect" href="../Command/_startlines.html" title="Command/startlines">\startlines</a></tt> &hellip; <tt>\stoplines</tt> doesn&rsquo;t work within a setup.
+You can use a buffer and call it within the setup. The following example uses the <code>document:stop</code> setup that is automatically placed if you use <tt><a href="../Command/startdocument.html" title="Command/startdocument">\startdocument</a></tt> &hellip; <tt>\stopdocument</tt>.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>imprint<span class="brx">]</span>
+&copy; <span class="cs"><span class="documentcs">\currentdate</span></span><span class="brx">[</span>year<span class="brx">]</span> Publisher
+&hellip;
+Printshop etc.
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs">\startsetup</span> document:stop
+<span class="cs"><span class="stylecs">\dontleavehmode</span></span><span class="cs">\vfill</span>
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Imprint<span class="br">}</span>
+<span class="cs"><span class="documentcs">\startlines</span></span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>imprint<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\stoplines</span></span>
+<span class="cs">\stopsetup</span>
+</pre>
+    <p>Another option is to change the catcode regime and use <tt><a class="new" href="../index.php?title=Command/startrawsetups&action=edit&redlink=1.html" title="Command/startrawsetups (page does not exist)">\startrawsetups</a></tt>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\pushcatcodetable</span></span>
+<span class="cs">\obeylines</span>
+<span class="cs"><span class="systemcs">\startrawsetups</span></span><span class="brx">[</span>document:stop<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\startlines</span></span>
+  &copy; <span class="cs"><span class="documentcs">\currentdate</span></span><span class="brx">[</span>year<span class="brx">]</span> Publisher
+  foo bar baz
+  blah blah
+  <span class="cs"><span class="documentcs">\stoplines</span></span>
+<span class="cs"><span class="systemcs">\stoprawsetups</span></span>
+<span class="cs">\popcatcodetable</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Using_setups_for_namespaces">
+      Using setups for namespaces
+     </span>
+    </h2>
+    <p>Using <tt>\setups</tt> for a variable namespace allows an easier control over the
+containing variables.
+All you have to do is to define the setups
+<tt>namespace:set</tt> and/or <tt>namespace:reset</tt>
+for a given namespace.
+Now every time a variable of that namespace is assigned (written), ConTeXt
+automatically calls these setups. Reading of variables is totally unaffected by these
+settings.
+A possible use are default values, calculations and even verification.
+</p>
+    <p>So once you have 'setup' your variables proper, you don't have to worry about
+unset variables and alike any more. Also changes can be made easy, as there is only
+one common setup.
+The drawback is the slower speed in use,
+as every assignment to a variable calls these setups.
+</p>
+    <p><br>
+To give you the idea, try this example.
+</p>
+    <ul>
+     <li>
+      When you initialize the namespace, the setups assigned to
+      <code>set</code>
+      are called.
+     </li>
+    </ul>
+    <ul>
+     <li>
+      When you assign a variable to the namespace, first the setup in
+      <code>reset</code>
+      is called, and then the setup in
+      <code>set</code>
+      .
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\startsetups</span></span> namespace:set
+    <span class="comment">% Print message to log and to document</span>
+    <span class="cs"><span class="systemcs">\writestatus</span></span><span class="br">{</span>VARIABLES<span class="br">}</span><span class="br">{</span>namespace:set is being called..<span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="stylecs">\space</span></span><span class="br">{</span><span class="cs">\blue</span><span class="brx">[</span>namespace:set<span class="brx">]</span><span class="br">}</span>
+    <span class="cs">\def</span><span class="cs">\applecolor</span><span class="br">{</span>red<span class="br">}</span>
+    <span class="comment">% whatever must be done with your variables after you assign a value</span>
+    <span class="comment">% (initialisation with defaults,..)</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startsetups</span></span> namespace:reset
+  <span class="comment">% Print message to log and document</span>
+  <span class="cs"><span class="systemcs">\writestatus</span></span><span class="br">{</span>VARIABLES<span class="br">}</span><span class="br">{</span>namespace:reset is being called..<span class="br">}</span><span class="comment">%</span>
+  <span class="cs"><span class="stylecs">\space</span></span><span class="br">{</span><span class="cs">\red</span><span class="brx">[</span>namespace:reset<span class="brx">]</span><span class="br">}</span>
+
+  <span class="comment">% whatever must be done after an assignment (verification, calculation,..)</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+
+
+<span class="comment">% \setups[namespace:set] is automatically called right after 'set' is assigned</span>
+<span class="cs"><span class="stylecs">\setvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span>
+  <span class="brx">[</span>set<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\setups</span></span><span class="brx">[</span>namespace:set<span class="brx">]</span><span class="br">}</span>,
+   key<span class="brx">=</span><span class="br">{</span>Apples are <span class="protectedcs">\applecolor!</span><span class="br">}</span>,
+   reset<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="stylecs">\setups</span></span><span class="brx">[</span>namespace:reset<span class="brx">]</span><span class="br">}</span>,
+  <span class="brx">]</span>
+
+<span class="comment">% watch for the colors</span>
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\hairline</span></span>
+<span class="br">{</span><span class="cs">\bf</span> reading has no effect<span class="cs">\par</span><span class="br">}</span>
+<span class="br">{</span><span class="cs">\tt</span> Calling <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>namespace<span class="br">}</span><span class="br">{</span>key<span class="br">}</span><span class="br">}</span>...<span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>namespace<span class="br">}</span><span class="br">{</span>key<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+<span class="br">{</span><span class="cs">\bf</span> writing calls reset and set<span class="cs">\par</span><span class="br">}</span>
+<span class="br">{</span><span class="cs">\tt</span> Calling <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\setvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span><span class="br">}</span>...<span class="cs"><span class="stylecs">\setvariables</span></span><span class="brx">[</span>namespace<span class="brx">]</span><span class="brx">[</span>key<span class="brx">=</span>value<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/fcc06b7f7770403b58aea3a9eea6593b.webp" width="874">
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212425
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.058 seconds
+Real time usage: 0.113 seconds
+Preprocessor visited node count: 227/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1297/2097152 bytes
+Template argument size: 245/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 10607/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   44.860      1 -total
+ 14.10%    6.327     12 Template:cmd
+ 10.01%    4.492      3 Template:code
+  4.16%    1.865      1 Template:Multicol-break
+  4.09%    1.836      1 Template:Multicol
+  3.83%    1.718      1 Template:Multicol-end
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4747-1!canonical and timestamp 20260109212425 and revision id 42489
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Setups">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Tables/Tutorials/Creating booktabs-like tables with xtable&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Tables/Tutorials/Creating_booktabs-like_tables_with_xtable" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Tables/Tutorials/Creating booktabs-like tables with xtable
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7097&diff=39948">2025-01-12</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Making book tables ala LaTeX's <code>booktabs</code> proves to be a challenge in
+the current ConTeXt ecosystem. This article provides an <code>xtable</code>
+(<tt><a href="../../Command/startxtable.html" title="Command/startxtable">\startxtable</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stopxtable&action=edit&redlink=1.html" title="Command/stopxtable (page does not exist)">\stopxtable</a></tt>) setup for making such tables, staying
+close enough to the original package.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Prelude">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Prelude
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Booktabs_table_layout">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Booktabs table layout
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Tricks_used">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Tricks used
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Step_by_step_explanation">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Step by step explanation
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Starting_point">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Starting point
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Making_a_booktabs_configuration_and_custom_parameters">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Making a booktabs configuration and custom parameters
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Layout">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Layout
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Rules">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Rules
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#Top_rule">
+            <span class="tocnumber">
+             2.4.1
+            </span>
+            <span class="toctext">
+             Top rule
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#Bottom_rule">
+            <span class="tocnumber">
+             2.4.2
+            </span>
+            <span class="toctext">
+             Bottom rule
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-11">
+           <a href="#Mid.2Fcmid_rules">
+            <span class="tocnumber">
+             2.4.3
+            </span>
+            <span class="toctext">
+             Mid/cmid rules
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#Full_code">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Full code
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Prelude">
+      Prelude
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Booktabs_table_layout">
+      Booktabs table layout
+     </span>
+    </h3>
+    <p>In general, a proper table:
+</p>
+    <ul>
+     <li>
+      doesn't have vertical rules,
+     </li>
+     <li>
+      uses horizontal rules sparingly and varies their widths. This way it's
+        much easier to distinguish the header, the body and the footer of the
+        table,
+     </li>
+     <li>
+      doesn't have any additional offsets except above and below tables as
+        well as between columns. This means each row is spaced just like the
+        lines of regular text.
+     </li>
+    </ul>
+    <p>Compare these two tables and decide which one is more readable.
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="170" src="../../wikiteximage/7f2438576777c47292c242a2be88a0ee.webp" width="372">
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="179" src="../../wikiteximage/41317bcd26789e0b6114b7d00983edab.webp" width="321">
+     </li>
+    </ul>
+    <p>LaTeX's <code>booktabs</code> makes this easy to achieve. It uses a bunch of rules
+and values to achieve the coveted formal (book) table look. The ones of most
+importance are:
+</p>
+    <ul>
+     <li>
+      <code>\tabcolsep=0.5em</code>
+      . This is half of the space between columns.
+        This is actually a pure LaTeX value and we won't use it directly;
+     </li>
+     <li>
+      <code>\toprule</code>
+      . This is the rule used above headers. Additional
+        space is added below;
+     </li>
+     <li>
+      <code>\bottomrule</code>
+      . This is the rule used below footers. Additional
+        space is added above;
+     </li>
+     <li>
+      <code>\midrule</code>
+      . This is the rule used between headers and the table
+        body, or footers and the table body. Additional space is added above
+        and below;
+     </li>
+     <li>
+      <code>\cmidrule</code>
+      . This is the sub-rule used inside headers/footers
+        when you need a rule only over some columns. Additional space is added
+        above and below. This sort of rule is trimmed on the sides so that it
+        doesn't poke out into the space between columns;
+     </li>
+     <li>
+      <code>\heavyrulewidth=0.08em</code>
+      . This is the default
+      <code>\toprule</code>
+      and
+      <code>\bottomrule</code>
+      width;
+     </li>
+     <li>
+      <code>\lightrulewidth=0.05em</code>
+      . This is the default
+      <code>\midrule</code>
+      width;
+     </li>
+     <li>
+      <code>\cmidrulewidth=0.03em</code>
+      . This is the default
+      <code>\cmidrule</code>
+      width;
+     </li>
+     <li>
+      <code>\aboverulesep=0.4ex</code>
+      . This is the default vertical skip above
+        mid and bottom rules;
+     </li>
+     <li>
+      <code>\belowrulesep=0.65ex</code>
+      . This is the default vertical skip
+        below top and mid rules;
+     </li>
+     <li>
+      <code>\cmidrulekern=0.5em</code>
+      . This is the default trim given to
+      <code>cmidrule</code>
+      s.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Tricks_used">
+      Tricks used
+     </span>
+    </h3>
+    <p>We will be relying on certain tricks to make this work. They will be mentioned
+here as well as in the setup explanation. These are:
+</p>
+    <ol>
+     <li>
+      <code>xtable</code>
+      uses
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      for its cells, cell groups, rows
+        and row groups. It's possible to set
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      up through
+      <tt>
+       <a href="../../Command/setupxtable.html" title="Command/setupxtable">
+        \setupxtable
+       </a>
+      </tt>
+      or by passing arguments to
+      <tt>
+       <a href="../../Command/startxtable.html" title="Command/startxtable">
+        \startxtable
+       </a>
+      </tt>
+      or its parts
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxtablehead&action=edit&redlink=1.html" title="Command/startxtablehead (page does not exist)">
+        \startxtablehead
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxtablenext&action=edit&redlink=1.html" title="Command/startxtablenext (page does not exist)">
+        \startxtablenext
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxtablebody&action=edit&redlink=1.html" title="Command/startxtablebody (page does not exist)">
+        \startxtablebody
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxtablefoot&action=edit&redlink=1.html" title="Command/startxtablefoot (page does not exist)">
+        \startxtablefoot
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxrowgroup&action=edit&redlink=1.html" title="Command/startxrowgroup (page does not exist)">
+        \startxrowgroup
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a href="../../Command/startxrow.html" title="Command/startxrow">
+        \startxrow
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxcellgroup&action=edit&redlink=1.html" title="Command/startxcellgroup (page does not exist)">
+        \startxcellgroup
+       </a>
+      </tt>
+      ,
+      <tt>
+       <a class="new" href="../../index.php?title=Command/startxcell&action=edit&redlink=1.html" title="Command/startxcell (page does not exist)">
+        \startxcell
+       </a>
+      </tt>
+      ;
+     </li>
+     <li>
+      Default
+      <code>location</code>
+      and
+      <code>strut</code>
+      settings of
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      enable us to have cells or even entire rows of empty cells with offsets
+        and even backgrounds. Therefore we will have separate &ldquo;rule rows&rdquo; whose
+        only purpose is to be there and force a rule;
+     </li>
+     <li>
+      <code>xtable</code>
+      allows one to make named configurations which can be
+        applied to the whole table or its parts mentioned before. This will
+        make it convenient to use whole groups of settings necessary for rules
+        and the whole table to work;
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      accepts overlays for backgrounds. One can use MetaPost
+        drawings (made with
+      <tt>
+       <a href="../../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">
+        \startuseMPgraphic
+       </a>
+      </tt>
+      &hellip;
+      <tt>
+       <a class="new" href="../../index.php?title=Command/stopuseMPgraphic&action=edit&redlink=1.html" title="Command/stopuseMPgraphic (page does not exist)">
+        \stopuseMPgraphic
+       </a>
+      </tt>
+      )
+        inside overlays and those can use overlay dimensions as well as
+        arguments passed to
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      through
+      <tt>
+       <a class="new" href="../../index.php?title=Command/frameddimension&action=edit&redlink=1.html" title="Command/frameddimension (page does not exist)">
+        \frameddimension
+       </a>
+      </tt>
+      ;
+        this is how it can be used to draw things inside cells, cell groups,
+        rows, row groups;
+     </li>
+     <li>
+      Overlays don't add to table size, so to make drawn rule widths count,
+        the width will be added to
+      <tt>
+       <a href="../../Command/framed.html" title="Command/framed">
+        \framed
+       </a>
+      </tt>
+      vertical offsets when needed.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="Step_by_step_explanation">
+      Step by step explanation
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Starting_point">
+      Starting point
+     </span>
+    </h3>
+    <p>We start with this table here, just like the one shown before. It will serve as
+an example, but the setup will work for any table with no changes. Don't be too
+afraid of Lua code in <tt><a href="../../Command/startluacode.html" title="Command/startluacode">\startluacode</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stopluacode&action=edit&redlink=1.html" title="Command/stopluacode (page does not exist)">\stopluacode</a></tt>, it simply
+generates random numbers for cells just so that we have something in the table
+body.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>
+    option<span class="brx">=</span><span class="br">{</span>tight<span class="br">}</span>,
+<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startxtable</span></span>
+    <span class="cs"><span class="documentcs">\startxtablehead</span></span>
+        <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>align<span class="brx">=</span>center<span class="brx">]</span>
+            <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nr<span class="brx">=</span>2, align<span class="brx">=</span><span class="br">{</span>center, lohi<span class="br">}</span><span class="brx">]</span> &numero; <span class="cs"><span class="documentcs">\stopxcell</span></span>
+            <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>5<span class="brx">]</span> Variables <span class="cs"><span class="documentcs">\stopxcell</span></span>
+        <span class="cs"><span class="documentcs">\stopxrow</span></span>
+        <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>align<span class="brx">=</span>center<span class="brx">]</span>
+            <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+                <span class="cs"><span class="documentcs">\startxcell</span></span> <span class="cs"><span class="documentcs">\m</span></span><span class="br">{</span>x_<span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="br">}</span> <span class="cs"><span class="documentcs">\stopxcell</span></span>
+            <span class="br">}</span><span class="comment">%</span>
+        <span class="cs"><span class="documentcs">\stopxrow</span></span>
+    <span class="cs"><span class="documentcs">\stopxtablehead</span></span>
+    <span class="cs"><span class="documentcs">\startxtablebody</span></span>
+        <span class="cs"><span class="systemcs">\startluacode</span></span>
+            for i<span class="brx">=</span>1,5 do
+                context.startxrow<span class="brx">(</span><span class="br">{</span>align <span class="brx">=</span> "center"<span class="br">}</span><span class="brx">)</span>;
+                context.startxcell<span class="brx">(</span><span class="brx">)</span>;
+                context<span class="brx">(</span>i<span class="brx">)</span>;
+                context.stopxcell<span class="brx">(</span><span class="brx">)</span>;
+                for j<span class="brx">=</span>1, 5 do
+                    local num <span class="brx">=</span> math.random<span class="brx">(</span><span class="brx">)</span>;
+                    local result <span class="brx">=</span> string.format<span class="brx">(</span>"<span class="comment">%.5f", num);</span>
+                    context.startxcell<span class="brx">(</span><span class="brx">)</span>;
+                    context<span class="brx">(</span>result<span class="brx">)</span>;
+                    context.stopxcell<span class="brx">(</span><span class="brx">)</span>;
+                end
+                context.stopxrow<span class="brx">(</span><span class="brx">)</span>;
+            end
+        <span class="cs"><span class="systemcs">\stopluacode</span></span>
+    <span class="cs"><span class="documentcs">\stopxtablebody</span></span>
+<span class="cs"><span class="documentcs">\stopxtable</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="179" src="../../wikiteximage/41317bcd26789e0b6114b7d00983edab.webp" width="321">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Making_a_booktabs_configuration_and_custom_parameters">
+      Making a booktabs configuration and custom parameters
+     </span>
+    </h3>
+    <p>Let's make an <code>xtable</code> configuration for book tables.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span>
+</pre>
+    <p>Currently it's empty. We'll add <code>booktabs</code> parameters used ahead of
+time. These will be used as constants in case one needs the original values.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span><span class="brx">[</span>
+    heavyrulewidth<span class="brx">=</span>.08em,
+    lightrulewidth<span class="brx">=</span>.05em,
+    cmidrulewidth<span class="brx">=</span>.03em,
+    cmidrulekern<span class="brx">=</span>.5em,
+    aboverulesep<span class="brx">=</span>.4ex,
+    belowrulesep<span class="brx">=</span>.65ex,
+<span class="brx">]</span>
+</pre>
+    <p>The values we will actually use are different.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span><span class="brx">[</span>
+    heavyrulewidth<span class="brx">=</span>.08em,
+    lightrulewidth<span class="brx">=</span>.05em,
+    cmidrulewidth<span class="brx">=</span>.03em,
+    cmidrulekern<span class="brx">=</span>.5em,
+    aboverulesep<span class="brx">=</span>.4ex,
+    belowrulesep<span class="brx">=</span>.65ex,
+    <span class="comment">%</span>
+    toprulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    bottomrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    midrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>lightrulewidth<span class="br">}</span>,
+    cmidrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulewidth<span class="br">}</span>,
+    cmidrulekernleft<span class="brx">=</span>0pt, <span class="comment">% for a reason, explained later</span>
+    cmidrulekernright<span class="brx">=</span>0pt,
+    abovespace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>aboverulesep<span class="br">}</span>,
+    belowspace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowrulesep<span class="br">}</span>,
+<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Layout">
+      Layout
+     </span>
+    </h3>
+    <p>To ensure the desired layout (not counting the spaces above and below rules),
+it's necessary to disable the frame around each cell, set its thickness to zero
+and set all offsets to zero. Disabling the frame with <code>frame=off</code>
+hides it, but the space taken by it remains. Set the rule thickness to 0 with
+<code>rulethickness=0pt</code> to remove that space. Finally, remove all offsets
+with <code>offset=0pt</code>.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span><span class="brx">[</span>
+    frame<span class="brx">=</span>off,
+    rulethickness<span class="brx">=</span>0pt,
+    offset<span class="brx">=</span>0pt,
+    <span class="comment">%</span>
+    heavyrulewidth<span class="brx">=</span>.08em,
+    lightrulewidth<span class="brx">=</span>.05em,
+    cmidrulewidth<span class="brx">=</span>.03em,
+    cmidrulekern<span class="brx">=</span>.5em,
+    aboverulesep<span class="brx">=</span>.4ex,
+    belowrulesep<span class="brx">=</span>.65ex,
+    <span class="comment">%</span>
+    toprulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    bottomrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    midrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>lightrulewidth<span class="br">}</span>,
+    cmidrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulewidth<span class="br">}</span>,
+    cmidrulekernleft<span class="brx">=</span>0pt, <span class="comment">% for a reason, explained later</span>
+    cmidrulekernright<span class="brx">=</span>0pt,
+    abovespace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>aboverulesep<span class="br">}</span>,
+    belowspace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowrulesep<span class="br">}</span>,
+<span class="brx">]</span>
+</pre>
+    <p>Having replaced <tt><a href="../../Command/startxtable.html" title="Command/startxtable">\startxtable</a></tt> with <tt><a href="../../Command/startxtable.html" title="Command/startxtable">\startxtable</a>[booktabs]</tt>,
+we get a following table.
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="142" src="../../wikiteximage/a21a08f4101ba177809a338f2684c21f.webp" width="289">
+     </li>
+    </ul>
+    <p>Obviously, it's a little crammed horizontally, but vertically it's exactly how
+we want it. There are two ways to add some space between columns. Setting the
+<code>columndistance</code> parameter is arguably a better approach since it plays
+along nicely with how space is allocated to cells; it also means
+<code>\cmidrule</code>s come trimmed already as all rules are drawn inside cells
+and the intercolumn space outside is not part of them. This is why we keep the
+trim parameters at 0 pt, there's no need to use them outside of specific cases.
+You will run into issues if you happen to want your sub-rules to actually poke
+out into intercolumn space, however.
+</p>
+    <p>Setting the left and right offsets with the <code>loffset</code> and
+<code>roffset</code> parameters is another way to do it, but the offsets count as
+cell space which means trouble when trying to align text in cells with
+unbalanced offsets (it won't be properly centered if you want it centered).
+</p>
+    <p>Let's add the <code>columndistance</code> setting now.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span><span class="brx">[</span>
+    frame<span class="brx">=</span>off,
+    rulethickness<span class="brx">=</span>0pt,
+    offset<span class="brx">=</span>0pt,
+    columndistance<span class="brx">=</span>.5em, <span class="comment">% LaTeX's \tabcolsep</span>
+    <span class="comment">%</span>
+    heavyrulewidth<span class="brx">=</span>.08em,
+    lightrulewidth<span class="brx">=</span>.05em,
+    cmidrulewidth<span class="brx">=</span>.03em,
+    cmidrulekern<span class="brx">=</span>.5em,
+    aboverulesep<span class="brx">=</span>.4ex,
+    belowrulesep<span class="brx">=</span>.65ex,
+    <span class="comment">%</span>
+    toprulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    bottomrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    midrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>lightrulewidth<span class="br">}</span>,
+    cmidrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulewidth<span class="br">}</span>,
+    cmidrulekernleft<span class="brx">=</span>0pt, <span class="comment">% for a reason, explained later</span>
+    cmidrulekernright<span class="brx">=</span>0pt,
+    abovespace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>aboverulesep<span class="br">}</span>,
+    belowspace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowrulesep<span class="br">}</span>,
+<span class="brx">]</span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="142" src="../../wikiteximage/d2f1355df9484cfa1806b437d920b7e4.webp" width="331">
+     </li>
+    </ul>
+    <p>Beautiful. We're getting there.
+</p>
+    <h3>
+     <span class="mw-headline" id="Rules">
+      Rules
+     </span>
+    </h3>
+    <p>Our rules will have two parts to each. There will be the drawing part
+consisting of a MetaPost picture, and there will be the <code>xtable</code>
+configuration part where the drawing is enabled and proper spacing is added.
+</p>
+    <h4>
+     <span class="mw-headline" id="Top_rule">
+      Top rule
+     </span>
+    </h4>
+    <p>Let's start with the drawing itself. There are some crucial things to know
+about MetaPost.
+</p>
+    <p>Paths are like plans, the points which define a line. You can draw a path
+and/or fill the area delimited by it. You can define paths point by point or
+get them from functions. Here we will use the latter. The <code>&hellip;boundary</code>
+functions return one of the edges of the bounding box of whatever path you give
+to it. Here is a modified example from the
+<a class="external text" href="https://www.pragma-ade.nl/general/manuals/metafun-s.pdf" rel="nofollow">Metafun manual</a>.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>bounds<span class="br">}</span>
+path p&nbsp;;
+p&nbsp;:<span class="brx">=</span> <span class="brx">(</span>0cm,1cm<span class="brx">)</span> .. <span class="brx">(</span>2cm,2cm<span class="brx">)</span> .. <span class="brx">(</span>4cm,0cm<span class="brx">)</span> .. <span class="brx">(</span>2.5cm,1cm<span class="brx">)</span> .. cycle&nbsp;;
+draw p dashed withdots&nbsp;;
+draw leftboundary p withcolor .625yellow&nbsp;;
+draw topboundary p withcolor .625green&nbsp;;
+draw rightboundary p withcolor .625blue&nbsp;;
+draw bottomboundary p withcolor .625red;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+<span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>bounds<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="124" src="../../wikiteximage/b7ae06771b1f960cbdf32cceda073e11.webp" width="266">
+     </li>
+    </ul>
+    <p>A path called <code>OverlayBox</code> is available when making an overlay, and it
+simply is the outer bounds (that is, including offsets) of a cell/row/group in
+our case. Since our rules are in separate rows, it doesn't matter too much if
+we pick the top edge or the bottom one to draw the rule. It will simply be
+easier to make a top rule with the top edge because of the top offset right
+below.
+</p>
+    <p>First, we fetch the top rule thickness from <tt><a href="../../Command/framed.html" title="Command/framed">\framed</a></tt> parameters.
+Something to note is that drawing on the boundaries will inevitably bring some
+of the drawing out of bounds. In our case, the top half of the rule (that is,
+half of the thickness) will be out of bounds. This is why we prepare an offset
+of half the thickness downwards. Then, we prepare the path as the top boundary
+of the overlay box shifted downwards half the rule thickness, which we can then
+draw with a square pen. To not have the bits of the rule poking at the sides,
+we clip the current picture (the rule). Finally, we set the current picture
+bounding box to the overlay's.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>toprule<span class="br">}</span>
+
+path upper_rule&nbsp;;
+numeric upper_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+upper_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>toprulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> -upper_thickness/2&nbsp;;
+upper_rule&nbsp;:<span class="brx">=</span> topboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>;
+
+draw upper_rule withpen pensquare scaled upper_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+</pre>
+    <p>With the picture prepared, we can make an overlay with it. Then, we can make a
+configuration for the top rule that inherits from the <code>booktabs</code>
+configuration. Since the top rule is drawn at the top boundary and it doesn't
+have its own thickness, we have to set the top offsets to the sum of
+<code>belowrulesep</code> and <code>toprulethickness</code> to account for both the
+rule and the space.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>toprule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>toprule<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>toprule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>toprulethickness<span class="br">}</span>,
+<span class="brx">]</span>
+</pre>
+    <p>Finally, let's add this row to the table header:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span>
+    <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stopxcell</span></span>
+<span class="cs"><span class="documentcs">\stopxrow</span></span>
+</pre>
+    <p>Note that it has a single spanning cell, as wide as all the cells.
+</p>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="148" src="../../wikiteximage/3c0fc4b91fa8baa2148a1d154aeacb3d.webp" width="331">
+     </li>
+    </ul>
+    <h4>
+     <span class="mw-headline" id="Bottom_rule">
+      Bottom rule
+     </span>
+    </h4>
+    <p>The bottom rule works similarly. Here is the code that gets added:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>bottomrule<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>bottomrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> bottomboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>bottomrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>bottomrule<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:bottomrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:bottomrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>bottomrule,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>aboverulesep<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>bottomrulethickness<span class="br">}</span>,
+<span class="brx">]</span>
+</pre>
+    <p>Add a table footer with <tt><a class="new" href="../../index.php?title=Command/startxtablefoot&action=edit&redlink=1.html" title="Command/startxtablefoot (page does not exist)">\startxtablefoot</a></tt>&hellip;<tt><a class="new" href="../../index.php?title=Command/stopxtablefoot&action=edit&redlink=1.html" title="Command/stopxtablefoot (page does not exist)">\stopxtablefoot</a></tt> and a
+row just like with the top rule:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startxtablefoot</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>booktabs:bottomrule<span class="brx">]</span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stopxcell</span></span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+<span class="cs"><span class="documentcs">\stopxtablefoot</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="152" src="../../wikiteximage/1468dcce1203f0d7e65569eee3a363c3.webp" width="331">
+     </li>
+    </ul>
+    <h4>
+     <span id="Mid/cmid_rules">
+     </span>
+     <span class="mw-headline" id="Mid.2Fcmid_rules">
+      Mid/cmid rules
+     </span>
+    </h4>
+    <p>Here the trouble is that the rule needs to be drawn right between the offsets.
+An easy way to do it is to start with one of the boundaries and then shift
+upwards or downwards. For <code>\cmidrule</code>, we use the corner functions
+instead of the boundary ones as to get the starting and ending points. That
+will let us apply trimming if necessary.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>midrulebelow<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> bottomboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;; <span class="comment">% finally, set picture bounds to the box's bounds</span>
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>cmidrulebelow<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+numeric rule_kerns<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+
+rule_kerns<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernleft<span class="br">}</span>&nbsp;;
+rule_kerns<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> -<span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernright<span class="br">}</span>&nbsp;;
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> <span class="brx">(</span>llcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>1<span class="brx">]</span>, 0<span class="brx">)</span> -- lrcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>2<span class="brx">]</span>, 0<span class="brx">)</span><span class="brx">)</span> shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;; <span class="comment">% finally, set picture bounds to the box's bounds</span>
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>midrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>midrulebelow<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>cmidrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>cmidrulebelow<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:midrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:midrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>midrule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>/2,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>/2,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:cmidrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:cmidrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>cmidrule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>/2,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>/2,
+<span class="brx">]</span>
+
+</pre>
+    <p>Now, let's add the appropriate rows. Since the row count changes in the header,
+the &numero; cell will now be taking up 3 rows, not just 2.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startxtablehead</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stopxcell</span></span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>align<span class="brx">=</span>center<span class="brx">]</span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nr<span class="brx">=</span>3, align<span class="brx">=</span><span class="br">{</span>center, lohi<span class="br">}</span><span class="brx">]</span> &numero; <span class="cs"><span class="documentcs">\stopxcell</span></span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>5<span class="brx">]</span> Variables <span class="cs"><span class="documentcs">\stopxcell</span></span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>booktabs:cmidrule<span class="brx">]</span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>5<span class="brx">]</span><span class="cs"><span class="documentcs">\stopxcell</span></span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>align<span class="brx">=</span>center<span class="brx">]</span>
+        <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>5<span class="br">}</span><span class="br">{</span><span class="comment">%</span>
+            <span class="cs"><span class="documentcs">\startxcell</span></span> <span class="cs"><span class="documentcs">\m</span></span><span class="br">{</span>x_<span class="br">{</span><span class="cs"><span class="systemcs">\recurselevel</span></span><span class="br">}</span><span class="br">}</span> <span class="cs"><span class="documentcs">\stopxcell</span></span>
+        <span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+    <span class="cs"><span class="documentcs">\startxrow</span></span><span class="brx">[</span>booktabs:midrule<span class="brx">]</span>
+        <span class="cs"><span class="documentcs">\startxcell</span></span><span class="brx">[</span>nc<span class="brx">=</span>6<span class="brx">]</span><span class="cs"><span class="documentcs">\stopxcell</span></span>
+    <span class="cs"><span class="documentcs">\stopxrow</span></span>
+<span class="cs"><span class="documentcs">\stopxtablehead</span></span>
+</pre>
+    <ul class="demo">
+     <li class="rendering">
+      <img height="170" src="../../wikiteximage/8924a19ce0e1f288f7d67084ef45ec12.webp" width="372">
+     </li>
+    </ul>
+    <p>With that, we have everything we need. This setup works well even with
+multipage <code>booktabs</code> tables.
+</p>
+    <h2>
+     <span class="mw-headline" id="Full_code">
+      Full code
+     </span>
+    </h2>
+    <p>Feel free to place this in an environment file for later use. Don't forget to
+load the environment. Improvements are very much welcome.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>toprule<span class="br">}</span>
+
+path upper_rule&nbsp;;
+numeric upper_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+upper_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>toprulethickness<span class="br">}</span>&nbsp;; <span class="comment">% get width from a parameter given to \framed</span>
+rule_sep&nbsp;:<span class="brx">=</span> -upper_thickness/2&nbsp;;
+upper_rule&nbsp;:<span class="brx">=</span> topboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>; <span class="comment">% top boundary of the cell, right above the top offset</span>
+
+draw upper_rule withpen pensquare scaled upper_thickness&nbsp;; <span class="comment">% draw the top boundary with a square pen of given width</span>
+clip currentpicture to OverlayBox&nbsp;; <span class="comment">% the rule will poke out a little on the sides, so we clip the drawn rule</span>
+
+setbounds currentpicture to OverlayBox&nbsp;; <span class="comment">% finally, set picture bounds to the box's bounds</span>
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>bottomrule<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>bottomrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> bottomboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>midruleabove<span class="br">}</span>
+
+path upper_rule&nbsp;;
+numeric upper_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+upper_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> -<span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> - upper_thickness/2&nbsp;;
+upper_rule&nbsp;:<span class="brx">=</span> topboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw upper_rule withpen pensquare scaled upper_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>midrule<span class="br">}</span>
+
+path center_rule&nbsp;;
+numeric center_thickness&nbsp;;
+
+center_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>&nbsp;;
+center_rule&nbsp;:<span class="brx">=</span> center leftboundary OverlayBox -- origin -- center rightboundary OverlayBox&nbsp;;
+
+draw center_rule withpen pensquare scaled center_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>midrulebelow<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> bottomboundary OverlayBox shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;; <span class="comment">% finally, set picture bounds to the box's bounds</span>
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>cmidruleabove<span class="br">}</span>
+
+path upper_rule&nbsp;;
+numeric upper_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+numeric rule_kerns<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+
+rule_kerns<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernleft<span class="br">}</span>&nbsp;;
+rule_kerns<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> -<span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernright<span class="br">}</span>&nbsp;;
+upper_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> -<span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> - upper_thickness/2&nbsp;;
+upper_rule&nbsp;:<span class="brx">=</span> <span class="brx">(</span>ulcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>1<span class="brx">]</span>, 0<span class="brx">)</span> -- urcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>2<span class="brx">]</span>, 0<span class="brx">)</span><span class="brx">)</span> shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw upper_rule withpen pensquare scaled upper_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;;
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>cmidrulebelow<span class="br">}</span>
+
+path lower_rule&nbsp;;
+numeric lower_thickness&nbsp;;
+numeric rule_sep&nbsp;;
+numeric rule_kerns<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+
+rule_kerns<span class="brx">[</span>1<span class="brx">]</span>&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernleft<span class="br">}</span>&nbsp;;
+rule_kerns<span class="brx">[</span>2<span class="brx">]</span>&nbsp;:<span class="brx">=</span> -<span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulekernright<span class="br">}</span>&nbsp;;
+lower_thickness&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>&nbsp;;
+rule_sep&nbsp;:<span class="brx">=</span> <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + lower_thickness/2&nbsp;;
+lower_rule&nbsp;:<span class="brx">=</span> <span class="brx">(</span>llcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>1<span class="brx">]</span>, 0<span class="brx">)</span> -- lrcorner OverlayBox shifted <span class="brx">(</span>rule_kerns<span class="brx">[</span>2<span class="brx">]</span>, 0<span class="brx">)</span><span class="brx">)</span> shifted <span class="brx">(</span>0, rule_sep<span class="brx">)</span>&nbsp;;
+
+draw lower_rule withpen pensquare scaled lower_thickness&nbsp;;
+clip currentpicture to OverlayBox&nbsp;;
+
+setbounds currentpicture to OverlayBox&nbsp;; <span class="comment">% finally, set picture bounds to the box's bounds</span>
+
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>toprule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>toprule<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>bottomrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>bottomrule<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>midrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>midrulebelow<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>midruleabove<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>midruleabove<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>midrulebelow<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>midrulebelow<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>cmidrule<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>cmidrulebelow<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>cmidruleabove<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>cmidruleabove<span class="br">}</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineoverlay</span></span><span class="brx">[</span>cmidrulebelow<span class="brx">]</span><span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>cmidrulebelow<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs<span class="brx">]</span><span class="brx">[</span>
+    frame<span class="brx">=</span>off,
+    rulethickness<span class="brx">=</span>0pt,
+    offset<span class="brx">=</span>0pt,
+    columndistance<span class="brx">=</span>1em,
+    heavyrulewidth<span class="brx">=</span>.08em,
+    lightrulewidth<span class="brx">=</span>.05em,
+    cmidrulewidth<span class="brx">=</span>.03em,
+    toprulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    bottomrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>heavyrulewidth<span class="br">}</span>,
+    midrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>lightrulewidth<span class="br">}</span>,
+    cmidrulethickness<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulewidth<span class="br">}</span>,
+    cmidrulekern<span class="brx">=</span>.5em,
+    cmidrulekernleft<span class="brx">=</span>0pt,
+    cmidrulekernright<span class="brx">=</span>0pt,
+    aboverulesep<span class="brx">=</span>.4ex,
+    belowrulesep<span class="brx">=</span>.65ex,
+    abovespace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>aboverulesep<span class="br">}</span>,
+    belowspace<span class="brx">=</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowrulesep<span class="br">}</span>,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:toprule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>toprule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>toprulethickness<span class="br">}</span>,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:bottomrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:bottomrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>bottomrule,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>bottomrulethickness<span class="br">}</span>,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:midrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:midrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>midrule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>/2,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>midrulethickness<span class="br">}</span>/2,
+<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definextable</span></span><span class="brx">[</span>booktabs:cmidrule<span class="brx">]</span><span class="brx">[</span>booktabs<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupxtable</span></span><span class="brx">[</span>booktabs:cmidrule<span class="brx">]</span><span class="brx">[</span>
+    background<span class="brx">=</span>cmidrule,
+    toffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>abovespace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>/2,
+    boffset<span class="brx">=</span><span class="cs">\dimexpr</span><span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>belowspace<span class="br">}</span> + <span class="cs"><span class="systemcs">\frameddimension</span></span><span class="br">{</span>cmidrulethickness<span class="br">}</span>/2,
+<span class="brx">]</span>
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212436
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.216 seconds
+Real time usage: 0.535 seconds
+Preprocessor visited node count: 740/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 3548/2097152 bytes
+Template argument size: 1087/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 42440/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%  412.375      1 -total
+  3.63%   14.955     28 Template:cmd
+  2.62%   10.785     41 Template:code
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7097-1!canonical and timestamp 20260109212436 and revision id 39948
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Tables/Tutorials/Creating_booktabs-like_tables_with_xtable">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Scratch Variables&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Scratch_Variables" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Scratch Variables
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2151&diff=40377">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Mnemonics_and_Aliases.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Mnemonics and Aliases">Mnemonics & Aliases</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Expansion_Control.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control">Expansion Control</a> &gt;
+</p>
+    <h3>
+     <span class="mw-headline" id="Scratch_registers">
+      Scratch registers
+     </span>
+    </h3>
+    <p>Because values often need to be saved only temporarily, ConTeXt defines the &lt;<i>counter</i>&gt; <code>\scratchcounter</code>. This is a real &lt;<i>counter</i>&gt;, and not a pseudo one, as we will meet further on.  Analogous scratch registers are <code>\scratchdimen</code>, <code>\scratchskip</code>, <code>\scratchmuskip</code>, <code>\scratchtoks</code> and <code>\scratchbox</code>. You can use these registers in your own macro code, but a warning is in order:
+</p>
+    <p>Do <b>not</b> expect it to be safe to use any of the scratch registers across any call to any internal ConTeXt macro. While ConTeXt is supposed to make sure that the scratch registers it needs are initialized on entry to the internal macro, it doesn't bother to restore the original value when it returns from that macro, so you never know what will be in any scratch register afterwards.
+</p>
+    <p>ConTeXt uses a rather large collection of other scratch registers itself. Their names all look like this: <code>\!!XXXXXY</code>, where <code>XXXXX</code> is something like 'count' or 'depth', and <code>Y</code> is a letter starting from <code>a</code> (e.g. <code>\!!counta</code>). The fact that their names start with <code>!!</code> is a clear statement: Don't touch them, it's dangerous. If you need extra scratch registers, define your own.
+</p>
+    <h3>
+     <span class="mw-headline" id="Scratch_commands">
+      Scratch commands
+     </span>
+    </h3>
+    <p>ConTeXt uses another large set of 'scratch' commands to store all sorts of string values in, because if you have to repeat them more than once inside a macro definition, then macro names occupy less space in TeX's memory than the strings themselves).
+</p>
+    <p>For this reason, you should not define or alter macro names that start with
+</p>
+    <ul>
+     <li>
+      <code>\s!</code>
+      : These are macros holding
+      <i>
+       system constants
+      </i>
+      , i.e. values that never change
+     </li>
+     <li>
+      <code>\c!</code>
+      : These are macros holding
+      <i>
+       constant keys
+      </i>
+      in key-value pairs. The actual definitions depend on the multi-lingual interface that is currently being used
+     </li>
+     <li>
+      <code>\v!</code>
+      : These are macros holding names of
+      <i>
+       variable values
+      </i>
+      in key-value pairs. The actual definitions depend on the multi-lingual interface that is currently being used
+     </li>
+     <li>
+      <code>\??</code>
+      : These are multi-lingual interface constant calls.
+     </li>
+     <li>
+      <code>\@@</code>
+      : These are results of a multi-lingual interface constant expansion.
+     </li>
+    </ul>
+    <p>By far the safest approach to defining your own scratch macros is to make them mixed case.
+</p>
+    <p>&lt; <b>Prev:</b> <a href="Mnemonics_and_Aliases.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Mnemonics and Aliases">Mnemonics & Aliases</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Expansion_Control.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Expansion Control">Expansion Control</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212409
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.014 seconds
+Real time usage: 0.043 seconds
+Preprocessor visited node count: 9/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 0/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2151-1!canonical and timestamp 20260109212409 and revision id 40377
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Scratch_Variables">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

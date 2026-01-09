@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Translating Figure markup&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Translating_Figure_markup" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Translating Figure markup
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2482&diff=28853">2020-06-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <a href="HTML_to_ConTeXt.html" title="HTML to ConTeXt">HTML_to_ConTeXt</a>
+</p>
+    <pre>
+
+Let's deal with figure references first                                                                                       
+# when we encounter a reference to a figure inside the html
+# we replace it with a ConTeXt reference
+
+(@article/"a").each do |a|
+  a.swap("\\in[#{a.inner_html}]")
+end
+
+</pre>
+    <p>I have used the "alt" attribute inside the HTML element "img" to carry some ConTeXt figure
+setup directives such as width and position. To retrieve these I pass on the different
+string elements within "alt" into an array. The "alt" attribute is also used to carry an optional
+"keyword" for the image. This is useful for referencing figures.
+</p>
+    <pre>
+
+# replace &lt;p&gt;&lt;img&gt; by equivalent command in context
+(@article/"p/img").each do |img|
+
+  img_attrs=img.attributes['alt'].split(",")
+
+</pre>
+    <pre>
+
+
+  # ConTeXt can figure out the best image format. So we remove the file extension for images
+  # I have to take care of file names that have a "." embedded in them, so I reverse
+  # the order of the string before operating on it. After I filter, I reverse it again.
+
+  img_src=img.attributes['src'].reverse.sub(/\w+\./,"").reverse
+
+</pre>
+    <pre>
+
+  # see if position of figure is indicated
+  img_pos="force"
+  img_attrs.each do |arr|
+    img_pos=arr.gsub("position=","") if arr.match("position=")
+  end
+  img_attrs.delete("position=#{img_pos}") unless img_pos=="force"
+
+</pre>
+    <pre>
+
+  # see if the array img_attrs contains an referral key word
+  if img_attrs.first.match(/\w+[=]\w+/)
+    img_id=" "
+  else
+    img_id=img_attrs.shift
+  end
+
+</pre>
+    <pre>
+
+  if img_pos=="force"
+    if img.attributes['title']
+      img.swap("
+      \\placefigure\n
+      [#{img_pos}][#{img_id}] \n
+      {#{img.attributes['title']}} \n
+      {\\externalfigure[#{img_src}][#{img_attrs.join(",")}]}  \n
+              ")
+       else
+      img.swap("
+      \\placefigure\n
+      [#{img_pos}] \n
+      {none} \n
+      {\\externalfigure[#{img_src}][#{img_attrs.join(",")}]}
+              ")
+    end                                                                                                                       
+  end
+
+end # end of converting inside (@article/"p/img")
+
+</pre>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212440
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.005 seconds
+Real time usage: 0.005 seconds
+Preprocessor visited node count: 19/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 1827/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2482-1!canonical and timestamp 20260109212440 and revision id 28853
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Translating_Figure_markup">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

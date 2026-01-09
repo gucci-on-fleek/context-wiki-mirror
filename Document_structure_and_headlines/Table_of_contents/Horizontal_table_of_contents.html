@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Table of contents/Horizontal table of contents&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Table_of_contents/Horizontal_table_of_contents" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Table of contents/Horizontal table of contents
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2628&diff=37675">2025-01-05</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This is an example which displays horizontal aligned table of contents from luigi:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\startluacode</span></span>
+    document.yue <span class="brx">=</span> document.yue or <span class="br">{</span><span class="br">}</span>
+    document.yue.chapter <span class="brx">=</span> document.yue.chapter or <span class="br">{</span><span class="br">}</span>
+    document.yue.section <span class="brx">=</span> document.yue.section or <span class="br">{</span><span class="br">}</span>
+    document.yue.chcount <span class="brx">=</span>  0
+    document.yue.seccount <span class="brx">=</span> 0
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+
+<span class="cs">\def</span><span class="cs">\ListSectionCommand</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2 <span class="brx">#</span>3<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+<span class="cs">\def</span><span class="cs">\ListChapterCommand</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="systemcs">\startluacode</span></span>
+document.yue.chcount <span class="brx">=</span> document.yue.chcount +1
+document.yue.chapter<span class="brx">[</span>document.yue.chcount<span class="brx">]</span> <span class="brx">=</span> "<span class="br">{</span><span class="cs">\\</span>red<span class="cs">\\</span>switchtobodyfont<span class="brx">[</span>55pt<span class="brx">]</span><span class="cs">\\</span>os <span class="brx">#</span>1<span class="br">}</span> <span class="br">{</span><span class="cs">\\</span>blue<span class="cs">\\</span>switchtobodyfont<span class="brx">[</span>34pt<span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span>"
+<span class="cs"><span class="systemcs">\stopluacode</span></span><span class="comment">%</span>
+<span class="br">}</span>
+
+
+<span class="cs">\def</span><span class="cs">\PlaceContent</span><span class="comment">%</span>
+<span class="br">{</span><span class="cs"><span class="systemcs">\startluacode</span></span>
+tprint <span class="brx">=</span> function<span class="brx">(</span>s<span class="brx">)</span> tex.sprint<span class="brx">(</span>tex.ctxcatcodes,s<span class="brx">)</span> end
+format <span class="brx">=</span> string.format
+local tab
+tab <span class="brx">=</span> ""
+if document.yue.chcount &gt; 0
+ then
+   for i<span class="brx">=</span>1,document.yue.chcount do
+    tab <span class="brx">=</span> tab.."\|p"
+   end
+   tab <span class="brx">=</span> tab.."\|"
+   tprint<span class="brx">(</span>"<span class="cs">\\</span>starttabulate<span class="brx">[</span>"..tab.."<span class="brx">]</span>"<span class="brx">)</span>
+   for i<span class="brx">=</span>1,document.yue.chcount do
+     tprint<span class="brx">(</span>"<span class="cs">\\</span>NC
+"..document.yue.chapter<span class="brx">[</span>i<span class="brx">]</span>.."<span class="cs">\\</span>vskip8pt"..format<span class="brx">(</span>"<span class="cs">\\</span>placelist<span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>criterium<span class="brx">=</span>chapter,number<span class="brx">=</span><span class="cs">\%</span>i,before<span class="brx">=</span>,after<span class="brx">=</span><span class="cs">\\</span>vskip2pt<span class="brx">]</span>",i<span class="brx">)</span><span class="brx">)</span>
+   end
+   tprint<span class="brx">(</span>"<span class="cs">\\</span>NC<span class="cs">\\</span>NR"<span class="brx">)</span>
+   tprint<span class="brx">(</span>"<span class="cs">\\</span>stoptabulate"<span class="brx">)</span>
+end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>none,command<span class="brx">=</span><span class="cs">\ListSectionCommand</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuplist</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>none,command<span class="brx">=</span><span class="cs">\ListChapterCommand</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span> <span class="brx">[</span>A4,landscape<span class="brx">]</span><span class="brx">[</span>A4,landscape<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span><span class="brx">[</span>page<span class="brx">]</span><span class="brx">[</span>backgound<span class="brx">=</span>color,backgroundcolor<span class="brx">=</span>darkyellow<span class="brx">]</span>
+<span class="comment">%% Do nothing except store chapters</span>
+
+<span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>height<span class="brx">=</span>6cm,frame<span class="brx">=</span>off,align<span class="brx">=</span>middle,top<span class="brx">=</span><span class="cs">\vss</span>,bottom<span class="brx">=</span><span class="brx">]</span><span class="br">{</span><span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>ss, 55pt<span class="brx">]</span> <span class="cs">\darkgreen</span> Table of Contents<span class="br">}</span>
+<span class="br">{</span> <span class="cs">\magenta</span>
+<span class="cs"><span class="stylecs">\switchtobodyfont</span></span><span class="brx">[</span>ss,21pt<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="comment">%</span>
+<span class="cs">\PlaceContent</span>
+<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>first<span class="br">}</span>  <span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>AA<span class="br">}</span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> tufte<span class="br">}</span> <span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>BB<span class="br">}</span> <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> knuth<span class="br">}</span>
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>second<span class="br">}</span> <span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>CC<span class="br">}</span> <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> zapf<span class="br">}</span><span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>DD<span class="br">}</span> <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> bryson<span class="br">}</span>
+<span class="cs"><span class="documentcs">\chapter</span></span><span class="br">{</span>third<span class="br">}</span>  <span class="cs"><span class="documentcs">\section</span></span><span class="br">{</span>EE<span class="br">}</span> <span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>10<span class="br">}</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> ward<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><br>
+Later, Yue Wang wrote a new implementation of the horizontal table of contents as follows:
+</p>
+    <pre class="tex"><span class="cs">\newcount</span><span class="cs">\chapcounter</span> <span class="cs">\chapcounter</span><span class="brx">=</span>0
+<span class="cs">\def</span><span class="cs">\tocchap</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="br">{</span><span class="cs">\hskip</span>0pt plus 0.02<span class="cs">\textwidth</span> minus 0pt<span class="cs">\advance</span><span class="cs">\chapcounter</span> by 1
+  <span class="cs"><span class="documentcs">\framedtext</span></span><span class="brx">[</span>height<span class="brx">=</span><span class="cs">\textheight</span>,frame<span class="brx">=</span>off,width<span class="brx">=</span>.48<span class="cs">\textwidth</span>,offset<span class="brx">=</span>none<span class="brx">]</span><span class="comment">%</span>
+    <span class="br">{</span><span class="cs"><span class="documentcs">\framedtext</span></span><span class="brx">[</span>height<span class="brx">=</span>.7<span class="cs">\textheight</span>,frame<span class="brx">=</span>off,width<span class="brx">=</span>.48<span class="cs">\textwidth</span>,offset<span class="brx">=</span>none,top<span class="brx">=</span><span class="cs">\vss</span>,bottom<span class="brx">=</span><span class="brx">]</span><span class="br">{</span><span class="br">{</span><span class="cs">\red</span><span class="cs">\BigFont</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">#</span>1<span class="cs">\par</span><span class="br">}</span><span class="br">{</span><span class="cs">\tfb</span><span class="cs"><span class="stylecs">\setupinterlinespace</span></span> <span class="brx">#</span>2<span class="cs">\par</span><span class="br">}</span><span class="br">}</span><span class="comment">%</span>
+     <span class="cs"><span class="documentcs">\framedtext</span></span><span class="brx">[</span>height<span class="brx">=</span>.3<span class="cs">\textheight</span>,width<span class="brx">=</span>.48<span class="cs">\textwidth</span>,offset<span class="brx">=</span>none,frame<span class="brx">=</span>off,top<span class="brx">=</span>,bottom<span class="brx">=</span><span class="cs">\vss</span>,align<span class="brx">=</span>right<span class="brx">]</span><span class="comment">%</span>
+      <span class="br">{</span><span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>criterium<span class="brx">=</span>chapter,number<span class="brx">=</span><span class="cs">\chapcounter</span>,alternative<span class="brx">=</span>command, command<span class="brx">=</span><span class="cs">\tocsec</span><span class="brx">]</span><span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\tocsec</span><span class="brx">#</span>1<span class="brx">#</span>2<span class="brx">#</span>3<span class="br">{</span><span class="br">{</span><span class="cs">\black</span> <span class="brx">#</span>2~<span class="brx">(</span><span class="brx">#</span>3<span class="brx">)</span><span class="br">}</span><span class="cs">\par</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs"><span class="documentcs">\placecontent</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>command,command<span class="brx">=</span><span class="cs">\tocchap</span><span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>--<a class="new" href="../../index.php?title=User:58.35.85.255&action=edit&redlink=1" title="User:58.35.85.255 (page does not exist)">58.35.85.255</a> 06:37, 2 September 2008 (CEST)yue wang
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212412
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.037 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 7/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11929/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2628-1!canonical and timestamp 20260109212412 and revision id 37675
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Table_of_contents/Horizontal_table_of_contents">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

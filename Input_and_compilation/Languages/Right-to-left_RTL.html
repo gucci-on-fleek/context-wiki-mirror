@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Languages/Right-to-left RTL&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Languages/Right-to-left_RTL" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Languages/Right-to-left RTL
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4930&diff=42327">2025-10-08</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Here we collect several tips and tricks for dealing with right-to-left (RTL) texts as well as BiDi (bidirectional) texts.  The large number of hooks in different commands makes it possible to use CONTEXT's support for such documents.  However, there are limitations and/or bugs, as well.  Everything here is tested in MkIV and we recommend that you try one of the most recent versions since certain bugs are fixed and features are added only in the beta.  All the credit should go to Hans, Wolfgang and others who respond to questions on the mailing list.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Basics">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Basics
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#BiDi_text">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           BiDi text
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#LTR_paragraph_in_RTL_document">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           LTR paragraph in RTL document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Indic_numerals">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Indic numerals
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Indic_numerals_in_math_mode">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Indic numerals in math mode
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#Structural_elements">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Structural elements
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Footnotes">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Footnotes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Sectioning">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Sectioning
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Itemize">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Itemize
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Enumerations_and_descriptions">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           Enumerations and descriptions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#Multi-column_document">
+          <span class="tocnumber">
+           2.5
+          </span>
+          <span class="toctext">
+           Multi-column document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#Tables">
+          <span class="tocnumber">
+           2.6
+          </span>
+          <span class="toctext">
+           Tables
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#Frames_and_Colors">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Frames and Colors
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#Date_and_Time">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Date and Time
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Poems">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         Poems
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#TODO">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         TODO
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Basics">
+      Basics
+     </span>
+    </h2>
+    <p>Use <tt><a href="../../Command/setupalign.html" title="Command/setupalign">\setupalign</a></tt> to change the text direction to RTL.  This command sets the page, paragraph and text directions.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+</pre>
+      <p>This produces:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="198" src="../../wikiteximage/431e6b3095dc6bec5cd5ad2d7f92e2e0.webp" width="649">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="BiDi_text">
+      BiDi text
+     </span>
+    </h3>
+    <p>To work with documents with mixed RTL and LTR text, we need the bidi algorithms implemented in <tt><a href="../../Command/setupdirections.html" title="Command/setupdirections">\setupdirections</a></tt>.  Since numbers are LTR elements in Arabic, Persian and other RTL languages, we almost always need this.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>dejavusans*arabic<span class="brx">]</span>
+<span class="comment">% Some fonts have glyphs for ZWNJ, etc.  Use the following to suppress them.</span>
+<span class="cs"><span class="stylecs">\setcharacterstripping</span></span><span class="brx">[</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupdirections</span></span><span class="brx">[</span>bidi<span class="brx">=</span>global,method<span class="brx">=</span>one<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+
+ این نمونه ساده از متنی فارسی است که در <span class="cs"><span class="documentcs">\CONTEXT</span></span>\ تهیه شده است.
+توجه کنید که عدد ۱۰۰۰ <span class="brx">(</span>هزار<span class="brx">)</span> به صورت صحیح نمایش داده می&zwnj;شود.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="40" src="../../wikiteximage/da004bcf0481559be1d50d73a71363ba.webp" width="609">
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="LTR_paragraph_in_RTL_document">
+      LTR paragraph in RTL document
+     </span>
+    </h3>
+    <p>In addition to short LTR text pieces, sometimes one needs an LTR paragraph in a mainly RTL document.  Using <code>\righttoleft</code> at the beginning of a paragraph (i.e., in vertical mode) achieves this.  This command needs to be placed inside a group to limit its scope.  I use the following.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definestartstop</span></span><span class="brx">[</span>LTR<span class="brx">]</span> <span class="brx">[</span>before<span class="brx">=</span><span class="br">{</span><span class="cs">\begingroup</span><span class="cs"><span class="stylecs">\lefttoright</span></span><span class="br">}</span>,after<span class="brx">=</span><span class="cs">\endgroup</span><span class="brx">]</span>
+</pre>
+    <p>This can be used either as <code>\LTR{some English text</code>} for short pieces (for example, inside an RTL paragraph) or as a start/stop construct to produce LTR paragraphs.
+</p>
+    <h3>
+     <span class="mw-headline" id="Indic_numerals">
+      Indic numerals
+     </span>
+    </h3>
+    <p>Arabic, Persian and Urdu documents typically use a different set of digits, called Indic; it's kind of ironic that the normal digits used in Latin languages are called Arabic!  The ConTeXt beta has several number conversion methods to achieve this: <code>persiandecimals</code>, <code>arabicdecimals</code>.  Note that these are different from <code>persiannumerals</code> and <code>arabicnumerals</code>.  The naming of the latter is inspired from Roman numerals and the like, which use letters for displaying numbers.
+</p>
+    <p>To use these conversion methods, you should look for a <code>conversion</code> or <code>numberconversion</code> in the command of interest.  Setting that to the above values would achieve the desired behavior.  However, a few elements lack proper BiDi support; so it is best to place the above conversions inside a left-to-right block to guarantee correct number display.
+</p>
+    <p>For instance to get the page numbers using Indic digits, we can use the following.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuppagenumber</span></span><span class="brx">[</span>numberconversion<span class="brx">=</span>persiandecimals<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Indic_numerals_in_math_mode">
+      Indic numerals in math mode
+     </span>
+    </h3>
+    <p>In Persian (and perhaps Arabic and Urdu) we often want to have Indic numerals in math formulas.  We can use a fallback mechanism to substitute all Latin digits by the Indic ones.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="comment">% use arabicindic for standard Arabic (Indic) digits</span>
+<span class="cs"><span class="stylecs">\definefontfallback</span></span> <span class="brx">[</span>Math<span class="brx">]</span> <span class="brx">[</span>dejavusansmono<span class="brx">]</span>     <span class="brx">[</span>digitsextendedarabicindic<span class="brx">]</span> <span class="brx">[</span>check<span class="brx">=</span>yes,force<span class="brx">=</span>yes,offset<span class="brx">=</span>digitsnormal<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontfallback</span></span> <span class="brx">[</span>Math<span class="brx">]</span> <span class="brx">[</span>dejavusansmonobold<span class="brx">]</span> <span class="brx">[</span>digitsextendedarabicindic<span class="brx">]</span> <span class="brx">[</span>check<span class="brx">=</span>yes,force<span class="brx">=</span>yes,offset<span class="brx">=</span>digitsbold<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>dejavu<span class="brx">]</span>
+
+$3+2<span class="brx">=</span>5 <span class="cs"><span class="stylecs">\quad</span></span> <span class="cs">\bf</span> 3+2<span class="brx">=</span>5$ <span class="cs">\endgraf</span>
+</pre>
+      <p>This produces:
+</p>
+     </li>
+     <li class="rendering">
+      <img height="15" src="../../wikiteximage/8aad287dc0389cdbc4f868cead260a93.webp" width="165">
+     </li>
+    </ul>
+    <p>This works because we essentially have the following definition in DejaVu typescript <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/type-imp-dejavu.mkiv" rel="nofollow">type-imp-dejavu.mkiv</a>:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>MathRoman<span class="brx">]</span>    <span class="brx">[</span>file:texgyredejavu-math<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>math<span class="cs">\mathsizesuffix</span>,mathextra<span class="br">}</span>,goodies<span class="brx">=</span>dejavu-math,fallbacks<span class="brx">=</span>Math<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>MathRomanBold<span class="brx">]</span><span class="brx">[</span>file:texgyredejavu-math<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span><span class="br">{</span>math<span class="cs">\mathsizesuffix</span>,dejavu-math-bold,mathextra<span class="br">}</span>,goodies<span class="brx">=</span>dejavu-math,fallbacks<span class="brx">=</span>Math<span class="brx">]</span>
+</pre>
+    <p>This uses the fallback Math. For other fonts, one may need to rewrite the math section of the typescript or change the name of the fallback.
+</p>
+    <p><br>
+By (re)defining certain macros, we can use commands like <tt><a href="../../Command/digits.html" title="Command/digits">\digits</a></tt> to properly translate decimal points, thousand separators, etc. to their Arabic/Persian equivalents.
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\digitsperiodsymbol</span><span class="br">{</span>٫<span class="br">}</span>
+<span class="cs"><span class="documentcs">\digits</span></span><span class="br">{</span>1.5<span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Structural_elements">
+      Structural elements
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Footnotes">
+      Footnotes
+     </span>
+    </h3>
+    <p>One may has complex requirements for footnotes in a bidirectional documents<a class="external autonumber" href="http://github.com/bateni/dabeer/blob/master/tests/usage-05-footnote.tex" rel="nofollow">[1]</a>, but there are two basic elements that most RTL documents ask for.
+</p>
+    <ul>
+     <li>
+      The footnote text had better go through the BiDi algorithm because it may contain numbers or otherwise LTR material.
+     </li>
+     <li>
+      Footnote rule should either default to the right-hand side or agree with the direction of the first footnote paragraph.
+     </li>
+    </ul>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupfootnotes</span></span><span class="brx">[</span>rule<span class="brx">=</span>paragraph<span class="brx">]</span> <span class="comment">% available in beta only; set it to right to have it always on the right.</span>
+<span class="cs"><span class="stylecs">\startsetups</span></span><span class="brx">[</span>bidi:footnotes<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\setupdirections</span></span><span class="brx">[</span>bidi<span class="brx">=</span>on<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+<span class="cs"><span class="stylecs">\setupnotes</span></span><span class="brx">[</span>footnote<span class="brx">]</span><span class="brx">[</span>setups<span class="brx">=</span>bidi:footnotes<span class="brx">]</span>
+</pre>
+    <p>To change the numbers to Indic numerals (used in Arabic, Persian and Urdu documents), you can use the following.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupnotation</span></span><span class="brx">[</span>footnote<span class="brx">]</span><span class="brx">[</span>numberconversion<span class="brx">=</span>persiandecimals<span class="brx">]</span> <span class="comment">% available in beta only</span>
+</pre>
+    <p>In general, footnotes originating in RTL paragraphs are typeset on the right and those within LTR text produce LTR footnotes.  With the above change, both types end up with Indic digits.  Some more work is to be done if these are not what you want.
+</p>
+    <h3>
+     <span class="mw-headline" id="Sectioning">
+      Sectioning
+     </span>
+    </h3>
+    <p>To get the section numbers right as well as their directions both in the head and in the table of contents, I use the following setup.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>part,chapter,section<span class="brx">]</span><span class="brx">[</span>conversion<span class="brx">=</span>LTRpersiandecimals,numberstyle<span class="brx">=</span><span class="cs"><span class="stylecs">\righttoleft</span></span><span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Itemize">
+      Itemize
+     </span>
+    </h3>
+    <p>Use <code>persiandecimals</code> or the other values to number itemizations.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>persiandecimals<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> First
+<span class="cs"><span class="documentcs">\item</span></span> Second
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+</pre>
+    <p>The multi-column versions (using keys <code>columns</code> or <code>horizontal</code>) have a default left-to-right direction.  To fix that, use either of the two solutions below.  One sets is per <tt><a class="mw-redirect" href="../../Command/_startitemgroup.html" title="Command/startitemize">\startitemize</a></tt> while the other sets it globally.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startitemize</span></span><span class="brx">[</span>columns,two<span class="brx">]</span><span class="brx">[</span>direction<span class="brx">=</span>reverse<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\item</span></span> First
+<span class="cs"><span class="documentcs">\item</span></span> Second
+<span class="cs"><span class="documentcs">\item</span></span> Third
+<span class="cs"><span class="documentcs">\item</span></span> Fourth
+<span class="cs"><span class="documentcs">\stopitemize</span></span>
+</pre>
+    <pre class="tex"><span class="comment">% The global solution</span>
+<span class="cs"><span class="stylecs">\setupmixedcolumns</span></span><span class="brx">[</span>itemgroupcolumns<span class="brx">]</span><span class="brx">[</span>direction<span class="brx">=</span>reverse<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="Enumerations_and_descriptions">
+      Enumerations and descriptions
+     </span>
+    </h3>
+    <p>Enumerations are a kind of descriptions, hence I focus on the former here.  Same restrictions apply to the latter as well.  The discussion here is based on recent betas, which differs slightly from the (old) stable version here.
+</p>
+    <p>In MkIV and MkXL we use <code>alternative</code> option in <tt><a href="../../Command/defineenumeration.html" title="Command/defineenumeration">\defineenumeration</a></tt> to pick its general form.  All the options (left, serried, top, margin, etc.) seem to work in the latest beta, provided that one sets key <code>headalign=r2l</code> and the surrounding paragraph is aligned r2l.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="comment">% hack to make dejavu typescript work</span>
+<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>arabic<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>dejavu,sans<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupdirections</span></span><span class="brx">[</span>bidi<span class="brx">=</span>global,method<span class="brx">=</span>one<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineenumeration</span></span><span class="brx">[</span>theorem<span class="brx">]</span><span class="brx">[</span>headalign<span class="brx">=</span>r2l,alternative<span class="brx">=</span>text,text<span class="brx">=</span>قضیه ,numberconversion<span class="brx">=</span>persiandecimals,title<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>sam<span class="brx">]</span>
+<span class="cs">\starttheorem</span><span class="brx">[</span>title<span class="brx">=</span>عنوان<span class="brx">]</span>
+مجموعه اعداد صحیح نسبت به اعمال جمع و تفریق بسته است.
+    یعنی اگر  $a$ و $b$ دو عدد حقیقی باشند،
+    هر یک از  $a+b$، $a-b$ و $ab$ نیز یک عدد حقیقی است.
+<span class="cs">\stoptheorem</span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>sam<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupenumeration</span></span><span class="brx">[</span>theorem<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>top<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>sam<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupenumeration</span></span><span class="brx">[</span>theorem<span class="brx">]</span><span class="brx">[</span>alternative<span class="brx">=</span>left,hang<span class="brx">=</span>2<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\getbuffer</span></span><span class="brx">[</span>sam<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="303" src="../../wikiteximage/4ed7e0f12aafdffeb7b9bfce2793879a.webp" width="628">
+     </li>
+    </ul>
+    <p>Notice that <code>alternative=left</code> in the RTL environment means that the heading is really on the <em>right</em>.
+</p>
+    <h3>
+     <span class="mw-headline" id="Multi-column_document">
+      Multi-column document
+     </span>
+    </h3>
+    <p>Similar to the above, we can pick right-to-left ordering for the columns.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startcolumns</span></span><span class="brx">[</span>n<span class="brx">=</span>2,direction<span class="brx">=</span>reverse<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\input</span></span> knuth
+<span class="cs"><span class="documentcs">\stopcolumns</span></span>
+</pre>
+    <p><em>There is currently a bug that leads to incorrect section numbering inside RTL columns.</em>
+</p>
+    <h3>
+     <span class="mw-headline" id="Tables">
+      Tables
+     </span>
+    </h3>
+    <p>CONTEXT has several mechanisms for typesetting tables: see <a href="../../Tables.html" title="Tables">Tables</a>.  Natural tables are the recommended construct, but they are somewhat verbose.  It's easier for quick small tables to use the older macros adapted (and enhanced) from the TaBlE package.  This is not actively developed, so we do not hope for new RTL features in particular.
+</p>
+    <p>Using them on their own ignores the paragraph direction and sets an LTR table.  However, when wrapped in <tt><a href="../../Command/leftaligned.html" title="Command/leftaligned">\leftaligned</a></tt> or its friends, we get RTL/LTR tables depending on the paragraph direction.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>arabic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>dejavu,sans<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupdirections</span></span><span class="brx">[</span>bidi<span class="brx">=</span>global,method<span class="brx">=</span>unicode<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\starttable</span></span><span class="brx">[</span>|c|c|<span class="brx">]</span>
+<span class="cs">\NC</span> <span class="cs">\REF</span><span class="brx">[</span>cB<span class="brx">]</span><span class="br">{</span>ماه<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\REF</span><span class="brx">[</span>cB<span class="brx">]</span><span class="br">{</span>تعداد روز<span class="br">}</span> <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\NC</span> ژانویه <span class="cs">\NC</span> ۳۱ <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\NC</span> فوریه <span class="cs">\NC</span>  ۲۸ <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs">\NC</span> مارس <span class="cs">\NC</span> ۳۱ <span class="cs">\NC</span> <span class="cs">\AR</span>
+<span class="cs"><span class="documentcs">\stoptable</span></span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="137" src="../../wikiteximage/8350bb5858f1c2ace11f2d0d38913e7a.webp" width="624">
+     </li>
+    </ul>
+    <p>Now with natural tables, the <code>direction=reverse</code> key turn the order of columns in each row to be from left to right.
+Note that the alignment within cells is a separate option to set up. 
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="comment">% works only in beta as of March of 2025.</span>
+<span class="cs"><span class="documentcs">\bTABLE</span></span><span class="brx">[</span>align<span class="brx">=</span>right, direction<span class="brx">=</span>reverse<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> One <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> two <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+<span class="cs"><span class="documentcs">\bTR</span></span> <span class="cs"><span class="documentcs">\bTD</span></span> Three <span class="cs">\eTD</span> <span class="cs"><span class="documentcs">\bTD</span></span> fourteen <span class="cs">\eTD</span> <span class="cs">\eTR</span>
+<span class="cs">\eTABLE</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="53" src="../../wikiteximage/724ce80b6a57e346d942880c8267bc4a.webp" width="116">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Frames_and_Colors">
+      Frames and Colors
+     </span>
+    </h2>
+    <p>Single-line framing mechanisms work well without modification inside text:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>dejavusans*arabic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\righttoleft</span></span>
+می&zwnj;توان متن را
+<span class="cs"><span class="documentcs">\inframed</span></span><span class="brx">[</span>framecolor<span class="brx">=</span>red<span class="brx">]</span><span class="br">{</span>درون قاب<span class="br">}</span>
+گذاشت تا مهم به نظر برسد.
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="28" src="../../wikiteximage/3077ba0953845bf995a8395a56caee21.webp" width="389">
+     </li>
+    </ul>
+    <p>The produced picture above is clipped in this illustration, so the top and bottom red framing is not visible.
+It does work in practice though.
+</p>
+    <p>When you need multiple lines, the <code>align</code> key has to be set perhaps in combination to <code>width</code>.
+Setting <code>align=r2l</code> is a good choice as it works with and without a wrapping <tt><a href="../../Command/leftaligned.html" title="Command/leftaligned">\leftaligned</a></tt>.
+Without the wrapper, the entire frame (not its content) will be aligned to the left regardless of the surrounding text direction. If you want to <i>ragged</i> alignment, note that the meaning of <code>flushleft</code> and <code>flushright</code> values of the <code>align</code> key changes once you add the wrapping alignment command. To control hyphenation, etc. for the alignment of text, more options can be added as discussed in <a href="../../Text_blocks/Environments/Frames.html" title="Text blocks/Environments/Frames">Text_blocks/Environments/Frames</a>.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>dejavusans*arabic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\leftaligned</span></span><span class="cs"><span class="documentcs">\framed</span></span><span class="brx">[</span>width<span class="brx">=</span>5cm,align<span class="brx">=</span>r2l<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\input</span></span> khatt-ar<span class="cs">\endgraf</span><span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="114" src="../../wikiteximage/3fbc90c86088723824497467e34a6eb9.webp" width="624">
+     </li>
+    </ul>
+    <p><tt><a class="mw-redirect" href="../../Command/_framedtext.html" title="Command/framedtext">\framedtext</a></tt> works similarly and handles multi-paragraph text but still doesn't break the text across pages even between paragraphs.
+</p>
+    <h2>
+     <span class="mw-headline" id="Date_and_Time">
+      Date and Time
+     </span>
+    </h2>
+    <p>The standard <tt><a href="../../Command/currentdate.html" title="Command/currentdate">\currentdate</a></tt> and <tt><a href="../../Command/date.html" title="Command/date">\date</a></tt> command provide options to typeset Jalali and Hebrew dates.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex">Normal: <span class="cs"><span class="documentcs">\currentdate</span></span><span class="cs">\par</span>
+Formatted: <span class="cs"><span class="documentcs">\currentdate</span></span><span class="brx">[</span>dd,/,mm,/,y<span class="brx">]</span><span class="cs">\par</span>
+Modified: <span class="cs"><span class="documentcs">\date</span></span><span class="brx">[</span>m<span class="brx">=</span>6,d<span class="brx">=</span>3<span class="brx">]</span><span class="cs">\par</span>
+Jalali: <span class="cs"><span class="documentcs">\currentdate</span></span><span class="brx">[</span>jalali:to,dd,/,mm,/,y<span class="brx">]</span><span class="cs">\par</span>
+Jalali modified: <span class="cs"><span class="documentcs">\date</span></span><span class="brx">[</span>m<span class="brx">=</span>6<span class="brx">]</span><span class="brx">[</span>jalali:to,d,~,m:jalali,~,y<span class="brx">]</span><span class="cs">\par</span>
+Hebrew: <span class="cs"><span class="documentcs">\currentdate</span></span><span class="brx">[</span>hebrew:to,dd,/,mm,/,y<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="119" src="../../wikiteximage/ef6d8131ee114457527803f7cf32445d.webp" width="246">
+     </li>
+    </ul>
+    <p>todo: There are problems to get the Jalali month name translated to Farsi while setting <code>\mainlanguage[fa]</code>.
+</p>
+    <p>Though <tt><a href="../../Command/currentdate.html" title="Command/currentdate">\currentdate</a></tt> has options for changing the type of numbers (e.g., to Roman numerals or Abjad), the conversion to <i>Persian decimals</i> does not work for some technical reason. The following fixes work instead.
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>dejavusans<span class="brx">]</span>
+This one is simple and works if the numbers do not have leading zeros. Leading zeros are dropped by the conversion mechanism.
+
+<span class="cs"><span class="stylecs">\persiandecimals</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\rawdate</span></span><span class="brx">[</span>jalali:to,d<span class="brx">]</span><span class="br">}</span>/<span class="comment">%</span>
+<span class="cs"><span class="stylecs">\persiandecimals</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\rawdate</span></span><span class="brx">[</span>jalali:to,M<span class="brx">]</span><span class="br">}</span>/<span class="comment">%</span>
+<span class="cs"><span class="stylecs">\persiandecimals</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\rawdate</span></span><span class="brx">[</span>jalali:to,y<span class="brx">]</span><span class="br">}</span>
+
+This one is an ugly hack but can handle the leading zeros, and lets us use all conversion from <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="documentcs">\currentdate</span></span><span class="br">}</span> in one go.
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+  function persmap<span class="brx">(</span>s<span class="brx">)</span>
+  local stream  <span class="brx">=</span> tostring<span class="brx">(</span>s<span class="brx">)</span>
+  local mapping <span class="brx">=</span> languages.decimals.persian
+  local gsub    <span class="brx">=</span> string.gsub
+  return mapping and gsub<span class="brx">(</span>stream, ".", mapping<span class="brx">)</span> or stream
+  end
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\def</span><span class="cs">\persmap</span><span class="brx">#</span>1<span class="br">{</span><span class="cs"><span class="systemcs">\ctxlua</span></span><span class="br">{</span>context<span class="brx">(</span>persmap<span class="brx">(</span>"<span class="brx">#</span>1"<span class="brx">)</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\mycurrentdate</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span><span class="cs">\persmap</span><span class="br">{</span><span class="cs"><span class="stylecs">\rawdate</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">}</span><span class="br">}</span>
+<span class="cs">\mycurrentdate</span><span class="brx">[</span>jalali:to,dd,/,mm,/,y<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="117" src="../../wikiteximage/017b60ef3583c45596644d767549075a.webp" width="618">
+     </li>
+    </ul>
+    <p>The same approach work with <tt><a href="../../Command/currenttime.html" title="Command/currenttime">\currenttime</a></tt> as well.
+</p>
+    <pre class="tex"><span class="cs">\persmap</span><span class="br">{</span><span class="cs">\currenthour</span>:<span class="cs">\currentminute</span><span class="br">}</span>
+</pre>
+    <h2>
+     <span class="mw-headline" id="Poems">
+      Poems
+     </span>
+    </h2>
+    <p>Classical Persian poetry is usually composed of hemistiches and can be typeset as follows:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>hemistich<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>dejavusans*arabic<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupalign</span></span><span class="brx">[</span>r2l<span class="brx">]</span>
+
+<span class="cs">\hemistiches</span>
+<span class="br">{</span>چه خوش گفت فردوسی پاک زاد<span class="br">}</span>
+<span class="br">{</span>که رحمت بر آن تربت پاک باد<span class="br">}</span>
+<span class="cs">\hemistiches</span>
+<span class="br">{</span>میازار موری که دانه&zwnj;کش است<span class="br">}</span>
+<span class="br">{</span>که جان دارد و جان شیرین خوش است<span class="br">}</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="44" src="../../wikiteximage/e270abb839d67f1ea111dc054ccf1add.webp" width="624">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="TODO">
+      TODO
+     </span>
+    </h2>
+    <p>Here are some of the things to be added:
+</p>
+    <ul>
+     <li>
+      Float numbering
+     </li>
+     <li>
+      Margin notes
+     </li>
+     <li>
+      Indices and sorting
+     </li>
+     <li>
+      Textbackground
+     </li>
+     <li>
+      Metapost
+     </li>
+    </ul>
+    <p><br>
+For more information, you can look at <a class="external text" href="http://github.com/bateni/dabeer" rel="nofollow">Dabeer</a> that is a sample set of macros (ongoing work) for typesetting Persian documents using ConTeXt.
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212422
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.086 seconds
+Real time usage: 0.127 seconds
+Preprocessor visited node count: 453/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1719/2097152 bytes
+Template argument size: 565/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 20872/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   80.599      1 -total
+  7.29%    5.878     12 Template:cmd
+  5.77%    4.654     22 Template:code
+  4.54%    3.659      1 Template:src
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:4930-1!canonical and timestamp 20260109212422 and revision id 42327
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Languages/Right-to-left_RTL">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

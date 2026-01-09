@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Graphics and media/Collections of tips and tricks/Layer sets as individual pages&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Layer_sets_as_individual_pages" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Graphics and media/Collections of tips and tricks/Layer sets as individual pages
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7362&diff=41800">2025-01-19</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Layer_sets_as_individual_pages">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Layer sets as individual pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Base_or_Invisible_Layer">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Base or Invisible Layer
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Layer_Definitions">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Layer Definitions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Finishing_Layer">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           Finishing Layer
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Layer_Sets">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           Layer Sets
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Drawing_the_Pages">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Drawing the Pages
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <p>The following ConTeXt code example can be used to create a series of layered Metapost graphics and generate multiple pages with different combinations of these layers. Each page represents a different composition of the defined layers. Use cases are when you need to compose manually your layer sets. 
+</p>
+    <h2>
+     <span class="mw-headline" id="Base_or_Invisible_Layer">
+      Base or Invisible Layer
+     </span>
+    </h2>
+    <p>The code begins by defining a base or invisible layer called "base" using the <code>\startuseMPgraphic</code> command. In this layer, various components are defined, such as paths, colors, and coordinates. These components will be used to draw the images in subsequent layers, but they're not drawn yet, thus this layer is "invisible".
+</p>
+    <h2>
+     <span class="mw-headline" id="Layer_Definitions">
+      Layer Definitions
+     </span>
+    </h2>
+    <p>After defining the base layer, several other layers are defined using the <code>\startuseMPgraphic</code> command. Each layer is given a unique name, in our example the names are such as "layerA" "layerW" or "layerM". These layers are created as images using the <code>picture</code> environment. Each image consists of drawn elements. In our example, the elements are filled squares with a specific color and a label.
+</p>
+    <h2>
+     <span class="mw-headline" id="Finishing_Layer">
+      Finishing Layer
+     </span>
+    </h2>
+    <p>The purpose of the finishing layer in our ConTeXt code is to add the final touches to the drawn layers and to clip the graphic to the same frame. It also includes the addition of page numbering to each page with the help of a Metapost variable, in our case "mypagenumber". We need this method because apparently, it is not possible to use the ConTeXt page numbering on a Metapost page. The finishing layer needs to be applied after drawing all the other layers.
+</p>
+    <h2>
+     <span class="mw-headline" id="Layer_Sets">
+      Layer Sets
+     </span>
+    </h2>
+    <p>The before defined layers can be "set" (selected and combined) manually together, to become a layer set. They are layered on top of each other according to the order of appearance. The last layer is put on top of (and might cover) the previous one. 
+Some subgroups or intermediate results of our "setting" or "putting together" will be reused again during the process. Selected intermediate results will be shown as such on individual pages, like a photo documentation of your setting procedure. Other intermediate results will be reused without ever being shown on an individual page. To be spared from doing such steps over and over again, they are stored, either as layersetpage plus a number, as a mere layerset, or as a layer subset.
+</p>
+    <p>All of them are defined using the <code>\startuseMPgraphic</code> command. Each of them includes a specific set of the previously defined layers (or if you want, also drawn elements, as the "special!" label in layersetpage4). The layersets which are shown as a page are numbered, starting from one.
+</p>
+    <h2>
+     <span class="mw-headline" id="Drawing_the_Pages">
+      Drawing the Pages
+     </span>
+    </h2>
+    <p>Finally, the code uses a loop to draw each layerset page onto its own page using the <code>\dorecurse</code> command. The loop iterates from 1 to a manually defined number, and for each iteration, it uses the <code>\useMPgraphic</code> command to draw the corresponding layersetpage, to which it is also passing the Metapost variable "mypagenumber".
+</p>
+    <p>The resulting output is a series of pages, each displaying a different selection and combination of the defined layers.
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>base<span class="br">}</span> <span class="comment">%Here in the base, we define the components we will use to draw our images</span>
+numeric u; u <span class="brx">=</span> 1cm; 
+numeric framefactor; framefactor <span class="brx">=</span> 3.4;
+path TheFrame&nbsp;; TheFrame&nbsp;:<span class="brx">=</span> fullsquare xyscaled <span class="brx">(</span>framefactor*u, framefactor*u<span class="brx">)</span>  ; <span class="comment">%Needed to have for every page the same dimensions. Use (sqrt(2)*framefactor*u, framefactor*u) for DIN A Landscape ratio of the dimensions. </span>
+color stone_color; stone_color <span class="brx">=</span> 1/256<span class="brx">(</span>199,199,199<span class="brx">)</span>;
+color light_teal_color; light_teal_color <span class="brx">=</span> 1/256<span class="brx">(</span>154,209,189<span class="brx">)</span>;
+
+z1 <span class="brx">=</span> <span class="brx">(</span>-u,-u<span class="brx">)</span>&nbsp;;
+z2 <span class="brx">=</span> <span class="brx">(</span>u,-u<span class="brx">)</span>&nbsp;;
+z3 <span class="brx">=</span> <span class="brx">(</span>-u,u<span class="brx">)</span>&nbsp;;
+z4 <span class="brx">=</span> <span class="brx">(</span>u,u<span class="brx">)</span>&nbsp;;
+z5 <span class="brx">=</span> <span class="brx">(</span>-.5u,0<span class="brx">)</span>;
+z6 <span class="brx">=</span> <span class="brx">(</span>.8u,0<span class="brx">)</span>;
+
+picture layerA;
+layerA:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare scaled u shifted<span class="brx">(</span>z1<span class="brx">)</span> withcolor stone_color;
+label<span class="brx">(</span>"A", z1<span class="brx">)</span>;
+<span class="brx">)</span>;
+
+picture layerW;
+layerW:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare scaled u shifted<span class="brx">(</span>z2<span class="brx">)</span> withcolor stone_color;
+label<span class="brx">(</span>"W", z2<span class="brx">)</span>;
+<span class="brx">)</span>;
+
+picture layerM;
+layerM:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare scaled u shifted<span class="brx">(</span>z3<span class="brx">)</span> withcolor blue;
+label<span class="brx">(</span>"M", z3<span class="brx">)</span> withcolor white;
+<span class="brx">)</span>;
+
+picture layerC;
+layerC:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare scaled 1.5u shifted<span class="brx">(</span>z4<span class="brx">)</span> withcolor  transparent<span class="brx">(</span>1, .8, green<span class="brx">)</span>;
+label<span class="brx">(</span>"C", z4<span class="brx">)</span>;
+<span class="brx">)</span>;
+
+picture layerY;
+layerY:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare scaled 2u shifted<span class="brx">(</span>z5<span class="brx">)</span> withcolor light_teal_color;
+label<span class="brx">(</span>"Y", z5<span class="brx">)</span>;
+<span class="brx">)</span>;
+
+picture layerU;
+layerU:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare rotated 30 scaled 2u shifted<span class="brx">(</span>z4<span class="brx">)</span> withcolor transparent<span class="brx">(</span>1, .5, red<span class="brx">)</span>;
+label<span class="brx">(</span>"U", z4<span class="brx">)</span>;
+<span class="brx">)</span>;
+
+picture layerV;
+layerV:<span class="brx">=</span>image<span class="brx">(</span>
+fill fullsquare rotated 10 scaled 1.4u shifted<span class="brx">(</span>z6<span class="brx">)</span> withcolor transparent<span class="brx">(</span>1, .7, yellow<span class="brx">)</span>;
+label<span class="brx">(</span>"V", z6<span class="brx">)</span>;
+<span class="brx">)</span>;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span> <span class="comment">%base</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>finishing<span class="br">}</span> <span class="comment">%This is needed to clip the graphic to the same frame and to add the page numbering. Both have to happen after drawing the layers. </span>
+draw TheFrame withpen pencircle scaled .25u withcolor magenta&nbsp;;
+draw textext<span class="brx">(</span>decimal<span class="brx">(</span><span class="cs"><span class="stylecs">\MPvar</span></span><span class="br">{</span>mypagenumber<span class="br">}</span><span class="brx">)</span><span class="brx">)</span> scaled .1u withcolor magenta&nbsp;;
+setbounds currentpicture to TheFrame&nbsp;;
+<span class="comment">%scaling the page to your preferred dimension: </span>
+desiredformat&nbsp;:<span class="brx">=</span> 150;<span class="comment">% In pixels (will be converted by default at 72dpi). The shorter dimension of DIN A4 would be 595 pixels. </span>
+currentpicture&nbsp;:<span class="brx">=</span> currentpicture xysized <span class="brx">(</span>desiredformat ,desiredformat <span class="brx">)</span>; <span class="comment">%for square pages. If DIN A Landscape, use  (sqrt(2)*desiredformat ,desiredformat)</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span> <span class="comment">%finishing</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>Gamma<span class="br">}</span> <span class="comment">%This is a layer subset which will be used more than once. I call it a layer subset and not a layer set because it doesn't include another MPgraphic.</span>
+draw layerU&nbsp;;
+draw layerM&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span> <span class="comment">%Gamma</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage1<span class="br">}</span> <span class="comment">%Each layersetpage will become a page containing the defined layer set. The number corresponds to the page number. Start with number 1. </span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>base<span class="br">}</span> <span class="comment">%base has to be included only in layersetpage1. It will be passed on to the next layersetpages via inclusion. </span>
+draw layerW&nbsp;;
+draw layerA&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage2<span class="br">}</span> <span class="comment">%There should be no gap in the sequence of the numbers of the layersetpages</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpage1<span class="br">}</span>&nbsp;;
+draw layerV&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage3<span class="br">}</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpage2<span class="br">}</span>&nbsp;;
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>Gamma<span class="br">}</span>&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span> 
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpre4<span class="br">}</span> <span class="comment">%This is a layer set because it includes another MPgraphic. It will be used more than once, but it will not become a page itself. It's only an intermediate step on the way to the next layersetpage. For that reason, it's not named layersetpage. Because it's coming before the layersetpage4, I call it layersetpre4. If I need another intermediate step stored before layersetpre4, I would call it layersetprepre4. But that's only a naming convention for myself.</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpage1<span class="br">}</span>&nbsp;;
+draw layerY&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span> 
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage4<span class="br">}</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpre4<span class="br">}</span>&nbsp;;
+label<span class="brx">(</span>"special!", <span class="brx">(</span>z3+z4<span class="brx">)</span>/2<span class="brx">)</span> rotated 5 withcolor red;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage5<span class="br">}</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpage3<span class="br">}</span>&nbsp;;
+draw layerC&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>layersetpage6<span class="br">}</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpre4<span class="br">}</span>&nbsp;;
+draw layerC&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>6<span class="br">}</span><span class="br">{</span> <span class="comment">%This loop starts from 1 until the set number and draws each layersetpage onto its own page. Don't set a number which is higher than the number of your last layersetpage.</span>
+
+<span class="comment">%By differentiating finishinglayersetpage#1 from layersetpage#1, we can avoid adding \includeMPgraphic{finishing} to each \startuseMPgraphic{layersetpage<number>}. This allows us to apply the scaling of the page to our desiredformat, because the scaling will done only once per \useMPgraphic{}.</number></span>
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>finishinglayersetpage<span class="brx">#</span>1<span class="br">}</span>
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>layersetpage<span class="brx">#</span>1<span class="br">}</span>&nbsp;;
+<span class="cs">\includeMPgraphic</span><span class="br">{</span>finishing<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="comment">%uncomment if needed: </span>
+<span class="comment">% \setupTEXpage[background=color, backgroundcolor=gray]</span>
+  <span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>pagestate<span class="brx">=</span>start<span class="brx">]</span> <span class="comment">%`pagestate=start` is needed to have incremented page numbering of the pdf</span>
+    <span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>finishinglayersetpage<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>mypagenumber<span class="brx">=</span><span class="brx">#</span>1<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\stopTEXpage</span></span>
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p><a class="image" href="../../File:layer_sets.png"><img alt="layer sets.png" decoding="async" height="394" src="../../images/thumb/e/ef/layer_sets.webp" width="400"></a>
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212416
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.056 seconds
+Real time usage: 0.083 seconds
+Preprocessor visited node count: 20/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 11070/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:7362-1!canonical and timestamp 20260109212416 and revision id 41800
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Graphics_and_media/Collections_of_tips_and_tricks/Layer_sets_as_individual_pages">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

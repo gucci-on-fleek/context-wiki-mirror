@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Characters words and fonts/Examples of font installation and of typescripts/Simple typescript example&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts/Simple_typescript_example" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Characters words and fonts/Examples of font installation and of typescripts/Simple typescript example
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=3336&diff=41598">2025-01-18</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Overview">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Overview
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Requirements">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Requirements
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Script">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Script
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Extension">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Extension
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#References">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         References
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Overview">
+      Overview
+     </span>
+    </h2>
+    <p>This page describes how to map a Sans Serif font to the <tt><a class="new" href="../../index.php?title=Command/ss&action=edit&redlink=1.html" title="Command/ss (page does not exist)">\ss</a></tt> command and a Serif font to the <tt><a class="new" href="../../index.php?title=Command/rm&action=edit&redlink=1.html" title="Command/rm (page does not exist)">\rm</a></tt> command. This page also describes how typefaces differ from typescripts.
+</p>
+    <h2>
+     <span class="mw-headline" id="Requirements">
+      Requirements
+     </span>
+    </h2>
+    <p>This example uses Nimbus, which is a GPL font. Check whether Nimbus is available by running the following command:
+</p>
+    <pre>mtxrun --script fonts --list --all --pattern=nimbus*
+</pre>
+    <p>This should reveal a list similar to the following:
+</p>
+    <pre>nimbusromno9lmedi          nimbusromno9lmedi        utmb8a.afm
+nimbusromno9lmedibold      nimbusromno9lmedi        utmb8a.afm
+nimbusromno9lmediital      nimbusromno9lmediital    utmbi8a.afm
+nimbusromno9lregu          nimbusromno9lregu        utmr8a.afm
+nimbusromno9lreguital      nimbusromno9lreguital    utmri8a.afm
+nimbusromno9lregunormal    nimbusromno9lregu        utmr8a.afm
+nimbussanlbold             nimbussanlbold           uhvb8a.afm
+nimbussanlboldital         nimbussanlboldital       uhvbo8a.afm
+nimbussanlregu             nimbussanlregu           uhvr8a.afm
+nimbussanlreguital         nimbussanlreguital       uhvro8a.afm
+nimbussanlregunormal       nimbussanlregu           uhvr8a.afm
+</pre>
+    <p>If the font is not shown, you might have to install the font, which can be found on some systems at:
+</p>
+    <pre>/usr/share/fonts/type1/gsfonts
+</pre>
+    <p>You may use a different font; please see <a href="../Fonts_in_LuaTeX#Building_the_font_database.html" title="Characters words and fonts/Fonts in LuaTeX">how to install fonts to MkIV</a> for details.
+</p>
+    <h2>
+     <span class="mw-headline" id="Script">
+      Script
+     </span>
+    </h2>
+    <p>Configure a font follows:
+</p>
+    <pre class="tex"><span class="comment">% Enable Unicode fonts</span>
+<span class="cs"><span class="stylecs">\enableregime</span></span><span class="brx">[</span>utf<span class="brx">]</span>
+
+<span class="comment">% Enable Capital Letter use</span>
+<span class="cs"><span class="stylecs">\setupcapitals</span></span><span class="brx">[</span>sc<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="comment">% Define a script named [serif][nimbus]</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>nimbus<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span>             <span class="brx">[</span>name:nimbusromno9lregu<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBold<span class="brx">]</span>         <span class="brx">[</span>name:nimbusromno9lbold<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifItalic<span class="brx">]</span>       <span class="brx">[</span>name:nimbusromno9lreguital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifSlanted<span class="brx">]</span>      <span class="brx">[</span>name:nimbusromno9lreguital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldItalic<span class="brx">]</span>   <span class="brx">[</span>name:nimbusromno9lboldital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifBoldSlanted<span class="brx">]</span>  <span class="brx">[</span>name:nimbusromno9lboldital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SerifCaps<span class="brx">]</span>         <span class="brx">[</span>name:nimbusromno9lregu<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% Define a second script named [sans][nimbus]</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>sans<span class="brx">]</span> <span class="brx">[</span>nimbus<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Sans<span class="brx">]</span>             <span class="brx">[</span>name:nimbussanlregu<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBold<span class="brx">]</span>         <span class="brx">[</span>name:nimbussanlbold<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansItalic<span class="brx">]</span>       <span class="brx">[</span>name:nimbussanlreguital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansSlanted<span class="brx">]</span>      <span class="brx">[</span>name:nimbussanlreguital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBoldItalic<span class="brx">]</span>   <span class="brx">[</span>name:nimbussanlboldital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansBoldSlanted<span class="brx">]</span>  <span class="brx">[</span>name:nimbussanlboldital<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansCaps<span class="brx">]</span>         <span class="brx">[</span>name:nimbussanlregu<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% Define the typeface nimbus; use serif for rm-fonts, sans serif for ss-fonts.</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>nimbus<span class="brx">]</span>  <span class="brx">[</span>rm<span class="brx">]</span>  <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>nimbus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>nimbus<span class="brx">]</span>  <span class="brx">[</span>ss<span class="brx">]</span>  <span class="brx">[</span>sans<span class="brx">]</span>  <span class="brx">[</span>nimbus<span class="brx">]</span>
+
+<span class="comment">% Indicate the typeface to use.</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>nimbus<span class="brx">]</span><span class="brx">[</span>uc<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>nimbus,rm,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Regular, <span class="br">{</span><span class="cs">\it</span> Italic<span class="br">}</span>, <span class="br">{</span><span class="cs">\bf</span> Bold<span class="br">}</span>, <span class="br">{</span><span class="cs">\bi</span> Bold-Italic<span class="br">}</span>, <span class="br">{</span><span class="cs">\sc</span> KaPiTaLe<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\showbodyfont</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+    <p>Both scripts (serif and sans nimbus) map the fonts names to the different (existing) font style. Usage is implemented as follows:
+</p>
+    <ul>
+     <li>
+      The
+      <tt>
+       <a href="../../Command/setupbodyfont.html" title="Command/setupbodyfont">
+        \setupbodyfont
+       </a>
+      </tt>
+      command calls the
+      <i>
+       typeface nimbus
+      </i>
+      .
+     </li>
+     <li>
+      The
+      <i>
+       typeface nimbus
+      </i>
+      calls the
+      <i>
+       typescript [serif][nimbus]
+      </i>
+      for
+      <tt>
+       <a class="new" href="../../index.php?title=Command/rm&action=edit&redlink=1.html" title="Command/rm (page does not exist)">
+        \rm
+       </a>
+      </tt>
+      fonts, or
+      <i>
+       typescript [sans][nimbus]
+      </i>
+      for the
+      <tt>
+       <a class="new" href="../../index.php?title=Command/ss&action=edit&redlink=1.html" title="Command/ss (page does not exist)">
+        \ss
+       </a>
+      </tt>
+      fonts.
+     </li>
+    </ul>
+    <p>The scripts then map the fonts to different font styles.
+</p>
+    <h2>
+     <span class="mw-headline" id="Extension">
+      Extension
+     </span>
+    </h2>
+    <p>The fonts can be changed by extending the script:
+</p>
+    <pre class="tex">...
+<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>SansCaps<span class="brx">]</span>           <span class="brx">[</span>name:nimbusromno9lregu<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% Define a typescript named nimbus.</span>
+<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>nimbus<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>nimbus<span class="brx">]</span>	<span class="brx">[</span>rm<span class="brx">]</span>	<span class="brx">[</span>serif<span class="brx">]</span>	<span class="brx">[</span>nimbus<span class="brx">]</span>
+  <span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>nimbus<span class="brx">]</span>	<span class="brx">[</span>ss<span class="brx">]</span>	<span class="brx">[</span>sans<span class="brx">]</span>	<span class="brx">[</span>nimbus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\stoptypescript</span></span>
+
+<span class="comment">% Use the nimbus typescript, which defines the nimbus typeface.</span>
+<span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>nimbus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>nimbus,rm,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+...
+</pre>
+    <p>Note that <i>typeface [nimbus]</i> and <i>typescript [nimbus]</i> are different. 
+</p>
+    <p>Calling <tt><a href="../../Command/usetypescript.html" title="Command/usetypescript">\usetypescript</a></tt>[nimbus] ensures that the two <tt><a href="../../Command/definetypeface.html" title="Command/definetypeface">\definetypeface</a></tt> commands, embedded within <tt><a href="../../Command/starttypescript.html" title="Command/starttypescript">\starttypescript</a></tt>, as shown above, are called:
+</p>
+    <pre> \definetypeface [nimbus]  [rm]  [serif]  [nimbus]
+ \definetypeface [nimbus]  [ss]  [sans]   [nimbus]
+</pre>
+    <h2>
+     <span class="mw-headline" id="References">
+      References
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <tt>
+       <a href="../../Command/setupbodyfont.html" title="Command/setupbodyfont">
+        \setupbodyfont
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/showbodyfont.html" title="Command/showbodyfont">
+        \showbodyfont
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/definetypeface.html" title="Command/definetypeface">
+        \definetypeface
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/starttypescript.html" title="Command/starttypescript">
+        \starttypescript
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../../Command/definefontsynonym.html" title="Command/definefontsynonym">
+        \definefontsynonym
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <!-- 
+NewPP limit report
+Cached time: 20260109212215
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.036 seconds
+Real time usage: 0.050 seconds
+Preprocessor visited node count: 172/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 1134/2097152 bytes
+Template argument size: 268/2097152 bytes
+Highest expansion depth: 4/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 7395/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   23.159      1 -total
+ 25.95%    6.009     13 Template:cmd
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:3336-1!canonical and timestamp 20260109212215 and revision id 41598
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Characters_words_and_fonts/Examples_of_font_installation_and_of_typescripts/Simple_typescript_example">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

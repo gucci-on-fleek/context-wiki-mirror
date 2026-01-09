@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Definitions_and_Assignments" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    ConTeXt and Lua programming/Tutorials/System Macros/Definitions and Assignments
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2154&diff=40370">2025-01-14</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>&lt; <b>Prev:</b> <a href="Handling_Arguments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments">Handling Arguments</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Branches_and_Decisions.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions">Branches & Decisions</a> &gt;
+</p>
+    <p>TeX's primitive <code>\csname</code> can be used to construct all kind of commands that cannot be defined with <code>\def</code> and <code>\let</code>. Every macro programmer sooner or later wants macros like these.
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\setvalue</span></span>   <span class="br">{</span>name<span class="br">}</span><span class="br">{</span>...<span class="br">}</span> <span class="brx">=</span> <span class="cs">\def</span><span class="cs">\name</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\setgvalue</span></span>  <span class="br">{</span>name<span class="br">}</span><span class="br">{</span>...<span class="br">}</span> <span class="brx">=</span> <span class="cs">\gdef</span><span class="cs">\name</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\setevalue</span></span>  <span class="br">{</span>name<span class="br">}</span><span class="br">{</span>...<span class="br">}</span> <span class="brx">=</span> <span class="cs">\edef</span><span class="cs">\name</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\setxvalue</span></span>  <span class="br">{</span>name<span class="br">}</span><span class="br">{</span>...<span class="br">}</span> <span class="brx">=</span> <span class="cs">\xdef</span><span class="cs">\name</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs"><span class="systemcs">\letvalue</span></span>   <span class="br">{</span>name<span class="br">}</span><span class="brx">=</span>\... <span class="brx">=</span> <span class="cs">\let</span><span class="cs">\name</span><span class="brx">=</span>\...
+<span class="cs"><span class="systemcs">\getvalue</span></span>   <span class="br">{</span>name<span class="br">}</span>      <span class="brx">=</span> <span class="cs">\name</span>
+<span class="cs"><span class="systemcs">\resetvalue</span></span> <span class="br">{</span>name<span class="br">}</span>      <span class="brx">=</span> <span class="cs">\def</span><span class="cs">\name</span><span class="br">{</span><span class="br">}</span>
+</pre>
+    <p>As we will see, ConTeXt uses these commands many times, which is mainly due to its object oriented and parameter driven character.
+</p>
+    <p>The macro <code>\strippedcsname</code> can be very useful when using <code>\csname</code> like in:
+</p>
+    <pre class="tex"><span class="cs">\csname</span> if<span class="cs"><span class="systemcs">\strippedcsname</span></span><span class="cs">\something</span><span class="cs">\endcsname</span>
+</pre>
+    <p>This expands to <code>\ifsomething</code>.
+</p>
+    <p>Setups can be optional. A command expecting a setup is prefixed by <code>\complex</code>, a command without one gets the prefix <code>\simple</code>. Commands like this can be defined by:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\complexorsimple</span></span><span class="cs">\command</span>
+</pre>
+    <p>When <code>\command</code> is followed by a <code>[setup]</code>, then
+</p>
+    <pre class="tex"><span class="cs">\complexcommand</span> <span class="brx">[</span>setup<span class="brx">]</span>
+</pre>
+    <p>executes, else we get
+</p>
+    <pre class="tex"><span class="cs">\simplecommand</span>
+</pre>
+    <p>An alternative for <code>\complexorsimple</code> is:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\complexorsimpleempty</span></span> <span class="br">{</span>command<span class="br">}</span>
+</pre>
+    <p>Depending on the presence of <code>[setup]</code>, this one leads to one of:
+</p>
+    <pre class="tex"><span class="cs">\complexcommando</span> <span class="brx">[</span>setup<span class="brx">]</span>
+<span class="cs">\complexcommando</span> <span class="brx">[</span><span class="brx">]</span>
+</pre>
+    <p>Many ConTeXt commands started as complex or simple ones, but changed into more versatile (more object oriented) ones using the <code>\get...argument</code> commands later in their existence.
+</p>
+    <p>The previous commands are used so often that we found it worthwhile to offer two more alternatives.
+</p>
+    <p>These commands are called as:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\definecomplexorsimple</span></span><span class="cs">\command</span>
+</pre>
+    <p>Of course, we must have available
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\complexcommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="br">{</span>...<span class="br">}</span>
+<span class="cs">\def</span><span class="cs">\simplecommand</span> <span class="br">{</span>...<span class="br">}</span>
+</pre>
+    <p>Using this construction saves a few strings now and then.
+</p>
+    <p>We won't go into details here, but the general form for using this command is:
+</p>
+    <pre class="tex"><span class="cs">\definestartstopcommand</span><span class="cs">\somecommand</span><span class="protectedcs">\e!specifier</span><span class="br">{</span>arg<span class="br">}</span><span class="br">{</span>arg<span class="br">}</span><span class="comment">%</span>
+  <span class="br">{</span>do something with arg<span class="br">}</span>
+</pre>
+    <p>This expands to something like:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\somecommand</span> arg <span class="cs">\startspecifier</span> arg <span class="cs">\stopspecifier</span><span class="comment">%</span>
+  <span class="br">{</span>do something with arg<span class="br">}</span>
+</pre>
+    <p>The arguments can be anything reasonable, but double <code>#</code>'s are needed in the specification part, like:
+</p>
+    <pre class="tex"><span class="cs">\definestartstopcommand</span><span class="cs">\somecommand</span><span class="protectedcs">\e!specifier</span><span class="br">{</span><span class="brx">[</span><span class="brx">#</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span><span class="brx">#</span>2<span class="brx">]</span><span class="br">}</span><span class="br">{</span><span class="brx">#</span><span class="brx">#</span>3<span class="br">}</span><span class="comment">%</span>
+  <span class="br">{</span>do <span class="brx">#</span>1 something <span class="brx">#</span>2 with <span class="brx">#</span>3 arg<span class="br">}</span>
+</pre>
+    <p>which becomes:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\somecommand</span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="brx">[</span><span class="brx">#</span>2<span class="brx">]</span><span class="cs">\startspecifier</span><span class="brx">#</span>3<span class="cs">\stopspecifier</span><span class="comment">%</span>
+  <span class="br">{</span>do <span class="brx">#</span>1 something <span class="brx">#</span>2 with <span class="brx">#</span>3 arg<span class="br">}</span>
+</pre>
+    <p>Actually, this macro is never used in ConTeXt, but it used to be part of constructions like <code>\placeformula</code>.
+</p>
+    <p>&lt; <b>Prev:</b> <a href="Handling_Arguments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Handling Arguments">Handling Arguments</a> | <b>Top:</b> <a href="../System_Macros.html" title="ConTeXt and Lua programming/Tutorials/System Macros">System Macros</a> | <b>Next:</b> <a href="Branches_and_Decisions.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Branches and Decisions">Branches & Decisions</a> &gt;
+</p>
+    <!-- 
+NewPP limit report
+Cached time: 20260110004015
+Cache expiry: 86400
+Dynamic content: false
+Complications: []
+CPU time usage: 0.022 seconds
+Real time usage: 0.086 seconds
+Preprocessor visited node count: 40/1000000
+Preprocessor generated node count: 0/1000000
+Post‐expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Highest expansion depth: 2/40
+Expensive parser function count: 0/100
+Unstrip recursion depth: 0/20
+Unstrip post‐expand size: 5232/5000000 bytes
+-->
+    <!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%    0.000      1 -total
+-->
+    <!-- Saved in parser cache with key wikidb16_33:pcache:idhash:2154-1!canonical and timestamp 20260110004014 and revision id 40370
+ -->
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-01-10
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/ConTeXt_and_Lua_programming/Tutorials/System_Macros/Definitions_and_Assignments">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>
