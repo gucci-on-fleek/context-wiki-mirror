@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # ConTeXt Garden Wiki Mirror
 # https://github.com/gucci-on-fleek/context-wiki-mirror
-# SPDX-License-Identifier: MPL-2.0+
+# SPDX-License-Identifier: MPL-2.0+ or GFDL-1.2+
 # SPDX-FileCopyrightText: 2026 Max Chernoff
 
 ###############
@@ -12,9 +12,12 @@ from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from asyncio import TaskGroup
 from asyncio import run as asyncio_run
 from collections.abc import AsyncGenerator, Callable
+from datetime import date
 from pathlib import Path
 from pprint import pp as pprint
 from re import sub as regex_replace
+from shutil import move as move_file
+from shutil import rmtree as remove_tree
 from sys import exit
 from tomllib import load as toml_load
 from traceback import print_exception
@@ -73,6 +76,9 @@ USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/cont
 MAX_CONNECTIONS = 8
 TIMEOUT_SECONDS = 10 * 60
 SCRIPT_DIR = Path(__file__).resolve().parent
+STYLE_URL = Path("/style.css")
+FAVICON_URL = Path("/favicon.ico")
+HOME_URL = Path("/index.html")
 
 
 #########################
@@ -308,6 +314,21 @@ async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
     return cast(QueryPagesValues, response)
 
 
+def normalize_image_url(url: str) -> str:
+    """Normalize an image URL."""
+    return regex_replace(r"(?<=/)([^/]+)/\d+px-\1", r"\1", url)
+
+
+def make_url_relative(this_url: str, base_path: Path) -> str:
+    """Make a URL relative to a base URL."""
+    this_path = Path("/" + this_url.removeprefix(WIKI_URL))
+    if this_path == Path("/"):
+        this_path /= "index"
+    return str(
+        this_path.with_suffix(".html").relative_to(base_path, walk_up=True)
+    )
+
+
 @without_exceptions
 async def download_image(
     wiki: Wiki,
@@ -321,7 +342,7 @@ async def download_image(
         image_data = await response.read()
 
     # Write the image data to a file
-    output_file = output_path / url
+    output_file = output_path / normalize_image_url(url)
     output_file.parent.mkdir(parents=True, exist_ok=True)
     with output_file.open("wb") as f:
         f.write(image_data)
@@ -337,19 +358,33 @@ async def process_page(
 ) -> None:
     """Process a specific page."""
 
-    print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")
+    print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
 
     # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
     page_html = await wiki.get_page_html(page_id)
 
+    # Get the page URL
+    page_url = (
+        Path("/") / page_info["title"].removeprefix(WIKI_URL)
+    ).with_suffix(".html")
+
     # Process the template
     rendered_content = template.render({
         "title": page_info["displaytitle"],
-        "date": page_info["touched"].split("T", maxsplit=1)[0],
+        "modified_date": page_info["touched"].split("T", maxsplit=1)[0],
         "body": page_html,
+        "style": STYLE_URL.relative_to(page_url, walk_up=True),
+        "favicon": FAVICON_URL.relative_to(page_url, walk_up=True),
+        "home": HOME_URL.relative_to(page_url, walk_up=True),
+        "mirror_date": date.today().isoformat(),
         # Use an invalid scheme to avoid early link rewriting
-        "canonical": page_info["canonicalurl"].replace("https", "invalid"),
+        "canonical": page_info["canonicalurl"].replace(
+            "https://", "invalid://"
+        ),
+        "revision_url": f"{WIKI_URL}index.php?curid={page_id}&diff={page_info['lastrevid']}".replace(
+            "https://", "invalid://"
+        ),
     })
 
     # Parse the HTML
@@ -363,18 +398,29 @@ async def process_page(
         for header in headers[1:]:
             header.decompose()
 
-    # Make all links point here
+    # Fix the links
     for link in parsed.find_all(attrs={"href": True}):
         href = cast(str, link.get("href", ""))
-        if href.startswith(WIKI_URL):
-            link["href"] = "/" + href.removeprefix(WIKI_URL)
-        elif href.startswith("invalid"):
-            link["href"] = href.replace("invalid", "https")
+        if href.startswith("invalid://"):
+            link["href"] = href.replace("invalid://", "https://")
+
+        # Make the links relative
+        elif href.startswith(WIKI_URL):
+            link["href"] = make_url_relative(href, page_url)
 
     # Download images
     for img in parsed.find_all(name="img"):
         img_src = cast(str, img.get("src", ""))
         if img_src.startswith("/") and not img_src.startswith("//"):
+            try:
+                del img["srcset"]
+            except AttributeError:
+                pass
+            img["src"] = str(
+                Path(normalize_image_url(img_src)).relative_to(
+                    page_url, walk_up=True
+                )
+            )
             task_group.create_task(
                 download_image(
                     wiki,
@@ -387,13 +433,13 @@ async def process_page(
     formatted = parsed.prettify(formatter="html5")
 
     # Write the output file
-    output_file = (output_path / page_info["title"]).with_suffix(".html")
+    output_file = output_path / page_url.relative_to("/")
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     with output_file.open("w", encoding="utf-8") as f:
         f.write(formatted)
 
-    print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")
+    print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
 
 
 ###################
@@ -408,17 +454,30 @@ async def async_main(
 ) -> None:
     """The main async function."""
 
+    # Load the template
     template_path = SCRIPT_DIR / "page.template.html"
     with template_path.open("r", encoding="utf-8") as f:
         template_content = f.read()
     env = Environment()
     template = env.from_string(template_content)
 
+    # Delete the old files
+    for item in output_path.iterdir():
+        if item.match(".git*") or item.match("README.md"):
+            continue
+        elif item.is_dir():
+            remove_tree(item)
+        else:
+            item.unlink()
+
+    # Download all the pages
     async with (
         Wiki(WIKI_URL, username, password) as wiki,
         TaskGroup() as task_group,
     ):
         task_group.create_task(write_style(wiki, output_path))
+        task_group.create_task(download_image(wiki, output_path, "favicon.ico"))
+
         async for page in list_pages(wiki):
             task_group.create_task(
                 process_page(
@@ -429,6 +488,12 @@ async def async_main(
                     page_id=page["pageid"],
                 )
             )
+
+    # Move the Main Page to index.html
+    move_file(
+        output_path / "Main Page.html",
+        output_path / "index.html",
+    )
 
 
 def main() -> NoReturn:
