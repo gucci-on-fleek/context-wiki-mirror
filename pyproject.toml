@@ -1,0 +1,58 @@
+# ConTeXt Garden Wiki Mirror
+# https://github.com/gucci-on-fleek/context-wiki-mirror
+# SPDX-License-Identifier: MPL-2.0+
+# SPDX-FileCopyrightText: 2025 Max Chernoff
+
+[project]
+name = "context-wiki-mirror"
+license = "MPL-2.0+"
+authors = [{ name = "Max Chernoff" }]
+version = "0.0.0"
+requires-python = ">=3.11"
+classifiers = ["Private :: Do Not Upload"]
+dependencies = ["aiohttp ~= 3.13.3"]
+
+
+[project.scripts]
+context-wiki-mirror = "context_wiki_mirror:main"
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.ruff]
+line-length = 80
+fix = true
+preview = true
+
+
+[tool.ruff.lint]
+extend-select = [
+    "ANN", # flake8-annotations
+    "ASYNC", # flake8-async
+    "I", # isort
+    "ISC", # flake8-implicit-str-concat
+    "NPY", # numpy
+    "PL", # pylint
+    "PTH", # flake8-use-pathlib
+    "UP", # pyupgrade
+]
+extend-ignore = [
+    "ANN002", # missing type annotation for args
+    "ANN003", # missing type annotation for kwargs
+    "ANN401", # Dynamically typed expressions are disallowed
+    "F821", # undefined name
+    "PLC0415", # import should be at the top-level of a file
+]
+unfixable = ["F401"] # ignore unused imports
+
+
+[tool.ruff.lint.pyflakes]
+allowed-unused-imports = ["pprint"]
+
+
+[tool.ruff.lint.isort]
+required-imports = ["from pprint import pp as pprint"]
+lines-after-imports = 2
