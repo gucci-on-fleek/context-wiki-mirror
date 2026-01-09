@@ -71,7 +71,7 @@ STATUS_OK = 0
 WIKI_URL = "https://wiki.contextgarden.net/"
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
 MAX_CONNECTIONS = 8
-TIMEOUT_SECONDS = 30
+TIMEOUT_SECONDS = 15 * 60
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 
@@ -327,6 +327,7 @@ async def download_image(
         f.write(image_data)
 
 
+@without_exceptions
 async def process_page(
     wiki: Wiki,
     output_path: Path,
@@ -335,6 +336,8 @@ async def process_page(
     page_id: int,
 ) -> None:
     """Process a specific page."""
+
+    print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")
 
     # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
@@ -384,11 +387,13 @@ async def process_page(
     formatted = parsed.prettify(formatter="html5")
 
     # Write the output file
-    output_file = output_path / page_info["title"]
+    output_file = (output_path / page_info["title"]).with_suffix(".html")
     output_file.parent.mkdir(parents=True, exist_ok=True)
 
     with output_file.open("w", encoding="utf-8") as f:
         f.write(formatted)
+
+    print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")
 
 
 ###################
@@ -415,16 +420,15 @@ async def async_main(
     ):
         task_group.create_task(write_style(wiki, output_path))
         async for page in list_pages(wiki):
-            if page["pageid"] == 6395:
-                task_group.create_task(
-                    process_page(
-                        wiki=wiki,
-                        output_path=output_path,
-                        template=template,
-                        task_group=task_group,
-                        page_id=page["pageid"],
-                    )
+            task_group.create_task(
+                process_page(
+                    wiki=wiki,
+                    output_path=output_path,
+                    template=template,
+                    task_group=task_group,
+                    page_id=page["pageid"],
                 )
+            )
 
 
 def main() -> NoReturn:

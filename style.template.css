@@ -179,6 +179,10 @@ header p:last-of-type {
     right: var(--margin-width);
 }
 
+header {
+    padding-bottom: var(--margin-big);
+}
+
 p {
     margin-top: var(--margin-small);
     margin-bottom: var(--margin-small);
@@ -272,17 +276,23 @@ select {
     font: inherit;
 }
 
-:is(.cmd, pre, table) {
-    --color-background: var(--color-light);
-    --color-text: var(--color-dark);
-    --color-link: var(--color-blue);
-    --color-link-followed: var(--color-purple);
-    --color-faded: var(--color-dark-faded);
-    --color-semi: var(--color-dark-semi);
-    color: var(--color-text);
-}
+@media (prefers-color-scheme: dark) {
+    :is(.cmd, pre, table) {
+        --color-background: var(--color-light);
+        --color-text: var(--color-dark);
+        --color-link: var(--color-blue);
+        --color-link-followed: var(--color-purple);
+        --color-faded: var(--color-dark-faded);
+        --color-semi: var(--color-dark-semi);
+        color: var(--color-text);
+    }
 
-:is(.cmd, pre):not(table, td, td, tr),
-table {
-    filter: invert(1) hue-rotate(180deg) !important;
+    :is(.cmd, pre):not(table, td, td, tr),
+    table {
+        filter: invert(1) hue-rotate(180deg) !important;
+    }
+
+    table :is(.cmd, pre) {
+        filter: unset !important;
+    }
 }
