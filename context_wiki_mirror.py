@@ -319,12 +319,14 @@ async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
 
 def normalize_image_url(url: str) -> str:
     """Normalize an image URL."""
-    return regex_replace(r"(?<=/)([^/]+)/\d+px-\1", r"\1", url)
+    return regex_replace(
+        r"(?<=/)([^/]+)/\d+px-\1", r"\1", url.replace(" ", "_")
+    )
 
 
 def make_url_relative(this_url: str, base_path: Path) -> str:
     """Make a URL relative to a base URL."""
-    this_path = Path("/" + this_url.removeprefix(WIKI_URL))
+    this_path = Path("/" + this_url.removeprefix(WIKI_URL).replace(" ", "_"))
     if this_path == Path("/"):
         this_path /= "index"
     return str(
@@ -377,9 +379,9 @@ async def process_page(
         "title": page_info["displaytitle"],
         "modified_date": page_info["touched"].split("T", maxsplit=1)[0],
         "body": page_html,
-        "style": STYLE_URL.relative_to(page_url, walk_up=True),
-        "favicon": FAVICON_URL.relative_to(page_url, walk_up=True),
-        "home": HOME_URL.relative_to(page_url, walk_up=True),
+        "style": make_url_relative(str(STYLE_URL), page_url),
+        "favicon": make_url_relative(str(FAVICON_URL), page_url),
+        "home": make_url_relative(str(HOME_URL), page_url),
         "mirror_date": date.today().isoformat(),
         # Use an invalid scheme to avoid early link rewriting
         "canonical": page_info["canonicalurl"].replace(
@@ -431,11 +433,7 @@ async def process_page(
                 del img["srcset"]
             except AttributeError:
                 pass
-            img["src"] = str(
-                Path(normalize_image_url(img_src)).relative_to(
-                    page_url, walk_up=True
-                )
-            )
+            img["src"] = make_url_relative(img_src, page_url)
             task_group.create_task(
                 download_image(
                     wiki,
@@ -506,7 +504,7 @@ async def async_main(
 
     # Move the Main Page to index.html
     move_file(
-        output_path / "Main Page.html",
+        output_path / "Main_Page.html",
         output_path / "index.html",
     )
 
