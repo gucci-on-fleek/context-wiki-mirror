@@ -1,0 +1,271 @@
+/* Initialization */
+:root {
+    /* All of the colors that we can use */
+    --color-light: hsl(32, 98%, 92%);
+    --color-light-semi: hsl(32, 35%, 65%);
+    --color-light-faded: hsl(32, 20%, 40%);
+    --color-dark: hsl(32, 80%, 8%);
+    --color-dark-semi: hsl(32, 35%, 28%);
+    --color-dark-faded: hsl(32, 20%, 60%);
+    --color-blue: hsl(213, 90%, 33%);
+    --color-purple: hsl(280, 90%, 37%);
+    --color-light-blue: hsl(213, 85%, 75%);
+    --color-light-purple: hsl(280, 84%, 75%);
+
+    --monospace-font: ui-monospace,
+        Consolas,
+        Inconsolata,
+        "Roboto Mono",
+        "Fira Mono",
+        monospace;
+    --heading-ratio: 0.7071067811865476;
+    --heading-base: 2.5rem;
+    --margin-big: 1.75rem;
+    --margin-small: 0.5rem;
+    --base-font-size: 1.125rem;
+    --page-margin: 15px;
+    --max-page-width: 55rem;
+    --margin-width: calc((100vw - var(--max-page-width)) / 2);
+}
+
+@media (max-width: 55rem) {
+    :root {
+        --margin-width: var(--page-margin);
+    }
+}
+
+:root {
+    /* Default (light mode) */
+    --color-background: var(--color-light);
+    --color-text: var(--color-dark);
+    --color-link: var(--color-blue);
+    --color-link-followed: var(--color-purple);
+    --color-faded: var(--color-dark-faded);
+    --color-semi: var(--color-dark-semi);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark mode */
+        --color-background: var(--color-dark);
+        --color-text: var(--color-light);
+        --color-link: var(--color-light-blue);
+        --color-link-followed: var(--color-light-purple);
+        --color-faded: var(--color-light-faded);
+        --color-semi: var(--color-light-semi);
+    }
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+}
+
+/*{{ wiki_css }}*/
+
+html {
+    color: var(--color-text);
+    background-color: var(--color-background);
+    color-scheme: light dark;
+}
+
+a:link {
+    color: var(--color-link);
+    text-decoration: none;
+}
+
+a:visited {
+    color: var(--color-link-followed);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+body {
+    /* Center all content in the viewport */
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    margin: var(--page-margin);
+    font-size: var(--base-font-size);
+
+    /* Use the default system-ui font, when available */
+    font-family: 'Segoe UI', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.4;
+    /* Slight Enlargement */
+    hyphens: auto;
+    font-variant-ligatures: common-ligatures contextual;
+    font-kerning: normal;
+    -webkit-text-size-adjust: none;
+    text-size-adjust: none;
+    text-wrap-style: pretty;
+    font-size-adjust: ex-height 0.53;
+}
+
+body * {
+    min-width: 0;
+}
+
+:focus-visible {
+    border-radius: 4px;
+    outline: 2px solid var(--color-text);
+    outline-offset: 2px;
+}
+
+::selection {
+    background-color: var(--color-faded);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-faded) var(--color-background);
+}
+
+h1 {
+    margin-bottom: 0;
+    margin-top: 1rem;
+    font-size: max(var(--heading-base), var(--base-font-size));
+    padding-bottom: 0.1em;
+    border-bottom: 1px solid var(--color-faded);
+    font-weight: 700;
+}
+
+h2 {
+    font-size: max(calc(var(--heading-base) * var(--heading-ratio)), var(--base-font-size));
+    font-weight: 700;
+    margin-top: var(--margin-big);
+    margin-bottom: var(--margin-small);
+}
+
+h3 {
+    font-size: max(calc(var(--heading-base) * var(--heading-ratio) * var(--heading-ratio)), var(--base-font-size));
+    font-weight: 700;
+    margin-top: var(--margin-big);
+    margin-bottom: var(--margin-small);
+}
+
+h4 {
+    font-size: max(calc(var(--heading-base) * var(--heading-ratio) * var(--heading-ratio) * var(--heading-ratio)), var(--base-font-size));
+    font-weight: 500;
+    font-style: italic;
+    margin-top: var(--margin-big);
+    margin-bottom: var(--margin-small);
+}
+
+h5 {
+    font-size: calc(var(--base-font-size) * 0.9);
+    font-weight: 500;
+    color: var(--color-semi);
+    margin-top: var(--margin-big);
+    margin-bottom: var(--margin-small);
+}
+
+:is(h1, h2, h3, h4, h5)+* {
+    margin-top: 0;
+}
+
+header p {
+    font-style: italic;
+}
+
+header h1+p {
+    position: absolute;
+    right: var(--margin-width);
+}
+
+p {
+    margin-top: var(--margin-small);
+    margin-bottom: var(--margin-small);
+}
+
+code {
+    font-family: var(--monospace-font);
+    overflow-wrap: anywhere;
+    hyphens: none;
+    tab-size: 4;
+}
+
+section,
+header,
+footer,
+article,
+body nav {
+    display: block;
+    width: 100%;
+    max-width: var(--max-page-width);
+}
+
+code.block {
+    display: block;
+    max-width: 100%;
+}
+
+footer {
+    margin-top: 1em;
+    padding-top: 0;
+    border-top: 1px solid var(--color-faded);
+}
+
+footer ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline;
+    list-style-type: none;
+    padding: 0;
+}
+
+footer ul li:first-of-type {
+    margin-right: auto
+}
+
+footer li:not(:last-child):not(:first-child)::after {
+    content: " • ";
+}
+
+abbr {
+    text-decoration: none;
+    font-variant-caps: all-small-caps;
+    font-variant-numeric: oldstyle-nums;
+    font-size: 1.075em;
+}
+
+svg,
+img {
+    background-color: hsla(0, 0%, 100%, 0%);
+    transition: all 250ms ease-out;
+}
+
+svg:hover,
+img:hover {
+    background-color: hsla(0, 0%, 100%, 100%);
+    transition: all 250ms ease-in;
+}
+
+pre {
+    max-width: calc(100vw - var(--page-margin) * 2);
+    overflow-x: auto;
+    hyphens: none;
+    margin: calc(2 * var(--margin-small)) 0;
+}
+
+pre.scroll {
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}

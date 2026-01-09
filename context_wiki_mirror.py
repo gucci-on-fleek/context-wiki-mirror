@@ -2,7 +2,7 @@
 # ConTeXt Garden Wiki Mirror
 # https://github.com/gucci-on-fleek/context-wiki-mirror
 # SPDX-License-Identifier: MPL-2.0+
-# SPDX-FileCopyrightText: 2025 Max Chernoff
+# SPDX-FileCopyrightText: 2026 Max Chernoff
 
 ###############
 ### Imports ###
@@ -14,11 +14,15 @@ from asyncio import run as asyncio_run
 from collections.abc import AsyncGenerator
 from pathlib import Path
 from pprint import pp as pprint
+from re import sub as regex_replace
 from sys import exit
 from tomllib import load as toml_load
 from typing import Any, NoReturn, NotRequired, TypedDict, cast
 
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
+from bs4 import BeautifulSoup
+from jinja2 import Environment
+from jinja2.environment import Template
 
 
 ########################
@@ -66,6 +70,7 @@ WIKI_URL = "https://wiki.contextgarden.net/"
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
 MAX_CONNECTIONS = 8
 TIMEOUT_SECONDS = 30
+SCRIPT_DIR = Path(__file__).resolve().parent
 
 
 #########################
@@ -96,6 +101,9 @@ class Wiki:
             connector=TCPConnector(limit_per_host=MAX_CONNECTIONS),
             timeout=ClientTimeout(total=TIMEOUT_SECONDS),
         )
+
+        # Get function
+        self.get = self._session.get
 
     async def api_query_list(
         self,
@@ -211,6 +219,51 @@ class Wiki:
 ############################
 
 
+async def write_style(wiki: Wiki, output_path: Path) -> None:
+    """Get the CSS style for the wiki pages."""
+
+    # Paths
+    template_path = SCRIPT_DIR / "style.template.css"
+    output_file = output_path / "style.css"
+
+    # Get the CSS from the wiki
+    async with wiki.get(
+        url="index.php",
+        params={
+            "title": "MediaWiki:Common.css",
+            "action": "raw",
+        },
+    ) as response:
+        wiki_css = await response.text()
+
+    # Preprocess the CSS
+    wiki_css = regex_replace(
+        r"font-family\s*:\s*monospace\s*;?",
+        "font-family: var(--monospace-font);",
+        wiki_css,
+    )
+    wiki_css = regex_replace(
+        r"font-family\s*:\s*sans-serif\s*;?",
+        "",
+        wiki_css,
+    )
+
+    # Process the template
+    with template_path.open("r", encoding="utf-8") as f:
+        template_content = f.read()
+
+    env = Environment(
+        variable_start_string="/*{{",
+        variable_end_string="}}*/",
+    )
+    template = env.from_string(template_content)
+    rendered_content = template.render({"wiki_css": wiki_css})
+
+    # Write the output file
+    with output_file.open("w", encoding="utf-8") as f:
+        f.write(rendered_content)
+
+
 def list_pages(wiki: Wiki) -> AsyncGenerator[ListPagesValues]:
     """List all pages in the wiki."""
 
@@ -233,16 +286,38 @@ async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
     return cast(QueryPagesValues, response)
 
 
-async def process_page(wiki: Wiki, page_id: int) -> None:
+async def process_page(
+    wiki: Wiki,
+    output_path: Path,
+    template: Template,
+    page_id: int,
+) -> None:
     """Process a specific page."""
 
+    # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
     page_html = await wiki.get_page_html(page_id)
-    # Here you can add code to save the page HTML to a file or database
-    pprint({
-        "info": page_info,
-        "html": page_html,
+
+    # Process the template
+    rendered_content = template.render({
+        "title": page_info["displaytitle"],
+        "date": page_info["touched"].split("T", maxsplit=1)[0],
+        "body": page_html,
+        "canonical": page_info["canonicalurl"],
     })
+
+    # Format the HTML
+    parsed = BeautifulSoup(rendered_content, "lxml")
+    formatted = cast(
+        str, parsed.prettify(encoding="unicode", formatter="html5")
+    )
+
+    # Write the output file
+    output_file = output_path / page_info["title"]
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+
+    with output_file.open("w", encoding="utf-8") as f:
+        f.write(formatted)
 
 
 ###################
@@ -250,11 +325,26 @@ async def process_page(wiki: Wiki, page_id: int) -> None:
 ###################
 
 
-async def async_main(username: str, password: str) -> None:
+async def async_main(
+    username: str,
+    password: str,
+    output_path: Path,
+) -> None:
+    """The main async function."""
+
+    template_path = SCRIPT_DIR / "page.template.html"
+    with template_path.open("r", encoding="utf-8") as f:
+        template_content = f.read()
+    env = Environment()
+    template = env.from_string(template_content)
+
     async with Wiki(WIKI_URL, username, password) as wiki, TaskGroup() as tg:
+        tg.create_task(write_style(wiki, output_path))
         async for page in list_pages(wiki):
             if page["pageid"] == 6395:
-                tg.create_task(process_page(wiki, page["pageid"]))
+                tg.create_task(
+                    process_page(wiki, output_path, template, page["pageid"])
+                )
 
 
 def main() -> NoReturn:
@@ -269,12 +359,21 @@ def main() -> NoReturn:
         type=Path,
         help="The path to process.",
         nargs="?",
-        default=Path(Path(__file__).resolve().parents[0] / "credentials.toml"),
+        default=SCRIPT_DIR / "credentials.toml",
+    )
+
+    parser.add_argument(
+        "output_path",
+        type=Path,
+        help="The output path to save the mirrored wiki.",
+        nargs="?",
+        default=SCRIPT_DIR / "mirror/",
     )
 
     # Parse the arguments
     args = parser.parse_args()
     credentials_file: Path = args.credentials_file
+    output_path: Path = args.output_path
 
     # Load credentials
     with credentials_file.open("rb") as f:
@@ -285,8 +384,20 @@ def main() -> NoReturn:
             f'The credentials file "{credentials_file}" is missing a username or password.'
         )
 
+    # Ensure output path exists
+    if not output_path.is_dir():
+        raise NotADirectoryError(
+            f'The output path "{output_path}" is not a directory.'
+        )
+
     # Run the main async function
-    asyncio_run(async_main(credentials["username"], credentials["password"]))
+    asyncio_run(
+        async_main(
+            credentials["username"],
+            credentials["password"],
+            output_path,
+        )
+    )
 
     exit(STATUS_OK)
 
