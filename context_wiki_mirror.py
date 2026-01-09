@@ -15,6 +15,7 @@ from collections.abc import AsyncGenerator, Callable
 from datetime import date
 from pathlib import Path
 from pprint import pp as pprint
+from re import compile as regex_compile
 from re import sub as regex_replace
 from shutil import move as move_file
 from shutil import rmtree as remove_tree
@@ -70,15 +71,17 @@ class QueryPagesValues(TypedDict):
 ### Constants ###
 #################
 
-STATUS_OK = 0
-WIKI_URL = "https://wiki.contextgarden.net/"
-USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
-MAX_CONNECTIONS = 8
-TIMEOUT_SECONDS = 10 * 60
-SCRIPT_DIR = Path(__file__).resolve().parent
-STYLE_URL = Path("/style.css")
 FAVICON_URL = Path("/favicon.ico")
 HOME_URL = Path("/index.html")
+HTML_HEADERS = regex_compile(r"h[1-6]")
+MAX_CONNECTIONS = 8
+MAX_HTML_HEADER_LEVEL = 6
+SCRIPT_DIR = Path(__file__).resolve().parent
+STATUS_OK = 0
+STYLE_URL = Path("/style.css")
+TIMEOUT_SECONDS = 10 * 60
+USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
+WIKI_URL = "https://wiki.contextgarden.net/"
 
 
 #########################
@@ -366,7 +369,7 @@ async def process_page(
 
     # Get the page URL
     page_url = (
-        Path("/") / page_info["title"].removeprefix(WIKI_URL)
+        Path("/") / page_info["title"].removeprefix(WIKI_URL).replace(" ", "_")
     ).with_suffix(".html")
 
     # Process the template
@@ -392,11 +395,23 @@ async def process_page(
         rendered_content, "lxml", preserve_whitespace_tags={"pre", "p", "code"}
     )
 
-    # Remove duplicate h1 headers
-    headers = parsed.find_all(name="h1")
-    if len(headers) > 1:
-        for header in headers[1:]:
-            header.decompose()
+    # Fix the headers
+    h1s = parsed.find_all(name="h1")
+    if len(h1s) == 1:
+        # All good
+        pass
+    elif len(h1s) == 2:  # noqa: PLR2004
+        # Remove the second h1
+        h1s[1].decompose()
+    else:
+        # Lower the header levels
+        headers = parsed.find_all(name=HTML_HEADERS)
+        for header in headers:
+            if header.get("id") == "page-title":
+                continue
+            current_level = int(header.name[1])
+            if current_level < MAX_HTML_HEADER_LEVEL:
+                header.name = f"h{current_level + 1}"
 
     # Fix the links
     for link in parsed.find_all(attrs={"href": True}):
