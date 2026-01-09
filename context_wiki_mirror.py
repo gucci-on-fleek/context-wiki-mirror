@@ -9,6 +9,7 @@
 ###############
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
+from asyncio import TaskGroup
 from asyncio import run as asyncio_run
 from collections.abc import AsyncGenerator
 from pathlib import Path
@@ -17,15 +18,15 @@ from sys import exit
 from tomllib import load as toml_load
 from typing import Any, NoReturn, NotRequired, TypedDict, cast
 
-from aiohttp import ClientSession
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
 
 
 ########################
 ### Type Definitions ###
 ########################
 
-QueryListResponse = TypedDict(
-    "QueryListResponse",
+QueryResponse = TypedDict(
+    "QueryResponse",
     {
         "continue": NotRequired[dict[str, str]],
         "query": dict[str, list[dict[str, Any]]],
@@ -33,10 +34,27 @@ QueryListResponse = TypedDict(
 )
 
 
-class PageResponse(TypedDict):
+class ListPagesValues(TypedDict):
     pageid: int
     ns: int
     title: str
+
+
+class QueryPagesValues(TypedDict):
+    pageid: int
+    ns: int
+    title: str
+    contentmodel: str
+    pagelanguage: str
+    pagelanguagehtmlcode: str
+    pagelanguagedir: str
+    touched: str
+    lastrevid: int
+    length: int
+    fullurl: str
+    editurl: str
+    canonicalurl: str
+    displaytitle: str
 
 
 #################
@@ -46,6 +64,8 @@ class PageResponse(TypedDict):
 STATUS_OK = 0
 WIKI_URL = "https://wiki.contextgarden.net/"
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
+MAX_CONNECTIONS = 8
+TIMEOUT_SECONDS = 30
 
 
 #########################
@@ -68,13 +88,20 @@ class Wiki:
             "uselang": "en",
             "safemode": "1",
         }
-        self._session: ClientSession | None = None
+        # Create the session
+        self._session = ClientSession(
+            headers={"User-Agent": USER_AGENT},
+            base_url=self._base_url,
+            raise_for_status=True,
+            connector=TCPConnector(limit_per_host=MAX_CONNECTIONS),
+            timeout=ClientTimeout(total=TIMEOUT_SECONDS),
+        )
 
     async def api_query_list(
-        self, params: dict[str, str]
+        self,
+        params: dict[str, str],
     ) -> AsyncGenerator[dict[str, Any]]:
         """Get data from the MediaWiki API."""
-        assert self._session is not None
 
         if "list" not in params:
             raise ValueError('The "list" parameter must be specified.')
@@ -90,8 +117,7 @@ class Wiki:
                     **self._api_params,
                 },
             ) as response:
-                json = cast(QueryListResponse, await response.json())
-                pprint(json)
+                json = cast(QueryResponse, await response.json())
                 results = next(iter(json["query"].values()))
                 last_continue = json.get("continue", None)
                 for result in results:
@@ -99,10 +125,28 @@ class Wiki:
                 if last_continue is None:
                     break
 
+    async def api_query_property(
+        self,
+        params: dict[str, str],
+    ) -> dict[str, Any]:
+        """Get data from the MediaWiki API."""
+
+        if "prop" not in params:
+            raise ValueError('The "prop" parameter must be specified.')
+
+        async with self._session.get(
+            url="api.php",
+            params={
+                "action": "query",
+                **params,
+                **self._api_params,
+            },
+        ) as response:
+            json = cast(QueryResponse, await response.json())
+            return next(iter(json["query"].values()))[0]
+
     async def get_page_html(self, page_id: int) -> str:
         """Get the HTML content of a wiki page by its page ID."""
-        assert self._session is not None
-
         async with self._session.get(
             url="index.php",
             params={
@@ -114,8 +158,6 @@ class Wiki:
 
     async def _login(self) -> None:
         """Log in to the wiki."""
-        assert self._session is not None
-
         # Get a login token
         async with self._session.get(
             url="api.php",
@@ -143,7 +185,6 @@ class Wiki:
             },
         ) as response:
             json = await response.json()
-            pprint(json)
             result = json["login"]["result"]
             if result != "Success":
                 raise ValueError(f"Login failed: {result}")
@@ -155,27 +196,53 @@ class Wiki:
 
     async def __aenter__(self) -> "Wiki":
         """Enter the async context manager."""
-
-        # Create the session
-        self._session = ClientSession(
-            headers={"User-Agent": USER_AGENT},
-            base_url=self._base_url,
-            raise_for_status=True,
-        )
-
+        await self._session.__aenter__()
         # Log in
         await self._login()
         return self
 
-    async def __aexit__(self, *_) -> None:
-        if self._session:
-            await self._session.close()
-            self._session = None
+    async def __aexit__(self, *args) -> None:
+        """Exit the async context manager."""
+        await self._session.__aexit__(*args)
 
 
 ############################
 ### Function Definitions ###
 ############################
+
+
+def list_pages(wiki: Wiki) -> AsyncGenerator[ListPagesValues]:
+    """List all pages in the wiki."""
+
+    response = wiki.api_query_list({
+        "list": "allpages",
+        "aplimit": "max",
+        "apfilterredir": "nonredirects",
+    })
+    return cast(AsyncGenerator[ListPagesValues], response)
+
+
+async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
+    """Get information about a specific page."""
+
+    response = await wiki.api_query_property({
+        "prop": "info",
+        "pageids": str(page_id),
+        "inprop": "url|displaytitle",
+    })
+    return cast(QueryPagesValues, response)
+
+
+async def process_page(wiki: Wiki, page_id: int) -> None:
+    """Process a specific page."""
+
+    page_info = await get_page_info(wiki, page_id)
+    page_html = await wiki.get_page_html(page_id)
+    # Here you can add code to save the page HTML to a file or database
+    pprint({
+        "info": page_info,
+        "html": page_html,
+    })
 
 
 ###################
@@ -184,14 +251,10 @@ class Wiki:
 
 
 async def async_main(username: str, password: str) -> None:
-    async with Wiki(WIKI_URL, username, password) as wiki:
-        async for page in wiki.api_query_list({
-            "list": "allpages",
-            "aplimit": "max",
-            "apfilterredir": "nonredirects",
-        }):
-            page = cast(PageResponse, page)
-            pprint(page)
+    async with Wiki(WIKI_URL, username, password) as wiki, TaskGroup() as tg:
+        async for page in list_pages(wiki):
+            if page["pageid"] == 6395:
+                tg.create_task(process_page(wiki, page["pageid"]))
 
 
 def main() -> NoReturn:
