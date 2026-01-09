@@ -24,11 +24,11 @@
     --margin-small: 0.5rem;
     --base-font-size: 1.125rem;
     --page-margin: 15px;
-    --max-page-width: 55rem;
+    --max-page-width: 62.5rem;
     --margin-width: calc((100vw - var(--max-page-width)) / 2);
 }
 
-@media (max-width: 55rem) {
+@media (max-width: 62.5rem) {
     :root {
         --margin-width: var(--page-margin);
     }
@@ -71,13 +71,13 @@ html {
     color-scheme: light dark;
 }
 
-a:link {
-    color: var(--color-link);
+a:link:not(.new) {
+    color: var(--color-link) !important;
     text-decoration: none;
 }
 
-a:visited {
-    color: var(--color-link-followed);
+a:visited:not(.new) {
+    color: var(--color-link-followed) !important;
     text-decoration: none;
 }
 
@@ -168,12 +168,14 @@ h5 {
     margin-top: 0;
 }
 
-header p {
-    font-style: italic;
+header p:first-of-type {
+    position: absolute;
+    left: var(--margin-width);
 }
 
-header h1+p {
+header p:last-of-type {
     position: absolute;
+    font-style: italic;
     right: var(--margin-width);
 }
 
@@ -268,4 +270,19 @@ button,
 textarea,
 select {
     font: inherit;
+}
+
+:is(.cmd, pre, table) {
+    --color-background: var(--color-light);
+    --color-text: var(--color-dark);
+    --color-link: var(--color-blue);
+    --color-link-followed: var(--color-purple);
+    --color-faded: var(--color-dark-faded);
+    --color-semi: var(--color-dark-semi);
+    color: var(--color-text);
+}
+
+:is(.cmd, pre):not(table, td, td, tr),
+table {
+    filter: invert(1) hue-rotate(180deg) !important;
 }

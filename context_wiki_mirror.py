@@ -11,12 +11,14 @@
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
 from asyncio import TaskGroup
 from asyncio import run as asyncio_run
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
 from pathlib import Path
 from pprint import pp as pprint
 from re import sub as regex_replace
 from sys import exit
 from tomllib import load as toml_load
+from traceback import print_exception
+from types import CoroutineType
 from typing import Any, NoReturn, NotRequired, TypedDict, cast
 
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
@@ -219,6 +221,21 @@ class Wiki:
 ############################
 
 
+def without_exceptions(
+    func: Callable[..., CoroutineType[Any, Any, None]],
+) -> Callable[..., CoroutineType[Any, Any, None]]:
+    """A decorator to suppress exceptions in async functions."""
+
+    async def wrapper(*args: Any, **kwargs: Any) -> None:
+        try:
+            await func(*args, **kwargs)
+        except Exception as e:
+            print_exception(e)
+
+    return wrapper
+
+
+@without_exceptions
 async def write_style(wiki: Wiki, output_path: Path) -> None:
     """Get the CSS style for the wiki pages."""
 
@@ -244,6 +261,11 @@ async def write_style(wiki: Wiki, output_path: Path) -> None:
     )
     wiki_css = regex_replace(
         r"font-family\s*:\s*sans-serif\s*;?",
+        "",
+        wiki_css,
+    )
+    wiki_css = regex_replace(
+        r"font-size\s*:\s*10pt\s*;?",
         "",
         wiki_css,
     )
@@ -286,10 +308,30 @@ async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
     return cast(QueryPagesValues, response)
 
 
+@without_exceptions
+async def download_image(
+    wiki: Wiki,
+    output_path: Path,
+    url: str,
+) -> None:
+    """Download an image from the wiki."""
+
+    # Get the image data
+    async with wiki.get(url=url) as response:
+        image_data = await response.read()
+
+    # Write the image data to a file
+    output_file = output_path / url
+    output_file.parent.mkdir(parents=True, exist_ok=True)
+    with output_file.open("wb") as f:
+        f.write(image_data)
+
+
 async def process_page(
     wiki: Wiki,
     output_path: Path,
     template: Template,
+    task_group: TaskGroup,
     page_id: int,
 ) -> None:
     """Process a specific page."""
@@ -306,11 +348,31 @@ async def process_page(
         "canonical": page_info["canonicalurl"],
     })
 
-    # Format the HTML
-    parsed = BeautifulSoup(rendered_content, "lxml")
-    formatted = cast(
-        str, parsed.prettify(encoding="unicode", formatter="html5")
+    # Parse the HTML
+    parsed = BeautifulSoup(
+        rendered_content, "lxml", preserve_whitespace_tags={"pre", "p", "code"}
     )
+
+    # Remove duplicate h1 headers
+    headers = parsed.find_all(name="h1")
+    if len(headers) > 1:
+        for header in headers[1:]:
+            header.decompose()
+
+    # Download images
+    for img in parsed.find_all("img"):
+        img_src = cast(str, img.get("src", ""))
+        if img_src.startswith("/") and not img_src.startswith("//"):
+            task_group.create_task(
+                download_image(
+                    wiki,
+                    output_path,
+                    img_src.lstrip("/"),
+                )
+            )
+
+    # Format the HTML
+    formatted = parsed.prettify(formatter="html5")
 
     # Write the output file
     output_file = output_path / page_info["title"]
@@ -338,12 +400,21 @@ async def async_main(
     env = Environment()
     template = env.from_string(template_content)
 
-    async with Wiki(WIKI_URL, username, password) as wiki, TaskGroup() as tg:
-        tg.create_task(write_style(wiki, output_path))
+    async with (
+        Wiki(WIKI_URL, username, password) as wiki,
+        TaskGroup() as task_group,
+    ):
+        task_group.create_task(write_style(wiki, output_path))
         async for page in list_pages(wiki):
             if page["pageid"] == 6395:
-                tg.create_task(
-                    process_page(wiki, output_path, template, page["pageid"])
+                task_group.create_task(
+                    process_page(
+                        wiki=wiki,
+                        output_path=output_path,
+                        template=template,
+                        task_group=task_group,
+                        page_id=page["pageid"],
+                    )
                 )
 
 
