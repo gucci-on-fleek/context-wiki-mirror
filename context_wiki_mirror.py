@@ -71,7 +71,7 @@ STATUS_OK = 0
 WIKI_URL = "https://wiki.contextgarden.net/"
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
 MAX_CONNECTIONS = 8
-TIMEOUT_SECONDS = 15 * 60
+TIMEOUT_SECONDS = 10 * 60
 SCRIPT_DIR = Path(__file__).resolve().parent
 
 
