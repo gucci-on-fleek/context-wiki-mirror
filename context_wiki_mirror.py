@@ -27,7 +27,7 @@ from typing import Any, Literal, NoReturn, NotRequired, TypedDict, cast
 from urllib.parse import unquote as url_decode
 
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Comment
 from jinja2 import Environment
 from jinja2.environment import Template
 from pyvips import Image as vips
@@ -531,6 +531,12 @@ async def process_page(  # noqa: PLR0912
         "lxml",
         preserve_whitespace_tags={"pre", "p", "code", "td"},
     )
+
+    # Remove comments
+    for comment in parsed.find_all(
+        string=lambda text: isinstance(text, Comment)
+    ):
+        comment.extract()
 
     # Remove empty paragraphs
     for p in parsed.find_all(name="p"):
