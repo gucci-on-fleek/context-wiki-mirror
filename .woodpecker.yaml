@@ -1,0 +1,78 @@
+# ConTeXt Garden Wiki Mirror
+# https://github.com/gucci-on-fleek/context-wiki-mirror
+# SPDX-License-Identifier: MPL-2.0+ or GFDL-1.2+
+# SPDX-FileCopyrightText: 2026 Max Chernoff
+when:
+  - event:
+      - cron
+      - manual
+    cron: context-wiki-daily
+
+clone:
+  - name: Clone the repository
+    image: docker.io/woodpeckerci/plugin-git
+    settings:
+        branch: master
+
+steps:
+  - name: Copy the secret
+    image: maxchernoff.ca/tex:latest
+    pull: true
+    commands: |
+        set -euo pipefail
+        echo "$CREDENTIALS_TOML" > credentials.toml
+    environment:
+        CREDENTIALS_TOML:
+            from_secret: credentials.toml
+
+  - name: Download and process wiki
+    image: maxchernoff.ca/tex:latest
+    pull: true
+    commands: |
+        # Setup
+        set -euxo pipefail
+        git config credential.helper '!f() { echo username=$GITHUB_USER; echo "password=$GITHUB_TOKEN"; };f'
+        git config --global user.email "ruddy@duck.tel"
+        git config --global user.name "Ruddy Duck [Bot]"
+
+        # Prepare worktree
+        git fetch origin mirror
+        git worktree add --checkout mirror mirror
+
+        # Run the wiki mirror script
+        uv run --locked --link-mode=symlink context-wiki-mirror
+
+        # Commit and push changes
+        cd mirror
+        git add -A
+        git commit -m "Automated wiki update: $(date -u +"%Y-%m-%d")" || echo "No changes to commit"
+        git push origin mirror
+    environment:
+        GITHUB_USER: "ruddy-duck"
+        GITHUB_TOKEN:
+            from_secret: github_token
+
+  - name: Email on failure
+    image: docker.io/deblan/woodpecker-email:latest
+    when:
+        status:
+          - failure
+    settings:
+        level: failure
+        dsn:
+            from_secret: EMAIL_DSN
+        from:
+            address: "woodpecker@noreply.maxchernoff.ca"
+        recipients:
+          - "server-status@maxchernoff.ca"
+        recipients_only: true
+        content:
+            subject: >
+                [{{ pipeline.status }}]
+                {{ repo.full_name }}
+                ({{ commit.branch }} - {{ commit.sha[0:8] }})"
+            body: |
+                {{ commit.sha }}<br>
+                {{ pipeline.status }}<br>
+                {{ commit.author_email }}<br>
+
