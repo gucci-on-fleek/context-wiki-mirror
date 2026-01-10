@@ -24,6 +24,7 @@ from tomllib import load as toml_load
 from traceback import print_exception
 from types import CoroutineType
 from typing import Any, Literal, NoReturn, NotRequired, TypedDict, cast
+from urllib.parse import unquote as url_decode
 
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
 from bs4 import BeautifulSoup
@@ -92,7 +93,6 @@ TIMEOUT_SECONDS = 10 * 60
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
 WIKI_URL = "https://wiki.contextgarden.net/"
 
-verbose = False
 
 #########################
 ### Class Definitions ###
@@ -235,6 +235,15 @@ class Wiki:
         await self._session.__aexit__(*args)
 
 
+class VerbosePrinter:
+    verbose: bool = False
+
+    @classmethod
+    def print(cls, *args: Any, **kwargs: Any) -> None:
+        if cls.verbose:
+            print(*args, **kwargs)  # noqa: T201
+
+
 ############################
 ### Function Definitions ###
 ############################
@@ -308,6 +317,11 @@ async def write_style(wiki: Wiki, output_path: Path) -> None:
         f.write(rendered_content)
 
 
+def normalize_file_name(name: str) -> str:
+    """Normalize a file name."""
+    return url_decode(name).replace(" ", "_")
+
+
 def list_pages(
     wiki: Wiki, redirects: Literal["no", "only"]
 ) -> AsyncGenerator[ListPagesValues]:
@@ -325,8 +339,9 @@ def list_pages(
 async def get_redirects(wiki: Wiki, page_id: int) -> None:
     """Get the redirects to a specific page."""
 
-    if verbose:
-        print(f"Started redirects for <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    VerbosePrinter.print(
+        f"Started redirects for <{WIKI_URL}index.php?curid={page_id}>"
+    )
 
     response = cast(
         PageLinksValues,
@@ -336,12 +351,13 @@ async def get_redirects(wiki: Wiki, page_id: int) -> None:
         }),
     )
     for link in response["links"]:
-        redirects[response["title"].replace(" ", "_")] = link["title"].replace(
-            " ", "_"
+        redirects[normalize_file_name(response["title"])] = normalize_file_name(
+            link["title"]
         )
 
-    if verbose:
-        print(f"Finished redirects for <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    VerbosePrinter.print(
+        f"Finished redirects for <{WIKI_URL}index.php?curid={page_id}>"
+    )
 
 
 async def get_page_info(wiki: Wiki, page_id: int) -> PageInfoValues:
@@ -358,16 +374,16 @@ async def get_page_info(wiki: Wiki, page_id: int) -> PageInfoValues:
 def normalize_image_url(url: str) -> str:
     """Normalize an image URL."""
     return regex_replace(
-        r"(?<=/)([^/]+)/\d+px-\1", r"\1", url.replace(" ", "_")
+        r"(?<=/)([^/]+)/\d+px-\1", r"\1", normalize_file_name(url)
     )
 
 
 def make_url_relative(this_url: str, base_path: Path) -> str:
     """Make a URL relative to a base URL."""
 
-    this_url = (
-        this_url.removeprefix(WIKI_URL).replace(" ", "_").removeprefix("/")
-    )
+    this_url = normalize_file_name(
+        this_url.removeprefix(WIKI_URL)
+    ).removeprefix("/")
     if this_url in redirects:
         this_url = redirects[this_url]
 
@@ -410,8 +426,9 @@ async def process_page(  # noqa: PLR0912
 ) -> None:
     """Process a specific page."""
 
-    if verbose:
-        print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    VerbosePrinter.print(
+        f"Started processing <{WIKI_URL}index.php?curid={page_id}>"
+    )
 
     # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
@@ -419,7 +436,8 @@ async def process_page(  # noqa: PLR0912
 
     # Get the page URL
     page_url = (
-        Path("/") / page_info["title"].removeprefix(WIKI_URL).replace(" ", "_")
+        Path("/")
+        / normalize_file_name(page_info["title"].removeprefix(WIKI_URL))
     ).with_suffix(".html")
 
     # Process the template
@@ -480,7 +498,9 @@ async def process_page(  # noqa: PLR0912
             link["href"] = href.replace("invalid://", "https://")
 
         # Make the links relative
-        elif href.startswith(WIKI_URL):
+        elif href.startswith(WIKI_URL) or (
+            href.startswith("/") and not href.startswith("//")
+        ):
             link["href"] = make_url_relative(href, page_url)
 
     # Download images
@@ -512,8 +532,9 @@ async def process_page(  # noqa: PLR0912
     with output_file.open("w", encoding="utf-8") as f:
         f.write(formatted)
 
-    if verbose:
-        print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    VerbosePrinter.print(
+        f"Finished processing <{WIKI_URL}index.php?curid={page_id}>"
+    )
 
 
 ###################
@@ -614,8 +635,7 @@ def main() -> NoReturn:
     args = parser.parse_args()
     credentials_file: Path = args.credentials_file
     output_path: Path = args.output_path
-    global verbose
-    verbose = args.verbose
+    VerbosePrinter.verbose = args.verbose
 
     # Load credentials
     with credentials_file.open("rb") as f:
