@@ -9,7 +9,7 @@
 ###############
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-from asyncio import TaskGroup
+from asyncio import CancelledError, TaskGroup
 from asyncio import run as asyncio_run
 from collections.abc import AsyncGenerator, Callable
 from datetime import date
@@ -23,7 +23,7 @@ from sys import exit
 from tomllib import load as toml_load
 from traceback import print_exception
 from types import CoroutineType
-from typing import Any, NoReturn, NotRequired, TypedDict, cast
+from typing import Any, Literal, NoReturn, NotRequired, TypedDict, cast
 
 from aiohttp import ClientSession, ClientTimeout, TCPConnector
 from bs4 import BeautifulSoup
@@ -50,7 +50,7 @@ class ListPagesValues(TypedDict):
     title: str
 
 
-class QueryPagesValues(TypedDict):
+class PageInfoValues(TypedDict):
     pageid: int
     ns: int
     title: str
@@ -65,6 +65,15 @@ class QueryPagesValues(TypedDict):
     editurl: str
     canonicalurl: str
     displaytitle: str
+
+
+class PageLinksValuesLinks(TypedDict):
+    ns: int
+    title: str
+
+
+class PageLinksValues(ListPagesValues):
+    links: list[PageLinksValuesLinks]
 
 
 #################
@@ -83,6 +92,7 @@ TIMEOUT_SECONDS = 10 * 60
 USER_AGENT = "context-wiki-mirror/0.1.0 (+https://github.com/gucci-on-fleek/context-wiki-mirror)"
 WIKI_URL = "https://wiki.contextgarden.net/"
 
+verbose = False
 
 #########################
 ### Class Definitions ###
@@ -229,6 +239,9 @@ class Wiki:
 ### Function Definitions ###
 ############################
 
+# A mapping from page titles to their redirects
+redirects: dict[str, str] = {}
+
 
 def without_exceptions(
     func: Callable[..., CoroutineType[Any, Any, None]],
@@ -295,18 +308,43 @@ async def write_style(wiki: Wiki, output_path: Path) -> None:
         f.write(rendered_content)
 
 
-def list_pages(wiki: Wiki) -> AsyncGenerator[ListPagesValues]:
+def list_pages(
+    wiki: Wiki, redirects: Literal["no", "only"]
+) -> AsyncGenerator[ListPagesValues]:
     """List all pages in the wiki."""
 
     response = wiki.api_query_list({
         "list": "allpages",
         "aplimit": "max",
-        "apfilterredir": "nonredirects",
+        "apfilterredir": "nonredirects" if redirects == "no" else "redirects",
     })
     return cast(AsyncGenerator[ListPagesValues], response)
 
 
-async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
+@without_exceptions
+async def get_redirects(wiki: Wiki, page_id: int) -> None:
+    """Get the redirects to a specific page."""
+
+    if verbose:
+        print(f"Started redirects for <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+
+    response = cast(
+        PageLinksValues,
+        await wiki.api_query_property({
+            "prop": "links",
+            "pageids": str(page_id),
+        }),
+    )
+    for link in response["links"]:
+        redirects[response["title"].replace(" ", "_")] = link["title"].replace(
+            " ", "_"
+        )
+
+    if verbose:
+        print(f"Finished redirects for <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+
+
+async def get_page_info(wiki: Wiki, page_id: int) -> PageInfoValues:
     """Get information about a specific page."""
 
     response = await wiki.api_query_property({
@@ -314,7 +352,7 @@ async def get_page_info(wiki: Wiki, page_id: int) -> QueryPagesValues:
         "pageids": str(page_id),
         "inprop": "url|displaytitle",
     })
-    return cast(QueryPagesValues, response)
+    return cast(PageInfoValues, response)
 
 
 def normalize_image_url(url: str) -> str:
@@ -326,11 +364,20 @@ def normalize_image_url(url: str) -> str:
 
 def make_url_relative(this_url: str, base_path: Path) -> str:
     """Make a URL relative to a base URL."""
-    this_path = Path("/" + this_url.removeprefix(WIKI_URL).replace(" ", "_"))
+
+    this_url = (
+        this_url.removeprefix(WIKI_URL).replace(" ", "_").removeprefix("/")
+    )
+    if this_url in redirects:
+        this_url = redirects[this_url]
+
+    this_path = Path("/" + this_url)
     if this_path == Path("/"):
         this_path /= "index"
-    return str(
-        this_path.with_suffix(".html").relative_to(base_path, walk_up=True)
+    if not this_path.suffix:
+        this_path = this_path.with_suffix(".html")
+    return str(this_path.relative_to(base_path, walk_up=True)).removeprefix(
+        "../"
     )
 
 
@@ -354,7 +401,7 @@ async def download_image(
 
 
 @without_exceptions
-async def process_page(
+async def process_page(  # noqa: PLR0912
     wiki: Wiki,
     output_path: Path,
     template: Template,
@@ -363,7 +410,8 @@ async def process_page(
 ) -> None:
     """Process a specific page."""
 
-    print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    if verbose:
+        print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
 
     # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
@@ -394,8 +442,18 @@ async def process_page(
 
     # Parse the HTML
     parsed = BeautifulSoup(
-        rendered_content, "lxml", preserve_whitespace_tags={"pre", "p", "code"}
+        rendered_content,
+        "lxml",
+        preserve_whitespace_tags={"pre", "p", "code", "td"},
     )
+
+    # Remove empty paragraphs
+    for p in parsed.find_all(name="p"):
+        if not p.text.strip() and not p.find(name=["img", "svg"]):
+            p.decompose()
+
+    for el in parsed.find_all(class_="mw-empty-elt"):
+        el.decompose()
 
     # Fix the headers
     h1s = parsed.find_all(name="h1")
@@ -433,7 +491,9 @@ async def process_page(
                 del img["srcset"]
             except AttributeError:
                 pass
-            img["src"] = make_url_relative(img_src, page_url)
+            img["src"] = make_url_relative(
+                normalize_image_url(img_src), page_url
+            )
             task_group.create_task(
                 download_image(
                     wiki,
@@ -452,7 +512,8 @@ async def process_page(
     with output_file.open("w", encoding="utf-8") as f:
         f.write(formatted)
 
-    print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
+    if verbose:
+        print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")  # noqa: T201
 
 
 ###################
@@ -483,24 +544,35 @@ async def async_main(
         else:
             item.unlink()
 
-    # Download all the pages
-    async with (
-        Wiki(WIKI_URL, username, password) as wiki,
-        TaskGroup() as task_group,
-    ):
-        task_group.create_task(write_style(wiki, output_path))
-        task_group.create_task(download_image(wiki, output_path, "favicon.ico"))
-
-        async for page in list_pages(wiki):
+    async with Wiki(WIKI_URL, username, password) as wiki:
+        async with TaskGroup() as task_group:
+            # Download the style and favicon
+            task_group.create_task(write_style(wiki, output_path))
             task_group.create_task(
-                process_page(
-                    wiki=wiki,
-                    output_path=output_path,
-                    template=template,
-                    task_group=task_group,
-                    page_id=page["pageid"],
-                )
+                download_image(wiki, output_path, "favicon.ico")
             )
+
+            # Get the mapping of redirects
+            async for page in list_pages(wiki, redirects="only"):
+                task_group.create_task(
+                    get_redirects(
+                        wiki,
+                        page["pageid"],
+                    )
+                )
+
+        # Download all pages
+        async with TaskGroup() as task_group:
+            async for page in list_pages(wiki, redirects="no"):
+                task_group.create_task(
+                    process_page(
+                        wiki=wiki,
+                        output_path=output_path,
+                        template=template,
+                        task_group=task_group,
+                        page_id=page["pageid"],
+                    )
+                )
 
     # Move the Main Page to index.html
     move_file(
@@ -525,6 +597,12 @@ def main() -> NoReturn:
     )
 
     parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable verbose output.",
+    )
+
+    parser.add_argument(
         "output_path",
         type=Path,
         help="The output path to save the mirrored wiki.",
@@ -536,6 +614,8 @@ def main() -> NoReturn:
     args = parser.parse_args()
     credentials_file: Path = args.credentials_file
     output_path: Path = args.output_path
+    global verbose
+    verbose = args.verbose
 
     # Load credentials
     with credentials_file.open("rb") as f:
@@ -553,13 +633,16 @@ def main() -> NoReturn:
         )
 
     # Run the main async function
-    asyncio_run(
-        async_main(
-            credentials["username"],
-            credentials["password"],
-            output_path,
+    try:
+        asyncio_run(
+            async_main(
+                credentials["username"],
+                credentials["password"],
+                output_path,
+            )
         )
-    )
+    except (KeyboardInterrupt, CancelledError):
+        parser.error("Operation cancelled.")
 
     exit(STATUS_OK)
 
