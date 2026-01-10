@@ -19,3 +19,7 @@ branch](https://github.com/gucci-on-fleek/context-wiki-mirror/tree/mirror)
 contains the mirrored content, while the [`master`
 branch](https://github.com/gucci-on-fleek/context-wiki-mirror/tree/master)
 contains the mirroring script and related files.
+
+All URLs in this mirror are relative, and all pages are static, so if
+you wish to host a copy of this mirror, you can simply clone the
+repository into any directory and serve it using any web server.
