@@ -19,7 +19,7 @@ from re import compile as regex_compile
 from re import sub as regex_replace
 from shutil import move as move_file
 from shutil import rmtree as remove_tree
-from sys import exit
+from sys import exit, stderr
 from tomllib import load as toml_load
 from traceback import print_exception
 from types import CoroutineType
@@ -85,8 +85,11 @@ FAVICON_URL = Path("/favicon.ico")
 HOME_URL = Path("/index.html")
 HTML_HEADERS = regex_compile(r"h[1-6]")
 MAX_CONNECTIONS = 8
+MAX_EXCEPTIONS_FOR_SUCCESS = 100
 MAX_HTML_HEADER_LEVEL = 6
+MIN_PAGES_FOR_SUCCESS = 1_000
 SCRIPT_DIR = Path(__file__).resolve().parent
+STATUS_ERROR = 1
 STATUS_OK = 0
 STYLE_URL = Path("/style.css")
 TIMEOUT_SECONDS = 10 * 60
@@ -235,21 +238,31 @@ class Wiki:
         await self._session.__aexit__(*args)
 
 
-class VerbosePrinter:
-    verbose: bool = False
+########################
+### Global Variables ###
+########################
 
-    @classmethod
-    def print(cls, *args: Any, **kwargs: Any) -> None:
-        if cls.verbose:
-            print(*args, **kwargs)  # noqa: T201
+# A mapping from page titles to their redirects
+redirects: dict[str, str] = {}
+
+# The number of supressed exceptions
+suppressed_exceptions_count: int = 0
+
+# Whether to print verbose output
+verbose: bool = False
+
+# The number of successfully processed pages
+processed_pages_count: int = 0
 
 
 ############################
 ### Function Definitions ###
 ############################
 
-# A mapping from page titles to their redirects
-redirects: dict[str, str] = {}
+
+def verbose_print(*args: Any, force: bool = False, **kwargs: Any) -> None:
+    if verbose or force:
+        print(*args, **kwargs, file=stderr)  # noqa: T201
 
 
 def without_exceptions(
@@ -261,6 +274,8 @@ def without_exceptions(
         try:
             await func(*args, **kwargs)
         except Exception as e:
+            global suppressed_exceptions_count
+            suppressed_exceptions_count += 1
             print_exception(e)
 
     return wrapper
@@ -339,7 +354,7 @@ def list_pages(
 async def get_redirects(wiki: Wiki, page_id: int) -> None:
     """Get the redirects to a specific page."""
 
-    VerbosePrinter.print(
+    verbose_print(
         f"Started redirects for <{WIKI_URL}index.php?curid={page_id}>"
     )
 
@@ -355,7 +370,7 @@ async def get_redirects(wiki: Wiki, page_id: int) -> None:
             link["title"]
         )
 
-    VerbosePrinter.print(
+    verbose_print(
         f"Finished redirects for <{WIKI_URL}index.php?curid={page_id}>"
     )
 
@@ -426,9 +441,7 @@ async def process_page(  # noqa: PLR0912
 ) -> None:
     """Process a specific page."""
 
-    VerbosePrinter.print(
-        f"Started processing <{WIKI_URL}index.php?curid={page_id}>"
-    )
+    verbose_print(f"Started processing <{WIKI_URL}index.php?curid={page_id}>")
 
     # Run the network requests concurrently
     page_info = await get_page_info(wiki, page_id)
@@ -532,9 +545,10 @@ async def process_page(  # noqa: PLR0912
     with output_file.open("w", encoding="utf-8") as f:
         f.write(formatted)
 
-    VerbosePrinter.print(
-        f"Finished processing <{WIKI_URL}index.php?curid={page_id}>"
-    )
+    # Done
+    verbose_print(f"Finished processing <{WIKI_URL}index.php?curid={page_id}>")
+    global processed_pages_count
+    processed_pages_count += 1
 
 
 ###################
@@ -635,7 +649,8 @@ def main() -> NoReturn:
     args = parser.parse_args()
     credentials_file: Path = args.credentials_file
     output_path: Path = args.output_path
-    VerbosePrinter.verbose = args.verbose
+    global verbose
+    verbose = args.verbose
 
     # Load credentials
     with credentials_file.open("rb") as f:
@@ -662,9 +677,16 @@ def main() -> NoReturn:
             )
         )
     except (KeyboardInterrupt, CancelledError):
-        parser.error("Operation cancelled.")
+        verbose_print("Operation cancelled.", force=True)
+        exit(STATUS_ERROR)
 
-    exit(STATUS_OK)
+    if (
+        processed_pages_count > MIN_PAGES_FOR_SUCCESS
+        and suppressed_exceptions_count <= MAX_EXCEPTIONS_FOR_SUCCESS
+    ):
+        exit(STATUS_OK)
+    else:
+        exit(STATUS_ERROR)
 
 
 if __name__ == "__main__":
