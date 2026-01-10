@@ -9,7 +9,7 @@
 ###############
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser
-from asyncio import CancelledError, TaskGroup
+from asyncio import CancelledError, TaskGroup, get_running_loop
 from asyncio import run as asyncio_run
 from collections.abc import AsyncGenerator, Callable
 from datetime import date
@@ -30,11 +30,15 @@ from aiohttp import ClientSession, ClientTimeout, TCPConnector
 from bs4 import BeautifulSoup
 from jinja2 import Environment
 from jinja2.environment import Template
+from pyvips import Image as vips
+from pyvips import enums as vips_enums
 
 
 ########################
 ### Type Definitions ###
 ########################
+
+vips: Any
 
 QueryResponse = TypedDict(
     "QueryResponse",
@@ -87,6 +91,7 @@ HTML_HEADERS = regex_compile(r"h[1-6]")
 MAX_CONNECTIONS = 8
 MAX_EXCEPTIONS_FOR_SUCCESS = 100
 MAX_HTML_HEADER_LEVEL = 6
+MAX_IMAGE_DIMENSION = 1_000  # pixels
 MIN_PAGES_FOR_SUCCESS = 1_000
 SCRIPT_DIR = Path(__file__).resolve().parent
 STATUS_ERROR = 1
@@ -265,7 +270,7 @@ def verbose_print(*args: Any, force: bool = False, **kwargs: Any) -> None:
         print(*args, **kwargs, file=stderr)  # noqa: T201
 
 
-def without_exceptions(
+def async_without_exceptions(
     func: Callable[..., CoroutineType[Any, Any, None]],
 ) -> Callable[..., CoroutineType[Any, Any, None]]:
     """A decorator to suppress exceptions in async functions."""
@@ -281,7 +286,23 @@ def without_exceptions(
     return wrapper
 
 
-@without_exceptions
+def sync_without_exceptions(
+    func: Callable[..., Any],
+) -> Callable[..., Any]:
+    """A decorator to suppress exceptions in sync functions."""
+
+    def wrapper(*args: Any, **kwargs: Any) -> None:
+        try:
+            func(*args, **kwargs)
+        except Exception as e:
+            global suppressed_exceptions_count
+            suppressed_exceptions_count += 1
+            print_exception(e)
+
+    return wrapper
+
+
+@async_without_exceptions
 async def write_style(wiki: Wiki, output_path: Path) -> None:
     """Get the CSS style for the wiki pages."""
 
@@ -350,7 +371,7 @@ def list_pages(
     return cast(AsyncGenerator[ListPagesValues], response)
 
 
-@without_exceptions
+@async_without_exceptions
 async def get_redirects(wiki: Wiki, page_id: int) -> None:
     """Get the redirects to a specific page."""
 
@@ -388,9 +409,12 @@ async def get_page_info(wiki: Wiki, page_id: int) -> PageInfoValues:
 
 def normalize_image_url(url: str) -> str:
     """Normalize an image URL."""
-    return regex_replace(
+    url = regex_replace(
         r"(?<=/)([^/]+)/\d+px-\1", r"\1", normalize_file_name(url)
     )
+    if not url.endswith(".ico"):
+        url = regex_replace(r"\.[^.]{3,4}$", ".webp", url)
+    return url
 
 
 def make_url_relative(this_url: str, base_path: Path) -> str:
@@ -412,7 +436,7 @@ def make_url_relative(this_url: str, base_path: Path) -> str:
     )
 
 
-@without_exceptions
+@async_without_exceptions
 async def download_image(
     wiki: Wiki,
     output_path: Path,
@@ -430,8 +454,38 @@ async def download_image(
     with output_file.open("wb") as f:
         f.write(image_data)
 
+    # Compress the image
+    await get_running_loop().run_in_executor(None, compress_image, output_file)
 
-@without_exceptions
+
+@sync_without_exceptions
+def compress_image(path: Path) -> None:
+    """Compress an image to fit within the maximum dimensions."""
+    if path.suffix.lower() == ".ico":
+        return
+
+    image = vips.new_from_file(str(path), access="sequential")
+    width = image.width
+    height = image.height
+
+    if width > MAX_IMAGE_DIMENSION or height > MAX_IMAGE_DIMENSION:
+        scale = min(
+            MAX_IMAGE_DIMENSION / width,
+            MAX_IMAGE_DIMENSION / height,
+        )
+        image = image.resize(scale)
+
+    image.webpsave(
+        str(path),
+        preset=vips_enums.ForeignWebpPreset.TEXT,
+        strip=True,
+        lossless=True,
+        near_lossless=True,
+        Q=20,
+    )
+
+
+@async_without_exceptions
 async def process_page(  # noqa: PLR0912
     wiki: Wiki,
     output_path: Path,
