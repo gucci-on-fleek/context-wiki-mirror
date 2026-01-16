@@ -30,27 +30,45 @@ steps:
     pull: true
     commands: |
         # Setup
-        set -euxo pipefail
-        git config credential.helper '!f() { echo username=$GITHUB_USER; echo "password=$GITHUB_TOKEN"; };f'
+        set -euo pipefail
         git config --global user.email "ruddy@duck.tel"
         git config --global user.name "Ruddy Duck [Bot]"
 
+        # Credentials
+        git config --global --replace-all credential.helper store
+        truncate --size=0 ~/.git-credentials
+        echo "https://$GITHUB_USER:$GITHUB_TOKEN@github.com" >> ~/.git-credentials
+        echo "https://$CODEBERG_USER:$CODEBERG_TOKEN@codeberg.org" >> ~/.git-credentials
+        set -x
+
+        # Remotes
+        git remote add github "https://github.com/gucci-on-fleek/context-wiki-mirror.git"
+        git remote add codeberg "https://codeberg.org/gucci-on-fleek/context-wiki-mirror.git"
+
         # Prepare worktree
-        git fetch origin mirror
+        git fetch github mirror
         git worktree add --checkout mirror mirror
 
         # Run the wiki mirror script
         uv run --locked --link-mode=symlink context-wiki-mirror
 
+        # For testing
+        date > mirror/test.txt
+
         # Commit and push changes
         cd mirror
         git add -A
         git commit -m "Automated wiki update: $(date -u +"%Y-%m-%d")" || echo "No changes to commit"
-        git push origin mirror
+        git push github mirror
+        git push codeberg mirror
+
     environment:
         GITHUB_USER: "ruddy-duck"
         GITHUB_TOKEN:
             from_secret: github_token
+        CODEBERG_USER: "ruddy-duck"
+        CODEBERG_TOKEN:
+            from_secret: codeberg_token
 
   - name: Email on failure
     image: docker.io/deblan/woodpecker-email:latest
