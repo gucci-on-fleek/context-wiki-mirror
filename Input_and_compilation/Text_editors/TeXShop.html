@@ -18,7 +18,7 @@
     Input and compilation/Text editors/TeXShop
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5396&diff=42670">2026-01-14</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5396&diff=42690">2026-01-15</a>
         </p>
   </header>
   <article>
@@ -155,12 +155,9 @@
       multiple file encodings.
      </li>
     </ul>
-    <p>Here, only a summary of the main configuration relevant to ConTeXt is provided. This should get you up and running, but for more detailed documentation, refer to <i>TeXShop &gt; Help &gt; Changes</i>. Also, check the stuff inside <i>~/Library/TeXShop/</i>, in particular, the folders <i>Engines/Inactive/ConTeXt-Sync</i>, and <i>ExternalEditorScripts</i> if you plan to use TeXShop as a previewer for an external editor.
+    <p>Here, only a summary of the main configuration relevant to ConTeXt is provided. This should get you up and running, but for more detailed documentation, refer to <i>TeXShop &gt; Help &gt; TeXShop Manual</i>. Also, check the stuff inside <i>~/Library/TeXShop/</i>, in particular, the folders <i>Engines/Inactive/ConTeXt</i>, and <i>ExternalEditorScripts</i> if you plan to use TeXShop as a previewer for an external editor.
 </p>
-    <p>If you have installed MacTeX (the TeX Live distribution for macOS), you may start typesetting right away.
-If TeXShop was installed with MacTeX, you may find it in the <i>/Applications/TeX</i> folder; otherwise, it will likely be in your <i>/Applications</i> folder. Open a ConTeXt document with TeXShop, choose the <i>ConTeXt (LuaTeX)</i> engine from the drop-down menu in the toolbar of the source window, and typeset!
-</p>
-    <p>Most likely, though, you will want to use the most up to date ConTeXt release (see <a class="mw-redirect" href="../../Introduction/Installation.html" title="Input and compilation/Installation">Installation</a>). For that, you need to perform the following one-time set up:
+    <p>It is possible to select the engine used to typeset a document from the document's toolbar. If no ConTeXt option is present, proceed as follows:
 </p>
     <ul>
      <li>
@@ -188,28 +185,31 @@ If TeXShop was installed with MacTeX, you may find it in the <i>/Applications/Te
      <li>
       Go into
       <i>
-       TeXShop &gt; Engines &gt; Inactive &gt; ConTeXt-Sync
+       TeXShop &gt; Engines &gt; Inactive &gt; ConTeXt
       </i>
-      . Move or copy the file
-      <code>ConTeXt202X.engine</code>
-      into the
+      . There should be three engine files:
+      <code>ConTeXt-TL.engine</code>
+      and
+      <code>ConTeXt.engine</code>
+      (to typeset with LuaTeX) are meant to be used when TeX Live or MacTeX are installed;
+      <code>ConTeXt-CG.engine</code>
+      is meant to be used when ConTeXt is installed from ConTeXt Garden (this wiki site).
+     </li>
+     <li>
+      Move or copy those files into the
       <i>
        Engines
       </i>
       folder.
      </li>
      <li>
-      Close and reopen TeXShop. The new
-      <i>
-       ConTeXt202X
-      </i>
-      engine should now appear in the toolbar drop-down menu.
+      Close and reopen TeXShop. The ConTeXt engines should now appear in the toolbar drop-down menu.
      </li>
      <li>
-      Open Terminal.app, then type the following to make the engine executable and press Enter:
+      Open Terminal.app, then type the following to make sure that the engines are executable and press Enter:
      </li>
     </ul>
-    <pre>chmod +x ~/Library/TeXShop/Engines/ConTeXt202X.engine
+    <pre>chmod +x ~/Library/TeXShop/Engines/ConTeXt*.engine
 </pre>
     <p>You may close the terminal.
 </p>
@@ -223,17 +223,25 @@ If TeXShop was installed with MacTeX, you may find it in the <i>/Applications/Te
       <i>
        Alternate Path
       </i>
-      text field to point to the full path of your local ConTeXt installation.
+      text field to point to the full path of your ConTeXt installation from ConTeXt Garden, if any: this is the path used by
+      <code>ConTeXt-CG.engine</code>
+      . The other two engines will use the path in the
+      <i>
+       Path settings
+      </i>
+      field.
      </li>
     </ul>
-    <p><b> Remark</b> this engines uses <code>context</code> and not <code>mtxrun</code> for compilation. See below how to add an engine using the latter instead.
+    <p><b> Remark</b> those engines use <code>context</code> and not <code>mtxrun</code> for compilation. See below how to add an engine using the latter instead.
 </p>
-    <p>Now, every time you edit a ConTeXt document and want to use your local installation instead of MacTeX's, add the following &ldquo;magic lines&rdquo; right at the beginning of your source document:
+    <p>Select a ConTeXt engine from the drop-down menu and click Typeset. If there are no errors the output will appear in a viewer window.
+</p>
+    <p>It is possible to specify which engine to use with each document by adding some &ldquo;magic lines&rdquo; right at the beginning of your source document. For example:
 </p>
     <pre>% !TEX TS-program = ConTeXt-CG
 % !TEX useAlternatePath
 </pre>
-    <p>Then, typeset your document. You do not need to select the correct engine from the drop-down menu when <code>% !TEX TS-program</code> is used: TeXShop will pick up the engine specified in the source. Verify in the Console window that the correct ConTeXt distribution is used for typesetting.
+    <p>When those lines are present, they override the selection in the toolbar. Verify in the Console window that the correct ConTeXt distribution is used for typesetting.
 </p>
     <h5>
      <span class="mw-headline" id="Syncing_between_Source_and_PDF">
@@ -313,7 +321,7 @@ voluptas nulla pariatur?
 </pre>
     <p>where <code>&lt;MAIN&gt;.tex</code> is the name of your root source. If your included files are in a different folder, you need to specify the correct (relative) path to the root document. Refer to TeXShop's documentation to learn more about this and the other &ldquo;magic lines&rdquo;.
 </p>
-    <p>TeXShop still supports an old syncing method, which is based on J&eacute;r&ocirc;me Laurens's SyncTeX, but using that for ConTeXt is not recommended any longer, so how to use that will not be explained in this document. Just note that the <i>Sync Method</i> preference in <i>Preferences &gt; Typesetting</i> is not relevant for the new syncing method described above; it is strongly recommended that it is set to <i>SyncTeX (TeX &ge; 2010)</i> anyway.
+    <p>TeXShop still supports an old syncing method, which is based on J&eacute;r&ocirc;me Laurens's SyncTeX, but using that for ConTeXt is not recommended any longer, so how to use that will not be explained in this document. Just note that the <i>Sync Method</i> preference in <i>Preferences &gt; Typeset</i> is not relevant for the new syncing method described above; it is strongly recommended that it is set to <i>SyncTeX (TeX &ge; 2010)</i> anyway.
 </p>
     <h5>
      <span class="mw-headline" id="Syncing_with_an_External_Editor">
@@ -322,20 +330,49 @@ voluptas nulla pariatur?
     </h5>
     <p>TeXShop can be used as a previewer for an external editor. If you want to edit your source files in a different editor, go to <i>TeXShop &gt; Preferences &gt; Source</i>, and check <i>Configure for External Editor</i>. Then, close and reopen TeXShop.
 </p>
-    <p>Detailed instructions about configuring TeXShop to synchronise with an external editor are provided in <i>TeXShop &gt; Help &gt; TeXShop Manual</i>. Such instructions will not be repeated here, also because they depend on which editor you are using. We only say that you will probably need to execute this command in a terminal:
+    <p>Detailed instructions about configuring TeXShop to synchronise with an external editor are provided in <i>TeXShop &gt; Help &gt; TeXShop Manual</i>. Such instructions will not be repeated here, also because they depend on which editor you are using. We only mention that you will need to execute this command in a terminal:
 </p>
     <pre>   defaults write TeXShop OtherEditorSync YES
 </pre>
     <p>and you will need to create a small shell script called <code>/usr/local/bin/othereditor</code> containing a command that TeXShop can use to call your editor. See TeXShop's manual for details.
 </p>
-    <p>The following are a few things you may want to keep in mind if you use an external editor. They certainly apply to TeXShop v4.66; more recent releases may have rectified some of the issues or improved the user experience:
+    <h5>
+     <span class="mw-headline" id="Troubleshooting">
+      Troubleshooting
+     </span>
+    </h5>
+    <p><b>No synchronization happens either way</b>
 </p>
     <ul>
      <li>
-      TeXShop v4.66 does not (yet) support forward syncing from an included source. Forward syncing is supported for the root source document of a document consisting of many source files or for a single-source document, though.
+      Is a
+      <code>.synctex</code>
+      file created after typesetting your document? If not, check that
+      <code>\setupsynctex</code>
+      is used in your source document as explained above. Also check that the typesetting engine does not use
+      <code>--nonstopmode</code>
+      , which may inhibit the creation of the
+      <code>.synctex</code>
+      file.
      </li>
-    </ul>
-    <ul>
+     <li>
+      Is the expected ConTeXt version being used? Check the console for the version and the executable paths used by TeXShop.
+     </li>
+     <li>
+      Also check the paths in
+      <i>
+       TeXShop
+      </i>
+      &gt;
+      <i>
+       Settings
+      </i>
+      &gt;
+      <i>
+       Engine
+      </i>
+      .
+     </li>
      <li>
       For syncing to work with an external editor, make sure that
       <b>
@@ -343,27 +380,12 @@ voluptas nulla pariatur?
       </b>
       (the preview of the document you are currently editing) is opened in TeXShop; otherwise, syncing may not work. Depending on the editor, you may also need to keep only one source window open in your editor.
      </li>
-    </ul>
-    <ul>
      <li>
-      If syncing with an external editor still does not appear to work, and you are sure that you have followed the instructions and your configuration is correct, make sure that the relevant &ldquo;magic lines&rdquo; appear in your source document and try typesetting your document once
-      <b>
-       from within TeXShop,
-      </b>
-      by selecting the menu entry
-      <i>
-       Typeset &gt; Typeset
-      </i>
-      (the PDF of your document must be opened in TeXShop, of course). Then, try syncing again. If syncing in one direction does not work, try syncing in the other direction first.
-     </li>
-    </ul>
-    <ul>
-     <li>
-      Even if
+      It should not be necessary, but as a last resort try this: regardless of whether
       <i>
        Configure for External Editor
       </i>
-      is checked in your preferences, always open the
+      is checked in TeXShop's settings, open the
       <code>.tex</code>
       file in TeXShop, rather than the
       <code>.pdf</code>
@@ -372,31 +394,56 @@ voluptas nulla pariatur?
       file, it may have an opportunity to parse the &ldquo;magic lines&rdquo; of the source code and configure itself correctly for ConTeXt (provided that your source file contains the relevant magic lines!).
      </li>
     </ul>
-    <h5>
-     <span class="mw-headline" id="Troubleshooting">
-      Troubleshooting
-     </span>
-    </h5>
-    <p>The new ConTeXt syncing in TeXShop works by invoking ConTeXt's command-line tool <code>mtxrun</code>. This has two advantages:
+    <p><b>Synchronization from source to PDF does not work</b>
 </p>
     <ul>
      <li>
-      it simplifies the code required in TeXShop to deal with synchronisation;
+      TeXShop v4.66 does not (yet) support forward syncing from an included source. Forward syncing is supported for the root source document of a document consisting of many source files or for a single-source document, though.
      </li>
      <li>
-      it allows ConTeXt's developers to continue improving synchronisation independently, and TeXShop can automatically benefit from such improvements (as long as
-      <code>mtxrun</code>
-      's interface does not change).
+      If you have configured TeXShop to use an external editor, but syncing from the editor to the viewer does not work, check whether the path stored in the
+      <code>.synctex</code>
+      file is relative or absolute. For example, if your source file is called
+      <code>main.tex</code>
+      , typesetting it will generate
+      <code>main.synctex</code>
+      . Open
+      <code>main.synctex</code>
+      with a text editor and look at the first lines. If they look like this:
      </li>
     </ul>
-    <p>But if something breaks, who is to blame: ConTeXt, TeXShop, or maybe yourself?
+    <pre>SyncTeX Version:1
+Input:1:/some/absolute/path/to/main.tex
+</pre>
+    <p>then syncing from the editor to the viewer will work only if the editor calls <code>mtxrun --script synctex</code> with absolute paths. If the <code>.synctex</code> file is a relative path:
 </p>
-    <p>If no synchronization seems to work from the editor to the viewer and vice versa, read the instructions above once again: you may have missed some step. Also check whether a <code>.synctex</code> file exists after typesetting the document. If no <code>.synctex</code> file is created, that's the reason why synchronization does not work, and you should fix that: did you add <code>\setupsynctex</code> to your document? Is the <code>mtxrun</code> command perhaps using <code>--nonstopmode</code> (which may inhibit the creation of the <code>.synctex</code> file)? Try to remove <code>--nonstopmode</code>.
+    <pre>SyncTeX Version:1
+Input:main.tex
+</pre>
+    <p>then syncing will work only if the editor calls <code>mtxrun --script synctex</code> with relative paths. Make sure your editor is configured accordingly.
 </p>
-    <p>If Cmd-clicking somewhere has an effect, e.g., TeXShop jumps somewhere but perhaps not at the right spot, it is more likely that <code>mtxrun</code> is to blame. So, it is recommended to verify that by invoking <code>mtxrun</code> directly. For instance, if <code>test.tex</code> is the name of the minimal example above, then a terminal session may go like this (<code>$</code> is the shell prompt: it must not be typed):
+    <p><b>Synchronization from PDF to source does not work</b>
+</p>
+    <ul>
+     <li>
+      If using an external editor: have you set
+      <code>defaults write TeXShop OtherEditorSync YES</code>
+      ?
+     </li>
+     <li>
+      If using an external editor: have you created
+      <code>/usr/local/bin/othereditor</code>
+      ? Is it executable? Does it run correctly (try to run it from the terminal)?
+     </li>
+    </ul>
+    <p><b>Synchronization works, but the target location is wrong</b>
+</p>
+    <p>First of all, keep in mind that synchronization should jump to an <i>approximately</i> correct location. That said, if it seems that a blatantly wrong location is hit, you may debug the issue by running <code>mtxrun</code> directly.
+</p>
+    <p>For instance, if <code>test.tex</code> is the name of the minimal example above, then a terminal session may go like this (<code>$</code> is the shell prompt: it must not be typed):
 </p>
     <pre>$ cd &lt;path to test.tex source directory&gt;
-$ export PATH=~/context-osx-64/tex/texmf-osx-64/bin:$PATH  # Make sure ConTeXt beta is used (Intel macOS executable)
+$ export PATH=~/context-osx-64/tex/texmf-osx-64/bin:$PATH  # If necessary (adapt the path to match your system)
 $ mtxrun --script context --autogenerate test.tex
 
 </pre>
@@ -416,10 +463,6 @@ page=1 llx=354 lly=178 urx=423 ury=193
     <p>The output shows the source path, the line number (<code>11</code>), and a tolerance (<code>0</code>), which will be positive if the input coordinate is slightly outside any bounding box recorded in the <code>.synctex</code> file.
 </p>
     <p>If <code>mtxrun</code> output looks accurate enough, then probably TeXShop is at fault; otherwise, report the issue to ConTeXt's mailing list.
-</p>
-    <p>If, on the other hand, Cmd-clicking somewhere has no effect whatsoever, then TeXShop might be at fault. But since the configuration for synchronisation is not trivial, be sure to double-check everything explained above before reporting an issue to TeXShop's author. In particular, if you are working with a complex document consisting of many files, make sure that each one has a <code>% !TEX root</code> directive (the space between <code>%</code> and <code>!</code> is mandatory in magic lines) and the other necessary magic lines. Make also sure that you are typesetting with a sufficiently recent ConTeXt release.
-</p>
-    <p>If you have configured TeXShop to use an external editor, be sure to (re)read TeXShop's documentation: although syncing with an external editor works (with some limitation for complex documents), you may have to work a bit harder than necessary to convince TeXShop to synchronise with your editor. See the remarks above.
 </p>
     <h5>
      <span class="mw-headline" id="Making_UTF-8_Default_File_Encoding">
@@ -768,7 +811,7 @@ page=1 llx=354 lly=178 urx=423 ury=193
      </a>
     </li>
     <li>
-     Mirrored on 2026-01-15
+     Mirrored on 2026-01-16
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
