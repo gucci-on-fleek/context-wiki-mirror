@@ -18,7 +18,7 @@
     References notes and floats/Footnotes
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1020&diff=40262">2025-01-12</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1020&diff=42695">2026-01-24</a>
         </p>
   </header>
   <article>
@@ -256,6 +256,16 @@
           </span>
           <span class="toctext">
            Verbatim Text in Footnotes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#Continuation_Mark_for_Multi-Page_Footnotes">
+          <span class="tocnumber">
+           12.6
+          </span>
+          <span class="toctext">
+           Continuation Mark for Multi-Page Footnotes
           </span>
          </a>
         </li>
@@ -869,6 +879,76 @@ Suppose that one wants a width of 1.5 em. Then
       doesn&rsquo;t alter blank spaces (either by adding, or by compacting them).
      </li>
     </ol>
+    <h3>
+     <span class="mw-headline" id="Continuation_Mark_for_Multi-Page_Footnotes">
+      Continuation Mark for Multi-Page Footnotes
+     </span>
+    </h3>
+    <p>This example was inspired by a question on TeX StackExchange (<a class="external free" href="https://tex.stackexchange.com/questions/758683/can-i-add-a-symbol-to-indicate-that-a-footnote-has-been-split-across-pages" rel="nofollow">https://tex.stackexchange.com/questions/758683/can-i-add-a-symbol-to-indicate-that-a-footnote-has-been-split-across-pages</a>). 
+</p>
+    <p>It is sometimes desirable to indicate to the reader when a footnote staring on one page continues on the next. This can be achieved by combining <tt><a href="../Command/definetextbackground.html" title="Command/definetextbackground">\definetextbackground</a></tt> (for adding the symbols depending on whether the footnote starts and/or end on the current page) and <tt><a href="../Command/defineoverlay.html" title="Command/defineoverlay">\defineoverlay</a></tt> (to get the positions of the bottom and top of the footnotes) as shown in the example below:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>ipsum<span class="brx">]</span>
+ 
+<span class="comment">% Add an arrow</span>
+<span class="comment">% * on the bottom right if the footnote continues on the next page</span>
+<span class="comment">% * on the top left if the footnote starts on the previous page.</span>
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>mp:continuedFootnote<span class="br">}</span>
+  for i<span class="brx">=</span>1 upto nofmultipars&nbsp;:
+    if multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> "single"&nbsp;:
+    elseif  multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> "first"  :
+      label<span class="brx">(</span>"$<span class="cs">\rightarrow</span>$", lrcorner footnotesBox + <span class="brx">(</span>0.8*EmWidth,0.2*LineHeight<span class="brx">)</span><span class="brx">)</span>;
+    elseif  multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> "middle"&nbsp;:
+      label<span class="brx">(</span>"$<span class="cs">\rightarrow</span>$", lrcorner footnotesBox + <span class="brx">(</span>0.8*EmWidth,0.2*LineHeight<span class="brx">)</span><span class="brx">)</span>;
+      label<span class="brx">(</span>"$<span class="cs">\rightarrow</span>$", ulcorner footnotesBox + <span class="brx">(</span>-0.8*EmWidth,-0.6*LineHeight<span class="brx">)</span><span class="brx">)</span>;
+    elseif  multikind<span class="brx">[</span>i<span class="brx">]</span> <span class="brx">=</span> "last"   :
+      label<span class="brx">(</span>"$<span class="cs">\rightarrow</span>$", ulcorner footnotesBox + <span class="brx">(</span>-0.8*EmWidth,-0.6*LineHeight<span class="brx">)</span><span class="brx">)</span>;
+    fi;
+  endfor&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\definetextbackground</span></span>
+  <span class="brx">[</span>continuedFootnote<span class="brx">]</span>
+  <span class="brx">[</span>mp<span class="brx">=</span>mp:continuedFootnote,
+   location<span class="brx">=</span>text<span class="brx">]</span>
+
+<span class="comment">% Get the footnotes box</span>
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>mp:footnotesBox<span class="br">}</span>
+  path footnotesBox;
+  footnotesBox&nbsp;:<span class="brx">=</span> OverlayBox;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>footnotesBox<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>mp:footnotesBox<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\myfootnote</span><span class="br">{</span><span class="cs"><span class="documentcs">\footnote</span></span><span class="br">{</span><span class="cs">\startcontinuedFootnote</span><span class="brx">#</span>1<span class="cs">\stopcontinuedFootnote</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span><span class="brx">[</span>footnote<span class="brx">]</span><span class="brx">[</span>background<span class="brx">=</span>footnotesBox<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+  <span class="cs">\ipsum</span>
+
+  <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+
+  <span class="cs">\ipsum</span>
+
+  <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+
+  <span class="cs">\ipsum</span><span class="cs">\myfootnote</span><span class="br">{</span><span class="cs"><span class="systemcs">\dorecurse</span></span><span class="br">{</span>9<span class="br">}</span><span class="br">{</span><span class="cs">\ipsum</span><span class="br">}</span><span class="br">}</span>
+  
+  <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>
+  
+  <span class="cs">\ipsum</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/d95ebdfd000822055fa557133672b406.webp" width="874">
+     </li>
+    </ul>
    </div>
   </article>
   <footer>
@@ -879,7 +959,7 @@ Suppose that one wants a width of 1.5 em. Then
      </a>
     </li>
     <li>
-     Mirrored on 2026-01-23
+     Mirrored on 2026-01-25
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
