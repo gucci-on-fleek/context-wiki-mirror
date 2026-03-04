@@ -18,7 +18,7 @@
     Input and compilation/Text editors/AUCTeX
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1906&diff=42092">2025-02-02</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1906&diff=42742">2026-03-04</a>
         </p>
   </header>
   <article>
@@ -196,6 +196,18 @@
                ("\\mathbb{C}" . ?&complexes;)
                ("\\mathbb{K}" . ?&Kopf;)))
       (add-to-list 'tex--prettify-symbols-alist symb))))
+</pre>
+    <p>Addendum:
+AUCTeX (version 14.1.2, as used here) still determines the presence of a ConTeXt environment by checking whether the legacy texexec command is available. For ConTeXt LMTX, however, this detection mechanism fails: since LMTX no longer uses texexec &mdash; it relies exclusively on the context command &mdash; AUCTeX&rsquo;s auto-detection yields an invalid or non-functional compilation command when invoking C-c C-c.
+To resolve this, you must disable AUCTeX&rsquo;s automatic TeX engine detection entirely &mdash; i.e.,
+elisp
+</p>
+    <pre>(use-package context
+  :custom
+  ((TeX-check-TeX nil)
+   ;; .... ... ...
+   )
+)
 </pre>
     <h2>
      <span class="mw-headline" id="Help_with_delimiters_and_math_mode">
@@ -442,7 +454,7 @@
                   :front ".*\\\\start\\w*MP\\w*\\({\\w*}\\|\\[\\w*\\]\\|\\)\\W*"
                   :back  ".*\\\\stop\\w*MP")
                  ))
-(add-to-list 'mmm-mode-ext-classes-alist '(context-mode nil context-plus))
+(add-to-list 'mmm-mode-ext-classes-alist '(ConTeXt-mode nil context-plus))
 </pre>
     <ul>
      <li>
@@ -462,7 +474,7 @@
      </a>
     </li>
     <li>
-     Mirrored on 2026-03-03
+     Mirrored on 2026-03-04
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
