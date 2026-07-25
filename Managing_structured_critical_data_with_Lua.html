@@ -1,0 +1,2568 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Managing structured critical data with Lua&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Managing_structured_critical_data_with_Lua" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Managing structured critical data with Lua
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7535&diff=43259">2026-07-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#fff4df; border:1px solid #e5c07b; border-left:5px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.35em; vertical-align:middle;">🚧</span>
+<b>Work in progress.</b> This guide is currently being drafted, corrected, and reviewed.
+Please do not modify the code unless this banner has been removed.
+</p>
+    </div>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">&larr; Guide 5 &mdash; Typesetting an original text and translation in parallel</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 6 of 6 &mdash; Final guide</b>
+</p>
+    </div>
+    <p><br>
+The earlier guides attach formatted apparatus material directly to the text.
+That approach is clear and effective for a compact edition, but the internal
+parts of an entry are no longer independently available after they have been
+combined into a string.
+</p>
+    <p>For example:
+</p>
+    <pre>Reason] Judgment B D; om. E
+</pre>
+    <p>contains several facts:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Field
+       </th>
+       <th>
+        Value
+       </th>
+      </tr>
+      <tr>
+       <td>Textual unit
+</td>
+       <td><code>reason-01</code>
+</td>
+      </tr>
+      <tr>
+       <td>Position
+</td>
+       <td><code>1:1</code>
+</td>
+      </tr>
+      <tr>
+       <td>Layer
+</td>
+       <td><code>textual</code>
+</td>
+      </tr>
+      <tr>
+       <td>Editorial operation
+</td>
+       <td><code>reading</code>
+</td>
+      </tr>
+      <tr>
+       <td>Lemma
+</td>
+       <td><code>Reason</code>
+</td>
+      </tr>
+      <tr>
+       <td>Reading
+</td>
+       <td><code>Judgment</code>
+</td>
+      </tr>
+      <tr>
+       <td>Witnesses
+</td>
+       <td><code>ms-b,ms-d</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>When those facts are stored separately, the same collection can be sorted,
+filtered, validated, and rendered in several forms.
+</p>
+    <p>The progression is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Editorial problem
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td>A formatted string cannot be queried reliably
+</td>
+       <td>Each entry becomes a structured record
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td>Records must be entered from ConTeXt
+</td>
+       <td>A stable registration command is exposed
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td>Registration order may not equal textual order
+</td>
+       <td>Records are copied, sorted, and filtered
+</td>
+      </tr>
+      <tr>
+       <td>4
+</td>
+       <td>Identifiers and required fields may be wrong
+</td>
+       <td>Controlled vocabularies and validation rules are applied
+</td>
+      </tr>
+      <tr>
+       <td>5
+</td>
+       <td>Editors and readers need different outputs
+</td>
+       <td>Several views and modes are generated from one registry
+</td>
+      </tr>
+      <tr>
+       <td>6
+</td>
+       <td>Multilingual editions need additional distinctions
+</td>
+       <td>Language, target, and lemma level extend the model
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Division of responsibilities.</b> Lua stores, checks, selects, and reorganizes
+the editorial records. ConTeXt remains responsible for typography, page layout,
+notes, tables, and publication output.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Decide_when_a_Lua_registry_is_justified">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Decide when a Lua registry is justified
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Design_one_critical_record">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Design one critical record
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Create_a_project_namespace">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Create a project namespace
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#4._Register_one_record_from_ConTeXt">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Register one record from ConTeXt
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#5._Render_one_structured_record">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Render one structured record
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#6._Compile_the_minimal_registry_MWE">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Compile the minimal registry MWE
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#7._Sort_without_destroying_registration_order">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Sort without destroying registration order
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#8._Filter_records_by_one_criterion">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Filter records by one criterion
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#9._Compile_a_sorting_and_filtering_MWE">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Compile a sorting and filtering MWE
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#10._Keep_data_and_presentation_separate">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Keep data and presentation separate
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#11._Declare_controlled_vocabularies">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Declare controlled vocabularies
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#12._Record_validation_issues">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Record validation issues
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#13._Validate_identifiers_and_required_fields">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Validate identifiers and required fields
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#14._Compile_a_diagnostic_validation_MWE">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Compile a diagnostic validation MWE
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#15._Distinguish_formal_validation_from_scholarly_judgement">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. Distinguish formal validation from scholarly judgement
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#16._Generate_several_outputs_from_one_registry">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         16. Generate several outputs from one registry
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#17._Organize_the_project_files">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         17. Organize the project files
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-18">
+       <a href="#18._Keep_the_public_registration_interface_stable">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         18. Keep the public registration interface stable
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#19._Advanced_extension:_multilingual_records">
+        <span class="tocnumber">
+         19
+        </span>
+        <span class="toctext">
+         19. Advanced extension: multilingual records
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#20._Advanced_extension:_query_multilingual_data">
+        <span class="tocnumber">
+         20
+        </span>
+        <span class="toctext">
+         20. Advanced extension: query multilingual data
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#21._Recognize_the_limits_of_the_registry">
+        <span class="tocnumber">
+         21
+        </span>
+        <span class="toctext">
+         21. Recognize the limits of the registry
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#22._Test_the_workflow_systematically">
+        <span class="tocnumber">
+         22
+        </span>
+        <span class="toctext">
+         22. Test the workflow systematically
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-23">
+       <a href="#23._Command_summary">
+        <span class="tocnumber">
+         23
+        </span>
+        <span class="toctext">
+         23. Command summary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#24._What_this_guide_has_established">
+        <span class="tocnumber">
+         24
+        </span>
+        <span class="toctext">
+         24. What this guide has established
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-25">
+       <a href="#25._Continue_with_TEI_XML_when_necessary">
+        <span class="tocnumber">
+         25
+        </span>
+        <span class="toctext">
+         25. Continue with TEI XML when necessary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-26">
+       <a href="#Online_resources">
+        <span class="tocnumber">
+         26
+        </span>
+        <span class="toctext">
+         Online resources
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-27">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         27
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._Decide_when_a_Lua_registry_is_justified">
+      1. Decide when a Lua registry is justified
+     </span>
+    </h2>
+    <p>Lua is useful when the project must:
+</p>
+    <ul>
+     <li>
+      sort entries independently of registration order;
+     </li>
+     <li>
+      select records belonging to one witness or layer;
+     </li>
+     <li>
+      list only omissions, conjectures, or source notes;
+     </li>
+     <li>
+      detect unknown identifiers or missing fields;
+     </li>
+     <li>
+      generate both reader-facing and editor-facing outputs;
+     </li>
+     <li>
+      separate editorial data from final punctuation and typography.
+     </li>
+    </ul>
+    <p>Direct ConTeXt commands remain preferable when the apparatus is short, stable,
+and intended for one principal output.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Editorial model
+       </th>
+       <th>
+        Suitable when
+       </th>
+      </tr>
+      <tr>
+       <td>Direct ConTeXt commands
+</td>
+       <td>The apparatus is compact and rendered mainly in one form
+</td>
+      </tr>
+      <tr>
+       <td>Lua registry
+</td>
+       <td>Records must be queried, reordered, checked, or rendered in several forms
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial decision.</b> Lua should be introduced because the data need
+processing&mdash;not merely because the edition is technically sophisticated.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Design_one_critical_record">
+      2. Design one critical record
+     </span>
+    </h2>
+    <p>The basic model uses nine public fields:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Field
+       </th>
+       <th>
+        Purpose
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>id</code>
+</td>
+       <td>Stable record identifier
+</td>
+       <td><code>reason-reading</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>unit</code>
+</td>
+       <td>Stable textual-unit identifier
+</td>
+       <td><code>reason-01</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>position</code>
+</td>
+       <td>Sorting key in the form <code>unitorder:entryorder</code>
+</td>
+       <td><code>1:2</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>layer</code>
+</td>
+       <td>Editorial layer
+</td>
+       <td><code>textual</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>kind</code>
+</td>
+       <td>Editorial operation
+</td>
+       <td><code>reading</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>lemma</code>
+</td>
+       <td>Edited text to which the record refers
+</td>
+       <td><code>Reason</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>reading</code>
+</td>
+       <td>Alternative text or explanatory content
+</td>
+       <td><code>Judgment</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>witnesses</code>
+</td>
+       <td>Comma-separated witness identifiers
+</td>
+       <td><code>ms-b,ms-d</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>responsibility</code>
+</td>
+       <td>Editor or authority responsible for a decision
+</td>
+       <td><code>Smith</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Lua parses:
+</p>
+    <pre>1:2
+</pre>
+    <p>into:
+</p>
+    <pre>unitorder  = 1
+entryorder = 2
+</pre>
+    <p>Not every field is required for every operation. An omission has no alternative
+reading, while a conjecture normally requires a responsible editor.
+</p>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Data-model principle.</b> Store editorial facts, not final punctuation. The
+renderer decides later whether an omission appears as <code>om.</code>, as a
+complete sentence, or in another language.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Create_a_project_namespace">
+      3. Create a project namespace
+     </span>
+    </h2>
+    <p>Avoid loose global variables. Create one project namespace:
+</p>
+    <pre>\startluacode
+
+userdata.critical = userdata.critical or { }
+
+local critical = userdata.critical
+
+critical.entries = critical.entries or { }
+
+\stopluacode
+</pre>
+    <p>The registry is:
+</p>
+    <pre>critical.entries
+</pre>
+    <p>The assignment:
+</p>
+    <pre>local critical = userdata.critical
+</pre>
+    <p>creates only a shorter local reference. It does not create another registry.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Register_one_record_from_ConTeXt">
+      4. Register one record from ConTeXt
+     </span>
+    </h2>
+    <p>First parse the position:
+</p>
+    <pre>local function parse_position(position)
+    local unitorder, entryorder =
+        string.match(position or "", "^(%d+):(%d+)$")
+
+    return tonumber(unitorder) or 0,
+           tonumber(entryorder) or 0
+end
+</pre>
+    <p>Then define the registration function:
+</p>
+    <pre>function critical.register(
+    id,
+    unit,
+    position,
+    layer,
+    kind,
+    lemma,
+    reading,
+    witnesses,
+    responsibility
+)
+    local unitorder, entryorder =
+        parse_position(position)
+
+    critical.entries[#critical.entries + 1] = {
+        id             = id,
+        unit           = unit,
+        unitorder      = unitorder,
+        entryorder     = entryorder,
+        layer          = layer,
+        kind           = kind,
+        lemma          = lemma,
+        reading        = reading,
+        witnesses      = witnesses,
+        responsibility = responsibility,
+    }
+end
+</pre>
+    <p>Expose it to ConTeXt:
+</p>
+    <pre>interfaces.implement {
+    name      = "registercriticalentry",
+    public    = true,
+    protected = true,
+    arguments = {
+        "string", "string", "string",
+        "string", "string", "string",
+        "string", "string", "string",
+    },
+    actions   = critical.register,
+}
+</pre>
+    <p>Use the generated command:
+</p>
+    <pre>\registercriticalentry
+  {reason-reading}
+  {reason-01}
+  {1:1}
+  {textual}
+  {reading}
+  {Reason}
+  {Judgment}
+  {ms-b,ms-d}
+  {}
+</pre>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Registration is not rendering.</b> The command adds a record to the Lua
+registry. Nothing becomes visible until a separate placement command selects
+and renders records.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Render_one_structured_record">
+      5. Render one structured record
+     </span>
+    </h2>
+    <p>Declare the printed sigla separately:
+</p>
+    <pre>critical.witness_sigla = {
+    ["ms-a"] = "A",
+    ["ms-b"] = "B",
+    ["ms-c"] = "C",
+    ["ms-d"] = "D",
+    ["ms-e"] = "E",
+}
+</pre>
+    <p>Split a comma-separated list:
+</p>
+    <pre>local function split_identifiers(list)
+    local result = { }
+
+    for identifier in string.gmatch(list or "", "[^,%s]+") do
+        result[#result + 1] = identifier
+    end
+
+    return result
+end
+</pre>
+    <p>Resolve the sigla:
+</p>
+    <pre>local function format_witnesses(list)
+    local result = { }
+
+    for _, identifier in ipairs(split_identifiers(list)) do
+        result[#result + 1] =
+            critical.witness_sigla[identifier] or
+            ("[" .. identifier .. "]")
+    end
+
+    return table.concat(result, " ")
+end
+</pre>
+    <p>An unknown identifier remains visible:
+</p>
+    <pre>[ms-x]
+</pre>
+    <p>Define a renderer:
+</p>
+    <pre>local function formatted_entry(entry)
+    local witnesses = format_witnesses(entry.witnesses)
+
+    if entry.kind == "omission" then
+        return entry.lemma .. "] om. " .. witnesses
+
+    elseif entry.kind == "addition" then
+        return entry.lemma .. "] add. " ..
+               entry.reading .. " " .. witnesses
+
+    elseif entry.kind == "conjecture" then
+        return entry.lemma .. "] conj. " ..
+               entry.reading .. " " ..
+               entry.responsibility
+
+    else
+        return entry.lemma .. "] " ..
+               entry.reading .. " " .. witnesses
+    end
+end
+</pre>
+    <p>The punctuation now belongs to the renderer rather than to the stored record.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Compile_the_minimal_registry_MWE">
+      6. Compile the minimal registry MWE
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+
+userdata.critical <span class="brx">=</span> userdata.critical or <span class="br">{</span> <span class="br">}</span>
+
+local critical <span class="brx">=</span> userdata.critical
+
+critical.entries <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+critical.witness_sigla <span class="brx">=</span> <span class="br">{</span>
+    <span class="brx">[</span>"ms-b"<span class="brx">]</span> <span class="brx">=</span> "B",
+    <span class="brx">[</span>"ms-c"<span class="brx">]</span> <span class="brx">=</span> "C",
+    <span class="brx">[</span>"ms-d"<span class="brx">]</span> <span class="brx">=</span> "D",
+    <span class="brx">[</span>"ms-e"<span class="brx">]</span> <span class="brx">=</span> "E",
+<span class="br">}</span>
+
+local function split_identifiers<span class="brx">(</span>list<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for identifier in string.gmatch<span class="brx">(</span>list or "", "<span class="brx">[</span>^,<span class="comment">%s]+") do</span>
+        result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span> identifier
+    end
+
+    return result
+end
+
+local function format_witnesses<span class="brx">(</span>list<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for _, identifier in ipairs<span class="brx">(</span>split_identifiers<span class="brx">(</span>list<span class="brx">)</span><span class="brx">)</span> do
+        result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span>
+            critical.witness_sigla<span class="brx">[</span>identifier<span class="brx">]</span> or
+            <span class="brx">(</span>"<span class="brx">[</span>" .. identifier .. "<span class="brx">]</span>"<span class="brx">)</span>
+    end
+
+    return table.concat<span class="brx">(</span>result, " "<span class="brx">)</span>
+end
+
+local function parse_position<span class="brx">(</span>position<span class="brx">)</span>
+    local unitorder, entryorder <span class="brx">=</span>
+        string.match<span class="brx">(</span>position or "", "^<span class="brx">(</span><span class="comment">%d+):(%d+)$")</span>
+
+    return tonumber<span class="brx">(</span>unitorder<span class="brx">)</span> or 0,
+           tonumber<span class="brx">(</span>entryorder<span class="brx">)</span> or 0
+end
+
+function critical.register<span class="brx">(</span>
+    id,
+    unit,
+    position,
+    layer,
+    kind,
+    lemma,
+    reading,
+    witnesses,
+    responsibility
+<span class="brx">)</span>
+    local unitorder, entryorder <span class="brx">=</span>
+        parse_position<span class="brx">(</span>position<span class="brx">)</span>
+
+    critical.entries<span class="brx">[</span><span class="brx">#</span>critical.entries + 1<span class="brx">]</span> <span class="brx">=</span> <span class="br">{</span>
+        id             <span class="brx">=</span> id,
+        unit           <span class="brx">=</span> unit,
+        unitorder      <span class="brx">=</span> unitorder,
+        entryorder     <span class="brx">=</span> entryorder,
+        layer          <span class="brx">=</span> layer,
+        kind           <span class="brx">=</span> kind,
+        lemma          <span class="brx">=</span> lemma,
+        reading        <span class="brx">=</span> reading,
+        witnesses      <span class="brx">=</span> witnesses,
+        responsibility <span class="brx">=</span> responsibility,
+    <span class="br">}</span>
+end
+
+local function formatted_entry<span class="brx">(</span>entry<span class="brx">)</span>
+    local witnesses <span class="brx">=</span> format_witnesses<span class="brx">(</span>entry.witnesses<span class="brx">)</span>
+
+    if entry.kind <span class="brx">=</span><span class="brx">=</span> "omission" then
+        return entry.lemma .. "<span class="brx">]</span> om. " .. witnesses
+
+    elseif entry.kind <span class="brx">=</span><span class="brx">=</span> "addition" then
+        return entry.lemma .. "<span class="brx">]</span> add. " ..
+               entry.reading .. " " .. witnesses
+
+    else
+        return entry.lemma .. "<span class="brx">]</span> " ..
+               entry.reading .. " " .. witnesses
+    end
+end
+
+function critical.place_all<span class="brx">(</span><span class="brx">)</span>
+    context.startitemize<span class="brx">(</span><span class="brx">)</span>
+
+    for _, entry in ipairs<span class="brx">(</span>critical.entries<span class="brx">)</span> do
+        context.startitem<span class="brx">(</span><span class="brx">)</span>
+        context<span class="brx">(</span>formatted_entry<span class="brx">(</span>entry<span class="brx">)</span><span class="brx">)</span>
+        context.stopitem<span class="brx">(</span><span class="brx">)</span>
+    end
+
+    context.stopitemize<span class="brx">(</span><span class="brx">)</span>
+end
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "registercriticalentry",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    arguments <span class="brx">=</span> <span class="br">{</span>
+        "string", "string", "string",
+        "string", "string", "string",
+        "string", "string", "string",
+    <span class="br">}</span>,
+    actions   <span class="brx">=</span> critical.register,
+<span class="br">}</span>
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placecriticalentries",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_all,
+<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs">\registercriticalentry</span>
+  <span class="br">{</span>reason-reading<span class="br">}</span>
+  <span class="br">{</span>reason-01<span class="br">}</span>
+  <span class="br">{</span>1:1<span class="br">}</span>
+  <span class="br">{</span>textual<span class="br">}</span>
+  <span class="br">{</span>reading<span class="br">}</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span>Judgment<span class="br">}</span>
+  <span class="br">{</span>ms-b,ms-d<span class="br">}</span>
+  <span class="br">{</span><span class="br">}</span>
+
+<span class="cs">\registercriticalentry</span>
+  <span class="br">{</span>reason-omission<span class="br">}</span>
+  <span class="br">{</span>reason-01<span class="br">}</span>
+  <span class="br">{</span>1:2<span class="br">}</span>
+  <span class="br">{</span>textual<span class="br">}</span>
+  <span class="br">{</span>omission<span class="br">}</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="br">}</span>
+  <span class="br">{</span>ms-e<span class="br">}</span>
+  <span class="br">{</span><span class="br">}</span>
+
+<span class="cs">\registercriticalentry</span>
+  <span class="br">{</span>understanding-addition<span class="br">}</span>
+  <span class="br">{</span>understanding-01<span class="br">}</span>
+  <span class="br">{</span>2:1<span class="br">}</span>
+  <span class="br">{</span>textual<span class="br">}</span>
+  <span class="br">{</span>addition<span class="br">}</span>
+  <span class="br">{</span>understanding<span class="br">}</span>
+  <span class="br">{</span>and directs the will<span class="br">}</span>
+  <span class="br">{</span>ms-c<span class="br">}</span>
+  <span class="br">{</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Registered critical entries<span class="br">}</span>
+
+<span class="cs">\placecriticalentries</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/1d5525d41d3de4da87eb05f4aaaef4c3.webp" width="874">
+     </li>
+    </ul>
+    <p>Expected contents:
+</p>
+    <pre>Reason] Judgment B D
+Reason] om. E
+understanding] add. and directs the will C
+</pre>
+    <h2>
+     <span class="mw-headline" id="7._Sort_without_destroying_registration_order">
+      7. Sort without destroying registration order
+     </span>
+    </h2>
+    <p>Lua's <code>table.sort</code> changes the table it receives. Copy the registry
+before sorting:
+</p>
+    <pre>local function copy_entries(entries)
+    local result = { }
+
+    for index, entry in ipairs(entries) do
+        result[index] = entry
+    end
+
+    return result
+end
+</pre>
+    <p>Sort by textual position:
+</p>
+    <pre>local function sort_entries(entries)
+    table.sort(entries, function(a, b)
+        if a.unitorder == b.unitorder then
+            if a.entryorder == b.entryorder then
+                return a.id &lt; b.id
+            end
+
+            return a.entryorder &lt; b.entryorder
+        end
+
+        return a.unitorder &lt; b.unitorder
+    end)
+
+    return entries
+end
+</pre>
+    <p>Use:
+</p>
+    <pre>local selected = sort_entries(
+    copy_entries(critical.entries)
+)
+</pre>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Why copy first?</b> Preserving registration order allows another report to
+show how the data were entered while the reader apparatus uses textual order.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Filter_records_by_one_criterion">
+      8. Filter records by one criterion
+     </span>
+    </h2>
+    <p>A witness filter asks whether an identifier occurs in the witness list:
+</p>
+    <pre>local function has_witness(entry, wanted)
+    for _, identifier in ipairs(
+        split_identifiers(entry.witnesses)
+    ) do
+        if identifier == wanted then
+            return true
+        end
+    end
+
+    return false
+end
+</pre>
+    <p>A generic selector reduces repetition:
+</p>
+    <pre>local function select_entries(test)
+    local result = { }
+
+    for _, entry in ipairs(critical.entries) do
+        if test(entry) then
+            result[#result + 1] = entry
+        end
+    end
+
+    return sort_entries(result)
+end
+</pre>
+    <p>Examples:
+</p>
+    <pre>local textual = select_entries(
+    function(entry)
+        return entry.layer == "textual"
+    end
+)
+
+local omissions = select_entries(
+    function(entry)
+        return entry.kind == "omission"
+    end
+)
+
+local witness_b = select_entries(
+    function(entry)
+        return has_witness(entry, "ms-b")
+    end
+)
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Selection
+       </th>
+       <th>
+        Scholarly question
+       </th>
+      </tr>
+      <tr>
+       <td>Witness
+</td>
+       <td>Where does one witness contribute evidence?
+</td>
+      </tr>
+      <tr>
+       <td>Layer
+</td>
+       <td>Which records belong to textual criticism, translation, or sources?
+</td>
+      </tr>
+      <tr>
+       <td>Operation
+</td>
+       <td>Where are the omissions, additions, or conjectures?
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="9._Compile_a_sorting_and_filtering_MWE">
+      9. Compile a sorting and filtering MWE
+     </span>
+    </h2>
+    <p>The following compact MWE registers records out of order and creates three
+views:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+
+userdata.critical <span class="brx">=</span> userdata.critical or <span class="br">{</span> <span class="br">}</span>
+
+local critical <span class="brx">=</span> userdata.critical
+
+critical.entries <span class="brx">=</span> <span class="br">{</span>
+    <span class="br">{</span>
+        id <span class="brx">=</span> "source-experience",
+        unitorder <span class="brx">=</span> 2,
+        entryorder <span class="brx">=</span> 2,
+        layer <span class="brx">=</span> "sources",
+        kind <span class="brx">=</span> "source",
+        lemma <span class="brx">=</span> "experience",
+        reading <span class="brx">=</span> "Compare Locke, Essay II.1",
+        witnesses <span class="brx">=</span> "",
+    <span class="br">}</span>,
+    <span class="br">{</span>
+        id <span class="brx">=</span> "reason-omission",
+        unitorder <span class="brx">=</span> 1,
+        entryorder <span class="brx">=</span> 2,
+        layer <span class="brx">=</span> "textual",
+        kind <span class="brx">=</span> "omission",
+        lemma <span class="brx">=</span> "Reason",
+        reading <span class="brx">=</span> "",
+        witnesses <span class="brx">=</span> "ms-e",
+    <span class="br">}</span>,
+    <span class="br">{</span>
+        id <span class="brx">=</span> "reason-reading",
+        unitorder <span class="brx">=</span> 1,
+        entryorder <span class="brx">=</span> 1,
+        layer <span class="brx">=</span> "textual",
+        kind <span class="brx">=</span> "reading",
+        lemma <span class="brx">=</span> "Reason",
+        reading <span class="brx">=</span> "Judgment",
+        witnesses <span class="brx">=</span> "ms-b,ms-d",
+    <span class="br">}</span>,
+<span class="br">}</span>
+
+critical.witness_sigla <span class="brx">=</span> <span class="br">{</span>
+    <span class="brx">[</span>"ms-b"<span class="brx">]</span> <span class="brx">=</span> "B",
+    <span class="brx">[</span>"ms-d"<span class="brx">]</span> <span class="brx">=</span> "D",
+    <span class="brx">[</span>"ms-e"<span class="brx">]</span> <span class="brx">=</span> "E",
+<span class="br">}</span>
+
+local function split_identifiers<span class="brx">(</span>list<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for identifier in string.gmatch<span class="brx">(</span>list or "", "<span class="brx">[</span>^,<span class="comment">%s]+") do</span>
+        result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span> identifier
+    end
+
+    return result
+end
+
+local function format_witnesses<span class="brx">(</span>list<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for _, identifier in ipairs<span class="brx">(</span>split_identifiers<span class="brx">(</span>list<span class="brx">)</span><span class="brx">)</span> do
+        result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span>
+            critical.witness_sigla<span class="brx">[</span>identifier<span class="brx">]</span> or
+            <span class="brx">(</span>"<span class="brx">[</span>" .. identifier .. "<span class="brx">]</span>"<span class="brx">)</span>
+    end
+
+    return table.concat<span class="brx">(</span>result, " "<span class="brx">)</span>
+end
+
+local function sort_entries<span class="brx">(</span>entries<span class="brx">)</span>
+    table.sort<span class="brx">(</span>entries, function<span class="brx">(</span>a, b<span class="brx">)</span>
+        if a.unitorder <span class="brx">=</span><span class="brx">=</span> b.unitorder then
+            if a.entryorder <span class="brx">=</span><span class="brx">=</span> b.entryorder then
+                return a.id &lt; b.id
+            end
+
+            return a.entryorder &lt; b.entryorder
+        end
+
+        return a.unitorder &lt; b.unitorder
+    end<span class="brx">)</span>
+
+    return entries
+end
+
+local function select_entries<span class="brx">(</span>test<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for _, entry in ipairs<span class="brx">(</span>critical.entries<span class="brx">)</span> do
+        if test<span class="brx">(</span>entry<span class="brx">)</span> then
+            result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span> entry
+        end
+    end
+
+    return sort_entries<span class="brx">(</span>result<span class="brx">)</span>
+end
+
+local function formatted_entry<span class="brx">(</span>entry<span class="brx">)</span>
+    local witnesses <span class="brx">=</span> format_witnesses<span class="brx">(</span>entry.witnesses<span class="brx">)</span>
+
+    if entry.kind <span class="brx">=</span><span class="brx">=</span> "omission" then
+        return entry.lemma .. "<span class="brx">]</span> om. " .. witnesses
+
+    elseif entry.kind <span class="brx">=</span><span class="brx">=</span> "source" then
+        return entry.lemma .. "<span class="brx">]</span> source: " .. entry.reading
+
+    else
+        return entry.lemma .. "<span class="brx">]</span> " ..
+               entry.reading .. " " .. witnesses
+    end
+end
+
+local function place<span class="brx">(</span>entries<span class="brx">)</span>
+    context.startitemize<span class="brx">(</span><span class="brx">)</span>
+
+    for _, entry in ipairs<span class="brx">(</span>entries<span class="brx">)</span> do
+        context.startitem<span class="brx">(</span><span class="brx">)</span>
+        context<span class="brx">(</span>formatted_entry<span class="brx">(</span>entry<span class="brx">)</span><span class="brx">)</span>
+        context.stopitem<span class="brx">(</span><span class="brx">)</span>
+    end
+
+    context.stopitemize<span class="brx">(</span><span class="brx">)</span>
+end
+
+function critical.place_textual<span class="brx">(</span><span class="brx">)</span>
+    place<span class="brx">(</span>select_entries<span class="brx">(</span>
+        function<span class="brx">(</span>entry<span class="brx">)</span>
+            return entry.layer <span class="brx">=</span><span class="brx">=</span> "textual"
+        end
+    <span class="brx">)</span><span class="brx">)</span>
+end
+
+function critical.place_omissions<span class="brx">(</span><span class="brx">)</span>
+    place<span class="brx">(</span>select_entries<span class="brx">(</span>
+        function<span class="brx">(</span>entry<span class="brx">)</span>
+            return entry.kind <span class="brx">=</span><span class="brx">=</span> "omission"
+        end
+    <span class="brx">)</span><span class="brx">)</span>
+end
+
+function critical.place_sources<span class="brx">(</span><span class="brx">)</span>
+    place<span class="brx">(</span>select_entries<span class="brx">(</span>
+        function<span class="brx">(</span>entry<span class="brx">)</span>
+            return entry.layer <span class="brx">=</span><span class="brx">=</span> "sources"
+        end
+    <span class="brx">)</span><span class="brx">)</span>
+end
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placetextualview",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_textual,
+<span class="br">}</span>
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placeomissionview",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_omissions,
+<span class="br">}</span>
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placesourceview",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_sources,
+<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Textual layer<span class="br">}</span>
+<span class="cs">\placetextualview</span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Omissions<span class="br">}</span>
+<span class="cs">\placeomissionview</span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Source layer<span class="br">}</span>
+<span class="cs">\placesourceview</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/8794cc4d8cb0347df39299d9b8994503.webp" width="874">
+     </li>
+    </ul>
+    <p>The textual view begins with <code>Reason] Judgment B D</code>, even though
+that record was registered last.
+</p>
+    <h2>
+     <span class="mw-headline" id="10._Keep_data_and_presentation_separate">
+      10. Keep data and presentation separate
+     </span>
+    </h2>
+    <p>A stored omission is:
+</p>
+    <pre>{
+    kind      = "omission",
+    lemma     = "Reason",
+    witnesses = "ms-e",
+}
+</pre>
+    <p>It is not stored as:
+</p>
+    <pre>Reason] om. E
+</pre>
+    <p>Another renderer could produce:
+</p>
+    <pre>Witness E omits &ldquo;Reason&rdquo; in reason-01.
+</pre>
+    <p>without modifying the record.
+</p>
+    <p>This is the principal conceptual gain of structured data.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Declare_controlled_vocabularies">
+      11. Declare controlled vocabularies
+     </span>
+    </h2>
+    <p>Validation requires an explicit statement of what the project permits.
+</p>
+    <pre>critical.known_units = {
+    ["reason-01"]     = true,
+    ["experience-01"] = true,
+}
+
+critical.valid_layers = {
+    textual     = true,
+    translation = true,
+    sources     = true,
+}
+
+critical.valid_kinds = {
+    reading     = true,
+    omission    = true,
+    addition    = true,
+    conjecture  = true,
+    translation = true,
+    source      = true,
+}
+</pre>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Controlled vocabulary.</b> Values such as <code>textual</code>,
+<code>translation</code>, and <code>omission</code> should be declared once.
+Otherwise, spelling variants create different categories without warning.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Record_validation_issues">
+      12. Record validation issues
+     </span>
+    </h2>
+    <p>Create a diagnostic list:
+</p>
+    <pre>critical.validation_issues = { }
+
+local report = logs.reporter("critical apparatus")
+
+local function add_issue(severity, code, message)
+    critical.validation_issues[
+        #critical.validation_issues + 1
+    ] = {
+        severity = severity,
+        code     = code,
+        message  = message,
+    }
+
+    report("%s: %s", severity, message)
+end
+</pre>
+    <p>The validator can continue after finding a problem, so one proof run can report
+several issues.
+</p>
+    <h2>
+     <span class="mw-headline" id="13._Validate_identifiers_and_required_fields">
+      13. Validate identifiers and required fields
+     </span>
+    </h2>
+    <p>Useful checks include:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Check
+       </th>
+       <th>
+        Typical severity
+       </th>
+      </tr>
+      <tr>
+       <td>Undefined witness
+</td>
+       <td>warning
+</td>
+      </tr>
+      <tr>
+       <td>Undefined textual unit
+</td>
+       <td>error
+</td>
+      </tr>
+      <tr>
+       <td>Unknown layer or operation
+</td>
+       <td>error
+</td>
+      </tr>
+      <tr>
+       <td>Missing lemma
+</td>
+       <td>error
+</td>
+      </tr>
+      <tr>
+       <td>Missing content for a reading, addition, conjecture, translation, or source
+</td>
+       <td>error
+</td>
+      </tr>
+      <tr>
+       <td>Duplicate record identifier
+</td>
+       <td>error
+</td>
+      </tr>
+      <tr>
+       <td>Duplicate textual position
+</td>
+       <td>warning or error according to project policy
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>A simple empty-value test is:
+</p>
+    <pre>local function is_empty(value)
+    return value == nil or
+           value:match("^%s*$") ~= nil
+end
+</pre>
+    <p>An omission is deliberately excluded from the rule requiring a reading.
+</p>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Validation policy.</b> A duplicate position may be legitimate when several
+records belong to the same textual location. The project must decide whether
+that case is informational, a warning, or an error.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="14._Compile_a_diagnostic_validation_MWE">
+      14. Compile a diagnostic validation MWE
+     </span>
+    </h2>
+    <p>The following MWE intentionally contains invalid records:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,9.5pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\startluacode</span></span>
+
+userdata.critical <span class="brx">=</span> userdata.critical or <span class="br">{</span> <span class="br">}</span>
+
+local critical <span class="brx">=</span> userdata.critical
+
+critical.entries           <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+critical.validation_issues <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+critical.ids               <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+critical.witness_sigla <span class="brx">=</span> <span class="br">{</span>
+    <span class="brx">[</span>"ms-b"<span class="brx">]</span> <span class="brx">=</span> "B",
+    <span class="brx">[</span>"ms-c"<span class="brx">]</span> <span class="brx">=</span> "C",
+<span class="br">}</span>
+
+critical.known_units <span class="brx">=</span> <span class="br">{</span>
+    <span class="brx">[</span>"reason-01"<span class="brx">]</span>     <span class="brx">=</span> true,
+    <span class="brx">[</span>"experience-01"<span class="brx">]</span> <span class="brx">=</span> true,
+<span class="br">}</span>
+
+critical.valid_layers <span class="brx">=</span> <span class="br">{</span>
+    textual <span class="brx">=</span> true,
+    sources <span class="brx">=</span> true,
+<span class="br">}</span>
+
+critical.valid_kinds <span class="brx">=</span> <span class="br">{</span>
+    reading  <span class="brx">=</span> true,
+    omission <span class="brx">=</span> true,
+    source   <span class="brx">=</span> true,
+<span class="br">}</span>
+
+local report <span class="brx">=</span> logs.reporter<span class="brx">(</span>"critical apparatus"<span class="brx">)</span>
+
+local function is_empty<span class="brx">(</span>value<span class="brx">)</span>
+    return value <span class="brx">=</span><span class="brx">=</span> nil or
+           value:match<span class="brx">(</span>"^<span class="comment">%s*$") ~= nil</span>
+end
+
+local function split_identifiers<span class="brx">(</span>list<span class="brx">)</span>
+    local result <span class="brx">=</span> <span class="br">{</span> <span class="br">}</span>
+
+    for identifier in string.gmatch<span class="brx">(</span>list or "", "<span class="brx">[</span>^,<span class="comment">%s]+") do</span>
+        result<span class="brx">[</span><span class="brx">#</span>result + 1<span class="brx">]</span> <span class="brx">=</span> identifier
+    end
+
+    return result
+end
+
+local function add_issue<span class="brx">(</span>severity, code, message<span class="brx">)</span>
+    critical.validation_issues<span class="brx">[</span>
+        <span class="brx">#</span>critical.validation_issues + 1
+    <span class="brx">]</span> <span class="brx">=</span> <span class="br">{</span>
+        severity <span class="brx">=</span> severity,
+        code     <span class="brx">=</span> code,
+        message  <span class="brx">=</span> message,
+    <span class="br">}</span>
+
+    report<span class="brx">(</span>"<span class="comment">%s: %s", severity, message)</span>
+end
+
+local requires_content <span class="brx">=</span> <span class="br">{</span>
+    reading <span class="brx">=</span> true,
+    source  <span class="brx">=</span> true,
+<span class="br">}</span>
+
+local function validate<span class="brx">(</span>entry<span class="brx">)</span>
+    if critical.ids<span class="brx">[</span>entry.id<span class="brx">]</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "duplicate-id",
+            'Duplicate identifier "' .. entry.id .. '".'
+        <span class="brx">)</span>
+    else
+        critical.ids<span class="brx">[</span>entry.id<span class="brx">]</span> <span class="brx">=</span> true
+    end
+
+    if not critical.known_units<span class="brx">[</span>entry.unit<span class="brx">]</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "undefined-unit",
+            'Undefined unit "' .. entry.unit .. '".'
+        <span class="brx">)</span>
+    end
+
+    if not critical.valid_layers<span class="brx">[</span>entry.layer<span class="brx">]</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "undefined-layer",
+            'Unknown layer "' .. entry.layer .. '".'
+        <span class="brx">)</span>
+    end
+
+    if not critical.valid_kinds<span class="brx">[</span>entry.kind<span class="brx">]</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "undefined-kind",
+            'Unknown operation "' .. entry.kind .. '".'
+        <span class="brx">)</span>
+    end
+
+    if is_empty<span class="brx">(</span>entry.lemma<span class="brx">)</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "missing-lemma",
+            'Entry "' .. entry.id .. '" has no lemma.'
+        <span class="brx">)</span>
+    end
+
+    if requires_content<span class="brx">[</span>entry.kind<span class="brx">]</span> and
+       is_empty<span class="brx">(</span>entry.reading<span class="brx">)</span> then
+        add_issue<span class="brx">(</span>
+            "error",
+            "missing-content",
+            'Entry "' .. entry.id .. '" has no content.'
+        <span class="brx">)</span>
+    end
+
+    for _, witness in ipairs<span class="brx">(</span>split_identifiers<span class="brx">(</span>entry.witnesses<span class="brx">)</span><span class="brx">)</span> do
+        if not critical.witness_sigla<span class="brx">[</span>witness<span class="brx">]</span> then
+            add_issue<span class="brx">(</span>
+                "warning",
+                "undefined-witness",
+                'Undefined witness "' .. witness ..
+                '" in "' .. entry.id .. '".'
+            <span class="brx">)</span>
+        end
+    end
+end
+
+local function register<span class="brx">(</span>entry<span class="brx">)</span>
+    critical.entries<span class="brx">[</span><span class="brx">#</span>critical.entries + 1<span class="brx">]</span> <span class="brx">=</span> entry
+    validate<span class="brx">(</span>entry<span class="brx">)</span>
+end
+
+register <span class="br">{</span>
+    id <span class="brx">=</span> "reason-reading",
+    unit <span class="brx">=</span> "reason-01",
+    layer <span class="brx">=</span> "textual",
+    kind <span class="brx">=</span> "reading",
+    lemma <span class="brx">=</span> "Reason",
+    reading <span class="brx">=</span> "Judgment",
+    witnesses <span class="brx">=</span> "ms-b",
+<span class="br">}</span>
+
+register <span class="br">{</span>
+    id <span class="brx">=</span> "reason-reading-two",
+    unit <span class="brx">=</span> "reason-01",
+    layer <span class="brx">=</span> "textual",
+    kind <span class="brx">=</span> "reading",
+    lemma <span class="brx">=</span> "Reason",
+    reading <span class="brx">=</span> "Understanding",
+    witnesses <span class="brx">=</span> "ms-x",
+<span class="br">}</span>
+
+register <span class="br">{</span>
+    id <span class="brx">=</span> "unknown-unit",
+    unit <span class="brx">=</span> "reason-04",
+    layer <span class="brx">=</span> "textual",
+    kind <span class="brx">=</span> "omission",
+    lemma <span class="brx">=</span> "",
+    reading <span class="brx">=</span> "",
+    witnesses <span class="brx">=</span> "ms-c",
+<span class="br">}</span>
+
+register <span class="br">{</span>
+    id <span class="brx">=</span> "source-without-content",
+    unit <span class="brx">=</span> "experience-01",
+    layer <span class="brx">=</span> "sourcex",
+    kind <span class="brx">=</span> "source",
+    lemma <span class="brx">=</span> "experience",
+    reading <span class="brx">=</span> "",
+    witnesses <span class="brx">=</span> "",
+<span class="br">}</span>
+
+function critical.place_summary<span class="brx">(</span><span class="brx">)</span>
+    local errors   <span class="brx">=</span> 0
+    local warnings <span class="brx">=</span> 0
+
+    for _, issue in ipairs<span class="brx">(</span>critical.validation_issues<span class="brx">)</span> do
+        if issue.severity <span class="brx">=</span><span class="brx">=</span> "error" then
+            errors <span class="brx">=</span> errors + 1
+        elseif issue.severity <span class="brx">=</span><span class="brx">=</span> "warning" then
+            warnings <span class="brx">=</span> warnings + 1
+        end
+    end
+
+    context<span class="brx">(</span>"Entries: <span class="comment">%d\\par", #critical.entries)</span>
+    context<span class="brx">(</span>"Errors: <span class="comment">%d\\par", errors)</span>
+    context<span class="brx">(</span>"Warnings: <span class="comment">%d\\par", warnings)</span>
+end
+
+function critical.place_report<span class="brx">(</span><span class="brx">)</span>
+    context.startitemize<span class="brx">(</span><span class="brx">)</span>
+
+    for _, issue in ipairs<span class="brx">(</span>critical.validation_issues<span class="brx">)</span> do
+        context.startitem<span class="brx">(</span><span class="brx">)</span>
+        context<span class="brx">(</span>"<span class="br">{</span><span class="cs">\\</span>bf <span class="comment">%s} &mdash; {\\tt %s}\\par",</span>
+            issue.severity,
+            issue.code<span class="brx">)</span>
+        context<span class="brx">(</span>"<span class="comment">%s", issue.message)</span>
+        context.stopitem<span class="brx">(</span><span class="brx">)</span>
+    end
+
+    context.stopitemize<span class="brx">(</span><span class="brx">)</span>
+end
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placevalidationsummary",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_summary,
+<span class="br">}</span>
+
+interfaces.implement <span class="br">{</span>
+    name      <span class="brx">=</span> "placevalidationreport",
+    public    <span class="brx">=</span> true,
+    protected <span class="brx">=</span> true,
+    actions   <span class="brx">=</span> critical.place_report,
+<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\stopluacode</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Critical-data validation<span class="br">}</span>
+
+<span class="cs">\placevalidationsummary</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs">\placevalidationreport</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/bc6957193e6ee06df77184966b50d13d.webp" width="874">
+     </li>
+    </ul>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Diagnostic MWE.</b> The invalid records are intentional. This example is
+designed to demonstrate the reporting mechanism, not to provide data for a real
+edition.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="15._Distinguish_formal_validation_from_scholarly_judgement">
+      15. Distinguish formal validation from scholarly judgement
+     </span>
+    </h2>
+    <p>Validation can detect:
+</p>
+    <ul>
+     <li>
+      missing fields;
+     </li>
+     <li>
+      unknown identifiers;
+     </li>
+     <li>
+      inconsistent vocabulary;
+     </li>
+     <li>
+      duplicate identifiers;
+     </li>
+     <li>
+      invalid combinations defined by the project.
+     </li>
+    </ul>
+    <p>It cannot decide whether:
+</p>
+    <ul>
+     <li>
+      a reading is philologically correct;
+     </li>
+     <li>
+      a conjecture is convincing;
+     </li>
+     <li>
+      a translation is accurate;
+     </li>
+     <li>
+      a morphological analysis is sound;
+     </li>
+     <li>
+      a cited parallel is historically relevant.
+     </li>
+    </ul>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Limit of validation.</b> Lua can verify the formal consistency of recorded
+scholarship. It cannot perform the scholarship itself.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="16._Generate_several_outputs_from_one_registry">
+      16. Generate several outputs from one registry
+     </span>
+    </h2>
+    <p>One collection can support:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Output
+       </th>
+       <th>
+        Selection
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td>Reader apparatus
+</td>
+       <td>textual layer in textual order
+</td>
+       <td>publish variants
+</td>
+      </tr>
+      <tr>
+       <td>Witness report
+</td>
+       <td>records containing one witness
+</td>
+       <td>inspect one manuscript
+</td>
+      </tr>
+      <tr>
+       <td>Omission catalogue
+</td>
+       <td><code>kind == "omission"</code>
+</td>
+       <td>review absent passages
+</td>
+      </tr>
+      <tr>
+       <td>Conjecture list
+</td>
+       <td><code>kind == "conjecture"</code>
+</td>
+       <td>review editorial interventions
+</td>
+      </tr>
+      <tr>
+       <td>Translation review
+</td>
+       <td>translation layer
+</td>
+       <td>check terminology
+</td>
+      </tr>
+      <tr>
+       <td>Source report
+</td>
+       <td>sources layer
+</td>
+       <td>collect parallels and allusions
+</td>
+      </tr>
+      <tr>
+       <td>Validation proof
+</td>
+       <td>all detected issues
+</td>
+       <td>check formal consistency
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>ConTeXt modes can select the required output:
+</p>
+    <pre>\startmode[proof]
+
+\placevalidationsummary
+\placevalidationreport
+
+\stopmode
+</pre>
+    <p>Compile with:
+</p>
+    <pre>context --mode=proof edition.tex
+</pre>
+    <p>Only the selected presentation changes. The registry remains the same.
+</p>
+    <h2>
+     <span class="mw-headline" id="17._Organize_the_project_files">
+      17. Organize the project files
+     </span>
+    </h2>
+    <p>Move the Lua implementation into a separate file:
+</p>
+    <pre>critical-data.lua
+</pre>
+    <p>Load it with:
+</p>
+    <pre>\registerctxluafile{critical-data}{}
+</pre>
+    <p>A useful project structure is:
+</p>
+    <pre>project/
+&boxv;
+&boxvr;&boxh;&boxh; environment/
+&boxv;   &boxur;&boxh;&boxh; env-critical-edition.mkxl
+&boxv;
+&boxvr;&boxh;&boxh; lua/
+&boxv;   &boxur;&boxh;&boxh; critical-data.lua
+&boxv;
+&boxvr;&boxh;&boxh; data/
+&boxv;   &boxur;&boxh;&boxh; critical-records.mkxl
+&boxv;
+&boxvr;&boxh;&boxh; components/
+&boxv;   &boxur;&boxh;&boxh; chapter-01.mkxl
+&boxv;
+&boxur;&boxh;&boxh; edition.tex
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        File
+       </th>
+       <th>
+        Responsibility
+       </th>
+      </tr>
+      <tr>
+       <td>Environment
+</td>
+       <td>typography, layout, note styles, public commands
+</td>
+      </tr>
+      <tr>
+       <td>Lua file
+</td>
+       <td>registration, sorting, filtering, validation, reports
+</td>
+      </tr>
+      <tr>
+       <td>Data file
+</td>
+       <td>record-registration calls
+</td>
+      </tr>
+      <tr>
+       <td>Component
+</td>
+       <td>edited text and textual-unit references
+</td>
+      </tr>
+      <tr>
+       <td>Main document
+</td>
+       <td>selected output mode and document assembly
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="18._Keep_the_public_registration_interface_stable">
+      18. Keep the public registration interface stable
+     </span>
+    </h2>
+    <p>The nine-argument command is a contract:
+</p>
+    <pre>\registercriticalentry
+  {id}
+  {unit}
+  {unit order:entry order}
+  {layer}
+  {operation}
+  {lemma}
+  {reading or content}
+  {witness identifiers}
+  {responsibility}
+</pre>
+    <p>The internal Lua representation may later change, provided that this public
+interface remains compatible.
+</p>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Interface stability.</b> The ConTeXt command is the boundary between
+editorial source and Lua implementation. A stable boundary protects the source
+from internal refactoring.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="19._Advanced_extension:_multilingual_records">
+      19. Advanced extension: multilingual records
+     </span>
+    </h2>
+    <p>A multilingual edition needs additional fields:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Field
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>language</code>
+</td>
+       <td>Language of the annotated text
+</td>
+      </tr>
+      <tr>
+       <td><code>target</code>
+</td>
+       <td>Stable identifier of the exact word, phrase, or passage
+</td>
+      </tr>
+      <tr>
+       <td><code>lemmalevel</code>
+</td>
+       <td><code>word</code>, <code>phrase</code>, or <code>passage</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>lexicallemma</code>
+</td>
+       <td>Dictionary form used in lexical analysis
+</td>
+      </tr>
+      <tr>
+       <td><code>bibliography</code>
+</td>
+       <td>Stable bibliographical key
+</td>
+      </tr>
+      <tr>
+       <td><code>locator</code>
+</td>
+       <td>Page, section, column, or cited location
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The distinction between <code>unit</code> and <code>target</code> is important:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Field
+       </th>
+       <th>
+        Identifies
+       </th>
+      </tr>
+      <tr>
+       <td><code>unit</code>
+</td>
+       <td>The larger synchronized passage
+</td>
+      </tr>
+      <tr>
+       <td><code>target</code>
+</td>
+       <td>The exact range annotated by one record
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Controlled lemma levels can be declared as:
+</p>
+    <pre>critical.valid_lemma_levels = {
+    word    = true,
+    phrase  = true,
+    passage = true,
+}
+</pre>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Scholarly distinction.</b> An apparatus lemma identifies text in the edited
+passage. A lexical lemma identifies a dictionary form. Store them in separate
+fields.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="20._Advanced_extension:_query_multilingual_data">
+      20. Advanced extension: query multilingual data
+     </span>
+    </h2>
+    <p>A Greek textual view may select two properties:
+</p>
+    <pre>local greek_textual = select_entries(
+    function(entry)
+        return entry.language == "gr" and
+               entry.layer == "textual"
+    end
+)
+</pre>
+    <p>A lexical view may select:
+</p>
+    <pre>local lexical = select_entries(
+    function(entry)
+        return entry.layer == "lexical"
+    end
+)
+</pre>
+    <p>A passage-level report may select:
+</p>
+    <pre>local passages = select_entries(
+    function(entry)
+        return entry.lemmalevel == "passage"
+    end
+)
+</pre>
+    <p>One record may appear in several reports because each report asks a different
+question. This is not duplication of source data.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Report
+       </th>
+       <th>
+        Selection
+       </th>
+       <th>
+        Editorial purpose
+       </th>
+      </tr>
+      <tr>
+       <td>Greek textual records
+</td>
+       <td>Greek + textual layer
+</td>
+       <td>review Greek variants
+</td>
+      </tr>
+      <tr>
+       <td>Latin translation records
+</td>
+       <td>Latin + translation layer
+</td>
+       <td>inspect translation evidence
+</td>
+      </tr>
+      <tr>
+       <td>Lexical records
+</td>
+       <td>lexical layer
+</td>
+       <td>review lemmas and morphology
+</td>
+      </tr>
+      <tr>
+       <td>Bibliographical records
+</td>
+       <td>bibliography layer
+</td>
+       <td>inspect cited works and locators
+</td>
+      </tr>
+      <tr>
+       <td>Passage-level records
+</td>
+       <td>passage lemma level
+</td>
+       <td>find annotations attached to complete passages
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The reader-facing page and the editorial report remain different outputs. The
+first is designed for reading; the second is designed for inspection and
+verification.
+</p>
+    <h2>
+     <span class="mw-headline" id="21._Recognize_the_limits_of_the_registry">
+      21. Recognize the limits of the registry
+     </span>
+    </h2>
+    <p>An embedded Lua registry is appropriate when:
+</p>
+    <ul>
+     <li>
+      one project controls both data and output;
+     </li>
+     <li>
+      the record model is stable;
+     </li>
+     <li>
+      ConTeXt remains the editorial master;
+     </li>
+     <li>
+      interchange with external tools is limited.
+     </li>
+    </ul>
+    <p>A dedicated structured format becomes preferable when:
+</p>
+    <ul>
+     <li>
+      several institutions share the corpus;
+     </li>
+     <li>
+      overlapping or discontinuous annotations must be represented;
+     </li>
+     <li>
+      schema-based validation is required;
+     </li>
+     <li>
+      the data must outlive one ConTeXt project;
+     </li>
+     <li>
+      several independent systems must consume the same data.
+     </li>
+    </ul>
+    <p>At that point, continue with
+<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="22._Test_the_workflow_systematically">
+      22. Test the workflow systematically
+     </span>
+    </h2>
+    <p>Compile separate tests for:
+</p>
+    <ul>
+     <li>
+      one valid record;
+     </li>
+     <li>
+      records entered out of textual order;
+     </li>
+     <li>
+      one witness filter;
+     </li>
+     <li>
+      one layer filter;
+     </li>
+     <li>
+      one operation filter;
+     </li>
+     <li>
+      an undefined witness;
+     </li>
+     <li>
+      an undefined unit;
+     </li>
+     <li>
+      an unknown layer;
+     </li>
+     <li>
+      a missing lemma;
+     </li>
+     <li>
+      missing required content;
+     </li>
+     <li>
+      a duplicate identifier;
+     </li>
+     <li>
+      a duplicate position;
+     </li>
+     <li>
+      proof and reader modes;
+     </li>
+     <li>
+      an empty view containing no records.
+     </li>
+    </ul>
+    <p>Inspect both:
+</p>
+    <ul>
+     <li>
+      the generated PDF;
+     </li>
+     <li>
+      the compilation log.
+     </li>
+    </ul>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Testing requirement.</b> Successful compilation proves only that the code ran.
+The PDF, the log, and the validation report must all be inspected before the
+editorial data are treated as valid.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="23._Command_summary">
+      23. Command summary
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Interface
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>\registercriticalentry</code>
+</td>
+       <td>Register one structured record
+</td>
+      </tr>
+      <tr>
+       <td><code>\placecriticalentries</code>
+</td>
+       <td>Print records in registration order
+</td>
+      </tr>
+      <tr>
+       <td><code>\placetextualview</code>
+</td>
+       <td>Print the textual layer in textual order
+</td>
+      </tr>
+      <tr>
+       <td><code>\placewitnessview</code>
+</td>
+       <td>Print records associated with one witness
+</td>
+      </tr>
+      <tr>
+       <td><code>\placeomissionview</code>
+</td>
+       <td>Print omission records
+</td>
+      </tr>
+      <tr>
+       <td><code>\placesourceview</code>
+</td>
+       <td>Print the source layer
+</td>
+      </tr>
+      <tr>
+       <td><code>\placevalidationsummary</code>
+</td>
+       <td>Print record, error, and warning counts
+</td>
+      </tr>
+      <tr>
+       <td><code>\placevalidationreport</code>
+</td>
+       <td>Print the complete diagnostic list
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>These are project interfaces created through
+<code>interfaces.implement</code>. They are not predefined ConTeXt commands.
+</p>
+    <h2>
+     <span class="mw-headline" id="24._What_this_guide_has_established">
+      24. What this guide has established
+     </span>
+    </h2>
+    <p>The progression is:
+</p>
+    <pre>formatted apparatus string
+        &boxv;
+        ▼
+structured record
+        &boxv;
+        ▼
+Lua registry
+        &boxv;
+        ▼
+sorting and filtering
+        &boxv;
+        ▼
+validation
+        &boxv;
+        ▼
+reader and editorial outputs
+</pre>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Final result of the series.</b> The six guides have progressed from a simple
+page-bottom apparatus to a structured workflow involving witnesses, several
+annotation layers, parallel texts, stable editorial units, Lua processing, and
+formal validation.
+</p>
+    </div>
+    <p>Lua does not replace:
+</p>
+    <ul>
+     <li>
+      editorial judgement;
+     </li>
+     <li>
+      ConTeXt typography;
+     </li>
+     <li>
+      the critical apparatus read on the page;
+     </li>
+     <li>
+      a dedicated interchange format when long-term collaborative exchange is
+     </li>
+    </ul>
+    <pre> required.
+</pre>
+    <h2>
+     <span class="mw-headline" id="25._Continue_with_TEI_XML_when_necessary">
+      25. Continue with TEI XML when necessary
+     </span>
+    </h2>
+    <p>The Lua registry is appropriate when the ConTeXt project remains the principal
+editorial environment.
+</p>
+    <p>TEI XML becomes relevant when the edition requires:
+</p>
+    <ul>
+     <li>
+      a formally documented interchange vocabulary;
+     </li>
+     <li>
+      collaborative work across several tools or institutions;
+     </li>
+     <li>
+      long-term preservation independent of one typesetting system;
+     </li>
+     <li>
+      complex overlapping or discontinuous annotation;
+     </li>
+     <li>
+      schema-based validation;
+     </li>
+     <li>
+      several outputs not controlled by one ConTeXt project.
+     </li>
+    </ul>
+    <p>The complementary collection begins at:
+</p>
+    <p><a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>
+</p>
+    <h2>
+     <span class="mw-headline" id="Online_resources">
+      Online resources
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">
+       ConTeXt and Lua programming
+      </a>
+      &mdash; orientation for Lua programming in ConTeXt;
+     </li>
+     <li>
+      <a href="ConTeXt_and_Lua_programming/ConTeXt_Lua_Documents_CLD.html" title="ConTeXt and Lua programming/ConTeXt Lua Documents CLD">
+       ConTeXt and Lua programming/ConTeXt Lua Documents CLD
+      </a>
+      &mdash; generating ConTeXt content from Lua;
+     </li>
+     <li>
+      <a href="ConTeXt_and_Lua_programming/Tutorials/Programming_in_LuaTeX.html" title="ConTeXt and Lua programming/Tutorials/Programming in LuaTeX">
+       ConTeXt and Lua programming/Tutorials/Programming in LuaTeX
+      </a>
+      &mdash; calling Lua from TeX and TeX from Lua;
+     </li>
+     <li>
+      <a href="ConTeXt_and_Lua_programming/Tutorials/System_Macros/Key_Value_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments">
+       ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments
+      </a>
+      &mdash; key&ndash;value interfaces;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=Modes&action=edit&redlink=1" title="Modes (page does not exist)">
+       Modes
+      </a>
+      &mdash; proof, validation, and publication outputs;
+     </li>
+     <li>
+      <a href="Command/environment.html" title="Command/environment">
+       Command/environment
+      </a>
+      &mdash; loading shared project definitions;
+     </li>
+     <li>
+      <a href="TEI_xml.html" title="TEI xml">
+       TEI xml
+      </a>
+      &mdash; XML and TEI processing.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">
+       Glossary of critical edition terms
+      </a>
+     </li>
+     <li>
+      <a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">
+       Building a simple critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">
+       Formatting a critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">
+       Managing witnesses and textual variants
+      </a>
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">
+       Typesetting an original text and translation in parallel
+      </a>
+     </li>
+     <li>
+      <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">
+       Building critical editions from TEI XML
+      </a>
+     </li>
+    </ul>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">&larr; Guide 5 &mdash; Typesetting an original text and translation in parallel</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 6 of 6 &mdash; End of guides</b>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Managing_structured_critical_data_with_Lua">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

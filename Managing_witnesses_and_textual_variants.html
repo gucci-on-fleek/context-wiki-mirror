@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Managing witnesses and textual variants&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Managing_witnesses_and_textual_variants" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Managing witnesses and textual variants
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7532&diff=43256">2026-07-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#fff4df; border:1px solid #e5c07b; border-left:5px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.35em; vertical-align:middle;">🚧</span>
+<b>Work in progress.</b> This guide is currently being drafted, corrected, and reviewed.
+Please do not modify the code unless this banner has been removed.
+</p>
+    </div>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">&larr; Guide 2 &mdash; Formatting a critical apparatus</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 3 of 6</b> &middot;
+<a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Next: Guide 4 &mdash; Using multiple apparatus layers &rarr;</a>
+</p>
+    </div>
+    <p><br>
+A critical apparatus repeatedly refers to manuscripts, printed editions, and
+other textual <b>witnesses</b>. In a short example, sigla can be typed directly:
+</p>
+    <pre>\reading{Judgment}{B D}
+</pre>
+    <p>In a larger edition, this becomes fragile. The same witness may occur hundreds
+of times, its printed siglum may change, and its description may be needed in
+an introduction, a witness table, or a discussion of textual relationships.
+</p>
+    <p>This guide develops a small witness-management interface in ordinary ConTeXt.
+It separates:
+</p>
+    <ul>
+     <li>
+      the stable identifier used in the source;
+     </li>
+     <li>
+      the siglum printed in the apparatus;
+     </li>
+     <li>
+      the type and description of the witness;
+     </li>
+     <li>
+      the readings and textual operations associated with that witness.
+     </li>
+    </ul>
+    <p>The progression is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Problem
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td>A siglum is repeated as literal text
+</td>
+       <td>The witness is declared once
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td>The source needs a stable name distinct from the printed siglum
+</td>
+       <td>Identifier and siglum are separated
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td>Apparatus entries need one or several declared witnesses
+</td>
+       <td>Readings use reusable witness references
+</td>
+      </tr>
+      <tr>
+       <td>4
+</td>
+       <td>The apparatus must describe more than alternative wording
+</td>
+       <td>Named commands represent omissions, additions, and other operations
+</td>
+      </tr>
+      <tr>
+       <td>5
+</td>
+       <td>Several witnesses repeatedly appear together
+</td>
+       <td>Witness groups store and reuse that relationship
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>How this guide works.</b> Each step adds one small layer to the same witness
+interface. The examples begin with a single declaration, then reuse it in
+apparatus entries before introducing lists, groups, and safeguards.
+</p>
+    </div>
+    <p>For definitions of the principal terms, see the
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary of critical edition terms</a>.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Understand_the_witness_record">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Understand the witness record
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Declare_and_retrieve_one_witness">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Declare and retrieve one witness
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Control_the_appearance_of_sigla">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Control the appearance of sigla
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#4._Declare_a_working_set_of_witnesses">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Declare a working set of witnesses
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#5._Use_declared_witnesses_in_readings">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Use declared witnesses in readings
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#6._Represent_common_textual_operations">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Represent common textual operations
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#7._Process_witness_lists_more_compactly">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Process witness lists more compactly
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#8._Define_reusable_witness_groups">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Define reusable witness groups
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#9._Add_visible_safeguards">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Add visible safeguards
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#10._Reuse_witness_metadata_outside_the_apparatus">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Reuse witness metadata outside the apparatus
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#11._Understand_the_data_model">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Understand the data model
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#12._Complete_working_example">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Complete working example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#13._What_this_guide_has_established">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. What this guide has established
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#14._Choose_the_next_guide">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Choose the next guide
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#Online_resources">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         Online resources
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._Understand_the_witness_record">
+      1. Understand the witness record
+     </span>
+    </h2>
+    <p>A useful witness declaration should distinguish four elements:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Element
+       </th>
+       <th>
+        Function
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td>Identifier
+</td>
+       <td>Stable key used in the ConTeXt source
+</td>
+       <td><code>ms-b</code>
+</td>
+      </tr>
+      <tr>
+       <td>Siglum
+</td>
+       <td>Short form printed in the apparatus
+</td>
+       <td><code>B</code>
+</td>
+      </tr>
+      <tr>
+       <td>Type
+</td>
+       <td>General category of witness
+</td>
+       <td><code>manuscript</code>
+</td>
+      </tr>
+      <tr>
+       <td>Description
+</td>
+       <td>Full human-readable identification
+</td>
+       <td>Oxford, Bodleian Library, MS 567
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The identifier and siglum are not the same thing. The source may continue to
+use <code>ms-b</code> even if the printed siglum later changes from
+<code>B</code> to <code>Ox</code>.
+</p>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial principle.</b> The identifier belongs to the source structure; the
+siglum belongs to the printed edition. Keeping them separate allows the visible
+notation to change without rewriting every apparatus entry.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Declare_and_retrieve_one_witness">
+      2. Declare and retrieve one witness
+     </span>
+    </h2>
+    <p>ConTeXt variables provide a compact way to store several fields under one
+identifier.
+</p>
+    <pre>\define[4]\definewitness
+  {\setvariables
+     [witness:#1]
+     [siglum={#2},
+      type={#3},
+      description={#4}]}
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Content
+       </th>
+      </tr>
+      <tr>
+       <td><code>#1</code>
+</td>
+       <td>Stable witness identifier
+</td>
+      </tr>
+      <tr>
+       <td><code>#2</code>
+</td>
+       <td>Printed siglum
+</td>
+      </tr>
+      <tr>
+       <td><code>#3</code>
+</td>
+       <td>Witness type
+</td>
+      </tr>
+      <tr>
+       <td><code>#4</code>
+</td>
+       <td>Full description
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Declare one witness:
+</p>
+    <pre>\definewitness
+  {ms-b}
+  {B}
+  {manuscript}
+  {Oxford, Bodleian Library, MS 567}
+</pre>
+    <p>Define three retrieval commands:
+</p>
+    <pre>\define[1]\witness
+  {\getvariable{witness:#1}{siglum}}
+
+\define[1]\witnesstype
+  {\getvariable{witness:#1}{type}}
+
+\define[1]\witnessdescription
+  {\getvariable{witness:#1}{description}}
+</pre>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>4<span class="brx">]</span><span class="cs">\definewitness</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\setvariables</span></span>
+     <span class="brx">[</span>witness:<span class="brx">#</span>1<span class="brx">]</span>
+     <span class="brx">[</span>siglum<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>,
+      type<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>,
+      description<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witness</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>witness:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>siglum<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnesstype</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>witness:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>type<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnessdescription</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>witness:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>description<span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\definewitness</span>
+  <span class="br">{</span>ms-b<span class="br">}</span>
+  <span class="br">{</span>B<span class="br">}</span>
+  <span class="br">{</span>manuscript<span class="br">}</span>
+  <span class="br">{</span>Oxford, Bodleian Library, MS 567<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Siglum: <span class="cs">\witness</span><span class="br">{</span>ms-b<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+Type: <span class="cs">\witnesstype</span><span class="br">{</span>ms-b<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+Description: <span class="cs">\witnessdescription</span><span class="br">{</span>ms-b<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/81980fc31a4df4a05dccdee64d7f8091.webp" width="874">
+     </li>
+    </ul>
+    <p>At this stage, the declaration stores data only. Typography is controlled
+separately.
+</p>
+    <h2>
+     <span class="mw-headline" id="3._Control_the_appearance_of_sigla">
+      3. Control the appearance of sigla
+     </span>
+    </h2>
+    <p>Define one shared style:
+</p>
+    <pre>\define[1]\witnessstyle
+  {{\it #1}}
+</pre>
+    <p>Then apply it in the retrieval command:
+</p>
+    <pre>\define[1]\witness
+  {\witnessstyle
+     {\getvariable{witness:#1}{siglum}}}
+</pre>
+    <p>To print every siglum in bold instead, redefine only:
+</p>
+    <pre>\define[1]\witnessstyle
+  {{\bf #1}}
+</pre>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Design principle.</b> Witness declarations store editorial information.
+Commands such as <code>\witnessstyle</code> control its presentation. Metadata
+and typography should remain separate.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Declare_a_working_set_of_witnesses">
+      4. Declare a working set of witnesses
+     </span>
+    </h2>
+    <pre>\definewitness{ms-a}{A}{manuscript}{Paris manuscript}
+\definewitness{ms-b}{B}{manuscript}{Oxford manuscript}
+\definewitness{ms-c}{C}{manuscript}{Cambridge manuscript}
+\definewitness{ms-d}{D}{manuscript}{London manuscript}
+\definewitness{editio-princeps}{E}{printed edition}{Basel, 1520}
+\definewitness{revised-edition}{F}{printed edition}{Paris, 1542}
+</pre>
+    <p>The identifiers are descriptive and stable. The apparatus remains compact
+because only the sigla are printed.
+</p>
+    <h2>
+     <span class="mw-headline" id="5._Use_declared_witnesses_in_readings">
+      5. Use declared witnesses in readings
+     </span>
+    </h2>
+    <p>Define:
+</p>
+    <pre>\define[2]\reading
+  {#1 #2}
+</pre>
+    <p>A single witness:
+</p>
+    <pre>\reading
+  {Judgment}
+  {\witness{ms-b}}
+</pre>
+    <p>Several witnesses:
+</p>
+    <pre>\reading
+  {Judgment}
+  {\witness{ms-b}\space
+   \witness{ms-d}}
+</pre>
+    <p>The printed result is:
+</p>
+    <pre>Judgment B D
+</pre>
+    <p>The witness interface can now be combined with the apparatus commands from
+<a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">Building a simple critical apparatus</a>:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span><span class="brx">[</span>apparatus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupnote</span></span><span class="brx">[</span>apparatus<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupnotation</span></span><span class="brx">[</span>apparatus<span class="brx">]</span><span class="brx">[</span>way<span class="brx">=</span>bypage,style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>4<span class="brx">]</span><span class="cs">\definewitness</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\setvariables</span></span>
+     <span class="brx">[</span>witness:<span class="brx">#</span>1<span class="brx">]</span>
+     <span class="brx">[</span>siglum<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>,type<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>,description<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnessstyle</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witness</span>
+  <span class="br">{</span><span class="cs">\witnessstyle</span><span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>witness:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>siglum<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\definewitness</span><span class="br">{</span>ms-b<span class="br">}</span><span class="br">{</span>B<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>Oxford manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>ms-c<span class="br">}</span><span class="br">{</span>C<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>Cambridge manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>ms-d<span class="br">}</span><span class="br">{</span>D<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>London manuscript<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span>
+     <span class="br">{</span>Judgment<span class="br">}</span>
+     <span class="br">{</span><span class="cs">\witness</span><span class="br">{</span>ms-b<span class="br">}</span><span class="cs"><span class="stylecs">\space</span></span><span class="cs">\witness</span><span class="br">{</span>ms-d<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\reading</span>
+     <span class="br">{</span>Understanding<span class="br">}</span>
+     <span class="br">{</span><span class="cs">\witness</span><span class="br">{</span>ms-c<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+guides the will.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/b0ff6e11191317bf581ff1b847e66ad9.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="6._Represent_common_textual_operations">
+      6. Represent common textual operations
+     </span>
+    </h2>
+    <p>A reading supplies textual wording. A textual operation describes what happens
+to the text.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Function
+       </th>
+       <th>
+        Example output
+       </th>
+      </tr>
+      <tr>
+       <td><code>\omission</code>
+</td>
+       <td>Record absence of the lemma
+</td>
+       <td><code>om. E</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\addition</code>
+</td>
+       <td>Record additional wording
+</td>
+       <td><code>add. and directs the will F</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\transposition</code>
+</td>
+       <td>Record different word order
+</td>
+       <td><code>transp. experience and reason D</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\conjecture</code>
+</td>
+       <td>Record an editorial proposal
+</td>
+       <td><code>Reason conj. Smith</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\uncertainreading</code>
+</td>
+       <td>Mark uncertain transcription
+</td>
+       <td><code>Judgment? C</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\illegible</code>
+</td>
+       <td>Record illegible text
+</td>
+       <td><code>illeg. D</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <pre>\define[1]\omission
+  {{\it om.} #1}
+
+\define[2]\addition
+  {{\it add.} #1 #2}
+
+\define[2]\transposition
+  {{\it transp.} #1 #2}
+
+\define[2]\conjecture
+  {#1 {\it conj.} #2}
+
+\define[2]\uncertainreading
+  {#1? #2}
+
+\define[1]\illegible
+  {{\it illeg.} #1}
+</pre>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial caution.</b> Abbreviations such as <code>om.</code>,
+<code>add.</code>, <code>transp.</code>, and <code>illeg.</code> are not
+built-in ConTeXt meanings. They belong to the editorial conventions of the
+edition and should be documented there.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="7._Process_witness_lists_more_compactly">
+      7. Process witness lists more compactly
+     </span>
+    </h2>
+    <pre>\define[1]\processwitness
+  {\witness{#1}\space}
+
+\define[1]\witnesslist
+  {\processcommalist[#1]\processwitness}
+</pre>
+    <p>Then:
+</p>
+    <pre>\witnesslist{ms-a,ms-b,ms-d}
+</pre>
+    <p>prints:
+</p>
+    <pre>A B D
+</pre>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Small implementation detail.</b> The simple processor adds a trailing space.
+Check the final punctuation and spacing in the actual apparatus design.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Define_reusable_witness_groups">
+      8. Define reusable witness groups
+     </span>
+    </h2>
+    <pre>\define[2]\definewitnessgroup
+  {\setvalue{witnessgroup:#1}{#2}}
+
+\define[1]\witnessgroup
+  {\witnesslist{\getvalue{witnessgroup:#1}}}
+</pre>
+    <p>Declare:
+</p>
+    <pre>\definewitnessgroup{family-alpha}{ms-a,ms-b}
+\definewitnessgroup{family-beta}{ms-c,ms-d}
+\definewitnessgroup{all-editions}{editio-princeps,revised-edition}
+</pre>
+    <p>Use:
+</p>
+    <pre>\reading
+  {Judgment}
+  {\witnessgroup{family-alpha}}
+</pre>
+    <p>Sometimes an edition prints a collective label instead:
+</p>
+    <pre>\define[2]\definegrouplabel
+  {\setvalue{witnessgroup:label:#1}{#2}}
+
+\define[1]\grouplabel
+  {\getvalue{witnessgroup:label:#1}}
+
+\definegrouplabel{family-alpha}{\alpha}
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td><code>\witnessgroup{family-alpha}</code>
+</td>
+       <td>Prints the member sigla
+</td>
+      </tr>
+      <tr>
+       <td><code>\grouplabel{family-alpha}</code>
+</td>
+       <td>Prints the collective family label
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial meaning.</b> A witness group should represent a documented
+relationship among witnesses, not merely a convenient abbreviation.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Add_visible_safeguards">
+      9. Add visible safeguards
+     </span>
+    </h2>
+    <p>A guarded group command can be written as:
+</p>
+    <pre>\define[1]\witnessgroup
+  {\doifdefinedelse
+     {witnessgroup:#1}
+     {\witnesslist
+        {\getvalue{witnessgroup:#1}}}
+     {{\bf [undefined witness group: #1]}}}
+</pre>
+    <p>Likewise:
+</p>
+    <pre>\define[1]\grouplabel
+  {\doifdefinedelse
+     {witnessgroup:label:#1}
+     {\getvalue{witnessgroup:label:#1}}
+     {{\bf [undefined group label: #1]}}}
+</pre>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Version check.</b> Guarded tests involving variables should be compiled with
+the ConTeXt release used for the edition. These warnings are useful safeguards,
+but they are not a substitute for full dataset validation.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Reuse_witness_metadata_outside_the_apparatus">
+      10. Reuse witness metadata outside the apparatus
+     </span>
+    </h2>
+    <pre>\starttabulate[|l|l|p|]
+\NC Siglum
+\NC Type
+\NC Description
+\NC\NR
+\HL
+
+\NC \witness{ms-a}
+\NC \witnesstype{ms-a}
+\NC \witnessdescription{ms-a}
+\NC\NR
+
+\NC \witness{ms-b}
+\NC \witnesstype{ms-b}
+\NC \witnessdescription{ms-b}
+\NC\NR
+\stoptabulate
+</pre>
+    <p>Changing a siglum centrally updates both the apparatus and the descriptive
+table.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Understand_the_data_model">
+      11. Understand the data model
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Information
+       </th>
+       <th>
+        Example
+       </th>
+       <th>
+        Meaning
+       </th>
+      </tr>
+      <tr>
+       <td>Witness declaration
+</td>
+       <td><code>\definewitness{ms-b}{B}{...}{...}</code>
+</td>
+       <td>Describes what the witness is
+</td>
+      </tr>
+      <tr>
+       <td>Apparatus evidence
+</td>
+       <td><code>\reading{Judgment}{\witness{ms-b}}</code>
+</td>
+       <td>Records what the witness reads at one location
+</td>
+      </tr>
+      <tr>
+       <td>Witness group
+</td>
+       <td><code>\definewitnessgroup{family-alpha}{ms-a,ms-b}</code>
+</td>
+       <td>Records a relationship among witnesses
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The present macros remain a direct-composition interface. They do not yet
+provide automatic sorting, duplicate detection, witness-specific reports,
+filtering by operation, or export to another format.
+</p>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Data model.</b> Witness declarations describe sources; apparatus entries
+describe textual evidence at particular locations; group declarations describe
+relationships among witnesses.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Complete_working_example">
+      12. Complete working example
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span><span class="brx">[</span>apparatus<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupnote</span></span><span class="brx">[</span>apparatus<span class="brx">]</span><span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupnotation</span></span><span class="brx">[</span>apparatus<span class="brx">]</span><span class="brx">[</span>way<span class="brx">=</span>bypage,style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>4<span class="brx">]</span><span class="cs">\definewitness</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\setvariables</span></span>
+     <span class="brx">[</span>witness:<span class="brx">#</span>1<span class="brx">]</span>
+     <span class="brx">[</span>siglum<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>,type<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>3<span class="br">}</span>,description<span class="brx">=</span><span class="br">{</span><span class="brx">#</span>4<span class="br">}</span><span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnessstyle</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witness</span>
+  <span class="br">{</span><span class="cs">\witnessstyle</span><span class="br">{</span><span class="cs"><span class="stylecs">\getvariable</span></span><span class="br">{</span>witness:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>siglum<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\definewitness</span><span class="br">{</span>ms-a<span class="br">}</span><span class="br">{</span>A<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>Paris manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>ms-b<span class="br">}</span><span class="br">{</span>B<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>Oxford manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>ms-c<span class="br">}</span><span class="br">{</span>C<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>Cambridge manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>ms-d<span class="br">}</span><span class="br">{</span>D<span class="br">}</span><span class="br">{</span>manuscript<span class="br">}</span><span class="br">{</span>London manuscript<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>editio-princeps<span class="br">}</span><span class="br">{</span>E<span class="br">}</span><span class="br">{</span>printed edition<span class="br">}</span><span class="br">{</span>Basel, 1520<span class="br">}</span>
+<span class="cs">\definewitness</span><span class="br">{</span>revised-edition<span class="br">}</span><span class="br">{</span>F<span class="br">}</span><span class="br">{</span>printed edition<span class="br">}</span><span class="br">{</span>Paris, 1542<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\processwitness</span><span class="br">{</span><span class="cs">\witness</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="cs"><span class="stylecs">\space</span></span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnesslist</span><span class="br">{</span><span class="cs"><span class="systemcs">\processcommalist</span></span><span class="brx">[</span><span class="brx">#</span>1<span class="brx">]</span><span class="cs">\processwitness</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\definewitnessgroup</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\setvalue</span></span><span class="br">{</span>witnessgroup:<span class="brx">#</span>1<span class="br">}</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnessgroup</span>
+  <span class="br">{</span><span class="cs">\witnesslist</span><span class="br">{</span><span class="cs"><span class="systemcs">\getvalue</span></span><span class="br">{</span>witnessgroup:<span class="brx">#</span>1<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs">\definewitnessgroup</span><span class="br">{</span>family-alpha<span class="br">}</span><span class="br">{</span>ms-a,ms-b<span class="br">}</span>
+<span class="cs">\definewitnessgroup</span><span class="br">{</span>family-beta<span class="br">}</span><span class="br">{</span>ms-c,ms-d<span class="br">}</span>
+<span class="cs">\definewitnessgroup</span><span class="br">{</span>all-editions<span class="br">}</span><span class="br">{</span>editio-princeps,revised-edition<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span><span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span><span class="br">{</span><span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\transposition</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> transp.<span class="br">}</span> <span class="brx">#</span>1 <span class="brx">#</span>2<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\conjecture</span><span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> conj.<span class="br">}</span> <span class="brx">#</span>2<span class="br">}</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\illegible</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> illeg.<span class="br">}</span> <span class="brx">#</span>1<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span><span class="cs">\witnessgroup</span><span class="br">{</span>family-alpha<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>Understanding<span class="br">}</span><span class="br">{</span><span class="cs">\witnessgroup</span><span class="br">{</span>family-beta<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span><span class="cs">\witnessgroup</span><span class="br">{</span>all-editions<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+guides
+<span class="cs">\variant</span>
+  <span class="br">{</span>the will<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>human desire<span class="br">}</span><span class="br">{</span><span class="cs">\witness</span><span class="br">{</span>ms-b<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\addition</span><span class="br">{</span>and directs experience<span class="br">}</span><span class="br">{</span><span class="cs">\witness</span><span class="br">{</span>revised-edition<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\illegible</span><span class="br">{</span><span class="cs">\witness</span><span class="br">{</span>ms-d<span class="br">}</span><span class="br">}</span><span class="br">}</span>.
+
+The text later joins
+<span class="cs">\variant</span>
+  <span class="br">{</span>reason and experience<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\transposition</span>
+     <span class="br">{</span>experience and reason<span class="br">}</span>
+     <span class="br">{</span><span class="cs">\witnesslist</span><span class="br">{</span>ms-d,editio-princeps<span class="br">}</span><span class="br">}</span>;
+   <span class="cs">\conjecture</span>
+     <span class="br">{</span>reason informed by experience<span class="br">}</span>
+     <span class="br">{</span>Smith<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/9c13c1e984e95b9f3604c1f6cb69c715.webp" width="874">
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="13._What_this_guide_has_established">
+      13. What this guide has established
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Mechanism
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td>Witness declaration
+</td>
+       <td>Store identifier, siglum, type, and description once
+</td>
+      </tr>
+      <tr>
+       <td>Witness retrieval
+</td>
+       <td>Print the current siglum from a stable source identifier
+</td>
+      </tr>
+      <tr>
+       <td>Named textual operations
+</td>
+       <td>Distinguish readings, omissions, additions, and other cases
+</td>
+      </tr>
+      <tr>
+       <td>Witness lists
+</td>
+       <td>Process several identifiers more compactly
+</td>
+      </tr>
+      <tr>
+       <td>Witness groups
+</td>
+       <td>Reuse documented relationships among witnesses
+</td>
+      </tr>
+      <tr>
+       <td>Safeguards
+</td>
+       <td>Make undeclared identifiers or groups visible
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What this guide has established.</b> Witnesses can be declared once and
+referenced through stable identifiers. Their sigla, types, descriptions,
+groups, and associated textual operations can then be reused without
+hard-coding the same information throughout the apparatus.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="14._Choose_the_next_guide">
+      14. Choose the next guide
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Next task
+       </th>
+       <th>
+        Continue with
+       </th>
+      </tr>
+      <tr>
+       <td>Change the typography of the apparatus
+</td>
+       <td><a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Guide 2</a>
+</td>
+      </tr>
+      <tr>
+       <td>Create several independent note layers
+</td>
+       <td><a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Guide 4</a>
+</td>
+      </tr>
+      <tr>
+       <td>Compose an original text and translation in parallel
+</td>
+       <td><a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">Guide 5</a>
+</td>
+      </tr>
+      <tr>
+       <td>Register, sort, filter, and validate critical records
+</td>
+       <td><a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Guide 6</a>
+</td>
+      </tr>
+      <tr>
+       <td>Process structured TEI critical data
+</td>
+       <td><a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Online_resources">
+      Online resources
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="new" href="index.php?title=Variables&action=edit&redlink=1" title="Variables (page does not exist)">
+       Variables
+      </a>
+      &mdash; storing and retrieving named fields;
+     </li>
+     <li>
+      <a href="Command/setvariables.html" title="Command/setvariables">
+       Command/setvariables
+      </a>
+      &mdash; defining variable sets;
+     </li>
+     <li>
+      <a href="Command/getvariable.html" title="Command/getvariable">
+       Command/getvariable
+      </a>
+      &mdash; retrieving individual fields;
+     </li>
+     <li>
+      <a href="ConTeXt_and_Lua_programming/Tutorials/System_Macros/Key_Value_Assignments.html" title="ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments">
+       ConTeXt and Lua programming/Tutorials/System Macros/Key Value Assignments
+      </a>
+      &mdash; key&ndash;value data;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=References,_notes,_indexes,_and_floats/Footnotes&action=edit&redlink=1.html" title="References, notes, indexes, and floats/Footnotes (page does not exist)">
+       Footnotes
+      </a>
+      &mdash; note mechanisms used by the apparatus.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">
+       Glossary of critical edition terms
+      </a>
+     </li>
+     <li>
+      <a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">
+       Building a simple critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">
+       Formatting a critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">
+       Typesetting an original text and translation in parallel
+      </a>
+     </li>
+     <li>
+      <a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">
+       Managing structured critical data with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">
+       Building critical editions from TEI XML
+      </a>
+     </li>
+    </ul>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">&larr; Guide 2 &mdash; Formatting a critical apparatus</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 3 of 6</b> &middot;
+<a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Next: Guide 4 &mdash; Using multiple apparatus layers &rarr;</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Managing_witnesses_and_textual_variants">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

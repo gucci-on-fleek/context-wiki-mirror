@@ -1,0 +1,4760 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Processing TEI critical apparatus data with Lua&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Processing_TEI_critical_apparatus_data_with_Lua" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Processing TEI critical apparatus data with Lua
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7546&diff=43140">2026-07-22</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="margin: 0 0 1.2em 0; padding: 0.75em 1em; border: 1px solid #d6b656; background: #fff4cc; text-align: center;">
+     <p><b>🚧 Work in progress: please do not modify this page while this banner is displayed.</b>
+</p>
+    </div>
+    <div style="margin: 0 0 1.5em 0; padding: 0.7em 1em; border: 1px solid #aab7c4; background: #f7f9fb; text-align: center;">
+     <p><b>Guide 5 of 6 &mdash; Processing TEI critical apparatus data with Lua</b><br>
+<a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">&larr; Previous: Encoding complex textual variation in TEI</a> &middot;
+<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Series overview</a> &middot;
+<a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Next: Typesetting a TEI critical apparatus with ConTeXt &rarr;</a>
+</p>
+    </div>
+    <p>A TEI document can describe witnesses, lemmas, variant readings, omissions,
+additions, editorial interventions, and the relationships between these
+elements. ConTeXt can subsequently use this information to produce a
+typographically structured critical apparatus.
+</p>
+    <p>A direct passage from XML elements to printed output is possible in very simple
+cases. It becomes increasingly fragile, however, when the source contains
+multiple witnesses, abbreviated references, several kinds of readings,
+incomplete records, or editorial conventions that must be applied consistently.
+</p>
+    <p>Lua provides an intermediate processing layer between the documentary
+structure of TEI and the typographical structure produced by ConTeXt.
+</p>
+    <p>Its role is not limited to reading XML. Lua can:
+</p>
+    <ul>
+     <li>
+      collect declarations from different parts of the TEI document;
+     </li>
+     <li>
+      transform XML elements into consistent internal records;
+     </li>
+     <li>
+      normalize identifiers, witness lists, and textual values;
+     </li>
+     <li>
+      resolve references such as
+      <code>#A</code>
+      or
+      <code>#B</code>
+      ;
+     </li>
+     <li>
+      verify that the referenced objects have actually been declared;
+     </li>
+     <li>
+      distinguish usable data from incomplete or contradictory data;
+     </li>
+     <li>
+      prepare a stable representation that ConTeXt can typeset.
+     </li>
+    </ul>
+    <p>This guide develops that intermediate layer. It stops before the final
+composition of the critical apparatus. The records produced here will be
+passed to ConTeXt in the next guide.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._What_this_guide_does">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. What this guide does
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Why_use_Lua_between_TEI_and_ConTeXt.3F">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Why use Lua between TEI and ConTeXt?
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2.1._Reading_is_not_yet_interpreting">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Reading is not yet interpreting
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#2.2._Normalizing_editorial_data">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           2.2. Normalizing editorial data
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#2.3._Resolving_references">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           2.3. Resolving references
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#2.4._Validating_the_editorial_model">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           2.4. Validating the editorial model
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#2.5._Separating_interpretation_from_typesetting">
+          <span class="tocnumber">
+           2.5
+          </span>
+          <span class="toctext">
+           2.5. Separating interpretation from typesetting
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#3._The_processing_pipeline">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. The processing pipeline
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#3.1._TEI_as_the_documentary_source">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           3.1. TEI as the documentary source
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#3.2._Lua_as_the_interpretative_layer">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           3.2. Lua as the interpretative layer
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#3.3._Validated_records_as_an_intermediate_representation">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           3.3. Validated records as an intermediate representation
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#3.4._ConTeXt_as_the_typesetting_layer">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           3.4. ConTeXt as the typesetting layer
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#4._Building_a_witness_registry_from_TEI_XML">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Building a witness registry from TEI XML
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#4.1._The_TEI_witness_declarations">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           4.1. The TEI witness declarations
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#4.2._Constructing_the_Lua_registry">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           4.2. Constructing the Lua registry
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#4.3._Looking_up_witness_information">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           4.3. Looking up witness information
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#4.4._Functional_MWE:_Building_a_witness_registry_from_TEI_XML">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           4.4. Functional MWE: Building a witness registry from TEI XML
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#4.5._Testing_missing_and_duplicate_identifiers">
+          <span class="tocnumber">
+           4.5
+          </span>
+          <span class="toctext">
+           4.5. Testing missing and duplicate identifiers
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#4.6._Result_of_this_stage">
+          <span class="tocnumber">
+           4.6
+          </span>
+          <span class="toctext">
+           4.6. Result of this stage
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#5._Converting_TEI_apparatus_entries_into_Lua_records">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Converting TEI apparatus entries into Lua records
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#5.1._Reading_lemmas_and_variant_readings">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           5.1. Reading lemmas and variant readings
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#5.2._Normalizing_witness_lists">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           5.2. Normalizing witness lists
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#5.3._Preserving_editorial_distinctions">
+          <span class="tocnumber">
+           5.3
+          </span>
+          <span class="toctext">
+           5.3. Preserving editorial distinctions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-24">
+         <a href="#5.4._Functional_MWE:_Converting_TEI_apparatus_entries_into_Lua_records">
+          <span class="tocnumber">
+           5.4
+          </span>
+          <span class="toctext">
+           5.4. Functional MWE: Converting TEI apparatus entries into Lua records
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#5.5._Result_of_this_stage">
+          <span class="tocnumber">
+           5.5
+          </span>
+          <span class="toctext">
+           5.5. Result of this stage
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-26">
+       <a href="#6._Validating_witness_references_and_apparatus_records">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Validating witness references and apparatus records
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#6.1._Detecting_unknown_witnesses">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           6.1. Detecting unknown witnesses
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#6.2._Detecting_incomplete_apparatus_entries">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           6.2. Detecting incomplete apparatus entries
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-29">
+         <a href="#6.3._Distinguishing_errors_from_warnings">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           6.3. Distinguishing errors from warnings
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-30">
+         <a href="#6.4._Functional_MWE:_Validating_witness_references_and_apparatus_records">
+          <span class="tocnumber">
+           6.4
+          </span>
+          <span class="toctext">
+           6.4. Functional MWE: Validating witness references and apparatus records
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#6.5._Result_of_this_stage">
+          <span class="tocnumber">
+           6.5
+          </span>
+          <span class="toctext">
+           6.5. Result of this stage
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-32">
+       <a href="#7._Complete_MWE:_From_TEI_apparatus_data_to_validated_Lua_records">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Complete MWE: From TEI apparatus data to validated Lua records
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-33">
+         <a href="#7.1._Source_data">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           7.1. Source data
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#7.2._Processing_stages">
+          <span class="tocnumber">
+           7.2
+          </span>
+          <span class="toctext">
+           7.2. Processing stages
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-35">
+         <a href="#7.3._Validation_report">
+          <span class="tocnumber">
+           7.3
+          </span>
+          <span class="toctext">
+           7.3. Validation report
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-36">
+         <a href="#7.4._Complete_functional_MWE:_From_TEI_apparatus_data_to_validated_Lua_records">
+          <span class="tocnumber">
+           7.4
+          </span>
+          <span class="toctext">
+           7.4. Complete functional MWE: From TEI apparatus data to validated Lua records
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#7.5._Records_prepared_for_ConTeXt">
+          <span class="tocnumber">
+           7.5
+          </span>
+          <span class="toctext">
+           7.5. Records prepared for ConTeXt
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-38">
+         <a href="#7.6._Result_of_the_complete_workflow">
+          <span class="tocnumber">
+           7.6
+          </span>
+          <span class="toctext">
+           7.6. Result of the complete workflow
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-39">
+       <a href="#8._What_Lua_should_not_decide">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. What Lua should not decide
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-40">
+         <a href="#8.1._Lua_should_not_repair_the_TEI_source_silently">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           8.1. Lua should not repair the TEI source silently
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-41">
+         <a href="#8.2._Lua_should_not_erase_significant_TEI_distinctions">
+          <span class="tocnumber">
+           8.2
+          </span>
+          <span class="toctext">
+           8.2. Lua should not erase significant TEI distinctions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-42">
+         <a href="#8.3._Lua_should_not_determine_typography_prematurely">
+          <span class="tocnumber">
+           8.3
+          </span>
+          <span class="toctext">
+           8.3. Lua should not determine typography prematurely
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-43">
+         <a href="#8.4._Lua_should_not_replace_editorial_judgment">
+          <span class="tocnumber">
+           8.4
+          </span>
+          <span class="toctext">
+           8.4. Lua should not replace editorial judgment
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-44">
+       <a href="#9._Preparing_the_transition_to_ConTeXt">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Preparing the transition to ConTeXt
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-45">
+         <a href="#9.1._The_contract_between_Lua_and_ConTeXt">
+          <span class="tocnumber">
+           9.1
+          </span>
+          <span class="toctext">
+           9.1. The contract between Lua and ConTeXt
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-46">
+         <a href="#9.2._What_ConTeXt_will_decide">
+          <span class="tocnumber">
+           9.2
+          </span>
+          <span class="toctext">
+           9.2. What ConTeXt will decide
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-47">
+         <a href="#9.3._Preparing_more_complex_scholarly_structures">
+          <span class="tocnumber">
+           9.3
+          </span>
+          <span class="toctext">
+           9.3. Preparing more complex scholarly structures
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-48">
+       <a href="#10._What_this_guide_has_established">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. What this guide has established
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-49">
+         <a href="#10.1._From_encoded_forms_to_editorial_objects">
+          <span class="tocnumber">
+           10.1
+          </span>
+          <span class="toctext">
+           10.1. From encoded forms to editorial objects
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-50">
+         <a href="#10.2._Normalization_and_validation_are_interpretative_operations">
+          <span class="tocnumber">
+           10.2
+          </span>
+          <span class="toctext">
+           10.2. Normalization and validation are interpretative operations
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-51">
+         <a href="#10.3._Diagnostics_preserve_the_limits_of_interpretation">
+          <span class="tocnumber">
+           10.3
+          </span>
+          <span class="toctext">
+           10.3. Diagnostics preserve the limits of interpretation
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-52">
+         <a href="#10.4._The_intermediate_representation_is_a_contract">
+          <span class="tocnumber">
+           10.4
+          </span>
+          <span class="toctext">
+           10.4. The intermediate representation is a contract
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-53">
+       <a href="#11._Where_to_go_next">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Where to go next
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._What_this_guide_does">
+      1. What this guide does
+     </span>
+    </h2>
+    <p>The examples in this guide progressively construct a small processing system
+for TEI critical apparatus data.
+</p>
+    <p>The system will:
+</p>
+    <ol>
+     <li>
+      build a registry of textual witnesses;
+     </li>
+     <li>
+      convert TEI apparatus entries into Lua records;
+     </li>
+     <li>
+      resolve witness references against the registry;
+     </li>
+     <li>
+      validate the resulting records;
+     </li>
+     <li>
+      report errors and warnings;
+     </li>
+     <li>
+      make the validated records available to ConTeXt.
+     </li>
+    </ol>
+    <p>The aim is not to reproduce the whole TEI specification in Lua. Nor is it to
+replace TEI with a second and competing data model.
+</p>
+    <p>The Lua representation is deliberately smaller than the XML source. It retains
+the information required by the current editorial and typographical task while
+preserving links to the TEI elements from which that information was derived.
+</p>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #4a78a8; background: #eef5fc;">
+     <p><b>Guiding principle.</b> TEI remains the documentary source, Lua constructs and
+checks task-oriented editorial records, and ConTeXt gives those records their
+typographical form. The three layers cooperate, but they do not have the same
+responsibility.
+</p>
+    </div>
+    <h2>
+     <span id="2._Why_use_Lua_between_TEI_and_ConTeXt?">
+     </span>
+     <span class="mw-headline" id="2._Why_use_Lua_between_TEI_and_ConTeXt.3F">
+      2. Why use Lua between TEI and ConTeXt?
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="2.1._Reading_is_not_yet_interpreting">
+      2.1. Reading is not yet interpreting
+     </span>
+    </h3>
+    <p>Reading an XML element answers questions such as:
+</p>
+    <ul>
+     <li>
+      What is the name of this element?
+     </li>
+     <li>
+      Which attributes does it possess?
+     </li>
+     <li>
+      What text does it contain?
+     </li>
+     <li>
+      Where does it occur in the document?
+     </li>
+    </ul>
+    <p>These are necessary questions, but they are not sufficient for producing a
+critical edition.
+</p>
+    <p>Suppose that a TEI reading contains:
+</p>
+    <pre>&lt;rdg wit="#A #C"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/rdg&gt;
+</pre>
+    <p>The XML parser can return the string <code>#A #C</code>. It has not yet established:
+</p>
+    <ul>
+     <li>
+      that this string contains two witness references;
+     </li>
+     <li>
+      that the leading number signs are reference markers rather than parts of the identifiers;
+     </li>
+     <li>
+      that witnesses
+      <code>A</code>
+      and
+      <code>C</code>
+      have been declared;
+     </li>
+     <li>
+      that both witnesses are admissible in the current apparatus;
+     </li>
+     <li>
+      that their order should be preserved or normalized;
+     </li>
+     <li>
+      that the same witness has not accidentally been listed twice.
+     </li>
+    </ul>
+    <p>The parser exposes the encoded data. Lua determines how that data is to be understood within the editorial workflow.
+</p>
+    <p>This distinction is fundamental. XML parsing produces access to a document structure. Editorial processing produces knowledge about the consistency and meaning of the encoded relationships.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.2._Normalizing_editorial_data">
+      2.2. Normalizing editorial data
+     </span>
+    </h3>
+    <p>Equivalent information may appear in several surface forms.
+</p>
+    <p>For example, witness references might be written as:
+</p>
+    <pre>wit="#A #B"
+wit=" #A   #B "
+wit="#A #A #B"
+</pre>
+    <p>Depending on the rules adopted for the edition, these values may need to be converted into the same internal representation:
+</p>
+    <pre>{ "A", "B" }
+</pre>
+    <p>Normalization may include:
+</p>
+    <ul>
+     <li>
+      removing reference markers;
+     </li>
+     <li>
+      trimming insignificant whitespace;
+     </li>
+     <li>
+      splitting a list into individual identifiers;
+     </li>
+     <li>
+      removing accidental duplicates;
+     </li>
+     <li>
+      preserving or standardizing witness order;
+     </li>
+     <li>
+      replacing absent values with explicit Lua values;
+     </li>
+     <li>
+      converting XML strings into booleans, numbers, or controlled categories.
+     </li>
+    </ul>
+    <p>Normalization does not merely make the data more convenient to program. It
+establishes which differences in the source are editorially significant and
+which are only differences of notation.
+</p>
+    <p>Lua therefore participates in the definition of equivalence between encoded
+forms.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.3._Resolving_references">
+      2.3. Resolving references
+     </span>
+    </h3>
+    <p>TEI commonly represents relationships by identifiers and references.
+</p>
+    <p>A witness may be declared in a <code>&lt;listWit&gt;</code>:
+</p>
+    <pre>&lt;witness xml:id="A"&gt;Paris, Biblioth&egrave;que nationale de France, grec 1807&lt;/witness&gt;
+</pre>
+    <p>An apparatus entry may refer to it elsewhere:
+</p>
+    <pre>&lt;rdg wit="#A"&gt;...&lt;/rdg&gt;
+</pre>
+    <p>The apparatus entry does not itself contain the witness description. It
+contains a reference to a declared object.
+</p>
+    <p>Lua can resolve this reference by consulting a witness registry:
+</p>
+    <pre>witnesses["A"]
+</pre>
+    <p>The result can provide the siglum, description, type, group, order, or any
+other information required later by the edition.
+</p>
+    <p>Reference resolution changes the status of the data. Before resolution,
+<code>#A</code> is a character string. After successful resolution, it denotes
+a known witness record. If no such record exists, the reference becomes a
+detectable editorial problem.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.4._Validating_the_editorial_model">
+      2.4. Validating the editorial model
+     </span>
+    </h3>
+    <p>A document can be well-formed XML and still contain unusable critical data.
+</p>
+    <p>For example:
+</p>
+    <ul>
+     <li>
+      a reading may refer to an undeclared witness;
+     </li>
+     <li>
+      an apparatus entry may contain no lemma;
+     </li>
+     <li>
+      a witness identifier may be declared twice;
+     </li>
+     <li>
+      a reading may contain neither text nor an omission marker;
+     </li>
+     <li>
+      the same witness may be assigned incompatible readings;
+     </li>
+     <li>
+      a required classification may be absent;
+     </li>
+     <li>
+      a reference may be syntactically valid but editorially inappropriate.
+     </li>
+    </ul>
+    <p>An XML parser does not normally treat these conditions as parsing errors.
+They concern the editorial model rather than the syntax of XML.
+</p>
+    <p>Lua allows the edition to express these additional constraints explicitly.
+</p>
+    <p>Validation can produce different levels of diagnostic information:
+</p>
+    <ul>
+     <li>
+      an
+      <b>
+       error
+      </b>
+      identifies data that cannot safely be processed;
+     </li>
+     <li>
+      a
+      <b>
+       warning
+      </b>
+      identifies data that may be intentional but deserves review;
+     </li>
+     <li>
+      an
+      <b>
+       informational message
+      </b>
+      records a normalization or an editorial choice.
+     </li>
+    </ul>
+    <p>The purpose of validation is not merely to reject malformed input. It makes the
+assumptions of the edition visible and testable.
+</p>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #c89b24; background: #fff8dc;">
+     <p><b>Important.</b> Well-formed XML is not necessarily editorially usable XML.
+Syntax can be correct while witness references, classifications, or apparatus
+relationships remain incomplete or contradictory.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="2.5._Separating_interpretation_from_typesetting">
+      2.5. Separating interpretation from typesetting
+     </span>
+    </h3>
+    <p>Without an intermediate layer, typographical commands can become responsible
+for too many tasks at once. A ConTeXt macro may then have to:
+</p>
+    <ul>
+     <li>
+      read an XML attribute;
+     </li>
+     <li>
+      split a witness list;
+     </li>
+     <li>
+      remove reference markers;
+     </li>
+     <li>
+      check declarations;
+     </li>
+     <li>
+      decide how omissions are represented;
+     </li>
+     <li>
+      determine punctuation;
+     </li>
+     <li>
+      sort sigla;
+     </li>
+     <li>
+      and finally typeset the apparatus entry.
+     </li>
+    </ul>
+    <p>Such a macro mixes documentary interpretation, editorial policy, error
+handling, and visual presentation.
+</p>
+    <p>The separation adopted in this guide is more robust:
+</p>
+    <pre>TEI XML
+    &darr;
+Lua interpretation and validation
+    &darr;
+validated Lua records
+    &darr;
+ConTeXt typesetting
+</pre>
+    <p>Lua answers questions such as:
+</p>
+    <ul>
+     <li>
+      What does this apparatus entry contain?
+     </li>
+     <li>
+      Which witnesses does it concern?
+     </li>
+     <li>
+      Are its references valid?
+     </li>
+     <li>
+      Which normalized values should be passed forward?
+     </li>
+    </ul>
+    <p>ConTeXt answers a different set of questions:
+</p>
+    <ul>
+     <li>
+      Where should the apparatus appear?
+     </li>
+     <li>
+      How should the lemma be distinguished?
+     </li>
+     <li>
+      How should witnesses be separated?
+     </li>
+     <li>
+      Which font, spacing, punctuation, or paragraph structure should be used?
+     </li>
+    </ul>
+    <p>The boundary is not absolute, but it provides a useful principle: Lua should
+prepare editorially meaningful records; ConTeXt should transform those records
+into pages.
+</p>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #4a78a8; background: #eef5fc;">
+     <p><b>Division of labour.</b> Lua answers questions about identity, structure,
+consistency, and editorial status. ConTeXt answers questions about placement,
+visual hierarchy, spacing, punctuation, and page construction.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._The_processing_pipeline">
+      3. The processing pipeline
+     </span>
+    </h2>
+    <p>The complete workflow developed in this guide consists of several distinct
+stages.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Input
+       </th>
+       <th>
+        Operation
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td>1. Documentary encoding
+</td>
+       <td>TEI elements and attributes
+</td>
+       <td>The editor records witnesses, lemmas, readings, and relationships.
+</td>
+       <td>A structured XML document
+</td>
+      </tr>
+      <tr>
+       <td>2. Extraction
+</td>
+       <td>TEI XML
+</td>
+       <td>Lua selects the elements and attributes relevant to the apparatus.
+</td>
+       <td>Raw Lua values
+</td>
+      </tr>
+      <tr>
+       <td>3. Normalization
+</td>
+       <td>Raw strings and element content
+</td>
+       <td>Lua trims, splits, classifies, and standardizes the values.
+</td>
+       <td>Consistent Lua fields
+</td>
+      </tr>
+      <tr>
+       <td>4. Reference resolution
+</td>
+       <td>Identifiers such as <code>#A</code>
+</td>
+       <td>Lua connects references with declared witness records.
+</td>
+       <td>Resolved editorial objects
+</td>
+      </tr>
+      <tr>
+       <td>5. Validation
+</td>
+       <td>Normalized and resolved records
+</td>
+       <td>Lua tests structural and editorial constraints.
+</td>
+       <td>Errors, warnings, and usable records
+</td>
+      </tr>
+      <tr>
+       <td>6. Intermediate representation
+</td>
+       <td>Validated apparatus data
+</td>
+       <td>Lua stores the information in a stable internal form.
+</td>
+       <td>Records prepared for ConTeXt
+</td>
+      </tr>
+      <tr>
+       <td>7. Typesetting
+</td>
+       <td>Validated Lua records
+</td>
+       <td>ConTeXt applies the required typographical structure.
+</td>
+       <td>The printed or electronic apparatus
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>These stages should not be confused with the <i>chronological actions</i> of a single program. A practical implementation may combine several operations in one Lua function.
+</p>
+    <p>The <i>conceptual distinctions</i> nevertheless remain important. They make it possible to determine where a particular decision belongs and where a particular error should be reported.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.1._TEI_as_the_documentary_source">
+      3.1. TEI as the documentary source
+     </span>
+    </h3>
+    <p>TEI remains the authoritative documentary representation.
+</p>
+    <p>It records the textual evidence and preserves distinctions that may be useful
+for purposes beyond the immediate ConTeXt output. The Lua layer should not
+silently rewrite the TEI source or discard distinctions merely because they are
+not currently displayed.
+</p>
+    <p>Where possible, each Lua record should retain the identifier of its source TEI
+element. This makes it easier to relate a diagnostic message or a typeset entry
+to the original encoding.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.2._Lua_as_the_interpretative_layer">
+      3.2. Lua as the interpretative layer
+     </span>
+    </h3>
+    <p>Lua receives XML structures but produces editorial objects.
+</p>
+    <p>A witness record may contain fields such as:
+</p>
+    <pre>{
+    id          = "A",
+    siglum      = "A",
+    description = "Paris, Biblioth&egrave;que nationale de France, grec 1807",
+    kind        = "manuscript",
+    order       = 1,
+}
+</pre>
+    <p>An apparatus record may contain:
+</p>
+    <pre>{
+    id       = "app-001",
+    lemma    = "&lambda;ό&gamma;&omicron;&sigmaf;",
+    readings = {
+        {
+            text      = "&lambda;έ&xi;&iota;&sigmaf;",
+            witnesses = { "B", "C" },
+        },
+    },
+    valid = true,
+}
+</pre>
+    <p>These tables are not substitutes for TEI. They are task-oriented
+representations constructed from TEI.
+</p>
+    <p>Their structure reflects what the next stage of the workflow needs to know.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.3._Validated_records_as_an_intermediate_representation">
+      3.3. Validated records as an intermediate representation
+     </span>
+    </h3>
+    <p>The intermediate representation provides a contract between data processing
+and typesetting.
+</p>
+    <p>The processing layer guarantees, for example, that:
+</p>
+    <ul>
+     <li>
+      every witness identifier has a normalized form;
+     </li>
+     <li>
+      every resolved witness exists in the registry;
+     </li>
+     <li>
+      every apparatus record has a predictable structure;
+     </li>
+     <li>
+      absent information is represented explicitly;
+     </li>
+     <li>
+      invalid records are marked or excluded;
+     </li>
+     <li>
+      diagnostic messages have already been produced.
+     </li>
+    </ul>
+    <p>The typesetting layer can therefore operate on records rather than repeatedly
+interpreting XML syntax.
+</p>
+    <p>This intermediate representation is also useful for purposes other than
+typesetting. The same records can support:
+</p>
+    <ul>
+     <li>
+      editorial reports;
+     </li>
+     <li>
+      lists of undeclared witnesses;
+     </li>
+     <li>
+      witness statistics;
+     </li>
+     <li>
+      indexes of variant locations;
+     </li>
+     <li>
+      consistency checks;
+     </li>
+     <li>
+      alternative output formats;
+     </li>
+     <li>
+      automated tests.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="3.4._ConTeXt_as_the_typesetting_layer">
+      3.4. ConTeXt as the typesetting layer
+     </span>
+    </h3>
+    <p>ConTeXt receives records whose editorial meaning has already been established.
+</p>
+    <p>It can then concentrate on presentation:
+</p>
+    <ul>
+     <li>
+      converting a record into an apparatus note;
+     </li>
+     <li>
+      applying the selected lemma and reading styles;
+     </li>
+     <li>
+      formatting sigla;
+     </li>
+     <li>
+      placing entries in one or more apparatus layers;
+     </li>
+     <li>
+      controlling line breaking and page breaking;
+     </li>
+     <li>
+      producing references and navigation;
+     </li>
+     <li>
+      adapting the same data to print or screen output.
+     </li>
+    </ul>
+    <p>The final typographical composition belongs to Guide 6.
+</p>
+    <p>The examples that follow therefore display the constructed records and
+validation reports, but they do not yet create the final critical apparatus.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Building_a_witness_registry_from_TEI_XML">
+      4. Building a witness registry from TEI XML
+     </span>
+    </h2>
+    <p>Before an apparatus entry can be interpreted, the witnesses to which it refers
+must be known.
+</p>
+    <p>TEI normally declares textual witnesses in a <code>&lt;listWit&gt;</code>
+element. Each <code>&lt;witness&gt;</code> receives an identifier that may later
+be referenced from a lemma or a reading.
+</p>
+    <p>For example:
+</p>
+    <pre>&lt;listWit&gt;
+  &lt;witness xml:id="A" type="manuscript"&gt;
+    Paris, Biblioth&egrave;que nationale de France, grec 1807
+  &lt;/witness&gt;
+  &lt;witness xml:id="B" type="manuscript"&gt;
+    Vatican City, Biblioteca Apostolica Vaticana, Vat. gr. 1
+  &lt;/witness&gt;
+  &lt;witness xml:id="C" type="edition"&gt;
+    Aldine edition, Venice, 1513
+  &lt;/witness&gt;
+&lt;/listWit&gt;
+</pre>
+    <p>At the XML level, these are three document elements. For subsequent processing,
+Lua needs a registry in which each identifier gives direct access to a
+structured witness record.
+</p>
+    <p>The intended result has the following general form:
+</p>
+    <pre>witnesses["A"] = {
+    id          = "A",
+    siglum      = "A",
+    kind        = "manuscript",
+    description = "Paris, Biblioth&egrave;que nationale de France, grec 1807",
+    order       = 1,
+}
+</pre>
+    <p>The registry does more than reproduce the XML declarations. It establishes a
+controlled collection of known editorial objects.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.1._The_TEI_witness_declarations">
+      4.1. The TEI witness declarations
+     </span>
+    </h3>
+    <p>A witness declaration can supply several kinds of information:
+</p>
+    <ul>
+     <li>
+      an identifier used by internal references;
+     </li>
+     <li>
+      a siglum displayed in the apparatus;
+     </li>
+     <li>
+      a description of the manuscript, edition, or source;
+     </li>
+     <li>
+      a classification such as
+      <code>manuscript</code>
+      or
+      <code>edition</code>
+      ;
+     </li>
+     <li>
+      an order used when witnesses are displayed or compared.
+     </li>
+    </ul>
+    <p>Not every edition will require all these fields. The Lua registry should retain
+only the information needed by the processing and typesetting workflow.
+</p>
+    <p>The identifier is nevertheless essential. Without it, later references such as
+<code>wit="#A"</code> cannot be resolved reliably.
+</p>
+    <p>In this first example, the siglum is derived from <code>xml:id</code>. A later
+project could instead read the displayed siglum from an additional TEI element
+or attribute.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.2._Constructing_the_Lua_registry">
+      4.2. Constructing the Lua registry
+     </span>
+    </h3>
+    <p>The registry uses two complementary Lua structures:
+</p>
+    <pre>witnesses.by_id
+witnesses.in_order
+</pre>
+    <p>The first provides direct lookup by identifier:
+</p>
+    <pre>witnesses.by_id["A"]
+</pre>
+    <p>The second preserves the order in which witnesses were declared:
+</p>
+    <pre>witnesses.in_order[1]
+</pre>
+    <p>Maintaining both structures avoids a common ambiguity. A Lua table indexed by
+identifiers is suitable for reference resolution, but it should not be relied
+upon to preserve an editorially significant sequence.
+</p>
+    <p>During construction, the processing code checks that:
+</p>
+    <ul>
+     <li>
+      every witness has an identifier;
+     </li>
+     <li>
+      no identifier is declared more than once;
+     </li>
+     <li>
+      textual descriptions are normalized;
+     </li>
+     <li>
+      the documentary order is recorded explicitly.
+     </li>
+    </ul>
+    <p>A missing identifier and a duplicate identifier are treated as errors because
+they prevent unambiguous reference resolution.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.3._Looking_up_witness_information">
+      4.3. Looking up witness information
+     </span>
+    </h3>
+    <p>Once the registry has been constructed, later processing stages no longer need
+to search the original <code>&lt;listWit&gt;</code> repeatedly.
+</p>
+    <p>They can request a witness directly:
+</p>
+    <pre>local witness = witnesses.by_id["B"]
+</pre>
+    <p>If the lookup succeeds, <code>witness</code> denotes a complete record. If it
+fails, the requested identifier has not been declared in the registry.
+</p>
+    <p>This distinction will become important when apparatus entries are validated.
+</p>
+    <p>A reference such as:
+</p>
+    <pre>&lt;rdg wit="#A #B"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+</pre>
+    <p>will eventually be converted into a list of normalized identifiers:
+</p>
+    <pre>{ "A", "B" }
+</pre>
+    <p>Each identifier can then be checked against:
+</p>
+    <pre>witnesses.by_id
+</pre>
+    <h3>
+     <span class="mw-headline" id="4.4._Functional_MWE:_Building_a_witness_registry_from_TEI_XML">
+      4.4. Functional MWE: Building a witness registry from TEI XML
+     </span>
+    </h3>
+    <p>The following example reads witness declarations from a TEI fragment, builds a
+Lua registry, records errors, and prints a diagnostic report.
+</p>
+    <p>It does not yet process apparatus entries. Its sole purpose is to establish the
+collection of witnesses against which later references will be resolved.
+</p>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A5]
+
+\setupbodyfont
+  [libertinus,10pt]
+
+\setupwhitespace
+  [medium]
+
+\startbuffer[tei-data]
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+      &lt;listWit&gt;
+        &lt;witness xml:id="A" type="manuscript"&gt;
+          Paris, Biblioth&egrave;que nationale de France, grec 1807
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="B" type="manuscript"&gt;
+          Vatican City, Biblioteca Apostolica Vaticana, Vat. gr. 1
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="C" type="edition"&gt;
+          Aldine edition, Venice, 1513
+        &lt;/witness&gt;
+      &lt;/listWit&gt;
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+
+\startluacode
+
+thirddata = thirddata or {}
+
+thirddata.tei_witnesses = {
+    by_id    = {},
+    in_order = {},
+    errors   = {},
+}
+
+local registry = thirddata.tei_witnesses
+
+local function normalize_space(value)
+    if not value then
+        return ""
+    end
+
+    value = value:gsub("%s+", " ")
+    value = value:gsub("^%s+", "")
+    value = value:gsub("%s+$", "")
+
+    return value
+end
+
+local function add_error(message)
+    registry.errors[#registry.errors + 1] = message
+end
+
+local function reset_registry()
+    registry.by_id    = {}
+    registry.in_order = {}
+    registry.errors   = {}
+end
+
+local function register_witness(node)
+    local attributes = node.at or {}
+
+    local id =
+        attributes["xml:id"]
+        or attributes.id
+        or ""
+
+    local kind =
+        attributes.type
+        or ""
+
+    id   = normalize_space(id)
+    kind = normalize_space(kind)
+
+    local description =
+        normalize_space(xml.text(node))
+
+    if id == "" then
+        add_error(
+            "A witness declaration has no xml:id."
+        )
+        return
+    end
+
+    if registry.by_id[id] then
+        add_error(
+            "Duplicate witness identifier: " .. id
+        )
+        return
+    end
+
+    local record = {
+        id          = id,
+        siglum      = id,
+        kind        = kind ~= "" and kind or "unspecified",
+        description = description,
+        order       = #registry.in_order + 1,
+        source      = node,
+    }
+
+    registry.by_id[id] = record
+    registry.in_order[#registry.in_order + 1] = record
+end
+
+function registry.build()
+    reset_registry()
+
+    local document = xml.convert(
+        buffers.getcontent("tei-data")
+    )
+
+    for node in xml.collected(
+        document,
+        "witness"
+    ) do
+        register_witness(node)
+    end
+end
+
+function registry.lookup(id)
+    return registry.by_id[id]
+end
+
+function registry.typeset()
+    context.subject("Witness registry")
+
+    context.starttabulate {
+        "|l|l|p|"
+    }
+
+    context.NC()
+    context.bold("Siglum")
+    context.NC()
+    context.bold("Kind")
+    context.NC()
+    context.bold("Description")
+    context.NC()
+    context.NR()
+
+    for _, witness in ipairs(registry.in_order) do
+        context.NC()
+        context(witness.siglum)
+
+        context.NC()
+        context(witness.kind)
+
+        context.NC()
+        context(witness.description)
+
+        context.NC()
+        context.NR()
+    end
+
+    context.stoptabulate()
+
+    context.blank()
+
+    context.subject("Lookup test")
+
+    local selected = registry.lookup("B")
+
+    if selected then
+        context(
+            "Witness B is registered as a %s.",
+            selected.kind
+        )
+    else
+        context(
+            "Witness B is not registered."
+        )
+    end
+
+    context.blank()
+
+    context.subject("Registry report")
+
+    context(
+        "Registered witnesses: %s",
+        #registry.in_order
+    )
+
+    context.par()
+
+    if #registry.errors == 0 then
+        context(
+            "No registry errors were detected."
+        )
+    else
+        context(
+            "Errors: %s",
+            #registry.errors
+        )
+
+        context.startitemize()
+
+        for _, message in ipairs(registry.errors) do
+            context.startitem()
+            context(message)
+            context.stopitem()
+        end
+
+        context.stopitemize()
+    end
+end
+
+\stopluacode
+
+\starttext
+
+\subject{Building a witness registry from TEI XML}
+
+The following report is produced from the witness declarations contained in
+the TEI fragment.
+
+\blank
+
+\ctxlua{
+    thirddata.tei_witnesses.build()
+    thirddata.tei_witnesses.typeset()
+}
+
+\stoptext
+
+</pre>
+    <div class="center">
+     <div class="floatnone">
+      <a class="image" href="File:tei-witness-registry-output.png" title="Output of the functional MWE &ldquo;Building and inspecting a witness registry from TEI XML&rdquo;. The three TEI witness declarations have been converted into an ordered Lua registry; witness B is successfully retrieved, and no registry errors are reported.">
+       <img alt="Output of the functional MWE &ldquo;Building and inspecting a witness registry from TEI XML&rdquo;. The three TEI witness declarations have been converted into an ordered Lua registry; witness B is successfully retrieved, and no registry errors are reported." decoding="async" height="993" src="images/thumb/1/1b/tei-witness-registry-output.webp" width="700">
+      </a>
+     </div>
+    </div>
+    <p><br>
+The central result of the example is not the table printed on the page. The
+important result is the Lua registry itself:
+</p>
+    <pre>witnesses.by_id
+witnesses.in_order
+witnesses.errors
+</pre>
+    <p>These three fields represent different kinds of knowledge about the TEI
+document:
+</p>
+    <ul>
+     <li>
+      <code>by_id</code>
+      records which witnesses are known and makes them
+     </li>
+    </ul>
+    <pre> directly accessible;
+</pre>
+    <ul>
+     <li>
+      <code>in_order</code>
+      records the sequence in which the witnesses were
+     </li>
+    </ul>
+    <pre> declared;
+</pre>
+    <ul>
+     <li>
+      <code>errors</code>
+      records conditions that prevent reliable interpretation.
+     </li>
+    </ul>
+    <p>The source XML contains witness declarations. The Lua registry turns those
+declarations into a collection of identifiable, ordered, and verifiable
+editorial objects.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.5._Testing_missing_and_duplicate_identifiers">
+      4.5. Testing missing and duplicate identifiers
+     </span>
+    </h3>
+    <p>The validation behaviour can be tested by adding the following declarations to
+the TEI buffer:
+</p>
+    <pre>&lt;witness type="manuscript"&gt;
+  An unidentified manuscript
+&lt;/witness&gt;
+
+&lt;witness xml:id="A" type="manuscript"&gt;
+  A second declaration using the identifier A
+&lt;/witness&gt;
+</pre>
+    <p>The first declaration cannot be referenced because it has no
+<code>xml:id</code>. The second makes the identifier <code>A</code>
+ambiguous because that identifier is already present in the registry.
+</p>
+    <p>The processing layer therefore reports both conditions and excludes the
+problematic declarations from the usable registry.
+</p>
+    <p>This is an important difference between merely traversing the XML tree and
+constructing an editorial representation. Traversal can find both elements.
+Registry construction must decide whether they can function as stable objects
+within the edition.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.6._Result_of_this_stage">
+      4.6. Result of this stage
+     </span>
+    </h3>
+    <p>At the end of this stage, Lua possesses a witness registry with the following
+properties:
+</p>
+    <ul>
+     <li>
+      every usable witness has a unique normalized identifier;
+     </li>
+     <li>
+      every identifier gives access to a structured record;
+     </li>
+     <li>
+      documentary order is preserved separately from identifier lookup;
+     </li>
+     <li>
+      incomplete and duplicate declarations are reported;
+     </li>
+     <li>
+      later apparatus references can be checked against a known set of witnesses.
+     </li>
+    </ul>
+    <p>The next stage will use this registry while converting
+<code>&lt;app&gt;</code>, <code>&lt;lem&gt;</code>, and
+<code>&lt;rdg&gt;</code> elements into Lua apparatus records.
+</p>
+    <h2>
+     <span class="mw-headline" id="5._Converting_TEI_apparatus_entries_into_Lua_records">
+      5. Converting TEI apparatus entries into Lua records
+     </span>
+    </h2>
+    <p>Once the witness registry has been constructed, the apparatus entries
+themselves can be processed.
+</p>
+    <p>A TEI apparatus entry normally groups a lemma with one or more variant
+readings:
+</p>
+    <pre>&lt;app xml:id="app-001"&gt;
+  &lt;lem wit="#A"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/lem&gt;
+  &lt;rdg wit="#B #C"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>At the XML level, this structure records a textual relationship. It identifies
+the lemma, the alternative reading, and the witnesses associated with each
+form.
+</p>
+    <p>For later processing, Lua converts the XML elements into a predictable record:
+</p>
+    <pre>{
+    id = "app-001",
+
+    lemma = {
+        text      = "&lambda;ό&gamma;&omicron;&sigmaf;",
+        witnesses = { "A" },
+    },
+
+    readings = {
+        {
+            text      = "&lambda;έ&xi;&iota;&sigmaf;",
+            witnesses = { "B", "C" },
+            kind      = "reading",
+        },
+    },
+
+    valid = true,
+}
+</pre>
+    <p>This transformation does not yet typeset the apparatus entry. It establishes
+an intermediate representation in which textual content, witness references,
+and editorial categories are separated into explicit fields.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.1._Reading_lemmas_and_variant_readings">
+      5.1. Reading lemmas and variant readings
+     </span>
+    </h3>
+    <p>The <code>&lt;app&gt;</code> element acts as a container. Its children provide
+the editorial content that must be interpreted.
+</p>
+    <p>The principal elements used in this example are:
+</p>
+    <ul>
+     <li>
+      <code>&lt;lem&gt;</code>
+      , which records the lemma;
+     </li>
+     <li>
+      <code>&lt;rdg&gt;</code>
+      , which records a variant reading;
+     </li>
+     <li>
+      <code>@wit</code>
+      , which associates a lemma or reading with one or more
+     </li>
+    </ul>
+    <pre> witnesses;
+</pre>
+    <ul>
+     <li>
+      <code>@xml:id</code>
+      , which gives the apparatus entry a stable identifier.
+     </li>
+    </ul>
+    <p>A single apparatus entry may contain several <code>&lt;rdg&gt;</code>
+elements:
+</p>
+    <pre>&lt;app xml:id="app-002"&gt;
+  &lt;lem wit="#A"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&lt;/lem&gt;
+  &lt;rdg wit="#B"&gt;ἀ&lambda;&eta;&theta;&epsilon;ί&alpha;&lt;/rdg&gt;
+  &lt;rdg wit="#C"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&nu;&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>The corresponding Lua record therefore stores the readings in an ordered
+array:
+</p>
+    <pre>readings = {
+    {
+        text      = "ἀ&lambda;&eta;&theta;&epsilon;ί&alpha;",
+        witnesses = { "B" },
+    },
+    {
+        text      = "ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&nu;",
+        witnesses = { "C" },
+    },
+}
+</pre>
+    <p>The order of the readings may be significant. It should therefore be preserved
+explicitly rather than reconstructed later from an unordered table.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.2._Normalizing_witness_lists">
+      5.2. Normalizing witness lists
+     </span>
+    </h3>
+    <p>The value of a TEI <code>@wit</code> attribute is a whitespace-separated list
+of references:
+</p>
+    <pre>wit="#B #C"
+</pre>
+    <p>Lua must convert this string into individual identifiers:
+</p>
+    <pre>{ "B", "C" }
+</pre>
+    <p>The normalization operation performs several tasks:
+</p>
+    <ul>
+     <li>
+      removes the leading
+      <code>#</code>
+      reference marker;
+     </li>
+     <li>
+      ignores insignificant whitespace;
+     </li>
+     <li>
+      separates the references;
+     </li>
+     <li>
+      removes accidental duplicates;
+     </li>
+     <li>
+      preserves the order of first occurrence.
+     </li>
+    </ul>
+    <p>For example:
+</p>
+    <pre>wit="  #B   #C  #B "
+</pre>
+    <p>becomes:
+</p>
+    <pre>{ "B", "C" }
+</pre>
+    <p>This operation establishes that differences in spacing and repeated references
+do not create distinct witness lists.
+</p>
+    <p>The normalized identifiers are not yet guaranteed to be valid. They will be
+checked against the witness registry in section 6.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.3._Preserving_editorial_distinctions">
+      5.3. Preserving editorial distinctions
+     </span>
+    </h3>
+    <p>Not every <code>&lt;rdg&gt;</code> contains an ordinary replacement reading.
+</p>
+    <p>TEI can represent several editorial situations, including:
+</p>
+    <ul>
+     <li>
+      a textual variant;
+     </li>
+     <li>
+      an omission;
+     </li>
+     <li>
+      an addition;
+     </li>
+     <li>
+      an orthographic form;
+     </li>
+     <li>
+      a conjecture;
+     </li>
+     <li>
+      a reading attributed to a particular source or hand.
+     </li>
+    </ul>
+    <p>The Lua record should therefore retain an explicit category rather than infer
+the meaning later from the displayed text.
+</p>
+    <p>A normal reading may be represented as:
+</p>
+    <pre>{
+    kind      = "reading",
+    text      = "&lambda;έ&xi;&iota;&sigmaf;",
+    witnesses = { "B", "C" },
+}
+</pre>
+    <p>An omission may be represented as:
+</p>
+    <pre>{
+    kind      = "omission",
+    text      = "",
+    witnesses = { "C" },
+}
+</pre>
+    <p>This distinction is important because an empty textual value does not by itself
+explain why the text is absent. It may represent an omission, missing data, or
+an encoding error.
+</p>
+    <p>The TEI source must therefore supply enough information for Lua to distinguish
+these cases.
+</p>
+    <p>In the following MWE, the attribute <code>type="omission"</code> is used to
+identify an omission explicitly:
+</p>
+    <pre>&lt;rdg wit="#C" type="omission"/&gt;
+</pre>
+    <p>The Lua processing layer preserves this distinction in the
+<code>kind</code> field.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.4._Functional_MWE:_Converting_TEI_apparatus_entries_into_Lua_records">
+      5.4. Functional MWE: Converting TEI apparatus entries into Lua records
+     </span>
+    </h3>
+    <p>The following example extends the witness-registry mechanism developed in
+section 4.
+</p>
+    <p>It reads two apparatus entries, normalizes their witness lists, preserves the
+order of their readings, and constructs Lua records.
+</p>
+    <p>The example displays the resulting records for inspection. It does not yet
+validate whether every witness reference is known.
+</p>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A5]
+
+\setupbodyfont
+  [libertinus,10pt]
+
+\setupwhitespace
+  [medium]
+
+\startbuffer[tei-data]
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+
+      &lt;listWit&gt;
+        &lt;witness xml:id="A" type="manuscript"&gt;
+          Paris, Biblioth&egrave;que nationale de France, grec 1807
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="B" type="manuscript"&gt;
+          Vatican City, Biblioteca Apostolica Vaticana, Vat. gr. 1
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="C" type="edition"&gt;
+          Aldine edition, Venice, 1513
+        &lt;/witness&gt;
+      &lt;/listWit&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-001"&gt;
+          &lt;lem wit="#A"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/lem&gt;
+          &lt;rdg wit="#B #C"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-002"&gt;
+          &lt;lem wit="#A #B"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&lt;/lem&gt;
+          &lt;rdg wit="#C" type="omission"/&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+
+\startluacode
+
+thirddata = thirddata or {}
+
+thirddata.tei_apparatus = {
+    records = {},
+    errors  = {},
+}
+
+local apparatus = thirddata.tei_apparatus
+
+local function normalize_space(value)
+    if not value then
+        return ""
+    end
+
+    value = value:gsub("%s+", " ")
+    value = value:gsub("^%s+", "")
+    value = value:gsub("%s+$", "")
+
+    return value
+end
+
+local function normalize_witnesses(value)
+    local result = {}
+    local seen   = {}
+
+    value = normalize_space(value)
+
+    for reference in value:gmatch("%S+") do
+        local id = reference:gsub("^#", "")
+
+        if id ~= "" and not seen[id] then
+            result[#result + 1] = id
+            seen[id] = true
+        end
+    end
+
+    return result
+end
+
+local function make_reading_record(node)
+    local attributes = node.at or {}
+
+    local kind =
+        normalize_space(attributes.type)
+
+    if kind == "" then
+        kind = "reading"
+    end
+
+    return {
+        kind      = kind,
+        text      = normalize_space(xml.text(node)),
+        witnesses = normalize_witnesses(attributes.wit),
+        source    = node,
+    }
+end
+
+local function make_lemma_record(node)
+    if not node then
+        return nil
+    end
+
+    local attributes = node.at or {}
+
+    return {
+        text      = normalize_space(xml.text(node)),
+        witnesses = normalize_witnesses(attributes.wit),
+        source    = node,
+    }
+end
+
+local function make_apparatus_record(node, position)
+    local attributes = node.at or {}
+
+    local lemma_node =
+        xml.first(node, "lem")
+
+    local record = {
+        id =
+            normalize_space(attributes["xml:id"])
+            ~= ""
+            and normalize_space(attributes["xml:id"])
+            or "app-" .. position,
+
+        lemma    = make_lemma_record(lemma_node),
+        readings = {},
+        order    = position,
+        source   = node,
+        valid    = true,
+    }
+
+    for reading_node in xml.collected(node, "rdg") do
+        record.readings[#record.readings + 1] =
+            make_reading_record(reading_node)
+    end
+
+    return record
+end
+
+function apparatus.build()
+    apparatus.records = {}
+    apparatus.errors  = {}
+
+    local document = xml.convert(
+        buffers.getcontent("tei-data")
+    )
+
+    local position = 0
+
+    for node in xml.collected(document, "app") do
+        position = position + 1
+
+        apparatus.records[#apparatus.records + 1] =
+            make_apparatus_record(node, position)
+    end
+end
+
+local function typeset_witness_list(list)
+    if #list == 0 then
+        context("none")
+        return
+    end
+
+    context(table.concat(list, ", "))
+end
+
+function apparatus.typeset()
+    context.subject("Apparatus records")
+
+    for _, record in ipairs(apparatus.records) do
+        context.subsubject(record.id)
+
+        if record.lemma then
+            context.bold("Lemma: ")
+            context(record.lemma.text)
+
+            context.par()
+
+            context.bold("Lemma witnesses: ")
+            typeset_witness_list(record.lemma.witnesses)
+        else
+            context.bold("Lemma: ")
+            context("missing")
+        end
+
+        context.par()
+        context.bold("Readings: ")
+        context(#record.readings)
+
+        context.startitemize()
+
+        for _, reading in ipairs(record.readings) do
+            context.startitem()
+
+            context.bold("Kind: ")
+            context(reading.kind)
+
+            context.par()
+
+            context.bold("Text: ")
+
+            if reading.text ~= "" then
+                context(reading.text)
+            else
+                context("empty")
+            end
+
+            context.par()
+
+            context.bold("Witnesses: ")
+            typeset_witness_list(reading.witnesses)
+
+            context.stopitem()
+        end
+
+        context.stopitemize()
+    end
+end
+
+\stopluacode
+
+\starttext
+
+\subject{Converting TEI apparatus entries into Lua records}
+
+The following report shows the intermediate records constructed from two TEI
+apparatus entries.
+
+\blank
+
+\ctxlua{
+    thirddata.tei_apparatus.build()
+    thirddata.tei_apparatus.typeset()
+}
+
+\stoptext
+
+</pre>
+    <div class="center">
+     <div class="floatnone">
+      <a class="image" href="File:tei-apparatus-records.png" title="Output of the functional MWE &ldquo;Converting TEI apparatus entries into Lua records&rdquo;.">
+       <img alt="Output of the functional MWE &ldquo;Converting TEI apparatus entries into Lua records&rdquo;." decoding="async" height="993" src="images/thumb/b/b8/tei-apparatus-records.webp" width="700">
+      </a>
+     </div>
+    </div>
+    <p>The first record contains:
+</p>
+    <ul>
+     <li>
+      the lemma
+      <code>&lambda;ό&gamma;&omicron;&sigmaf;</code>
+      , associated with witness
+      <code>A</code>
+      ;
+     </li>
+     <li>
+      the reading
+      <code>&lambda;έ&xi;&iota;&sigmaf;</code>
+      , associated with witnesses
+     </li>
+    </ul>
+    <pre> <code>B</code> and <code>C</code>.
+</pre>
+    <p>The second record contains:
+</p>
+    <ul>
+     <li>
+      the lemma
+      <code>ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;</code>
+      , associated with witnesses
+     </li>
+    </ul>
+    <pre> <code>A</code> and <code>B</code>;
+</pre>
+    <ul>
+     <li>
+      an explicitly classified omission associated with witness
+      <code>C</code>
+      .
+     </li>
+    </ul>
+    <p>The empty text of the omission is therefore not treated as an ordinary empty
+reading. Its meaning is preserved by the value:
+</p>
+    <pre>kind = "omission"
+</pre>
+    <h3>
+     <span class="mw-headline" id="5.5._Result_of_this_stage">
+      5.5. Result of this stage
+     </span>
+    </h3>
+    <p>At the end of this stage, each TEI <code>&lt;app&gt;</code> element has become
+a structured Lua record with:
+</p>
+    <ul>
+     <li>
+      a stable identifier;
+     </li>
+     <li>
+      one lemma record;
+     </li>
+     <li>
+      an ordered collection of reading records;
+     </li>
+     <li>
+      normalized witness identifiers;
+     </li>
+     <li>
+      explicit editorial categories;
+     </li>
+     <li>
+      a reference to the source XML node;
+     </li>
+     <li>
+      a predictable structure for later validation and typesetting.
+     </li>
+    </ul>
+    <p>The transformation has therefore moved beyond XML traversal.
+</p>
+    <p>Lua has identified the editorial roles of the elements, separated their
+contents into explicit fields, and constructed apparatus objects that can be
+examined independently of the original XML syntax.
+</p>
+    <p>The witness identifiers contained in these records have been normalized, but
+they have not yet been verified against the witness registry.
+</p>
+    <p>That verification is the purpose of the next section.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Validating_witness_references_and_apparatus_records">
+      6. Validating witness references and apparatus records
+     </span>
+    </h2>
+    <p>The apparatus records constructed in section 5 have a predictable Lua
+structure, but their internal consistency has not yet been established.
+</p>
+    <p>Normalization can transform:
+</p>
+    <pre>wit=" #B  #C "
+</pre>
+    <p>into:
+</p>
+    <pre>{ "B", "C" }
+</pre>
+    <p>It cannot determine by itself whether witnesses <code>B</code> and
+<code>C</code> have actually been declared.
+</p>
+    <p>Validation introduces this additional stage. It compares the apparatus records
+with the witness registry and tests rules that concern the editorial model
+rather than XML syntax.
+</p>
+    <p>A record may therefore be structurally readable while remaining editorially
+invalid.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.1._Detecting_unknown_witnesses">
+      6.1. Detecting unknown witnesses
+     </span>
+    </h3>
+    <p>Each normalized witness identifier must be resolved against the registry
+constructed from <code>&lt;listWit&gt;</code>.
+</p>
+    <p>For example:
+</p>
+    <pre>&lt;rdg wit="#B #D"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+</pre>
+    <p>may be converted into:
+</p>
+    <pre>{ "B", "D" }
+</pre>
+    <p>If only witness <code>B</code> has been declared, the identifier
+<code>D</code> remains unresolved.
+</p>
+    <p>Lua can detect this condition by consulting:
+</p>
+    <pre>registry.by_id["D"]
+</pre>
+    <p>An unresolved reference is treated as an error because the processing layer
+cannot determine which editorial object the identifier is intended to denote.
+</p>
+    <p>The diagnostic message should identify both:
+</p>
+    <ul>
+     <li>
+      the apparatus record in which the problem occurs;
+     </li>
+     <li>
+      the unresolved witness identifier.
+     </li>
+    </ul>
+    <p>For example:
+</p>
+    <pre>app-002: unknown witness D in reading 1.
+</pre>
+    <p>This makes it possible to trace the problem back to a specific part of the TEI
+source.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.2._Detecting_incomplete_apparatus_entries">
+      6.2. Detecting incomplete apparatus entries
+     </span>
+    </h3>
+    <p>An apparatus entry may be valid XML while lacking information required by the
+edition.
+</p>
+    <p>Possible problems include:
+</p>
+    <ul>
+     <li>
+      an
+      <code>&lt;app&gt;</code>
+      element without a lemma;
+     </li>
+     <li>
+      a lemma without textual content;
+     </li>
+     <li>
+      an apparatus entry without readings;
+     </li>
+     <li>
+      an ordinary reading with no text;
+     </li>
+     <li>
+      an omission that has not been explicitly classified;
+     </li>
+     <li>
+      a witness list that is absent where the editorial model requires one.
+     </li>
+    </ul>
+    <p>These conditions cannot all be inferred from XML well-formedness.
+</p>
+    <p>For example:
+</p>
+    <pre>&lt;app xml:id="app-003"&gt;
+  &lt;rdg wit="#B"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>is well-formed XML, but the apparatus record has no lemma.
+</p>
+    <p>Likewise:
+</p>
+    <pre>&lt;rdg wit="#C"/&gt;
+</pre>
+    <p>contains no text. Without an explicit category such as:
+</p>
+    <pre>type="omission"
+</pre>
+    <p>the processing layer cannot know whether the empty content represents an
+intentional omission or incomplete data.
+</p>
+    <p>Validation therefore tests not only the presence of elements, but also the
+relationship between their textual content and their editorial classification.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.3._Distinguishing_errors_from_warnings">
+      6.3. Distinguishing errors from warnings
+     </span>
+    </h3>
+    <p>Not every irregularity makes a record unusable.
+</p>
+    <p>This guide distinguishes two principal diagnostic levels.
+</p>
+    <p>An <b>error</b> identifies a condition that prevents safe interpretation, such
+as:
+</p>
+    <ul>
+     <li>
+      an unknown witness;
+     </li>
+     <li>
+      a missing lemma;
+     </li>
+     <li>
+      an empty ordinary reading;
+     </li>
+     <li>
+      an ambiguous duplicate witness declaration.
+     </li>
+    </ul>
+    <p>A <b>warning</b> identifies a condition that can be normalized or may be
+intentional, but should remain visible to the editor, such as:
+</p>
+    <ul>
+     <li>
+      a witness repeated in the same
+      <code>@wit</code>
+      value;
+     </li>
+     <li>
+      an apparatus entry with no variant readings;
+     </li>
+     <li>
+      an omission element that unexpectedly contains text;
+     </li>
+     <li>
+      an automatically generated apparatus identifier.
+     </li>
+    </ul>
+    <p>This distinction prevents validation from becoming a simple choice between
+acceptance and rejection.
+</p>
+    <p>A record may remain usable while carrying warnings that deserve editorial
+review.
+</p>
+    <p>The diagnostics are therefore part of the intermediate representation. They
+record not only whether processing succeeded, but also which interpretative
+decisions were required.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.4._Functional_MWE:_Validating_witness_references_and_apparatus_records">
+      6.4. Functional MWE: Validating witness references and apparatus records
+     </span>
+    </h3>
+    <p>The following example combines a witness registry with several apparatus
+records.
+</p>
+    <p>It deliberately includes:
+</p>
+    <ul>
+     <li>
+      one valid apparatus entry;
+     </li>
+     <li>
+      one reading that refers to an undeclared witness;
+     </li>
+     <li>
+      one apparatus entry without a lemma;
+     </li>
+     <li>
+      one empty reading that is not classified as an omission;
+     </li>
+     <li>
+      one repeated witness reference that can be normalized but should be reported.
+     </li>
+    </ul>
+    <p>The output separates errors from warnings and marks each apparatus record as
+valid or invalid.
+</p>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A5]
+
+\setupbodyfont
+  [libertinus,10pt]
+
+\setupwhitespace
+  [medium]
+
+\startbuffer[tei-data]
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+
+      &lt;listWit&gt;
+        &lt;witness xml:id="A" type="manuscript"&gt;
+          Paris, Biblioth&egrave;que nationale de France, grec 1807
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="B" type="manuscript"&gt;
+          Vatican City, Biblioteca Apostolica Vaticana, Vat. gr. 1
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="C" type="edition"&gt;
+          Aldine edition, Venice, 1513
+        &lt;/witness&gt;
+      &lt;/listWit&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-001"&gt;
+          &lt;lem wit="#A"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/lem&gt;
+          &lt;rdg wit="#B #C"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-002"&gt;
+          &lt;lem wit="#A"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&lt;/lem&gt;
+          &lt;rdg wit="#B #D"&gt;ἀ&lambda;&eta;&theta;&epsilon;ί&alpha;&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-003"&gt;
+          &lt;rdg wit="#B"&gt;&phi;&omega;&nu;ή&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-004"&gt;
+          &lt;lem wit="#A #B"&gt;&sigma;&omicron;&phi;ί&alpha;&lt;/lem&gt;
+          &lt;rdg wit="#C"/&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-005"&gt;
+          &lt;lem wit="#A"&gt;&psi;&upsilon;&chi;ή&lt;/lem&gt;
+          &lt;rdg wit="#B #B #C"&gt;&pi;&nu;&omicron;ή&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+
+\startluacode
+
+thirddata = thirddata or {}
+
+thirddata.tei_validation = {
+    witnesses = {
+        by_id    = {},
+        in_order = {},
+    },
+    records  = {},
+    errors   = {},
+    warnings = {},
+}
+
+local validation = thirddata.tei_validation
+
+local function normalize_space(value)
+    if not value then
+        return ""
+    end
+
+    value = value:gsub("%s+", " ")
+    value = value:gsub("^%s+", "")
+    value = value:gsub("%s+$", "")
+
+    return value
+end
+
+local function add_error(message)
+    validation.errors[#validation.errors + 1] = message
+end
+
+local function add_warning(message)
+    validation.warnings[#validation.warnings + 1] = message
+end
+
+local function normalize_witnesses(value)
+    local result     = {}
+    local seen       = {}
+    local duplicates = {}
+
+    value = normalize_space(value)
+
+    for reference in value:gmatch("%S+") do
+        local id = reference:gsub("^#", "")
+
+        if id ~= "" then
+            if seen[id] then
+                duplicates[#duplicates + 1] = id
+            else
+                result[#result + 1] = id
+                seen[id] = true
+            end
+        end
+    end
+
+    return result, duplicates
+end
+
+local function build_witness_registry(document)
+    validation.witnesses.by_id    = {}
+    validation.witnesses.in_order = {}
+
+    for node in xml.collected(document, "witness") do
+        local attributes = node.at or {}
+
+        local id =
+            normalize_space(
+                attributes["xml:id"]
+                or attributes.id
+            )
+
+        if id == "" then
+            add_error(
+                "A witness declaration has no xml:id."
+            )
+        elseif validation.witnesses.by_id[id] then
+            add_error(
+                "Duplicate witness identifier: " .. id
+            )
+        else
+            local record = {
+                id          = id,
+                siglum      = id,
+                kind        =
+                    normalize_space(attributes.type)
+                    ~= ""
+                    and normalize_space(attributes.type)
+                    or "unspecified",
+                description =
+                    normalize_space(xml.text(node)),
+                order       =
+                    #validation.witnesses.in_order + 1,
+                source      = node,
+            }
+
+            validation.witnesses.by_id[id] = record
+
+            validation.witnesses.in_order[
+                #validation.witnesses.in_order + 1
+            ] = record
+        end
+    end
+end
+
+local function make_text_record(node, default_kind)
+    if not node then
+        return nil
+    end
+
+    local attributes = node.at or {}
+
+    local witnesses, duplicates =
+        normalize_witnesses(attributes.wit)
+
+    local kind =
+        normalize_space(attributes.type)
+
+    if kind == "" then
+        kind = default_kind
+    end
+
+    return {
+        kind       = kind,
+        text       = normalize_space(xml.text(node)),
+        witnesses  = witnesses,
+        duplicates = duplicates,
+        source     = node,
+    }
+end
+
+local function build_apparatus_records(document)
+    validation.records = {}
+
+    local position = 0
+
+    for node in xml.collected(document, "app") do
+        position = position + 1
+
+        local attributes = node.at or {}
+
+        local id =
+            normalize_space(
+                attributes["xml:id"]
+                or attributes.id
+            )
+
+        if id == "" then
+            id = "app-" .. position
+
+            add_warning(
+                id .. ": generated identifier."
+            )
+        end
+
+        local record = {
+            id       = id,
+            lemma    =
+                make_text_record(
+                    xml.first(node, "lem"),
+                    "lemma"
+                ),
+            readings = {},
+            order    = position,
+            source   = node,
+            valid    = true,
+        }
+
+        for reading_node in xml.collected(node, "rdg") do
+            record.readings[#record.readings + 1] =
+                make_text_record(
+                    reading_node,
+                    "reading"
+                )
+        end
+
+        validation.records[
+            #validation.records + 1
+        ] = record
+    end
+end
+
+local function validate_witness_list(
+    record,
+    list,
+    location
+)
+    for _, id in ipairs(list) do
+        if not validation.witnesses.by_id[id] then
+            add_error(
+                string.format(
+                    "%s: unknown witness %s in %s.",
+                    record.id,
+                    id,
+                    location
+                )
+            )
+
+            record.valid = false
+        end
+    end
+end
+
+local function report_duplicates(
+    record,
+    duplicates,
+    location
+)
+    for _, id in ipairs(duplicates) do
+        add_warning(
+            string.format(
+                "%s: duplicate witness %s in %s; "
+                .. "the repeated reference was removed.",
+                record.id,
+                id,
+                location
+            )
+        )
+    end
+end
+
+local function validate_record(record)
+    if not record.lemma then
+        add_error(
+            record.id .. ": missing lemma."
+        )
+
+        record.valid = false
+    else
+        if record.lemma.text == "" then
+            add_error(
+                record.id .. ": the lemma is empty."
+            )
+
+            record.valid = false
+        end
+
+        validate_witness_list(
+            record,
+            record.lemma.witnesses,
+            "lemma"
+        )
+
+        report_duplicates(
+            record,
+            record.lemma.duplicates,
+            "lemma"
+        )
+    end
+
+    if #record.readings == 0 then
+        add_warning(
+            record.id .. ": no variant readings."
+        )
+    end
+
+    for index, reading in ipairs(record.readings) do
+        local location =
+            "reading " .. index
+
+        validate_witness_list(
+            record,
+            reading.witnesses,
+            location
+        )
+
+        report_duplicates(
+            record,
+            reading.duplicates,
+            location
+        )
+
+        if reading.kind == "omission" then
+            if reading.text ~= "" then
+                add_warning(
+                    string.format(
+                        "%s: %s is classified as an "
+                        .. "omission but contains text.",
+                        record.id,
+                        location
+                    )
+                )
+            end
+        elseif reading.text == "" then
+            add_error(
+                string.format(
+                    "%s: %s is empty and is not "
+                    .. "classified as an omission.",
+                    record.id,
+                    location
+                )
+            )
+
+            record.valid = false
+        end
+    end
+end
+
+function validation.build()
+    validation.errors   = {}
+    validation.warnings = {}
+    validation.records  = {}
+
+    local document = xml.convert(
+        buffers.getcontent("tei-data")
+    )
+
+    build_witness_registry(document)
+    build_apparatus_records(document)
+
+    for _, record in ipairs(validation.records) do
+        validate_record(record)
+    end
+end
+
+local function typeset_status(record)
+    if record.valid then
+        context("valid")
+    else
+        context("invalid")
+    end
+end
+
+function validation.typeset()
+    context.subject("Validation summary")
+
+    context.starttabulate {
+        "|l|l|l|r|"
+    }
+
+    context.NC()
+    context.bold("Record")
+    context.NC()
+    context.bold("Status")
+    context.NC()
+    context.bold("Lemma")
+    context.NC()
+    context.bold("Readings")
+    context.NC()
+    context.NR()
+
+    for _, record in ipairs(validation.records) do
+        context.NC()
+        context(record.id)
+
+        context.NC()
+        typeset_status(record)
+
+        context.NC()
+
+        if record.lemma then
+            context(record.lemma.text)
+        else
+            context("missing")
+        end
+
+        context.NC()
+        context(#record.readings)
+
+        context.NC()
+        context.NR()
+    end
+
+    context.stoptabulate()
+
+    context.blank()
+
+    context.subject("Errors")
+
+    if #validation.errors == 0 then
+        context("No validation errors were detected.")
+    else
+        context.startitemize()
+
+        for _, message in ipairs(validation.errors) do
+            context.startitem()
+            context(message)
+            context.stopitem()
+        end
+
+        context.stopitemize()
+    end
+
+    context.blank()
+
+    context.subject("Warnings")
+
+    if #validation.warnings == 0 then
+        context("No validation warnings were produced.")
+    else
+        context.startitemize()
+
+        for _, message in ipairs(validation.warnings) do
+            context.startitem()
+            context(message)
+            context.stopitem()
+        end
+
+        context.stopitemize()
+    end
+end
+
+\stopluacode
+
+\starttext
+
+\subject{Validating witness references and apparatus records}
+
+The following report compares normalized apparatus records with the witness
+registry and applies a small set of editorial validation rules.
+
+\blank
+
+\ctxlua{
+    thirddata.tei_validation.build()
+    thirddata.tei_validation.typeset()
+}
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:702px;">
+       <a class="image" href="File:tei-apparatus-validation.png">
+        <img alt class="thumbimage" decoding="async" height="993" src="images/thumb/b/bd/tei-apparatus-validation.webp" width="700">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="File:tei-apparatus-validation.png" title="Enlarge">
+         </a>
+        </div>
+        Output of the functional MWE &ldquo;Validating witness references and apparatus records&rdquo;. The validation layer distinguishes valid and invalid apparatus records, reports an unknown witness, a missing lemma, and an unclassified empty reading, and preserves a normalized duplicate reference as a warning.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>The expected validation summary marks:
+</p>
+    <ul>
+     <li>
+      <code>app-001</code>
+      as valid;
+     </li>
+     <li>
+      <code>app-002</code>
+      as invalid because witness
+      <code>D</code>
+      has not
+     </li>
+    </ul>
+    <pre> been declared;
+</pre>
+    <ul>
+     <li>
+      <code>app-003</code>
+      as invalid because it has no lemma;
+     </li>
+     <li>
+      <code>app-004</code>
+      as invalid because its empty reading is not classified
+     </li>
+    </ul>
+    <pre> as an omission;
+</pre>
+    <ul>
+     <li>
+      <code>app-005</code>
+      as valid, but accompanied by a warning because witness
+     </li>
+    </ul>
+    <pre> <code>B</code> was repeated in the original <code>@wit</code> value.
+</pre>
+    <p>The repeated reference in <code>app-005</code> is removed during
+normalization. The warning nevertheless preserves knowledge of the irregularity
+found in the source.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.5._Result_of_this_stage">
+      6.5. Result of this stage
+     </span>
+    </h3>
+    <p>At the end of this stage, the processing layer knows more than the XML parser
+alone can establish.
+</p>
+    <p>It knows:
+</p>
+    <ul>
+     <li>
+      which witness references denote declared editorial objects;
+     </li>
+     <li>
+      which apparatus records satisfy the required structural rules;
+     </li>
+     <li>
+      which records cannot safely be passed to typesetting;
+     </li>
+     <li>
+      which irregularities were normalized without invalidating the record;
+     </li>
+     <li>
+      which diagnostic messages must be presented to the editor.
+     </li>
+    </ul>
+    <p>Validation therefore produces a new epistemic state.
+</p>
+    <p>The original TEI document contains encoded claims and relationships. The Lua
+layer tests those claims against the declarations and rules of the edition.
+</p>
+    <p>A reference is no longer merely syntactically present: it is either resolved or
+unresolved.
+</p>
+    <p>An apparatus entry is no longer merely well-formed: it is either editorially
+usable, usable with warnings, or invalid.
+</p>
+    <p>The next section will combine witness registration, apparatus conversion,
+reference resolution, and validation in a single complete workflow.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Complete_MWE:_From_TEI_apparatus_data_to_validated_Lua_records">
+      7. Complete MWE: From TEI apparatus data to validated Lua records
+     </span>
+    </h2>
+    <p>The preceding examples isolated three successive operations:
+</p>
+    <ol>
+     <li>
+      constructing a witness registry;
+     </li>
+     <li>
+      converting TEI apparatus entries into Lua records;
+     </li>
+     <li>
+      validating those records against the declarations and rules of the edition.
+     </li>
+    </ol>
+    <p>A practical processing workflow must combine these operations while preserving
+their conceptual distinction.
+</p>
+    <p>The complete example in this section therefore processes a single TEI fragment
+through the following stages:
+</p>
+    <pre>TEI witness declarations
+    &darr;
+Lua witness registry
+    &darr;
+TEI apparatus entries
+    &darr;
+normalized Lua apparatus records
+    &darr;
+reference resolution and validation
+    &darr;
+records prepared for ConTeXt
+</pre>
+    <p>The result is not yet a typeset critical apparatus. It is a stable intermediate
+representation whose structure and validity have been established before
+typographical composition begins.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.1._Source_data">
+      7.1. Source data
+     </span>
+    </h3>
+    <p>The TEI fragment used in this example contains three declared witnesses and
+three apparatus entries.
+</p>
+    <p>The first two entries are valid:
+</p>
+    <pre>&lt;app xml:id="app-001"&gt;
+  &lt;lem wit="#A"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/lem&gt;
+  &lt;rdg wit="#B #C"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+&lt;/app&gt;
+
+&lt;app xml:id="app-002"&gt;
+  &lt;lem wit="#A #B"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&lt;/lem&gt;
+  &lt;rdg wit="#C" type="omission"/&gt;
+&lt;/app&gt;
+</pre>
+    <p>The third entry deliberately contains an undeclared witness:
+</p>
+    <pre>&lt;app xml:id="app-003"&gt;
+  &lt;lem wit="#A"&gt;&psi;&upsilon;&chi;ή&lt;/lem&gt;
+  &lt;rdg wit="#B #D"&gt;&pi;&nu;&omicron;ή&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>Witness <code>D</code> does not occur in the
+<code>&lt;listWit&gt;</code>. The entry can be read and normalized, but it
+cannot be accepted as a fully resolved editorial record.
+</p>
+    <p>This distinction allows the complete workflow to demonstrate both successful
+processing and controlled rejection.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.2._Processing_stages">
+      7.2. Processing stages
+     </span>
+    </h3>
+    <p>The complete program retains separate Lua structures for:
+</p>
+    <ul>
+     <li>
+      the witness registry;
+     </li>
+     <li>
+      the apparatus records;
+     </li>
+     <li>
+      global errors and warnings;
+     </li>
+     <li>
+      records accepted for later typesetting.
+     </li>
+    </ul>
+    <p>Each apparatus record also contains its own diagnostic state.
+</p>
+    <p>A successfully resolved reading may contain:
+</p>
+    <pre>{
+    kind = "reading",
+    text = "&lambda;έ&xi;&iota;&sigmaf;",
+
+    witness_ids = {
+        "B",
+        "C",
+    },
+
+    witnesses = {
+        witnesses.by_id["B"],
+        witnesses.by_id["C"],
+    },
+
+    valid = true,
+}
+</pre>
+    <p>The distinction between <code>witness_ids</code> and
+<code>witnesses</code> is important.
+</p>
+    <p>The first field preserves the normalized identifiers extracted from TEI. The
+second contains references to the corresponding editorial objects in the
+witness registry.
+</p>
+    <p>Before resolution:
+</p>
+    <pre>"B"
+</pre>
+    <p>is a normalized identifier.
+</p>
+    <p>After resolution:
+</p>
+    <pre>witnesses.by_id["B"]
+</pre>
+    <p>is a known witness record with a siglum, type, description, and documentary
+order.
+</p>
+    <p>The intermediate representation therefore preserves both the encoded reference
+and the editorial object to which it has been connected.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.3._Validation_report">
+      7.3. Validation report
+     </span>
+    </h3>
+    <p>The program produces two complementary forms of output.
+</p>
+    <p>The validation report shows:
+</p>
+    <ul>
+     <li>
+      the number of declared witnesses;
+     </li>
+     <li>
+      the number of apparatus records;
+     </li>
+     <li>
+      the validity of each record;
+     </li>
+     <li>
+      the number of accepted records;
+     </li>
+     <li>
+      all detected errors and warnings.
+     </li>
+    </ul>
+    <p>The record report then displays the normalized and resolved content of each
+apparatus entry.
+</p>
+    <p>Invalid records remain available for inspection, but they are not included in
+the collection prepared for typesetting.
+</p>
+    <p>This is safer than silently discarding them. It allows the editor to examine
+the failed interpretation and trace the diagnostic message back to the source
+record.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.4._Complete_functional_MWE:_From_TEI_apparatus_data_to_validated_Lua_records">
+      7.4. Complete functional MWE: From TEI apparatus data to validated Lua records
+     </span>
+    </h3>
+    <p>The following MWE performs the complete processing sequence developed in this
+guide.
+</p>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A5]
+
+\setupbodyfont
+  [libertinus,10pt]
+
+\setupwhitespace
+  [medium]
+
+\startbuffer[tei-data]
+&lt;TEI&gt;
+  &lt;text&gt;
+    &lt;body&gt;
+
+      &lt;listWit&gt;
+        &lt;witness xml:id="A" type="manuscript"&gt;
+          Paris, Biblioth&egrave;que nationale de France, grec 1807
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="B" type="manuscript"&gt;
+          Vatican City, Biblioteca Apostolica Vaticana, Vat. gr. 1
+        &lt;/witness&gt;
+
+        &lt;witness xml:id="C" type="edition"&gt;
+          Aldine edition, Venice, 1513
+        &lt;/witness&gt;
+      &lt;/listWit&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-001"&gt;
+          &lt;lem wit="#A"&gt;&lambda;ό&gamma;&omicron;&sigmaf;&lt;/lem&gt;
+          &lt;rdg wit="#B #C"&gt;&lambda;έ&xi;&iota;&sigmaf;&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-002"&gt;
+          &lt;lem wit="#A #B"&gt;ἀ&lambda;ή&theta;&epsilon;&iota;&alpha;&lt;/lem&gt;
+          &lt;rdg wit="#C" type="omission"/&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+      &lt;p&gt;
+        &lt;app xml:id="app-003"&gt;
+          &lt;lem wit="#A"&gt;&psi;&upsilon;&chi;ή&lt;/lem&gt;
+          &lt;rdg wit="#B #D"&gt;&pi;&nu;&omicron;ή&lt;/rdg&gt;
+        &lt;/app&gt;
+      &lt;/p&gt;
+
+    &lt;/body&gt;
+  &lt;/text&gt;
+&lt;/TEI&gt;
+\stopbuffer
+
+\startluacode
+
+thirddata = thirddata or {}
+
+thirddata.tei_complete = {
+    witnesses = {
+        by_id    = {},
+        in_order = {},
+    },
+
+    records  = {},
+    accepted = {},
+    errors   = {},
+    warnings = {},
+}
+
+local processing = thirddata.tei_complete
+
+local function normalize_space(value)
+    if not value then
+        return ""
+    end
+
+    value = value:gsub("%s+", " ")
+    value = value:gsub("^%s+", "")
+    value = value:gsub("%s+$", "")
+
+    return value
+end
+
+local function add_global_error(message)
+    processing.errors[
+        #processing.errors + 1
+    ] = message
+end
+
+local function add_global_warning(message)
+    processing.warnings[
+        #processing.warnings + 1
+    ] = message
+end
+
+local function add_record_error(record, message)
+    record.errors[
+        #record.errors + 1
+    ] = message
+
+    record.valid = false
+
+    add_global_error(
+        record.id .. ": " .. message
+    )
+end
+
+local function add_record_warning(record, message)
+    record.warnings[
+        #record.warnings + 1
+    ] = message
+
+    add_global_warning(
+        record.id .. ": " .. message
+    )
+end
+
+local function reset_processing()
+    processing.witnesses.by_id    = {}
+    processing.witnesses.in_order = {}
+    processing.records            = {}
+    processing.accepted           = {}
+    processing.errors             = {}
+    processing.warnings           = {}
+end
+
+local function normalize_witnesses(value)
+    local identifiers = {}
+    local duplicates  = {}
+    local seen        = {}
+
+    value = normalize_space(value)
+
+    for reference in value:gmatch("%S+") do
+        local id =
+            reference:gsub("^#", "")
+
+        if id ~= "" then
+            if seen[id] then
+                duplicates[
+                    #duplicates + 1
+                ] = id
+            else
+                identifiers[
+                    #identifiers + 1
+                ] = id
+
+                seen[id] = true
+            end
+        end
+    end
+
+    return identifiers, duplicates
+end
+
+local function build_witness_registry(document)
+    for node in xml.collected(
+        document,
+        "witness"
+    ) do
+        local attributes = node.at or {}
+
+        local id =
+            normalize_space(
+                attributes["xml:id"]
+                or attributes.id
+            )
+
+        if id == "" then
+            add_global_error(
+                "A witness declaration has no xml:id."
+            )
+        elseif processing.witnesses.by_id[id] then
+            add_global_error(
+                "Duplicate witness identifier: " .. id
+            )
+        else
+            local kind =
+                normalize_space(
+                    attributes.type
+                )
+
+            local record = {
+                id          = id,
+                siglum      = id,
+                kind        =
+                    kind ~= ""
+                    and kind
+                    or "unspecified",
+                description =
+                    normalize_space(
+                        xml.text(node)
+                    ),
+                order       =
+                    #processing.witnesses.in_order + 1,
+                source      = node,
+            }
+
+            processing.witnesses.by_id[id] =
+                record
+
+            processing.witnesses.in_order[
+                #processing.witnesses.in_order + 1
+            ] = record
+        end
+    end
+end
+
+local function make_text_record(
+    node,
+    default_kind
+)
+    if not node then
+        return nil
+    end
+
+    local attributes = node.at or {}
+
+    local witness_ids, duplicates =
+        normalize_witnesses(
+            attributes.wit
+        )
+
+    local kind =
+        normalize_space(
+            attributes.type
+        )
+
+    if kind == "" then
+        kind = default_kind
+    end
+
+    return {
+        kind        = kind,
+        text        =
+            normalize_space(
+                xml.text(node)
+            ),
+        witness_ids = witness_ids,
+        witnesses   = {},
+        duplicates  = duplicates,
+        valid       = true,
+        source      = node,
+    }
+end
+
+local function build_apparatus_records(document)
+    local position = 0
+
+    for node in xml.collected(
+        document,
+        "app"
+    ) do
+        position = position + 1
+
+        local attributes = node.at or {}
+
+        local id =
+            normalize_space(
+                attributes["xml:id"]
+                or attributes.id
+            )
+
+        local generated_id = false
+
+        if id == "" then
+            id = "app-" .. position
+            generated_id = true
+        end
+
+        local record = {
+            id       = id,
+            lemma    =
+                make_text_record(
+                    xml.first(node, "lem"),
+                    "lemma"
+                ),
+            readings = {},
+            order    = position,
+            valid    = true,
+            errors   = {},
+            warnings = {},
+            source   = node,
+        }
+
+        if generated_id then
+            add_record_warning(
+                record,
+                "generated apparatus identifier."
+            )
+        end
+
+        for reading_node in xml.collected(
+            node,
+            "rdg"
+        ) do
+            record.readings[
+                #record.readings + 1
+            ] = make_text_record(
+                reading_node,
+                "reading"
+            )
+        end
+
+        processing.records[
+            #processing.records + 1
+        ] = record
+    end
+end
+
+local function resolve_witnesses(
+    record,
+    text_record,
+    location
+)
+    text_record.witnesses = {}
+
+    for _, id in ipairs(
+        text_record.witness_ids
+    ) do
+        local witness =
+            processing.witnesses.by_id[id]
+
+        if witness then
+            text_record.witnesses[
+                #text_record.witnesses + 1
+            ] = witness
+        else
+            text_record.valid = false
+
+            add_record_error(
+                record,
+                string.format(
+                    "unknown witness %s in %s.",
+                    id,
+                    location
+                )
+            )
+        end
+    end
+
+    for _, id in ipairs(
+        text_record.duplicates
+    ) do
+        add_record_warning(
+            record,
+            string.format(
+                "duplicate witness %s in %s; "
+                .. "the repeated reference was removed.",
+                id,
+                location
+            )
+        )
+    end
+end
+
+local function validate_record(record)
+    if not record.lemma then
+        add_record_error(
+            record,
+            "missing lemma."
+        )
+    else
+        if record.lemma.text == "" then
+            add_record_error(
+                record,
+                "the lemma is empty."
+            )
+        end
+
+        resolve_witnesses(
+            record,
+            record.lemma,
+            "lemma"
+        )
+    end
+
+    if #record.readings == 0 then
+        add_record_warning(
+            record,
+            "no variant readings."
+        )
+    end
+
+    for index, reading in ipairs(
+        record.readings
+    ) do
+        local location =
+            "reading " .. index
+
+        resolve_witnesses(
+            record,
+            reading,
+            location
+        )
+
+        if reading.kind == "omission" then
+            if reading.text ~= "" then
+                add_record_warning(
+                    record,
+                    location
+                    .. " is classified as an omission "
+                    .. "but contains text."
+                )
+            end
+        elseif reading.text == "" then
+            reading.valid = false
+
+            add_record_error(
+                record,
+                location
+                .. " is empty and is not classified "
+                .. "as an omission."
+            )
+        end
+    end
+
+    if record.valid then
+        processing.accepted[
+            #processing.accepted + 1
+        ] = record
+    end
+end
+
+function processing.build()
+    reset_processing()
+
+    local document = xml.convert(
+        buffers.getcontent("tei-data")
+    )
+
+    build_witness_registry(document)
+    build_apparatus_records(document)
+
+    for _, record in ipairs(
+        processing.records
+    ) do
+        validate_record(record)
+    end
+end
+
+local function typeset_identifier_list(list)
+    if #list == 0 then
+        context("none")
+    else
+        context(
+            table.concat(list, ", ")
+        )
+    end
+end
+
+local function resolved_sigla(list)
+    local sigla = {}
+
+    for _, witness in ipairs(list) do
+        sigla[#sigla + 1] =
+            witness.siglum
+    end
+
+    return sigla
+end
+
+local function typeset_status(valid)
+    if valid then
+        context("valid")
+    else
+        context("invalid")
+    end
+end
+
+local function typeset_messages(
+    title,
+    messages,
+    empty_message
+)
+    context.subject(title)
+
+    if #messages == 0 then
+        context(empty_message)
+        return
+    end
+
+    context.startitemize()
+
+    for _, message in ipairs(messages) do
+        context.startitem()
+        context(message)
+        context.stopitem()
+    end
+
+    context.stopitemize()
+end
+
+function processing.typeset_summary()
+    context.subject("Processing summary")
+
+    context.starttabulate {
+        "|l|r|"
+    }
+
+    context.NC()
+    context("Declared witnesses")
+    context.NC()
+    context(#processing.witnesses.in_order)
+    context.NC()
+    context.NR()
+
+    context.NC()
+    context("Apparatus records")
+    context.NC()
+    context(#processing.records)
+    context.NC()
+    context.NR()
+
+    context.NC()
+    context("Accepted records")
+    context.NC()
+    context(#processing.accepted)
+    context.NC()
+    context.NR()
+
+    context.NC()
+    context("Errors")
+    context.NC()
+    context(#processing.errors)
+    context.NC()
+    context.NR()
+
+    context.NC()
+    context("Warnings")
+    context.NC()
+    context(#processing.warnings)
+    context.NC()
+    context.NR()
+
+    context.stoptabulate()
+
+    context.blank()
+
+    context.subject("Record status")
+
+    context.starttabulate {
+        "|l|l|l|r|"
+    }
+
+    context.NC()
+    context.bold("Record")
+    context.NC()
+    context.bold("Status")
+    context.NC()
+    context.bold("Lemma")
+    context.NC()
+    context.bold("Readings")
+    context.NC()
+    context.NR()
+
+    for _, record in ipairs(
+        processing.records
+    ) do
+        context.NC()
+        context(record.id)
+
+        context.NC()
+        typeset_status(record.valid)
+
+        context.NC()
+
+        if record.lemma then
+            context(record.lemma.text)
+        else
+            context("missing")
+        end
+
+        context.NC()
+        context(#record.readings)
+
+        context.NC()
+        context.NR()
+    end
+
+    context.stoptabulate()
+
+    context.blank()
+
+    typeset_messages(
+        "Errors",
+        processing.errors,
+        "No processing errors were detected."
+    )
+
+    context.blank()
+
+    typeset_messages(
+        "Warnings",
+        processing.warnings,
+        "No processing warnings were produced."
+    )
+end
+
+function processing.typeset_records()
+    context.subject(
+        "Validated intermediate records"
+    )
+
+    for _, record in ipairs(
+        processing.records
+    ) do
+        context.subsubject(record.id)
+
+        context.bold("Status: ")
+        typeset_status(record.valid)
+        context.par()
+
+        if record.lemma then
+            context.bold("Lemma: ")
+            context(record.lemma.text)
+            context.par()
+
+            context.bold(
+                "Normalized lemma references: "
+            )
+
+            typeset_identifier_list(
+                record.lemma.witness_ids
+            )
+
+            context.par()
+
+            context.bold(
+                "Resolved lemma witnesses: "
+            )
+
+            typeset_identifier_list(
+                resolved_sigla(
+                    record.lemma.witnesses
+                )
+            )
+
+            context.par()
+        else
+            context.bold("Lemma: ")
+            context("missing")
+            context.par()
+        end
+
+        for index, reading in ipairs(
+            record.readings
+        ) do
+            context.bold(
+                "Reading %s kind: ",
+                index
+            )
+            context(reading.kind)
+            context.par()
+
+            context.bold(
+                "Reading %s text: ",
+                index
+            )
+
+            if reading.text ~= "" then
+                context(reading.text)
+            elseif reading.kind == "omission" then
+                context("omission")
+            else
+                context("empty")
+            end
+
+            context.par()
+
+            context.bold(
+                "Normalized reading references: "
+            )
+
+            typeset_identifier_list(
+                reading.witness_ids
+            )
+
+            context.par()
+
+            context.bold(
+                "Resolved reading witnesses: "
+            )
+
+            typeset_identifier_list(
+                resolved_sigla(
+                    reading.witnesses
+                )
+            )
+
+            context.par()
+        end
+    end
+end
+
+\stopluacode
+
+\starttext
+
+\subject{From TEI apparatus data to validated Lua records}
+
+This report shows the complete processing sequence from TEI witness and
+apparatus data to normalized, resolved, and validated Lua records.
+
+\blank
+
+\ctxlua{
+    thirddata.tei_complete.build()
+    thirddata.tei_complete.typeset_summary()
+    thirddata.tei_complete.typeset_records()
+}
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:702px;">
+       <a class="image" href="File:tei-apparatus-processing_1.png">
+        <img alt class="thumbimage" decoding="async" height="993" src="images/thumb/b/ba/tei-apparatus-processing_1.webp" width="700">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="File:tei-apparatus-processing_1.png" title="Enlarge">
+         </a>
+        </div>
+        First page of the complete functional MWE &ldquo;From TEI apparatus data to validated Lua records&rdquo;. The processing summary reports three declared witnesses, three apparatus records, two accepted records, and one unresolved witness error.
+       </div>
+      </div>
+     </div>
+    </div>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:702px;">
+       <a class="image" href="File:tei-apparatus-processing_2.png">
+        <img alt class="thumbimage" decoding="async" height="993" src="images/thumb/b/ba/tei-apparatus-processing_2.webp" width="700">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="File:tei-apparatus-processing_2.png" title="Enlarge">
+         </a>
+        </div>
+        Second page of the complete functional MWE &ldquo;From TEI apparatus data to validated Lua records&rdquo;. The detailed intermediate records distinguish normalized witness identifiers from resolved witness objects and retain the invalid record for inspection.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>The expected summary contains:
+</p>
+    <ul>
+     <li>
+      three declared witnesses;
+     </li>
+     <li>
+      three apparatus records;
+     </li>
+     <li>
+      two accepted records;
+     </li>
+     <li>
+      one error;
+     </li>
+     <li>
+      no warnings.
+     </li>
+    </ul>
+    <p>The records <code>app-001</code> and <code>app-002</code> are accepted.
+</p>
+    <p>In <code>app-001</code>, the normalized identifiers
+<code>B</code> and <code>C</code> are both resolved to witness records.
+</p>
+    <p>In <code>app-002</code>, the empty reading is accepted because its
+<code>kind</code> is explicitly recorded as <code>omission</code>.
+</p>
+    <p>The record <code>app-003</code> is rejected because witness
+<code>D</code> cannot be resolved. Its normalized identifiers remain visible,
+and the successfully resolved witness <code>B</code> is retained, but the
+record is not included in:
+</p>
+    <pre>processing.accepted
+</pre>
+    <h3>
+     <span class="mw-headline" id="7.5._Records_prepared_for_ConTeXt">
+      7.5. Records prepared for ConTeXt
+     </span>
+    </h3>
+    <p>The collection:
+</p>
+    <pre>processing.records
+</pre>
+    <p>contains every apparatus record constructed from the TEI source, including
+invalid records retained for inspection.
+</p>
+    <p>The collection:
+</p>
+    <pre>processing.accepted
+</pre>
+    <p>contains only records that have passed validation and may safely be transmitted
+to the typesetting layer.
+</p>
+    <p>This distinction prevents invalid data from silently reaching the final
+apparatus while preserving enough information for diagnosis and correction.
+</p>
+    <p>A record prepared for ConTeXt now possesses:
+</p>
+    <ul>
+     <li>
+      a stable apparatus identifier;
+     </li>
+     <li>
+      normalized lemma and reading text;
+     </li>
+     <li>
+      explicit editorial categories;
+     </li>
+     <li>
+      normalized witness identifiers;
+     </li>
+     <li>
+      resolved witness objects;
+     </li>
+     <li>
+      documentary order;
+     </li>
+     <li>
+      source-node references;
+     </li>
+     <li>
+      validity information;
+     </li>
+     <li>
+      errors and warnings.
+     </li>
+    </ul>
+    <p>ConTeXt will therefore not need to rediscover the meaning of
+<code>@wit</code>, search the TEI witness declarations, distinguish omissions
+from missing data, or decide whether unresolved references should be printed.
+</p>
+    <p>The next guide can begin from records whose editorial status has already been
+made explicit.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.6._Result_of_the_complete_workflow">
+      7.6. Result of the complete workflow
+     </span>
+    </h3>
+    <p>The complete workflow does not merely transfer information from one notation
+to another.
+</p>
+    <p>It successively changes the epistemic status of the data:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Status of the data
+       </th>
+      </tr>
+      <tr>
+       <td>TEI encoding
+</td>
+       <td>Witnesses and variants are documented through elements, attributes, identifiers, and references.
+</td>
+      </tr>
+      <tr>
+       <td>Extraction
+</td>
+       <td>The relevant XML structures become accessible to Lua.
+</td>
+      </tr>
+      <tr>
+       <td>Normalization
+</td>
+       <td>Notational variations are reduced to controlled internal forms.
+</td>
+      </tr>
+      <tr>
+       <td>Reference resolution
+</td>
+       <td>Character strings become relations to known editorial objects.
+</td>
+      </tr>
+      <tr>
+       <td>Validation
+</td>
+       <td>Encoded claims are tested against declarations and editorial rules.
+</td>
+      </tr>
+      <tr>
+       <td>Intermediate representation
+</td>
+       <td>The accepted records form an explicit and reusable body of editorial knowledge.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The final Lua records are therefore not neutral copies of the XML source.
+</p>
+    <p>They are the result of documented interpretative operations whose assumptions,
+successes, and failures can be inspected.
+</p>
+    <p>This intermediate representation is what makes a reliable separation between
+scholarly data processing and typographical composition possible.
+</p>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #4a78a8; background: #eef5fc;">
+     <p><b>At this stage,</b> the data has not yet been typeset, but its editorial status
+has been made explicit. This is the stable point at which Guide 6 can take over.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._What_Lua_should_not_decide">
+      8. What Lua should not decide
+     </span>
+    </h2>
+    <p>The processing layer developed in this guide performs substantial interpretative
+work. It normalizes encoded forms, resolves references, applies validation
+rules, and constructs editorial records.
+</p>
+    <p>This does not mean that every decision should be transferred to Lua.
+</p>
+    <p>Some decisions belong to the documentary encoding itself. Others belong to the
+typographical design of the edition.
+</p>
+    <p>Lua should not silently replace either of these layers.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.1._Lua_should_not_repair_the_TEI_source_silently">
+      8.1. Lua should not repair the TEI source silently
+     </span>
+    </h3>
+    <p>When the TEI source contains an undeclared witness, an absent lemma, or an
+ambiguous reading, Lua can detect the problem and report it.
+</p>
+    <p>It should not normally invent the missing evidence.
+</p>
+    <p>For example, if the source contains:
+</p>
+    <pre>&lt;rdg wit="#D"&gt;&pi;&nu;&omicron;ή&lt;/rdg&gt;
+</pre>
+    <p>but witness <code>D</code> has not been declared, Lua may report:
+</p>
+    <pre>app-003: unknown witness D in reading 1.
+</pre>
+    <p>It should not silently create a new witness record for <code>D</code>.
+</p>
+    <p>Such a repair would conceal the distinction between documented information and
+programmatically invented information.
+</p>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #c89b24; background: #fff8dc;">
+     <p><b>Do not repair silently.</b> A controlled default may be legitimate when the
+edition explicitly authorizes it, but the intervention should remain visible
+through a warning, a generated-value flag, or another diagnostic record.
+</p>
+    </div>
+    <p>The same principle applies to missing lemmas, absent classifications, or
+incomplete descriptions. Lua may apply controlled defaults when the editorial
+policy explicitly permits them, but those defaults should remain visible in
+the diagnostic state.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.2._Lua_should_not_erase_significant_TEI_distinctions">
+      8.2. Lua should not erase significant TEI distinctions
+     </span>
+    </h3>
+    <p>The intermediate representation is deliberately smaller than the TEI source,
+but it should not collapse distinctions that remain editorially significant.
+</p>
+    <p>For example, the following situations should not all become an empty string:
+</p>
+    <ul>
+     <li>
+      an omission;
+     </li>
+     <li>
+      a lacuna;
+     </li>
+     <li>
+      unreadable text;
+     </li>
+     <li>
+      absent data;
+     </li>
+     <li>
+      an editorial suppression;
+     </li>
+     <li>
+      an element whose textual content was lost during processing.
+     </li>
+    </ul>
+    <p>A suitable Lua representation should preserve the relevant category:
+</p>
+    <pre>{
+    kind = "omission",
+    text = "",
+}
+</pre>
+    <p>or:
+</p>
+    <pre>{
+    kind = "lacuna",
+    text = "",
+}
+</pre>
+    <p>The reduction from TEI to Lua must therefore be selective rather than
+destructive.
+</p>
+    <p>The processing layer should retain every distinction required by validation,
+editorial interpretation, or later typesetting.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.3._Lua_should_not_determine_typography_prematurely">
+      8.3. Lua should not determine typography prematurely
+     </span>
+    </h3>
+    <p>The Lua records may contain typographically relevant categories, but they
+should not normally contain fixed visual instructions.
+</p>
+    <p>For example, a Lua record may state:
+</p>
+    <pre>kind = "omission"
+</pre>
+    <p>It should not need to state:
+</p>
+    <pre>print_text = "om."
+font_style = "italic"
+separator = "; "
+</pre>
+    <p>The first value expresses editorial meaning. The other values express one
+possible typographical realization.
+</p>
+    <p>ConTeXt may later render the same omission differently according to:
+</p>
+    <ul>
+     <li>
+      the apparatus layer;
+     </li>
+     <li>
+      the language of the edition;
+     </li>
+     <li>
+      the available horizontal space;
+     </li>
+     <li>
+      the print or screen medium;
+     </li>
+     <li>
+      the conventions of a particular publisher;
+     </li>
+     <li>
+      the typographical hierarchy of the page.
+     </li>
+    </ul>
+    <p>Keeping these decisions in ConTeXt makes it possible to change the appearance
+without reconstructing the editorial data.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.4._Lua_should_not_replace_editorial_judgment">
+      8.4. Lua should not replace editorial judgment
+     </span>
+    </h3>
+    <p>Validation rules can test declared constraints, but they cannot determine every
+scholarly question.
+</p>
+    <p>Lua can establish that:
+</p>
+    <ul>
+     <li>
+      a witness identifier has been declared;
+     </li>
+     <li>
+      a reading contains text;
+     </li>
+     <li>
+      an omission is explicitly classified;
+     </li>
+     <li>
+      the same witness occurs twice in a reference list;
+     </li>
+     <li>
+      a required field is absent.
+     </li>
+    </ul>
+    <p>Lua cannot establish by itself that:
+</p>
+    <ul>
+     <li>
+      a particular reading is philologically preferable;
+     </li>
+     <li>
+      a conjecture is historically plausible;
+     </li>
+     <li>
+      two witnesses belong to the same textual family;
+     </li>
+     <li>
+      a translation adequately represents the source text;
+     </li>
+     <li>
+      an apparatus entry expresses the editor's argument correctly.
+     </li>
+    </ul>
+    <p>The processing layer can make editorial assumptions explicit and test their
+formal consequences. It cannot replace the scholarly reasoning from which
+those assumptions arise.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Preparing_the_transition_to_ConTeXt">
+      9. Preparing the transition to ConTeXt
+     </span>
+    </h2>
+    <p>The validated Lua records produced in this guide provide a stable boundary
+between documentary interpretation and typographical composition.
+</p>
+    <p>ConTeXt can now receive records whose internal meaning has already been made
+explicit.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.1._The_contract_between_Lua_and_ConTeXt">
+      9.1. The contract between Lua and ConTeXt
+     </span>
+    </h3>
+    <p>The processing layer guarantees that accepted records have a predictable
+structure.
+</p>
+    <p>A record passed to ConTeXt may contain:
+</p>
+    <pre>{
+    id       = "app-001",
+    order    = 1,
+    valid    = true,
+
+    lemma = {
+        text        = "&lambda;ό&gamma;&omicron;&sigmaf;",
+        witness_ids = { "A" },
+        witnesses   = {
+            {
+                id     = "A",
+                siglum = "A",
+                kind   = "manuscript",
+                order  = 1,
+            },
+        },
+    },
+
+    readings = {
+        {
+            kind        = "reading",
+            text        = "&lambda;έ&xi;&iota;&sigmaf;",
+            witness_ids = { "B", "C" },
+            witnesses   = {
+                {
+                    id     = "B",
+                    siglum = "B",
+                    kind   = "manuscript",
+                    order  = 2,
+                },
+                {
+                    id     = "C",
+                    siglum = "C",
+                    kind   = "edition",
+                    order  = 3,
+                },
+            },
+        },
+    },
+}
+
+</pre>
+    <p>ConTeXt does not need to parse <code>@wit</code>, search
+<code>&lt;listWit&gt;</code>, or decide whether witness
+<code>C</code> exists.
+</p>
+    <p>It can concentrate on transforming these records into visible typographical
+structures.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.2._What_ConTeXt_will_decide">
+      9.2. What ConTeXt will decide
+     </span>
+    </h3>
+    <p>The next guide will determine:
+</p>
+    <ul>
+     <li>
+      how lemmas and readings are formatted;
+     </li>
+     <li>
+      how witness sigla are separated;
+     </li>
+     <li>
+      how omissions are represented;
+     </li>
+     <li>
+      how apparatus entries are ordered and grouped;
+     </li>
+     <li>
+      how several apparatus layers are distinguished;
+     </li>
+     <li>
+      how notes are placed and broken across pages;
+     </li>
+     <li>
+      how the same data may be adapted to different layouts.
+     </li>
+    </ul>
+    <p>ConTeXt may also decide whether a description, siglum, or diagnostic value
+should be printed at all.
+</p>
+    <p>These are presentation decisions rather than questions about the validity of
+the underlying record.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.3._Preparing_more_complex_scholarly_structures">
+      9.3. Preparing more complex scholarly structures
+     </span>
+    </h3>
+    <p>The intermediate representation developed here is not limited to a single
+apparatus line.
+</p>
+    <p>The same processing principles can support records containing:
+</p>
+    <ul>
+     <li>
+      Greek and Latin source texts;
+     </li>
+     <li>
+      a translation aligned with one or both source texts;
+     </li>
+     <li>
+      several levels of lemmatization;
+     </li>
+     <li>
+      distinct textual, source, and translation apparatuses;
+     </li>
+     <li>
+      bibliographical notes;
+     </li>
+     <li>
+      references to manuscripts, editions, and secondary literature;
+     </li>
+     <li>
+      alignment information between parallel passages;
+     </li>
+     <li>
+      validation reports for each annotation layer.
+     </li>
+    </ul>
+    <p>A larger record might therefore contain:
+</p>
+    <pre>{
+    passage_id = "passage-001",
+
+    texts = {
+        greek       = { ... },
+        latin       = { ... },
+        translation = { ... },
+    },
+
+    apparatus = {
+        textual     = { ... },
+        sources     = { ... },
+        translation = { ... },
+    },
+
+    bibliography = { ... },
+    alignment    = { ... },
+
+    validation = {
+        valid    = true,
+        errors   = {},
+        warnings = {},
+    },
+}
+</pre>
+    <p>Guide 6 will show how ConTeXt can use such prepared data to construct a
+typographically differentiated scholarly page.
+</p>
+    <p>The complexity of the final page should not be reproduced as uncontrolled
+complexity in the typesetting macros.
+</p>
+    <p>The purpose of the Lua layer is precisely to ensure that ConTeXt receives
+structured editorial objects rather than unresolved documentary fragments.
+</p>
+    <h2>
+     <span class="mw-headline" id="10._What_this_guide_has_established">
+      10. What this guide has established
+     </span>
+    </h2>
+    <p>This guide has established more than a method for reading TEI XML with Lua. It
+has shown how documentary data passes through a controlled sequence of
+interpretative operations before it becomes suitable for typesetting.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.1._From_encoded_forms_to_editorial_objects">
+      10.1. From encoded forms to editorial objects
+     </span>
+    </h3>
+    <p>XML extraction makes elements, attributes, text, and document order accessible.
+Lua then performs operations that XML parsing alone does not provide:
+</p>
+    <ul>
+     <li>
+      it normalizes notational variants;
+     </li>
+     <li>
+      it classifies lemmas, readings, omissions, and related structures;
+     </li>
+     <li>
+      it resolves identifiers against declared witnesses;
+     </li>
+     <li>
+      it tests editorial constraints;
+     </li>
+     <li>
+      it records errors, warnings, and controlled defaults.
+     </li>
+    </ul>
+    <p>A string such as:
+</p>
+    <pre>#A #B
+</pre>
+    <p>therefore becomes more than accessible text. After normalization and reference
+resolution, it denotes two known editorial objects whose identity and order can
+be inspected and reused.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.2._Normalization_and_validation_are_interpretative_operations">
+      10.2. Normalization and validation are interpretative operations
+     </span>
+    </h3>
+    <p>Normalization defines which differences are treated as significant. For
+example:
+</p>
+    <pre>wit="#A #B"
+wit=" #A   #B "
+wit="#A #A #B"
+</pre>
+    <p>may all produce:
+</p>
+    <pre>{ "A", "B" }
+</pre>
+    <p>This equivalence follows an editorial rule: spacing differences and repeated
+references do not create distinct witness lists.
+</p>
+    <p>Validation then tests the normalized records against the declarations and rules
+of the edition. It determines whether references can be resolved, whether
+required structures are present, and whether empty or exceptional readings
+have been classified explicitly.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.3._Diagnostics_preserve_the_limits_of_interpretation">
+      10.3. Diagnostics preserve the limits of interpretation
+     </span>
+    </h3>
+    <p>An invalid record is not simply discarded. Its normalized fields, unresolved
+references, source-node connection, and diagnostic messages remain available
+for inspection.
+</p>
+    <p>The processing layer therefore records both what it has established and what it
+could not establish. Failure becomes traceable rather than silent.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.4._The_intermediate_representation_is_a_contract">
+      10.4. The intermediate representation is a contract
+     </span>
+    </h3>
+    <p>The validated Lua records form a contract between documentary encoding and
+typographical composition. They provide ConTeXt with:
+</p>
+    <ul>
+     <li>
+      predictable structures;
+     </li>
+     <li>
+      normalized values;
+     </li>
+     <li>
+      resolved references;
+     </li>
+     <li>
+      explicit editorial categories;
+     </li>
+     <li>
+      separate collections of accepted and rejected records;
+     </li>
+     <li>
+      diagnostic information that has already been produced.
+     </li>
+    </ul>
+    <div style="margin: 1em 0; padding: 0.8em 1em; border-left: 5px solid #4a78a8; background: #eef5fc;">
+     <p><b>What has changed?</b> TEI remains the authoritative documentary source, but
+Lua has transformed its relevant structures into inspectable editorial
+knowledge. ConTeXt can now compose that knowledge without having to reinterpret
+the XML at every typographical command.
+</p>
+    </div>
+    <p>Lua does not replace the TEI document, the editor, or ConTeXt. It mediates
+between them by making the assumptions, results, and limits of the processing
+workflow explicit.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Where_to_go_next">
+      11. Where to go next
+     </span>
+    </h2>
+    <p>The validated records prepared in this guide are ready for the typographical
+layer.
+</p>
+    <p>The next guide is:
+</p>
+    <p><a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Typesetting a TEI critical apparatus with ConTeXt</a>
+</p>
+    <p>It shows how ConTeXt can transform these records into a structured critical
+apparatus, including:
+</p>
+    <ul>
+     <li>
+      the formatting of lemmas, readings, and witness sigla;
+     </li>
+     <li>
+      the representation of omissions and other editorial categories;
+     </li>
+     <li>
+      the separation of apparatus and note layers;
+     </li>
+     <li>
+      the composition of parallel source texts and translations;
+     </li>
+     <li>
+      the integration of bibliographical notes;
+     </li>
+     <li>
+      the construction of complex scholarly pages whose documentary richness
+     </li>
+    </ul>
+    <pre> remains typographically clear.
+</pre>
+    <p>The central question is no longer:
+</p>
+    <pre>What does this TEI data mean?
+</pre>
+    <p>That question has been addressed by the processing layer. The next question is:
+</p>
+    <pre>How should this validated editorial knowledge be composed on the page?
+</pre>
+    <div style="margin: 1.5em 0 0 0; padding: 0.7em 1em; border: 1px solid #aab7c4; background: #f7f9fb; text-align: center;">
+     <p><a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">&larr; Previous: Encoding complex textual variation in TEI</a> &middot;
+<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Series overview</a> &middot;
+<a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Next: Typesetting a TEI critical apparatus with ConTeXt &rarr;</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Processing_TEI_critical_apparatus_data_with_Lua">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

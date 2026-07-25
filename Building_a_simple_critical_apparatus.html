@@ -1,0 +1,2156 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Building a simple critical apparatus&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Building_a_simple_critical_apparatus" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Building a simple critical apparatus
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7530&diff=43248">2026-07-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#fff4df; border:1px solid #e5c07b; border-left:5px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.35em; vertical-align:middle;">🚧</span>
+<b>Work in progress.</b> This guide is currently being drafted, corrected, and reviewed.
+Please do not modify the code unless this banner has been removed.
+</p>
+    </div>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 1 of 6</b> &middot;
+<a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Next: Guide 2 &mdash; Formatting a critical apparatus &rarr;</a>
+</p>
+    </div>
+    <p><br>
+A <b>critical apparatus</b> records the textual evidence on which an edited
+text is based. It connects a passage printed in the edited text with the
+alternative readings, omissions, additions, or other textual operations
+reported by the editor, together with the witnesses or editors associated
+with them.
+</p>
+    <p>This guide constructs a small critical apparatus with a dedicated ConTeXt
+note series. It begins with a complete minimal example, then rebuilds that
+example step by step so that the function of each command remains visible.
+</p>
+    <p>The progression is deliberately simple:
+</p>
+    <ol>
+     <li>
+      define an independent note series for the apparatus;
+     </li>
+     <li>
+      attach one apparatus entry directly to a passage;
+     </li>
+     <li>
+      separate the lemma, reading, and witnesses into reusable command arguments;
+     </li>
+     <li>
+      allow several readings or textual operations to belong to the same lemma;
+     </li>
+     <li>
+      add commands for omissions and additions.
+     </li>
+    </ol>
+    <p>By the end of the guide, the source will be able to express an entry such as:
+</p>
+    <pre>Reason] Judgment B D; Understanding C; om. E
+</pre>
+    <p>In this entry:
+</p>
+    <ul>
+     <li>
+      <code>Reason</code>
+      is the
+      <b>
+       lemma
+      </b>
+      : the passage printed in the edited text to which the entry refers;
+     </li>
+     <li>
+      <code>Judgment</code>
+      and
+      <code>Understanding</code>
+      are alternative
+      <b>
+       readings
+      </b>
+      ;
+     </li>
+     <li>
+      <code>B</code>
+      ,
+      <code>C</code>
+      , and
+      <code>D</code>
+      are witness
+      <b>
+       sigla
+      </b>
+      ;
+     </li>
+     <li>
+      <code>om. E</code>
+      records an
+      <b>
+       omission
+      </b>
+      in witness
+      <code>E</code>
+      .
+     </li>
+    </ul>
+    <p>A reading supplies textual wording. An omission does something different: it
+records that no corresponding wording is present in the named witness. In
+this guide, readings, omissions, and additions are therefore represented by
+different commands.
+</p>
+    <p>The method developed here is suitable for a small edition, for a teaching
+example, or for experimenting with the design of an apparatus. It uses
+ordinary ConTeXt macros and literal witness sigla. ConTeXt does not yet know
+that <code>B</code> and <code>D</code> identify declared witnesses; they are
+still pieces of text supplied by the editor.
+</p>
+    <p>For centrally declared witnesses and reusable witness metadata, see
+<a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Managing witnesses and textual variants</a>.
+</p>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>How this tutorial works.</b> Each stage introduces one editorial problem,
+one small ConTeXt mechanism, and one complete result. The first examples use
+only one apparatus entry. Later sections combine several readings and textual
+operations without changing the basic note mechanism.
+</p>
+    </div>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Important distinction.</b> A ConTeXt note series named
+<code>apparatus</code> is only a typographical mechanism. It becomes a
+critical apparatus because of the textual evidence recorded in its entries
+and the editorial conventions used to represent that evidence.
+</p>
+    </div>
+    <p>For definitions of the principal terms used in this guide, see the
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary of critical edition terms</a>.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._What_you_will_build">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. What you will build
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Define_a_separate_apparatus_note_series">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Define a separate apparatus note series
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2.1._Create_the_note_series">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Create the note series
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#2.2._Place_the_apparatus_at_the_bottom_of_the_page">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           2.2. Place the apparatus at the bottom of the page
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#2.3._Configure_markers_and_entries">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           2.3. Configure markers and entries
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#2.4._Insert_an_apparatus_entry_directly">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           2.4. Insert an apparatus entry directly
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#3._Separate_the_lemma.2C_reading.2C_and_witnesses">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Separate the lemma, reading, and witnesses
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#4._Record_several_readings_for_one_lemma">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Record several readings for one lemma
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#4.1._Redefine_the_apparatus_entry_command">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           4.1. Redefine the apparatus entry command
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#4.2._Define_one_alternative_reading">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           4.2. Define one alternative reading
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#4.3._Combine_several_readings">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           4.3. Combine several readings
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#5._Record_an_omission">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Record an omission
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#5.1._Define_an_omission_command">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           5.1. Define an omission command
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#5.2._Combine_readings_and_an_omission">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           5.2. Combine readings and an omission
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#6._Record_an_addition">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Record an addition
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#6.1._Define_an_addition_command">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           6.1. Define an addition command
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#6.2._Combine_an_addition_with_readings">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           6.2. Combine an addition with readings
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-18">
+       <a href="#7._Build_the_complete_passage">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Build the complete passage
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#8._Understand_the_progression">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Understand the progression
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#9._Limits_of_the_simple_approach">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Limits of the simple approach
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#9.1._Witnesses_remain_literal_text">
+          <span class="tocnumber">
+           9.1
+          </span>
+          <span class="toctext">
+           9.1. Witnesses remain literal text
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#9.2._Readings_are_not_stored_as_independent_records">
+          <span class="tocnumber">
+           9.2
+          </span>
+          <span class="toctext">
+           9.2. Readings are not stored as independent records
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#9.3._Separators_and_ordering_are_entered_manually">
+          <span class="tocnumber">
+           9.3
+          </span>
+          <span class="toctext">
+           9.3. Separators and ordering are entered manually
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-24">
+         <a href="#9.4._The_apparatus_has_only_one_layer">
+          <span class="tocnumber">
+           9.4
+          </span>
+          <span class="toctext">
+           9.4. The apparatus has only one layer
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#9.5._Typography_remains_minimal">
+          <span class="tocnumber">
+           9.5
+          </span>
+          <span class="toctext">
+           9.5. Typography remains minimal
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#9.6._The_data_cannot_yet_be_validated_or_transformed">
+          <span class="tocnumber">
+           9.6
+          </span>
+          <span class="toctext">
+           9.6. The data cannot yet be validated or transformed
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-27">
+       <a href="#10._Choose_the_next_guide">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Choose the next guide
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-28">
+       <a href="#11._Complete_source">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Complete source
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-29">
+       <a href="#12._Online_resources">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Online resources
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-30">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._What_you_will_build">
+      1. What you will build
+     </span>
+    </h2>
+    <p>The running example uses the edited sentence:
+</p>
+    <pre>Reason directs the will.
+</pre>
+    <p>Suppose that the editor has consulted five witnesses:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Siglum
+       </th>
+       <th>
+        Description
+       </th>
+       <th>
+        Textual evidence
+       </th>
+      </tr>
+      <tr>
+       <td><i>A</i>
+</td>
+       <td>Principal manuscript
+</td>
+       <td><i>Reason directs the will.</i>
+</td>
+      </tr>
+      <tr>
+       <td><i>B</i>
+</td>
+       <td>Second manuscript
+</td>
+       <td><i>Judgment directs the will.</i>
+</td>
+      </tr>
+      <tr>
+       <td><i>C</i>
+</td>
+       <td>Early printed edition
+</td>
+       <td><i>Understanding directs the will.</i>
+</td>
+      </tr>
+      <tr>
+       <td><i>D</i>
+</td>
+       <td>Later manuscript
+</td>
+       <td><i>Judgment directs the will.</i>
+</td>
+      </tr>
+      <tr>
+       <td><i>E</i>
+</td>
+       <td>Damaged manuscript
+</td>
+       <td>Omits <i>Reason</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The edited text prints <i>Reason</i>, the reading found in witness <i>A</i>. The
+apparatus nevertheless records the alternative evidence:
+</p>
+    <pre>Reason] Judgment B D; Understanding C; om. E
+</pre>
+    <p>This compact entry contains the following elements:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Element
+       </th>
+       <th>
+        Content
+       </th>
+       <th>
+        Function
+       </th>
+      </tr>
+      <tr>
+       <td>Lemma
+</td>
+       <td><code>Reason</code>
+</td>
+       <td>Identifies the passage in the edited text to which the entry refers
+</td>
+      </tr>
+      <tr>
+       <td>First alternative reading
+</td>
+       <td><code>Judgment</code>
+</td>
+       <td>Gives the wording transmitted by witnesses <code>B</code> and <code>D</code>
+</td>
+      </tr>
+      <tr>
+       <td>Second alternative reading
+</td>
+       <td><code>Understanding</code>
+</td>
+       <td>Gives the wording transmitted by witness <code>C</code>
+</td>
+      </tr>
+      <tr>
+       <td>Textual operation
+</td>
+       <td><code>om.</code>
+</td>
+       <td>Records the omission of the lemma in witness <code>E</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The closing bracket after the lemma separates the text printed by the editor
+from the alternatives reported in the apparatus. The semicolons separate
+different readings or textual operations belonging to the same lemma.
+</p>
+    <div style="background:#fff8e8; border-left:4px solid #c49a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial notation.</b> The closing bracket, the semicolons, and the
+abbreviation <code>om.</code> are conventions chosen for this example. They
+are not imposed by ConTeXt and may be replaced by the notation used in a
+particular edition.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Define_a_separate_apparatus_note_series">
+      2. Define a separate apparatus note series
+     </span>
+    </h2>
+    <p>The simplest ConTeXt implementation treats the apparatus as an independent
+series of notes. The entries may appear at the bottom of the page, like
+ordinary footnotes, but they remain logically and typographically separate
+from explanatory notes.
+</p>
+    <p>The following complete example creates two apparatus entries:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Reason<span class="cs">\apparatus</span><span class="br">{</span>Reason<span class="brx">]</span> Judgment <span class="br">{</span><span class="cs">\it</span> B<span class="br">}</span><span class="br">}</span>
+directs
+the will<span class="cs">\apparatus</span><span class="br">{</span>the will<span class="brx">]</span> human desire <span class="br">{</span><span class="cs">\it</span> C<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/44972413dbac08175553097c070d3949.webp" width="874">
+     </li>
+    </ul>
+    <p>The example contains three distinct operations:
+</p>
+    <ol>
+     <li>
+      defining a note series;
+     </li>
+     <li>
+      configuring its placement and appearance;
+     </li>
+     <li>
+      inserting apparatus entries in the edited text.
+     </li>
+    </ol>
+    <h3>
+     <span class="mw-headline" id="2.1._Create_the_note_series">
+      2.1. Create the note series
+     </span>
+    </h3>
+    <p>The command:
+</p>
+    <pre>\definenote
+  [apparatus]
+</pre>
+    <p>creates a note category named <code>apparatus</code>.
+</p>
+    <p>ConTeXt also creates a corresponding insertion command:
+</p>
+    <pre>\apparatus{...}
+</pre>
+    <p>Every call to <code>\apparatus</code> places a marker in the edited text and
+adds one entry to the apparatus.
+</p>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>ConTeXt principle.</b> The name <code>apparatus</code> is chosen by the
+author. It is not a predefined critical-editing command. The same mechanism
+can be used to create many independent note series with different names.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="2.2._Place_the_apparatus_at_the_bottom_of_the_page">
+      2.2. Place the apparatus at the bottom of the page
+     </span>
+    </h3>
+    <p>The setup:
+</p>
+    <pre>\setupnote
+  [apparatus]
+  [location=page]
+</pre>
+    <p>places the collected entries at page level. The apparatus therefore occupies
+the same general typographical region as footnotes while remaining a separate
+note category.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.3._Configure_markers_and_entries">
+      2.3. Configure markers and entries
+     </span>
+    </h3>
+    <p>The notation setup controls the numbering and appearance of the series:
+</p>
+    <pre>\setupnotation
+  [apparatus]
+  [way=bypage,
+   numberconversion=numbers,
+   style=\tfx]
+</pre>
+    <p>Here:
+</p>
+    <ul>
+     <li>
+      <code>way=bypage</code>
+      restarts the numbering on each page;
+     </li>
+     <li>
+      <code>numberconversion=numbers</code>
+      uses Arabic numerals;
+     </li>
+     <li>
+      <code>style=\tfx</code>
+      sets the apparatus entries in a smaller relative size.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="2.4._Insert_an_apparatus_entry_directly">
+      2.4. Insert an apparatus entry directly
+     </span>
+    </h3>
+    <p>In the edited text:
+</p>
+    <pre>Reason\apparatus{Reason] Judgment {\it B}}
+</pre>
+    <p>the word <code>Reason</code> is printed normally. The command
+<code>\apparatus</code> then adds a marker and creates the entry:
+</p>
+    <pre>Reason] Judgment B
+</pre>
+    <p>At this stage, the entire apparatus entry is entered as one formatted string:
+</p>
+    <pre>Reason] Judgment {\it B}
+</pre>
+    <p>ConTeXt does not distinguish the lemma, the reading, and the witness siglum.
+It receives only the complete contents of the note.
+</p>
+    <p>This direct method is sufficient for a very small apparatus, but it becomes
+difficult to maintain when the same punctuation and typographical conventions
+must be repeated in many entries.
+</p>
+    <h2>
+     <span id="3._Separate_the_lemma,_reading,_and_witnesses">
+     </span>
+     <span class="mw-headline" id="3._Separate_the_lemma.2C_reading.2C_and_witnesses">
+      3. Separate the lemma, reading, and witnesses
+     </span>
+    </h2>
+    <p>The next step is to define a wrapper command that receives the principal
+editorial elements as separate arguments.
+</p>
+    <p>Define:
+</p>
+    <pre>% Print the lemma and attach one apparatus entry.
+\define[3]\variant
+  {#1\apparatus{{\it #1}] #2 {\it #3}}}
+</pre>
+    <p>The command takes three arguments:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Editorial content
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>#1</code>
+</td>
+       <td>Lemma printed in the edited text
+</td>
+       <td><code>Reason</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>#2</code>
+</td>
+       <td>Alternative reading
+</td>
+       <td><code>Judgment</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>#3</code>
+</td>
+       <td>Witness siglum or sigla
+</td>
+       <td><code>B D</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>It is used as follows:
+</p>
+    <pre>\variant
+  {Reason}
+  {Judgment}
+  {B D}
+</pre>
+    <p>The command prints the lemma in the edited text and produces the apparatus
+entry:
+</p>
+    <pre>Reason] Judgment B D
+</pre>
+    <p>The following complete example uses the command twice:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="comment">% Print a lemma and attach one alternative reading.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>3<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span>Judgment<span class="br">}</span>
+  <span class="br">{</span>B D<span class="br">}</span>
+directs
+<span class="cs">\variant</span>
+  <span class="br">{</span>the will<span class="br">}</span>
+  <span class="br">{</span>human desire<span class="br">}</span>
+  <span class="br">{</span>C<span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/99164d48b25258afe8ebecfacc7a0369.webp" width="874">
+     </li>
+    </ul>
+    <p>The source now exposes three editorial roles:
+</p>
+    <pre>\variant
+  {Reason}     % lemma
+  {Judgment}   % alternative reading
+  {B D}        % supporting witnesses
+</pre>
+    <p>The command definition determines how those arguments are printed:
+</p>
+    <pre>\define[3]\variant
+  {#1\apparatus{{\it #1}] #2 {\it #3}}}
+</pre>
+    <p>The first occurrence of <code>#1</code> prints the lemma in the edited text.
+The same argument appears again inside the apparatus entry. The closing
+bracket, spacing, and italic treatment of the lemma and sigla are supplied by
+the command definition.
+</p>
+    <p>This separation has two immediate advantages:
+</p>
+    <ul>
+     <li>
+      each apparatus call follows the same source pattern;
+     </li>
+     <li>
+      changing the printed notation requires changing only the command definition.
+     </li>
+    </ul>
+    <p>For example, this version prints the lemma upright and the witness sigla in
+bold:
+</p>
+    <pre>\define[3]\variant
+  {#1\apparatus{#1] #2 {\bf #3}}}
+</pre>
+    <p>The arguments in the document remain unchanged.
+</p>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What has changed?</b> The source is now more explicit, but it is not yet a
+database or a validated editorial record. The three arguments remain ordinary
+macro arguments. ConTeXt does not yet know that <code>B</code> and
+<code>D</code> are witness identifiers, nor can it check whether they have
+been declared correctly.
+</p>
+    </div>
+    <p>The three-argument form is useful when a lemma has only one alternative
+reading. The next section adapts the interface so that several readings or
+textual operations can belong to the same apparatus entry.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Record_several_readings_for_one_lemma">
+      4. Record several readings for one lemma
+     </span>
+    </h2>
+    <p>The three-argument form of <code>\variant</code> is useful when a lemma has
+only one alternative reading:
+</p>
+    <pre>\variant
+  {Reason}
+  {Judgment}
+  {B D}
+</pre>
+    <p>A real apparatus, however, often records several readings or textual
+operations for the same lemma. The entry:
+</p>
+    <pre>Reason] Judgment B D; Understanding C; om. E
+</pre>
+    <p>contains one lemma, two alternative readings, and one omission.
+</p>
+    <p>To represent that structure more clearly, the source now distinguishes two
+levels:
+</p>
+    <ul>
+     <li>
+      <code>\variant</code>
+      creates the complete apparatus entry and attaches it to the lemma;
+     </li>
+     <li>
+      <code>\reading</code>
+      represents one alternative reading and its supporting witnesses.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="4.1._Redefine_the_apparatus_entry_command">
+      4.1. Redefine the apparatus entry command
+     </span>
+    </h3>
+    <p>Redefine <code>\variant</code> with two arguments:
+</p>
+    <pre>% Print the lemma and attach a complete list of readings or operations.
+\define[2]\variant
+  {#1\apparatus{{\it #1}] #2}}
+</pre>
+    <p>The arguments now have the following functions:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Editorial content
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>#1</code>
+</td>
+       <td>Lemma printed in the edited text
+</td>
+       <td><code>Reason</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>#2</code>
+</td>
+       <td>Complete list of readings or textual operations
+</td>
+       <td><code>\reading{Judgment}{B D}; ...</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The second argument is no longer one reading. It is the complete contents of
+the apparatus entry after the lemma.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.2._Define_one_alternative_reading">
+      4.2. Define one alternative reading
+     </span>
+    </h3>
+    <p>Define:
+</p>
+    <pre>% Print one alternative reading followed by its witness sigla.
+\define[2]\reading
+  {#1 {\it #2}}
+</pre>
+    <p>The two arguments are:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Editorial content
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>#1</code>
+</td>
+       <td>Alternative textual wording
+</td>
+       <td><code>Judgment</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>#2</code>
+</td>
+       <td>Witness siglum or sigla
+</td>
+       <td><code>B D</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The command:
+</p>
+    <pre>\reading
+  {Judgment}
+  {B D}
+</pre>
+    <p>produces:
+</p>
+    <pre>Judgment B D
+</pre>
+    <p>The reading remains upright, while the witness sigla are set in italics by
+the command definition.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.3._Combine_several_readings">
+      4.3. Combine several readings
+     </span>
+    </h3>
+    <p>Several <code>\reading</code> commands can now be placed in the second
+argument of <code>\variant</code>:
+</p>
+    <pre>\variant
+  {Reason}
+  {\reading{Judgment}{B D};
+   \reading{Understanding}{C}}
+</pre>
+    <p>This produces the apparatus entry:
+</p>
+    <pre>Reason] Judgment B D; Understanding C
+</pre>
+    <p>The semicolon is entered explicitly in the source. At this stage, it is
+ordinary punctuation separating two readings associated with the same lemma.
+</p>
+    <p>The complete working example is:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="comment">% Print the lemma and attach a complete list of readings or operations.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Print one alternative reading followed by its witness sigla.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>Understanding<span class="br">}</span><span class="br">{</span>C<span class="br">}</span><span class="br">}</span>
+directs the will.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/e7f7c436840bcc18596d35d3363e17bd.webp" width="874">
+     </li>
+    </ul>
+    <p>The printed result resembles the earlier direct note, but the source now
+distinguishes:
+</p>
+    <ul>
+     <li>
+      the apparatus entry as a whole;
+     </li>
+     <li>
+      each individual reading;
+     </li>
+     <li>
+      the witness sigla associated with each reading.
+     </li>
+    </ul>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What has changed?</b> The source now represents several editorial units with
+different commands. The semicolons and ordering are still supplied manually,
+and the witnesses remain literal text rather than declared objects.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Record_an_omission">
+      5. Record an omission
+     </span>
+    </h2>
+    <p>An omission is not an alternative reading. It does not supply replacement
+wording; it records that the lemma is absent from one or more witnesses.
+</p>
+    <p>This difference should remain visible in the source.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.1._Define_an_omission_command">
+      5.1. Define an omission command
+     </span>
+    </h3>
+    <p>Define:
+</p>
+    <pre>% Record omission of the lemma in one or more witnesses.
+\define[1]\omission
+  {{\it om.} {\it #1}}
+</pre>
+    <p>The single argument contains the relevant witness siglum or sigla:
+</p>
+    <pre>\omission{E}
+</pre>
+    <p>This produces:
+</p>
+    <pre>om. E
+</pre>
+    <p>Here, <code>om.</code> is the conventional abbreviation used by this
+tutorial. It is printed by the macro definition; it is not a ConTeXt keyword.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.2._Combine_readings_and_an_omission">
+      5.2. Combine readings and an omission
+     </span>
+    </h3>
+    <p>The omission can be placed in the same apparatus entry as the alternative
+readings:
+</p>
+    <pre>\variant
+  {Reason}
+  {\reading{Judgment}{B D};
+   \reading{Understanding}{C};
+   \omission{E}}
+</pre>
+    <p>This produces:
+</p>
+    <pre>Reason] Judgment B D; Understanding C; om. E
+</pre>
+    <p>The complete example is:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Record omission of the lemma in one or more witnesses.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>Understanding<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span>E<span class="br">}</span><span class="br">}</span>
+directs the will.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/df26d6a43b9b0c5b2eaf4db9e74634d9.webp" width="874">
+     </li>
+    </ul>
+    <p>The source now distinguishes two different kinds of evidence:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Kind of evidence
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>\reading{text}{witnesses}</code>
+</td>
+       <td>Alternative wording
+</td>
+       <td><code>\reading{Judgment}{B D}</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\omission{witnesses}</code>
+</td>
+       <td>Absence of the lemma
+</td>
+       <td><code>\omission{E}</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial principle.</b> A reading supplies textual wording. An omission
+records the absence of wording. Using separate commands prevents these two
+different kinds of evidence from being represented as though they were the
+same operation.
+</p>
+    </div>
+    <p>The printed abbreviation can be changed without altering the apparatus calls.
+For example:
+</p>
+    <pre>\define[1]\omission
+  {{\it omitted in} {\it #1}}
+</pre>
+    <p>would produce a more explicit English form.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Record_an_addition">
+      6. Record an addition
+     </span>
+    </h2>
+    <p>An addition records material present in one or more witnesses but not printed
+in the edited text at that location.
+</p>
+    <p>Like an omission, an addition is a textual operation rather than a simple
+alternative reading.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.1._Define_an_addition_command">
+      6.1. Define an addition command
+     </span>
+    </h3>
+    <p>Define:
+</p>
+    <pre>% Record material added by one or more witnesses.
+\define[2]\addition
+  {{\it add.} #1 {\it #2}}
+</pre>
+    <p>The arguments are:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Argument
+       </th>
+       <th>
+        Editorial content
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>#1</code>
+</td>
+       <td>Added wording
+</td>
+       <td><code>and governs desire</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>#2</code>
+</td>
+       <td>Witness siglum or sigla
+</td>
+       <td><code>F</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The command:
+</p>
+    <pre>\addition
+  {and governs desire}
+  {F}
+</pre>
+    <p>produces:
+</p>
+    <pre>add. and governs desire F
+</pre>
+    <p>The abbreviation <code>add.</code>, the order of the arguments, and the
+typographical treatment are conventions defined by the macro.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.2._Combine_an_addition_with_readings">
+      6.2. Combine an addition with readings
+     </span>
+    </h3>
+    <p>An addition can appear in the same apparatus entry as alternative readings:
+</p>
+    <pre>\variant
+  {the will}
+  {\reading{will}{C};
+   \reading{human desire}{D};
+   \addition{and governs desire}{F}}
+</pre>
+    <p>This produces an entry of the following form:
+</p>
+    <pre>the will] will C; human desire D; add. and governs desire F
+</pre>
+    <p>The complete example is:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="comment">% Record material added by one or more witnesses.</span>
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Reason directs
+<span class="cs">\variant</span>
+  <span class="br">{</span>the will<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>will<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>human desire<span class="br">}</span><span class="br">{</span>D<span class="br">}</span>;
+   <span class="cs">\addition</span><span class="br">{</span>and governs desire<span class="br">}</span><span class="br">{</span>F<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/b0f30de0703ae7941c0c70803a56006f.webp" width="874">
+     </li>
+    </ul>
+    <div style="background:#fff8e8; border-left:4px solid #c49a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Location of an addition.</b> A real apparatus may need to state whether the
+added words occur before or after a particular passage. Expressions such as
+<code>add. ante</code> or <code>add. post</code> belong to the editorial
+notation of the edition. They can be represented later by more specific
+commands if required.
+</p>
+    </div>
+    <p>At this point, the source can represent three distinct kinds of textual
+evidence:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Function
+       </th>
+      </tr>
+      <tr>
+       <td><code>\reading{text}{witnesses}</code>
+</td>
+       <td>Record alternative wording
+</td>
+      </tr>
+      <tr>
+       <td><code>\omission{witnesses}</code>
+</td>
+       <td>Record absence of the lemma
+</td>
+      </tr>
+      <tr>
+       <td><code>\addition{text}{witnesses}</code>
+</td>
+       <td>Record wording added by one or more witnesses
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The next section combines these commands in one continuous passage.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Build_the_complete_passage">
+      7. Build the complete passage
+     </span>
+    </h2>
+    <p>The commands introduced in the preceding sections can now be combined in one
+continuous sentence.
+</p>
+    <p>The edited text is:
+</p>
+    <pre>Reason directs the will.
+</pre>
+    <p>The first lemma has two alternative readings and one omission. The second
+lemma has two alternative readings and one addition.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="comment">% Define a separate critical note series.</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="comment">% Define the small editorial interface.</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>Understanding<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span>E<span class="br">}</span><span class="br">}</span>
+directs
+<span class="cs">\variant</span>
+  <span class="br">{</span>the will<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>will<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>human desire<span class="br">}</span><span class="br">{</span>D<span class="br">}</span>;
+   <span class="cs">\addition</span><span class="br">{</span>and governs desire<span class="br">}</span><span class="br">{</span>F<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/099b22fd5dabff785e63208e50bc908a.webp" width="874">
+     </li>
+    </ul>
+    <p>The first apparatus entry records:
+</p>
+    <ul>
+     <li>
+      the reading
+      <code>Judgment</code>
+      in witnesses
+      <code>B</code>
+      and
+      <code>D</code>
+      ;
+     </li>
+     <li>
+      the reading
+      <code>Understanding</code>
+      in witness
+      <code>C</code>
+      ;
+     </li>
+     <li>
+      omission of the lemma in witness
+      <code>E</code>
+      .
+     </li>
+    </ul>
+    <p>The second apparatus entry records:
+</p>
+    <ul>
+     <li>
+      the shorter reading
+      <code>will</code>
+      in witness
+      <code>C</code>
+      ;
+     </li>
+     <li>
+      the alternative reading
+      <code>human desire</code>
+      in witness
+      <code>D</code>
+      ;
+     </li>
+     <li>
+      the additional wording
+      <code>and governs desire</code>
+      in witness
+      <code>F</code>
+      .
+     </li>
+    </ul>
+    <p>The edited sentence remains readable because each apparatus entry is attached
+directly to the lemma to which it belongs.
+</p>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Reading the source.</b> The outer <code>\variant</code> command identifies
+the lemma and creates one complete apparatus entry. The commands inside its
+second argument identify the individual readings or textual operations
+reported in that entry.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Understand_the_progression">
+      8. Understand the progression
+     </span>
+    </h2>
+    <p>The tutorial has moved from an unstructured note string to a small,
+purpose-built editorial interface.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Source form
+       </th>
+       <th>
+        What the source distinguishes
+       </th>
+      </tr>
+      <tr>
+       <td>Direct apparatus note
+</td>
+       <td><code>\apparatus{Reason] Judgment B}</code>
+</td>
+       <td>Nothing inside the entry: ConTeXt receives one formatted string
+</td>
+      </tr>
+      <tr>
+       <td>One reading with separate arguments
+</td>
+       <td><code>\variant{Reason}{Judgment}{B}</code>
+</td>
+       <td>Lemma, alternative reading, and witness siglum
+</td>
+      </tr>
+      <tr>
+       <td>Several readings and operations
+</td>
+       <td><code>\variant{Reason}{\reading{Judgment}{B}; \omission{E}}</code>
+</td>
+       <td>One lemma containing several named editorial units
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The final interface remains intentionally small:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>\variant{lemma}{contents}</code>
+</td>
+       <td>Print the lemma and attach one complete apparatus entry
+</td>
+      </tr>
+      <tr>
+       <td><code>\reading{text}{witnesses}</code>
+</td>
+       <td>Record alternative wording and the witnesses supporting it
+</td>
+      </tr>
+      <tr>
+       <td><code>\omission{witnesses}</code>
+</td>
+       <td>Record absence of the lemma in one or more witnesses
+</td>
+      </tr>
+      <tr>
+       <td><code>\addition{text}{witnesses}</code>
+</td>
+       <td>Record wording present in one or more witnesses but absent from the edited text
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>These commands are defined by this tutorial. They are not predefined ConTeXt
+commands.
+</p>
+    <p>Their names, punctuation, abbreviations, order, and typographical treatment
+can therefore be adapted to the conventions of a particular edition.
+</p>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What this guide has established.</b> A critical apparatus can begin as an
+independent ConTeXt note series. Small wrapper commands can then distinguish
+the lemma, readings, witness sigla, omissions, and additions without requiring
+a larger data-management system.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Limits_of_the_simple_approach">
+      9. Limits of the simple approach
+     </span>
+    </h2>
+    <p>The method is useful for a small apparatus, but it retains several deliberate
+limitations.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.1._Witnesses_remain_literal_text">
+      9.1. Witnesses remain literal text
+     </span>
+    </h3>
+    <p>In:
+</p>
+    <pre>\reading{Judgment}{B D}
+</pre>
+    <p>the string <code>B D</code> is ordinary text.
+</p>
+    <p>ConTeXt does not know that <code>B</code> and <code>D</code> identify two
+witnesses. It cannot retrieve descriptions, distinguish manuscripts from
+printed editions, expand witness groups, or detect a mistyped siglum.
+</p>
+    <p>For central witness declarations and reusable metadata, see
+<a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Managing witnesses and textual variants</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.2._Readings_are_not_stored_as_independent_records">
+      9.2. Readings are not stored as independent records
+     </span>
+    </h3>
+    <p>The command:
+</p>
+    <pre>\reading{Judgment}{B D}
+</pre>
+    <p>makes the editorial intention clearer to a human reader, but it does not
+create a record that can be queried independently.
+</p>
+    <p>The arguments remain ordinary macro arguments used immediately for
+typesetting.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.3._Separators_and_ordering_are_entered_manually">
+      9.3. Separators and ordering are entered manually
+     </span>
+    </h3>
+    <p>The semicolons are written directly in the second argument of
+<code>\variant</code>:
+</p>
+    <pre>{\reading{Judgment}{B D};
+ \reading{Understanding}{C};
+ \omission{E}}
+</pre>
+    <p>The editor is responsible for their presence and for the order of the
+readings.
+</p>
+    <p>Automatically collecting, ordering, or punctuating an arbitrary number of
+readings requires a more structured interface.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.4._The_apparatus_has_only_one_layer">
+      9.4. The apparatus has only one layer
+     </span>
+    </h3>
+    <p>All entries belong to the same <code>apparatus</code> note series.
+</p>
+    <p>An edition may instead need separate systems for:
+</p>
+    <ul>
+     <li>
+      textual variants;
+     </li>
+     <li>
+      source references;
+     </li>
+     <li>
+      translation notes;
+     </li>
+     <li>
+      lexical notes;
+     </li>
+     <li>
+      editorial commentary.
+     </li>
+    </ul>
+    <p>See <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Using multiple apparatus layers</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.5._Typography_remains_minimal">
+      9.5. Typography remains minimal
+     </span>
+    </h3>
+    <p>The present guide uses only:
+</p>
+    <ul>
+     <li>
+      page-level placement;
+     </li>
+     <li>
+      Arabic note markers;
+     </li>
+     <li>
+      a smaller relative type size;
+     </li>
+     <li>
+      simple italics for lemmas, sigla, and abbreviations.
+     </li>
+    </ul>
+    <p>It does not yet control the apparatus as a designed typographical block.
+</p>
+    <p>Spacing, indentation, separators, line breaking, and reusable visual styles are
+treated in <a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Formatting a critical apparatus</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="9.6._The_data_cannot_yet_be_validated_or_transformed">
+      9.6. The data cannot yet be validated or transformed
+     </span>
+    </h3>
+    <p>The present macros cannot:
+</p>
+    <ul>
+     <li>
+      check whether a witness has been declared;
+     </li>
+     <li>
+      detect an unknown siglum;
+     </li>
+     <li>
+      sort entries;
+     </li>
+     <li>
+      filter entries by witness or operation;
+     </li>
+     <li>
+      generate a separate report;
+     </li>
+     <li>
+      render the same data in more than one form.
+     </li>
+    </ul>
+    <p>Those tasks require structured records. See
+<a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Managing structured critical data with Lua</a>.
+</p>
+    <div style="background:#fff8e8; border-left:4px solid #c49a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Why keep this simple method?</b> These limitations do not make the method
+incorrect. They mark the point at which a direct macro-based apparatus may
+need to develop into a more structured editorial workflow.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Choose_the_next_guide">
+      10. Choose the next guide
+     </span>
+    </h2>
+    <p>The next step depends on the problem to be solved.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Next task
+       </th>
+       <th>
+        Continue with
+       </th>
+      </tr>
+      <tr>
+       <td>Change the size, spacing, indentation, separators, or general appearance of the apparatus
+</td>
+       <td><a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Guide 2: Formatting a critical apparatus</a>
+</td>
+      </tr>
+      <tr>
+       <td>Declare witnesses once and reuse their identifiers, sigla, types, and descriptions
+</td>
+       <td><a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Guide 3: Managing witnesses and textual variants</a>
+</td>
+      </tr>
+      <tr>
+       <td>Maintain separate textual, source, translation, or commentary layers
+</td>
+       <td><a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Guide 4: Using multiple apparatus layers</a>
+</td>
+      </tr>
+      <tr>
+       <td>Compose an original text and translation in parallel
+</td>
+       <td><a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">Guide 5: Typesetting an original text and translation in parallel</a>
+</td>
+      </tr>
+      <tr>
+       <td>Validate, sort, filter, transform, or render structured critical records
+</td>
+       <td><a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Guide 6: Managing structured critical data with Lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>Use textual data encoded in TEI XML
+</td>
+       <td><a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Readers following the collection in order should continue with
+<a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Guide 2</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Complete_source">
+      11. Complete source
+     </span>
+    </h2>
+    <p>The following source gathers the final result of the tutorial without the
+intermediate explanations.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="comment">% Define a separate critical note series.</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="comment">% Define the small editorial interface.</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>Understanding<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span>E<span class="br">}</span><span class="br">}</span>
+directs
+<span class="cs">\variant</span>
+  <span class="br">{</span>the will<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>will<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>human desire<span class="br">}</span><span class="br">{</span>D<span class="br">}</span>;
+   <span class="cs">\addition</span><span class="br">{</span>and governs desire<span class="br">}</span><span class="br">{</span>F<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/099b22fd5dabff785e63208e50bc908a.webp" width="874">
+     </li>
+    </ul>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Copying the example.</b> This is a complete ConTeXt document. Copy the
+entire block before changing the sentence, witness sigla, apparatus notation,
+or page design.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Online_resources">
+      12. Online resources
+     </span>
+    </h2>
+    <p>The following ConTeXt Garden pages document the underlying mechanisms used in
+this guide:
+</p>
+    <ul>
+     <li>
+      <a href="Command/definenote.html" title="Command/definenote">
+       Command/definenote
+      </a>
+      &mdash; defining an independent note series;
+     </li>
+     <li>
+      <a href="Command/setupnote.html" title="Command/setupnote">
+       Command/setupnote
+      </a>
+      &mdash; placing and configuring a note series;
+     </li>
+     <li>
+      <a href="Command/setupnotation.html" title="Command/setupnotation">
+       Command/setupnotation
+      </a>
+      &mdash; configuring note markers and entries;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=References,_notes,_indexes,_and_floats/Footnotes&action=edit&redlink=1.html" title="References, notes, indexes, and floats/Footnotes (page does not exist)">
+       Footnotes
+      </a>
+      &mdash; general documentation on note mechanisms in ConTeXt.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">
+       Glossary of critical edition terms
+      </a>
+     </li>
+     <li>
+      <a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">
+       Formatting a critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">
+       Managing witnesses and textual variants
+      </a>
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">
+       Typesetting an original text and translation in parallel
+      </a>
+     </li>
+     <li>
+      <a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">
+       Managing structured critical data with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">
+       Building critical editions from TEI XML
+      </a>
+     </li>
+    </ul>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">&larr; Glossary</a> &middot;
+<b>Guide 1 of 6</b> &middot;
+<a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Next: Guide 2 &mdash; Formatting a critical apparatus &rarr;</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Building_a_simple_critical_apparatus">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

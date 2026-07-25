@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Typesetting an original text and translation in parallel&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Typesetting_an_original_text_and_translation_in_parallel" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Typesetting an original text and translation in parallel
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7534&diff=43258">2026-07-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#fff4df; border:1px solid #e5c07b; border-left:5px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.35em; vertical-align:middle;">🚧</span>
+<b>Work in progress.</b> This guide is currently being drafted, corrected, and reviewed.
+Please do not modify the code unless this banner has been removed.
+</p>
+    </div>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">&larr; Guide 4 &mdash; Using multiple apparatus layers</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 5 of 6</b> &middot;
+<a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Next: Guide 6 &mdash; Managing structured critical data with Lua &rarr;</a>
+</p>
+    </div>
+    <p><br>
+Placing an original text beside its translation does not by itself create a
+<b>parallel edition</b>.
+</p>
+    <p>Two columns may appear parallel while gradually losing their correspondence.
+A short paragraph in the original may face a much longer translation; a page
+break may separate passages intended to remain opposite each other.
+</p>
+    <p>The first question is therefore not:
+</p>
+    <pre>How can two columns be created?
+</pre>
+    <p>but:
+</p>
+    <pre>Which units of the original and translation must remain in correspondence?
+</pre>
+    <p>This guide begins by recording those units explicitly. It then shows how the
+same source can be rendered side by side or as a stacked proof.
+</p>
+    <p>The progression is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Editorial problem
+       </th>
+       <th>
+        Result
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td>Decide what must remain aligned
+</td>
+       <td>Correspondence units are defined in the source
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td>Render each pair clearly
+</td>
+       <td>Two paragraph cells with an explicit gutter
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td>Distinguish original and translation
+</td>
+       <td>Separate language, style, and width settings
+</td>
+      </tr>
+      <tr>
+       <td>4
+</td>
+       <td>Add scholarly annotation
+</td>
+       <td>Independent note layers remain attached to the correct side
+</td>
+      </tr>
+      <tr>
+       <td>5
+</td>
+       <td>Test other outputs and difficult pages
+</td>
+       <td>Stacked proof, stable identifiers, and page-boundary tests
+</td>
+      </tr>
+      <tr>
+       <td>6
+</td>
+       <td>Extend the model to line-based editions
+</td>
+       <td>Shared line numbers and advanced apparatus levels
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Core principle.</b> The source should record editorial correspondence.
+The page layout should render that correspondence without becoming its only
+possible representation.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Choose_the_unit_of_correspondence">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Choose the unit of correspondence
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Record_correspondence_before_choosing_a_layout">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Record correspondence before choosing a layout
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Build_the_first_paired_layout">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Build the first paired layout
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#4._Compile_a_minimal_paired-paragraph_example">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Compile a minimal paired-paragraph example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#5._Set_the_language_and_style_of_each_side">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Set the language and style of each side
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#6._Adjust_the_relative_widths">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Adjust the relative widths
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#7._Give_different_editorial_units_explicit_names">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Give different editorial units explicit names
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#8._Attach_notes_to_the_appropriate_side">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Attach notes to the appropriate side
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#9._Compile_an_annotated_parallel-text_example">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Compile an annotated parallel-text example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#10._Switch_between_publication_and_proof_layouts">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Switch between publication and proof layouts
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#11._Assign_stable_identifiers_to_corresponding_units">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Assign stable identifiers to corresponding units
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#12._Test_unequal_blocks_and_page_boundaries">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Test unequal blocks and page boundaries
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#13._Choose_the_layout_mechanism_from_the_editorial_requirement">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Choose the layout mechanism from the editorial requirement
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#14._Reuse_the_setup_in_an_environment_file">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Reuse the setup in an environment file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#15._Advanced_extension:_number_corresponding_lines">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. Advanced extension: number corresponding lines
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#16._Advanced_extension:_distinguish_annotation_levels">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         16. Advanced extension: distinguish annotation levels
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#17._Test_the_complete_design_systematically">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         17. Test the complete design systematically
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-18">
+       <a href="#18._Understand_the_limits_and_next_steps">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         18. Understand the limits and next steps
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#19._Command_summary">
+        <span class="tocnumber">
+         19
+        </span>
+        <span class="toctext">
+         19. Command summary
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#20._Choose_the_next_guide">
+        <span class="tocnumber">
+         20
+        </span>
+        <span class="toctext">
+         20. Choose the next guide
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#Online_resources">
+        <span class="tocnumber">
+         21
+        </span>
+        <span class="toctext">
+         Online resources
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         22
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._Choose_the_unit_of_correspondence">
+      1. Choose the unit of correspondence
+     </span>
+    </h2>
+    <p>Parallel editions can synchronize different kinds of units.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Model
+       </th>
+       <th>
+        Unit placed in correspondence
+       </th>
+       <th>
+        Typical use
+       </th>
+       <th>
+        Main consequence
+       </th>
+      </tr>
+      <tr>
+       <td>Free parallel composition
+</td>
+       <td>pages or independent columns
+</td>
+       <td>translation intended for continuous reading
+</td>
+       <td>the two texts may advance at different rates
+</td>
+      </tr>
+      <tr>
+       <td>Paragraph synchronization
+</td>
+       <td>corresponding paragraphs or editorial blocks
+</td>
+       <td>prose, philosophy, history
+</td>
+       <td>each pair begins at the same vertical position
+</td>
+      </tr>
+      <tr>
+       <td>Segment synchronization
+</td>
+       <td>sentences or short passages
+</td>
+       <td>close philological comparison
+</td>
+       <td>alignment is more precise, but markup is finer
+</td>
+      </tr>
+      <tr>
+       <td>Line synchronization
+</td>
+       <td>verses or editorial lines
+</td>
+       <td>poetry, drama, ancient texts
+</td>
+       <td>every line becomes a reference unit
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>These are not progressively better versions of one another. Each answers a
+different editorial need.
+</p>
+    <p>For the first part of this guide, paragraph or short-segment synchronization is
+the most practical starting point.
+</p>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial principle.</b> Choose the alignment unit from the structure and
+purpose of the edition. Do not let a convenient page mechanism decide the
+segmentation accidentally.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Record_correspondence_before_choosing_a_layout">
+      2. Record correspondence before choosing a layout
+     </span>
+    </h2>
+    <p>The source should express one corresponding pair:
+</p>
+    <pre>\parallelparagraph
+  {original-language paragraph}
+  {translated paragraph}
+</pre>
+    <p>The command records an editorial relation. It does not commit the source to a
+single layout.
+</p>
+    <p>The same pair may later be rendered as:
+</p>
+    <ul>
+     <li>
+      two adjacent blocks;
+     </li>
+     <li>
+      a stacked proof;
+     </li>
+     <li>
+      facing pages;
+     </li>
+     <li>
+      another project-specific mechanism.
+     </li>
+    </ul>
+    <p>Avoid writing a complete tabulation directly in every textual component. That
+would mix the editorial content with one particular page design.
+</p>
+    <h2>
+     <span class="mw-headline" id="3._Build_the_first_paired_layout">
+      3. Build the first paired layout
+     </span>
+    </h2>
+    <p>A simple implementation uses two paragraph cells separated by an explicit
+gutter:
+</p>
+    <pre>\definetabulate
+  [paralleltext]
+  [|p(.43\textwidth)|w(1.5em)|p(.43\textwidth)|]
+</pre>
+    <p>The middle column contains no text. It provides a fixed separation between the
+two sides.
+</p>
+    <p>Define:
+</p>
+    <pre>\define[2]\parallelparagraph
+  {\startparalleltext
+   \NC #1
+   \NC
+   \NC #2
+   \NC\NR
+   \stopparalleltext}
+</pre>
+    <p>Use:
+</p>
+    <pre>\parallelparagraph
+  {Reason guides the understanding.}
+  {La raison guide l'entendement.}
+</pre>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Layout principle.</b> The empty middle cell creates an explicit gutter.
+This keeps the separation stable in every row and makes the two textual cells
+easier to reason about.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Compile_a_minimal_paired-paragraph_example">
+      4. Compile a minimal paired-paragraph example
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>16mm,
+   topspace<span class="brx">=</span>14mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>8mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definetabulate</span></span>
+  <span class="brx">[</span>paralleltext<span class="brx">]</span>
+  <span class="brx">[</span>|p<span class="brx">(</span>.43<span class="cs">\textwidth</span><span class="brx">)</span>|w<span class="brx">(</span>1.5em<span class="brx">)</span>|p<span class="brx">(</span>.43<span class="cs">\textwidth</span><span class="brx">)</span>|<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\parallelparagraph</span>
+  <span class="br">{</span><span class="cs">\startparalleltext</span>
+   <span class="cs">\NC</span> <span class="brx">#</span>1
+   <span class="cs">\NC</span>
+   <span class="cs">\NC</span> <span class="brx">#</span>2
+   <span class="cs">\NC</span><span class="cs">\NR</span>
+   <span class="cs">\stopparalleltext</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\parallelparagraph</span>
+  <span class="br">{</span>Reason guides the understanding.<span class="br">}</span>
+  <span class="br">{</span>La raison guide l'entendement.<span class="br">}</span>
+
+<span class="cs">\parallelparagraph</span>
+  <span class="br">{</span>Experience supplies the materials of knowledge.<span class="br">}</span>
+  <span class="br">{</span>L'exp&eacute;rience fournit les mat&eacute;riaux de la connaissance.<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/833931fc52cae022b2a637ab54e66457.webp" width="874">
+     </li>
+    </ul>
+    <p>This MWE checks:
+</p>
+    <ul>
+     <li>
+      the width of the two textual cells;
+     </li>
+     <li>
+      the consistency of the empty gutter;
+     </li>
+     <li>
+      the common starting position of each pair;
+     </li>
+     <li>
+      the fit of the complete tabulation within the text width.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="5._Set_the_language_and_style_of_each_side">
+      5. Set the language and style of each side
+     </span>
+    </h2>
+    <p>The two texts may require different hyphenation and typographical settings.
+</p>
+    <p>Define wrappers:
+</p>
+    <pre>\define[1]\originaltext
+  {\language[en]#1}
+
+\define[1]\translatedtext
+  {\language[fr]#1}
+</pre>
+    <p>Use them inside the paired command:
+</p>
+    <pre>\define[2]\parallelparagraph
+  {\startparalleltext
+   \NC \originaltext{#1}
+   \NC
+   \NC \translatedtext{#2}
+   \NC\NR
+   \stopparalleltext}
+</pre>
+    <p>Styling can also be kept separate:
+</p>
+    <pre>\define[1]\originalstyle
+  {{\it #1}}
+
+\define[1]\translationstyle
+  {#1}
+
+\define[1]\originaltext
+  {\language[en]\originalstyle{#1}}
+
+\define[1]\translatedtext
+  {\language[fr]\translationstyle{#1}}
+</pre>
+    <p>For a Greek original, the wrapper may instead select Greek:
+</p>
+    <pre>\define[1]\originaltext
+  {\language[agr]#1}
+</pre>
+    <p>The exact language tag and font coverage should be tested in the real project
+environment.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Adjust_the_relative_widths">
+      6. Adjust the relative widths
+     </span>
+    </h2>
+    <p>A translation may require more room than the original.
+</p>
+    <p>For example:
+</p>
+    <pre>\definetabulate
+  [paralleltext]
+  [|p(.39\textwidth)|w(1.5em)|p(.47\textwidth)|]
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Design
+       </th>
+       <th>
+        Original
+       </th>
+       <th>
+        Gutter
+       </th>
+       <th>
+        Translation
+       </th>
+      </tr>
+      <tr>
+       <td>Equal emphasis
+</td>
+       <td>43%
+</td>
+       <td>1.5 em
+</td>
+       <td>43%
+</td>
+      </tr>
+      <tr>
+       <td>Wider translation
+</td>
+       <td>39%
+</td>
+       <td>1.5 em
+</td>
+       <td>47%
+</td>
+      </tr>
+      <tr>
+       <td>Wider original
+</td>
+       <td>47%
+</td>
+       <td>1.5 em
+</td>
+       <td>39%
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Equal widths are not automatically neutral. Column width changes lineation,
+reading rhythm, and the visual importance of each text.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Give_different_editorial_units_explicit_names">
+      7. Give different editorial units explicit names
+     </span>
+    </h2>
+    <p>Paragraphs, short segments, and lines may initially share the same renderer:
+</p>
+    <pre>\define[2]\parallelpair
+  {\startparalleltext
+   \NC \originaltext{#1}
+   \NC
+   \NC \translatedtext{#2}
+   \NC\NR
+   \stopparalleltext}
+
+\define[2]\parallelparagraph
+  {\parallelpair{#1}{#2}}
+
+\define[2]\parallelsentence
+  {\parallelpair{#1}{#2}}
+
+\define[2]\parallelline
+  {\parallelpair{#1}{#2}}
+</pre>
+    <p>Even when the implementation is identical, the command names preserve the
+editorial distinction. A later version can give lines numbers or a different
+layout without changing every source occurrence.
+</p>
+    <h2>
+     <span class="mw-headline" id="8._Attach_notes_to_the_appropriate_side">
+      8. Attach notes to the appropriate side
+     </span>
+    </h2>
+    <p>The original may carry a textual apparatus:
+</p>
+    <pre>\definenote
+  [textualapparatus]
+
+\setupnote
+  [textualapparatus]
+  [location=page]
+
+\define[2]\variant
+  {#1\textualapparatus{{\it #1}] #2}}
+</pre>
+    <p>The translation may carry its own notes:
+</p>
+    <pre>\definenote
+  [translationnotes]
+
+\setupnote
+  [translationnotes]
+  [location=page]
+
+\define[1]\translationnote
+  {\translationnotes{#1}}
+</pre>
+    <p>Use both inside one pair:
+</p>
+    <pre>\parallelparagraph
+  {\variant
+     {Reason}
+     {Judgment B D}
+   guides the understanding.}
+  {La raison guide
+   l'entendement\translationnote
+     {The term is translated here as &ldquo;entendement&rdquo;.}.}
+</pre>
+    <p>The horizontal structure contains the two texts. The page-level note systems
+form a separate critical zone.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Area
+       </th>
+       <th>
+        Contents
+       </th>
+      </tr>
+      <tr>
+       <td>Original cell
+</td>
+       <td>edited original and textual apparatus calls
+</td>
+      </tr>
+      <tr>
+       <td>Gutter
+</td>
+       <td>no textual material
+</td>
+      </tr>
+      <tr>
+       <td>Translation cell
+</td>
+       <td>translated text and translation-note calls
+</td>
+      </tr>
+      <tr>
+       <td>Page-level critical zone
+</td>
+       <td>collected apparatus entries and translation notes
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Testing requirement.</b> Note calls made inside paragraph cells must be
+compiled with the ConTeXt release and page design intended for publication.
+A successful short example does not prove that long notes or page boundaries
+will behave satisfactorily.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Compile_an_annotated_parallel-text_example">
+      9. Compile an annotated parallel-text example
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>16mm,
+   topspace<span class="brx">=</span>14mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>8mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definetabulate</span></span>
+  <span class="brx">[</span>paralleltext<span class="brx">]</span>
+  <span class="brx">[</span>|p<span class="brx">(</span>.43<span class="cs">\textwidth</span><span class="brx">)</span>|w<span class="brx">(</span>1.5em<span class="brx">)</span>|p<span class="brx">(</span>.43<span class="cs">\textwidth</span><span class="brx">)</span>|<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\originaltext</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\language</span></span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">#</span>1<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\translatedtext</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\language</span></span><span class="brx">[</span>fr<span class="brx">]</span><span class="brx">#</span>1<span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\parallelparagraph</span>
+  <span class="br">{</span><span class="cs">\startparalleltext</span>
+   <span class="cs">\NC</span> <span class="cs">\originaltext</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+   <span class="cs">\NC</span>
+   <span class="cs">\NC</span> <span class="cs">\translatedtext</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span>
+   <span class="cs">\NC</span><span class="cs">\NR</span>
+   <span class="cs">\stopparalleltext</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>textualapparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>textualapparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>textualapparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\textualapparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>translationnotes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>translationnotes<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>translationnotes<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>romannumerals,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\translationnote</span>
+  <span class="br">{</span><span class="cs">\translationnotes</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs">\parallelparagraph</span>
+  <span class="br">{</span><span class="cs">\variant</span>
+     <span class="br">{</span>Reason<span class="br">}</span>
+     <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span><span class="br">}</span>
+   guides the understanding.<span class="br">}</span>
+  <span class="br">{</span>La raison guide
+   l'entendement<span class="cs">\translationnote</span>
+     <span class="br">{</span>The word &ldquo;entendement&rdquo; is used here rather than &ldquo;intellect&rdquo;.<span class="br">}</span>.<span class="br">}</span>
+
+<span class="cs">\parallelparagraph</span>
+  <span class="br">{</span>Experience supplies the materials of knowledge.<span class="br">}</span>
+  <span class="br">{</span>L'exp&eacute;rience fournit les mat&eacute;riaux de la connaissance.<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/98101db8fc301713b43cfa933a72ccdc.webp" width="874">
+     </li>
+    </ul>
+    <p>This example tests:
+</p>
+    <ul>
+     <li>
+      note calls inside both textual cells;
+     </li>
+     <li>
+      two independent note series;
+     </li>
+     <li>
+      distinct marker systems;
+     </li>
+     <li>
+      preservation of the explicit gutter;
+     </li>
+     <li>
+      alignment of consecutive pairs.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="10._Switch_between_publication_and_proof_layouts">
+      10. Switch between publication and proof layouts
+     </span>
+    </h2>
+    <p>A stacked proof can reveal missing or mismatched translation units more clearly
+than a side-by-side page.
+</p>
+    <p>Define the side-by-side renderer:
+</p>
+    <pre>\define[2]\parallelparagraphsidebyside
+  {\startparalleltext
+   \NC \originaltext{#1}
+   \NC
+   \NC \translatedtext{#2}
+   \NC\NR
+   \stopparalleltext}
+</pre>
+    <p>Define the stacked renderer:
+</p>
+    <pre>\define[2]\parallelparagraphstacked
+  {\startframedtext
+     [width=\textwidth,
+      frame=off,
+      offset=none]
+   {\bf Original}\par
+   \originaltext{#1}
+
+   \blank[small]
+
+   {\bf Translation}\par
+   \translatedtext{#2}
+   \stopframedtext
+   \blank[small]}
+</pre>
+    <p>Select one renderer:
+</p>
+    <pre>\let\parallelparagraph
+   \parallelparagraphsidebyside
+</pre>
+    <p>or:
+</p>
+    <pre>\let\parallelparagraph
+   \parallelparagraphstacked
+</pre>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial workflow.</b> Proof and publication layouts may display the same
+correspondence units differently. The correspondence belongs to the source;
+the visible arrangement belongs to the chosen output.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="11._Assign_stable_identifiers_to_corresponding_units">
+      11. Assign stable identifiers to corresponding units
+     </span>
+    </h2>
+    <p>A long edition should be able to refer to a pair independently of page number.
+</p>
+    <p>Store an identifier and optional printed label:
+</p>
+    <pre>\define[2]\defineparallelunit
+  {\setvariables
+     [parallelunit:#1]
+     [label={#2}]}
+
+\define[1]\parallelunitlabel
+  {\getvariable{parallelunit:#1}{label}}
+</pre>
+    <p>Declare:
+</p>
+    <pre>\defineparallelunit
+  {chapter1-paragraph3}
+  {1.3}
+</pre>
+    <p>A proof command may display the label:
+</p>
+    <pre>\define[3]\identifiedparallelparagraph
+  {\startparalleltext
+   \NC {\bf \parallelunitlabel{#1}}\quad
+       \originaltext{#2}
+   \NC
+   \NC {\bf \parallelunitlabel{#1}}\quad
+       \translatedtext{#3}
+   \NC\NR
+   \stopparalleltext}
+</pre>
+    <p>The stable identifier remains unchanged even if printed numbering is revised.
+</p>
+    <h2>
+     <span class="mw-headline" id="12._Test_unequal_blocks_and_page_boundaries">
+      12. Test unequal blocks and page boundaries
+     </span>
+    </h2>
+    <p>A paired layout should not be judged from short, balanced examples only.
+</p>
+    <p>Test:
+</p>
+    <ul>
+     <li>
+      a short original facing a long translation;
+     </li>
+     <li>
+      a long original facing a short translation;
+     </li>
+     <li>
+      several consecutive pairs;
+     </li>
+     <li>
+      annotations in both cells;
+     </li>
+     <li>
+      a pair near the bottom of the page.
+     </li>
+    </ul>
+    <p>A tabulated pair preserves the common starting position of the two cells, but
+it should not be assumed to be indivisible. The longer cell may continue after
+the shorter one has ended.
+</p>
+    <p>This may be acceptable for short or medium synchronized units. It is less
+suitable when a complete original and translation block must remain together.
+</p>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Page-boundary difficulty.</b> When a pair is too large for the remaining
+space, the first remedy should be an editorially defensible subdivision into
+smaller correspondence units&mdash;not arbitrary fragmentation introduced only to
+fill the page.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="13._Choose_the_layout_mechanism_from_the_editorial_requirement">
+      13. Choose the layout mechanism from the editorial requirement
+     </span>
+    </h2>
+    <p>The paired tabulation is only one possible mechanism.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Requirement
+       </th>
+       <th>
+        Useful starting point
+       </th>
+       <th>
+        Main limitation
+       </th>
+      </tr>
+      <tr>
+       <td>Translation readable independently
+</td>
+       <td>free columns or facing pages
+</td>
+       <td>weak paragraph synchronization
+</td>
+      </tr>
+      <tr>
+       <td>Paragraphs should begin together
+</td>
+       <td>paired tabulated blocks
+</td>
+       <td>long rows require page-break testing
+</td>
+      </tr>
+      <tr>
+       <td>Short segments must correspond closely
+</td>
+       <td>paired segment commands
+</td>
+       <td>finer editorial markup
+</td>
+      </tr>
+      <tr>
+       <td>Every verse or line must correspond
+</td>
+       <td>explicit line units
+</td>
+       <td>one source unit per line
+</td>
+      </tr>
+      <tr>
+       <td>Long texts must flow independently
+</td>
+       <td>streams or a custom synchronized system
+</td>
+       <td>more complex synchronization strategy
+</td>
+      </tr>
+      <tr>
+       <td>Same source must produce proof and publication layouts
+</td>
+       <td>semantic pairing commands with replaceable renderers
+</td>
+       <td>requires disciplined source structure
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>ConTeXt can render correspondence recorded in the source. It cannot decide
+automatically which passages are equivalent translations.
+</p>
+    <h2>
+     <span class="mw-headline" id="14._Reuse_the_setup_in_an_environment_file">
+      14. Reuse the setup in an environment file
+     </span>
+    </h2>
+    <p>A larger project should keep the layout and note-series definitions outside the
+textual components.
+</p>
+    <p>Create:
+</p>
+    <pre>env-parallel-critical-text.mkxl
+</pre>
+    <p>It may contain:
+</p>
+    <ul>
+     <li>
+      the tabulation definition;
+     </li>
+     <li>
+      language and style wrappers;
+     </li>
+     <li>
+      side-by-side and stacked renderers;
+     </li>
+     <li>
+      note-series declarations;
+     </li>
+     <li>
+      textual apparatus and translation-note interfaces.
+     </li>
+    </ul>
+    <p>Load it with:
+</p>
+    <pre>\environment env-parallel-critical-text
+</pre>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Practical consequence.</b> The environment defines how paired units and
+their annotations are displayed. The components record the corresponding
+original and translated passages.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="15._Advanced_extension:_number_corresponding_lines">
+      15. Advanced extension: number corresponding lines
+     </span>
+    </h2>
+    <p>A line-based edition may use stable editorial line numbers rather than numbers
+derived from physical line breaks.
+</p>
+    <p>One numbered row contains:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Cell
+       </th>
+       <th>
+        Contents
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td>shared editorial line number
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td>original text
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td>corresponding translation
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Define:
+</p>
+    <pre>\newdimen\paralleltextwidth
+\paralleltextwidth=\dimexpr
+  (\textwidth-2.5em)/2
+\relax
+
+\definetabulate
+  [numberedparalleltext]
+  [|w(1.5em)|p(\paralleltextwidth)|p(\paralleltextwidth)|]
+
+\define[3]\numberedparallelline
+  {\NC \hfill{\tfxx #1}
+   \NC {\language[agr]#2}
+   \NC {\language[la]#3}
+   \NC\NR}
+</pre>
+    <p>Use:
+</p>
+    <pre>\numberedparallelline
+  {1}
+  {&Tau;ὰ ἰ&sigma;ό&nu;&omicron;&mu;&alpha; &lambda;&epsilon;&gamma;ό&mu;&epsilon;&nu;&alpha;}
+  {Aequivoca dicuntur}
+</pre>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Stable reference.</b> Explicit editorial line numbers remain stable when
+fonts, widths, physical line breaks, or page layouts change.
+</p>
+    </div>
+    <p>Unequal correspondence may use an empty continuation number or suffixes such as
+<code>6a</code> and <code>6b</code>. The chosen convention should be stated in
+the editorial principles of the edition.
+</p>
+    <h2>
+     <span class="mw-headline" id="16._Advanced_extension:_distinguish_annotation_levels">
+      16. Advanced extension: distinguish annotation levels
+     </span>
+    </h2>
+    <p>A scholarly Greek&ndash;Latin page may require several types of annotation:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Layer
+       </th>
+       <th>
+        Function
+       </th>
+      </tr>
+      <tr>
+       <td>Textual apparatus
+</td>
+       <td>variants, omissions, substitutions
+</td>
+      </tr>
+      <tr>
+       <td>Lexical or morphological notes
+</td>
+       <td>dictionary lemmas and grammatical analysis
+</td>
+      </tr>
+      <tr>
+       <td>Bibliographical notes
+</td>
+       <td>editions, parallels, commentaries, secondary literature
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The interfaces should make those functions visible:
+</p>
+    <pre>\define[2]\textual
+  {#1\textualnote{#1] #2}}
+
+\define[2]\lemmatize
+  {#1\lemmanote{#1] #2}}
+
+\define[2]\bibliographic
+  {#1\bibnote{#1] #2}}
+</pre>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Scholarly distinction.</b> An apparatus lemma identifies a passage in the
+edited text. A lexical lemma identifies the dictionary form of a word. The two
+uses of <i>lemma</i> must not be confused.
+</p>
+    </div>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Advanced implementation warning.</b> Notes and line notes called inside
+tabulation cells may be scoped locally or collected differently from ordinary
+page notes. Any solution based on postponing notes, line-note levels, or custom
+boxes must be compiled and validated independently before it is presented as a
+general recipe.
+</p>
+    </div>
+    <p>For that reason, the line-based Greek&ndash;Latin page should be treated as an
+advanced project-specific extension rather than as the minimal continuation of
+the paragraph-pair method.
+</p>
+    <h2>
+     <span class="mw-headline" id="17._Test_the_complete_design_systematically">
+      17. Test the complete design systematically
+     </span>
+    </h2>
+    <p>Compile representative cases containing:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Test case
+       </th>
+       <th>
+        What to inspect
+       </th>
+      </tr>
+      <tr>
+       <td>Short balanced pairs
+</td>
+       <td>basic alignment and gutter
+</td>
+      </tr>
+      <tr>
+       <td>Short original, long translation
+</td>
+       <td>wrapping and page breaking
+</td>
+      </tr>
+      <tr>
+       <td>Long original, short translation
+</td>
+       <td>blank space and continuation
+</td>
+      </tr>
+      <tr>
+       <td>Notes in the original
+</td>
+       <td>textual apparatus placement
+</td>
+      </tr>
+      <tr>
+       <td>Notes in the translation
+</td>
+       <td>translation-note placement
+</td>
+      </tr>
+      <tr>
+       <td>Notes in both cells
+</td>
+       <td>marker distinction and collection
+</td>
+      </tr>
+      <tr>
+       <td>Pair near a page boundary
+</td>
+       <td>continuation and page balance
+</td>
+      </tr>
+      <tr>
+       <td>Stacked proof
+</td>
+       <td>preservation of source correspondence
+</td>
+      </tr>
+      <tr>
+       <td>Numbered line pairs
+</td>
+       <td>stability of editorial references
+</td>
+      </tr>
+      <tr>
+       <td>Several annotation levels
+</td>
+       <td>order, readability, and page capacity
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Check:
+</p>
+    <ul>
+     <li>
+      whether corresponding units begin together;
+     </li>
+     <li>
+      whether either cell overflows;
+     </li>
+     <li>
+      whether the gutter remains stable;
+     </li>
+     <li>
+      whether the note systems remain distinct;
+     </li>
+     <li>
+      whether page filling remains acceptable;
+     </li>
+     <li>
+      whether proof and publication renderers use the same source successfully.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="18._Understand_the_limits_and_next_steps">
+      18. Understand the limits and next steps
+     </span>
+    </h2>
+    <p>The paired-block method is well suited to demonstrations, proofing, and
+editions built from reasonably short synchronized units.
+</p>
+    <p>It does not automatically provide:
+</p>
+    <ul>
+     <li>
+      independent long-text flow with synchronization points;
+     </li>
+     <li>
+      automatic facing-page synchronization;
+     </li>
+     <li>
+      automatic detection of missing translation units;
+     </li>
+     <li>
+      validation of duplicate identifiers;
+     </li>
+     <li>
+      sorting and filtering of all critical records;
+     </li>
+     <li>
+      interchange with external editorial systems.
+     </li>
+    </ul>
+    <p>For registration, sorting, filtering, and validation, see
+<a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Managing structured critical data with Lua</a>.
+</p>
+    <p>For TEI XML sources, see
+<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>.
+</p>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What this guide has established.</b> Parallel composition begins with
+editorially defined units of correspondence. Semantic commands can render
+those units side by side or in a stacked proof while preserving independent
+annotation layers. The same model can later be extended to stable numbered
+lines and more complex scholarly apparatuses.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="19._Command_summary">
+      19. Command summary
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>\parallelparagraph</code>
+</td>
+       <td>Record and render one corresponding paragraph pair
+</td>
+      </tr>
+      <tr>
+       <td><code>\parallelsentence</code>
+</td>
+       <td>Record one corresponding sentence or short segment
+</td>
+      </tr>
+      <tr>
+       <td><code>\parallelline</code>
+</td>
+       <td>Record one corresponding line
+</td>
+      </tr>
+      <tr>
+       <td><code>\originaltext</code>
+</td>
+       <td>Apply original-language settings
+</td>
+      </tr>
+      <tr>
+       <td><code>\translatedtext</code>
+</td>
+       <td>Apply translation-language settings
+</td>
+      </tr>
+      <tr>
+       <td><code>\parallelparagraphsidebyside</code>
+</td>
+       <td>Render a pair in two cells separated by a gutter
+</td>
+      </tr>
+      <tr>
+       <td><code>\parallelparagraphstacked</code>
+</td>
+       <td>Render the same pair vertically for proofing
+</td>
+      </tr>
+      <tr>
+       <td><code>\defineparallelunit</code>
+</td>
+       <td>Store a stable unit identifier and printed label
+</td>
+      </tr>
+      <tr>
+       <td><code>\variant</code>
+</td>
+       <td>Attach textual evidence to the original
+</td>
+      </tr>
+      <tr>
+       <td><code>\translationnote</code>
+</td>
+       <td>Attach a translation note to the translation
+</td>
+      </tr>
+      <tr>
+       <td><code>\numberedparallelline</code>
+</td>
+       <td>Render one numbered original&ndash;translation line pair
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The semantic commands are defined by this guide. They are not predefined
+ConTeXt commands.
+</p>
+    <h2>
+     <span class="mw-headline" id="20._Choose_the_next_guide">
+      20. Choose the next guide
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Next task
+       </th>
+       <th>
+        Continue with
+       </th>
+      </tr>
+      <tr>
+       <td>Build one simple apparatus
+</td>
+       <td><a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">Guide 1</a>
+</td>
+      </tr>
+      <tr>
+       <td>Format the apparatus
+</td>
+       <td><a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">Guide 2</a>
+</td>
+      </tr>
+      <tr>
+       <td>Declare witnesses and textual operations
+</td>
+       <td><a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Guide 3</a>
+</td>
+      </tr>
+      <tr>
+       <td>Use several independent apparatus layers
+</td>
+       <td><a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Guide 4</a>
+</td>
+      </tr>
+      <tr>
+       <td>Register, sort, filter, and validate critical records
+</td>
+       <td><a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Guide 6</a>
+</td>
+      </tr>
+      <tr>
+       <td>Process a TEI XML edition
+</td>
+       <td><a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Online_resources">
+      Online resources
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a class="new" href="index.php?title=Tabulate&action=edit&redlink=1" title="Tabulate (page does not exist)">
+       Tabulate
+      </a>
+      &mdash; constructing aligned side-by-side blocks;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=Columns&action=edit&redlink=1" title="Columns (page does not exist)">
+       Columns
+      </a>
+      &mdash; column mechanisms and their limitations;
+     </li>
+     <li>
+      <a href="Command/definenote.html" title="Command/definenote">
+       Command/definenote
+      </a>
+      &mdash; defining independent note series;
+     </li>
+     <li>
+      <a href="Command/setupnote.html" title="Command/setupnote">
+       Command/setupnote
+      </a>
+      &mdash; placing and configuring note blocks;
+     </li>
+     <li>
+      <a href="Command/setupnotation.html" title="Command/setupnotation">
+       Command/setupnotation
+      </a>
+      &mdash; formatting markers and entries;
+     </li>
+     <li>
+      <a href="Command/definelinenote.html" title="Command/definelinenote">
+       Command/definelinenote
+      </a>
+      &mdash; defining line-note series;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=Line_numbering&action=edit&redlink=1" title="Line numbering (page does not exist)">
+       Line numbering
+      </a>
+      &mdash; numbering textual lines;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=Modes&action=edit&redlink=1" title="Modes (page does not exist)">
+       Modes
+      </a>
+      &mdash; switching between proof and publication layouts;
+     </li>
+     <li>
+      <a href="Command/environment.html" title="Command/environment">
+       Command/environment
+      </a>
+      &mdash; loading shared layout definitions.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">
+       Glossary of critical edition terms
+      </a>
+     </li>
+     <li>
+      <a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">
+       Building a simple critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Formatting_a_critical_apparatus.html" title="Formatting a critical apparatus">
+       Formatting a critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">
+       Managing witnesses and textual variants
+      </a>
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+     </li>
+     <li>
+      <a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">
+       Managing structured critical data with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">
+       Building critical editions from TEI XML
+      </a>
+     </li>
+    </ul>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">&larr; Guide 4 &mdash; Using multiple apparatus layers</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 5 of 6</b> &middot;
+<a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Next: Guide 6 &mdash; Managing structured critical data with Lua &rarr;</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Typesetting_an_original_text_and_translation_in_parallel">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

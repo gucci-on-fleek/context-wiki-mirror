@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Formatting a critical apparatus&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Formatting_a_critical_apparatus" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Formatting a critical apparatus
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7531&diff=43251">2026-07-24</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#fff4df; border:1px solid #e5c07b; border-left:5px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.35em; vertical-align:middle;">🚧</span>
+<b>Work in progress.</b> This guide is currently being drafted, corrected, and reviewed.
+Please do not modify the code unless this banner has been removed.
+</p>
+    </div>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">&larr; Guide 1 &mdash; Building a simple critical apparatus</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 2 of 6</b> &middot;
+<a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Next: Guide 3 &mdash; Managing witnesses and textual variants &rarr;</a>
+</p>
+    </div>
+    <p><br>
+This guide shows how to change the appearance of an existing
+<b>critical apparatus</b> without rewriting its editorial entries.
+</p>
+    <p>It assumes that the document already uses a separate apparatus note series and
+a small editorial interface such as:
+</p>
+    <pre>\define[2]\variant
+  {#1\apparatus{{\it #1}] #2}}
+
+\define[2]\reading
+  {#1 {\it #2}}
+
+\define[1]\omission
+  {{\it om.} {\it #1}}
+
+\define[2]\addition
+  {{\it add.} #1 {\it #2}}
+</pre>
+    <p>The editorial commands remain stable throughout the guide. Only the
+typographical setup changes.
+</p>
+    <p>The progression is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Stage
+       </th>
+       <th>
+        Typographical problem
+       </th>
+       <th>
+        Main mechanism
+       </th>
+      </tr>
+      <tr>
+       <td>1
+</td>
+       <td>Distinguish individual entries from the complete apparatus block
+</td>
+       <td><code>\setupnotation</code> and <code>\setupnote</code>
+</td>
+      </tr>
+      <tr>
+       <td>2
+</td>
+       <td>Control entry size, number style, spacing, and continuation lines
+</td>
+       <td>notation settings
+</td>
+      </tr>
+      <tr>
+       <td>3
+</td>
+       <td>Give recurring editorial categories a consistent visual treatment
+</td>
+       <td>named style commands
+</td>
+      </tr>
+      <tr>
+       <td>4
+</td>
+       <td>Separate the apparatus block from the edited text
+</td>
+       <td>block spacing and separator
+</td>
+      </tr>
+      <tr>
+       <td>5
+</td>
+       <td>Reuse the same design throughout a project
+</td>
+       <td>shared setup or environment file
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>For the construction of the apparatus mechanism itself, see
+<a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">Building a simple critical apparatus</a>.
+</p>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Formatting principle.</b> The editorial source describes lemmas, readings,
+omissions, additions, and witness sigla. The formatting setup determines how
+those categories are displayed. A change of design should not require a
+change to the critical data.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Distinguish_entry_design_from_block_design">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Distinguish entry design from block design
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Start_from_a_working_apparatus">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Start from a working apparatus
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Format_individual_entries">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Format individual entries
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#3.1._Set_the_entry_and_number_sizes">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           3.1. Set the entry and number sizes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#3.2._Keep_the_number_close_to_the_entry">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           3.2. Keep the number close to the entry
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#3.3._Control_line_spacing_with_a_named_style">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           3.3. Control line spacing with a named style
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#4._Define_recurring_editorial_styles">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Define recurring editorial styles
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#5._Format_the_complete_apparatus_block">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Format the complete apparatus block
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#5.1._Add_space_above_the_apparatus">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           5.1. Add space above the apparatus
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#5.2._Add_a_separator_rule">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           5.2. Add a separator rule
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#6._Compare_compact_and_spacious_designs">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Compare compact and spacious designs
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#7._Build_the_complete_formatted_apparatus">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Build the complete formatted apparatus
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#8._Reuse_the_setup">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Reuse the setup
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#9._Test_the_design_and_recognize_its_limits">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Test the design and recognize its limits
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#10._Complete_source_and_next_guide">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Complete source and next guide
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#Online_resources">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         Online resources
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._Distinguish_entry_design_from_block_design">
+      1. Distinguish entry design from block design
+     </span>
+    </h2>
+    <p>ConTeXt separates the presentation of individual apparatus entries from the
+presentation of the complete apparatus block.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Controls
+       </th>
+       <th>
+        Typical settings
+       </th>
+      </tr>
+      <tr>
+       <td><code>\setupnotation[apparatus]</code>
+</td>
+       <td>Individual markers and entries
+</td>
+       <td>number style, entry style, width, distance, compact arrangement
+</td>
+      </tr>
+      <tr>
+       <td><code>\setupnote[apparatus]</code>
+</td>
+       <td>Complete apparatus block
+</td>
+       <td>location, space above the block, separator rule
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Use <code>\setupnotation</code> when changing:
+</p>
+    <ul>
+     <li>
+      the size of apparatus entries;
+     </li>
+     <li>
+      the style of entry numbers;
+     </li>
+     <li>
+      the distance between the number and the entry;
+     </li>
+     <li>
+      the horizontal arrangement of number and text.
+     </li>
+    </ul>
+    <p>Use <code>\setupnote</code> when changing:
+</p>
+    <ul>
+     <li>
+      where the apparatus is placed;
+     </li>
+     <li>
+      the space above the collected entries;
+     </li>
+     <li>
+      the separator between the edited text and the apparatus.
+     </li>
+    </ul>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Key distinction.</b> A separator intended for the complete apparatus belongs
+to <code>\setupnote</code>. A setting applied through
+<code>\setupnotation</code> affects individual entries.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Start_from_a_working_apparatus">
+      2. Start from a working apparatus
+     </span>
+    </h2>
+    <p>The following example will be used as the reference source for the guide:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   style<span class="brx">=</span><span class="cs">\tfx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The faculties of the mind do not operate independently.
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>the faculty by which the mind determines concepts<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span>E<span class="br">}</span><span class="br">}</span>
+guides
+<span class="cs">\variant</span>
+  <span class="br">{</span>the understanding<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>human understanding<span class="br">}</span><span class="br">{</span>B<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>the finite understanding<span class="br">}</span><span class="br">{</span>C D<span class="br">}</span>;
+   <span class="cs">\addition</span>
+     <span class="br">{</span>and determines the proper use of experience<span class="br">}</span>
+     <span class="br">{</span>E<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/48d333352fd950cdca29f24a3188f644.webp" width="874">
+     </li>
+    </ul>
+    <p>The apparatus already works. The remaining sections change only its
+presentation.
+</p>
+    <h2>
+     <span class="mw-headline" id="3._Format_individual_entries">
+      3. Format individual entries
+     </span>
+    </h2>
+    <p>The notation setup controls the size, number style, spacing, and horizontal
+arrangement of each entry.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.1._Set_the_entry_and_number_sizes">
+      3.1. Set the entry and number sizes
+     </span>
+    </h3>
+    <p>A critical apparatus is commonly set smaller than the edited text:
+</p>
+    <pre>\setupnotation
+  [apparatus]
+  [style=\tfx]
+</pre>
+    <p>The number can be styled independently:
+</p>
+    <pre>\setupnotation
+  [apparatus]
+  [style=\tfx,
+   numberstyle=\tfxx]
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Setting
+       </th>
+       <th>
+        Effect
+       </th>
+      </tr>
+      <tr>
+       <td><code>style=\tfx</code>
+</td>
+       <td>Sets the apparatus entry in a smaller relative size
+</td>
+      </tr>
+      <tr>
+       <td><code>numberstyle=\tfxx</code>
+</td>
+       <td>Makes the entry number slightly smaller again
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Relative size commands follow the current body font and therefore remain
+proportional if the body font changes.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.2._Keep_the_number_close_to_the_entry">
+      3.2. Keep the number close to the entry
+     </span>
+    </h3>
+    <p>A compact arrangement can be obtained with:
+</p>
+    <pre>\setupnotation
+  [apparatus]
+  [alternative=serried,
+   width=fit,
+   distance=.5em]
+</pre>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Setting
+       </th>
+       <th>
+        Function
+       </th>
+      </tr>
+      <tr>
+       <td><code>alternative=serried</code>
+</td>
+       <td>Places the number and entry in a compact sequence
+</td>
+      </tr>
+      <tr>
+       <td><code>width=fit</code>
+</td>
+       <td>Gives the number only the width it requires
+</td>
+      </tr>
+      <tr>
+       <td><code>distance=.5em</code>
+</td>
+       <td>Sets the space between number and entry
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The combined notation setup becomes:
+</p>
+    <pre>\setupnotation
+  [apparatus]
+  [way=bypage,
+   numberconversion=numbers,
+   alternative=serried,
+   width=fit,
+   distance=.5em,
+   style=\tfx,
+   numberstyle=\tfxx]
+</pre>
+    <h3>
+     <span class="mw-headline" id="3.3._Control_line_spacing_with_a_named_style">
+      3.3. Control line spacing with a named style
+     </span>
+    </h3>
+    <p>Font size and line spacing are separate choices. A named style keeps them
+together:
+</p>
+    <pre>\define\apparatusstyle
+  {\tfx
+   \setupinterlinespace[small]}
+
+\setupnotation
+  [apparatus]
+  [style=\apparatusstyle]
+</pre>
+    <p>A more spacious proof setting can be obtained by changing only the style:
+</p>
+    <pre>\define\apparatusstyle
+  {\tfx
+   \setupinterlinespace[medium]}
+</pre>
+    <p>The editorial entries remain unchanged.
+</p>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Testing requirement.</b> A one-line entry does not reveal whether a design is
+robust. Test long entries, continuation lines, long witness lists, and both
+one-digit and two-digit entry numbers.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Define_recurring_editorial_styles">
+      4. Define recurring editorial styles
+     </span>
+    </h2>
+    <p>The apparatus contains recurring categories whose appearance should be
+controlled globally.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Editorial category
+       </th>
+       <th>
+        Possible treatment
+       </th>
+      </tr>
+      <tr>
+       <td>Lemma
+</td>
+       <td>italic or another clearly distinguished style
+</td>
+      </tr>
+      <tr>
+       <td>Alternative reading
+</td>
+       <td>upright type
+</td>
+      </tr>
+      <tr>
+       <td>Editorial abbreviation
+</td>
+       <td>italic
+</td>
+      </tr>
+      <tr>
+       <td>Witness siglum
+</td>
+       <td>italic, bold, or small capitals
+</td>
+      </tr>
+      <tr>
+       <td>Editor responsible for a conjecture
+</td>
+       <td>a style distinct from witness sigla
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>Define one command for each recurring category:
+</p>
+    <pre>\define[1]\lemmastyle
+  {{\it #1}}
+
+\define[1]\witnesses
+  {{\it #1}}
+
+\define[1]\editorname
+  {{\sc #1}}
+</pre>
+    <p>Then use those commands inside the editorial interface:
+</p>
+    <pre>\define[2]\variant
+  {#1\apparatus{\lemmastyle{#1}] #2}}
+
+\define[2]\reading
+  {#1 \witnesses{#2}}
+
+\define[1]\omission
+  {{\it om.} \witnesses{#1}}
+
+\define[2]\addition
+  {{\it add.} #1 \witnesses{#2}}
+</pre>
+    <p>To change every witness siglum from italics to bold, redefine only:
+</p>
+    <pre>\define[1]\witnesses
+  {{\bf #1}}
+</pre>
+    <p>In this guide, <code>\witnesses</code> formats material already supplied by
+the editor. It does not declare, resolve, or validate witness identifiers.
+</p>
+    <div style="background:#f7f3fb; border-left:4px solid #7b5a9e; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Design principle.</b> A typographical command should represent a recurring
+editorial category. Avoid scattering local font switches throughout the
+critical source.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Format_the_complete_apparatus_block">
+      5. Format the complete apparatus block
+     </span>
+    </h2>
+    <p>The complete block is controlled through <code>\setupnote</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.1._Add_space_above_the_apparatus">
+      5.1. Add space above the apparatus
+     </span>
+    </h3>
+    <p>A simple visual separation is:
+</p>
+    <pre>\setupnote
+  [apparatus]
+  [location=page,
+   before=\blank[medium]]
+</pre>
+    <p>The amount of space depends on page size, body font, and apparatus density.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.2._Add_a_separator_rule">
+      5.2. Add a separator rule
+     </span>
+    </h3>
+    <p>A rule can be requested at block level:
+</p>
+    <pre>\setupnote
+  [apparatus]
+  [location=page,
+   before=\blank[small],
+   rule=on]
+</pre>
+    <p>The rule should appear once above the collected apparatus entries.
+</p>
+    <p>A custom separator can be defined separately:
+</p>
+    <pre>\define\apparatusseparator
+  {\blackrule
+     [width=3cm,
+      height=.4pt]}
+</pre>
+    <p>and assigned to the apparatus block:
+</p>
+    <pre>\setupnote
+  [apparatus]
+  [location=page,
+   before=\blank[medium],
+   rule=command,
+   rulecommand=\apparatusseparator]
+</pre>
+    <p>This keeps the responsibilities distinct:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Element
+       </th>
+       <th>
+        Controlled by
+       </th>
+      </tr>
+      <tr>
+       <td>Space above the apparatus
+</td>
+       <td><code>before=\blank[...]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Shape of the separator
+</td>
+       <td><code>\apparatusseparator</code>
+</td>
+      </tr>
+      <tr>
+       <td>Individual entries
+</td>
+       <td><code>\setupnotation[apparatus]</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#fff8e8; border-left:4px solid #c89a35; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Version check.</b> Custom note-rule interfaces may vary between ConTeXt
+releases. Compile this setup with the ConTeXt version intended for publication
+before adopting it throughout a project.
+</p>
+    </div>
+    <p>Do not attach the block separator to every entry:
+</p>
+    <pre>% Wrong level for a single apparatus separator.
+\setupnotation
+  [apparatus]
+  [before=\apparatusseparator]
+</pre>
+    <p>That would risk placing a separator before each individual entry rather than
+once above the complete block.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Compare_compact_and_spacious_designs">
+      6. Compare compact and spacious designs
+     </span>
+    </h2>
+    <p>The same editorial source can support different typographical purposes.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Setting
+       </th>
+       <th>
+        Compact publication design
+       </th>
+       <th>
+        Spacious proof design
+       </th>
+      </tr>
+      <tr>
+       <td>Interline spacing
+</td>
+       <td><code>small</code>
+</td>
+       <td><code>medium</code>
+</td>
+      </tr>
+      <tr>
+       <td>Number distance
+</td>
+       <td><code>.5em</code>
+</td>
+       <td><code>.8em</code>
+</td>
+      </tr>
+      <tr>
+       <td>Number size
+</td>
+       <td><code>\tfxx</code>
+</td>
+       <td><code>\tfx</code>
+</td>
+      </tr>
+      <tr>
+       <td>Purpose
+</td>
+       <td>save space while remaining readable
+</td>
+       <td>make variants easier to inspect
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>A compact setup:
+</p>
+    <pre>\define\apparatusstyle
+  {\tfx
+   \setupinterlinespace[small]}
+
+\setupnotation
+  [apparatus]
+  [alternative=serried,
+   width=fit,
+   distance=.5em,
+   style=\apparatusstyle,
+   numberstyle=\tfxx]
+</pre>
+    <p>A more spacious setup:
+</p>
+    <pre>\define\apparatusstyle
+  {\tfx
+   \setupinterlinespace[medium]}
+
+\setupnotation
+  [apparatus]
+  [alternative=serried,
+   width=fit,
+   distance=.8em,
+   style=\apparatusstyle,
+   numberstyle=\tfx]
+</pre>
+    <p>Neither setup requires rewriting:
+</p>
+    <pre>\variant
+  {Reason}
+  {\reading{Judgment}{B D};
+   \omission{E}}
+</pre>
+    <h2>
+     <span class="mw-headline" id="7._Build_the_complete_formatted_apparatus">
+      7. Build the complete formatted apparatus
+     </span>
+    </h2>
+    <p>The following example combines the principal settings developed in this guide:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,11pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle,
+   backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>0mm,
+   footer<span class="brx">=</span>10mm<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definenote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\apparatusseparator</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\blackrule</span></span>
+     <span class="brx">[</span>width<span class="brx">=</span>3cm,
+      height<span class="brx">=</span>.4pt<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupnote</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>page,
+   before<span class="brx">=</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span>,
+   rule<span class="brx">=</span>command,
+   rulecommand<span class="brx">=</span><span class="cs">\apparatusseparator</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\apparatusstyle</span>
+  <span class="br">{</span><span class="cs">\tfx</span>
+   <span class="cs"><span class="stylecs">\setupinterlinespace</span></span><span class="brx">[</span>small<span class="brx">]</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setupnotation</span></span>
+  <span class="brx">[</span>apparatus<span class="brx">]</span>
+  <span class="brx">[</span>way<span class="brx">=</span>bypage,
+   numberconversion<span class="brx">=</span>numbers,
+   alternative<span class="brx">=</span>serried,
+   width<span class="brx">=</span>fit,
+   distance<span class="brx">=</span>.5em,
+   style<span class="brx">=</span><span class="cs">\apparatusstyle</span>,
+   numberstyle<span class="brx">=</span><span class="cs">\tfxx</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\lemmastyle</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\witnesses</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> <span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\variant</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs">\apparatus</span><span class="br">{</span><span class="cs">\lemmastyle</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="brx">]</span> <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\reading</span>
+  <span class="br">{</span><span class="brx">#</span>1 <span class="cs">\witnesses</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\omission</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> om.<span class="br">}</span> <span class="cs">\witnesses</span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\addition</span>
+  <span class="br">{</span><span class="br">{</span><span class="cs">\it</span> add.<span class="br">}</span> <span class="brx">#</span>1 <span class="cs">\witnesses</span><span class="br">{</span><span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The faculties of the mind do not operate independently.
+<span class="cs">\variant</span>
+  <span class="br">{</span>Reason<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>Judgment<span class="br">}</span><span class="br">{</span>B D<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>the faculty by which the mind determines concepts<span class="br">}</span><span class="br">{</span>C<span class="br">}</span>;
+   <span class="cs">\omission</span><span class="br">{</span>E<span class="br">}</span><span class="br">}</span>
+guides
+<span class="cs">\variant</span>
+  <span class="br">{</span>the understanding<span class="br">}</span>
+  <span class="br">{</span><span class="cs">\reading</span><span class="br">{</span>human understanding<span class="br">}</span><span class="br">{</span>B<span class="br">}</span>;
+   <span class="cs">\reading</span><span class="br">{</span>the finite understanding<span class="br">}</span><span class="br">{</span>C D<span class="br">}</span>;
+   <span class="cs">\addition</span>
+     <span class="br">{</span>and determines the proper use of experience<span class="br">}</span>
+     <span class="br">{</span>E<span class="br">}</span><span class="br">}</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/4b8876a5800c1b3545c6c75ddcc18a83.webp" width="874">
+     </li>
+    </ul>
+    <p>The example separates three levels:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Level
+       </th>
+       <th>
+        Commands
+       </th>
+      </tr>
+      <tr>
+       <td>Editorial source
+</td>
+       <td><code>\variant</code>, <code>\reading</code>, <code>\omission</code>, <code>\addition</code>
+</td>
+      </tr>
+      <tr>
+       <td>Entry design
+</td>
+       <td><code>\setupnotation[apparatus]</code>, <code>\apparatusstyle</code>, and category styles
+</td>
+      </tr>
+      <tr>
+       <td>Block design
+</td>
+       <td><code>\setupnote[apparatus]</code> and <code>\apparatusseparator</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="8._Reuse_the_setup">
+      8. Reuse the setup
+     </span>
+    </h2>
+    <p>A larger project should not repeat the complete apparatus setup in every
+component.
+</p>
+    <p>The apparatus definitions can be moved into a separate environment file, for
+example:
+</p>
+    <pre>env-critical-apparatus.mkxl
+</pre>
+    <p>The document then loads it with:
+</p>
+    <pre>\environment env-critical-apparatus
+</pre>
+    <p>The environment contains the shared definitions and settings, but normally
+not <code>\starttext</code> or <code>\stoptext</code>.
+</p>
+    <p>A minimal organization is:
+</p>
+    <pre>project/
+&boxvr;&boxh;&boxh; env-critical-apparatus.mkxl
+&boxvr;&boxh;&boxh; main.mkxl
+&boxvr;&boxh;&boxh; chapter-01.tex
+&boxur;&boxh;&boxh; chapter-02.tex
+</pre>
+    <p>If a component is compiled from another directory, the relative path must be
+stated explicitly unless that directory is already part of ConTeXt's search
+path. For example:
+</p>
+    <pre>\environment ../env/env-critical-apparatus.mkxl
+</pre>
+    <div style="background:#eef6ff; border-left:4px solid #4479a6; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Practical consequence.</b> Changing the apparatus design in one shared
+environment changes every document that loads it. The individual components
+do not need to be edited.
+</p>
+    </div>
+    <p>The detailed organization of projects, products, components, and environments
+belongs to project management rather than to apparatus formatting. This guide
+therefore limits itself to the principle of reusable shared setup.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Test_the_design_and_recognize_its_limits">
+      9. Test the design and recognize its limits
+     </span>
+    </h2>
+    <p>A formatting setup should be tested on representative pages from the real
+edition.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Test case
+       </th>
+       <th>
+        What to inspect
+       </th>
+      </tr>
+      <tr>
+       <td>One short entry
+</td>
+       <td>basic number and text spacing
+</td>
+      </tr>
+      <tr>
+       <td>Several consecutive entries
+</td>
+       <td>consistency and density
+</td>
+      </tr>
+      <tr>
+       <td>One long wrapped entry
+</td>
+       <td>continuation-line alignment
+</td>
+      </tr>
+      <tr>
+       <td>Two-digit entry numbers
+</td>
+       <td>number width and distance
+</td>
+      </tr>
+      <tr>
+       <td>Long witness lists or additions
+</td>
+       <td>line breaking and readability
+</td>
+      </tr>
+      <tr>
+       <td>Ordinary footnotes and apparatus entries on one page
+</td>
+       <td>separation between note systems
+</td>
+      </tr>
+      <tr>
+       <td>Dense recto and verso pages
+</td>
+       <td>page balance and available text area
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The present approach still has structural limits:
+</p>
+    <ul>
+     <li>
+      witness sigla remain literal text;
+     </li>
+     <li>
+      readings are not stored as independent records;
+     </li>
+     <li>
+      several apparatus layers require separate note series;
+     </li>
+     <li>
+      parallel layouts require further testing;
+     </li>
+     <li>
+      typography cannot validate, sort, or filter critical records.
+     </li>
+    </ul>
+    <p>For these later stages, see:
+</p>
+    <ul>
+     <li>
+      <a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">
+       Managing witnesses and textual variants
+      </a>
+      ;
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+      ;
+     </li>
+     <li>
+      <a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">
+       Typesetting an original text and translation in parallel
+      </a>
+      ;
+     </li>
+     <li>
+      <a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">
+       Managing structured critical data with Lua
+      </a>
+      .
+     </li>
+    </ul>
+    <div style="background:#f4f8ee; border-left:4px solid #6f8d45; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>What this guide has established.</b> The editorial commands can remain stable
+while entry size, number style, spacing, witness styling, continuation lines,
+and the complete apparatus block are controlled independently.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Complete_source_and_next_guide">
+      10. Complete source and next guide
+     </span>
+    </h2>
+    <p>The complete source is the MWE given in
+<a href="#7._Build_the_complete_formatted_apparatus">Section 7</a>.
+</p>
+    <p>Readers following the collection in order should continue with
+<a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Guide 3: Managing witnesses and textual variants</a>.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Next task
+       </th>
+       <th>
+        Continue with
+       </th>
+      </tr>
+      <tr>
+       <td>Build the apparatus mechanism itself
+</td>
+       <td><a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">Guide 1</a>
+</td>
+      </tr>
+      <tr>
+       <td>Declare witnesses and manage textual operations
+</td>
+       <td><a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Guide 3</a>
+</td>
+      </tr>
+      <tr>
+       <td>Create several independent critical layers
+</td>
+       <td><a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">Guide 4</a>
+</td>
+      </tr>
+      <tr>
+       <td>Compose an original text and translation in parallel
+</td>
+       <td><a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">Guide 5</a>
+</td>
+      </tr>
+      <tr>
+       <td>Sort, filter, and validate structured critical records
+</td>
+       <td><a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">Guide 6</a>
+</td>
+      </tr>
+      <tr>
+       <td>Process an edition encoded in TEI XML
+</td>
+       <td><a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Building critical editions from TEI XML</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="Online_resources">
+      Online resources
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Command/setupnotation.html" title="Command/setupnotation">
+       Command/setupnotation
+      </a>
+      &mdash; entry markers, number styles, width, distance, and alternatives;
+     </li>
+     <li>
+      <a href="Command/setupnote.html" title="Command/setupnote">
+       Command/setupnote
+      </a>
+      &mdash; placement, spacing, and block-level separators;
+     </li>
+     <li>
+      <a href="Command/definenote.html" title="Command/definenote">
+       Command/definenote
+      </a>
+      &mdash; definition of the apparatus note series;
+     </li>
+     <li>
+      <a class="new" href="index.php?title=References,_notes,_indexes,_and_floats/Footnotes&action=edit&redlink=1.html" title="References, notes, indexes, and floats/Footnotes (page does not exist)">
+       Footnotes
+      </a>
+      &mdash; general note design and placement.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">
+       Glossary of critical edition terms
+      </a>
+     </li>
+     <li>
+      <a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">
+       Building a simple critical apparatus
+      </a>
+     </li>
+     <li>
+      <a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">
+       Managing witnesses and textual variants
+      </a>
+     </li>
+     <li>
+      <a href="Using_multiple_apparatus_layers.html" title="Using multiple apparatus layers">
+       Using multiple apparatus layers
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_an_original_text_and_translation_in_parallel.html" title="Typesetting an original text and translation in parallel">
+       Typesetting an original text and translation in parallel
+      </a>
+     </li>
+     <li>
+      <a href="Managing_structured_critical_data_with_Lua.html" title="Managing structured critical data with Lua">
+       Managing structured critical data with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">
+       Building critical editions from TEI XML
+      </a>
+     </li>
+    </ul>
+    <div style="background:#f3f6f9; border:1px solid #c8d1da; padding:0.65em 0.9em; margin:1em 0;">
+     <p><b>Critical apparatus guides:</b>
+<a href="Building_a_simple_critical_apparatus.html" title="Building a simple critical apparatus">&larr; Guide 1 &mdash; Building a simple critical apparatus</a> &middot;
+<a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Orientation</a> &middot;
+<a href="Glossary_of_critical_edition_terms.html" title="Glossary of critical edition terms">Glossary</a> &middot;
+<b>Guide 2 of 6</b> &middot;
+<a href="Managing_witnesses_and_textual_variants.html" title="Managing witnesses and textual variants">Next: Guide 3 &mdash; Managing witnesses and textual variants &rarr;</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Formatting_a_critical_apparatus">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

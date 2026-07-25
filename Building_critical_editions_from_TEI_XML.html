@@ -1,0 +1,1880 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="style.css" rel="stylesheet">
+  <link href="favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Building critical editions from TEI XML&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Building_critical_editions_from_TEI_XML" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Building critical editions from TEI XML
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7527&diff=43167">2026-07-22</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="margin: 0 0 1.2em 0; padding: 0.75em 1em; border: 1px solid #d6b656; background: #fff4cc; text-align: center;">
+     <p><b>🚧 Work in progress: please do not modify this page while this banner is displayed.</b>
+</p>
+    </div>
+    <div style="margin: 0 0 1.5em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+     <p><b>Building critical editions from TEI XML with ConTeXt</b>
+</p>
+     <p><a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
+&nbsp;&middot;&nbsp;
+<b>Start with:</b> <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Guide 1</a>
+&nbsp;&middot;&nbsp;
+<b>Final guide:</b> <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Guide 6</a>
+&nbsp;&middot;&nbsp;
+<b>ConTeXt-only route:</b> <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Building a critical apparatus with ConTeXt</a>
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._From_notes_to_critical_apparatuses">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. From notes to critical apparatuses
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#1.1._What_is_a_note.3F">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           1.1. What is a note?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#1.2._What_is_a_critical_apparatus.3F">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           1.2. What is a critical apparatus?
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#2._The_apparatus_as_structured_editorial_information">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. The apparatus as structured editorial information
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#2.1._Description_and_presentation">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Description and presentation
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#2.2._Why_not_store_only_the_printed_apparatus.3F">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           2.2. Why not store only the printed apparatus?
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#3._Why_TEI_XML_is_useful">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Why TEI XML is useful
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#3.1._What_XML_contributes">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           3.1. What XML contributes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#3.2._What_TEI_adds_to_XML">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           3.2. What TEI adds to XML
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#4._Processing_and_typesetting">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Processing and typesetting
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#4.1._What_Lua_does_between_TEI_and_ConTeXt">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           4.1. What Lua does between TEI and ConTeXt
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#4.2._What_ConTeXt_contributes">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           4.2. What ConTeXt contributes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#4.3._Complementary_responsibilities">
+          <span class="tocnumber">
+           4.3
+          </span>
+          <span class="toctext">
+           4.3. Complementary responsibilities
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#4.4._From_the_note_area_to_a_model_of_textual_variation">
+          <span class="tocnumber">
+           4.4
+          </span>
+          <span class="toctext">
+           4.4. From the note area to a model of textual variation
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#5._How_to_use_this_collection">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. How to use this collection
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#5.1._Glossary">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           5.1. Glossary
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#6._The_six_guides">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. The six guides
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#6.1._Guide_1:_Understanding_TEI_documents_for_critical_editions">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           6.1. Guide 1: Understanding TEI documents for critical editions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#6.2._Guide_2:_Declaring_witnesses_in_TEI_critical_editions">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           6.2. Guide 2: Declaring witnesses in TEI critical editions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#6.3._Guide_3:_Encoding_a_basic_critical_apparatus_in_TEI">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           6.3. Guide 3: Encoding a basic critical apparatus in TEI
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#6.4._Guide_4:_Encoding_complex_textual_variation_in_TEI">
+          <span class="tocnumber">
+           6.4
+          </span>
+          <span class="toctext">
+           6.4. Guide 4: Encoding complex textual variation in TEI
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#6.5._Guide_5:_Processing_TEI_critical_apparatus_data_with_Lua">
+          <span class="tocnumber">
+           6.5
+          </span>
+          <span class="toctext">
+           6.5. Guide 5: Processing TEI critical apparatus data with Lua
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#6.6._Guide_6:_Typesetting_a_TEI_critical_apparatus_with_ConTeXt">
+          <span class="tocnumber">
+           6.6
+          </span>
+          <span class="toctext">
+           6.6. Guide 6: Typesetting a TEI critical apparatus with ConTeXt
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#7._Where_should_I_begin.3F">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Where should I begin?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-25">
+       <a href="#8._The_collection_as_a_layered_workflow">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. The collection as a layered workflow
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-26">
+       <a href="#9._Scope_and_limits_of_the_collection">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Scope and limits of the collection
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-27">
+       <a href="#Related_pages">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         Related pages
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <p>A critical edition is both a work of textual scholarship and a work of
+publication.
+</p>
+    <p>The editor studies the surviving forms of a text, compares their readings,
+identifies agreements and differences, and decides how this evidence should
+be represented. The resulting information must then be organised,
+verified, and presented to the reader in a usable form.
+</p>
+    <p>At first sight, this may appear to be mainly a problem of notes. Critical
+apparatus entries are often printed at the bottom of the page, and ConTeXt
+provides powerful mechanisms for placing and formatting such material.
+</p>
+    <p>But a critical apparatus is not merely a specialised footnote system.
+</p>
+    <p>To understand why TEI XML becomes relevant, it is necessary to distinguish
+progressively between:
+</p>
+    <pre>note
+  &rarr; critical apparatus
+    &rarr; structured editorial data
+      &rarr; XML
+        &rarr; TEI
+          &rarr; Lua processing
+            &rarr; ConTeXt typesetting
+</pre>
+    <p>This page introduces those stages and explains how they belong together. It
+then directs readers to a glossary and to six specialised guides.
+</p>
+    <h2>
+     <span class="mw-headline" id="1._From_notes_to_critical_apparatuses">
+      1. From notes to critical apparatuses
+     </span>
+    </h2>
+    <p>ConTeXt provides a wide range of mechanisms for placing annotations outside
+the main flow of a text. Notes may appear at the bottom of the page, at the
+end of a chapter or document, in the margin, in parallel columns, or in
+separately collected lists.
+</p>
+    <p>From a typographical point of view, a critical apparatus may therefore seem
+to belong to the same general family of objects as footnotes and endnotes: a
+sign or a passage in the text directs the reader to information placed
+elsewhere on the page or in the document.
+</p>
+    <p>This similarity is real, but only partial.
+</p>
+    <h3>
+     <span id="1.1._What_is_a_note?">
+     </span>
+     <span class="mw-headline" id="1.1._What_is_a_note.3F">
+      1.1. What is a note?
+     </span>
+    </h3>
+    <p>An ordinary note is usually attached to a point in the text and contains a
+relatively independent piece of information. It may provide:
+</p>
+    <ul>
+     <li>
+      a comment;
+     </li>
+     <li>
+      a reference;
+     </li>
+     <li>
+      an explanation;
+     </li>
+     <li>
+      a translation;
+     </li>
+     <li>
+      a bibliographical indication;
+     </li>
+     <li>
+      an editorial observation.
+     </li>
+    </ul>
+    <p>For example:
+</p>
+    <pre>The date of the first edition remains uncertain.&sup1;
+
+1. The surviving title page may belong to a later issue.
+</pre>
+    <p>The note is related to the main text, but its contents can generally be read
+as a separate statement.
+</p>
+    <h3>
+     <span id="1.2._What_is_a_critical_apparatus?">
+     </span>
+     <span class="mw-headline" id="1.2._What_is_a_critical_apparatus.3F">
+      1.2. What is a critical apparatus?
+     </span>
+    </h3>
+    <p>A critical apparatus records textual variation.
+</p>
+    <p>Suppose that three witnesses preserve different forms of the same sentence:
+</p>
+    <pre>A  The mind seeks unity.
+B  The soul seeks unity.
+C  The mind desires unity.
+</pre>
+    <p>An editor who prints the text of witness A might produce the following
+apparatus entries:
+</p>
+    <pre>mind] soul B
+seeks] desires C
+</pre>
+    <p>These entries may occupy the same physical area as footnotes, but they do not
+have the same internal structure.
+</p>
+    <p>An ordinary note generally adds a comment to a passage. A critical apparatus
+entry records a structured relationship between several textual forms.
+</p>
+    <p>It may:
+</p>
+    <ul>
+     <li>
+      identify a lemma;
+     </li>
+     <li>
+      delimit the extent of the passage concerned;
+     </li>
+     <li>
+      list one or more variant readings;
+     </li>
+     <li>
+      associate those readings with witnesses;
+     </li>
+     <li>
+      distinguish corrections from original readings;
+     </li>
+     <li>
+      identify omissions, additions, or transpositions;
+     </li>
+     <li>
+      apply editorial conventions determined by the nature of the edition.
+     </li>
+    </ul>
+    <p>The problem is therefore not only where the note should be placed.
+</p>
+    <p>It is also how the textual evidence should be represented.
+</p>
+    <h2>
+     <span class="mw-headline" id="2._The_apparatus_as_structured_editorial_information">
+      2. The apparatus as structured editorial information
+     </span>
+    </h2>
+    <p>Consider the compact apparatus entry:
+</p>
+    <pre>mind] soul B
+</pre>
+    <p>A reader familiar with critical editions may understand that:
+</p>
+    <ul>
+     <li>
+      <code>mind</code>
+      is the lemma printed in the edited text;
+     </li>
+     <li>
+      <code>soul</code>
+      is a variant reading;
+     </li>
+     <li>
+      <code>B</code>
+      is the witness that supports the variant.
+     </li>
+    </ul>
+    <p>These relationships are expressed through typographical convention. They are
+not explicitly identified within the printed character string.
+</p>
+    <p>A fuller description of the same entry would be:
+</p>
+    <pre>apparatus entry
+&boxvr;&boxh;&boxh; lemma
+&boxv;   &boxvr;&boxh;&boxh; text: mind
+&boxv;   &boxur;&boxh;&boxh; witness: A
+&boxur;&boxh;&boxh; variant reading
+    &boxvr;&boxh;&boxh; text: soul
+    &boxur;&boxh;&boxh; witness: B
+</pre>
+    <p>The compact printed form and the expanded description contain related
+information, but they serve different purposes.
+</p>
+    <p>The first is designed for economical reading on a printed page.
+</p>
+    <p>The second reveals the internal structure of the editorial record.
+</p>
+    <p>This distinction becomes increasingly important when an edition contains
+hundreds or thousands of variants, several classes of witnesses, multiple
+apparatuses, or several intended forms of publication.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.1._Description_and_presentation">
+      2.1. Description and presentation
+     </span>
+    </h3>
+    <p>ConTeXt can handle the typographical side of a critical edition:
+</p>
+    <ul>
+     <li>
+      lineation;
+     </li>
+     <li>
+      note and apparatus placement;
+     </li>
+     <li>
+      paragraph formatting;
+     </li>
+     <li>
+      witness sigla;
+     </li>
+     <li>
+      compact apparatus entries;
+     </li>
+     <li>
+      multiple note series;
+     </li>
+     <li>
+      parallel texts;
+     </li>
+     <li>
+      the visual relationship between the edited text and its apparatus.
+     </li>
+    </ul>
+    <p>A critical edition also requires a way to describe the underlying textual
+relations independently of their final appearance.
+</p>
+    <p>This is where structured data become useful.
+</p>
+    <p>The combination of structured data and ConTeXt separates two operations that
+are often mixed together in a manually prepared edition:
+</p>
+    <ul>
+     <li>
+      the scholarly description of the text and its variants;
+     </li>
+     <li>
+      the typographical presentation of the resulting edition.
+     </li>
+    </ul>
+    <p>This separation does not imply that the two operations are unrelated.
+</p>
+    <p>Editorial interpretation determines what must be displayed. Typographical
+design determines how readers can perceive the relationships established by
+the editor.
+</p>
+    <p>The two layers cooperate, but they do not perform the same task.
+</p>
+    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
+     <p><b>Guiding principle.</b> The TEI source records the editorial relationships; ConTeXt determines how those relationships are presented. Separating description from presentation makes the edition easier to verify, transform, and redesign.
+</p>
+    </div>
+    <h3>
+     <span id="2.2._Why_not_store_only_the_printed_apparatus?">
+     </span>
+     <span class="mw-headline" id="2.2._Why_not_store_only_the_printed_apparatus.3F">
+      2.2. Why not store only the printed apparatus?
+     </span>
+    </h3>
+    <p>An apparatus entry can be written directly as a formatted character string:
+</p>
+    <pre>mind] soul B; understanding C
+</pre>
+    <p>For a small edition, this may be entirely sufficient.
+</p>
+    <p>For a larger or reusable edition, however, the editor may later need to:
+</p>
+    <ul>
+     <li>
+      produce a positive apparatus instead of a negative apparatus;
+     </li>
+     <li>
+      suppress readings belonging to a particular class of witnesses;
+     </li>
+     <li>
+      produce a reading text without an apparatus;
+     </li>
+     <li>
+      create a diplomatic or synoptic presentation;
+     </li>
+     <li>
+      generate an HTML edition;
+     </li>
+     <li>
+      list every reading supported by one witness;
+     </li>
+     <li>
+      detect references to witnesses that have not been declared;
+     </li>
+     <li>
+      alter the order or typography of witness sigla;
+     </li>
+     <li>
+      reuse the same data in another publication.
+     </li>
+    </ul>
+    <p>If the editorial information exists only as a preformatted string, such
+operations require the string to be interpreted or rewritten.
+</p>
+    <p>If the lemma, readings, and witnesses have been recorded as distinct
+components, the same information can be transformed into several forms.
+</p>
+    <p>For example, one structured record might produce:
+</p>
+    <pre>mind] soul B; understanding C
+</pre>
+    <p>or:
+</p>
+    <pre>mind A] soul B; understanding C
+</pre>
+    <p>or:
+</p>
+    <pre>Witness B reads &ldquo;soul&rdquo;, while witness C reads &ldquo;understanding&rdquo;,
+instead of &ldquo;mind&rdquo;.
+</pre>
+    <p>The editorial data remain the same. The rules of presentation change.
+</p>
+    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
+     <p><b>Do not encode typography as evidence.</b> A string such as <code>mind] soul B</code> is a useful printed result, but it is a poor substitute for separately encoded lemmas, readings, and witness references.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Why_TEI_XML_is_useful">
+      3. Why TEI XML is useful
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="3.1._What_XML_contributes">
+      3.1. What XML contributes
+     </span>
+    </h3>
+    <p>XML stands for <i>Extensible Markup Language</i>.
+</p>
+    <p>XML is not a theory of textual criticism and does not by itself define a
+critical apparatus. It provides a general syntax for identifying the
+components of structured information.
+</p>
+    <p>For example:
+</p>
+    <pre>&lt;reading witness="B"&gt;soul&lt;/reading&gt;
+</pre>
+    <p>This markup identifies:
+</p>
+    <ul>
+     <li>
+      the textual content of the reading;
+     </li>
+     <li>
+      the witness associated with that reading.
+     </li>
+    </ul>
+    <p>XML documents are constructed from elements, attributes, textual content,
+and hierarchical relationships.
+</p>
+    <p>An imaginary XML representation of an apparatus entry might therefore be:
+</p>
+    <pre>&lt;apparatus&gt;
+  &lt;lemma witness="A"&gt;mind&lt;/lemma&gt;
+  &lt;reading witness="B"&gt;soul&lt;/reading&gt;
+&lt;/apparatus&gt;
+</pre>
+    <p>This is structured XML, but it is not yet TEI.
+</p>
+    <p>XML tells us how a vocabulary may be written. It does not determine which
+vocabulary textual editors should use.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.2._What_TEI_adds_to_XML">
+      3.2. What TEI adds to XML
+     </span>
+    </h3>
+    <p>TEI stands for the <i>Text Encoding Initiative</i>.
+</p>
+    <p>The TEI Guidelines define a shared vocabulary and a set of recommendations
+for representing texts and textual scholarship in XML.
+</p>
+    <p>The expression <i>TEI XML</i> therefore combines two levels:
+</p>
+    <ul>
+     <li>
+      XML provides the general markup syntax;
+     </li>
+     <li>
+      TEI provides the scholarly vocabulary and encoding model.
+     </li>
+    </ul>
+    <p>TEI does not treat a variant reading as an already formatted footnote. It
+represents it as structured data.
+</p>
+    <p>A critical passage may be encoded with:
+</p>
+    <ul>
+     <li>
+      an apparatus entry;
+     </li>
+     <li>
+      a lemma;
+     </li>
+     <li>
+      one or more readings;
+     </li>
+     <li>
+      references to the witnesses that support them.
+     </li>
+    </ul>
+    <p>A basic TEI apparatus entry may look like this:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
+  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+  &lt;rdg wit="#ed-C"&gt;understanding&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>Here:
+</p>
+    <ul>
+     <li>
+      <code>&lt;app&gt;</code>
+      represents the apparatus entry;
+     </li>
+     <li>
+      <code>&lt;lem&gt;</code>
+      represents the lemma;
+     </li>
+     <li>
+      <code>&lt;rdg&gt;</code>
+      represents a variant reading;
+     </li>
+     <li>
+      <code>#ms-A</code>
+      ,
+      <code>#ms-B</code>
+      , and
+      <code>#ed-C</code>
+      refer to witness declarations elsewhere in the TEI document.
+     </li>
+    </ul>
+    <p>The same encoded information can be used to produce different outputs:
+</p>
+    <ul>
+     <li>
+      a diplomatic transcription;
+     </li>
+     <li>
+      a reading text;
+     </li>
+     <li>
+      a positive apparatus;
+     </li>
+     <li>
+      a negative apparatus;
+     </li>
+     <li>
+      a synoptic presentation;
+     </li>
+     <li>
+      an HTML edition;
+     </li>
+     <li>
+      a typeset PDF.
+     </li>
+    </ul>
+    <p>TEI describes the textual relationships. It does not prescribe one final
+visual form for them.
+</p>
+    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
+     <p><b>Why TEI rather than arbitrary XML?</b> TEI supplies a documented scholarly vocabulary and a shared structural model. This allows the encoded apparatus to be understood, validated, and reused beyond the conventions of one private file.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Processing_and_typesetting">
+      4. Processing and typesetting
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="4.1._What_Lua_does_between_TEI_and_ConTeXt">
+      4.1. What Lua does between TEI and ConTeXt
+     </span>
+    </h3>
+    <p>A TEI document contains structured editorial information, but that information
+does not automatically determine the exact form of the printed edition.
+</p>
+    <p>Before typesetting, the data may need to be:
+</p>
+    <ul>
+     <li>
+      selected;
+     </li>
+     <li>
+      checked;
+     </li>
+     <li>
+      grouped;
+     </li>
+     <li>
+      sorted;
+     </li>
+     <li>
+      reformulated;
+     </li>
+     <li>
+      converted into typographical structures.
+     </li>
+    </ul>
+    <p>Lua is integrated into LuaMetaTeX and is therefore directly available to
+ConTeXt.
+</p>
+    <p>It can be used to:
+</p>
+    <ul>
+     <li>
+      inspect XML elements and attributes;
+     </li>
+     <li>
+      resolve references to witnesses;
+     </li>
+     <li>
+      collect readings belonging to an apparatus entry;
+     </li>
+     <li>
+      apply a project-specific order to witness sigla;
+     </li>
+     <li>
+      distinguish classes of readings;
+     </li>
+     <li>
+      detect missing or inconsistent data;
+     </li>
+     <li>
+      generate different forms of apparatus from the same source;
+     </li>
+     <li>
+      pass the processed information to ConTeXt.
+     </li>
+    </ul>
+    <p>Lua should not be understood as a substitute for TEI.
+</p>
+    <p>TEI records the editorial structures. Lua processes them.
+</p>
+    <p>Nor does Lua replace ConTeXt. ConTeXt remains responsible for the composition
+and visual presentation of the edition.
+</p>
+    <p>The general workflow is therefore:
+</p>
+    <pre>TEI XML source
+      &darr;
+selection and transformation with Lua
+      &darr;
+ConTeXt structures and commands
+      &darr;
+typeset critical edition
+</pre>
+    <p>Simple projects may require little or no explicit Lua code. More complex
+projects may use it extensively.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.2._What_ConTeXt_contributes">
+      4.2. What ConTeXt contributes
+     </span>
+    </h3>
+    <p>ConTeXt provides the programmable typesetting environment in which the
+structured editorial information is turned into a readable edition.
+</p>
+    <p>It can determine:
+</p>
+    <ul>
+     <li>
+      the typography of the edited text;
+     </li>
+     <li>
+      the appearance of lemmas and readings;
+     </li>
+     <li>
+      the form and order of witness sigla;
+     </li>
+     <li>
+      the placement of apparatus entries;
+     </li>
+     <li>
+      line and passage references;
+     </li>
+     <li>
+      page breaking;
+     </li>
+     <li>
+      several simultaneous apparatus layers;
+     </li>
+     <li>
+      parallel original texts and translations;
+     </li>
+     <li>
+      different output forms derived from the same source.
+     </li>
+    </ul>
+    <p>ConTeXt also provides XML-processing facilities. It can identify TEI
+elements, attach setup commands to them, retrieve attributes, and combine XML
+selection with Lua processing.
+</p>
+    <p>ConTeXt therefore acts primarily at the level of typographical presentation,
+but it can also participate in the interpretation and transformation of the
+TEI structure.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.3._Complementary_responsibilities">
+      4.3. Complementary responsibilities
+     </span>
+    </h3>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Layer
+       </th>
+       <th>
+        Principal responsibility
+       </th>
+      </tr>
+      <tr>
+       <td>Textual scholarship
+</td>
+       <td>Establish the witnesses, readings, relationships, and editorial decisions.
+</td>
+      </tr>
+      <tr>
+       <td>TEI XML
+</td>
+       <td>Record those textual and editorial structures explicitly.
+</td>
+      </tr>
+      <tr>
+       <td>Lua
+</td>
+       <td>Inspect, validate, select, group, and transform the encoded data.
+</td>
+      </tr>
+      <tr>
+       <td>ConTeXt
+</td>
+       <td>Compose and present the resulting edition.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The boundaries are not completely rigid. ConTeXt can perform data-processing
+tasks, and Lua can produce typographical instructions. Nevertheless, the
+distinction helps clarify the architecture of a critical-edition project.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.4._From_the_note_area_to_a_model_of_textual_variation">
+      4.4. From the note area to a model of textual variation
+     </span>
+    </h3>
+    <p>A critical apparatus may be printed in the same area as footnotes, but its
+source is not merely a note mechanism. It is a structured model of textual
+variation.
+</p>
+    <p>The collection therefore follows one continuous path:
+</p>
+    <pre>textual evidence
+        &darr;
+TEI encoding
+        &darr;
+selection, validation, and transformation
+        &darr;
+ConTeXt typesetting
+        &darr;
+readable critical edition
+</pre>
+    <p>The six guides develop this path progressively, from the first TEI document
+to the final apparatus.
+</p>
+    <h2>
+     <span class="mw-headline" id="5._How_to_use_this_collection">
+      5. How to use this collection
+     </span>
+    </h2>
+    <p>This page is an orientation page.
+</p>
+    <p>It explains why a critical apparatus may be represented as structured TEI XML
+data and how Lua and ConTeXt can then process and present that information. It
+does not attempt to provide a complete tutorial within a single page.
+</p>
+    <p>The collection contains three kinds of resource:
+</p>
+    <ul>
+     <li>
+      this general orientation page;
+     </li>
+     <li>
+      a glossary of editorial and technical terms;
+     </li>
+     <li>
+      six guides that develop the workflow progressively.
+     </li>
+    </ul>
+    <p>Readers who are unfamiliar with the editorial or technical vocabulary should
+begin with the glossary.
+</p>
+    <p>Readers who are completely new to XML or TEI should then continue with
+Guide 1.
+</p>
+    <p>The guides are progressive, but they are also designed to remain useful as
+separate reference pages.
+</p>
+    <p>Readers who wish to construct an apparatus directly in ConTeXt, without first
+encoding the textual data in TEI XML, should instead begin with:
+</p>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="5.1._Glossary">
+      5.1. Glossary
+     </span>
+    </h3>
+    <p>The vocabulary used in this collection comes from several different fields.
+</p>
+    <p>Some terms belong to textual criticism and scholarly editing:
+</p>
+    <ul>
+     <li>
+      apparatus;
+     </li>
+     <li>
+      witness;
+     </li>
+     <li>
+      siglum;
+     </li>
+     <li>
+      lemma;
+     </li>
+     <li>
+      reading;
+     </li>
+     <li>
+      omission;
+     </li>
+     <li>
+      conjecture;
+     </li>
+     <li>
+      positive apparatus;
+     </li>
+     <li>
+      negative apparatus.
+     </li>
+    </ul>
+    <p>Other terms describe XML structures:
+</p>
+    <ul>
+     <li>
+      element;
+     </li>
+     <li>
+      attribute;
+     </li>
+     <li>
+      textual content;
+     </li>
+     <li>
+      hierarchy;
+     </li>
+     <li>
+      XML tree;
+     </li>
+     <li>
+      identifier;
+     </li>
+     <li>
+      reference;
+     </li>
+     <li>
+      well-formed document;
+     </li>
+     <li>
+      validation.
+     </li>
+    </ul>
+    <p>A third group belongs more specifically to TEI:
+</p>
+    <ul>
+     <li>
+      TEI header;
+     </li>
+     <li>
+      witness list;
+     </li>
+     <li>
+      <code>&lt;app&gt;</code>
+      ;
+     </li>
+     <li>
+      <code>&lt;lem&gt;</code>
+      ;
+     </li>
+     <li>
+      <code>&lt;rdg&gt;</code>
+      ;
+     </li>
+     <li>
+      <code>@wit</code>
+      ;
+     </li>
+     <li>
+      <code>xml:id</code>
+      .
+     </li>
+    </ul>
+    <p>The collection also uses terms connected with Lua and ConTeXt:
+</p>
+    <ul>
+     <li>
+      Lua table;
+     </li>
+     <li>
+      function;
+     </li>
+     <li>
+      XML setup;
+     </li>
+     <li>
+      selection;
+     </li>
+     <li>
+      transformation;
+     </li>
+     <li>
+      typesetting command.
+     </li>
+    </ul>
+    <p>The glossary is intended to be consulted while reading the guides. It does
+not merely define isolated words: it explains how each term is used within
+the TEI-to-ConTeXt workflow developed here.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Glossary:
+      </b>
+      <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">
+       Glossary of terms used in the TEI XML critical edition guides
+      </a>
+     </dd>
+    </dl>
+    <h2>
+     <span class="mw-headline" id="6._The_six_guides">
+      6. The six guides
+     </span>
+    </h2>
+    <p>The six guides follow the construction of a critical-edition workflow from
+the first TEI document to the final typeset output.
+</p>
+    <p>Each guide concentrates on one stage of the process:
+</p>
+    <pre>TEI document
+    &darr;
+witness declarations
+    &darr;
+basic apparatus entries
+    &darr;
+complex textual variation
+    &darr;
+Lua processing
+    &darr;
+ConTeXt typesetting
+</pre>
+    <h3>
+     <span class="mw-headline" id="6.1._Guide_1:_Understanding_TEI_documents_for_critical_editions">
+      6.1. Guide 1: Understanding TEI documents for critical editions
+     </span>
+    </h3>
+    <p>The first guide introduces the structure of a small TEI document suitable for
+experimentation.
+</p>
+    <p>It begins with the distinction between XML syntax and the TEI vocabulary. It
+then explains the main parts of a TEI document:
+</p>
+    <ul>
+     <li>
+      the XML declaration;
+     </li>
+     <li>
+      the root
+      <code>&lt;TEI&gt;</code>
+      element;
+     </li>
+     <li>
+      the TEI header;
+     </li>
+     <li>
+      the textual body;
+     </li>
+     <li>
+      elements and attributes;
+     </li>
+     <li>
+      textual content;
+     </li>
+     <li>
+      XML identifiers and references;
+     </li>
+     <li>
+      the hierarchical structure of the XML tree.
+     </li>
+    </ul>
+    <p>The guide does not yet attempt to encode a complete critical apparatus. Its
+purpose is to provide a small, understandable source document on which the
+later guides can build.
+</p>
+    <p>At the end of the guide, the reader will have a minimal TEI document,
+a small sample text, a basic header, and a source file that ConTeXt can load
+and inspect. No previous knowledge of TEI is required.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Guide 1:
+      </b>
+      <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">
+       Understanding TEI documents for critical editions
+      </a>
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="6.2._Guide_2:_Declaring_witnesses_in_TEI_critical_editions">
+      6.2. Guide 2: Declaring witnesses in TEI critical editions
+     </span>
+    </h3>
+    <p>A critical apparatus repeatedly refers to manuscripts, printed editions, and
+other textual sources. Those sources must be identified before their readings
+can be cited consistently.
+</p>
+    <p>The second guide explains:
+</p>
+    <ul>
+     <li>
+      what counts as a witness;
+     </li>
+     <li>
+      how a siglum differs from an XML identifier;
+     </li>
+     <li>
+      where witnesses are declared in a TEI document;
+     </li>
+     <li>
+      how manuscripts and printed editions may be described;
+     </li>
+     <li>
+      how witness descriptions are connected with apparatus readings;
+     </li>
+     <li>
+      how several witnesses can be cited together;
+     </li>
+     <li>
+      how groups or families of witnesses may be represented;
+     </li>
+     <li>
+      how witness references are kept consistent with the declarations.
+     </li>
+    </ul>
+    <p>Particular attention is given to the distinction between a human-readable
+siglum such as <code>A</code> and a machine-readable reference such as
+<code>#ms-A</code>.
+</p>
+    <p>At the end of the guide, the reader will have a coherent TEI witness list and
+will be able to refer to its entries from elsewhere in the document.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Guide 2:
+      </b>
+      <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">
+       Declaring witnesses in TEI critical editions
+      </a>
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="6.3._Guide_3:_Encoding_a_basic_critical_apparatus_in_TEI">
+      6.3. Guide 3: Encoding a basic critical apparatus in TEI
+     </span>
+    </h3>
+    <p>The third guide introduces the central TEI structures used to record textual
+variation.
+</p>
+    <p>It explains:
+</p>
+    <ul>
+     <li>
+      the role of
+      <code>&lt;app&gt;</code>
+      ;
+     </li>
+     <li>
+      the distinction between
+      <code>&lt;lem&gt;</code>
+      and
+     </li>
+    </ul>
+    <pre> <code>&lt;rdg&gt;</code>;
+</pre>
+    <ul>
+     <li>
+      the use of
+      <code>@wit</code>
+      ;
+     </li>
+     <li>
+      how a reading is associated with one or more witnesses;
+     </li>
+     <li>
+      how an apparatus entry is connected with the edited text;
+     </li>
+     <li>
+      how several readings can belong to the same apparatus entry;
+     </li>
+     <li>
+      how structured TEI data correspond to a compact printed apparatus.
+     </li>
+    </ul>
+    <p>The guide begins with short examples such as:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
+  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>It then develops the same example sufficiently to show how the encoded
+structure can later be interpreted by ConTeXt.
+</p>
+    <p>At the end of the guide, the reader will have encoded a small lemma-based
+critical apparatus.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Guide 3:
+      </b>
+      <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">
+       Encoding a basic critical apparatus in TEI
+      </a>
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="6.4._Guide_4:_Encoding_complex_textual_variation_in_TEI">
+      6.4. Guide 4: Encoding complex textual variation in TEI
+     </span>
+    </h3>
+    <p>Real critical editions contain cases that cannot be reduced to one lemma
+followed by one alternative word.
+</p>
+    <p>The fourth guide develops the basic apparatus model to represent more complex
+situations.
+</p>
+    <p>It covers:
+</p>
+    <ul>
+     <li>
+      omissions;
+     </li>
+     <li>
+      additions;
+     </li>
+     <li>
+      substitutions;
+     </li>
+     <li>
+      corrections;
+     </li>
+     <li>
+      uncertain readings;
+     </li>
+     <li>
+      editorial conjectures;
+     </li>
+     <li>
+      orthographic variants;
+     </li>
+     <li>
+      grouped readings;
+     </li>
+     <li>
+      agreement between witnesses;
+     </li>
+     <li>
+      transpositions;
+     </li>
+     <li>
+      readings that concern passages of different extent;
+     </li>
+     <li>
+      the distinction between positive and negative apparatus data.
+     </li>
+    </ul>
+    <p>The purpose is not to provide a universal encoding rule for every editorial
+tradition. Instead, the guide shows how the TEI model can be extended while
+keeping the scholarly relationships explicit.
+</p>
+    <p>It also explains why a project should define its own encoding policy before
+large quantities of material are entered.
+</p>
+    <p>At the end of the guide, the reader will have a broader model capable of
+representing common forms of textual variation without reducing them
+prematurely to a single printed notation.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Guide 4:
+      </b>
+      <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">
+       Encoding complex textual variation in TEI
+      </a>
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="6.5._Guide_5:_Processing_TEI_critical_apparatus_data_with_Lua">
+      6.5. Guide 5: Processing TEI critical apparatus data with Lua
+     </span>
+    </h3>
+    <p>Once the apparatus has been encoded, the information must be extracted,
+checked, ordered, and prepared for typesetting.
+</p>
+    <p>The fifth guide introduces Lua as a processing layer between the TEI source
+and ConTeXt.
+</p>
+    <p>It explains how to:
+</p>
+    <ul>
+     <li>
+      inspect the XML tree;
+     </li>
+     <li>
+      retrieve elements and attributes;
+     </li>
+     <li>
+      collect lemmas and readings;
+     </li>
+     <li>
+      resolve witness references;
+     </li>
+     <li>
+      store editorial information in Lua tables;
+     </li>
+     <li>
+      apply a project-specific order to witness sigla;
+     </li>
+     <li>
+      group readings according to editorial criteria;
+     </li>
+     <li>
+      distinguish different types of apparatus entry;
+     </li>
+     <li>
+      detect missing declarations and inconsistent references;
+     </li>
+     <li>
+      prepare structured records for ConTeXt.
+     </li>
+    </ul>
+    <p>The guide does not attempt to teach Lua programming independently of the
+editorial problem. Each Lua mechanism is introduced because it performs a
+specific operation on the TEI data.
+</p>
+    <p>The examples also distinguish between tasks that can be performed directly by
+ConTeXt XML setups and tasks for which Lua provides a clearer or more flexible
+solution.
+</p>
+    <p>At the end of the guide, the reader will have a Lua representation of the TEI
+apparatus that can be checked, transformed, and passed to ConTeXt.
+</p>
+    <dl>
+     <dd>
+      <b>
+       Guide 5:
+      </b>
+      <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">
+       Processing TEI critical apparatus data with Lua
+      </a>
+     </dd>
+    </dl>
+    <h3>
+     <span class="mw-headline" id="6.6._Guide_6:_Typesetting_a_TEI_critical_apparatus_with_ConTeXt">
+      6.6. Guide 6: Typesetting a TEI critical apparatus with ConTeXt
+     </span>
+    </h3>
+    <p>The sixth guide turns the encoded and processed information into a readable
+critical edition.
+</p>
+    <p>It explains how to:
+</p>
+    <ul>
+     <li>
+      load the TEI source;
+     </li>
+     <li>
+      typeset the edited text;
+     </li>
+     <li>
+      connect passages in the text with apparatus entries;
+     </li>
+     <li>
+      format lemmas, readings, and witness sigla;
+     </li>
+     <li>
+      place the apparatus at the bottom of the page or elsewhere;
+     </li>
+     <li>
+      manage line, paragraph, and passage references;
+     </li>
+     <li>
+      compose compact apparatus paragraphs;
+     </li>
+     <li>
+      connect TEI data with several ConTeXt apparatus layers;
+     </li>
+     <li>
+      reuse TEI structures in parallel-text layouts where required;
+     </li>
+     <li>
+      generate different apparatus forms from the same TEI source;
+     </li>
+     <li>
+      separate editorial encoding from typographical configuration.
+     </li>
+    </ul>
+    <p>The guide also shows how the same underlying data may produce several
+outputs, for example:
+</p>
+    <ul>
+     <li>
+      a reading text without an apparatus;
+     </li>
+     <li>
+      a text with a negative apparatus;
+     </li>
+     <li>
+      a text with a positive apparatus;
+     </li>
+     <li>
+      a fuller editorial report;
+     </li>
+     <li>
+      a differently formatted PDF edition.
+     </li>
+    </ul>
+    <p>At the end of the guide, the reader will have a complete experimental
+workflow:
+</p>
+    <pre>TEI XML source
+      &darr;
+Lua and ConTeXt processing
+      &darr;
+edited text and critical apparatus
+      &darr;
+typeset PDF
+</pre>
+    <dl>
+     <dd>
+      <b>
+       Guide 6:
+      </b>
+      <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">
+       Typesetting a TEI critical apparatus with ConTeXt
+      </a>
+     </dd>
+    </dl>
+    <h2>
+     <span id="7._Where_should_I_begin?">
+     </span>
+     <span class="mw-headline" id="7._Where_should_I_begin.3F">
+      7. Where should I begin?
+     </span>
+    </h2>
+    <p>The guides may be read in sequence, but readers can also enter the collection
+at the point corresponding to their immediate need.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        If you want to&hellip;
+       </th>
+       <th>
+        Begin with&hellip;
+       </th>
+      </tr>
+      <tr>
+       <td>Understand why a critical apparatus is more than a specialised note system
+</td>
+       <td>This orientation page
+</td>
+      </tr>
+      <tr>
+       <td>Understand an unfamiliar editorial, XML, TEI, Lua, or ConTeXt term
+</td>
+       <td><a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary of terms used in the TEI XML critical edition guides</a>
+</td>
+      </tr>
+      <tr>
+       <td>Learn the basic structure of a TEI document
+</td>
+       <td><a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Understanding TEI documents for critical editions</a>
+</td>
+      </tr>
+      <tr>
+       <td>Declare manuscripts, printed editions, and other witnesses
+</td>
+       <td><a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">Declaring witnesses in TEI critical editions</a>
+</td>
+      </tr>
+      <tr>
+       <td>Encode lemmas and variant readings
+</td>
+       <td><a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
+</td>
+      </tr>
+      <tr>
+       <td>Represent omissions, additions, corrections, conjectures, or grouped readings
+</td>
+       <td><a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">Encoding complex textual variation in TEI</a>
+</td>
+      </tr>
+      <tr>
+       <td>Inspect, validate, sort, or transform TEI apparatus data
+</td>
+       <td><a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">Processing TEI critical apparatus data with Lua</a>
+</td>
+      </tr>
+      <tr>
+       <td>Produce a typeset critical text and apparatus
+</td>
+       <td><a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Typesetting a TEI critical apparatus with ConTeXt</a>
+</td>
+      </tr>
+      <tr>
+       <td>Construct an apparatus directly in ConTeXt without using TEI XML
+</td>
+       <td><a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Building a critical apparatus with ConTeXt</a>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="8._The_collection_as_a_layered_workflow">
+      8. The collection as a layered workflow
+     </span>
+    </h2>
+    <p>The earlier table identified the principal responsibilities of textual
+scholarship, TEI XML, Lua, and ConTeXt. The same workflow can also be viewed
+more abstractly as four cooperating layers.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Layer
+       </th>
+       <th>
+        Central question
+       </th>
+       <th>
+        Typical contents
+       </th>
+      </tr>
+      <tr>
+       <td>Editorial layer
+</td>
+       <td>What textual evidence exists, and how should it be interpreted?
+</td>
+       <td>Witnesses, readings, lemmas, omissions, corrections, conjectures
+</td>
+      </tr>
+      <tr>
+       <td>Encoding layer
+</td>
+       <td>How should the editorial information be recorded explicitly?
+</td>
+       <td>TEI elements, attributes, identifiers, and references
+</td>
+      </tr>
+      <tr>
+       <td>Processing layer
+</td>
+       <td>How should the encoded data be selected, checked, grouped, or transformed?
+</td>
+       <td>ConTeXt XML setups, Lua tables, functions, and processing rules
+</td>
+      </tr>
+      <tr>
+       <td>Typesetting layer
+</td>
+       <td>How should the resulting edition be presented to the reader?
+</td>
+       <td>Fonts, spacing, lineation, apparatus placement, page layout, and PDF output
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>These layers are connected, but they should not be confused.
+</p>
+    <p>For example:
+</p>
+    <ul>
+     <li>
+      deciding that witness
+      <code>B</code>
+      contains a distinct reading belongs to the editorial layer;
+     </li>
+     <li>
+      recording the reference
+      <code>wit="#ms-B"</code>
+      belongs to the encoding layer;
+     </li>
+     <li>
+      sorting
+      <code>B</code>
+      according to the project&rsquo;s witness order belongs to the processing layer;
+     </li>
+     <li>
+      printing the siglum
+      <code>B</code>
+      in small capitals belongs to the typesetting layer.
+     </li>
+    </ul>
+    <p>This distinction makes the project easier to maintain because editorial
+changes do not need to be expressed as typographical changes, and
+typographical redesign does not require the scholarly data to be rewritten.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Scope_and_limits_of_the_collection">
+      9. Scope and limits of the collection
+     </span>
+    </h2>
+    <p>This collection is concerned with the construction of critical editions from
+TEI XML using Lua and ConTeXt.
+</p>
+    <p>It does not attempt to provide:
+</p>
+    <ul>
+     <li>
+      a complete introduction to textual criticism;
+     </li>
+     <li>
+      a complete account of every part of the TEI Guidelines;
+     </li>
+     <li>
+      a universal encoding model suitable for every editorial tradition;
+     </li>
+     <li>
+      a replacement for a project-specific encoding policy;
+     </li>
+     <li>
+      a general course in XML;
+     </li>
+     <li>
+      a complete course in Lua programming;
+     </li>
+     <li>
+      a complete survey of all ConTeXt XML-processing facilities.
+     </li>
+    </ul>
+    <p>The guides introduce these subjects only where they are needed to solve a
+specific editorial or typographical problem.
+</p>
+    <p>Their examples are deliberately small enough to be understood and tested.
+They are intended to provide reusable principles rather than a rigid model
+that every edition must follow unchanged.
+</p>
+    <hr>
+    <div style="margin: 1.5em 0 1em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+     <p><b>Building critical editions from TEI XML with ConTeXt</b>
+</p>
+     <p><a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
+&nbsp;&middot;&nbsp;
+<b>Start with:</b> <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Guide 1</a>
+&nbsp;&middot;&nbsp;
+<b>Final guide:</b> <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Guide 6</a>
+&nbsp;&middot;&nbsp;
+<b>ConTeXt-only route:</b> <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">Building a critical apparatus with ConTeXt</a>
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Related_pages">
+      Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="Building_a_critical_apparatus_with_ConTeXt.html" title="Building a critical apparatus with ConTeXt">
+       Building a critical apparatus with ConTeXt
+      </a>
+     </li>
+     <li>
+      <a href="TEI_xml.html" title="TEI xml">
+       TEI XML
+      </a>
+     </li>
+     <li>
+      <a href="Input_and_compilation/XML_source.html" title="Input and compilation/XML source">
+       XML
+      </a>
+     </li>
+     <li>
+      <a href="ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">
+       ConTeXt and Lua programming
+      </a>
+     </li>
+     <li>
+      <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">
+       Glossary of terms used in the TEI XML critical edition guides
+      </a>
+     </li>
+    </ul>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-25
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Building_critical_editions_from_TEI_XML">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>
