@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Show error hook&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Show_error_hook" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Show error hook
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7590&diff=43389">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This <a href="Callbacks.html" title="LuaTeX/Callbacks">callback</a> doesn't replace any internal code and isn't supposed to do anything meaningful. It is called when an error message occurs, precisely right after the first line of the error message (beginning with an exclamation mark) has been printed, and before the rest of the message is given.
+</p>
+    <p>No argument is passed to the function registered in the callback, and return values, if any, are ignored. Its best use is probably to report additional information besides the error message. For instance, the input text <tt>a_1</tt> will produce the following error message (and another one quite similar at the end of the paragraph):
+</p>
+    <pre>! Missing $ inserted.
+&lt;inserted text&gt; 
+                $
+&lt;to be read again&gt; 
+                   _
+l.1 a_
+      1
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+</pre>
+    <p>This message can be annoying for two reasons: first, if one has a document made of several files, one doesn't know which file is concerned here (one can read the log file upward to spot the latest input file, but that isn't very convenient); second, the line number takes some time to arrive after the message's first line. The lines 2 to 4 aren't very informative, and it could be useful if the line number was available at once.
+</p>
+    <p>The following code inserts the input file's name and line number just after the first line of the message; thus the rest of the message can be ignored (as many users do, the first line, along with where the error happened, being often informative enough):
+</p>
+    <pre>callback.register("show_error_hook",
+  function ()
+    texio.write_nl("[FILE: " .. status.filename .. ", LINE: " .. status.linenumber .. "]")
+  end)
+</pre>
+    <p>Some information from the <tt>status</tt> library is put to use here: <tt>status.filename</tt> returns a string with the name of the current input file, <tt>status.linenumber</tt> returns a number (automatically converted to a string here) indicating the line TeX is currently reading.
+</p>
+    <p>Now the error message looks like this, assuming that <tt>a_1</tt> appeared in file called <tt>test_input.tex</tt> in the same directory as the main file:
+</p>
+    <pre>! Missing $ inserted.
+[FILE: ./test_input.tex, LINE: 1]
+&lt;inserted text&gt; 
+                $
+&lt;to be read again&gt; 
+                   _
+l.1 a_
+      1
+I've inserted a begin-math/end-math symbol since I think
+you left one out. Proceed, with fingers crossed.
+</pre>
+    <p>If one wants a full path instead of a relative path, one can use <a class="external text" href="http://keplerproject.github.com/luafilesystem/" rel="nofollow">the LuaFileSystem library</a>, shipped with LuaTeX (the use of <tt>%</tt> implies that this code isn't simply passed to <tt>\directlua</tt>; see <a href="Writing_Lua_in_TeX.html" title="LuaTeX/Writing Lua in TeX">LuaTeX/Writing Lua in TeX</a>):
+</p>
+    <pre>callback.register("show_error_hook",
+  function ()
+    local f = status.filename
+    f = string.gsub(f, "^%.", lfs.currentdir())
+    texio.write_nl("[FILE: " .. f .. ", LINE: " .. status.linenumber .. "]")
+  end)
+</pre>
+    <p>This replaces <tt>./</tt> at the beginning of the filename (if any) with the string returned by <tt>lfs.currentdir()</tt>, whose meaning should be obvious. (See <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-string.gsub" rel="nofollow">the Lua reference manual</a> for information on <tt>string.gsub()</tt>.)
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Show_error_hook">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

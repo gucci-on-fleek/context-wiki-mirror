@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/TeX without TeX revised and expanded&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/TeX_without_TeX_revised_and_expanded" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/TeX without TeX revised and expanded
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7612&diff=43411">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="About">
+      About
+     </span>
+    </h2>
+    <p>This is an update and expansion of <a href="TeX_without_TeX.html" title="LuaTeX/TeX without TeX">LuaTeX/TeX without TeX</a> --- using TeX's
+functionality (typesetting, pdf writing) using only Lua code (no \TeX
+macros).
+</p>
+    <p>It is (I believe) an adequate framework for developing a complete
+type-setting system; although one dedicated to a specific task, rather
+than a general purpose system such as LaTeX or ConTeXt. It includes a
+couple of example formatting commands (\Emph and \Bold), titles
+(\Title), the ability to include other subsidiary text files (\Input)
+and footnotes (\Footnote). It can be easily adapted and expanded to
+suit your needs.
+</p>
+    <p>I am not much of a programmer, and knew little about TeX and even less
+about Lua when I started this, so there is undoubtedly much that can
+be improved.  All questions, comments, suggestions, and corrections
+will be appreciated. You can reach me at "destiny6 &lt;AT&gt; mac &lt;DOT&gt;
+com".
+</p>
+    <h2>
+     <span class="mw-headline" id="Pre-requisites">
+      Pre-requisites
+     </span>
+    </h2>
+    <p>This system requires the luatex-plain format (from ConTeXt), so that
+we have access to Open Type Fonts and other goodies. This is what I
+did on my system:
+</p>
+    <ol>
+     <li>
+      Find the luatex-plain.tex file. On my system (with TeX-Live 2020)
+it was at:
+      <pre>/usr/local/share/texmf-dist/tex/generic/context/luatex/luatex-plain.tex
+</pre>
+     </li>
+     <li>
+      If you just build a format file,
+      <pre>luatex --ini /usr/local/share/texmf-dist/tex/generic/context/luatex/luatex-plain.tex
+</pre>
+      <p>you will probably get warnings about using the "merged" file, and not
+the more current and supported files. Delete, move, or rename this
+file. On my system I did:
+</p>
+      <pre>doas mv /usr/local/share/texmf-dist/tex/generic/context/luatex/luatex-fonts-merged.lua /usr/local/share/texmf-dist/tex/generic/context/luatex/luatex-fonts-merged.lua.bak
+</pre>
+     </li>
+     <li>
+      Now, build the format file.
+      <pre>luatex --ini /usr/local/share/texmf-dist/tex/generic/context/luatex/luatex-plain.tex
+</pre>
+     </li>
+     <li>
+      We are almost done. If the resulting format file (luatex-plain.fmt)
+is in the current working directory, you can use it with something
+like:
+      <pre>luatex --fmt luatex-plain test
+</pre>
+     </li>
+     <li>
+      But, this is too restrictive.
+      <ol>
+       <li>
+        Create a new executable with the name luatex-plain. Something like:
+        <pre>ln -s `which luatex` /usr/local/bin/luatex-plain
+</pre>
+       </li>
+       <li>
+        When you try to invoke it:
+        <pre>luatex-plain test
+</pre>
+        <p>it will fail with a message about failing to find the proper
+format file. There should be a line something like:
+</p>
+        <pre>mktexfmt [INFO]: writing formats under ~/.texlive2020/texmf-var/web2c
+</pre>
+        <p>so, copy the format file to that location:
+</p>
+        <pre>cp luatex-plain.fmt ~/.texlive2020/texmf-var/web2c/
+</pre>
+        <p>now, this should work:
+</p>
+        <pre>luatex-plain test
+</pre>
+        <p>Finally, run mtxrun to generate a fonts database: <br>
+</p>
+        <pre>mtxrun --script fonts --reload --simple
+</pre>
+       </li>
+      </ol>
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="Contents">
+      Contents
+     </span>
+    </h2>
+    <p>The most recent files for this project are also available at:
+<a class="external text" href="https://github.com/s-dismas/TeX-without-TeX-revised" rel="nofollow">GitHub</a>
+</p>
+    <p>There is a Read Eval Print Loop available for interactive exploring:
+</p>
+    <p><a href="T_wo_T_r:repl.lua" title="LuaTeX/T wo T r:repl.lua">repl.lua</a>
+</p>
+    <p>It can be invoked with <code>repl.repl()</code>, and either
+<code>quit()</code> or <code>exit</code> will exit it. I use Shell Mode in
+Emacs, but a simple terminal or similar should also work.
+</p>
+    <p>Some utilites are in the file:
+</p>
+    <p><a href="T_wo_T_r:utils.lua" title="LuaTeX/T wo T r:utils.lua">utils.lua</a>
+</p>
+    <p>The following five files comprise the system:
+</p>
+    <p><a href="T_wo_T_r:reader.lua" title="LuaTeX/T wo T r:reader.lua">reader.lua</a>
+</p>
+    <p><a href="T_wo_T_r:format.lua" title="LuaTeX/T wo T r:format.lua">format.lua</a>
+</p>
+    <p><a href="T_wo_T_r:main.lua" title="LuaTeX/T wo T r:main.lua">main.lua</a>
+</p>
+    <p><a href="T_wo_T_r:pages.lua" title="LuaTeX/T wo T r:pages.lua">pages.lua</a>
+</p>
+    <p><a href="T_wo_T_r:commands.lua" title="LuaTeX/T wo T r:commands.lua">commands.lua</a>
+</p>
+    <p>The license for this software can be seen at:
+</p>
+    <p><a href="T_wo_T_r:LICENSE.txt" title="LuaTeX/T wo T r:LICENSE.txt"> License.</a>
+</p>
+    <p>The TeX file to be compiled by luatex-plain is:
+</p>
+    <p><a href="T_wo_T_r:test.tex" title="LuaTeX/T wo T r:test.tex">test.tex</a>
+</p>
+    <p>The Lua file executed by <code>\directlua{dofile "test.lua"}</code>
+within <a href="T_wo_T_r:test.tex" title="LuaTeX/T wo T r:test.tex">test.tex</a> is:
+</p>
+    <p><a href="T_wo_T_r:test.lua" title="LuaTeX/T wo T r:test.lua">test.lua</a>
+</p>
+    <p>The main text file to be typeset is:
+</p>
+    <p><a href="T_wo_T_r:text.tex" title="LuaTeX/T wo T r:text.tex">text.tex</a>
+</p>
+    <p>It includes the following five files:
+</p>
+    <p><a href="T_wo_T_r:chapter-1.tex" title="LuaTeX/T wo T r:chapter-1.tex">chapter 1</a>
+</p>
+    <p><a href="T_wo_T_r:chapter-2.tex" title="LuaTeX/T wo T r:chapter-2.tex">chapter 2</a>
+</p>
+    <p><a href="T_wo_T_r:chapter-3.tex" title="LuaTeX/T wo T r:chapter-3.tex">chapter 3</a>
+</p>
+    <p><a href="T_wo_T_r:chapter-4.tex" title="LuaTeX/T wo T r:chapter-4.tex">chapter 4</a>
+</p>
+    <p><a href="T_wo_T_r:chapter-5.tex" title="LuaTeX/T wo T r:chapter-5.tex">chapter 5</a>
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/TeX_without_TeX_revised_and_expanded">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

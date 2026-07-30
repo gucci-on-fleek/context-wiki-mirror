@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Attributes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Attributes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Attributes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7577&diff=43373">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Introduction">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Introduction
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Syntax">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Syntax
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Box_attributes">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Box attributes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Asynchronous_attribute_settings">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Asynchronous attribute settings
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#On_the_Lua_side">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         On the Lua side
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Registers">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Registers
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Attributes_in_nodes">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           Attributes in nodes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Attribute_lists">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Attribute lists
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#Examples">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Introduction">
+      Introduction
+     </span>
+    </h2>
+    <p>Attributes are a new concept introduced in LuaTeX. In a way, they are a mix between count registers (they are numbers) and fonts (they are attached to the <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">LuaTeX/nodes</a> created under their scope). They allow information to be carried between different stages of processing.
+</p>
+    <h2>
+     <span class="mw-headline" id="Syntax">
+      Syntax
+     </span>
+    </h2>
+    <p>Syntactically, attributes are no different from (and can be used as) count registers. Accordingly, primitive commands to handle attribute registers mimick those for count registers: like <tt>\count</tt>, <tt>\attribute</tt> is used to refer to a register, and like <tt>\countdef</tt>, <tt>\attributedef</tt> defines a control sequence to be a synonym for a register. The syntax is:
+</p>
+    <pre>\attribute &lt;16-bit number&gt; &lt;optional equals&gt; &lt;32-bit number&gt;
+\attributedef &lt;csname&gt; &lt;optional equals&gt; &lt;16-bit number&gt;
+</pre>
+    <p>It is wise to have a \newattribute command, like \newcount (from plain TeX, used also in LaTeX and ConTeXt), for the allocation of registers. The command exists in ConTeXt, and is available in the <a class="external text" href="http://tug.ctan.org/pkg/luatexbase" rel="nofollow">luatexbase</a> package for plain TeX and LaTeX under the name \newluatexattribute.
+</p>
+    <p>Whenever a count register is allowed, an attribute register is too; that is, primitives like \advance, \multiply, \divide, can be used. More generally, anywhere a number is needed, attributes will do. Of course, assignments to attribute registers obey grouping.
+</p>
+    <p>Attributes differ from count registers in two respects:
+</p>
+    <ul>
+     <li>
+      They have a special value, -"7FFFFFFF in hexadecimal or -2147483647 in decimal; an attribute with that value (which is default) is said to be
+      <em>
+       unset
+      </em>
+      . With any larger value, the attribute is
+      <em>
+       set
+      </em>
+      .
+     </li>
+     <li>
+      When
+      <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">
+       LuaTeX/nodes
+      </a>
+      are created, they carry with them the values of all the attributes in force at creation time (except for some
+      <a class="new" href="../index.php?title=LuaTeX/&action=edit&redlink=1.html" title="LuaTeX/ (page does not exist)">
+       asynchronous attribute settings
+      </a>
+      ). In other words, when inspecting a
+      <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">
+       node
+      </a>
+      at whatever stage of its processing, one can retrieve (and also modify) the values of the attributes when the node was created. In that respect, attributes behave like fonts (glyph
+      <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">
+       LuaTeX/nodes
+      </a>
+      always carry information about their fonts).
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="Box_attributes">
+      Box attributes
+     </span>
+    </h3>
+    <p>When creating boxes, there exists a new keyword <tt>attr</tt> besides <tt>to</tt> and <tt>spread</tt>. The node representing the box will then have the associate attribute, but not its contents. For instance, after:
+</p>
+    <pre>\attribute0=1
+\setbox0=\hbox attr 1 = 1 {contents}
+</pre>
+    <p>The box (as a node) and each node of its contents have value 1 for attribute 0, but only the box node has value 1 for attribute 1; its contents has whatever value is currently assigned to that attribute (very probably the attribute is unset).
+</p>
+    <p>The syntax for the <tt>attr</tt> keyword is the following (all spaces are optional):
+</p>
+    <pre>attr &lt;number&gt; = &lt;number&gt;
+</pre>
+    <p>The <tt>attr</tt> declaration(s) should precede the <tt>to</tt> or <tt>spread</tt> declaration if any.
+</p>
+    <h3>
+     <span class="mw-headline" id="Asynchronous_attribute_settings">
+      Asynchronous attribute settings
+     </span>
+    </h3>
+    <p>Sometimes <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">LuaTeX/nodes</a> are assigned attribute values depending not on the real values at creation time but on the values of the surrounding nodes. The following simplistic code illustrates that:
+</p>
+    <pre>{\attribute0=1 Ve}\par
+</pre>
+    <p>LuaTeX will insert a font kern between the two letters (if the font says so, of course). That node will have attribute 0 set to 1, even though that is no longer the real value. Indeed, the kern node is created when building the paragraph, i.e. when the <tt>\par</tt> command is encountered; at that time, attribute 0 no longer has value 1, since that value was assigned in a group and the group is closed. So the kern should normally have whatever value is in force outside the group; instead it is given the value of the nodes that prompted its creation (more precisely, the value of the first node, which can differ from the second one). Similarly, a ligature node takes the values of those nodes it is created from, as does a discretionary node.
+</p>
+    <p>The <tt>\leftskip</tt> and <tt>\rightskip</tt> glues, inserted when non-zero at the beginning and end of each line of a paragraph, take the value of the neighboring nodes (i.e. the first and last nodes of a line, respectively).
+</p>
+    <p>Those asynchronous settings are supposed to make more sense than assignments that would follow the real values. Counter-measures can easily be implemented if necessary: for instance, one can inspect all lines in a paragraph and reassign to the <tt>\leftskip</tt> and <tt>\rightskip</tt> glues the current values for the attributes.
+</p>
+    <h2>
+     <span class="mw-headline" id="On_the_Lua_side">
+      On the Lua side
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Registers">
+      Registers
+     </span>
+    </h3>
+    <p>Like all registers, attributes are stored in a Lua table in the <tt>tex</tt> library. Hence besides <tt>tex.count</tt>, <tt>tex.box</tt>, etc., there exists <tt>tex.attribute</tt>. The indices to entries are either a register number or the name of a control sequence defined with <tt>\attributedef</tt>. For instance, after
+</p>
+    <pre>\attributedef\myattribute=100
+\myattribute=1
+</pre>
+    <p>both <tt>tex.attribute.myattribute</tt> and <tt>tex.attribute[100]</tt> return 1. The entry can also be assigned to, but then the assignment is necessarily local.
+</p>
+    <p>There are also two functions to set or retrieve attribute values, with the following syntax:
+</p>
+    <pre>tex.getattribute(&lt;register&gt;)
+tex.setattribute(["global",] &lt;register&gt;, &lt;number&gt;)
+</pre>
+    <p>In both case <tt>&lt;register&gt;</tt> is the same as an entry in <tt>tex.attribute</tt>: either a number or a string representing a control sequence defined with <tt>\attributedef</tt>. The first function returns the current value of the attribute, while the second sets it, either locally or globally if the first optional argument is given.
+</p>
+    <h3>
+     <span class="mw-headline" id="Attributes_in_nodes">
+      Attributes in nodes
+     </span>
+    </h3>
+    <p>The <tt>node</tt> library offers the following function to deal with the values of attributes for a given node:
+</p>
+    <pre>node.has_attribute(&lt;node&gt;, &lt;attribute&gt;[, &lt;value&gt;])
+</pre>
+    <p>Without the third argument, if <tt>&lt;node&gt;</tt> has <tt>attribute</tt> <em>set</em>, i.e. with a value different from -"7FFFFFFF, then the value is returned; otherwise <tt>nil</tt> is returned. If the third argument is given, the value of the attribute is returned if and only if it is equal to &lt;value&gt;, and <tt>nil</tt> otherwise.
+</p>
+    <pre>node.set_attribute(&lt;node&gt;, &lt;attribute&gt;, &lt;value&gt;)
+</pre>
+    <p>Sets &lt;attribute&gt; to &lt;value&gt; for &lt;node&gt;.
+</p>
+    <pre>node.unset_attribute(&lt;node&gt;, &lt;attribute&gt;[, &lt;value&gt;])
+</pre>
+    <p>Unsets &lt;attribute&gt; for &lt;node&gt; and returns the old value; if &lt;value&gt; is present, the attribute is unset only if it matches &lt;value&gt;.
+</p>
+    <h3>
+     <span class="mw-headline" id="Attribute_lists">
+      Attribute lists
+     </span>
+    </h3>
+    <p>In <a class="new" href="../index.php?title=LuaTeX/nodes&action=edit&redlink=1.html" title="LuaTeX/nodes (page does not exist)">LuaTeX/nodes</a>, attributes actually are implemented as nodes in a list. That is why the <tt>attr</tt> field of all nodes (except attribute nodes themselves) points to a node of type <tt>attribute_list</tt>. That node has only one field <tt>next</tt> pointing to the first attribute node in the list, if any. There might not be any such node because only <em>set</em> attributes are present in the list. Attribute nodes have three fields:
+</p>
+    <ul>
+     <li>
+      <tt>
+       number
+      </tt>
+      : the attribute's number;
+     </li>
+     <li>
+      <tt>
+       value
+      </tt>
+      : the attribute's value;
+     </li>
+     <li>
+      <tt>
+       next
+      </tt>
+      : the next attribute in the list, i.e. an attribute node that is
+      <em>
+       set
+      </em>
+      .
+     </li>
+    </ul>
+    <p>As an example, the following code prints <tt>0 = 5</tt> and <tt>10 = 45</tt>.
+</p>
+    <pre>\setbox0=\hbox attr0 = 5 attr10 = 45 {contents}
+
+\directlua{
+  local attr = tex.box[0].attr.next
+  while attr do
+    texio.write_nl(attr.number .. " = " .. attr.value)
+    attr = attr.next
+  end
+}
+</pre>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <p>The idea behind attributes is to mark material at a given time so as to spot it at a later stage of processing. The example in the page on the <a href="Post_linebreak_filter#Margin_notes.html" title="LuaTeX/Post linebreak filter"><tt>post_linebreak_filter</tt></a> <a href="Callbacks.html" title="LuaTeX/Callbacks">callback</a> shows how attributes can be put to use for margin notes: the text to which a note is added is marked with an attribute, and later, when the paragraph has been built, the note is appended to the line containing that text, identified by its having a given value for the attribute.
+</p>
+    <p><a class="new" href="../index.php?title=LuaTeX/Category:Old_LuaTeX_Wiki&action=edit&redlink=1.html" title="LuaTeX/Category:Old LuaTeX Wiki (page does not exist)">LuaTeX/Category:Old LuaTeX Wiki</a>
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Attributes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

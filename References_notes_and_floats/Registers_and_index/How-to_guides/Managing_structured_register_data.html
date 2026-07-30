@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../../style.css" rel="stylesheet">
+  <link href="../../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   References notes and floats/Registers and index/How-to guides/Managing structured register data&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/References_notes_and_floats/Registers_and_index/How-to_guides/Managing_structured_register_data" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    References notes and floats/Registers and index/How-to guides/Managing structured register data
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7652&diff=43578">2026-07-29</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-bottom:1em;">
+     <p><b>Indexes and registers in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="../../Registers_and_index.html" title="References notes and floats/Registers and index">Overview</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides (page does not exist)">How-to guides</a> &nbsp;&middot;&nbsp;
+<a href="Creating_multiple_registers.html" title="References notes and floats/Registers and index/How-to guides/Creating multiple registers">Previous: Creating multiple registers</a> &nbsp;&middot;&nbsp;
+<b>Managing structured register data</b> &nbsp;&middot;&nbsp;
+<a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides (page does not exist)">Next: How-to guides</a>
+</p>
+    </div>
+    <div style="background:#fff4df; border-left:4px solid #d08a24; padding:0.75em 0.95em; margin-bottom:1em;">
+     <p><b>Under construction.</b> The examples on this page have been compiled with ConTeXt LMTX. The explanatory text is being refined so that the progression from ordinary register commands to XML and Lua workflows remains explicit.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Managing_structured_register_data">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Managing structured register data
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#1._Identify_the_layers_of_a_register_occurrence">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           1. Identify the layers of a register occurrence
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2._Start_with_the_ordinary_register_interface">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           2. Start with the ordinary register interface
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-4">
+           <a href="#2.1._MWE_1:_separate_sorting_data_from_displayed_text">
+            <span class="tocnumber">
+             1.2.1
+            </span>
+            <span class="toctext">
+             2.1. MWE 1: separate sorting data from displayed text
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#3._Use_processors_for_page-reference_roles">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           3. Use processors for page-reference roles
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#3.1._MWE_2:_distinguish_principal_and_passing_references">
+            <span class="tocnumber">
+             1.3.1
+            </span>
+            <span class="toctext">
+             3.1. MWE 2: distinguish principal and passing references
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#4._Insert_decomposed_register_data_with_.5Csetstructurepageregister">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           4. Insert decomposed register data with \setstructurepageregister
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#4.1._MWE_3:_construct_hierarchical_entries_through_a_macro">
+            <span class="tocnumber">
+             1.4.1
+            </span>
+            <span class="toctext">
+             4.1. MWE 3: construct hierarchical entries through a macro
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#5._Attach_userdata_to_occurrences">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           5. Attach userdata to occurrences
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#5.1._Retrieve_userdata_while_rendering_page_references">
+            <span class="tocnumber">
+             1.5.1
+            </span>
+            <span class="toctext">
+             5.1. Retrieve userdata while rendering page references
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-11">
+           <a href="#5.2._MWE_4:_display_occurrence_userdata_beside_page_references">
+            <span class="tocnumber">
+             1.5.2
+            </span>
+            <span class="toctext">
+             5.2. MWE 4: display occurrence userdata beside page references
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-12">
+           <a href="#5.3._Understand_duplicate_merging">
+            <span class="tocnumber">
+             1.5.3
+            </span>
+            <span class="toctext">
+             5.3. Understand duplicate merging
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#6._Create_an_explicit_register_page_range">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           6. Create an explicit register page range
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-14">
+           <a href="#6.1._MWE_5:_create_an_explicit_page_range">
+            <span class="tocnumber">
+             1.6.1
+            </span>
+            <span class="toctext">
+             6.1. MWE 5: create an explicit page range
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#7._Generate_register_entries_directly_from_XML_attributes">
+          <span class="tocnumber">
+           1.7
+          </span>
+          <span class="toctext">
+           7. Generate register entries directly from XML attributes
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-16">
+           <a href="#7.1._MWE_6:_generate_an_index_directly_from_XML_attributes">
+            <span class="tocnumber">
+             1.7.1
+            </span>
+            <span class="toctext">
+             7.1. MWE 6: generate an index directly from XML attributes
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#8._Generate_structured_entries_from_a_Lua_authority_table">
+          <span class="tocnumber">
+           1.8
+          </span>
+          <span class="toctext">
+           8. Generate structured entries from a Lua authority table
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-18">
+           <a href="#8.1._MWE_7:_resolve_work_identifiers_from_a_Lua_table">
+            <span class="tocnumber">
+             1.8.1
+            </span>
+            <span class="toctext">
+             8.1. MWE 7: resolve work identifiers from a Lua table
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#9._Resolve_XML_authority_records_with_Lua">
+          <span class="tocnumber">
+           1.9
+          </span>
+          <span class="toctext">
+           9. Resolve XML authority records with Lua
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-20">
+           <a href="#9.1._MWE_8:_resolve_an_XML_authority_record_with_Lua">
+            <span class="tocnumber">
+             1.9.1
+            </span>
+            <span class="toctext">
+             9.1. MWE 8: resolve an XML authority record with Lua
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#10._Normalize_sorting_data_before_insertion">
+          <span class="tocnumber">
+           1.10
+          </span>
+          <span class="toctext">
+           10. Normalize sorting data before insertion
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#11._Choose_the_least_complex_suitable_interface">
+          <span class="tocnumber">
+           1.11
+          </span>
+          <span class="toctext">
+           11. Choose the least complex suitable interface
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#12._Diagnose_common_problems">
+          <span class="tocnumber">
+           1.12
+          </span>
+          <span class="toctext">
+           12. Diagnose common problems
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-24">
+           <a href="#12.1._Formatted_text_is_also_used_as_the_sorting_key">
+            <span class="tocnumber">
+             1.12.1
+            </span>
+            <span class="toctext">
+             12.1. Formatted text is also used as the sorting key
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-25">
+           <a href="#12.2._XML_occurrence_text_becomes_the_canonical_entry">
+            <span class="tocnumber">
+             1.12.2
+            </span>
+            <span class="toctext">
+             12.2. XML occurrence text becomes the canonical entry
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-26">
+           <a href="#12.3._Userdata_is_stored_but_not_printed">
+            <span class="tocnumber">
+             1.12.3
+            </span>
+            <span class="toctext">
+             12.3. Userdata is stored but not printed
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-27">
+           <a href="#12.4._Distinct_records_are_merged">
+            <span class="tocnumber">
+             1.12.4
+            </span>
+            <span class="toctext">
+             12.4. Distinct records are merged
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-28">
+           <a href="#12.5._Lua_receives_an_unknown_identifier">
+            <span class="tocnumber">
+             1.12.5
+            </span>
+            <span class="toctext">
+             12.5. Lua receives an unknown identifier
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-29">
+           <a href="#12.6._A_register_definition_refers_to_itself_as_parent">
+            <span class="tocnumber">
+             1.12.6
+            </span>
+            <span class="toctext">
+             12.6. A register definition refers to itself as parent
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-30">
+           <a href="#12.7._The_register_reflects_an_earlier_run">
+            <span class="tocnumber">
+             1.12.7
+            </span>
+            <span class="toctext">
+             12.7. The register reflects an earlier run
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#13._What_this_guide_has_established">
+          <span class="tocnumber">
+           1.13
+          </span>
+          <span class="toctext">
+           13. What this guide has established
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#14._See_also">
+          <span class="tocnumber">
+           1.14
+          </span>
+          <span class="toctext">
+           14. See also
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <p>A register entry can be more than a piece of text followed by a page number. In a structured publishing workflow, one occurrence may contain several independent kinds of information:
+</p>
+    <ul>
+     <li>
+      a register instance;
+     </li>
+     <li>
+      one or more displayed entry levels;
+     </li>
+     <li>
+      one or more sorting keys;
+     </li>
+     <li>
+      a page reference or page range;
+     </li>
+     <li>
+      a named presentational role;
+     </li>
+     <li>
+      occurrence-specific metadata;
+     </li>
+     <li>
+      a stable identifier linking the occurrence to an external authority record.
+     </li>
+    </ul>
+    <p>This guide shows how to keep these layers separate and how to choose the least complex ConTeXt interface that preserves the distinctions required by the project.
+</p>
+    <div style="background:#eaf6ea; border-left:4px solid #4c8b4c; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Goal.</b> By the end of this guide, you should be able to move from ordinary <code>\index</code> entries to structured register insertions generated from macros, XML attributes, Lua tables, and XML authority records resolved through Lua.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._Identify_the_layers_of_a_register_occurrence">
+      1. Identify the layers of a register occurrence
+     </span>
+    </h2>
+    <p>The same occurrence may carry several different representations.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Layer
+       </th>
+       <th>
+        Purpose
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><b>Register instance</b>
+</td>
+       <td>Selects the register that receives the occurrence.
+</td>
+       <td><code>index</code>, <code>authors</code>, <code>works</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>Displayed entry</b>
+</td>
+       <td>Supplies the text printed in the final register.
+</td>
+       <td><code>Plato</code>, italic <code>Republic</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>Sorting key</b>
+</td>
+       <td>Supplies plain sortable data.
+</td>
+       <td><code>Plato</code>, <code>Republic</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>Hierarchy</b>
+</td>
+       <td>Places an entry below a parent entry.
+</td>
+       <td><code>Plato + Republic</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>Page role</b>
+</td>
+       <td>Distinguishes kinds of references.
+</td>
+       <td>Main discussion, passing mention
+</td>
+      </tr>
+      <tr>
+       <td><b>Userdata</b>
+</td>
+       <td>Stores metadata attached to one occurrence.
+</td>
+       <td><code>role=m</code>, <code>xmlid=plato-republic</code>
+</td>
+      </tr>
+      <tr>
+       <td><b>Authority identifier</b>
+</td>
+       <td>Links the occurrence to a canonical external record.
+</td>
+       <td><code>plato-republic</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f0fa; border-left:4px solid #7856a8; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Central distinction.</b> The displayed entry is what the reader sees. The sorting key is what ConTeXt compares. Userdata is stored with the occurrence but has no automatic visual form. An authority identifier links the occurrence to canonical data elsewhere.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Start_with_the_ordinary_register_interface">
+      2. Start with the ordinary register interface
+     </span>
+    </h2>
+    <p>Use the ordinary interface whenever the entry can be expressed directly at the point where it occurs.
+</p>
+    <p>A simple entry uses:
+</p>
+    <pre>\index{Plato}
+</pre>
+    <p>A separate sorting key uses:
+</p>
+    <pre>\index[Plato]{Plato}
+</pre>
+    <p>A hierarchical entry uses the plus sign:
+</p>
+    <pre>\index[Plato+Republic]{Plato+\emph{Republic}}
+</pre>
+    <p>The first level is <code>Plato</code>; the second level is <code>Republic</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.1._MWE_1:_separate_sorting_data_from_displayed_text">
+      2.1. MWE 1: separate sorting data from displayed text
+     </span>
+    </h3>
+    <p>This example keeps plain sorting keys separate from the formatted text printed in the index.
+</p>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,10pt]
+
+\setupinteraction
+  [state=start]
+
+\setupregister
+  [index]
+  [n=1,
+   balance=no]
+
+\starttext
+
+\subject{Philosophical works}
+
+\bold{How it works.}
+Each \type{\index} command supplies a plain sorting key in brackets
+and a separately formatted entry in braces. ConTeXt sorts the index
+by the key but prints the formatted entry. The plus sign separates
+the first-level entry from its subentry.
+
+\index[Aristotle+Politics]
+      {Aristotle+\emph{Politics}}
+Aristotle's \emph{Politics} examines political communities and
+their constitutions.
+
+% \page
+
+\index[Plato+Laws]
+      {Plato+\emph{Laws}}
+Plato's \emph{Laws} presents a detailed account of legislation.
+
+\index[Plato+Republic]
+      {Plato+\emph{Republic}}
+The \emph{Republic} discusses justice, education, and political order.
+
+% \page
+
+\subject{Index}
+
+\placeregister[index]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-separate-data-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/7/7d/index-separate-data-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-separate-data-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        The optional argument of each
+        <code>\index</code>
+        command provides the plain sorting key, while the braced argument provides the formatted entry printed in the index. The plus sign separates the first-level entry from its subentry.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>The mechanism is direct:
+</p>
+    <ul>
+     <li>
+      the optional argument supplies sortable data;
+     </li>
+     <li>
+      the braced argument supplies the printed form;
+     </li>
+     <li>
+      the plus sign creates the hierarchy;
+     </li>
+     <li>
+      the commented
+      <code>\page</code>
+      commands keep the demonstration on one page.
+     </li>
+    </ul>
+    <div style="background:#eaf6ea; border-left:4px solid #4c8b4c; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Use this interface first.</b> Separate sorting keys and hierarchical levels do not, by themselves, require a lower-level structured command.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Use_processors_for_page-reference_roles">
+      3. Use processors for page-reference roles
+     </span>
+    </h2>
+    <p>Processors are named transformations applied when register data is rendered. In the validated example below, the processors distinguish the visual treatment of page references.
+</p>
+    <pre>\defineprocessor
+  [main]
+  [style=bold]
+
+\defineprocessor
+  [passing]
+  [style=italic]
+</pre>
+    <p>The processor is attached to the occurrence through the optional argument:
+</p>
+    <pre>\index[main-&gt;justice]{justice}
+</pre>
+    <p>and:
+</p>
+    <pre>\index[passing-&gt;education]{education}
+</pre>
+    <p>The entry remains <code>justice</code> or <code>education</code>; the processor changes the associated page reference.
+</p>
+    <div style="background:#fff4df; border-left:4px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Do not confuse three mechanisms.</b> A sorting key controls order. Formatting such as <code>\emph</code> changes the displayed entry. A processor such as <code>main</code> or <code>passing</code> can assign a named visual role to the page reference.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="3.1._MWE_2:_distinguish_principal_and_passing_references">
+      3.1. MWE 2: distinguish principal and passing references
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,9pt]
+
+\defineprocessor
+  [main]
+  [style=bold]
+
+\defineprocessor
+  [passing]
+  [style=italic]
+
+\setupregister
+  [index]
+  [n=1,
+   balance=no]
+
+\starttext
+
+\subject{Political concepts}
+
+\index[main-&gt;justice]{justice}
+The principal discussion of justice begins here.
+
+\blank[small]
+
+\index[passing-&gt;education]{education}
+Education is mentioned only in passing.
+
+\blank[small]
+
+\index[Plato+Republic]
+      {Plato+\emph{Republic}}
+Plato's \emph{Republic} provides the main example.
+  \footnote{\emph{This example combines several distinct mechanisms.
+  The processors \type{main} and \type{passing} do not change
+  the index entries themselves: they change the appearance of
+  the page references attached to those entries. By contrast,
+  \type{\emph} changes the displayed form of the subentry
+  \emph{Republic}, while the plain key \type{Republic} continues
+  to control its sorting. The example therefore keeps semantic
+  role, sorting data, displayed text, and page-reference
+  formatting separate. Feel free to experiment with a longer
+  text in order to observe the mechanism across several pages.}}.
+
+\subject{Index}
+
+\placeregister[index]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-processor-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/b/bc/index-processor-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-processor-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Using processors to distinguish principal and passing index references. The page references are formatted according to their semantic role, while the hierarchical work entry keeps its sorting key separate from its displayed form.
+       </div>
+      </div>
+     </div>
+    </div>
+    <div style="background:#f4f0fa; border-left:4px solid #7856a8; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Semantic advantage.</b> Names such as <code>main</code> and <code>passing</code> describe editorial roles. Their appearance can be changed globally without rewriting the index entries.
+</p>
+    </div>
+    <h2>
+     <span id="4._Insert_decomposed_register_data_with_\setstructurepageregister">
+     </span>
+     <span class="mw-headline" id="4._Insert_decomposed_register_data_with_.5Csetstructurepageregister">
+      4. Insert decomposed register data with \setstructurepageregister
+     </span>
+    </h2>
+    <p>When a macro, an XML setup, or Lua already supplies separate fields, the compact ordinary syntax may become inconvenient.
+</p>
+    <p>The lower-level command is:
+</p>
+    <pre>\setstructurepageregister
+  [register]
+  [register settings]
+  [userdata]
+</pre>
+    <p>Its three arguments are:
+</p>
+    <ol>
+     <li>
+      the register instance;
+     </li>
+     <li>
+      fields interpreted by the register mechanism;
+     </li>
+     <li>
+      arbitrary metadata stored with the occurrence.
+     </li>
+    </ol>
+    <p>A one-level entry can be written as:
+</p>
+    <pre>\setstructurepageregister
+  [index]
+  [entries=Plato,
+   keys=Plato]
+  []
+</pre>
+    <p>A two-level entry uses numbered fields:
+</p>
+    <pre>\setstructurepageregister
+  [index]
+  [entries:1=Plato,
+   keys:1=Plato,
+   entries:2=Republic,
+   keys:2=Republic]
+  []
+</pre>
+    <p>Use this interface when the data has already been decomposed into named fields. Do not use it merely to replace a straightforward <code>\index</code> command.
+</p>
+    <h3>
+     <span class="mw-headline" id="4.1._MWE_3:_construct_hierarchical_entries_through_a_macro">
+      4.1. MWE 3: construct hierarchical entries through a macro
+     </span>
+    </h3>
+    <p>The macro below receives four independent arguments:
+</p>
+    <ol>
+     <li>
+      author sorting key;
+     </li>
+     <li>
+      displayed author name;
+     </li>
+     <li>
+      title sorting key;
+     </li>
+     <li>
+      displayed title.
+     </li>
+    </ol>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,9pt]
+
+\defineregister[works]
+
+\setupregister
+  [works]
+  [n=1,
+   balance=no]
+
+\define[4]\RegisterWork
+  {\setstructurepageregister
+     [works]
+     [entries:1={#2},
+      keys:1={#1},
+      entries:2={\emph{#4}},
+      keys:2={#3}]
+     []}
+
+\starttext
+
+\subject{Political philosophy}
+
+\RegisterWork
+  {Plato}
+  {Plato}
+  {Republic}
+  {Republic}
+
+Plato's \emph{Republic} examines justice and the best political order.
+
+\blank[small]
+
+\RegisterWork
+  {Aristotle}
+  {Aristotle}
+  {Politics}
+  {Politics}
+
+Aristotle's \emph{Politics} analyses constitutions and political life.
+
+\blank[small]
+
+\RegisterWork
+  {Plato}
+  {Plato}
+  {Laws}
+  {Laws}
+
+Plato's \emph{Laws} gives legislation a central role.\footnote
+  {\emph{The command \type{\RegisterWork} receives four independent
+  arguments: the author's sorting key, the displayed author name,
+  the work's sorting key, and the displayed title. It passes them
+  to \type{\setstructurepageregister} as two hierarchical levels.
+  The plain values stored in \type{keys:1} and \type{keys:2}
+  determine alphabetical order, while \type{\emph} affects only
+  the displayed title. Feel free to experiment with a longer text
+  in order to observe how the same structured entries collect
+  references from several pages.}}
+
+\subject{Register of works}
+
+\placeregister[works]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-macro-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/4/4f/index-macro-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-macro-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Constructing hierarchical register entries from separate sorting and display fields. A reusable macro passes author and work data to the structured register interface, while the titles are formatted independently of the keys that determine their alphabetical order.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>This is the first example in which the document no longer reconstructs the register entry with a plus-separated expression. The macro supplies the levels directly.
+</p>
+    <div style="background:#fdecec; border-left:4px solid #b64b4b; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Lower-level interface.</b> <code>\setstructurepageregister</code> is useful in controlled workflows, but ordinary authors should normally remain with <code>\index</code> or a register instance created with <code>\defineregister</code>.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Attach_userdata_to_occurrences">
+      5. Attach userdata to occurrences
+     </span>
+    </h2>
+    <p>The third argument of <code>\setstructurepageregister</code> stores arbitrary key&ndash;value data with one occurrence.
+</p>
+    <pre>\setstructurepageregister
+  [index]
+  [entries=Plato,
+   keys=Plato]
+  [role=author,
+   xmlid=person-plato]
+</pre>
+    <p>The fields <code>role</code> and <code>xmlid</code> do not alter the entry automatically. They remain available to custom processing and rendering commands.
+</p>
+    <p>Possible userdata includes:
+</p>
+    <ul>
+     <li>
+      a database identifier;
+     </li>
+     <li>
+      an XML
+      <code>xml:id</code>
+      ;
+     </li>
+     <li>
+      the editorial role of the occurrence;
+     </li>
+     <li>
+      a language code;
+     </li>
+     <li>
+      a source file;
+     </li>
+     <li>
+      a confidence value;
+     </li>
+     <li>
+      a class used by a custom page command.
+     </li>
+    </ul>
+    <div style="background:#eaf6ea; border-left:4px solid #4c8b4c; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Useful rule.</b> Put data in <code>entries</code> and <code>keys</code> when it affects hierarchy, sorting, or display. Put auxiliary metadata in <code>userdata</code>.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="5.1._Retrieve_userdata_while_rendering_page_references">
+      5.1. Retrieve userdata while rendering page references
+     </span>
+    </h3>
+    <p>During page-reference rendering:
+</p>
+    <pre>\currentregisterpageuserdata{field}
+</pre>
+    <p>returns the value stored under <code>field</code> for the current occurrence.
+</p>
+    <p>A custom page command can use it:
+</p>
+    <pre>\define[1]\PageWithRole
+  {#1%
+   \doifnotempty
+     {\currentregisterpageuserdata{role}}
+     {\high{\currentregisterpageuserdata{role}}}}
+</pre>
+    <p>and the register can activate that command:
+</p>
+    <pre>\setupregister
+  [index]
+  [pagecommand=\PageWithRole]
+</pre>
+    <h3>
+     <span class="mw-headline" id="5.2._MWE_4:_display_occurrence_userdata_beside_page_references">
+      5.2. MWE 4: display occurrence userdata beside page references
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,9pt]
+
+\setupnotation
+  [footnote]
+  [alternative=serried,
+   width=fit,
+   distance=.5em,
+   bodyfont=7.5pt,
+   style=italic]
+
+\define[1]\PageWithRole
+  {#1%
+   \doifnotempty
+     {\currentregisterpageuserdata{role}}
+     {\high{\currentregisterpageuserdata{role}}}}
+
+\setupregister
+  [index]
+  [n=1,
+   balance=no,
+   pagecommand=\PageWithRole]
+
+\starttext
+
+\subject{Justice}
+
+\setstructurepageregister
+  [index]
+  [entries=justice,
+   keys=justice]
+  [role=m,
+   source=chapter-one]
+
+This page contains the main discussion of justice.
+
+\blank[small]
+
+\setstructurepageregister
+  [index]
+  [entries=justice,
+   keys=justice]
+  [role=p,
+   source=chapter-two]
+
+This page contains a passing reference to justice.
+
+\blank[small]
+
+\setstructurepageregister
+  [index]
+  [entries=education,
+   keys=education]
+  [role=m,
+   source=chapter-two]
+
+Education is discussed as a principal topic.\footnote
+  {This example coordinates three mechanisms.
+  \type{\setstructurepageregister} supplies the displayed entry
+  and its sorting key, while its third argument stores metadata
+  specific to the occurrence, here \type{role} and \type{source}.
+  When the index is rendered, \type{\PageWithRole} receives the
+  page reference and retrieves \type{role} through
+  \type{\currentregisterpageuserdata}; that value is printed as
+  a raised letter beside the page number. Because ConTeXt merges
+  identical entries occurring on the same page, the two roles
+  attached to \emph{justice} cannot appear separately here.
+  Experiment with a longer text to observe the mechanism across
+  several pages.}
+
+\subject{Index}
+
+\placeregister[index]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-userdata-pagecommand-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/0/06/index-userdata-pagecommand-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-userdata-pagecommand-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Displaying occurrence-specific userdata beside register page references. A custom page command retrieves the role stored with each register occurrence and prints it as a raised marker beside the page number.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>The raised letters are derived from userdata. They are not part of the displayed entry or the sorting key.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.3._Understand_duplicate_merging">
+      5.3. Understand duplicate merging
+     </span>
+    </h3>
+    <p>Userdata belongs to an occurrence, but it does not automatically redefine the identity of an entry.
+</p>
+    <p>If two distinct entities must never be merged, give them different register keys or different hierarchical data. Do not rely only on an auxiliary identifier stored as userdata.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Create_an_explicit_register_page_range">
+      6. Create an explicit register page range
+     </span>
+    </h2>
+    <p>A page range is opened and closed with the same tag:
+</p>
+    <pre>\startregister
+  [index]
+  [range-tag]
+  {entry}
+</pre>
+    <p>and:
+</p>
+    <pre>\stopregister
+  [index]
+  [range-tag]
+</pre>
+    <p>The tag links the beginning and end of the same range.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.1._MWE_5:_create_an_explicit_page_range">
+      6.1. MWE 5: create an explicit page range
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,9pt]
+
+\setupnotation
+  [footnote]
+  [alternative=serried,
+   width=fit,
+   distance=.5em,
+   bodyfont=7.5pt,
+   style=italic]
+
+\setupregister
+  [index]
+  [n=1,
+   balance=no,
+   compress=yes]
+
+\starttext
+
+\subject{The education of guardians}
+
+\startregister
+  [index]
+  [guardianeducation]
+  {education+guardians}
+
+The education of the guardians begins with music and gymnastics.
+
+% \page
+
+The discussion continues with the formation of character and judgement.
+
+% \page
+
+The argument concludes by relating education to political
+responsibility.\footnote
+  {This example creates an explicit register range rather than
+  three independent occurrences. The command \type{\startregister}
+  records the entry and opens the range under the tag
+  \type{guardianeducation}; \type{\stopregister} closes the same
+  range by referring to that tag. ConTeXt then combines the opening
+  and closing locations into a single page interval. In this compact
+  one-page version, the result is necessarily \type{1--1}. Restore
+  the intervening \type{\page} commands, or experiment with a longer
+  text, to obtain a range extending across several pages.}
+
+\stopregister
+  [index]
+  [guardianeducation]
+
+\subject{Index}
+
+\placeregister[index]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-structured-page-range-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/8/81/index-structured-page-range-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-structured-page-range-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Creating an explicit register page range. The commands
+        <code>\startregister</code>
+        and
+        <code>\stopregister</code>
+        use the same tag to delimit a single indexed range; in this compact one-page version, the resulting interval is necessarily displayed as 1&ndash;1.
+       </div>
+      </div>
+     </div>
+    </div>
+    <div style="background:#fff4df; border-left:4px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Use stable tags.</b> The opening and closing commands must use exactly the same register name and range tag. Generated workflows should also ensure that each tag is unique within the document.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="7._Generate_register_entries_directly_from_XML_attributes">
+      7. Generate register entries directly from XML attributes
+     </span>
+    </h2>
+    <p>When an XML occurrence already contains all required register fields, an XML setup can map them directly to <code>\setstructurepageregister</code>.
+</p>
+    <p>For example:
+</p>
+    <pre>&lt;term key="justice" entry="justice" role="m"&gt;justice&lt;/term&gt;
+</pre>
+    <p>contains:
+</p>
+    <ul>
+     <li>
+      <code>key</code>
+      : sorting data;
+     </li>
+     <li>
+      <code>entry</code>
+      : displayed register entry;
+     </li>
+     <li>
+      <code>role</code>
+      : userdata;
+     </li>
+     <li>
+      element content: the phrase printed in the running text.
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="7.1._MWE_6:_generate_an_index_directly_from_XML_attributes">
+      7.1. MWE 6: generate an index directly from XML attributes
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,8.5pt]
+
+\setuphead
+  [subject]
+  [before=\blank[small],
+   after=\blank[small]]
+
+\setupnotation
+  [footnote]
+  [alternative=serried,
+   width=fit,
+   distance=.4em,
+   bodyfont=6.8pt,
+   style=italic]
+
+\define[1]\PageWithRole
+  {#1%
+   \doifnotempty
+     {\currentregisterpageuserdata{role}}
+     {\high{\currentregisterpageuserdata{role}}}}
+
+\setupregister
+  [index]
+  [n=1,
+   balance=no,
+   pagecommand=\PageWithRole]
+
+\startbuffer[demo]
+&lt;document&gt;
+  &lt;section&gt;
+    &lt;head&gt;Justice&lt;/head&gt;
+    &lt;p&gt;
+      The dialogue begins with a
+      &lt;term key="justice"
+            entry="justice"
+            role="m"&gt;principal question about justice&lt;/term&gt;.
+    &lt;/p&gt;
+  &lt;/section&gt;
+  &lt;section&gt;
+    &lt;head&gt;Education&lt;/head&gt;
+    &lt;p&gt;
+      The argument later connects
+      &lt;term key="education"
+            entry="education"
+            role="m"&gt;education&lt;/term&gt;
+      with political order.
+    &lt;/p&gt;
+    &lt;p&gt;
+      It also returns briefly to
+      &lt;term key="justice"
+            entry="justice"
+            role="p"&gt;justice&lt;/term&gt;.
+    &lt;/p&gt;
+  &lt;/section&gt;
+&lt;/document&gt;
+\stopbuffer
+
+\startxmlsetups xml:demo:setups
+  \xmlsetsetup
+    {#1}
+    {document|section|head|p|term}
+    {xml:*}
+\stopxmlsetups
+
+\xmlregistersetup{xml:demo:setups}
+
+\startxmlsetups xml:document
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:section
+  \xmlflush{#1}
+  % Restore \page to place each section on a new page.
+\stopxmlsetups
+
+\startxmlsetups xml:head
+  \subject{\xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:p
+  \xmlflush{#1}
+  \par
+\stopxmlsetups
+
+\startxmlsetups xml:term
+  \setstructurepageregister
+    [index]
+    [entries={\xmlatt{#1}{entry}},
+     keys={\xmlatt{#1}{key}}]
+    [role={\xmlatt{#1}{role}}]
+  \xmlflush{#1}
+\stopxmlsetups
+
+\starttext
+
+\xmlprocessbuffer
+  {main}
+  {demo}
+  {}
+
+These entries come from XML.\footnote
+  {This example links XML processing to register rendering.
+  \type{\xmlsetsetup} routes each element to a setup, and
+  \type{xml:term} reads \type{key}, \type{entry}, and
+  \type{role} with \type{\xmlatt}.
+  \type{\setstructurepageregister} stores the first two as
+  register data and \type{role} as userdata, while
+  \type{\xmlflush} prints the visible XML text. When the index
+  is rendered, \type{\PageWithRole} retrieves the stored role
+  and raises it beside the page number. Restore \type{\page}
+  in \type{xml:section} to test the mechanism across pages.}
+
+\subject{Index}
+
+\placeregister[index]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-xml-entries.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/8/80/index-xml-entries.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-xml-entries.png" title="Enlarge">
+         </a>
+        </div>
+        Generating register entries from XML attributes. The XML setup separates sorting data, displayed text, and occurrence-specific userdata before the register is rendered.
+       </div>
+      </div>
+     </div>
+    </div>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        XML data
+       </th>
+       <th>
+        Register function
+       </th>
+      </tr>
+      <tr>
+       <td><code>key</code>
+</td>
+       <td>Sorting key
+</td>
+      </tr>
+      <tr>
+       <td><code>entry</code>
+</td>
+       <td>Displayed register entry
+</td>
+      </tr>
+      <tr>
+       <td><code>role</code>
+</td>
+       <td>Userdata rendered beside the page reference
+</td>
+      </tr>
+      <tr>
+       <td>Element content
+</td>
+       <td>Text printed in the running document
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f4f0fa; border-left:4px solid #7856a8; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>XML principle.</b> Do not derive canonical register data from the visible wording when the XML already supplies explicit fields. The visible phrase may be inflected, translated, abbreviated, or context-dependent.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Generate_structured_entries_from_a_Lua_authority_table">
+      8. Generate structured entries from a Lua authority table
+     </span>
+    </h2>
+    <p>Lua becomes useful when the document should contain only stable identifiers and the canonical data is stored elsewhere.
+</p>
+    <p>A practical division of labour is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Layer
+       </th>
+       <th>
+        Responsibility
+       </th>
+      </tr>
+      <tr>
+       <td>Document command
+</td>
+       <td>Supplies a stable identifier
+</td>
+      </tr>
+      <tr>
+       <td>Lua
+</td>
+       <td>Resolves and validates that identifier
+</td>
+      </tr>
+      <tr>
+       <td>TeX wrapper
+</td>
+       <td>Translates separate Lua fields into register settings
+</td>
+      </tr>
+      <tr>
+       <td>ConTeXt register
+</td>
+       <td>Collects, sorts, merges, and renders the entries
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="8.1._MWE_7:_resolve_work_identifiers_from_a_Lua_table">
+      8.1. MWE 7: resolve work identifiers from a Lua table
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,8.5pt]
+
+\setuphead
+  [subject]
+  [before=\blank[small],
+   after=\blank[small]]
+
+\setupnotation
+  [footnote]
+  [alternative=serried,
+   width=fit,
+   distance=.4em,
+   bodyfont=6.8pt,
+   style=italic]
+
+\defineregister[works]
+
+\setupregister
+  [works]
+  [n=1,
+   balance=no]
+
+\define[5]\RegisterAuthorityWork
+  {\setstructurepageregister
+     [works]
+     [entries:1={#2},
+      keys:1={#1},
+      entries:2={\emph{#4}},
+      keys:2={#3}]
+     [authorityid={#5}]}
+
+\startluacode
+
+userdata = userdata or { }
+
+userdata.workauthority = {
+    plato_republic = {
+        authorsort = "Plato",
+        author     = "Plato",
+        titlesort  = "Republic",
+        title      = "Republic",
+        id         = "work-plato-republic",
+    },
+    plato_laws = {
+        authorsort = "Plato",
+        author     = "Plato",
+        titlesort  = "Laws",
+        title      = "Laws",
+        id         = "work-plato-laws",
+    },
+    aristotle_politics = {
+        authorsort = "Aristotle",
+        author     = "Aristotle",
+        titlesort  = "Politics",
+        title      = "Politics",
+        id         = "work-aristotle-politics",
+    },
+}
+
+function userdata.registerwork(identifier)
+    local work = userdata.workauthority[identifier]
+
+    if not work then
+        logs.report(
+            "register authority",
+            "unknown work identifier %a",
+            identifier
+        )
+        return
+    end
+
+    context.RegisterAuthorityWork(
+        work.authorsort,
+        work.author,
+        work.titlesort,
+        work.title,
+        work.id
+    )
+end
+
+\stopluacode
+
+\define[1]\Work
+  {\ctxlua{userdata.registerwork("#1")}}
+
+\starttext
+
+\subject{Classical political philosophy}
+
+\Work{plato_republic}
+The \emph{Republic} investigates justice and political order.
+
+\blank[small]
+
+\Work{aristotle_politics}
+The \emph{Politics} compares constitutions.
+
+\blank[small]
+
+\Work{plato_laws}
+The \emph{Laws} gives legislation a central place.\footnote
+  {This example uses Lua as an authority-data layer.
+  Each \type{\Work} command passes a stable identifier to
+  \type{userdata.registerwork}, which looks it up in the Lua
+  table and validates that a corresponding record exists.
+  Lua then sends the author key, displayed author name, title
+  key, displayed title, and authority identifier to
+  \type{\RegisterAuthorityWork}. That macro inserts a
+  two-level structured register entry: the plain values in
+  \type{keys:1} and \type{keys:2} control sorting, the values
+  in \type{entries:1} and \type{entries:2} control display,
+  and \type{authorityid} is preserved as occurrence-specific
+  userdata. ConTeXt remains responsible for collecting,
+  sorting, and rendering the register. Experiment with a
+  longer text to observe how repeated identifiers accumulate
+  page references.}
+
+\subject{Register of works}
+
+\placeregister[works]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-lua-authority-table-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/3/30/index-lua-authority-table-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-lua-authority-table-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Generating structured register entries from a Lua authority table. Stable work identifiers are resolved and validated in Lua, then passed to ConTeXt as separate sorting keys, displayed author and title forms, and occurrence-specific userdata before the hierarchical register is rendered.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>The source command is deliberately small:
+</p>
+    <pre>\Work{plato_republic}
+</pre>
+    <p>Lua expands that identifier into separate author and title fields. If the identifier is unknown, <code>logs.report</code> records the failure instead of silently creating an incomplete entry.
+</p>
+    <div style="background:#eaf6ea; border-left:4px solid #4c8b4c; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Architectural boundary.</b> Lua resolves and validates the authority data. ConTeXt remains responsible for collecting occurrences, sorting entries, compressing page references, and typesetting the register.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Resolve_XML_authority_records_with_Lua">
+      9. Resolve XML authority records with Lua
+     </span>
+    </h2>
+    <p>In a more complete scholarly workflow, both the occurrences and the authority records may be stored in XML.
+</p>
+    <p>The XML occurrence contains only a reference:
+</p>
+    <pre>&lt;title ref="plato-republic"&gt;Republic&lt;/title&gt;
+</pre>
+    <p>The authority section contains the canonical data:
+</p>
+    <pre>&lt;work xml:id="plato-republic"
+      author-sort="Plato"
+      author-entry="Plato"
+      title-sort="Republic"
+      title-entry="Republic"/&gt;
+</pre>
+    <p>Lua then:
+</p>
+    <ol>
+     <li>
+      reads the occurrence's
+      <code>ref</code>
+      attribute;
+     </li>
+     <li>
+      locates the matching authority record;
+     </li>
+     <li>
+      extracts its attributes;
+     </li>
+     <li>
+      caches the result;
+     </li>
+     <li>
+      passes the fields to a TeX wrapper;
+     </li>
+     <li>
+      lets ConTeXt render the visible XML text and the register separately.
+     </li>
+    </ol>
+    <h3>
+     <span class="mw-headline" id="9.1._MWE_8:_resolve_an_XML_authority_record_with_Lua">
+      9.1. MWE 8: resolve an XML authority record with Lua
+     </span>
+    </h3>
+    <pre>\mainlanguage[en]
+
+\setuppapersize[A6]
+
+\setupbodyfont
+  [libertinus,8.5pt]
+
+\setuphead
+  [subject]
+  [before=\blank[small],
+   after=\blank[small]]
+
+\setupnotation
+  [footnote]
+  [alternative=serried,
+   width=fit,
+   distance=.4em,
+   bodyfont=6.8pt,
+   style=italic]
+
+\defineregister[works]
+
+\setupregister
+  [works]
+  [n=1,
+   balance=no]
+
+\define[5]\RegisterAuthorityWork
+  {\setstructurepageregister
+     [works]
+     [entries:1={#2},
+      keys:1={#1},
+      entries:2={\emph{#4}},
+      keys:2={#3}]
+     [xmlid={#5}]}
+
+\startbuffer[demo]
+&lt;document&gt;
+  &lt;authority&gt;
+    &lt;work xml:id="plato-republic"
+          author-sort="Plato"
+          author-entry="Plato"
+          title-sort="Republic"
+          title-entry="Republic"/&gt;
+    &lt;work xml:id="plato-laws"
+          author-sort="Plato"
+          author-entry="Plato"
+          title-sort="Laws"
+          title-entry="Laws"/&gt;
+    &lt;work xml:id="aristotle-politics"
+          author-sort="Aristotle"
+          author-entry="Aristotle"
+          title-sort="Politics"
+          title-entry="Politics"/&gt;
+  &lt;/authority&gt;
+
+  &lt;body&gt;
+    &lt;section&gt;
+      &lt;head&gt;Plato&lt;/head&gt;
+      &lt;p&gt;
+        The &lt;title ref="plato-republic"&gt;Republic&lt;/title&gt;
+        examines justice and political education.
+      &lt;/p&gt;
+      &lt;p&gt;
+        The &lt;title ref="plato-laws"&gt;Laws&lt;/title&gt;
+        presents a detailed legislative project.
+      &lt;/p&gt;
+    &lt;/section&gt;
+    &lt;section&gt;
+      &lt;head&gt;Aristotle&lt;/head&gt;
+      &lt;p&gt;
+        The &lt;title ref="aristotle-politics"&gt;Politics&lt;/title&gt;
+        compares constitutions and forms of political rule.
+      &lt;/p&gt;
+    &lt;/section&gt;
+  &lt;/body&gt;
+&lt;/document&gt;
+\stopbuffer
+
+\startxmlsetups xml:demo:setups
+  \xmlsetsetup
+    {#1}
+    {document|authority|work|body|section|head|p|title}
+    {xml:*}
+\stopxmlsetups
+
+\xmlregistersetup{xml:demo:setups}
+
+\startxmlsetups xml:document
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:authority
+  % Authority records are queried by Lua and are not printed.
+\stopxmlsetups
+
+\startxmlsetups xml:work
+  % Individual authority records are not printed directly.
+\stopxmlsetups
+
+\startxmlsetups xml:body
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:section
+  \xmlflush{#1}
+\stopxmlsetups
+
+\startxmlsetups xml:head
+  \subject{\xmlflush{#1}}
+\stopxmlsetups
+
+\startxmlsetups xml:p
+  \xmlflush{#1}
+  \par
+\stopxmlsetups
+
+\startxmlsetups xml:title
+  \xmlfunction{#1}{registerauthoritywork}
+  \emph{\xmlflush{#1}}
+\stopxmlsetups
+
+\startluacode
+
+userdata = userdata or { }
+
+userdata.workcache = userdata.workcache or { }
+
+local function authoritywork(node)
+    local reference = xml.attribute(node, "", "ref")
+
+    if not reference or reference == "" then
+        logs.report(
+            "register authority",
+            "title occurrence without a ref attribute"
+        )
+        return nil
+    end
+
+    local cached = userdata.workcache[reference]
+
+    if cached then
+        return cached
+    end
+
+    local path =
+        "ancestor::document/authority/work[@xml:id='" ..
+        reference ..
+        "']"
+
+    local record = xml.first(node, path)
+
+    if not record then
+        logs.report(
+            "register authority",
+            "no authority record found for %a",
+            reference
+        )
+        return nil
+    end
+
+    local work = {
+        id          = reference,
+        authorsort  = xml.attribute(record, "", "author-sort"),
+        authorentry = xml.attribute(record, "", "author-entry"),
+        titlesort   = xml.attribute(record, "", "title-sort"),
+        titleentry  = xml.attribute(record, "", "title-entry"),
+    }
+
+    userdata.workcache[reference] = work
+
+    return work
+end
+
+function xml.functions.registerauthoritywork(node)
+    local work = authoritywork(node)
+
+    if not work then
+        return
+    end
+
+    context.RegisterAuthorityWork(
+        work.authorsort  or "",
+        work.authorentry or "",
+        work.titlesort   or "",
+        work.titleentry  or "",
+        work.id          or ""
+    )
+end
+
+\stopluacode
+
+\starttext
+
+\xmlprocessbuffer
+  {main}
+  {demo}
+  {}
+
+The register below was generated by resolving XML references with Lua.\footnote
+  {This example combines XML authority data, Lua lookup, and
+  ConTeXt register rendering. Each \type{title} element carries
+  a stable \type{ref} value. The setup \type{xml:title} calls the
+  Lua function \type{registerauthoritywork}, which reads that
+  reference, searches the XML authority section for the matching
+  \type{work} record, and caches the result. Lua then passes the
+  separate author and title sorting keys, displayed forms, and XML
+  identifier to \type{\RegisterAuthorityWork}. The macro inserts
+  a two-level structured register entry, while the visible title
+  remains independently typeset by \type{\xmlflush}. ConTeXt
+  finally collects, sorts, and renders the register of works.}
+
+\subject{Register of works}
+
+\placeregister[works]
+
+\stoptext
+</pre>
+    <div class="center">
+     <div class="thumb tnone">
+      <div class="thumbinner" style="width:502px;">
+       <a class="image" href="../../../File:index-xml-lua-authority-register-mwe.png">
+        <img alt class="thumbimage" decoding="async" height="705" src="../../../images/thumb/e/eb/index-xml-lua-authority-register-mwe.webp" width="500">
+       </a>
+       <div class="thumbcaption">
+        <div class="magnify">
+         <a class="internal" href="../../../File:index-xml-lua-authority-register-mwe.png" title="Enlarge">
+         </a>
+        </div>
+        Resolving XML authority references with Lua. Each title occurrence carries a stable XML reference. Lua resolves that reference against the XML authority section, caches the corresponding record, and passes separate sorting keys, displayed forms, and the XML identifier to ConTeXt, which then generates the hierarchical register of works.
+       </div>
+      </div>
+     </div>
+    </div>
+    <p>This example keeps four representations separate:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Representation
+       </th>
+       <th>
+        Example
+       </th>
+       <th>
+        Function
+       </th>
+      </tr>
+      <tr>
+       <td>Occurrence text
+</td>
+       <td><code>Republic</code>
+</td>
+       <td>Printed in the paragraph
+</td>
+      </tr>
+      <tr>
+       <td>Authority identifier
+</td>
+       <td><code>plato-republic</code>
+</td>
+       <td>Links the occurrence to the authority record
+</td>
+      </tr>
+      <tr>
+       <td>Sorting data
+</td>
+       <td><code>Plato</code>, <code>Republic</code>
+</td>
+       <td>Controls alphabetical order
+</td>
+      </tr>
+      <tr>
+       <td>Register display data
+</td>
+       <td><code>Plato</code>, italic <code>Republic</code>
+</td>
+       <td>Printed in the register
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The cache avoids searching the XML authority section again when the same identifier is encountered repeatedly.
+</p>
+    <div style="background:#f4f0fa; border-left:4px solid #7856a8; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Architectural result.</b> XML stores semantic relationships, Lua resolves and validates them, userdata preserves identifiers, and ConTeXt performs sorting, page aggregation, and final typesetting.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Normalize_sorting_data_before_insertion">
+      10. Normalize sorting data before insertion
+     </span>
+    </h2>
+    <p>External data may contain values that are unsuitable as sorting keys:
+</p>
+    <ul>
+     <li>
+      leading articles;
+     </li>
+     <li>
+      inconsistent capitalization;
+     </li>
+     <li>
+      typographical markup;
+     </li>
+     <li>
+      punctuation used only for display;
+     </li>
+     <li>
+      variant spellings;
+     </li>
+     <li>
+      composed and decomposed Unicode sequences;
+     </li>
+     <li>
+      missing fields.
+     </li>
+    </ul>
+    <p>Normalization should occur before insertion into the register.
+</p>
+    <p>A Lua function may remove a leading English article:
+</p>
+    <pre>local function normaltitle(title)
+    return title
+        :gsub("^The%s+", "")
+        :gsub("^A%s+", "")
+        :gsub("^An%s+", "")
+end
+</pre>
+    <p>The displayed entry may remain <code>The Republic</code>, while the sorting key becomes <code>Republic</code>.
+</p>
+    <div style="background:#fff4df; border-left:4px solid #d08a24; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Editorial decision required.</b> Normalization rules are language- and project-dependent. Do not remove articles, accents, particles, or punctuation without defining a consistent policy.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="11._Choose_the_least_complex_suitable_interface">
+      11. Choose the least complex suitable interface
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Situation
+       </th>
+       <th>
+        Recommended interface
+       </th>
+      </tr>
+      <tr>
+       <td>Simple entry written directly in the document
+</td>
+       <td><code>\index{entry}</code>
+</td>
+      </tr>
+      <tr>
+       <td>Separate sorting and displayed forms
+</td>
+       <td><code>\index[key]{entry}</code>
+</td>
+      </tr>
+      <tr>
+       <td>Hierarchical entry
+</td>
+       <td>Plus-separated ordinary syntax
+</td>
+      </tr>
+      <tr>
+       <td>Named page-reference role
+</td>
+       <td>Processor
+</td>
+      </tr>
+      <tr>
+       <td>Data already divided into named fields
+</td>
+       <td><code>\setstructurepageregister</code>
+</td>
+      </tr>
+      <tr>
+       <td>Occurrence-specific metadata
+</td>
+       <td>Third userdata argument
+</td>
+      </tr>
+      <tr>
+       <td>Explicit page range
+</td>
+       <td><code>\startregister</code> and <code>\stopregister</code>
+</td>
+      </tr>
+      <tr>
+       <td>XML attributes already contain all fields
+</td>
+       <td>XML setup calling <code>\setstructurepageregister</code>
+</td>
+      </tr>
+      <tr>
+       <td>Stable identifiers resolve to a Lua authority table
+</td>
+       <td>Lua lookup followed by a TeX wrapper
+</td>
+      </tr>
+      <tr>
+       <td>XML references resolve to XML authority records
+</td>
+       <td>XML setups combined with Lua lookup
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#eaf6ea; border-left:4px solid #4c8b4c; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Rule of least complexity.</b> Use the highest-level interface that represents the data correctly. Move to structured commands, XML, or Lua only when the simpler interface no longer preserves the distinctions required by the project.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Diagnose_common_problems">
+      12. Diagnose common problems
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="12.1._Formatted_text_is_also_used_as_the_sorting_key">
+      12.1. Formatted text is also used as the sorting key
+     </span>
+    </h3>
+    <p><b>Symptom:</b> Entries appear in an unexpected order.
+</p>
+    <p><b>Solution:</b> Supply a plain key separately:
+</p>
+    <pre>\index[Plato+Republic]
+      {Plato+\emph{Republic}}
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.2._XML_occurrence_text_becomes_the_canonical_entry">
+      12.2. XML occurrence text becomes the canonical entry
+     </span>
+    </h3>
+    <p><b>Symptom:</b> Inflected or abbreviated forms appear as separate entries.
+</p>
+    <p><b>Solution:</b> Use explicit XML fields or resolve the occurrence against an authority record.
+</p>
+    <h3>
+     <span class="mw-headline" id="12.3._Userdata_is_stored_but_not_printed">
+      12.3. Userdata is stored but not printed
+     </span>
+    </h3>
+    <p><b>Symptom:</b> Metadata exists but has no visible effect.
+</p>
+    <p><b>Cause:</b> Userdata has no automatic visual representation.
+</p>
+    <p><b>Solution:</b> Retrieve it through a custom rendering command such as:
+</p>
+    <pre>\currentregisterpageuserdata{role}
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.4._Distinct_records_are_merged">
+      12.4. Distinct records are merged
+     </span>
+    </h3>
+    <p><b>Symptom:</b> Different authority records with identical keys and entries are combined.
+</p>
+    <p><b>Solution:</b> Define a distinguishing register key or hierarchy. Do not expect userdata alone to redefine register identity.
+</p>
+    <h3>
+     <span class="mw-headline" id="12.5._Lua_receives_an_unknown_identifier">
+      12.5. Lua receives an unknown identifier
+     </span>
+    </h3>
+    <p><b>Symptom:</b> No entry is inserted.
+</p>
+    <p><b>Solution:</b> Validate the identifier and report the failure with <code>logs.report</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="12.6._A_register_definition_refers_to_itself_as_parent">
+      12.6. A register definition refers to itself as parent
+     </span>
+    </h3>
+    <p><b>Symptom:</b> Compilation stops with an invalid-parent warning or a capacity error.
+</p>
+    <p><b>Cause:</b>
+</p>
+    <pre>\defineregister
+  [works]
+  [works]
+</pre>
+    <p>defines <code>works</code> as its own parent.
+</p>
+    <p><b>Solution:</b>
+</p>
+    <pre>\defineregister[works]
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.7._The_register_reflects_an_earlier_run">
+      12.7. The register reflects an earlier run
+     </span>
+    </h3>
+    <p><b>Symptom:</b> New entries or page references are missing.
+</p>
+    <p><b>Solution:</b> Process the document again. Registers may require more than one run before page references stabilize.
+</p>
+    <h2>
+     <span class="mw-headline" id="13._What_this_guide_has_established">
+      13. What this guide has established
+     </span>
+    </h2>
+    <p>The progression is cumulative:
+</p>
+    <ol>
+     <li>
+      ordinary register commands remain the preferred author-level interface;
+     </li>
+     <li>
+      explicit keys separate sorting from displayed text;
+     </li>
+     <li>
+      processors can mark page-reference roles;
+     </li>
+     <li>
+      <code>\setstructurepageregister</code>
+      accepts decomposed fields;
+     </li>
+     <li>
+      userdata preserves occurrence-specific metadata;
+     </li>
+     <li>
+      explicit range commands delimit one continuous page interval;
+     </li>
+     <li>
+      XML setups map source attributes to register fields;
+     </li>
+     <li>
+      Lua resolves stable identifiers and validates authority data;
+     </li>
+     <li>
+      XML and Lua can cooperate to resolve authority records;
+     </li>
+     <li>
+      ConTeXt remains responsible for collecting, sorting, merging, compressing, and typesetting the register.
+     </li>
+    </ol>
+    <p>The central design principle is separation of concerns:
+</p>
+    <ul>
+     <li>
+      source data describes entities and relationships;
+     </li>
+     <li>
+      sorting keys express the project's alphabetical policy;
+     </li>
+     <li>
+      displayed entries contain reader-facing text;
+     </li>
+     <li>
+      processors express reusable page-reference roles;
+     </li>
+     <li>
+      userdata carries auxiliary metadata;
+     </li>
+     <li>
+      Lua prepares and validates data;
+     </li>
+     <li>
+      ConTeXt renders the final register.
+     </li>
+    </ul>
+    <div style="background:#f4f0fa; border-left:4px solid #7856a8; padding:0.75em 0.95em; margin:1em 0;">
+     <p><b>Key conclusion.</b> A structured register does not merely automate entry insertion. It preserves the distinction between semantic identity, sorting behaviour, textual display, occurrence metadata, and document location.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="14._See_also">
+      14. See also
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../../Registers_and_index.html" title="References notes and floats/Registers and index">
+       Indexes and registers in ConTeXt
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides (page does not exist)">
+       Indexes and registers: how-to guides
+      </a>
+     </li>
+     <li>
+      <a href="Creating_multiple_registers.html" title="References notes and floats/Registers and index/How-to guides/Creating multiple registers">
+       Creating multiple registers
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides/Structuring_index_entries_and_cross-references&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides/Structuring index entries and cross-references (page does not exist)">
+       Structuring index entries and cross-references
+      </a>
+     </li>
+     <li>
+      <a href="Formatting_an_index.html" title="References notes and floats/Registers and index/How-to guides/Formatting an index">
+       Formatting an index
+      </a>
+     </li>
+     <li>
+      <a href="../../../ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">
+       ConTeXt and Lua programming
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../../../index.php?title=XML&action=edit&redlink=1" title="XML (page does not exist)">
+       XML
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../../../index.php?title=XML_setups&action=edit&redlink=1" title="XML setups (page does not exist)">
+       XML setups
+      </a>
+     </li>
+     <li>
+      <a href="../../../Command/defineregister.html" title="Command/defineregister">
+       \defineregister
+      </a>
+     </li>
+     <li>
+      <a href="../../../Command/setupregister.html" title="Command/setupregister">
+       \setupregister
+      </a>
+     </li>
+     <li>
+      <a href="../../../Command/placeregister.html" title="Command/placeregister">
+       \placeregister
+      </a>
+     </li>
+     <li>
+      <a href="../../../Command/defineprocessor.html" title="Command/defineprocessor">
+       \defineprocessor
+      </a>
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-top:1.2em;">
+     <p><b>Indexes and registers in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="../../Registers_and_index.html" title="References notes and floats/Registers and index">Overview</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides (page does not exist)">How-to guides</a> &nbsp;&middot;&nbsp;
+<a href="Creating_multiple_registers.html" title="References notes and floats/Registers and index/How-to guides/Creating multiple registers">Previous: Creating multiple registers</a> &nbsp;&middot;&nbsp;
+<b>Managing structured register data</b> &nbsp;&middot;&nbsp;
+<a class="new" href="../../../index.php?title=References_notes_and_floats/Registers_and_index/How-to_guides&action=edit&redlink=1.html" title="References notes and floats/Registers and index/How-to guides (page does not exist)">Next: How-to guides</a>
+</p>
+    </div>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/References_notes_and_floats/Registers_and_index/How-to_guides/Managing_structured_register_data">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

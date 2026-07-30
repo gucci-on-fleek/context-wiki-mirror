@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Show the hyphenation points&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Show_the_hyphenation_points" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Show the hyphenation points
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7591&diff=43390">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This LaTeX example adds a function to the <tt>post_linebreak_filter</tt> callback. The function iterates through all the nodes in the paragraph (and descends into the vlist and hlist nodes) and inserts a small rule where the discretionary nodes are.
+</p>
+    <pre>\documentclass[12pt,a4paper]{scrartcl}
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\usepackage{fontspec}
+\directlua{
+show_hyph = function(head)
+  while head do
+    if head.id == 0 or head.id == 1 then&nbsp;% hlist, vlist
+      show_hyph(head.list)&nbsp;% should be head.head in a newer luatex than 0.64
+    elseif head.id == 7 then             % disc
+      local n = node.new("whatsit","pdf_literal")
+      n.mode = 0
+      n.data = "q 0.3 w 0 2 m 0 7 l S Q"
+      n.next = head.next
+      n.prev = head
+      head.next = n
+      head = n
+    end
+  head = head.next
+  end
+  return true
+end
+luatexbase.add_to_callback("post_linebreak_filter",show_hyph,"show_hyph")
+
+}
+
+\begin{document}
+\begin{minipage}{5cm}
+\blindtext
+\end{minipage}
+\end{document}
+</pre>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Show_the_hyphenation_points">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

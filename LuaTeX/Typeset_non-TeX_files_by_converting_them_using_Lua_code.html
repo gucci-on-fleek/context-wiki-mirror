@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Typeset non-TeX files by converting them using Lua code&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Typeset_non-TeX_files_by_converting_them_using_Lua_code" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Typeset non-TeX files by converting them using Lua code
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7616&diff=43415">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The following code example demonstrates how to use the file reading callback and coroutines to convert a non-TeX file into TeX code which is then typeset.
+</p>
+    <p><br>
+First the Lua code ("Preprocessor.lua"):
+</p>
+    <pre> local function readFile(fn)
+ 	local file = assert(io.open(fn, "r"))
+ 	local contents = file:read("*a")
+ 	file:close()
+ 	return contents
+ end
+ 
+ 
+ local function processInputFile(contents)
+ 	-- Preamble
+ 	coroutine.yield("\\pdfoutput=1 ")
+ 	
+ 	-- Process the file: Return each line
+ 	for line in contents:gmatch("(.-)[\n\r]") do
+ 		coroutine.yield(line)
+ 	end
+ 	
+ 	-- Postamble
+ 	coroutine.yield("\\bye")
+ 	
+ 	-- Done
+ 	coroutine.yield(nil)
+ end
+ 
+ 
+ callback.register("open_read_file", function(fileName)
+ 	local contents = readFile(fileName)
+ 	return {
+ 		reader = coroutine.wrap(function()
+ 			processInputFile(contents .. "\n")
+ 		end)
+ 	}
+ end)
+</pre>
+    <p>Then a small test file ("Preprocessor.txt"):
+</p>
+    <pre> Hello World1
+ 
+ Hello World2
+ 
+ Paragraph 3,
+ continuing right now
+ and going on over
+ four lines
+</pre>
+    <p>And finally the bash shell script to tie everything together ("Preprocessor.sh"):
+</p>
+    <pre> luatex -fmt=luatex --jobname=Preprocessor '\directlua0{dofile("Preprocessor.lua")}\input Preprocessor.txt'
+</pre>
+    <p>As you can see, the file to be converted is simply read using "\input" and then converted
+in the Lua function "processInputFile". By using coroutines, we can pretend to convert the file
+in one go, when really we are supplying it line by line to LuaTeX.
+</p>
+    <p>It would of course be possible to check the file type/extension inside the "open_read_file" callback and perform different conversions (or none at all if a TeX file) depending on the
+file type, i.e. to typeset source code.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Typeset_non-TeX_files_by_converting_them_using_Lua_code">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

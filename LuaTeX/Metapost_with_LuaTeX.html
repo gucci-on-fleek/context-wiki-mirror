@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Metapost with LuaTeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Metapost_with_LuaTeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Metapost with LuaTeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7586&diff=43327">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Writing directly some metapost code is now possible in LuaTeX, through MPLib. It only works in pdf mode.
+</p>
+    <p>To get it working, you will need three files: <a class="external text" href="http://source.contextgarden.net/tex/context/base/supp-mpl.lua" rel="nofollow">supp-mpl.lua</a> and <a class="external text" href="http://source.contextgarden.net/tex/context/base/supp-mpl.tex" rel="nofollow">supp-mpl.tex</a> (you need to copy/paste them) from the ConTeXt distribution, and a stupid .sty file:
+</p>
+    <pre>\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mplib}
+
+\input supp-mpl.tex
+
+\directlua0{dofile(kpse.find_file("formathack.lua"))}
+</pre>
+    <p>And create a file formathack.lua containing:
+</p>
+    <pre>local preamble = [[
+input %s&nbsp;; dump&nbsp;;
+]]
+metapost.make = function (name, mem_name)
+    local mpx = mplib.new {
+        ini_version = true,
+        find_file = metapost.finder,
+        job_name =  name}
+    if mpx then
+        local result = mpx:execute(string.format(preamble,name))
+        mpx:finish()
+    end
+end
+function replacesuffix(filename, suffix)
+  return (string.gsub(filename,"%.[%a%d]+$","")) .. "." .. suffix
+end
+metapost.load = function (name)
+    local mpx = mplib.new {
+            ini_version = false,
+            mem_name = replacesuffix(name,"mem"),
+            find_file = finder
+        }
+    local result
+    if not mpx then
+        metapost.make(name)
+        metapost.report("creating %s.mem", name)
+        mpx = mplib.new {
+            ini_version = false,
+            mem_name = replacesuffix(name,"mem"),
+            find_file = finder
+        }
+    end
+    if not mpx then
+        result = { status = 99, error = "out of memory"}
+    end
+    return mpx, result
+end
+</pre>
+    <p>Once you have all four files, the following example should work:
+</p>
+    <pre>\mplibcode
+beginfig(1);
+pickup pencircle xscaled 5 rotated 30;
+draw unitsquare scaled 20 withcmykcolor (0.3,0.4,0.6,0);
+endfig;
+\endmplibcode 
+</pre>
+    <p>as well as any metapost code.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Metapost_with_LuaTeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

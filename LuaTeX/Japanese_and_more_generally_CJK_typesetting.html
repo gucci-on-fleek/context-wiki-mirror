@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Japanese and more generally CJK typesetting&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Japanese_and_more_generally_CJK_typesetting" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Japanese and more generally CJK typesetting
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7584&diff=43382">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>First define the following tables and functions in lua:
+</p>
+    <pre>table_le = {[0x3008]=true, [0x300A]=true, [0x300C]=true, [0x300E]=true, 
+[0x3010]=true, [0x3014]=true, [0x3016]=true, [0x3018]=true, [0x301A]=true, 
+[0x301D]=true, [0xFF08]=true, [0xFF3B]=true, [0xFF5B]=true}
+
+table_re = {[0x3001]=true, [0x3002]=true, [0x3009]=true, [0x300B]=true, 
+[0x300D]=true, [0x300F]=true, [0x3011]=true, [0x3015]=true, [0x3017]=true, 
+[0x3019]=true, [0x301F]=true, [0xFF09]=true, [0xFF0C]=true, [0xFF0E]=true, 
+[0xFF3D]=true, [0xFF5D]=true}
+
+table_sk = {[0x3041]=true, [0x3043]=true, [0x3045]=true, [0x3047]=true, 
+[0x3049]=true, [0x3063]=true, [0x3083]=true, [0x3085]=true, [0x3087]=true, 
+[0x3083]=true, [0x30A1]=true, [0x30A3]=true, [0x30A5]=true, [0x30A7]=true, 
+[0x30A9]=true, [0x30C3]=true, [0x30E3]=true, [0x30E5]=true, [0x30E7]=true, 
+[0x30EE]=true, [0x30F5]=true, [0x30F6]=true}
+
+table_aux = {[0x3005]=true, [0x3006]=true, [0x301C]=true, [0x309D]=true, 
+[0x309E]=true, [0x30FD]=true, [0x30FE]=true}
+
+table_ll = {[0x28]=true, [0x5B]=true}
+
+table_rl = { [0x29]=true,  [0x5D]=true,  [0x21]=true,  [0x2C]=true,  [0x2E]=true,  
+[0x3A]=true,  [0x3B]=true,  [0x3F]=true}
+
+function is_CJK(id) if ((id &gt;= 12288 and id &lt;= 55207) or (id &gt;= 65280 and id &lt;= 65504)) then return true; else return false; end end 
+
+function is_CJK_le(id) return table_le[id] end
+
+function is_CJK_re(id) return table_re[id] end
+
+function is_CJK_karenb(id) return (is_CJK(id) and (not table_re[id])) end
+
+function is_CJK_ll(id) return table_ll[id] end
+
+function is_CJK_rl(id) return table_ll[id] end
+
+function is_CJK_ka(id) return (is_CJK(id) and (not (table_re[id] or table_le[id] or table_sk[id] or table_aux[id]))) end
+
+function insert_penalty(head,t) n=node.new("penalty"); n.penalty=10000; node.insert_after(head,t,n); end
+
+function insert_small_glue(head,t) 
+   n=node.new("glue"); 
+   gs=node.new("glue_spec"); 
+   gs.width=0;
+   gs.stretch=0.05 * font.fonts[t.font].size;
+   gs.stretch_order=0;
+   gs.shrink=0;
+   gs.shrink_order=0;
+   n.spec=gs;
+   node.insert_after(head,t,n);
+end
+
+function insert_half_glue(head,t) 
+   n=node.new("glue");
+   gs=node.new("glue_spec");
+   gs.width=-0.5 * font.fonts[t.font].size;
+   gs.stretch=0.5 * font.fonts[t.font].size;
+   gs.stretch_order=0;
+   gs.shrink=0.05 * font.fonts[t.font].size;
+   gs.shrink_order=0;
+   n.spec=gs;
+   node.insert_after(head,t,n);
+end
+
+function insert_double_half(head,t) 
+   n=node.new("glue");
+   gs=node.new("glue_spec");
+   gs.width=-font.fonts[t.font].size;
+   gs.stretch=font.fonts[t.font].size;
+   gs.stretch_order=0;
+   gs.shrink=0.05 * font.fonts[t.font].size;
+   gs.shrink_order=0;
+   n.spec=gs;
+   node.insert_after(head,t,n);
+end
+</pre>
+    <p>Then use the following callback:
+</p>
+    <pre>callback.register('pre_linebreak_filter',
+function(t,groupcode,glyphes)
+   local node_id_glyph=node.id("glyph")
+   local node_id_glue=node.id("glue")
+   head = t
+   for t in node.traverse(head) do
+      if (node.has_attribute(t,kinsoku)) then
+         if (t.next and t.next.next and t.id == node_id_glyph and t.next.id == node_id_glue and t.next.next.id == node_id_glyph and is_CJK(t.char) and is_CJK(t.next.next.char)) 
+            then l = t.next.next
+                 node.free(t.next)
+                 t.next = l
+         end
+         if (t.next and t.id == node_id_glyph and t.next.id == node_id_glyph) then
+            if (is_CJK(t.next.char)) then
+               if (is_CJK_le(t.char)) then insert_small_glue(head,t); insert_penalty(head,t); 
+               elseif (is_CJK_re(t.char)) then 
+                  if (is_CJK_karenb(t.next.char)) then insert_half_glue(head,t);
+                  else insert_double_half(head,t); end
+               elseif (is_CJK_ll(t.char)) then
+                  if (is_CJK_karenb(t.next.char)) then insert_small_glue(head,t); insert_penalty(head,t); 
+                  else insert_half_glue(head,t); insert_penalty(head,t); end
+               else
+                  if (is_CJK_ka(t.next.char)) then insert_small_glue(head,t);
+                  elseif (is_CJK_le(t.next.char)) then insert_half_glue(head,t);
+                  else insert_small_glue(head,t); insert_penalty(head,t); end
+               end
+            elseif (is_CJK(t.char)) then
+               if (is_CJK_re(t.char)) then 
+                  if (is_CJK_rl(t.next.char)) then insert_half_glue(head,t); insert_penalty(head,t); 
+                  else insert_half_glue(head,t); end
+               elseif (is_CJK_le(t.char) or is_CJK_rl(t.next.char)) then insert_small_glue(head,t); insert_penalty(head,t);
+               else insert_small_glue(head,t); end
+            end
+         end
+      end
+   end
+return true
+end )
+</pre>
+    <p>And the following code in your TeX file:
+</p>
+    <pre>\def\newattribute#1#2{%
+\expandafter\attributedef \csname#1\endcsname #2
+\directlua0{#1 = #2 }}
+\newattribute{kinsoku}{300}
+
+\def\startkinsoku{\kinsoku1}
+\def\stopkinsoku{\kinsoku-1}&nbsp;% -1 signals 'unset'
+</pre>
+    <p>As you can see, there is <tt>\startkinsoku</tt> to start <i>kinsoku</i> and <tt>\stopkinsoku</tt> to stop it. You also need a font: just take the code on page <a href="Use_a_TrueType_font.html" title="LuaTeX/Use a TrueType font">LuaTeX/Use a TrueType font</a> and use any TrueType CJK font.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Japanese_and_more_generally_CJK_typesetting">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

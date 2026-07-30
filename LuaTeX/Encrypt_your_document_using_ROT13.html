@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Encrypt your document using ROT13&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Encrypt_your_document_using_ROT13" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Encrypt your document using ROT13
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7581&diff=43378">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>The following PlainTeX code example uses the ligaturing callback to "encrypt" the document using ROT13-"encryption".
+</p>
+    <pre> %&luatex
+ 
+ % Notes:
+ % 
+ % -	Hyphenation is applied before rotating.
+ % -	Ligaturing is performed after rotating.
+ 
+ \pdfoutput=1
+ \begingroup
+ \catcode`\%=12
+ \directlua0{
+ 	callback.register('ligaturing', function(head)
+ 		for v in node.traverse_id(33, head) do
+ 			if v.subtype == 1 then
+ 				local c = v.char
+ 				if c &gt;= 65 and c &lt;= 90 then
+ 					v.char = (c - 65 + 13)&nbsp;% 26 + 65
+ 				elseif c &gt;= 97 and c &lt;= 122 then
+ 					v.char = (c - 97 + 13)&nbsp;% 26 + 97
+ 				end
+ 			end
+ 		end
+ 		node.ligaturing(head)
+ 	end)
+ }
+ \endgroup
+ 
+ % Hello World; fi -- fl -- ffl -- ffi -- enough with the ligatures!
+ % Better do some kerning instead: AV
+ 
+ Uryyb Jbeyq; sv -- sy -- ssy -- ssv -- rabhtu jvgu gur yvtngherf!
+ Orggre qb fbzr xreavat vafgrnq: NI
+ 
+ 
+ \bye
+</pre>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Encrypt_your_document_using_ROT13">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

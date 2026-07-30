@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Traversing tokens&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Traversing_tokens" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Traversing tokens
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7615&diff=43414">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Add the following where you want to start tracing tokens:
+</p>
+    <pre>\directlua{
+callback.register('token_filter',
+function()
+	t = token.get_next()
+	if (t[3]==0) then
+	texio.write_nl('term and log', 'CHAR TOKEN char=' .. unicode.utf8.char(t[2]) .. ' catcode=' .. t[1])
+	else
+	texio.write_nl('term and log', 'CSEQ TOKEN name=' .. token.command_name(t) .. ' code=' .. t[1] .. ' id=' .. t[3])
+	end
+	return t
+end )
+}
+</pre>
+    <p>The anonymous function reads tokens using <tt>token.get_next()</tt>, processes them, and then supplies them (or different ones) to TeX by its <tt>return</tt> value. The function unicode.utf8.char reads a numeric value and produces a UTF-8 character. For all functions in the <b>string</b> library of lua you have the equivalents functions in the <b>unicode.utf8</b> library which is loaded by luatex.
+</p>
+    <p>When I apply this to file
+</p>
+    <pre>\font\x=omlgc
+\x VAT bl? bla bla bla 
+</pre>
+    <p>I get the following:
+</p>
+    <pre>This is luaTeX, Version 3.141592-snapshot-2007062922 (Web2C 7.5.6) (format= 2007.6.25)  4 JUL 2007 00:14
+**&plain test
+(
+CHAR TOKEN char=  catcode=10
+CSEQ TOKEN name=register code=93 id=1115710
+CSEQ TOKEN name=expand_after code=118 id=1114234
+CHAR TOKEN char== catcode=12
+CHAR TOKEN char=o catcode=11
+CHAR TOKEN char=o catcode=11
+CHAR TOKEN char=m catcode=11
+CHAR TOKEN char=l catcode=11
+CHAR TOKEN char=g catcode=11
+CHAR TOKEN char=c catcode=11
+CHAR TOKEN char=  catcode=10
+CSEQ TOKEN name=def_font code=92 id=1114234
+CSEQ TOKEN name=def_font code=92 id=1114234
+CSEQ TOKEN name=def_font code=92 id=1114234
+CSEQ TOKEN name=def_font code=92 id=1114234
+CSEQ TOKEN name=def_font code=92 id=1114234
+CHAR TOKEN char=V catcode=11
+CHAR TOKEN char=V catcode=11
+CHAR TOKEN char=A catcode=11
+CHAR TOKEN char=T catcode=11
+CHAR TOKEN char=  catcode=10
+CHAR TOKEN char=b catcode=11
+CHAR TOKEN char=l catcode=11
+CHAR TOKEN char=? catcode=12
+CHAR TOKEN char=  catcode=10
+CHAR TOKEN char=b catcode=11
+CHAR TOKEN char=l catcode=11
+CHAR TOKEN char=a catcode=11
+CHAR TOKEN char=  catcode=10
+CHAR TOKEN char=b catcode=11
+CHAR TOKEN char=l catcode=11
+CHAR TOKEN char=a catcode=11
+CHAR TOKEN char=  catcode=10
+CHAR TOKEN char=b catcode=11
+CHAR TOKEN char=l catcode=11
+CHAR TOKEN char=a catcode=11
+CHAR TOKEN char=  catcode=10
+CSEQ TOKEN name=par_end code=13 id=1114870
+...
+</pre>
+    <p>If you wondering why the letters o and V appear twice, here are the answers I received from Taco:
+</p>
+    <h3>
+     <span id="why_do_I_get_the_o_character_token_twice?">
+     </span>
+     <span class="mw-headline" id="why_do_I_get_the_o_character_token_twice.3F">
+      why do I get the o character token twice?
+     </span>
+    </h3>
+    <p>This is because of how the filename scanning works: it has
+to pre-scan the first character to decide between the two
+allowed syntaxes
+</p>
+    <pre>  \font\f=omlgc
+</pre>
+    <p>and
+</p>
+    <pre>  \font\f={omlgc}
+</pre>
+    <h3>
+     <span id="why_do_I_get_the_V_character_token_twice?">
+     </span>
+     <span class="mw-headline" id="why_do_I_get_the_V_character_token_twice.3F">
+      why do I get the V character token twice?
+     </span>
+    </h3>
+    <p>Because it is a character encoutered in vmode. TeX switches
+to hmode, then re-reads the character.
+</p>
+    <p><a class="new" href="../index.php?title=User:Yannis.Haralambous&action=edit&redlink=1" title="User:Yannis.Haralambous (page does not exist)">Yannis</a> 04:40, 4 July 2007 (EDT)
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Traversing_tokens">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

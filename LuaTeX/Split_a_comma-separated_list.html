@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Split a comma-separated list&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Split_a_comma-separated_list" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Split a comma-separated list
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7593&diff=43392">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>To split a comma-separated list, use the following lpeg grammar(s):
+</p>
+    <pre> LT = { }
+ LT.grammars = LT.grammars or { }
+ 
+ 
+ -- Matches nested braces (a brace group) with arbitrary contents
+ LT.grammars.braces = lpeg.P({
+     "{" * ((1 - lpeg.S("{}")) + lpeg.V(1))^0 * "}"
+ })
+ 
+ -- Splits a list of comma-separated values into a table. Braces are
+ -- handled correctly
+ LT.grammars.splitComma = lpeg.P({
+     -- The final table capture
+     lpeg.Ct(lpeg.V("elem") * (lpeg.V("sep") * lpeg.V("elem"))^0),
+     
+     -- The separator: Must contain the separator itself as well as braces
+     sep =    lpeg.S(",{}"),
+ 
+     -- An element in the list of comma-separated values: Everything
+     -- except the separator, or a brace group
+     elem =    lpeg.C(((1 - lpeg.V("sep")) + LT.grammars.braces)^0),
+ })
+</pre>
+    <p>Then "lpeg.match(splitComma,"1,2,3")" can be used to split the string into
+a table.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Split_a_comma-separated_list">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

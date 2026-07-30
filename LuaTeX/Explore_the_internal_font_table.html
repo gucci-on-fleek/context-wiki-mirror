@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Explore the internal font table&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Explore_the_internal_font_table" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Explore the internal font table
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7582&diff=43379">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Let us define a macro
+</p>
+    <pre>\def\studyfont#1{\directlua0{
+function printtable (ind,tableau,prof)
+local k,l
+texio.write_nl(string.rep("...",prof) .. ind .. " -&gt; {")
+prof=prof+1
+for k,l in pairs(tableau) do 
+if (type(l)=="table") then
+printtable(k,l,prof)
+else
+texio.write_nl(string.rep("...",prof) .. k .. " -&gt; " .. tostring(l))
+end
+end
+texio.write_nl(string.rep("...",prof-1) .. "}")
+end
+
+for i,f in font.each() do
+  if (f.name=="#1") then
+    printtable("#1",f,0)
+  end
+end
+}}
+</pre>
+    <p>and apply it to <tt>cmr10</tt> for example. (The <tt>font.each()</tt> has been added by Taco in checkout 573.) Here is what we get:
+</p>
+    <pre>cmr10 -&gt; {
+...checksum -&gt; 1274110073
+...type -&gt; real
+...characters -&gt; {
+......1 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 546135
+......}
+......2 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 509726
+......}
+......3 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 455111
+......}
+......4 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 436908
+......}
+......5 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 491521
+......}
+......6 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 473316
+......}
+......7 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 509726
+......}
+......8 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 473316
+......}
+......9 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 509726
+......}
+......10 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 473316
+......}
+......11 -&gt; {
+.........kerns -&gt; {
+............63 -&gt; 50973
+............93 -&gt; 50973
+............39 -&gt; 50973
+............33 -&gt; 50973
+............41 -&gt; 50973
+.........}
+.........italic -&gt; 50973
+.........ligatures -&gt; {
+............105 -&gt; {
+...............char -&gt; 14
+...............type -&gt; 0
+............}
+............108 -&gt; {
+...............char -&gt; 15
+...............type -&gt; 0
+............}
+.........}
+.........height -&gt; 455111
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 382295
+......}
+</pre>
+    <p>Glyph 11, namely the "ff" ligature has several kernings as well as two ligatures: one with i and one with l.
+</p>
+    <pre>...another 1095 lines...
+
+......127 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 437688
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 327681
+......}
+......0 -&gt; {
+.........italic -&gt; 0
+.........height -&gt; 447828
+.........depth -&gt; 0
+.........used -&gt; false
+.........width -&gt; 409601
+......}
+...}
+...parameters -&gt; {
+......x_height -&gt; 282168
+......space_stretch -&gt; 109226
+......extra_space -&gt; 0
+......space -&gt; 218453
+......quad -&gt; 655361
+......space_shrink -&gt; 72818
+......slant -&gt; 0
+...}
+...embedding -&gt; unknown
+...encodingbytes -&gt; 0
+...direction -&gt; -1
+...name -&gt; cmr10
+...size -&gt; 655360
+...used -&gt; false
+...format -&gt; unknown
+...designsize -&gt; 655360
+...area -&gt; 
+}
+</pre>
+    <p>If you want to explore the internal font table you have just defined but not yet used, then do not forget to write a <tt>\relax</tt> after the font definition:
+</p>
+    <pre>\font\x=something
+\studyfont{something}
+</pre>
+    <p>will NOT WORK. But:
+</p>
+    <pre>\font\x=something\relax
+\studyfont{something}
+</pre>
+    <p>will work. (Thanks Taco for the hint!)
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Explore_the_internal_font_table">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

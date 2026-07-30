@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Callbacks&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Callbacks" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Callbacks
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7578&diff=43375">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Callbacks allow the user to interact with TeX's internal operations; those can be enhanced by additional ones, but also replaced altogether. All callbacks are written in Lua.
+</p>
+    <p>Since functions registered in callbacks occur in a sequence of actions that makes up TeX's processing, many of them will receive arguments (and thus should be defined to handle them) and, most importantly, many are supposed to return values. What arguments are passed, if any, and what should be return, vary from callback to callback.
+</p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Registering_a_callback">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Registering a callback
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Several_functions_in_a_callback">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           Several functions in a callback
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#Information_about_callbacks">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Information about callbacks
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#List_of_callbacks">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         List of callbacks
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#File_discovery_callbacks">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           File discovery callbacks
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#File_reading_callbacks">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           File reading callbacks
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#Data_processing_callbacks">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           Data processing callbacks
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#Node_list_processing_callbacks">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           Node list processing callbacks
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#Information_reporting_callbacks">
+          <span class="tocnumber">
+           3.5
+          </span>
+          <span class="toctext">
+           Information reporting callbacks
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#Miscellaneous">
+          <span class="tocnumber">
+           3.6
+          </span>
+          <span class="toctext">
+           Miscellaneous
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Registering_a_callback">
+      Registering a callback
+     </span>
+    </h2>
+    <p>To install a function in a callback one must use the <tt>callback.register()</tt> function, whose syntax is:
+</p>
+    <pre>callback.register(callback_name, function)
+</pre>
+    <p>where <tt>callback_name</tt> is a string representing a predefined callback name (see below), and <tt>function</tt> is either a function variable or an anonymous function. The former is just the name of a function previously defined, for instance:
+</p>
+    <pre>local my_function = function (an_arg)
+  do_this_or_that(an_arg)
+end
+callback.register("some_callback", my_function)
+</pre>
+    <p>An anonymous function is a function definition that is not assigned to a variable, e.g.:
+</p>
+    <pre>callback.register("some_callback", function (an_arg) do_this_or_that(an_arg) end)
+</pre>
+    <p>Even in the case of a function variable, what LuaTeX registers is the function itself, and any further assignment to the variable has no effect on the callback.
+</p>
+    <p>If registering is successful, <tt>callback.register()</tt> returns a number, which is the internal representation of the callback; if registering fails (for instance because a callback doesn't exist, or what is registered isn't a function), the function returns <tt>nil</tt> and a string representing an error message.
+</p>
+    <p>Besides functions, <tt>callback.register()</tt> can take <tt>nil</tt> or <tt>false</tt>. The first value clears the callback, and returns to the default behavior (i.e. either nothing or TeX's default processing); the second value prevents anything from happening at this point, even TeX's default operations, and should be used with great care (the benefits are minor speed gain).
+</p>
+    <h3>
+     <span class="mw-headline" id="Several_functions_in_a_callback">
+      Several functions in a callback
+     </span>
+    </h3>
+    <p>Each call to <tt>callback.register()</tt> erases any function previously registered. I.e. after
+</p>
+    <pre>callback.register("some_callback", function_one)
+callback.register("some_callback", function_two)
+</pre>
+    <p>only <tt>function_two</tt> is registered in <tt>some_callback</tt>. Hence, if one wants several successive functions to occur in a callback, <tt>callback.register()</tt> is clearly insufficient. Instead, one must register a metafunction which calls the functions one after the other. This is taken care of in ConTeXt, and there exists <tt>luatexbase-mcb</tt> for plain TeX and LaTeX, but here's how to do it oneself. We'll take the <tt>process_input_buffer</tt> callback has an example; it is called whenever TeX reads an input line, it receives a string (the line) and should return one. A rough approach would be:
+</p>
+    <pre>local function_table = { }
+
+local function metafunction (str)
+  for _, fct in ipairs(function_table) do
+    str = fct(str)
+  end
+  return str
+end
+
+function add_function (fct)
+  table.insert(function_table, fct)
+end
+
+callback.register("process_input_buffer", metafunction)
+</pre>
+    <p>Then one can call <tt>add_function(my_function)</tt> to add <tt>my_function</tt> to the list of functions registered in <tt>process_input_buffer</tt>, and <tt>metafunction</tt> will pass the callback's argument (an input line) to the first function, set that argument to what the function returns, then repeat the process for all functions and finally return the resulting string.
+</p>
+    <p>If one also wants to be able to remove functions (and not the entire metafunction), a subtler approach is required, where names are associated with functions and can be used as handles.
+</p>
+    <h2>
+     <span class="mw-headline" id="Information_about_callbacks">
+      Information about callbacks
+     </span>
+    </h2>
+    <p>LuaTeX has two functions to get some information about callbacks. The first is <tt>callback.list()</tt>, called without arguments and returning a table with the callback names as keys and booleans as values: if the value is <tt>true</tt>, it means that something is registered in the callback, or that it is set to <tt>false</tt> (see above). The other function is <tt>callback.find()</tt>, called with a callback name. If a function is registered, it is returned; if the callback is set to <tt>false</tt>, a boolean with that value is returned; finally, if nothing is registered, <tt>nil</tt> is returned (note that if <tt>ret</tt> is the returned value, then <tt>if ret</tt> is false if <tt>ret</tt> is either <tt>false</tt> or <tt>nil</tt>; you must use <tt>if ret == nil </tt> to distinguish between the two).
+</p>
+    <h2>
+     <span class="mw-headline" id="List_of_callbacks">
+      List of callbacks
+     </span>
+    </h2>
+    <p>For suggestions on how to document callbacks, see <a class="new" href="../index.php?title=LuaTeX/Talk:Callbacks&action=edit&redlink=1.html" title="LuaTeX/Talk:Callbacks (page does not exist)">the discussion page</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="File_discovery_callbacks">
+      File discovery callbacks
+     </span>
+    </h3>
+    <p>These are called whenever an input file is needed. Each receives the <tt>asked_name</tt>, a string representing what file name was called by the user (for instance, <tt>my_file.tex</tt> in <tt>\input my_file.tex</tt>) and should return the name of a file to be read (or written to). The <tt>id_number</tt> in the first two callbacks is the stream's number plus one, because 0 denotes <tt>log</tt> and <tt>\input</tt> files.
+</p>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Argument(s)
+       </th>
+       <th>
+        Return value(s)
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_read_file&action=edit&redlink=1.html" title="LuaTeX/Find read file (page does not exist)">LuaTeX/Find_read_file</a></td>
+       <td>id_number, asked_name</td>
+       <td>actual_name</td>
+       <td>File called with <tt>\read</tt> or <tt>\input</tt>
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_write_file&action=edit&redlink=1.html" title="LuaTeX/Find write file (page does not exist)">LuaTeX/Find_write_file</a></td>
+       <td>id_number, asked_name</td>
+       <td>actual_name</td>
+       <td><tt>log</tt> file or file called with <tt>\write</tt>
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_font_file&action=edit&redlink=1.html" title="LuaTeX/Find font file (page does not exist)">LuaTeX/Find_font_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_output_file&action=edit&redlink=1.html" title="LuaTeX/Find output file (page does not exist)">LuaTeX/Find_output_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_format_file&action=edit&redlink=1.html" title="LuaTeX/Find format file (page does not exist)">LuaTeX/Find_format_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_vf_file&action=edit&redlink=1.html" title="LuaTeX/Find vf file (page does not exist)">LuaTeX/Find_vf_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_map_file&action=edit&redlink=1.html" title="LuaTeX/Find map file (page does not exist)">LuaTeX/Find_map_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_enc_file&action=edit&redlink=1.html" title="LuaTeX/Find enc file (page does not exist)">LuaTeX/Find_enc_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_sfd_file&action=edit&redlink=1.html" title="LuaTeX/Find sfd file (page does not exist)">LuaTeX/Find_sfd_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_pk_file&action=edit&redlink=1.html" title="LuaTeX/Find pk file (page does not exist)">LuaTeX/Find_pk_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_data_file&action=edit&redlink=1.html" title="LuaTeX/Find data file (page does not exist)">LuaTeX/Find_data_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_opentype_file&action=edit&redlink=1.html" title="LuaTeX/Find opentype file (page does not exist)">LuaTeX/Find_opentype_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_truetype_file&action=edit&redlink=1.html" title="LuaTeX/Find truetype file (page does not exist)">LuaTeX/Find_truetype_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_type_file&action=edit&redlink=1.html" title="LuaTeX/Find type file (page does not exist)">LuaTeX/Find_type_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Find_image_file&action=edit&redlink=1.html" title="LuaTeX/Find image file (page does not exist)">LuaTeX/Find_image_file</a></td>
+       <td>asked_name</td>
+       <td>actual_name
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="File_reading_callbacks">
+      File reading callbacks
+     </span>
+    </h3>
+    <p>The previous callbacks were called when a file was asked for; the following are triggered when the file is read. In all, <tt>filename</tt> is the string returned by the file discovery callbacks. The first callback reads <tt>\input</tt> or <tt>\read</tt> files; it must return a table, whose first cell is a function that will be called whenever a line from the input file is readed; the second cell is an optional function executed when the input file terminates.
+</p>
+    <p>The other callbacks are used for binary files: <tt>success</tt> is a boolean, <tt>data</tt> is a string and <tt>data_size</tt> is a number (the length of <tt>data</tt> in bytes).
+</p>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Argument(s)
+       </th>
+       <th>
+        Return value(s)
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Open_read_file&action=edit&redlink=1.html" title="LuaTeX/Open read file (page does not exist)">LuaTeX/Open_read_file</a></td>
+       <td>filename</td>
+       <td>{reader, close}
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_font_file&action=edit&redlink=1.html" title="LuaTeX/Read font file (page does not exist)">LuaTeX/Read_font_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_vf_file&action=edit&redlink=1.html" title="LuaTeX/Read vf file (page does not exist)">LuaTeX/Read_vf_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_map_file&action=edit&redlink=1.html" title="LuaTeX/Read map file (page does not exist)">LuaTeX/Read_map_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_enc_file&action=edit&redlink=1.html" title="LuaTeX/Read enc file (page does not exist)">LuaTeX/Read_enc_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_sfd_file&action=edit&redlink=1.html" title="LuaTeX/Read sfd file (page does not exist)">LuaTeX/Read_sfd_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_pk_file&action=edit&redlink=1.html" title="LuaTeX/Read pk file (page does not exist)">LuaTeX/Read_pk_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_data_file&action=edit&redlink=1.html" title="LuaTeX/Read data file (page does not exist)">LuaTeX/Read_data_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_truetype_file&action=edit&redlink=1.html" title="LuaTeX/Read truetype file (page does not exist)">LuaTeX/Read_truetype_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_type1_file&action=edit&redlink=1.html" title="LuaTeX/Read type1 file (page does not exist)">LuaTeX/Read_type1_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Read_opentype_file&action=edit&redlink=1.html" title="LuaTeX/Read opentype file (page does not exist)">LuaTeX/Read_opentype_file</a></td>
+       <td>filename</td>
+       <td>success, data, data_size
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Data_processing_callbacks">
+      Data processing callbacks
+     </span>
+    </h3>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Argument(s)
+       </th>
+       <th>
+        Return value(s)
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a href="Process_input_buffer.html" title="LuaTeX/Process input buffer">LuaTeX/Process_input_buffer</a></td>
+       <td>line</td>
+       <td>modified_line</td>
+       <td>Called for each input line (after <tt>reader</tt> in <tt>open_read_file</tt> if TeX is not reading the main file).
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Process_output_buffer&action=edit&redlink=1.html" title="LuaTeX/Process output buffer (page does not exist)">LuaTeX/Process_output_buffer</a></td>
+       <td>line</td>
+       <td>modified_line</td>
+       <td>Called for each line TeX writes to an external file; this excludes the <tt>log</tt> file, the terminal and <tt>\write18</tt> calls.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Process_jobname&action=edit&redlink=1.html" title="LuaTeX/Process jobname (page does not exist)">LuaTeX/Process_jobname</a></td>
+       <td>string</td>
+       <td>modified_string</td>
+       <td>Processes the jobname when queried with <tt>\jobname</tt> or <tt>tex.jobname</tt>. The internal job name (used for the output and log files) remains untouched. (This callback appeared in v.0.71.)
+</td>
+      </tr>
+      <tr>
+       <td><a href="Token_filter.html" title="LuaTeX/Token filter">LuaTeX/Token_filter</a></td>
+       <td></td>
+       <td>token</td>
+       <td>Called when TeX needs token; no argument is passed to the callback, the next token must be fetched with <tt>token.get_next()</tt>; what is returned is immediately processed by TeX.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Node_list_processing_callbacks">
+      Node list processing callbacks
+     </span>
+    </h3>
+    <p>These callbacks deal with node manipulations and occur at various stages of TeX's typesetting processes.
+</p>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Argument(s)
+       </th>
+       <th>
+        Return value(s)
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Buildpage_filter&action=edit&redlink=1.html" title="LuaTeX/Buildpage filter (page does not exist)">LuaTeX/Buildpage_filter</a></td>
+       <td>information</td>
+       <td></td>
+       <td>Called when TeX moves material to the main vertical list. (This callback is an endangered species.)
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Hyphenate&action=edit&redlink=1.html" title="LuaTeX/Hyphenate (page does not exist)">LuaTeX/Hyphenate</a></td>
+       <td>head, tail</td>
+       <td></td>
+       <td>Inserts discretionary nodes in the node list; called in restricted and unrestricted horizontal mode (i.e. <tt>\hbox</tt>'es and paragraph building). A function doing what TeX does here by default is <tt>lang.hyphenate()</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Ligaturing&action=edit&redlink=1.html" title="LuaTeX/Ligaturing (page does not exist)">LuaTeX/Ligaturing</a></td>
+       <td>head, tail</td>
+       <td></td>
+       <td>Same as <tt>hyphenate</tt>, but applying ligatures (and adding some discretionaries too). An associated function is <tt>node.ligaturing()</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Kerning&action=edit&redlink=1.html" title="LuaTeX/Kerning (page does not exist)">LuaTeX/Kerning</a></td>
+       <td>head, tail</td>
+       <td></td>
+       <td>Same as above, with font kerns. The associated function is <tt>node.kerning()</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Pre_linebreak_filter&action=edit&redlink=1.html" title="LuaTeX/Pre linebreak filter (page does not exist)">LuaTeX/Pre_linebreak_filter</a></td>
+       <td>head, context</td>
+       <td>boolean or newhead</td>
+       <td>Called in unrestricted horizontal mode, after <tt>kerning</tt>, and before calling the paragraph builder; it receives the list of nodes that is the contents of the paragraph (plus the <tt>\parfillskip</tt> glue) and must return something similar.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Linebreak_filter&action=edit&redlink=1.html" title="LuaTeX/Linebreak filter (page does not exist)">LuaTeX/Linebreak_filter</a></td>
+       <td>head, is_display</td>
+       <td>newhead</td>
+       <td>The paragraph builder. It receives what the previous callback has returned and is in charge of making a paragraph out of it; it must return what it has built. An associated function is <tt>tex.linebreak()</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a href="Post_linebreak_filter.html" title="LuaTeX/Post linebreak filter">LuaTeX/Post_linebreak_filter</a></td>
+       <td>head, groupcode,</td>
+       <td>boolean or newhead</td>
+       <td>Receives what has been returned by <tt>linebreak_filter</tt> and must return something similar.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Hpack_filter&action=edit&redlink=1.html" title="LuaTeX/Hpack filter (page does not exist)">LuaTeX/Hpack_filter</a></td>
+       <td>head, context, size, packtype[, dir]</td>
+       <td>boolean or newhead</td>
+       <td>Called when TeX is going to build an <tt>\hbox</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Vpack_filter&action=edit&redlink=1.html" title="LuaTeX/Vpack filter (page does not exist)">LuaTeX/Vpack_filter</a></td>
+       <td>head, context, size, packtype, maxdepth[, dir]</td>
+       <td>boolean or newhead</td>
+       <td>Called when TeX is going to build a <tt>\vbox</tt>.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Pre_output_filter&action=edit&redlink=1.html" title="LuaTeX/Pre output filter (page does not exist)">LuaTeX/Pre_output_filter</a></td>
+       <td>head, context, size, packtype, maxdepth[, dir]</td>
+       <td>boolean or newhead</td>
+       <td>Same as <tt>vpack_filter</tt>, but when TeX packs box 255 (or any other value of <tt>\outputbox</tt>) and goes to the output routine.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Mlist_to_hlist&action=edit&redlink=1.html" title="LuaTeX/Mlist to hlist (page does not exist)">LuaTeX/Mlist_to_hlist</a></td>
+       <td>head, display_type, need_penalties</td>
+       <td>newhead</td>
+       <td>Called when TeX turns a math list into a horizontal list (as described in Appendix G of the <em>TeXbook</em>).
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Information_reporting_callbacks">
+      Information reporting callbacks
+     </span>
+    </h3>
+    <p>These callbacks are called in various places when TeX has something to say. None of them takes an argument nor returns anything.
+</p>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Pre_dump&action=edit&redlink=1.html" title="LuaTeX/Pre dump (page does not exist)">LuaTeX/Pre_dump</a></td>
+       <td>Called before dumping a format.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Start_run&action=edit&redlink=1.html" title="LuaTeX/Start run (page does not exist)">LuaTeX/Start_run</a></td>
+       <td>LuaTeX's banner (<code>This is LuaTeX...'); must be changed in the initialization script, otherwise the banner has already been printed.
+</code></td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Stop_run&action=edit&redlink=1.html" title="LuaTeX/Stop run (page does not exist)">LuaTeX/Stop_run</a></td>
+       <td>TeX's final words (statistics and Output written to...').
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Start_page_number&action=edit&redlink=1.html" title="LuaTeX/Start page number (page does not exist)">LuaTeX/Start_page_number</a></td>
+       <td>The opening bracket and the page number printed when a page is shipped out.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Stop_page_number&action=edit&redlink=1.html" title="LuaTeX/Stop page number (page does not exist)">LuaTeX/Stop_page_number</a></td>
+       <td>The closing bracket printed after the previous callback.
+</td>
+      </tr>
+      <tr>
+       <td><a href="Show_error_hook.html" title="LuaTeX/Show error hook">LuaTeX/Show_error_hook</a></td>
+       <td>Called at the beginning of each error message.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="Miscellaneous">
+      Miscellaneous
+     </span>
+    </h3>
+    <table cellpadding="5">
+     <tbody>
+      <tr>
+       <th>
+        Name
+       </th>
+       <th>
+        Argument(s)
+       </th>
+       <th>
+        Return value(s)
+       </th>
+       <th>
+        Short description
+       </th>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Finish_pdffile&action=edit&redlink=1.html" title="LuaTeX/Finish pdffile (page does not exist)">LuaTeX/Finish_pdffile</a></td>
+       <td></td>
+       <td></td>
+       <td>Called when all pages have been written to the PDF file.
+</td>
+      </tr>
+      <tr>
+       <td><a class="new" href="../index.php?title=LuaTeX/Define_font&action=edit&redlink=1.html" title="LuaTeX/Define font (page does not exist)">LuaTeX/Define_font</a></td>
+       <td>name, size, id</td>
+       <td>font_table</td>
+       <td>Called when the <tt>\font</tt> command is executed; <tt>name</tt> is the filename asked for, <tt>size</tt> is the <tt>at</tt> size, <tt>id</tt> is the number that will be assigned as an internal representation to the font thus loaded. The callback should return a table representing a font.
+</td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Callbacks">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Annotate math expressions&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Annotate_math_expressions" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Annotate math expressions
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7576&diff=43371">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Now with the scripting language Lua having access to the TeX internals, it is quite easy to generate PDF annotations automatically.
+An interesting example I started to explore is whether it would be possible to generate Content MathML expressions from the low level
+TeX <i>mathlist</i> node representations exposed via the proper LuaTeX callback <i>mlist_to_hlist</i>.
+</p>
+    <p>Succinctly, it is possible to generate Content MathML from simple math formulas, however my initial approach using context free grammar parsers, (i.e. lpeg) are severely limited by the fact that the interpretation of LaTeX math expressions is rather context sensitive.
+</p>
+    <p>A much simpler topic is how Lua(La)TeX could be used to automatically generate math expression bounding boxes in PDF documents, such
+that extraction programs can reliably identify text areas in the PDF document that pertain to math formulas.
+</p>
+    <p>The entire code snippets can be downloaded from: <a class="external text" href="https://gist.github.com/2018232" rel="nofollow">https://gist.github.com/2018232</a>
+</p>
+    <p>We use two callback functions, <i>mlist_to_hlist</i> to insert a PDF annotation node and the callback <i>pre_output_filter</i> to identify the bounding box for a math formula.
+</p>
+    <pre>-- doesn't yield anything interesting
+function convertToMathML(head)
+	return {tag="not implemented"}
+end
+
+-- create content MathML for every math formula
+luatexbase.add_to_callback('mlist_to_hlist',
+function(head, display, penalty)
+	texio.write_nl('NEW mathlist')
+
+	result = convertToMathML(head)
+	if result ~= nil then
+		et = etree.ElementTree({tag = "math", result}, {decl = false})
+		local pdf = node.new("whatsit", "pdf_annot")
+		local buffer = etree.StringBuffer()
+		et:write(buffer)
+		pdf.data = '/Subtype /MathML /Contents (' .. tostring(buffer) .. ')'
+		head = node.insert_before(head, head, pdf)
+	end
+	return node.mlist_to_hlist(head, display, penalty)
+end,
+	"content MathML generator")
+</pre>
+    <p>In the callback above the function <i>convertToMathML</i> does not yield any interesting result:
+</p>
+    <pre>-- element tree, http://etree.luaforge.net/ (is a bit buggy for the {decl = false} option)
+local el = require "etree"
+
+function convertToMathML(head)
+	return {tag="not implemented"}
+end
+</pre>
+    <p>Now having tagged the math formula, we still need a bounding box. Luckily, the the pre-output phase is
+intercepted by the <i>pre-output-filter</i> and can be used to accomplish exactly that!
+</p>
+    <pre>local vpack_counter = 1
+
+luatexbase.add_to_callback('pre_output_filter',
+function(head)
+	add_size_to_annot(head,{width=0,height=0,depth=0})
+	-- viz.nodelist_visualize(head, "vpack"..vpack_counter..".gv")
+	vpack_counter = vpack_counter + 1
+	return head
+end
+	,"find math bounding box")
+</pre>
+    <p>Of course, we need the <i>add_size_to_annot</i> function:
+</p>
+    <pre>local whatsit   = node.id('whatsit')
+local hlist     = node.id('hlist')
+local vlist     = node.id('vlist')
+local math_node = node.id('math')
+
+local function add_size_to_annot(head, hbox)
+	while head do
+		typ = head.id
+		if typ == vlist then
+			add_size_to_annot(head.head, hbox)
+		elseif typ == hlist then
+			add_size_to_annot(head.head, {width=head.width,height=head.height,depth=head.depth})
+		elseif typ == whatsit and head.subtype == 15 and
+			string.sub(head.data, 1, 16) == '/Subtype /MathML' then
+			if head.prev ~= nil and head.prev.id == math_node and head.prev.subtype == 0 then
+				tail = head
+				for test_node in node.traverse_id(math_node, head.next) do
+					if test_node.subtype == 1 then
+						tail = test_node
+						break
+					end
+				end
+				w, h, d = node.dimensions(head.prev, tail)
+				hbox = {width=w,height=h,depth=d}
+			end
+			--[[ texio.write_nl(string.format("add height %gpt, width %gpt, depth %gpt",
+                                 hbox.height / 2^16, 
+                                 hbox.width / 2^16, 
+                                 hbox.depth / 2^16))
+                        --]]
+			head.width  = hbox.width
+			head.height = hbox.height
+			head.depth  = hbox.depth
+		else
+			-- texio.write_nl('found node ' .. node.type(head.id))
+		end
+		head = head.next
+	end
+end
+</pre>
+    <p>In order to use the above depicted code snippets in your LaTeX documents, simply generate a file named <i>mathml.lua</i> and include the Lua code in a LaTeX document:
+</p>
+    <pre>\pdfcompresslevel=0&nbsp;% to make everything visible in the pdf
+\documentclass{article}
+\usepackage{amssymb}
+\usepackage{luacode}
+
+\directlua{dofile("mathml.lua")}
+</pre>
+    <p>Interestingly, with Mac OSX PDF Preview one can hover over the formula areas and the appropriate text content pops up.
+</p>
+    <p>Alternatively, the Apache Java project PDFbox, <a class="external text" href="http://pdfbox.apache.org/index.html" rel="nofollow">http://pdfbox.apache.org/index.html</a> may be quickly extended to allow for the extraction of previously tagged math areas, see here <a class="external text" href="https://gist.github.com/2018466" rel="nofollow">https://gist.github.com/2018466</a>
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Annotate_math_expressions">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

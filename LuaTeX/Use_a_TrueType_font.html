@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Use a TrueType font&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Use_a_TrueType_font" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Use a TrueType font
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7617&diff=43416">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>A TrueType (or Openype) font can be used without going through a TFM or an OFM file, like in XeTeX.
+</p>
+    <p>For plain/LaTeX you are better using the package luaotfload, on the CTAN, and developped here: <a class="external free" href="http://github.com/khaledhosny/luaotfload/" rel="nofollow">http://github.com/khaledhosny/luaotfload/</a>, ConTeXt have this functionality built-in.
+</p>
+    <p>The code shows how we can use the table of a TrueType font to produce an internal TeX font table:
+</p>
+    <pre>\pdfoutput1
+\directlua{
+callback.register("define_font",
+  function(name, size)
+    local fonttype, f
+    local fonttype = string.match(string.lower(name), "otf$") and "opentype"
+                  or string.match(string.lower(name), "ttf$") and "truetype"
+
+    if fonttype then
+      filename = kpse.find_file(name, "opentype fonts") or kpse.find_file(name, "truetype fonts")
+      if size &lt; 0 then
+        size = (- 655.36) * size
+      end
+      ttffont = fontloader.to_table(fontloader.open(filename))
+      if ttffont then
+        f = { }
+        f.name = ttffont.fontname
+        f.fullname = ttffont.names[1].names.fullname
+        f.parameters = { }
+        f.designsize = size
+        f.size = size
+        f.direction = 0
+        f.parameters.slant = 0
+        f.parameters.space = size * 0.25
+        f.parameters.space_stretch = 0.3 * size
+        f.parameters.space_shrink = 0.1 * size
+        f.parameters.x_height = 0.4 * size
+        f.parameters.quad = 1.0 * size
+        f.parameters.extra_space = 0
+        f.characters = { }
+        local mag = size / ttffont.units_per_em
+
+        local names_of_char = { }
+        for char, glyph in pairs(ttffont.map.map) do
+          names_of_char[ttffont.glyphs[glyph].name] = ttffont.map.backmap[glyph]
+        end
+
+        for char, glyph in pairs(ttffont.map.map) do
+          local glyph_table = ttffont.glyphs[glyph]
+
+          f.characters[char] = {
+            index = glyph,
+            width = glyph_table.width * mag,
+            name = glyph_table.name }
+          if glyph_table.boundingbox[4] then
+            f.characters[char].height = glyph_table.boundingbox[4] * mag
+          end
+          if glyph_table.boundingbox[2] then
+            f.characters[char].depth = -glyph_table.boundingbox[2] * mag
+          end
+
+          if glyph_table.kerns then
+            local kerns = { }
+            for _, kern in pairs(glyph_table.kerns) do
+              kerns[names_of_char[kern.char]] = kern.off * mag
+            end
+            f.characters[char].kerns = kerns
+          end
+        end
+        
+        f.filename = filename
+        f.type = "real"
+        f.format = fonttype
+        f.embedding = "subset"
+        f.cidinfo = {
+          registry = "Adobe",
+          ordering = "Identity",
+          supplement = 0,
+          version = 1 }
+      end
+    else
+      f = font.read_tfm(name, size)
+    end
+  return f
+  end)
+}
+</pre>
+    <p>The index of the <tt>f.characters</tt> table is the Unicode value, among the properties of each entry of that table we have <tt>index</tt> which is the glyph index. Using this property we get the mapping between Unicode characters and glyphs. Kerning is handled via TeX font LKP.
+</p>
+    <p>What is missing in the code above is better calculation of standard TeX font parameters and OpenType features.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Use_a_TrueType_font">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

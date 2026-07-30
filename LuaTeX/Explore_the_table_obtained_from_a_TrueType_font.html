@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Explore the table obtained from a TrueType font&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Explore_the_table_obtained_from_a_TrueType_font" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Explore the table obtained from a TrueType font
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7583&diff=43380">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Define the following macro in your TeX file:
+</p>
+    <pre>\def\studyttffont#1{\directlua{
+function printtable (ind,tableau,prof)
+  local k,l
+  texio.write_nl(string.rep("...",prof) .. ind .. " -&gt; {")
+  prof=prof+1
+  for k,l in pairs(tableau) do 
+    if (type(l)=="table") then
+      printtable(k,l,prof)
+    else
+      texio.write_nl(string.rep("...",prof) .. k .. " -&gt; " .. tostring(l))
+    end
+  end
+  texio.write_nl(string.rep("...",prof-1) .. "}")
+end
+
+filename = kpse.find_file("#1","truetype fonts")
+ttffont  = fontloader.to_table(fontloader.open(filename))
+printtable("#1",ttffont,0)
+}}
+</pre>
+    <p>and call it giving the name of the font you want to explore (the font must be in some directory known by kpse). Here is what you get for the "Gentium" font (strongly truncated, otherwise it would be too long for wiki):
+</p>
+    <pre>(
+gentium -&gt; {
+...mark_class_cnt -&gt; 0
+...glyphs -&gt; {
+......1 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 0
+............2 -&gt; 0
+............3 -&gt; 0
+............4 -&gt; 0
+.........}
+.........name -&gt; .null
+.........unicodeenc -&gt; 0
+.........width -&gt; 0
+......}
+......2 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 0
+............2 -&gt; 0
+............3 -&gt; 0
+............4 -&gt; 0
+.........}
+.........name -&gt; nonmarkingreturn
+.........unicodeenc -&gt; 12
+.........width -&gt; 451
+......}
+......3 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 0
+............2 -&gt; 0
+............3 -&gt; 0
+............4 -&gt; 0
+.........}
+.........name -&gt; space
+.........unicodeenc -&gt; 32
+.........width -&gt; 451
+......}
+......4 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 154
+............2 -&gt; -40
+............3 -&gt; 391
+............4 -&gt; 1480
+.........}
+.........name -&gt; exclam
+.........unicodeenc -&gt; 33
+.........width -&gt; 557
+......}
+......5 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 160
+............2 -&gt; 813
+............3 -&gt; 711
+............4 -&gt; 1480
+.........}
+.........name -&gt; quotedbl
+.........unicodeenc -&gt; 34
+.........width -&gt; 870
+......}
+</pre>
+    <p>Explanation: the <tt>glyphs</tt> table is indexed by glyph indexes. Each glyph index maps to a bounding box, a potential (PostScript) name, a potential Unicode character, and to its width. Bounding box and width are given in font units.
+</p>
+    <pre>......6 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 87
+............2 -&gt; 127
+............3 -&gt; 982
+............4 -&gt; 1292
+.........}
+.........name -&gt; numbersign
+.........unicodeenc -&gt; 35
+.........width -&gt; 961
+......}
+......7 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 88
+............2 -&gt; -174
+............3 -&gt; 862
+............4 -&gt; 1384
+.........}
+.........name -&gt; dollar
+.........unicodeenc -&gt; 36
+.........width -&gt; 961
+......}
+......8 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 76
+............2 -&gt; -34
+............3 -&gt; 1337
+............4 -&gt; 1237
+.........}
+.........name -&gt; percent
+.........unicodeenc -&gt; 37
+.........width -&gt; 1413
+......}
+......9 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 80
+............2 -&gt; -30
+............3 -&gt; 1346
+............4 -&gt; 1450
+.........}
+.........name -&gt; ampersand
+.........unicodeenc -&gt; 38
+.........width -&gt; 1366
+......}
+......10 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 160
+............2 -&gt; 813
+............3 -&gt; 352
+............4 -&gt; 1480
+.........}
+.........name -&gt; quotesingle
+.........unicodeenc -&gt; 39
+.........width -&gt; 512
+......}
+......11 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 121
+............2 -&gt; -315
+............3 -&gt; 610
+............4 -&gt; 1600
+.........}
+.........name -&gt; parenleft
+.........unicodeenc -&gt; 40
+.........possub -&gt; {
+............1 -&gt; {
+...............flags -&gt; 0
+...............type -&gt; substitution
+...............subs -&gt; {
+..................variant -&gt; parenright
+...............}
+...............script_lang_index -&gt; 1
+...............tag -&gt; rtla
+............}
+.........}
+.........width -&gt; 649
+......}
+</pre>
+    <p>Here we have the special case of a glyph which has an attached OpenType transformation. In this case it is a (simple) substitution from the GSUB table. This substitution should happen when we are in the script+language combination indexed by number 1, and the OpenType which calls it is <tt>rtla</tt>, also known as �Right-to-left alternates�. The glyph �parenleft� is substituted by the glyph �parenright�.  
+</p>
+    <pre>......12 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 41
+............2 -&gt; -315
+............3 -&gt; 530
+............4 -&gt; 1600
+.........}
+.........name -&gt; parenright
+.........unicodeenc -&gt; 41
+.........possub -&gt; {
+............1 -&gt; {
+...............flags -&gt; 0
+...............type -&gt; substitution
+...............subs -&gt; {
+..................variant -&gt; parenleft
+...............}
+...............script_lang_index -&gt; 1
+...............tag -&gt; rtla
+............}
+.........}
+.........width -&gt; 649
+......}
+......13 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 70
+............2 -&gt; 709
+............3 -&gt; 846
+............4 -&gt; 1561
+.........}
+.........name -&gt; asterisk
+.........unicodeenc -&gt; 42
+.........width -&gt; 915
+......}
+......14 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 61
+............2 -&gt; 205
+............3 -&gt; 778
+............4 -&gt; 920
+.........}
+.........name -&gt; plus
+.........unicodeenc -&gt; 43
+.........width -&gt; 840
+......}
+......15 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 88
+............2 -&gt; -305
+............3 -&gt; 391
+............4 -&gt; 230
+.........}
+.........kerns -&gt; {
+............1 -&gt; {
+...............char -&gt; quotedblright
+...............off -&gt; -220
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............2 -&gt; {
+...............char -&gt; quoteright
+...............off -&gt; -220
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+.........}
+.........name -&gt; comma
+.........unicodeenc -&gt; 44
+.........width -&gt; 469
+......}
+</pre>
+    <p>Here we have some kernings: the �comma� glyph gets kerned by -220 units when in front of �quoteright� or �quotedblright�.
+</p>
+    <pre>......16 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 61
+............2 -&gt; 455
+............3 -&gt; 629
+............4 -&gt; 569
+.........}
+.........name -&gt; hyphen
+.........unicodeenc -&gt; 45
+.........width -&gt; 690
+......}
+......17 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 131
+............2 -&gt; -40
+............3 -&gt; 369
+............4 -&gt; 236
+.........}
+.........kerns -&gt; {
+............1 -&gt; {
+...............char -&gt; quotedblright
+...............off -&gt; -220
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............2 -&gt; {
+...............char -&gt; quoteright
+...............off -&gt; -220
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+.........}
+.........name -&gt; period
+.........unicodeenc -&gt; 46
+.........width -&gt; 469
+......}
+......18 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 49
+............2 -&gt; -335
+............3 -&gt; 909
+............4 -&gt; 1600
+.........}
+.........name -&gt; slash
+.........unicodeenc -&gt; 47
+.........width -&gt; 961
+......}
+......19 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 76
+............2 -&gt; -30
+............3 -&gt; 885
+............4 -&gt; 1235
+.........}
+.........name -&gt; zero
+.........unicodeenc -&gt; 48
+.........width -&gt; 961
+......}
+......20 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 139
+............2 -&gt; 0
+............3 -&gt; 840
+............4 -&gt; 1245
+.........}
+.........name -&gt; one
+.........unicodeenc -&gt; 49
+.........width -&gt; 961
+......}
+......21 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 98
+............2 -&gt; 0
+............3 -&gt; 836
+............4 -&gt; 1235
+.........}
+.........name -&gt; two
+.........unicodeenc -&gt; 50
+.........width -&gt; 961
+......}
+......22 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 68
+............2 -&gt; -30
+............3 -&gt; 825
+............4 -&gt; 1235
+.........}
+.........name -&gt; three
+.........unicodeenc -&gt; 51
+.........width -&gt; 961
+......}
+......23 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 55
+............2 -&gt; 0
+............3 -&gt; 874
+............4 -&gt; 1245
+.........}
+.........name -&gt; four
+.........unicodeenc -&gt; 52
+.........width -&gt; 961
+......}
+......24 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 78
+............2 -&gt; -30
+............3 -&gt; 836
+............4 -&gt; 1223
+.........}
+.........name -&gt; five
+.........unicodeenc -&gt; 53
+.........width -&gt; 961
+......}
+......25 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 111
+............2 -&gt; -30
+............3 -&gt; 881
+............4 -&gt; 1249
+.........}
+.........name -&gt; six
+.........unicodeenc -&gt; 54
+.........width -&gt; 961
+......}
+......26 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 104
+............2 -&gt; -30
+............3 -&gt; 885
+............4 -&gt; 1204
+.........}
+.........name -&gt; seven
+.........unicodeenc -&gt; 55
+.........width -&gt; 961
+......}
+......27 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 94
+............2 -&gt; -30
+............3 -&gt; 864
+............4 -&gt; 1235
+.........}
+.........name -&gt; eight
+.........unicodeenc -&gt; 56
+.........width -&gt; 961
+......}
+......28 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 100
+............2 -&gt; -43
+............3 -&gt; 870
+............4 -&gt; 1235
+.........}
+.........name -&gt; nine
+.........unicodeenc -&gt; 57
+.........width -&gt; 961
+......}
+......29 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 131
+............2 -&gt; -40
+............3 -&gt; 369
+............4 -&gt; 961
+.........}
+.........name -&gt; colon
+.........unicodeenc -&gt; 58
+.........width -&gt; 469
+......}
+......30 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 88
+............2 -&gt; -305
+............3 -&gt; 391
+............4 -&gt; 961
+.........}
+.........name -&gt; semicolon
+.........unicodeenc -&gt; 59
+.........width -&gt; 469
+......}
+......31 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 61
+............2 -&gt; 256
+............3 -&gt; 838
+............4 -&gt; 899
+.........}
+.........name -&gt; less
+.........unicodeenc -&gt; 60
+.........possub -&gt; {
+............1 -&gt; {
+...............flags -&gt; 0
+...............type -&gt; substitution
+...............subs -&gt; {
+..................variant -&gt; greater
+...............}
+...............script_lang_index -&gt; 1
+...............tag -&gt; rtla
+............}
+.........}
+.........width -&gt; 899
+......}
+......32 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 61
+............2 -&gt; 354
+............3 -&gt; 838
+............4 -&gt; 768
+.........}
+.........name -&gt; equal
+.........unicodeenc -&gt; 61
+.........width -&gt; 899
+......}
+......33 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 61
+............2 -&gt; 256
+............3 -&gt; 838
+............4 -&gt; 899
+.........}
+.........name -&gt; greater
+.........unicodeenc -&gt; 62
+.........possub -&gt; {
+............1 -&gt; {
+...............flags -&gt; 0
+...............type -&gt; substitution
+...............subs -&gt; {
+..................variant -&gt; less
+...............}
+...............script_lang_index -&gt; 1
+...............tag -&gt; rtla
+............}
+.........}
+.........width -&gt; 899
+......}
+......34 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 80
+............2 -&gt; -40
+............3 -&gt; 807
+............4 -&gt; 1480
+.........}
+.........name -&gt; question
+.........unicodeenc -&gt; 63
+.........width -&gt; 887
+......}
+......35 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 70
+............2 -&gt; -375
+............3 -&gt; 1583
+............4 -&gt; 1333
+.........}
+.........name -&gt; at
+.........unicodeenc -&gt; 64
+.........width -&gt; 1653
+......}
+......36 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 0
+............2 -&gt; 0
+............3 -&gt; 1198
+............4 -&gt; 1317
+.........}
+.........kerns -&gt; {
+............1 -&gt; {
+...............char -&gt; quotedblright
+...............off -&gt; -200
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............2 -&gt; {
+...............char -&gt; quoteright
+...............off -&gt; -200
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............3 -&gt; {
+...............char -&gt; y
+...............off -&gt; -100
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............4 -&gt; {
+...............char -&gt; w
+...............off -&gt; -80
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............5 -&gt; {
+...............char -&gt; v
+...............off -&gt; -100
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............6 -&gt; {
+...............char -&gt; Y
+...............off -&gt; -180
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............7 -&gt; {
+...............char -&gt; W
+...............off -&gt; -120
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............8 -&gt; {
+...............char -&gt; V
+...............off -&gt; -160
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............9 -&gt; {
+...............char -&gt; U
+...............off -&gt; -80
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............10 -&gt; {
+...............char -&gt; T
+...............off -&gt; -100
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............11 -&gt; {
+...............char -&gt; Q
+...............off -&gt; -30
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............12 -&gt; {
+...............char -&gt; O
+...............off -&gt; -30
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............13 -&gt; {
+...............char -&gt; G
+...............off -&gt; -30
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............14 -&gt; {
+...............char -&gt; C
+...............off -&gt; -30
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+.........}
+.........name -&gt; A
+.........unicodeenc -&gt; 65
+.........width -&gt; 1219
+......}
+......37 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 41
+............2 -&gt; -14
+............3 -&gt; 1016
+............4 -&gt; 1290
+.........}
+.........name -&gt; B
+.........unicodeenc -&gt; 66
+.........width -&gt; 1126
+......}
+......38 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 70
+............2 -&gt; -30
+............3 -&gt; 1018
+............4 -&gt; 1290
+.........}
+.........kerns -&gt; {
+............1 -&gt; {
+...............char -&gt; A
+...............off -&gt; -60
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+.........}
+.........name -&gt; C
+.........unicodeenc -&gt; 67
+.........width -&gt; 1098
+......}
+......39 -&gt; {
+.........boundingbox -&gt; {
+............1 -&gt; 41
+............2 -&gt; 0
+............3 -&gt; 1124
+............4 -&gt; 1290
+.........}
+.........kerns -&gt; {
+............1 -&gt; {
+...............char -&gt; Y
+...............off -&gt; -60
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............2 -&gt; {
+...............char -&gt; W
+...............off -&gt; -20
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............3 -&gt; {
+...............char -&gt; V
+...............off -&gt; 40
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+............4 -&gt; {
+...............char -&gt; A
+...............off -&gt; -60
+...............flags -&gt; 0
+...............sli -&gt; 0
+............}
+.........}
+.........name -&gt; D
+.........unicodeenc -&gt; 68
+.........width -&gt; 1214
+......}
+
+another 35,850 lines of code
+
+...}
+...fontstyle_id -&gt; 0
+...units_per_em -&gt; 2048
+</pre>
+    <p>2,048 units per em means that to obtain TeX quads we need to divide by that number. 
+</p>
+    <pre>...glyphcnt -&gt; 1699
+...gasp_cnt -&gt; 3
+...weight -&gt; Book
+...pfminfo -&gt; {
+......vlinegap -&gt; 0
+......os2_subyoff -&gt; 1200
+......hheadascent_add -&gt; 1
+......os2_strikeypos -&gt; 512
+......hhead_descent -&gt; -565
+......os2_typolinegap -&gt; 90
+......typodescent_add -&gt; 1
+......weight -&gt; 400
+......hhead_ascent -&gt; 1759
+......os2_strikeysize -&gt; 102
+......panose_set -&gt; 1
+......os2_breakchar -&gt; 0
+......pfmset -&gt; 1
+......os2_typoascent -&gt; -88
+......winascent_add -&gt; 1
+......firstchar -&gt; 32
+......os2_capheight -&gt; 0
+......windescent_add -&gt; 1
+......vheadset -&gt; 0
+......os2_subxsize -&gt; 856
+......os2_xheight -&gt; 0
+......os2_supxoff -&gt; 0
+......hheaddescent_add -&gt; 1
+......os2_defaultchar -&gt; 0
+......linegap -&gt; 45
+......os2_family_class -&gt; 0
+......os2_vendor -&gt; SIL 
+......os2_supyoff -&gt; 1200
+......os2_winascent -&gt; 1759
+......os2_subysize -&gt; 856
+......avgwidth -&gt; 845
+......os2_subxoff -&gt; 0
+......os2_supysize -&gt; 856
+......os2_windescent -&gt; 565
+......os2_typodescent -&gt; -69
+......hheadset -&gt; 1
+......fstype -&gt; 0
+......os2_supxsize -&gt; 856
+......lastchar -&gt; 64260
+......panose -&gt; {
+.........serifstyle -&gt; Any
+.........armstyle -&gt; Any
+.........contrast -&gt; Medium
+.........familytype -&gt; Text and Display
+.........proportion -&gt; Modern
+.........strokevariation -&gt; Any
+.........weight -&gt; Book
+.........xheight -&gt; Constant/Large
+.........midline -&gt; Any
+.........letterform -&gt; Normal/Contact
+......}
+......width -&gt; 5
+......pfmfamily -&gt; 17
+......subsuper_set -&gt; 1
+......typoascent_add -&gt; 1
+...}
+...fullname -&gt; GentiumAlt
+...map -&gt; {
+......map -&gt; {
+.........32 -&gt; 3
+.........33 -&gt; 4
+.........34 -&gt; 5
+.........35 -&gt; 6
+.........36 -&gt; 7
+.........37 -&gt; 8
+.........38 -&gt; 9
+.........39 -&gt; 10
+.........40 -&gt; 11
+
+another 1,679 lines
+
+.........65764 -&gt; 1688
+.........65765 -&gt; 1689
+.........65766 -&gt; 1690
+.........65767 -&gt; 1691
+.........65768 -&gt; 1692
+.........65769 -&gt; 1693
+.........65770 -&gt; 1694
+.........65771 -&gt; 1695
+.........65772 -&gt; 1696
+.........65773 -&gt; 1697
+.........65774 -&gt; 1698
+......}
+......enc -&gt; {
+.........1 -&gt; {
+............has_2byte -&gt; 1
+............char_max -&gt; 0
+............only_1byte -&gt; 0
+............is_unicodebmp -&gt; 1
+............char_cnt -&gt; 65536
+............high_page -&gt; 0
+............has_1byte -&gt; 0
+............low_page -&gt; 0
+............builtin -&gt; 1
+............enc_name -&gt; UnicodeBmp
+............hidden -&gt; 1
+.........}
+.........2 -&gt; {
+............has_2byte -&gt; 0
+............char_max -&gt; 0
+............only_1byte -&gt; 0
+............is_original -&gt; 1
+............char_cnt -&gt; 0
+............high_page -&gt; 0
+............has_1byte -&gt; 0
+............low_page -&gt; 0
+............builtin -&gt; 1
+............enc_name -&gt; Original
+............hidden -&gt; 1
+.........}
+.........3 -&gt; {
+............has_2byte -&gt; 0
+............char_max -&gt; 0
+............only_1byte -&gt; 0
+............char_cnt -&gt; 0
+............is_custom -&gt; 1
+............has_1byte -&gt; 0
+............low_page -&gt; 0
+............builtin -&gt; 1
+............enc_name -&gt; Custom
+............high_page -&gt; 0
+............hidden -&gt; 1
+.........}
+.........4 -&gt; {
+............has_2byte -&gt; 0
+............char_max -&gt; 0
+............only_1byte -&gt; 1
+............char_cnt -&gt; 256
+............high_page -&gt; 0
+............has_1byte -&gt; 1
+............low_page -&gt; 0
+............builtin -&gt; 1
+............enc_name -&gt; TeX-Base-Encoding
+............unicode -&gt; {
+...............1 -&gt; 729
+...............2 -&gt; 64257
+...............3 -&gt; 64258
+...............4 -&gt; 8260
+...............5 -&gt; 733
+...............6 -&gt; 321
+...............7 -&gt; 322
+...............8 -&gt; 731
+
+another 238 lines
+
+...............247 -&gt; 247
+...............248 -&gt; 248
+...............249 -&gt; 249
+...............250 -&gt; 250
+...............251 -&gt; 251
+...............252 -&gt; 252
+...............253 -&gt; 253
+...............254 -&gt; 254
+...............255 -&gt; 255
+...............0 -&gt; 0
+............}
+............hidden -&gt; 1
+.........}
+......}
+......backmax -&gt; 1699
+......enccount -&gt; 65775
+......encmax -&gt; 65775
+......backmap -&gt; {
+.........1 -&gt; 65537
+.........2 -&gt; 65538
+.........3 -&gt; 32
+.........4 -&gt; 33
+.........5 -&gt; 34
+.........6 -&gt; 35
+.........7 -&gt; 36
+.........8 -&gt; 37
+.........9 -&gt; 38
+.........10 -&gt; 39
+.........11 -&gt; 40
+.........12 -&gt; 41
+.........13 -&gt; 42
+
+another 1,679 lines
+
+.........1693 -&gt; 65769
+.........1694 -&gt; 65770
+.........1695 -&gt; 65771
+.........1696 -&gt; 65772
+.........1697 -&gt; 65773
+.........1698 -&gt; 65774
+.........0 -&gt; 65536
+......}
+...}
+...italicangle -&gt; 0
+...strokedfont -&gt; 0
+...cidinfo -&gt; {
+......supplement -&gt; 0
+......version -&gt; 0
+...}
+...familyname -&gt; GentiumAlt
+...script_lang -&gt; {
+......1 -&gt; {
+.........script -&gt; latn
+.........langs -&gt; {
+............1 -&gt; dflt
+.........}
+......}
+...}
+</pre>
+    <p>The table <tt>script_lang</tt> contains scripts and languages. Here we have script <tt>latn</tt> (Latin) with default language.
+</p>
+    <pre>...upos -&gt; -48
+...version -&gt; 1.01; 2003; initial SIL release
+...glyphmax -&gt; 1699
+...names -&gt; {
+......1 -&gt; {
+.........lang -&gt; English (US)
+.........names -&gt; {
+............designerurl -&gt; http://www.sil.org/~gaultney
+............venderurl -&gt; http://www.sil.org/
+............compatfull -&gt; GentiumAlt
+............trademark -&gt; Gentium is a trademark of SIL International.
+............license -&gt; This font is the property of SIL International. It is distributed as copyrighted freeware. You may use this software without any charge and may distribute it, as is, to others. Commercial distribution of this software is restricted 
+without prior written permission. If you wish to distribute this software commercially, contact SIL for details on obtaining a license. You may not rent or lease the software, nor may you modify, adapt, translate, reverse engineer, decompile, or disassemb
+le the software. You may not make derivative fonts from this software. THE SOFTWARE AND RELATED FILES ARE PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND.
+............fullname -&gt; GentiumAlt
+............preffamilyname -&gt; GentiumAlt
+............designer -&gt; J. Victor Gaultney
+............copyright -&gt; Copyright (c) SIL International 2003. All rights reserved.
+............version -&gt; Version 1.01; 2003; initial SIL release
+............prefmodifiers -&gt; Regular
+............family -&gt; GentiumAlt
+............postscriptname -&gt; GentiumAlt
+............subfamily -&gt; Regular
+............uniqueid -&gt; SIL: GentiumAlt: 2003
+.........}
+......}
+...}
+...gentags -&gt; {
+......tt_cur -&gt; 0
+...}
+...modificationtime -&gt; 1063146346
+...fontname -&gt; GentiumAlt
+...changed -&gt; 0
+...vertical_origin -&gt; 0
+...table_version -&gt; 0.1
+...hasvmetrics -&gt; 0
+...creationtime -&gt; 1032220800
+...order2 -&gt; 1
+...head_optimized_for_cleartype -&gt; 0
+...strokewidth -&gt; 0
+...design_range_bottom -&gt; 0
+...design_size -&gt; 0
+...design_range_top -&gt; 0
+...sli_cnt -&gt; 1
+...macstyle -&gt; -1
+...ttf_tables -&gt; {
+......1 -&gt; {
+.........len -&gt; 32
+.........data -&gt; 
+.........maxlen -&gt; 0
+.........tag -&gt; maxp
+......}
+...}
+...copyright -&gt; Copyright (c) SIL International 2003. All rights reserved.
+...os2_version -&gt; 1
+...gasp_version -&gt; 0
+...uni_interp -&gt; none
+...uwidth -&gt; 14
+...weight_width_slope_only -&gt; 0
+...descent -&gt; 410
+...ascent -&gt; 1638
+...uniqueid -&gt; 0
+} )
+</pre>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Explore_the_table_obtained_from_a_TrueType_font">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Writing Lua in TeX&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Writing_Lua_in_TeX" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Writing Lua in TeX
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7618&diff=43417">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Embedding_Lua_code_in_a_TeX_document">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Embedding Lua code in a TeX document
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#TeX_catcodes_in_Lua">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         TeX catcodes in Lua
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Expansion">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Expansion
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Line_ends">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Line ends
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Special_characters">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Special characters
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#Backslash">
+            <span class="tocnumber">
+             2.3.1
+            </span>
+            <span class="toctext">
+             Backslash
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#Braces">
+            <span class="tocnumber">
+             2.3.2
+            </span>
+            <span class="toctext">
+             Braces
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#Hash_and_comment">
+            <span class="tocnumber">
+             2.3.3
+            </span>
+            <span class="toctext">
+             Hash and comment
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#Active_characters">
+            <span class="tocnumber">
+             2.3.4
+            </span>
+            <span class="toctext">
+             Active characters
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#Other_characters">
+            <span class="tocnumber">
+             2.3.5
+            </span>
+            <span class="toctext">
+             Other characters
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#.5Cluaescapestring">
+          <span class="tocnumber">
+           2.4
+          </span>
+          <span class="toctext">
+           \luaescapestring
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#From_Lua_to_TeX">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         From Lua to TeX
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#tex.print.28.29">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           tex.print()
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#tex.sprint.28.29">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           tex.sprint()
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#tex.tprint.28.29">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           tex.tprint()
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-16">
+           <a href="#debug_note">
+            <span class="tocnumber">
+             3.3.1
+            </span>
+            <span class="toctext">
+             debug note
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Embedding_Lua_code_in_a_TeX_document">
+      Embedding Lua code in a TeX document
+     </span>
+    </h2>
+    <p>Although it is simpler to put Lua code in Lua files, from time to time one may want or need to go Lua in the middle of a document. To this end, LuaTeX has two commands: <tt>\directlua</tt> and <tt>\latelua</tt>. They work the same, except <tt>\latelua</tt> is processed when the page where it appears is shipped out, whereas <tt>\directlua</tt> is processed at once; the distinction is immaterial here, and what is said of <tt>\directlua</tt> also applies to <tt>\latelua</tt>.
+</p>
+    <p><tt>\directlua</tt> can be called in three ways:
+</p>
+    <pre>\directlua {&lt;lua code&gt;}
+\directlua name {&lt;name&gt;} {&lt;lua code&gt;}
+\directlua &lt;number&gt; {&lt;lua code&gt;}
+</pre>
+    <p>Those three ways are equivalent when it comes to process <tt>&lt;lua code&gt;</tt>, but in the second case processing will occur in a chunk named <tt>&lt;name&gt;</tt>, and in the third it will occur in a chunk whose name is the entry <tt>&lt;number&gt;</tt> in the table <tt>lua.name</tt>. The difference manifests itself only when errors occur, in which case the name of the chunk, if any, is reported.
+</p>
+    <p>Each call to <tt>\directlua</tt>, named or not, is processed in a separate chunk. That means that any <tt>local</tt> variable is defined for this call only and is lost afterward. Hence:
+</p>
+    <pre>\directlua{
+  one = 1
+  local two = 2
+}
+\directlua{
+  texio.write_nl(type(one))
+  texio.write_nl(type(two))
+}
+</pre>
+    <p>will report <tt>number</tt> and <tt>nil</tt> (<tt>texio.write_nl</tt> writes to the log file). On the other hand, Lua code is completely insensitive to TeX's grouping mechanism. In other words, calling <tt>\directlua</tt> between <tt>\bgroup</tt> and <tt>\egroup</tt> doesn't affect the code to be processed.
+</p>
+    <h2>
+     <span class="mw-headline" id="TeX_catcodes_in_Lua">
+      TeX catcodes in Lua
+     </span>
+    </h2>
+    <p>By default, the code passed to <tt>\directlua</tt> is treated as normal TeX input and only then sent to the Lua interpreter. This may lead to unwanted results and must be acknowledged.
+</p>
+    <h3>
+     <span class="mw-headline" id="Expansion">
+      Expansion
+     </span>
+    </h3>
+    <p>As with any other special, the code in <tt>\directlua</tt> (and the <tt>&lt;name&gt;</tt>, if specifed) is fully expanded. This means that macros can be safely passed to <tt>\directlua</tt> if one wants their values, but that they should also be properly escaped when needed. For instance:
+</p>
+    <pre>\def\macro{1}
+\directlua{
+  myvar = \macro
+}
+</pre>
+    <p>defines <tt>myvar</tt> as the number <tt>1</tt>. To store the control sequence <tt>\macro</tt> instead, another course of action is needed: see the <a href="#Backslash">section on backslash</a> below.
+</p>
+    <p>It should be noted that <tt>\par</tt> tokens are removed from <tt>\directlua</tt> if they are unexpandable (i.e., most likely, if they have their original meaning). Hence, empty lines can be used in Lua code.
+</p>
+    <h3>
+     <span class="mw-headline" id="Line_ends">
+      Line ends
+     </span>
+    </h3>
+    <p>When TeX reads a file, it normally turns line ends into spaces. That means that what looks like several lines is actually fed to the Lua interpreter as one big line. For instance:
+</p>
+    <pre>\directlua{
+  myvar = 1
+  anothervar = 2
+  onelastvar = 3
+}
+</pre>
+    <p>amounts to the following, if it were written in a separate Lua file:
+</p>
+    <pre>myvar = 1 anothervar = 2 onelastvar = 3
+</pre>
+    <p>That is perfectly legitimate, but strange things might happen. First, TeX macros gobble spaces as usual. Hence:
+</p>
+    <pre>\def\macro{1}
+\directlua{
+  myvar = \macro
+  anothervar = 2
+}
+</pre>
+    <p>will be fed to the interpreter as
+</p>
+    <pre>myvar = 1anothervar = 2
+</pre>
+    <p>which is not legitimate at all. Second, the Lua comment <tt>--</tt> will affect everything to the end of the <tt>\directlua</tt> call. That is:
+</p>
+    <pre>\directlua{
+  myvar = 1
+--  anothervar = 2
+  onelastvar = 3
+}
+</pre>
+    <p>will be processed as
+</p>
+    <pre>myvar = 1 -- anothervar = 2 onelastvar = 3
+</pre>
+    <p>which works but only defines <tt>myvar</tt>. Third, when reporting error, the Lua interpreter will always mention the line number as 1, since it processes one big line only; that isn't extremely useful when the code is large.
+</p>
+    <p>The solution is to set <tt>\endlinechar=10</tt> or <tt>\catcode<code>\^^M=12</code></tt><code>. In both cases, line ends will be preserved and the code will be processed as it is input.
+</code></p>
+    <code><h3><span class="mw-headline" id="Special_characters">Special characters</span></h3></code>
+    <code><p>In TeX, some characters have a special behavior. That must be taken into account when writing Lua code: one must change their catcodes beforehand if one wants to handle them as Lua would, as has just been done for line ends. That means that <tt>\directlua</tt>, as such, is clearly insufficient to write any extended chunk of code. It is thus better to devise a special macro that sets the catcodes to the appropriate values, reads the Lua code, feeds it to <tt>\directlua</tt>, and restores the catcodes. The following code does the job:
+</p></code>
+    <code><pre>\def\luacode{%
+  \bgroup
+  \catcode\&lt;/code&gt;\{=12
+  \catcode`\}=12
+  \catcode`\^^M=12
+  \catcode`\#=12
+  \catcode`\~=12
+  \catcode`\%=12
+  \doluacode
+}
+
+\bgroup
+\catcode`\^^M=12&nbsp;%
+\long\gdef\doluacode#1^^M#2\endluacode{\directlua{#2}\egroup}%
+\egroup
+</pre></code>
+    <code><p>Note that not all special characters are set to normal (catcode 12) characters; that is explained for each below. Note also that <tt>\doluacode</tt>, internally called by <tt>\luacode</tt>, is defined to get rid of anything up to the line end, and then pass anything up to <tt>\endluacode</tt> to <tt>\directlua</tt>. Discarding what follows <tt>\luacode</tt> is important, otherwise a simple code as
+</p></code>
+    <code><pre>\luacode
+myvar = 1
+\endluacode
+</pre></code>
+    <code><p>would actually create two lines, the first being empty; it is annoying because errors are then reported with the wrong line number (i.e. any error in this one-line code would be reported to happen on line 2).
+</p><p>However, the rest of the line after <tt>\luacode</tt> could also be processed, instead of discarded, to manage special effects (e.g. specifying a chunk's name, storing the code in a control sequence, or even setting which catcodes should be changed or not).
+</p></code>
+    <code><h4><span class="mw-headline" id="Backslash">Backslash</span></h4></code>
+    <code><p>The backslash in TeX is used to form control sequences. In the definition of <tt>\luacode</tt> above, it isn't changed and thus behaves as usual. It allows commands to be passed and expanded to the Lua code. Anyway a backslash in Lua is also an escape character in strings. Hence, if one wants to store the name of a macro in Lua code, the following won't work:
+</p></code>
+    <code><pre>\luacode
+myvar = "\noexpand\macro"
+\endluacode
+</pre></code>
+    <code><p>because to the Lua interpreter the string is made of <tt>\m</tt> followed by <tt>acro</tt>; since <tt>\m</tt> is not defined in Lua, the string is read as <tt>macro</tt>, but in other circumstances strange things might happen: for instance, <tt>\n</tt> is a newline. The proper way to pass a macro verbatim is:
+</p></code>
+    <code><pre>\luacode
+myvar = "\noexpand\\macro"
+\endluacode
+</pre></code>
+    <code><p>which Lua will correctly read as
+</p></code>
+    <code><pre>myvar = "\\macro"
+</pre></code>
+    <code><p>with the backslash escaped to represent itself. Another solution is:
+</p></code>
+    <code><pre>myvar = [[\noexpand\macro]]
+</pre></code>
+    <code><p>because the double brackets signals a string in Lua where no escape sequence occurs (and the string can also run on several lines). Note however that in the second case <tt>myvar</tt> will be defined with a trailing space, i.e. as <tt>"\macro "</tt>, because of TeX's habit to append a trailing space to unexpanded (or unexpandable) control sequences.
+</p><p>If one wants the backslash to be treated as any other character (not creating control sequences), then one has to rewrite <tt>\luacode</tt> as follows:
+</p></code>
+    <code><pre>\def\luacode{%
+  \bgroup
+  \catcode`\\=12
+  \catcode`\{=12
+  \catcode`\}=12
+  \catcode`\^^M=12
+  \catcode`\#=12
+  \catcode`\~=12
+  \catcode`\%=12
+  \doluacode
+}
+
+\bgroup
+\catcode`\|=0
+\catcode`\^^M=12&nbsp;%
+\catcode`\\=12&nbsp;%
+|long|gdef|doluacode#1^^M#2\endluacode{|directlua{#2}|egroup}%
+|egroup
+</pre></code>
+    <code><p>Backslashes remain escape characters in Lua, though.
+</p></code>
+    <code><h4><span class="mw-headline" id="Braces">Braces</span></h4></code>
+    <code><p>One may want to define a string in Lua which contains unbalanced braces, i.e.:
+</p></code>
+    <code><pre>\luacode
+myvar = "{"
+\endluacode
+</pre></code>
+    <code><p>If the braces' catcodes hadn't been changed beforehand, that would be impossible. Note, however, that this means that one can't feed arguments to commands in the usual way. I.e. the following will produce nothing good:
+</p></code>
+    <code><pre>\luacode
+myvar = "\dosomething{\macro}"
+\endluacode
+</pre></code>
+    <code><p><tt>\dosomething</tt> will be expanded with the left brace (devoid of its usual delimiter-ness) as its argument, and the rest of the line might produce chaos. Thus, one may also choose not to change the catcodes of braces, depending on how <tt>\luacode</tt> is most likely to be used. Note that strings with unbalanced braces can still be defined, even if braces have their usual catcodes, thanks to the following trick:
+</p></code>
+    <code><pre>\luacode
+myvar = "{" -- }
+\endluacode
+</pre></code>
+    <code><p>When the code is passed to <tt>\directlua</tt>, braces are balanced because the Lua comment means nothing to TeX; when passed to the Lua interpreter, on the other hand, the right brace is ignored.
+</p></code>
+    <code><h4><span class="mw-headline" id="Hash_and_comment">Hash and comment</span></h4></code>
+    <code><p>The hash sign <tt>#</tt> in Lua is the length operator: prefixed to a string or table variable, it returns its length. If its catcode weren't taken care of, LuaTeX would pass to <tt>\directlua</tt> a double hash for each hash, i.e. each <tt>#</tt> would be turned into <tt>##</tt>. That is normal TeX behavior, but unwanted here.
+</p><p>As for the commen sign <tt>%</tt>, it is useful in Lua when manipulating strings. If it weren't escaped it would discard parts of the code when TeX reads it, and a mutilated version of the input would be passed to the Lua interpreter. In turn, discarding a line by commenting it in <tt>\luacode</tt> should be done with the Lua comment <tt>--</tt>.
+</p></code>
+    <code><h4><span class="mw-headline" id="Active_characters">Active characters</span></h4></code>
+    <code><p>The <tt>~</tt> character is generally active and used as a no-break space in TeX. It it were passed as is to <tt>\directlua</tt>, it would expand to uninterpretable control sequences, whereas in Lua it is used to form the unequal operator <tt>~=</tt>.
+</p><p>Other possible active characters should be taken care of, but which characters are active is unpredictable; punctuation marks might be so to accommodate special spacing, as with LaTeX's <i>babel</i> package, but such tricks are unlikely to survive in LuaTeX (cleaner methods exist that add a space before punctuation marks when necessary).
+</p></code>
+    <code><h4><span class="mw-headline" id="Other_characters">Other characters</span></h4></code>
+    <code><p>When processing verbatim text in TeX, one generally also changes the catcodes of <tt>$</tt>, <tt>&</tt>, <tt>^</tt>, <tt>_</tt> and the space character, because they too are special. When passed to the Lua interpreter, though, their usual catcodes won't do any harm, that is why they are left unmodified here.
+</p></code>
+    <code><h3><span id="\luaescapestring"></span><span class="mw-headline" id=".5Cluaescapestring">\luaescapestring</span></h3></code>
+    <code><p>Although it can't do all of what's been explained, the <tt>\luaescapestring</tt> command might be useful in some cases: it expands its argument (which must be enclosed in <i>real</i> braces) fully, then modify it so that dangerous characters are escaped: backslashes, hashes, quotes and line ends. For instance:
+</p></code>
+    <code><pre>\def\macro{"\noexpand\foo"}
+\luacode
+myvar = "\luaescapestring{\macro}"
+\endluacode
+</pre></code>
+    <code><p>will be passed to Lua as
+</p></code>
+    <code><pre>myvar = "\"\\foo \""
+</pre></code>
+    <code><p>so that <tt>myvar</tt> is defined as <tt>"\foo "</tt>, with the quotes as parts of it. Note that the trailing space after <tt>\foo</tt> still happens.
+</p></code>
+    <code><h2><span class="mw-headline" id="From_Lua_to_TeX">From Lua to TeX</span></h2></code>
+    <code><p>Inside Lua code, one can pass strings to be processed by TeX with the functions <tt>tex.print()</tt>, <tt>tex.sprint()</tt> and <tt>tex.tprint()</tt>. All such calls are processed at the end of a <tt>\directlua</tt> call, even though they might happen in the middle of the code. This behavior is worth noting because it might be surprising in some cases, although it is generally harmless.
+</p></code>
+    <code><h3><span id="tex.print()"></span><span class="mw-headline" id="tex.print.28.29">tex.print()</span></h3></code>
+    <code><p>This function receives as its argument(s) either one or more strings or an array of strings. Each string is processed as an input line: an end-of-line character is appended (except to the last string), and TeX is in state <tt>newline</tt> when processing it (i.e. leading spaces are skipped). Hence the two equivalent calls:
+</p></code>
+    <code><pre>tex.print("a", "b")
+tex.print({"a", "b"})
+</pre></code>
+    <code><p>are both interpreted by TeX as would the following two lines:
+</p></code>
+    <code><pre>a
+b
+</pre></code>
+    <code><p>Thus <code>a b' is produced, since line ends normally produce a space.
+</code></p><p><code>The function can also take an optional number as its first argument; it is interpreted as referring to a catcode table (as defined by <tt>\initcatcodetable</tt> and <tt>\savecatcodetable</tt>), and each line is processed by TeX with that catcode regime. For instance (note that with such a minimal catcode table, braces don't even have their usual values):
+</code></p></code>
+    <code><code><pre>\bgroup
+\initcatcodetable1
+\catcode\&lt;/code&gt;\_=0
+\savecatcodetable1
+\egroup
+
+\directlua{tex.print(1, "_TeX")}
+</pre></code></code>
+    <code><code><p>The string will be read with <tt>_</tt> as an escape character, and thus interpreted as the command commonly known as <tt>\TeX</tt>. The catcode regime holds only for the strings passed to <tt>tex.print()</tt> and the rest of the document isn't affected.
+</p><p>If the optional number is <tt>-1</tt>, or points to an invalid (i.e. undefined) catcode table, then the strings are processed with the current catcodes, as if there was no optional argument. If it is <tt>-2</tt>, then the strings are read as if the result of <tt>\detokenize</tt>: all characters have catcode 12 (i.e. <code>other', characters that have no function beside representing themselves), except space, which has catcode 10 (as usual).
+</code></p></code></code>
+    <code><code><code><h3><span id="tex.sprint()"></span><span class="mw-headline" id="tex.sprint.28.29">tex.sprint()</span></h3></code></code></code>
+    <code><code><code><p>Like <tt>tex.print()</tt>, this function can receive either one or more strings or an array of strings, with an optional number as its first argument pointing to a catcode table. Unlike <tt>tex.print()</tt>, however, each string is processed as if TeX were in the middle of a line and not at the beginning of a new one: spaces aren't skipped, no end-of-line character is added and trailing spaces aren't ignored. Thus:
+</p></code></code></code>
+    <code><code><code><pre>tex.sprint("a", "b")
+</pre></code></code></code>
+    <code><code><code><p>is interpreted by TeX as
+</p></code></code></code>
+    <code><code><code><pre>ab
+</pre></code></code></code>
+    <code><code><code><p>without any space inbetween.
+</p></code></code></code>
+    <code><code><code><h3><span id="tex.tprint()"></span><span class="mw-headline" id="tex.tprint.28.29">tex.tprint()</span></h3></code></code></code>
+    <code><code><code><p>This function takes an unlimited number of tables as its arguments; each table must be an array of strings, with the first entry optionally being a number pointing to a catcode table. Then each table is processed as if passed to <tt>tex.sprint()</tt>. Thus:
+</p></code></code></code>
+    <code><code><code><pre>tex.tprint({1, "a", "b"}, {"c", "d"})
+</pre></code></code></code>
+    <code><code><code><p>is equivalent to
+</p></code></code></code>
+    <code><code><code><pre>tex.sprint(1, "a", "b")
+tex.sprint("c", "d")
+</pre></code></code></code>
+    <code><code><code><h4><span class="mw-headline" id="debug_note">debug note</span></h4></code></code></code>
+    <code><code><code></code><p><code>Note that there are some tables that Lua inside LuaTeX has; one reference is in <a class="external text" href="http://www.luatex.org/svn/trunk/manual/functionref.pdf" rel="nofollow">functionref</a>: <i></i></code><i><tt>luatex</tt> is a typesetter; <tt>texlua</tt> and <tt>luatex --luaonly</tt> are lua interpreters. In lua interpreter mode, the lua tables <tt>tex</tt>, <tt>token</tt>, <tt>node</tt>, and <tt>pdf</tt> are unavailable.'</i>
+</p><p>For utilizing lua-specific debug techniques, see 
+</p></code></code>
+    <code><code><ul><li><a class="external text" href="http://www.lua.org/pil/23.html" rel="nofollow">23. The Debug Library - Lua</a>,</li>
+<li><a class="external text" href="http://www.lua.org/pil/23.1.html" rel="nofollow">23.1 - Introspective Facilities</a>,</li>
+<li><a class="external text" href="http://lua-users.org/wiki/DebugLibraryTutorial" rel="nofollow">lua -users wiki: Debug Library Tutorial</a></li></ul></code></code>
+    <code><code><p>You can use commands like these in your .tex file:
+</p></code></code>
+    <code><code><pre>\directlua{
+for k,v in pairs(tex) do print(k, v) end
+print"==="
+for k,v in pairs(lua) do print(k,v) end
+print"==="
+print(debug.traceback(1))
+}
+</pre></code></code>
+    <code><code><p>... and the output of lua's <tt>print</tt> will be sent to stdout; the three <tt>=</tt> signs will serve simply as `delimiters' in the output, which will look something like:
+</p></code></code>
+    <code><code><pre style="height:250px;overflow:scroll;">tprint	function: 0x89086e8
+box	table: 0x895a0a0
+getsfcode	function: 0x895ae10
+pdffontsize	function: 0x895b048
+shipout	function: 0x895b2d8
+getmath	function: 0x895b380
+setuccode	function: 0x895ae48
+getskip	function: 0x8908860
+pdfxformname	function: 0x895b170
+setlist	function: 0x895ab38
+setattribute	function: 0x8908898
+count	table: 0x895b600
+getuccode	function: 0x895ae80
+getbox	function: 0x895ab00
+uniformdeviate	function: 0x895b080
+fontname	function: 0x895af58
+primitives	function: 0x895b220
+badness	function: 0x895b310
+setmath	function: 0x895b348
+setskip	function: 0x8908828
+getmathcode	function: 0x895ada0
+getcount	function: 0x8908950
+toks	table: 0x895b6b0
+setsfcode	function: 0x895add8
+run	function: 0x8908638
+sfcode	table: 0x895a130
+pdfpageref	function: 0x895b138
+setcount	function: 0x8908918
+setdimen	function: 0x89087b8
+print	function: 0x89086d0
+setlccode	function: 0x895acf8
+fontidentifier	function: 0x895af90
+getlccode	function: 0x895ad30
+setmathcode	function: 0x895ad68
+round	function: 0x895aeb8
+getdimen	function: 0x89087f0
+write	function: 0x89086b8
+set	function: 0x8908770
+definefont	function: 0x895b1b0
+dimen	table: 0x895b550
+get	function: 0x89087a0
+number	function: 0x895b0c0
+nest	table: 0x895a600
+lists	table: 0x895a550
+setcatcode	function: 0x895ac18
+delcode	table: 0x895a4a0
+setnest	function: 0x895aba8
+mathcode	table: 0x895a3f0
+getdelcode	function: 0x895acc0
+catcode	table: 0x895a340
+pdffontname	function: 0x895afd0
+uccode	table: 0x895a290
+setdelcode	function: 0x895ac88
+lccode	table: 0x895a1e0
+sp	function: 0x895af28
+attribute	table: 0x895b410
+getcatcode	function: 0x895ac50
+extraprimitives	function: 0x895b258
+linebreak	function: 0x895b3b8
+setbox	function: 0x895aac8
+skip	table: 0x895b4c0
+pdffontobjnum	function: 0x895b008
+settoks	function: 0x8908988
+gettoks	function: 0x895aa90
+enableprimitives	function: 0x895b298
+getlist	function: 0x895ab70
+getnest	function: 0x895abe0
+getattribute	function: 0x89088d8
+romannumeral	function: 0x895b0f8
+scale	function: 0x895aef0
+hashtokens	function: 0x895b1e8
+error	function: 0x8908720
+finish	function: 0x8908668
+
+====
+setluaname	function: 0x895efb8
+setbytecode	function: 0x895f028
+name	table: 0x895ef50
+getluaname	function: 0x895ef80
+getbytecode	function: 0x895eff0
+version	Lua 5.1
+bytecode	table: 0x895f080
+====
+1
+stack traceback:
+	&lt;\directlua &gt;:1: in main chunk
+</pre></code></code>
+    <code><code><p>Note that the string returned by <tt>debug.traceback</tt> contains <tt>\directlua</tt> and thus should be handled with care if passed to TeX, which might try to execute it.
+</p><p>\documentclass[tikz,border=3mm]{standalone}
+\usepackage{amsmath}&nbsp;% 用于数学公式
+\usetikzlibrary{positioning, arrows.meta}
+</p><p>\begin{document}
+\begin{tikzpicture}[
+</p></code></code>
+    <code><code><pre>   box/.style={draw, rectangle, minimum width=2cm, minimum height=1cm, thick},
+   ell/.style={draw, ellipse, minimum width=0.8cm, minimum height=0.8cm},
+   arrow/.style={-Stealth, thick}
+</pre></code></code>
+    <code><code><p>]
+</p><p>% 上半部分：直接效应模型
+% 节点定义
+\node[box] (X1) at (0,0) {$Flex_{it}$};
+\node[box] (Y1) at (4,0) {$Y_{lnincomeit}$};
+\node[ell] (e1) at (6,0) {$e1$};
+% 路径连接
+\draw[arrow] (X1) -- node[above] {$c$} (Y1);
+\draw[arrow] (Y1) -- (e1);
+% 方程标注
+\node[align=center] (eq1) at (2,-1) 
+</p></code></code>
+    <code><code><pre>   {$Y_{lnincomeit} = c Flex_{it} + e1$};
+</pre></code></code>
+    <code><code><p>% 下半部分：中介效应模型
+% 节点定义
+\node[box] (X2) at (0,-3) {$Flex_{it}$};
+\node[box] (M)  at (2,-5) {$M_{it}$};
+\node[box] (Y2) at (4,-3) {$Y_{lnincomeit}$};
+\node[ell] (e2) at (4,-5) {$e2$};
+\node[ell] (e3) at (6,-3) {$e3$};
+% 路径连接
+\draw[arrow] (X2) -- node[above] {$c'$} (Y2);
+\draw[arrow] (X2) -- node[above,sloped] {$a$} (M);
+\draw[arrow] (M)  -- node[above,sloped] {$b$} (Y2);
+\draw[arrow] (M)  -- (e2);
+\draw[arrow] (Y2) -- (e3);
+% 方程标注
+\node[align=center] (eq2) at (2,-6) 
+</p></code></code>
+    <code><code><pre>   {$M_{it} = a Flex_{it} + e2$};
+</pre></code></code>
+    <code><code><p>\node[align=center] (eq3) at (2,-7) 
+</p></code></code>
+    <code><code><pre>   {$Y_{lnincomeit} = c' Flex_{it} + b M_{it} + e3$};
+</pre></code></code>
+    <code><code><p>\end{tikzpicture}
+\end{document}
+</p></code></code>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Writing_Lua_in_TeX">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

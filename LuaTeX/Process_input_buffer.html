@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Process input buffer&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Process_input_buffer" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Process input buffer
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7589&diff=43388">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Syntax">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Syntax
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Encoding">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Encoding
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-4">
+           <a href="#Latin-1">
+            <span class="tocnumber">
+             2.1.1
+            </span>
+            <span class="toctext">
+             Latin-1
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-5">
+           <a href="#Other_8-bit_encodings">
+            <span class="tocnumber">
+             2.1.2
+            </span>
+            <span class="toctext">
+             Other 8-bit encodings
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#TeX_as_a_lightweight_markup_language">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           TeX as a lightweight markup language
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Syntax">
+      Syntax
+     </span>
+    </h2>
+    <p>This <a href="Callbacks.html" title="LuaTeX/Callbacks">callback</a> is called whenever TeX needs a new input line from the file it is currently reading. The argument passed to the function registered there is a string representing the original input line; the function should return another string, to be processed by TeX, or <tt>nil</tt>; in the latter case, the original string is processed. So the function should be defined according to the following blueprint:
+</p>
+    <pre>function (&lt;string&gt; original_line)
+  return &lt;string&gt; adjusted_line or nil
+end
+</pre>
+    <p>In case TeX isn't reading the main document but a file that is <tt>\input</tt> in it, the callback is called after the <tt>reader</tt> function possibly defined in the <tt><a class="new" href="../index.php?title=LuaTeX/Open_read_file&action=edit&redlink=1.html" title="LuaTeX/Open read file (page does not exist)">LuaTeX/Open_read_file</a></tt> callback.
+</p>
+    <p>The following examples aren't mutually exclusive; however, if one wanted to register them all in the same callback, special care would be needed, as explained <a href="Callbacks#Several_functions_in_a_callback.html" title="LuaTeX/Callbacks">in the main page on callbacks</a>. Here each call to <tt>callback.register()</tt> removes whatever there might have been in the callback beforehand.
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Encoding">
+      Encoding
+     </span>
+    </h3>
+    <p>LuaTeX understands UTF-8 and UTF-8 only (ASCII is a part of it, however). A line containing invalid characters will produce an error message: <em>String contains an invalid utf-8 sequence.</em> Thus documents with different encoding must be converted, and this can be done in <tt>process_input_buffer</tt>.
+</p>
+    <p>Note that such a conversion might not produce anything meaningful when the document is compiled, because the fonts used must have the proper glyphs in the right place; for instance, the Computer Modern fonts don't have characters with diacritics, and Latin Modern should be used instead. An alternative solution (quite archaic with LuaTeX) is to define the special characters as active, and to make them create a diacritic. For instance:
+</p>
+    <pre>\catcode`\&eacute; = 13
+\def &eacute;{\'e}
+</pre>
+    <h4>
+     <span class="mw-headline" id="Latin-1">
+      Latin-1
+     </span>
+    </h4>
+    <p>Reading a document written in Latin-1 (ISO-8859-1) is relatively straightforward, because the <tt>slnunicode</tt> library embedded in LuaTeX does the conversion at once.
+</p>
+    <pre>local utf8_char, byte, gsub = unicode.utf8.char, string.byte, string.gsub
+
+local function convert_char (char)
+  return utf8_char(byte(char))
+end
+
+local function convert_line (line)
+  return gsub(line, ".", convert_char)
+end
+
+callback.register("process_input_buffer", convert_line)
+</pre>
+    <p>The code reads as follows (bottom up): the <tt>convert_line</tt> function is registered in the <tt>process_input_buffer</tt> callback; it is passed the original input line as its sole argument, and returns another string, namely that line processed with the <tt>string.gsub()</tt> function. The latter replaces in a string (the first argument) all the occurrences of a pattern (the second argument) with the outcome of its third argument (for further information on <tt>string.gsub()</tt> see <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-string.gsub" rel="nofollow">the Lua reference manual</a>).
+</p>
+    <p>Here the third argument is a function, <tt>convert_char()</tt> to which is passed whatever matches the pattern. This pattern matches any character, the dot being a magic character. In <tt>convert_char()</tt>, the character is first converted to a numerical code (the codepoint in Latin-1, see the <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-string.byte" rel="nofollow">description of <tt>string.byte()</tt></a>); the code is passed to <tt>unicode.utf8.char</tt> which, given a number, returns the associated character in UTF-8, the number being interpreted as a code point in Unicode; since the characters in Latin-1 have the same code points as in Unicode, the conversion is automatic here.
+</p>
+    <p>The use of <tt>local</tt> variables ensures speed, and above all that those variables aren't defined outside the current chunk, for instance, the current <tt>\directlua</tt> call or the current Lua file; actually, the code could even be embedded between <tt>do</tt> and <tt>end</tt> and leave absolutely no trace whatsoever.
+</p>
+    <h4>
+     <span class="mw-headline" id="Other_8-bit_encodings">
+      Other 8-bit encodings
+     </span>
+    </h4>
+    <p>When using other 8-bit encoding, the previous code won't work, because it defaults to Latin-1 only. Then one must convert each character one by one by setting up a table matching each input character with the Unicode value; that value can be passed to unicode.utf8.char to yield the desired character.
+</p>
+    <p>For instance, here's the code needed to process a document encoded in Latin/Greek (ISO-8859-7):
+</p>
+    <pre>local utf8_char, byte = unicode.utf8.char, string.byte
+
+local LatinGreek_table = {
+  [0] = 0x0000, 0x0001, 0x0002, 0x0003, 0x0004,
+  -- ... 240+ other values...
+  0x03C9, 0x03CA, 0x03CB, 0x03CC, 0x03CD, 0x03CE
+  }
+
+local function convert_char (char)
+  return utf8_char(LatinGreek_table[byte(char)])
+end
+
+local function convert_line (line)
+  return gsub(line, ".", convert_char)
+end
+
+callback.register("process_input_buffer", convert_line)
+</pre>
+    <p>The <tt>convert_line()</tt> function and call to <tt>callback.register()</tt> are the same as above. What has changed is <tt>convert_char()</tt>; the numerical value of the original character is now used as an index in the <tt>LatinGreek_table</tt>, and the value returned is the corresponding Unicode code point; that number is passed to <tt>unicode.utf8.char</tt> to produce the character in UTF-8.
+</p>
+    <p>The values in the <tt>LatinGreek_table</tt> are assigned to the right indices because they are declared in a row (here in hexadecimal form by prefixing them with <tt>0x</tt>). The only index that needs to be specified is 0, because indexing of tables in Lua begins at 1 by default. The table length is 254 plus the value at index 0 (not 255, because there is no such character in Latin/Greek). Each index is a code point in Latin/Greek, and the value is the code point of the same character in Unicode. For instance, lowercase omega in Latin/Greek is 249, at which index one finds 0x03C9, lowercase omega in Unicode.
+</p>
+    <h3>
+     <span class="mw-headline" id="TeX_as_a_lightweight_markup_language">
+      TeX as a lightweight markup language
+     </span>
+    </h3>
+    <p>The <tt>process_input_buffer</tt> can be put to an entirely different use, namely to preprocess input strings using some kind of lightweight markup and turn them into proper TeX.
+</p>
+    <p>Let's suppose one has two control sequences, <tt>\italic</tt> and <tt>\bold</tt>, taking a single argument; let's suppose furthermore that one wants to write a sentence like
+</p>
+    <pre>This is in /italic/ and this is in *bold*.
+</pre>
+    <p>to be processed by TeX as
+</p>
+    <pre>This is in \italic{italic} and this is in \bold{bold}.
+</pre>
+    <p>so as to produce: `This is in <em>italic</em> and this is in <strong>bold</strong>.' The following code does exactly that (the use of the percent sign and of <tt>\\</tt> without <tt>\noexpand</tt> means that this code is either in a Lua file or in the second version of <tt>\luacode</tt> as defined in <a href="Writing_Lua_in_TeX#Backslash.html" title="LuaTeX/Writing Lua in TeX">Writing Lua in TeX</a>; also, this code illustrates the registering of an anonymous function instead of a function variable as in the previous examples):
+</p>
+    <pre>local gsub = string.gsub
+
+callback.register("process_input_buffer",
+  function (str)
+    str = gsub(str, "/(.-)/", "\\italic{%1}")
+    str = gsub(str, "%*(.-)%*", "\\bold{%1}")
+    return str
+  end)
+</pre>
+    <p>What happens is that the original string is replaced with successive call to <tt>string.gsub</tt> (see <a class="external text" href="http://www.lua.org/manual/5.1/manual.html#pdf-string.gsub" rel="nofollow">the Lua reference manual</a>), in which the captures in the patterns are replaced with themselves as arguments to the TeX function (the non-capture parts of the patterns are discarded). For instance, <tt>/a word/</tt> yields <tt>\italic{a word}</tt>. Note that with <tt>\bold</tt>, the asterisks in the pattern must be escaped with <tt>%</tt>, otherwise they would be interpreted as magic characters. The line can then be processed by TeX as usual.
+</p>
+    <p>Only pairs of slashes or asterisks in the same line will be interpreted as markup, because lines are processed one by one and nothing is remembered from one line to the next (that can be implemented, but is a bit more complicated and dangerous). Hence, nothing will be in italics in the following example:
+</p>
+    <pre>This will /not
+be/ in italic.
+</pre>
+    <p>Instead, slashes will be read.
+</p>
+    <p>One can add an unlimited number of replacements of the input line. For instance, here's a way to mark sections by rows of <tt>#</tt>'s:
+</p>
+    <pre>  str = gsub(str, "^%s*#%s*(.*)", "\\section{%1}")
+  str = gsub(str, "^%s*##%s*(.*)", "\\subsection{%1}")
+  str = gsub(str, "^%s*###%s*(.*)", "\\subsubsection{%1}")
+</pre>
+    <p>What is recognized as a section header is any line beginning with one, two or three hashes, ignoring space before and after. So one can write:
+</p>
+    <pre># A section
+  ## A subsection
+    ### A subsubsection
+</pre>
+    <p>More complicated things are possible. However, using the <a class="new" href="../index.php?title=LuaTeX/open_read_file&action=edit&redlink=1.html" title="LuaTeX/open read file (page does not exist)">LuaTeX/open read file</a> callback (only with an <tt>\input</tt> file) is preferable if subtlety is required, because it can read an entire file (or any set of lines) before changing anything. Also, the powerful <a class="external text" href="http://www.inf.puc-rio.br/~roberto/lpeg/lpeg.html" rel="nofollow">LPeg library</a> (embedded in LuaTeX) can be used instead of the default operations.
+</p>
+    <p>Finally, one must note that such manipulations can be dangerous or lead to unwanted results. For instance, a line such as
+</p>
+    <pre>... the file should be contained in user/directory/myfiles...
+</pre>
+    <p>will be processed without slashes and with <em>directory</em> in italics. Thus, such markup should either be used with files specially tailored for it, or contain ways to be overriden or to protect some text.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Process_input_buffer">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

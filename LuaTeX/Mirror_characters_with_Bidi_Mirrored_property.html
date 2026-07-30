@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Mirror characters with Bidi Mirrored property&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Mirror_characters_with_Bidi_Mirrored_property" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Mirror characters with Bidi Mirrored property
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7587&diff=43386">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>This example code for mirroring characters that has Bidi_Mirrored property (as defined by Unicode) in RTL contexts. It uses characters.data table defined in <a class="external text" href="http://source.contextgarden.net/tex/context/base/char-def.lua" rel="nofollow">char-def.lua</a> file from ConTeXt distribution to get character properties.
+</p>
+    <pre>dofile("char-def.lua") -- character definition table
+
+local function mirror(hlist)
+  local rtl = false
+  if tex.textdir == "TRT" then
+    rtl = true
+  elseif tex.textdir == "TLT" then
+    rtl = false
+  end
+  for n in node.traverse(hlist) do
+    if n.id == node.id('hlist') then
+      mirror(n.list)
+    end
+    if n.id == node.id("whatsit") and n.subtype == 7 then
+      if n.dir == "+TRT" or n.dir == "-TLT" then
+        rtl = true
+      elseif n.dir == "-TRT" or n.dir == "+TLT" then
+        rtl = false
+      end
+    end
+    if n.id == node.id('glyph') then
+      if rtl then
+      local char = n.char
+      local mirror = characters.data[char].mirror
+        if mirror then
+          n.char = mirror
+        end
+      end
+    end
+  end
+end
+
+callback.register('pre_linebreak_filter',
+  function(h)
+     mirror(h)
+     return true
+  end
+  )
+</pre>
+    <p>Example usage:
+</p>
+    <pre>\directlua{dofile("mirror.lua")}
+
+(Left to right) {\textdir TRT (RIGHT TO LEFT)}
+
+\textdir TRT
+
+RIGHT [TO] LEFT (TEXT)
+
+\textdir TLT
+
+left [to] right (text)
+\bye
+</pre>
+    <p>--khaledhosny
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Mirror_characters_with_Bidi_Mirrored_property">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

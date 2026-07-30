@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Changing the font for a script&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Changing_the_font_for_a_script" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Changing the font for a script
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7579&diff=43376">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Typically, fonts contain only a selection of scripts, and changing them automatically (as well as the writing direction) to make sure the document is properly typeset would be a nice feature. Here is a mock up.
+</p>
+    <p>It is based on the <code>pre_linebreak_filter</code> callback, which contains the horizontal list of glyphs, kerns, whatsits, etc., before building the paragraph. This callback is used by the font loader, too. It works with LaTeX 2016 and LuaTeX 0.95, but it should work with previous versions with minimal changes.
+</p>
+    <p>It is intended just for small chunks of text (a proper noun, a few words, etc.). For proper bidi writing, see typo-dha.lua, typo-dua.lua, typo-dub.lua and typo-duc.lua in context.
+</p>
+    <p>You may also want to readjust the vertical positioning (the baselines don't always match). This part resorts to a pdf literal and it's commented out (because it's a hack - the glyphs are moved, but the corresponding boxes are not).
+</p>
+    <p>As an alternative approach, you may use combo fonts (provided by luaotfload 2.7).
+</p>
+    <pre>\documentclass{article}
+
+\directlua{
+local DIR = node.id("dir")
+function arabic_text (head)
+  local prevglyf = nil
+  local isArab = false
+  for item in node.traverse_id(node.id"glyph", head) do
+    if item.char &gt; 1536 and item.char &lt; 1792 then
+      item.font = arabicfont&nbsp;% Defined below
+      if isArab == false then 
+        isArab = true
+        local d = node.new(DIR)
+        d.dir = '+TRT'
+        node.insert_before(head, item, d)
+        % local r = node.new(node.id'whatsit', node.subtype'pdf_literal')
+        % r.data = '2 Ts'
+        % node.insert_before(head, item, r)   
+      end
+    else
+      if isArab == true then
+        isArab = false
+        local d = node.new(DIR)
+        d.dir = '-TRT'
+        node.insert_before(head, prevglyf, d)
+        % local r = node.new(node.id'whatsit', node.subtype'pdf_literal')
+        % r.data = '0 Ts'
+        % node.insert_before(head, item, r)   
+      end
+    end
+    prevglyf = item&nbsp;% A bit dangerous, but usually OK.
+  end
+  return head
+end
+luatexbase.add_to_callback("pre_linebreak_filter", arabic_text, "Arabic text")
+luatexbase.add_to_callback("hpack_filter", arabic_text, "Arabic text")
+}
+
+% The contextual analysis for arabic must be after the font
+% is changed. If fontspec is loaded before, then the callbacks must be
+% reorderer, which is feasible.
+
+\usepackage{fontspec}
+\setmainfont{Iwona}
+\newfontfamily\amiri[Script=Arabic]{Amiri}
+
+\begin{document}
+
+{\amiri (نص قصير)\directlua{ arabicfont = font.current() }} Some text
+
+Some text نص قصير Some text
+
+\begin{tabular}{rr}
+One & Two \\
+Three & أربعة&nbsp;%&nbsp;:-/ Extra space
+\end{tabular}
+
+Some text.
+
+\end{document}
+</pre>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Changing_the_font_for_a_script">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

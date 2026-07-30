@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Sort a token list&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Sort_a_token_list" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Sort a token list
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7592&diff=43391">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <p>Sorting in TeX can be done, as demonstrated in the paper "Sorting in TeX's mouth" by Bernd Raichle, but it is slow. Using Lua, sorting can be done much quicker.
+</p>
+    <p>The following code demonstrates sorting in PlainTeX-LuaTeX:
+</p>
+    <pre>% We <code>preload' the necessary functions into the Lua state
+% 
+% Note that comments inside \directlua must be TeX comments (</code>%');
+% Lua comments (<code>--') do not work correctly
+% 
+% The code for transforming a string into a table and back
+% has been copied from the Lua users wiki (page </code>MakingLuaLikePhp')
+function explode(str,divider)
+	local result = {}
+	% Sanity check:
+	if divider == "" then
+		table.insert(result,str)
+		return result
+	end
+	% We search for the start of &lt;divider&gt; or an opening/closing
+	% brace. That way, we can jump through &lt;str&gt; instead of having to
+	% check every character
+	local search = "([{}" .. string.sub(divider,1,1) .. "])"
+	% The current search position
+	local curpos = 0
+	% The position of the last divider
+	local divpos = 0
+	% The number of open left braces
+	local braces = 0
+	% The length of &lt;divider&gt;
+	local divlen = string.len(divider)
+	
+	% Search for whatever comes first
+	for st,sp,first in function() return string.find(str,search,curpos) end
+	do
+		% Braces? Then increase/decrease the brace count
+		if first == "{" then
+			braces = braces + 1
+			curpos = st + 1
+		elseif first == "}" then
+			braces = braces - 1
+			curpos = st + 1
+		else
+			% Otherwise, if we are not inside braces, check if the 
+			% position found is the start of &lt;divider&gt;. Then split 
+			% the substring off &lt;str&gt; and store the first part in &lt;result&gt;
+			if braces == 0 and string.sub(str,st,st + divlen - 1) == divider then
+				table.insert(result,string.sub(str,divpos,st - 1))
+				divpos = st + divlen
+				curpos = st + divlen
+			else
+				curpos = st + 1
+			end
+		end
+	end
+	
+	% Do not forget to add the last substring to the result table
+	if divpos &lt; string.len(str) then
+		table.insert(result,string.sub(str,divpos))
+	end
+	
+	% Done
+	return result
+end
+
+function implode(t,div)
+	return table.concat(t,div)
+end
+}
+
+% #1 = continuation (called with the sorted list as its only
+% parameter), #2 = delimiter, #3 = &lt;delimiter&gt;-separated list
+\def\sort#1#2#3{%
+	\directlua0{%
+		% We prevent expansion and then escape all characters special
+		% to lua in the parameters. This is necessary to prevent them
+		% from (a) executed right now and (b) being misunderstood by
+		% Lua.
+		% 
+		% We convert the string into a table, delimited by a
+		% (unexpanded, escaped) delimiter:
+		local t = explode("\luaescapestring{\unexpanded{#3}}",
+				  "\luaescapestring{\unexpanded{#2}}")
+		% We sort the table in-place:
+		table.sort(t)
+		% We output the table as a string.
+		% 
+		% We use a single call to tex.print to prevent spaces in 
+		% the output, since all tex.print calls except the last add 
+		% an \endlinechar (LuaTeX manual 4.1.10.1):
+		tex.print("\luaescapestring{\unexpanded{#1}}{" .. implode(t," ") .. "}")
+	}%
+}
+
+
+% Output tokens without expansion
+\def\typeout#1{\message{\unexpanded{[#1]}}}
+
+
+% Example (text taken from Wikipedia, <code></code>Hyperreality<i>)</i>
+\sort{\typeout}{ }{%
+In semiotics and postmodern philosophy, the term hyperreality
+characterizes the inability of consciousness to distinguish reality
+from fantasy, especially \in technologically advanced postmodern
+cultures. Hyperreality is a means of characterising the way
+consciousness defines what is actually `real' in a world where a
+multitude of media can radically shape and filter the original event
+or experience being depicted. Some famous theorists of hyperreality
+include Jean Baudrillard, \Albert Borgmann, Daniel Boorstin, and
+Umberto Eco.}
+
+\bye
+</pre>
+    <p>Note: The above code correctly skips the delimiter if enclosed in braces.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Sort_a_token_list">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

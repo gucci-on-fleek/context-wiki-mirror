@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Post linebreak filter&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Post_linebreak_filter" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Post linebreak filter
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7588&diff=43387">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Syntax">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Syntax
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#Examples">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Examples
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Between_raggedright_and_justified">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           Between raggedright and justified
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#Margin_notes">
+          <span class="tocnumber">
+           2.2
+          </span>
+          <span class="toctext">
+           Margin notes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#Hyphenation_points">
+          <span class="tocnumber">
+           2.3
+          </span>
+          <span class="toctext">
+           Hyphenation points
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Syntax">
+      Syntax
+     </span>
+    </h2>
+    <p>The <tt>post_linebreak_filter</tt> <a href="Callbacks.html" title="LuaTeX/Callbacks">callback</a> is called after a paragraph has been built, i.e. after the <tt><a class="new" href="../index.php?title=LuaTeX/Linebreak_filter&action=edit&redlink=1.html" title="LuaTeX/Linebreak filter (page does not exist)">LuaTeX/Linebreak_filter</a></tt> callback or (if the latter isn't specified) TeX's default paragraph builder. The callback receives two arguments: the first is the head of the vertical list returned by the previous operation, the second is a string specifying in which context the paragraph is being built: an empty string means the main vertical list (a simple paragraph on the page), and other values include <tt>vbox</tt>, <tt>vtop</tt>...
+</p>
+    <p>The return value should be one of the the following three possibilities: <tt>true</tt> signals that everything is ok and the list that was passed to the callback should be processed further; <tt>false</tt> signals that the list should be flushed from memory: the paragraph simply disappears; finally, if a node list is returned it will be processed instead of the original one. Hence the syntax:
+</p>
+    <pre>function (&lt;node&gt; head, &lt;string&gt; context)
+  return true | false | &lt;node&gt; newhead
+end
+</pre>
+    <p>The callback doesn't replace any internal code and isn't expected to do anything meaningful. Its main use is to manipulate the paragraph once built; the list received as the first argument is made mostly of horizontal lists (the lines of text) interspersed with glues (to adjust baseline distances); any kind of postprocessing can be applied to those nodes (not to mention other types of nodes, if any: <tt>\vadjust</tt>ed material, inserts...).
+</p>
+    <h2>
+     <span class="mw-headline" id="Examples">
+      Examples
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="Between_raggedright_and_justified">
+      Between raggedright and justified
+     </span>
+    </h3>
+    <p>In paragraph 5.9.6 of <a class="external text" href="http://mirrors.ctan.org/info/texbytopic/TeXbyTopic.pdf" rel="nofollow"><em>TeX by Topic</em></a>, Victor Eijkhout gives a code so that `lines that would stretch beyond certain limits are set with their glue at natural width' (producing a paragraph between raggedright and justified, a style popular in advertisement at the time <em>TeX by Topic</em> was published).
+</p>
+    <p>That is exactly the kind of job the <tt>post_linebreak_filter</tt> filter is designed for (the smaller the <tt>\hsize</tt>, the more the result will stand out):
+</p>
+    <pre>local function check_lines (head)
+  for line in node.traverse_id(node.id("hlist"), head) do
+    if line.glue_order == 0 and line.glue_sign == 1 and line.glue_set &gt; .4 then
+      line.list = node.hpack(line.list)
+    end
+  end
+  return head
+end
+
+callback.register("post_linebreak_filter", check_lines)
+</pre>
+    <p>All the lines in a paragraph are inspected, thanks to the <tt>node.traverse_id()</tt> iterator, which loops over all the nodes with a given id in a list of node. For each line, one checks whether the following holds: first, the line has been justified with finite glue (it makes little sense to reset lines justified with infinite glue), i.e. the <tt>glue_order</tt> field of the line is 0 (larger values mean different orders of infinite); second, the glues have been stretched, not shrunk, i.e. <tt>glue_sign</tt> is 1, not 2; finally, the glue ratio, i.e. the amount of glue used, recorded in <tt>glue_set</tt> is above an arbitrary threshold: lines whose glues aren't stretched so much are left untouched.
+</p>
+    <p>If the conditions are satisfied, we simply reassign as the contents of the horizontal list that very contents processed with <tt>node.hpack()</tt>; the latter function turns a list of nodes into material suitable for a horizontal list, somehow like <tt>\hbox</tt>. Here, since no extra argument signalling that the horizontal material should be set to a certain width (as with the keyword <tt>to</tt> in <tt>\hbox</tt>), glues aren't stretched nor shrunk and the material is set to its natural width, as wanted.
+</p>
+    <p>At the end the head of the list is returned; returning <tt>true</tt> would have the same result, since LuaTeX is supposed to processed the same list that was received as an argument to the callback; that the list have been modified is immaterial here.
+</p>
+    <h3>
+     <span class="mw-headline" id="Margin_notes">
+      Margin notes
+     </span>
+    </h3>
+    <p>The callback can also be used to add material to the lines of text. Margin notes are such material: they are related to something in the paragraph, but as long as the paragraph isn't built, one doesn't know where they should be placed. With <tt>post_linebreak_filter</tt>, since the paragraph can be analysed, the limitation vanishes: one can spot the lines to which a note should be appended (their contents will be marked with <a href="Attributes.html" title="LuaTeX/Attributes">LuaTeX/Attributes</a>), and add that note.
+</p>
+    <p>Note that the following code is meant to illustrate the use of the <tt>post_linebreak_filter</tt> and of <a href="Attributes.html" title="LuaTeX/Attributes">LuaTeX/Attributes</a>, and isn't optimal for marginal notes themselves. They would be better dealt with in the output routine: there they can be moved up or down if necessary (so that they don't bleed into the bottom margin, for instance) and placed in the proper margin (left or right, depending on the page). Here all notes will be placed in the right margin.
+</p>
+    <p>The code works along the following lines: the <tt>\marginnote</tt> command takes two argument, the first being the text in the paragraph to which the note relates, the second the note itself. The text in the paragraph is marked with an <a href="Attributes.html" title="LuaTeX/Attributes">attribute</a>, and can be identified later in the callback, each mark being a new value for the attribute. The note itself is built in a local box and assigned to a PDF Form XObject; the latter move is for practical reasons only and irrelevant to the code here (working with boxes all the way down would yield the same result). After the paragraph is built, we inspect each line of text to check whether it contains material marked with the attribute; if so, the value of that attribute points to a given Form XObject, which is appended to the line.
+</p>
+    <p>Here's the code for the <tt>\marginnote</tt> command:
+</p>
+    <pre>\def\marginnote#1#2{%
+  \begingroup
+  \setbox0=\vtop{%
+    \hsize10em \leftskip1em
+    \rightskip0pt plus 1fill
+    \noindent #2}%
+  \count0=\wd0 \count2=\ht0 \count4=\dp0
+  \pdfxform0
+%
+  \directlua{%
+    local xform  = node.new(node.id("whatsit"), node.subtype("pdf_refxform"))
+    xform.objnum = \the\pdflastxform;
+    xform.width  = \the\count0;
+    xform.height = \the\count2;
+    xform.depth  = \the\count4;
+    xforms[\the\pdflastxform] = xform
+    }%
+%
+  \attribute1=\pdflastxform
+  #1%
+  \endgroup
+  }
+</pre>
+    <p>The first part typesets the note in a box (a <tt>\vtop</tt>, so the first line of the note will be aligned with the text it refers to in the paragraph), which is assigned to an XObject thanks to <tt>\pdfxform</tt>. The box itself has reduced <tt>\hsize</tt>, is typeset raggedright, and has a non-zero <tt>\leftskip</tt> meant to leave a gap between its left margin and the right margin of the paragraph. Other changes (fonts, baseline distances) would be suitable here too.
+</p>
+    <p>The second part of the code creates a node using that XObject: that is the kind of node <tt>\pdfrefxform\pdflastxform</tt> would have created, except we have to set the dimension by hand, which is why the dimensions of the box were recorded (the box has been emptied when assigned to <tt>\pdfxform</tt>). The node is then stored in a table (to be created permanently in the following code).
+</p>
+    <p>The third part simply releases the first argument, to be typeset as part of the paragraph, but marked with a special value of attribute 1 (any attribute would do, of course, and actually one should have something like <tt>\newattribute</tt> to allocate attributes properly, see <a href="Attributes.html" title="LuaTeX/Attributes">LuaTeX/Attributes</a>).
+</p>
+    <p>The following designs the code to handle the lines in <tt>post_linebreak_filter</tt> (and creates the <tt>xforms</tt> table beforehand):
+</p>
+    <pre>xforms = {}
+
+local function find_notes (head)
+  for line in node.traverse_id (node.id("hlist"), head) do
+    for item in node.traverse (line.list) do
+      local attr = node.has_attribute(item, 1)
+      if attr and xforms[attr] then
+        node.insert_after(line.list, node.tail(line.list), xforms[attr])
+        xforms[attr] = nil
+        break
+      end
+    end
+  end
+  return head
+end
+
+callback.register("post_linebreak_filter", find_notes)
+</pre>
+    <p>In the node list representing the constructed paragraph, it inspects all lines (i.e. nodes of type <tt>hlist</tt>). It loops over the material of those lines to check whether some material is marked with attribute 1. If there is, and if the <tt>xforms</tt> table contains an XObject at the index with that value (a condition to be explained presently), the XObject is simply added at the end of the line's material with <tt>node.insert_after()</tt>. The function <tt>node.tail()</tt> returns the last node of a list, hence <tt>xform</tt> is added at the very end.
+</p>
+    <p>Then the entry in the table is deleted. That is necessary, because the material marked to receive a footnote can end up broken over two lines (or more); if the entry wasn't deleted, the code would try to add the note twice (once for each line). That is the reason why we check whether the entry <tt>xforms[attr]</tt> exists.
+</p>
+    <p>Finally, <tt>break</tt> ends the inspection of the line, under the assumption (typographic rather than logical) that there is no more than one note per line.
+</p>
+    <h3>
+     <span class="mw-headline" id="Hyphenation_points">
+      Hyphenation points
+     </span>
+    </h3>
+    <p>The article <a href="Show_the_hyphenation_points.html" title="LuaTeX/Show the hyphenation points">LuaTeX/Show the hyphenation points</a> uses the callback to insert markers indicating where hyphenation might have occured in the paragraph; doing so after the paragraph has been built avoids hindering its proper construction.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Post_linebreak_filter">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

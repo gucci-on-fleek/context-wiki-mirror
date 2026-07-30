@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   LuaTeX/Traversing TeX nodes&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/LuaTeX/Traversing_TeX_nodes" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    LuaTeX/Traversing TeX nodes
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7614&diff=43413">2026-07-27</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <h2>
+     <span class="mw-headline" id="Traversing_TeX_nodes">
+      Traversing TeX nodes
+     </span>
+    </h2>
+    <p>Put this code at the beginning of any TeX file:
+</p>
+    <pre>\directlua{
+ local glyph = node.id('glyph')
+ local hlist = node.id('hlist')
+ local vlist = node.id('vlist')
+
+ function gothru(h,prof)
+   for t in node.traverse(h) do
+     texio.write_nl(string.rep("...",prof) .. 'NODE type=' ..  node.type(t.id) .. ' subtype=' .. t.subtype )
+     if t.id == hlist or t.id == vlist then
+       texio.write(' w=' .. t.width .. ' h=' .. t.height .. ' d=' .. t.depth .. ' s=' .. t.shift )
+	   gothru(t.list,prof+1)
+     end
+     if t.id == glyph then
+       texio.write(' font=' .. t.font .. ' char=' .. t.char .. ' width=' ..  font.fonts[t.font].characters[t.char]['width'])
+     end
+   end
+ end
+
+ callback.register('pre_linebreak_filter',
+   function(h)
+      gothru(h,0) 
+      return true 
+   end
+   )
+}
+</pre>
+    <p>It will display a list of all nodes on the terminal and in the log file. For example, for the document
+</p>
+    <pre>\font\x=omlgc
+\x bl&epsilon; bla bla bla
+</pre>
+    <p>which contains a Greek letter (in UTF-8), you will get:
+</p>
+    <pre>This is luaTeX, Version 3.141592-snapshot-2007062922 (Web2C 7.5.6)
+(
+NODE type=whatsit subtype=6
+NODE type=hlist subtype=0
+NODE type=glyph subtype=0 font=51 char=98
+NODE type=glyph subtype=0 font=51 char=108
+NODE type=glyph subtype=0 font=51 char=941
+NODE type=glue subtype=0
+NODE type=glyph subtype=0 font=51 char=98
+NODE type=glyph subtype=0 font=51 char=108
+NODE type=glyph subtype=0 font=51 char=97
+NODE type=glue subtype=0
+NODE type=glyph subtype=0 font=51 char=98
+NODE type=glyph subtype=0 font=51 char=108
+NODE type=glyph subtype=0 font=51 char=97
+NODE type=glue subtype=0
+NODE type=glyph subtype=0 font=51 char=98
+NODE type=glyph subtype=0 font=51 char=108
+NODE type=glyph subtype=0 font=51 char=97
+NODE type=glue subtype=0
+Underfull \hbox (badness 10000) in paragraph at lines 14--15
+
+[1] )
+</pre>
+    <p>Be aware of the fact that the nodes will be created only if the glyph requested indeed exists in the font.
+</p>
+    <p><a class="new" href="../index.php?title=User:Yannis.Haralambous&action=edit&redlink=1" title="User:Yannis.Haralambous (page does not exist)">Yannis.Haralambous</a> 02:52, 4 July 2007 (EDT)
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-07-30
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/LuaTeX/Traversing_TeX_nodes">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>
