@@ -18,117 +18,1208 @@
     References notes and floats/Simple bibliography
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2508&diff=41522">2025-01-18</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=2508&diff=43612">2026-07-30</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <p>Sometimes the bibliography needs to be more flexible in the bibliographic item description. Often the aviable data does not fit into the Bibtex schema; or  text needs to be written inside the bibliography list. For this case exists the module simplebib.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-bottom:1em;">
+     <p><b>Bibliography and citations in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">Overview</a> &nbsp;&middot;&nbsp;
+<a href="Bibliography_and_citations#5._The_four_guides.2FHow-to_guides" title="References notes and floats/Bibliography and citations">How-to guides</a> &nbsp;&middot;&nbsp;
+<b>Manual bibliography with simplebib</b> &nbsp;&middot;&nbsp;
 </p>
+    </div>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.15em; margin-right:0.35em;">🚧</span> <b>Under construction</b> &mdash; This page is currently being revised. Contributions are welcome: feel free to edit and <b>improve</b> it.
+</p>
+    </div>
+    <div style="background:#fff4df; border:1px solid #dfb56a; border-left:6px solid #d08a24; padding:0.85em 1em; margin:1em 0;">
+     <p><b>Choose the modern bibliography system for complete projects</b>
+</p>
+     <p>The <code>simplebib</code> module is intended for short, manually constructed bibliographies whose entries require unusual, freely written, or locally controlled descriptions.
+</p>
+     <p>For books, theses, article collections, multilingual editions, or other long-term projects, prefer the modern ConTeXt bibliography system based on reusable <code>.bib</code> files, BTX datasets, citation styles, sorting, selection, and bibliography renderings.
+</p>
+     <p>Before choosing this manual method, consult the <a class="new" href="../index.php?title=Bibliography_and_citations&action=edit&redlink=1" title="Bibliography and citations (page does not exist)">Bibliography and citations overview</a> and the <a class="new" href="../index.php?title=Bibliography_and_citations/Tutorial&action=edit&redlink=1.html" title="Bibliography and citations/Tutorial (page does not exist)">bibliography tutorial</a>. The complete set of links to the modern workflow is collected in <a href="#16.1._Modern_bibliography_workflow">Section 16.1</a>.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Purpose">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Purpose
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._When_to_use_simplebib">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. When to use simplebib
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Basic_workflow">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Basic workflow
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#3.1._Load_the_module">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           3.1. Load the module
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#3.2._Cite_an_item_in_the_running_text">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           3.2. Cite an item in the running text
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#3.3._Start_and_stop_the_bibliography">
+          <span class="tocnumber">
+           3.3
+          </span>
+          <span class="toctext">
+           3.3. Start and stop the bibliography
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#3.4._Add_an_item">
+          <span class="tocnumber">
+           3.4
+          </span>
+          <span class="toctext">
+           3.4. Add an item
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#4._Minimal_working_example">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Minimal working example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#5._Create_bibliography_blocks">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Create bibliography blocks
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#6._Define_bibliographic_items">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Define bibliographic items
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-11">
+         <a href="#6.1._Available_fields">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           6.1. Available fields
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#6.2._Distinguish_the_reference_from_the_printed_label">
+          <span class="tocnumber">
+           6.2
+          </span>
+          <span class="toctext">
+           6.2. Distinguish the reference from the printed label
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#6.3._Generate_labels_automatically">
+          <span class="tocnumber">
+           6.3
+          </span>
+          <span class="toctext">
+           6.3. Generate labels automatically
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#7._Describe_an_article_inside_a_containing_publication">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Describe an article inside a containing publication
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#7.1._Example:_an_article_in_a_journal">
+          <span class="tocnumber">
+           7.1
+          </span>
+          <span class="toctext">
+           7.1. Example: an article in a journal
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-16">
+         <a href="#7.2._Keep_the_nested_syntax_balanced">
+          <span class="tocnumber">
+           7.2
+          </span>
+          <span class="toctext">
+           7.2. Keep the nested syntax balanced
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#8._Refer_to_bibliographic_items">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Refer to bibliographic items
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#8.1._Use_bibref">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           8.1. Use bibref
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#8.2._Add_a_detail">
+          <span class="tocnumber">
+           8.2
+          </span>
+          <span class="toctext">
+           8.2. Add a detail
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#8.3._Use_the_underlying_cross-reference_command">
+          <span class="tocnumber">
+           8.3
+          </span>
+          <span class="toctext">
+           8.3. Use the underlying cross-reference command
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-21">
+       <a href="#9._Adjust_printed_labels">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Adjust printed labels
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#9.1._Reserve_space_for_labels">
+          <span class="tocnumber">
+           9.1
+          </span>
+          <span class="toctext">
+           9.1. Reserve space for labels
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#9.2._Add_text_around_labels">
+          <span class="tocnumber">
+           9.2
+          </span>
+          <span class="toctext">
+           9.2. Add text around labels
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#10._Customize_language-dependent_terms">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Customize language-dependent terms
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#10.1._English_terms">
+          <span class="tocnumber">
+           10.1
+          </span>
+          <span class="toctext">
+           10.1. English terms
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#10.2._German_terms">
+          <span class="tocnumber">
+           10.2
+          </span>
+          <span class="toctext">
+           10.2. German terms
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#10.3._Adapt_terms_to_the_publication">
+          <span class="tocnumber">
+           10.3
+          </span>
+          <span class="toctext">
+           10.3. Adapt terms to the publication
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-28">
+       <a href="#11._Insert_free_text_in_a_bibliography">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Insert free text in a bibliography
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-29">
+       <a href="#12._Complete_example">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Complete example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-30">
+       <a href="#13._Common_mistakes">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Common mistakes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#13.1._Misspelling_stopbibliography">
+          <span class="tocnumber">
+           13.1
+          </span>
+          <span class="toctext">
+           13.1. Misspelling stopbibliography
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#13.2._Starting_the_document_twice">
+          <span class="tocnumber">
+           13.2
+          </span>
+          <span class="toctext">
+           13.2. Starting the document twice
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-33">
+         <a href="#13.3._Using_bibtex_instead_of_bibref">
+          <span class="tocnumber">
+           13.3
+          </span>
+          <span class="toctext">
+           13.3. Using bibtex instead of bibref
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#13.4._Using_different_internal_references">
+          <span class="tocnumber">
+           13.4
+          </span>
+          <span class="toctext">
+           13.4. Using different internal references
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-35">
+         <a href="#13.5._Confusing_the_reference_and_label">
+          <span class="tocnumber">
+           13.5
+          </span>
+          <span class="toctext">
+           13.5. Confusing the reference and label
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-36">
+         <a href="#13.6._Omitting_braces_in_the_in_field">
+          <span class="tocnumber">
+           13.6
+          </span>
+          <span class="toctext">
+           13.6. Omitting braces in the in field
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#13.7._Using_simplebib_for_a_large_reusable_database">
+          <span class="tocnumber">
+           13.7
+          </span>
+          <span class="toctext">
+           13.7. Using simplebib for a large reusable database
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-38">
+       <a href="#14._Diagnostic_checklist">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Diagnostic checklist
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-39">
+       <a href="#15._What_this_page_has_established">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. What this page has established
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-40">
+       <a href="#16._Related_pages">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         16. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-41">
+         <a href="#16.1._Modern_bibliography_workflow">
+          <span class="tocnumber">
+           16.1
+          </span>
+          <span class="toctext">
+           16.1. Modern bibliography workflow
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-42">
+         <a href="#16.2._Related_mechanisms">
+          <span class="tocnumber">
+           16.2
+          </span>
+          <span class="toctext">
+           16.2. Related mechanisms
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-43">
+         <a href="#16.3._External_module_information">
+          <span class="tocnumber">
+           16.3
+          </span>
+          <span class="toctext">
+           16.3. External module information
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
     <h2>
-     <span class="mw-headline" id="Items">
-      Items
+     <span class="mw-headline" id="1._Purpose">
+      1. Purpose
      </span>
     </h2>
-    <p>The bibliography can be listed in one block or distributed over several block in the document (e.g. at the end of every chapter):
+    <p>A conventional bibliographic database works best when each publication can be described through a stable and predictable collection of fields.
 </p>
-    <pre class="tex">...
-
-<span class="cs">\startbibliography</span>
-...
-<span class="cs">\stopbibiography</span>
-
-...
-
-<span class="cs">\startbibliography</span>
-...
-<span class="cs">\stopbibiography</span>
-
-...
-</pre>
-    <p>Inside the bibliography environment you can specify bibliographic items via <code>\bibitem</code>.
-</p>
-    <pre class="tex"><span class="cs">\bibitem</span><span class="brx">[</span>reference<span class="brx">=</span>,label<span class="brx">=</span>,author<span class="brx">=</span>,editor<span class="brx">=</span>,year<span class="brx">=</span>,title<span class="brx">=</span>,in<span class="brx">=</span>,number<span class="brx">=</span>,series<span class="brx">=</span>,volume<span class="brx">=</span>,magazine<span class="brx">=</span>,edition<span class="brx">=</span>,revedition<span class="brx">=</span>,datedition<span class="brx">=</span>,publisher<span class="brx">=</span>,place<span class="brx">=</span>,isbn<span class="brx">=</span>,url<span class="brx">=</span>,pages<span class="brx">=</span>,access<span class="brx">=</span><span class="brx">]</span>
-</pre>
-    <p>Most attributes should be self explaining. A speciality is the <code>in</code> attribute. Often you have to cite an article that is published in a journal, compendium etc. So you use the "normal" attributes to specify the article and via the <code>in</code> attribute you specify the book with the same attributes inside:
-</p>
-    <pre class="tex"><span class="cs">\bibitem</span><span class="brx">[</span>reference<span class="brx">=</span>bpf,label<span class="brx">=</span><span class="br">{</span>B&uuml;PrFr<span class="br">}</span>,author<span class="brx">=</span><span class="br">{</span>B&uuml;chel, Christian; Price, Cathy J und Friston, Karl<span class="br">}</span>,year<span class="brx">=</span><span class="br">{</span>1998<span class="br">}</span>,title<span class="brx">=</span><span class="br">{</span>A multimodal language region in the ventral visual pathway<span class="br">}</span>,in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>title<span class="brx">=</span>Nature<span class="br">}</span>,volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
-</pre>
-    <p>If the label should be numbered automaticly just remove the <code>label</code> attribute of the <code>\bibitem</code> entity.
-</p>
-    <h2>
-     <span class="mw-headline" id="Referencing">
-      Referencing
-     </span>
-    </h2>
-    <p>For referencing simplebib is using the <a href="Crossref_module.html" title="References notes and floats/Crossref module">crossref</a> module. For the lazy ones it provides <code>\bibtex</code> what is nothing else than a <code>\crossref</code> with <code>type=external</code> preset.
-</p>
-    <p>So in following example both blocks do the same:
-</p>
-    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>ref1<span class="brx">]</span>
-<span class="cs">\bibref</span><span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
-
-<span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external<span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
-<span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external,detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
-</pre>
-    <p>Here a simple usage example: 
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplebib<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\starttext</span></span>
-
-<span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>
-<span class="cs">\bibref</span><span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 275<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>bpf<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\starttext</span></span>
-<span class="cs">\startbibliography</span>
-
-<span class="cs">\bibitem</span><span class="brx">[</span>reference<span class="brx">=</span>brk,label<span class="brx">=</span><span class="br">{</span>Brk\-01<span class="br">}</span>,author<span class="brx">=</span><span class="br">{</span>Brinker, Klaus<span class="br">}</span>,year<span class="brx">=</span><span class="br">{</span>2001<span class="br">}</span>,title<span class="brx">=</span><span class="br">{</span>Linguistische Textanalyse: Eine Einf&uuml;hrung in Grundbegriffe und Methoden<span class="br">}</span>,series<span class="brx">=</span><span class="br">{</span>Grundlagen der Germanistik<span class="br">}</span>,volume<span class="brx">=</span><span class="br">{</span>29<span class="br">}</span>,revedition<span class="brx">=</span><span class="br">{</span>5<span class="br">}</span>,publisher<span class="brx">=</span><span class="br">{</span>Schmidt Verlag<span class="br">}</span>,place<span class="brx">=</span><span class="br">{</span>Berlin<span class="br">}</span>,isbn<span class="brx">=</span><span class="br">{</span>3-503-04995-9<span class="br">}</span><span class="brx">]</span>
-
-<span class="cs">\bibitem</span><span class="brx">[</span>reference<span class="brx">=</span>bpf,label<span class="brx">=</span><span class="br">{</span>B&uuml;PrFr\-98<span class="br">}</span>,author<span class="brx">=</span><span class="br">{</span>B&uuml;chel, Christian; Price, Cathy J und Friston, Karl<span class="br">}</span>,year<span class="brx">=</span><span class="br">{</span>1998<span class="br">}</span>,title<span class="brx">=</span><span class="br">{</span>A multimodal language region in the ventral visual pathway<span class="br">}</span>,in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>title<span class="brx">=</span>Nature<span class="br">}</span>,volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span><span class="br">}</span><span class="brx">]</span>
-
-<span class="cs">\stopbibliography</span>
-<span class="cs"><span class="documentcs">\stoptext</span></span>
-</pre>
-    <h2>
-     <span class="mw-headline" id="Settings">
-      Settings
-     </span>
-    </h2>
-    <p>To adjust the space for the bibitem labels you can specify the:
+    <p>Some bibliographic material is less regular. For example:
 </p>
     <ul>
      <li>
-      <code>labelSpace</code>
-      with a natural number (the default is 12).
+      the available information may not fit naturally into a conventional BibTeX entry type;
+     </li>
+     <li>
+      a notice may require explanatory prose;
+     </li>
+     <li>
+      an editor may need to reproduce an unusual historical description;
+     </li>
+     <li>
+      a bibliography may combine references with comments or documentary information;
+     </li>
+     <li>
+      a short document may require only a small number of manually controlled entries;
+     </li>
+     <li>
+      several independently written bibliography blocks may be needed inside the same document.
      </li>
     </ul>
-    <p>They are defined as parameters of the module:
+    <p>The <code>simplebib</code> module provides a manually constructed bibliography based on individual <code>\bibitem</code> commands.
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span><span class="brx">[</span>labelSpace<span class="brx">=</span>...<span class="brx">]</span>
-...
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Scope of this page</b>
+</p>
+     <p>This page preserves documentation for a specialized manual workflow. It is not the entry point for the current dataset-based bibliography system used in most complete ConTeXt projects.
+</p>
+    </div>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Central principle</b>
+</p>
+     <p>With <code>simplebib</code>, bibliographic entries are written directly in the ConTeXt source. No separate <code>.bib</code> database is required.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._When_to_use_simplebib">
+      2. When to use simplebib
+     </span>
+    </h2>
+    <p>Use <code>simplebib</code> when:
+</p>
+    <ul>
+     <li>
+      the bibliography is short and local to one document;
+     </li>
+     <li>
+      individual entries require unusual manual descriptions;
+     </li>
+     <li>
+      the data cannot be represented conveniently in the available bibliographic schema;
+     </li>
+     <li>
+      explanatory text must be inserted among the bibliographic entries;
+     </li>
+     <li>
+      exact local control matters more than database reuse;
+     </li>
+     <li>
+      the bibliography is not intended to be maintained as a large structured dataset.
+     </li>
+    </ul>
+    <p>Do not choose <code>simplebib</code> merely because a structured bibliography initially appears more complicated.
+</p>
+    <p>For a substantial project, a <code>.bib</code> database usually provides better:
+</p>
+    <ul>
+     <li>
+      reuse;
+     </li>
+     <li>
+      consistency;
+     </li>
+     <li>
+      sorting;
+     </li>
+     <li>
+      validation;
+     </li>
+     <li>
+      style management;
+     </li>
+     <li>
+      collaboration;
+     </li>
+     <li>
+      maintenance across several documents or language versions.
+     </li>
+    </ul>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>A suitable use case</b>
+</p>
+     <p>A critical edition may contain a short list of archival documents whose descriptions include shelf marks, physical details, editorial remarks, and explanatory prose that do not fit an ordinary publication record. A manually constructed <code>simplebib</code> list may be appropriate for that local documentary bibliography.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Basic_workflow">
+      3. Basic workflow
+     </span>
+    </h2>
+    <p>The basic workflow has four stages:
+</p>
+    <ol>
+     <li>
+      load the module;
+     </li>
+     <li>
+      cite one or more internal references in the running text;
+     </li>
+     <li>
+      create a bibliography environment;
+     </li>
+     <li>
+      define the corresponding entries with
+      <code>\bibitem</code>
+      .
+     </li>
+    </ol>
+    <h3>
+     <span class="mw-headline" id="3.1._Load_the_module">
+      3.1. Load the module
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplebib<span class="brx">]</span>
 </pre>
-    <p>Depending on label definition or label numbering a text left and right of the label can be defined via <code>labelLeft</code> and <code>labelRight</code>. If brackets are needed they can be set with:
+    <h3>
+     <span class="mw-headline" id="3.2._Cite_an_item_in_the_running_text">
+      3.2. Cite an item in the running text
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <p>A citation may include a detail such as a page number:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="3.3._Start_and_stop_the_bibliography">
+      3.3. Start and stop the bibliography
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs">\startbibliography</span>
+
+  <span class="comment">% Bibliographic entries</span>
+
+<span class="cs">\stopbibliography</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="3.4._Add_an_item">
+      3.4. Add an item
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>brk,
+   label<span class="brx">=</span><span class="br">{</span>Brk-01<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Brinker, Klaus<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>2001<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>Linguistische Textanalyse:
+          Eine Einf&uuml;hrung in Grundbegriffe und Methoden<span class="br">}</span>,
+   publisher<span class="brx">=</span><span class="br">{</span>Schmidt Verlag<span class="br">}</span>,
+   place<span class="brx">=</span><span class="br">{</span>Berlin<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The value assigned to <code>reference</code> connects the citation in the running text with the corresponding bibliography entry.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Minimal_working_example">
+      4. Minimal working example
+     </span>
+    </h2>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplebib<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+The method is discussed by Brinker<span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\startsubject</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Bibliography<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\startbibliography</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>brk,
+   label<span class="brx">=</span><span class="br">{</span>Brk-01<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Brinker, Klaus<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>2001<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>Linguistische Textanalyse:
+          Eine Einf&uuml;hrung in Grundbegriffe und Methoden<span class="br">}</span>,
+   series<span class="brx">=</span><span class="br">{</span>Grundlagen der Germanistik<span class="br">}</span>,
+   volume<span class="brx">=</span><span class="br">{</span>29<span class="br">}</span>,
+   revedition<span class="brx">=</span><span class="br">{</span>5<span class="br">}</span>,
+   publisher<span class="brx">=</span><span class="br">{</span>Schmidt Verlag<span class="br">}</span>,
+   place<span class="brx">=</span><span class="br">{</span>Berlin<span class="br">}</span>,
+   isbn<span class="brx">=</span><span class="br">{</span>3-503-04995-9<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\stopbibliography</span>
+
+<span class="cs"><span class="documentcs">\stopsubject</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/4bb03248fff7b8c8731b92b5d896c154.webp" width="55">
+     </li>
+    </ul>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Result</b>
+</p>
+     <p>The citation in the running text points to the manually defined entry in the bibliography block.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Create_bibliography_blocks">
+      5. Create bibliography blocks
+     </span>
+    </h2>
+    <p>A bibliography may be placed in one block or distributed across several blocks in the document.
+</p>
+    <p>For example, separate lists may appear at the end of individual chapters:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First chapter<span class="br">}</span><span class="brx">]</span>
+
+  <span class="comment">% Chapter text and citations</span>
+
+  <span class="cs"><span class="documentcs">\startsubject</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Bibliography<span class="br">}</span><span class="brx">]</span>
+    <span class="cs">\startbibliography</span>
+
+      <span class="comment">% Entries used in the first chapter</span>
+
+    <span class="cs">\stopbibliography</span>
+  <span class="cs"><span class="documentcs">\stopsubject</span></span>
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Second chapter<span class="br">}</span><span class="brx">]</span>
+
+  <span class="comment">% Chapter text and citations</span>
+
+  <span class="cs"><span class="documentcs">\startsubject</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Bibliography<span class="br">}</span><span class="brx">]</span>
+    <span class="cs">\startbibliography</span>
+
+      <span class="comment">% Entries used in the second chapter</span>
+
+    <span class="cs">\stopbibliography</span>
+  <span class="cs"><span class="documentcs">\stopsubject</span></span>
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+</pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>One document may contain several bibliography environments</b>
+</p>
+     <p>The commands <code>\startbibliography</code> and <code>\stopbibliography</code> may be used more than once. Each environment defines a separate bibliography block at the point where it occurs.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="6._Define_bibliographic_items">
+      6. Define bibliographic items
+     </span>
+    </h2>
+    <p>Bibliographic entries are defined inside a bibliography environment with <code>\bibitem</code>.
+</p>
+    <p>The general form is:
+</p>
+    <pre class="tex"><span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>,
+   label<span class="brx">=</span>,
+   author<span class="brx">=</span>,
+   editor<span class="brx">=</span>,
+   year<span class="brx">=</span>,
+   title<span class="brx">=</span>,
+   in<span class="brx">=</span>,
+   number<span class="brx">=</span>,
+   series<span class="brx">=</span>,
+   volume<span class="brx">=</span>,
+   magazine<span class="brx">=</span>,
+   edition<span class="brx">=</span>,
+   revedition<span class="brx">=</span>,
+   datedition<span class="brx">=</span>,
+   publisher<span class="brx">=</span>,
+   place<span class="brx">=</span>,
+   isbn<span class="brx">=</span>,
+   url<span class="brx">=</span>,
+   pages<span class="brx">=</span>,
+   access<span class="brx">=</span><span class="brx">]</span>
+</pre>
+    <p>Not every entry uses every field. Include only the information required for the item.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.1._Available_fields">
+      6.1. Available fields
+     </span>
+    </h3>
+    <table class="wikitable" style="width:100%;">
+     <tbody>
+      <tr>
+       <th style="width:24%;">
+        Field
+       </th>
+       <th style="width:76%;">
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>reference</code>
+</td>
+       <td>Stable internal identifier used by <code>\bibref</code> or <code>\crossref</code>.
+</td>
+      </tr>
+      <tr>
+       <td><code>label</code>
+</td>
+       <td>Label printed for the entry. If omitted, the module can generate labels automatically.
+</td>
+      </tr>
+      <tr>
+       <td><code>author</code>
+</td>
+       <td>Author or authors of the item.
+</td>
+      </tr>
+      <tr>
+       <td><code>editor</code>
+</td>
+       <td>Editor or editors of the publication.
+</td>
+      </tr>
+      <tr>
+       <td><code>year</code>
+</td>
+       <td>Year of publication.
+</td>
+      </tr>
+      <tr>
+       <td><code>title</code>
+</td>
+       <td>Title of the work or contribution.
+</td>
+      </tr>
+      <tr>
+       <td><code>in</code>
+</td>
+       <td>Structured description of a containing publication.
+</td>
+      </tr>
+      <tr>
+       <td><code>number</code>
+</td>
+       <td>Number within a sequence, journal, or series.
+</td>
+      </tr>
+      <tr>
+       <td><code>series</code>
+</td>
+       <td>Name of a publication series.
+</td>
+      </tr>
+      <tr>
+       <td><code>volume</code>
+</td>
+       <td>Volume number.
+</td>
+      </tr>
+      <tr>
+       <td><code>magazine</code>
+</td>
+       <td>Journal, magazine, or periodical designation used by the module.
+</td>
+      </tr>
+      <tr>
+       <td><code>edition</code>
+</td>
+       <td>Edition statement.
+</td>
+      </tr>
+      <tr>
+       <td><code>revedition</code>
+</td>
+       <td>Revised-edition statement.
+</td>
+      </tr>
+      <tr>
+       <td><code>datedition</code>
+</td>
+       <td>Date-specific edition statement.
+</td>
+      </tr>
+      <tr>
+       <td><code>publisher</code>
+</td>
+       <td>Publisher.
+</td>
+      </tr>
+      <tr>
+       <td><code>place</code>
+</td>
+       <td>Place of publication.
+</td>
+      </tr>
+      <tr>
+       <td><code>isbn</code>
+</td>
+       <td>ISBN identifier.
+</td>
+      </tr>
+      <tr>
+       <td><code>url</code>
+</td>
+       <td>Web address.
+</td>
+      </tr>
+      <tr>
+       <td><code>pages</code>
+</td>
+       <td>Page or page range.
+</td>
+      </tr>
+      <tr>
+       <td><code>access</code>
+</td>
+       <td>Date on which an online resource was last consulted.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Field names reflect the module's own model</b>
+</p>
+     <p>The fields used by <code>simplebib</code> do not necessarily correspond exactly to modern BTX field names or to every conventional BibTeX entry type. Treat them as parameters of this particular module.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="6.2._Distinguish_the_reference_from_the_printed_label">
+      6.2. Distinguish the reference from the printed label
+     </span>
+    </h3>
+    <p>The <code>reference</code> value is the stable internal identifier:
+</p>
+    <pre class="tex">reference<span class="brx">=</span>brk
+</pre>
+    <p>The <code>label</code> value is printed in the bibliography:
+</p>
+    <pre class="tex">label<span class="brx">=</span><span class="br">{</span>Brk-01<span class="br">}</span>
+</pre>
+    <p>These values serve different purposes.
+</p>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Use stable semantic references</b>
+</p>
+     <p>The internal reference should remain stable even if the printed label changes. Avoid using a temporary position such as <code>item17</code> when a descriptive reference such as <code>brinker2001</code> is available.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="6.3._Generate_labels_automatically">
+      6.3. Generate labels automatically
+     </span>
+    </h3>
+    <p>To let the module number or label entries automatically, omit the <code>label</code> field:
+</p>
+    <pre class="tex"><span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>brk,
+   author<span class="brx">=</span><span class="br">{</span>Brinker, Klaus<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>2001<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>Linguistische Textanalyse:
+          Eine Einf&uuml;hrung in Grundbegriffe und Methoden<span class="br">}</span>,
+   publisher<span class="brx">=</span><span class="br">{</span>Schmidt Verlag<span class="br">}</span>,
+   place<span class="brx">=</span><span class="br">{</span>Berlin<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Use explicit labels when a publication requires a particular shorthand or siglum.
+</p>
+    <p>Use automatic labels when the exact printed identifier is not editorially significant.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Describe_an_article_inside_a_containing_publication">
+      7. Describe an article inside a containing publication
+     </span>
+    </h2>
+    <p>The <code>in</code> field describes a journal, collection, compendium, or other publication containing the cited contribution.
+</p>
+    <p>The fields outside <code>in</code> describe the article or contribution itself.
+</p>
+    <p>The nested fields inside <code>in=<a class="new" href="../index.php?title=Template:...&action=edit&redlink=1" title="Template:... (page does not exist)">Template:...</a></code> describe the containing publication.
+</p>
+    <h3>
+     <span class="mw-headline" id="7.1._Example:_an_article_in_a_journal">
+      7.1. Example: an article in a journal
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>bpf,
+   label<span class="brx">=</span><span class="br">{</span>B&uuml;PrFr-98<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>B&uuml;chel, Christian;
+           Price, Cathy J.;
+           Friston, Karl<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>1998<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>A multimodal language region
+          in the ventral visual pathway<span class="br">}</span>,
+   in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>title<span class="brx">=</span><span class="br">{</span>Nature<span class="br">}</span>,
+        volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,
+        pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The outer fields identify the article:
+</p>
+    <ul>
+     <li>
+      authors;
+     </li>
+     <li>
+      year;
+     </li>
+     <li>
+      article title.
+     </li>
+    </ul>
+    <p>The nested <code>in</code> value identifies the containing journal:
+</p>
+    <ul>
+     <li>
+      journal title;
+     </li>
+     <li>
+      volume;
+     </li>
+     <li>
+      page range.
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Read the entry from the outside inward</b>
+</p>
+     <p>The outer item is the work being cited. The <code>in</code> structure supplies information about the larger publication in which that work appears.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="7.2._Keep_the_nested_syntax_balanced">
+      7.2. Keep the nested syntax balanced
+     </span>
+    </h3>
+    <p>The nested value uses two pairs of braces:
+</p>
+    <pre class="tex">in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>title<span class="brx">=</span><span class="br">{</span>Nature<span class="br">}</span>,
+     volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,
+     pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <div style="background:#fbeaea; border-left:5px solid #b74d4d; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Common syntax error</b>
+</p>
+     <p>An omitted closing brace in the <code>in</code> field may cause the rest of the entry&mdash;or even the following document source&mdash;to be parsed incorrectly.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Refer_to_bibliographic_items">
+      8. Refer to bibliographic items
+     </span>
+    </h2>
+    <p>The <code>simplebib</code> module uses the cross-reference mechanism for citations.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.1._Use_bibref">
+      8.1. Use bibref
+     </span>
+    </h3>
+    <p>The concise citation command is:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>reference<span class="brx">]</span>
+</pre>
+    <p>Example:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="8.2._Add_a_detail">
+      8.2. Add a detail
+     </span>
+    </h3>
+    <p>Use the <code>detail</code> parameter for a page number, section, volume, or other local indication:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span>
+  <span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <p>Another example:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span>
+  <span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>pp. 274-275<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>bpf<span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="8.3._Use_the_underlying_cross-reference_command">
+      8.3. Use the underlying cross-reference command
+     </span>
+    </h3>
+    <p>The following pairs express the same operations:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>ref1<span class="brx">]</span>
+
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external<span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <p>and:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span>
+  <span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>
+
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Use bibref for ordinary citations</b>
+</p>
+     <p>The command <code>\bibref</code> is the convenient bibliographic interface. Use the underlying <code>\crossref</code> form only when direct access to the cross-reference configuration is required.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Adjust_printed_labels">
+      9. Adjust printed labels
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="9.1._Reserve_space_for_labels">
+      9.1. Reserve space for labels
+     </span>
+    </h3>
+    <p>The <code>labelSpace</code> parameter controls the space reserved for bibliography labels.
+</p>
+    <p>The default value reported by the original module documentation is <code>12</code>.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+  <span class="brx">[</span>labelSpace<span class="brx">=</span>18<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplebib<span class="brx">]</span>
+</pre>
+    <p>Increase this value when labels are longer than the default space allows.
+</p>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Module-version caution</b>
+</p>
+     <p>The label width is provided through the cross-reference mechanism used by <code>simplebib</code>. Check the module version installed with your ConTeXt distribution if the parameter is not recognized or does not affect the output.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="9.2._Add_text_around_labels">
+      9.2. Add text around labels
+     </span>
+    </h3>
+    <p>Text placed before and after bibliography labels is configured with <code>labelLeft</code> and <code>labelRight</code>.
+</p>
+    <p>For square brackets:
 </p>
     <pre class="tex"><span class="cs">\setupsimplebibtext</span><span class="brx">[</span>labelLeft<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>labelRight<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
 </pre>
-    <p>The language depending texts can be set via:
+    <p>This produces labels such as:
 </p>
+    <pre>[Brk-01]
+[B&uuml;PrFr-98]
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Braces and brackets must remain distinct</b>
+</p>
+     <p>The square bracket to be printed is itself the value of the parameter. Check the balance of the square brackets and braces carefully.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Customize_language-dependent_terms">
+      10. Customize language-dependent terms
+     </span>
+    </h2>
+    <p>The module uses configurable words and abbreviations when constructing entries.
+</p>
+    <p>Use:
+</p>
+    <pre class="tex"><span class="cs">\setupsimplebibtext</span>
+  <span class="brx">[</span>language<span class="brx">]</span>
+  <span class="brx">[</span>key<span class="brx">=</span><span class="br">{</span>text<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="10.1._English_terms">
+      10.1. English terms
+     </span>
+    </h3>
     <pre class="tex"><span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>editor<span class="brx">=</span><span class="br">{</span>ed.<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>number<span class="brx">=</span><span class="br">{</span>number<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>fromSeries<span class="brx">=</span><span class="br">{</span>from series<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>volume<span class="brx">=</span><span class="br">{</span>volume<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>magazine<span class="brx">=</span><span class="br">{</span>magazine<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>edition<span class="brx">=</span><span class="br">{</span>edition<span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>revedition<span class="brx">=</span><span class="br">{</span>reviewed edition<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>revedition<span class="brx">=</span><span class="br">{</span>revised edition<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>datedition<span class="brx">=</span><span class="br">{</span>edition from<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>isbn<span class="brx">=</span><span class="br">{</span>ISBN<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>pages<span class="brx">=</span><span class="br">{</span>p.<span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>access<span class="brx">=</span><span class="br">{</span>last access<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>access<span class="brx">=</span><span class="br">{</span>last accessed<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>in<span class="brx">=</span><span class="br">{</span>in<span class="br">}</span><span class="brx">]</span>
-
-<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>editor<span class="brx">=</span><span class="br">{</span>Hrsg.<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="10.2._German_terms">
+      10.2. German terms
+     </span>
+    </h3>
+    <pre class="tex"><span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>editor<span class="brx">=</span><span class="br">{</span>Hrsg.<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>number<span class="brx">=</span><span class="br">{</span>Nummer<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>fromSeries<span class="brx">=</span><span class="br">{</span>aus der Reihe<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>volume<span class="brx">=</span><span class="br">{</span>Band<span class="br">}</span><span class="brx">]</span>
@@ -141,6 +1232,510 @@
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>access<span class="brx">=</span><span class="br">{</span>letzter Zugriff<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupsimplebibtext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>in<span class="brx">=</span><span class="br">{</span>in<span class="br">}</span><span class="brx">]</span>
 </pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Language-dependent terms affect presentation, not bibliographic identity</b>
+</p>
+     <p>Changing <code>editor</code>, <code>volume</code>, <code>pages</code>, or related labels adapts the printed language of the bibliography. It does not change the internal reference of any item.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="10.3._Adapt_terms_to_the_publication">
+      10.3. Adapt terms to the publication
+     </span>
+    </h3>
+    <p>The supplied terms are not mandatory editorial choices.
+</p>
+    <p>A publication may prefer, for example:
+</p>
+    <pre class="tex"><span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>editor<span class="brx">=</span><span class="br">{</span>edited by<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>pages<span class="brx">=</span><span class="br">{</span>pp.<span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>access<span class="brx">=</span><span class="br">{</span>accessed<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Choose abbreviations and formulations according to the language and style of the publication.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Insert_free_text_in_a_bibliography">
+      11. Insert free text in a bibliography
+     </span>
+    </h2>
+    <p>One reason to use a manually constructed bibliography is the possibility of inserting explanatory material directly into the bibliography environment.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs">\startbibliography</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>primary-source,
+   label<span class="brx">=</span><span class="br">{</span>A<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Author<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>1785<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>Primary source title<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span>
+
+The following items are later editions and translations
+derived from the primary source.
+
+<span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>translation,
+   label<span class="brx">=</span><span class="br">{</span>A-FR<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Author<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>2026<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>French translation of the primary source<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\stopbibliography</span>
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Use free text sparingly</b>
+</p>
+     <p>Explanatory prose may be useful in a documentary or annotated bibliography, but excessive free text can obscure the structure of the entries. When annotations follow a repeated pattern, consider defining a more systematic command or using structured BTX data instead.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Complete_example">
+      12. Complete example
+     </span>
+    </h2>
+    <p>The following example combines:
+</p>
+    <ul>
+     <li>
+      two citations;
+     </li>
+     <li>
+      one citation with a page detail;
+     </li>
+     <li>
+      two manually constructed entries;
+     </li>
+     <li>
+      an article described through the
+      <code>in</code>
+      field;
+     </li>
+     <li>
+      explicit labels;
+     </li>
+     <li>
+      square brackets around labels;
+     </li>
+     <li>
+      a bibliography heading.
+     </li>
+    </ul>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+  <span class="brx">[</span>labelSpace<span class="brx">=</span>18<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>simplebib<span class="brx">]</span>
+
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>labelLeft<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupsimplebibtext</span><span class="brx">[</span>labelRight<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Brinker provides a general methodological framework
+<span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>.
+
+The neurological example is discussed on a specific page
+<span class="cs">\bibref</span><span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 275<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>bpf<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\startsubject</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Bibliography<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\startbibliography</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>brk,
+   label<span class="brx">=</span><span class="br">{</span>Brk-01<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Brinker, Klaus<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>2001<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>Linguistische Textanalyse:
+          Eine Einf&uuml;hrung in Grundbegriffe und Methoden<span class="br">}</span>,
+   series<span class="brx">=</span><span class="br">{</span>Grundlagen der Germanistik<span class="br">}</span>,
+   volume<span class="brx">=</span><span class="br">{</span>29<span class="br">}</span>,
+   revedition<span class="brx">=</span><span class="br">{</span>5<span class="br">}</span>,
+   publisher<span class="brx">=</span><span class="br">{</span>Schmidt Verlag<span class="br">}</span>,
+   place<span class="brx">=</span><span class="br">{</span>Berlin<span class="br">}</span>,
+   isbn<span class="brx">=</span><span class="br">{</span>3-503-04995-9<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>bpf,
+   label<span class="brx">=</span><span class="br">{</span>B&uuml;PrFr-98<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>B&uuml;chel, Christian;
+           Price, Cathy J.;
+           Friston, Karl<span class="br">}</span>,
+   year<span class="brx">=</span><span class="br">{</span>1998<span class="br">}</span>,
+   title<span class="brx">=</span><span class="br">{</span>A multimodal language region
+          in the ventral visual pathway<span class="br">}</span>,
+   in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>title<span class="brx">=</span><span class="br">{</span>Nature<span class="br">}</span>,
+        volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,
+        pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span><span class="br">}</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\stopbibliography</span>
+
+<span class="cs"><span class="documentcs">\stopsubject</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/8d9b253e9e55bc56033e760f84a0935a.webp" width="55">
+     </li>
+    </ul>
+    <p>Compile the example and check that:
+</p>
+    <ol>
+     <li>
+      both references in the running text resolve;
+     </li>
+     <li>
+      the second reference includes the page detail;
+     </li>
+     <li>
+      each internal reference points to the correct item;
+     </li>
+     <li>
+      the two labels are printed inside square brackets;
+     </li>
+     <li>
+      the journal title, volume, and pages are taken from the nested
+      <code>in</code>
+      data;
+     </li>
+     <li>
+      only one
+      <code>\starttext</code>
+      and one
+      <code>\stoptext</code>
+      occur in the document;
+     </li>
+     <li>
+      the bibliography environment is closed with
+      <code>\stopbibliography</code>
+      .
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="13._Common_mistakes">
+      13. Common mistakes
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="13.1._Misspelling_stopbibliography">
+      13.1. Misspelling stopbibliography
+     </span>
+    </h3>
+    <p>Incorrect:
+</p>
+    <pre class="tex"><span class="cs">\stopbibiography</span>
+</pre>
+    <p>Correct:
+</p>
+    <pre class="tex"><span class="cs">\stopbibliography</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.2._Starting_the_document_twice">
+      13.2. Starting the document twice
+     </span>
+    </h3>
+    <p>Incorrect:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">% Citations</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="comment">% Bibliography</span>
+</pre>
+    <p>A complete document must contain only one top-level <code>\starttext</code> and one corresponding <code>\stoptext</code>.
+</p>
+    <h3>
+     <span class="mw-headline" id="13.3._Using_bibtex_instead_of_bibref">
+      13.3. Using bibtex instead of bibref
+     </span>
+    </h3>
+    <p>The citation command used in the examples is:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>reference<span class="brx">]</span>
+</pre>
+    <p>Do not confuse the command name with BibTeX, the external bibliographic data format and processing tradition.
+</p>
+    <h3>
+     <span class="mw-headline" id="13.4._Using_different_internal_references">
+      13.4. Using different internal references
+     </span>
+    </h3>
+    <p>These values do not match:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>brinker<span class="brx">]</span>
+
+<span class="cs">\bibitem</span>
+  <span class="brx">[</span>reference<span class="brx">=</span>brk,
+   ...<span class="brx">]</span>
+</pre>
+    <p>Use exactly the same spelling and capitalization.
+</p>
+    <h3>
+     <span class="mw-headline" id="13.5._Confusing_the_reference_and_label">
+      13.5. Confusing the reference and label
+     </span>
+    </h3>
+    <p>This citation uses the internal reference:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <p>It does not cite the printed label:
+</p>
+    <pre class="tex">label<span class="brx">=</span><span class="br">{</span>Brk-01<span class="br">}</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.6._Omitting_braces_in_the_in_field">
+      13.6. Omitting braces in the in field
+     </span>
+    </h3>
+    <p>Incorrectly balanced nested data may prevent the item from being parsed correctly.
+</p>
+    <p>Keep the complete structure visible:
+</p>
+    <pre class="tex">in<span class="brx">=</span><span class="br">{</span><span class="br">{</span>
+  title<span class="brx">=</span><span class="br">{</span>Nature<span class="br">}</span>,
+  volume<span class="brx">=</span><span class="br">{</span>394<span class="br">}</span>,
+  pages<span class="brx">=</span><span class="br">{</span>274-277<span class="br">}</span>
+<span class="br">}</span><span class="br">}</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.7._Using_simplebib_for_a_large_reusable_database">
+      13.7. Using simplebib for a large reusable database
+     </span>
+    </h3>
+    <p>A large bibliography maintained across chapters, books, editions, or languages is usually better handled with the modern BTX workflow and one or more external <code>.bib</code> files.
+</p>
+    <div style="background:#fbeaea; border-left:5px solid #b74d4d; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Most important design mistake</b>
+</p>
+     <p>Do not choose a manual bibliography merely to avoid learning the structured bibliography system. Choose it because the material genuinely requires local, irregular, or freely written description.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="14._Diagnostic_checklist">
+      14. Diagnostic checklist
+     </span>
+    </h2>
+    <p>When the bibliography does not appear or a reference does not resolve, check:
+</p>
+    <ol>
+     <li>
+      whether
+      <code>\usemodule[simplebib]</code>
+      is present;
+     </li>
+     <li>
+      whether the item occurs inside
+      <code>\startbibliography</code>
+      and
+      <code>\stopbibliography</code>
+      ;
+     </li>
+     <li>
+      whether the citation and item use the same
+      <code>reference</code>
+      ;
+     </li>
+     <li>
+      whether all brackets and braces are balanced;
+     </li>
+     <li>
+      whether the nested
+      <code>in</code>
+      data is correctly enclosed;
+     </li>
+     <li>
+      whether the bibliography block occurs where it is intended to appear;
+     </li>
+     <li>
+      whether a long printed label exceeds the configured
+      <code>labelSpace</code>
+      ;
+     </li>
+     <li>
+      whether the language-dependent texts have been configured for the active language;
+     </li>
+     <li>
+      whether the document contains only one top-level
+      <code>\starttext</code>
+      ;
+     </li>
+     <li>
+      whether the installed module version supports the parameters being used;
+     </li>
+     <li>
+      whether the project would be better served by the modern BTX bibliography system.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="15._What_this_page_has_established">
+      15. What this page has established
+     </span>
+    </h2>
+    <p>The <code>simplebib</code> module provides a direct method for constructing bibliographies manually in a ConTeXt source file.
+</p>
+    <p>The essential workflow is:
+</p>
+    <pre>load simplebib
+      |
+      v
+cite an internal reference with \bibref
+      |
+      v
+start a bibliography block
+      |
+      v
+define the matching item with \bibitem
+      |
+      v
+stop the bibliography block
+</pre>
+    <p>This method supports:
+</p>
+    <ul>
+     <li>
+      manually specified bibliographic fields;
+     </li>
+     <li>
+      explicit or automatic labels;
+     </li>
+     <li>
+      nested descriptions through
+      <code>in</code>
+      ;
+     </li>
+     <li>
+      several bibliography blocks;
+     </li>
+     <li>
+      citation details;
+     </li>
+     <li>
+      language-dependent terms;
+     </li>
+     <li>
+      free explanatory text inside a bibliography.
+     </li>
+    </ul>
+    <p>Its principal advantage is local flexibility.
+</p>
+    <p>Its principal limitation is that manually entered data is less reusable and less systematically managed than a modern dataset-based bibliography.
+</p>
+    <h2>
+     <span class="mw-headline" id="16._Related_pages">
+      16. Related pages
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="16.1._Modern_bibliography_workflow">
+      16.1. Modern bibliography workflow
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/Tutorial&action=edit&redlink=1.html" title="Bibliography and citations/Tutorial (page does not exist)">
+       Bibliography tutorial
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Creating_a_bibliography_from_a_BibTeX_file&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Creating a bibliography from a BibTeX file (page does not exist)">
+       Create a bibliography from a BibTeX file
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Using_multiple_bibliographic_datasets&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Using multiple bibliographic datasets (page does not exist)">
+       Use multiple bibliographic datasets
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Creating_multiple_bibliographies&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Creating multiple bibliographies (page does not exist)">
+       Create multiple bibliographies
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Organizing_bibliographies_in_a_project&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Organizing bibliographies in a project (page does not exist)">
+       Organize bibliographies in a project
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/Reference&action=edit&redlink=1.html" title="Bibliography and citations/Reference (page does not exist)">
+       Bibliography command reference
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/Explanation&action=edit&redlink=1.html" title="Bibliography and citations/Explanation (page does not exist)">
+       Explanation of the bibliography mechanism
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="16.2._Related_mechanisms">
+      16.2. Related mechanisms
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="Crossref_module.html" title="References notes and floats/Crossref module">
+       Cross-reference module
+      </a>
+     </li>
+     <li>
+      <a href="../References_notes_and_floats.html" title="References notes and floats">
+       References, notes, and floats
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Project_structure&action=edit&redlink=1" title="Project structure (page does not exist)">
+       Project structure
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Using_modules&action=edit&redlink=1" title="Using modules (page does not exist)">
+       Using modules
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="16.3._External_module_information">
+      16.3. External module information
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/ruid%3D4126013157/action%3Dview/id%3D66" rel="nofollow">
+       Simple Bibliography module entry
+      </a>
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-top:1em;">
+     <p><b>Bibliography and citations in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations&action=edit&redlink=1" title="Bibliography and citations (page does not exist)">Overview</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations/Tutorial&action=edit&redlink=1.html" title="Bibliography and citations/Tutorial (page does not exist)">Tutorial</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides (page does not exist)">How-to guides</a> &nbsp;&middot;&nbsp;
+<b>Manual bibliography with simplebib</b> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations/Reference&action=edit&redlink=1.html" title="Bibliography and citations/Reference (page does not exist)">Reference</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations/Explanation&action=edit&redlink=1.html" title="Bibliography and citations/Explanation (page does not exist)">Explanation</a>
+</p>
+    </div>
    </div>
   </article>
   <footer>
@@ -151,7 +1746,7 @@
      </a>
     </li>
     <li>
-     Mirrored on 2026-07-30
+     Mirrored on 2026-07-31
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
