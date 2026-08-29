@@ -18,7 +18,7 @@
     Creating a bibliography and citing sources
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7556&diff=43667">2026-08-03</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7556&diff=43696">2026-08-28</a>
         </p>
   </header>
   <article>
@@ -379,7 +379,7 @@ able to:
     <div style="margin:1em 0; padding:1em 1.2em; border:1px solid #aac7aa; border-left:6px solid #5f9f68; background:#f4faf4;">
      <p><b>This guide concentrates on the first working bibliography.</b>
 </p>
-     <p>Datasets, renderings, selection methods, sorting policies, multiple
+     <p>Datasets, renderings, selection criteria, sorting policies, multiple
 bibliographies, and detailed style questions are introduced in the later
 guides.
 </p>
@@ -510,7 +510,7 @@ an external <code>.bib</code> file is usually easier to maintain.
       <tr>
        <td><code>\cite[authoryear][beiser1987]</code>
 </td>
-       <td>Retrieves and displays one record as an author&ndash;year citation.
+       <td>Uses the record identified by its key and displays an author&ndash;year citation.
 </td>
       </tr>
       <tr>
@@ -598,14 +598,18 @@ in Guide 2.
 </p>
     <pre class="tex"><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>authoryear<span class="brx">]</span><span class="brx">[</span>beiser1987<span class="brx">]</span>
 </pre>
-    <p>The first argument requests an author&ndash;year citation.
+    <p>The first argument selects the citation alternative, here
+<code>authoryear</code>.
 </p>
     <p>The second argument identifies the record:
 </p>
     <pre>beiser1987
 </pre>
-    <p>The key is not normally printed. ConTeXt retrieves the record and constructs
-the visible citation from its fields.
+    <p>The key is not normally printed. ConTeXt uses it to identify the record and
+constructs the visible citation from the record's fields.
+</p>
+    <p>Different citation alternatives can use the same bibliographic record in
+different ways. They are introduced more systematically in Guide 2.
 </p>
     <p>Several records can also be cited together:
 </p>
@@ -613,6 +617,10 @@ the visible citation from its fields.
   <span class="brx">[</span>authoryear<span class="brx">]</span>
   <span class="brx">[</span>beiser1987,jacobi1785<span class="brx">]</span>
 </pre>
+    <p>The bibliography specification determines how several cited records are
+combined and formatted, including cases in which several works have the same
+author. Such style-dependent behaviour is discussed later.
+</p>
     <h3>
      <span class="mw-headline" id="3.5._Placing_the_bibliography">
       3.5. Placing the bibliography
@@ -624,18 +632,24 @@ the visible citation from its fields.
 </pre>
     <p>places the bibliography at the current position.
 </p>
-    <p>The same structured records therefore serve two purposes:
+    <p>The same structured records can therefore be used in two related ways:
 </p>
     <ul>
      <li>
       <code>\cite</code>
-      produces citations;
+      refers to records at points in the document;
      </li>
      <li>
       <code>\placelistofpublications</code>
-      produces complete bibliography entries.
+      renders a bibliography list from records
      </li>
     </ul>
+    <pre> selected for that list.
+</pre>
+    <p>The distinction between citation and bibliography selection becomes important
+when a document contains several bibliography lists. It is developed in the
+following guides.
+</p>
     <h2>
      <span class="mw-headline" id="4._Understanding_a_bibliographic_record">
       4. Understanding a bibliographic record
@@ -709,7 +723,7 @@ the visible citation from its fields.
       4.1. Common categories
      </span>
     </h3>
-    <p>Common categories include:
+    <p>Common BibTeX-style categories used in bibliographic datasets include:
 </p>
     <pre>@Book
 @Article
@@ -873,6 +887,9 @@ the records in an external <code>.bib</code> file.
   pages   <span class="brx">=</span> <span class="br">{</span>451--470<span class="br">}</span>,
 <span class="br">}</span>
 </pre>
+    <p>The external file also adds a journal article, so that the example now contains
+more than one bibliographic category.
+</p>
     <h3>
      <span class="mw-headline" id="5.2._The_ConTeXt_source">
       5.2. The ConTeXt source
@@ -891,8 +908,8 @@ the records in an external <code>.bib</code> file.
 
 <span class="cs"><span class="stylecs">\usebtxdataset</span></span>
   <span class="brx">[</span>default<span class="brx">]</span>
-<span class="comment">% Here, enter the name of the file containing the bibliographic references</span>
-<span class="brx">[</span>references.bib<span class="brx">]</span>
+  <span class="comment">% Here, enter the name of the file containing the bibliographic references</span>
+  <span class="brx">[</span>references.bib<span class="brx">]</span>
 
 <span class="cs"><span class="stylecs">\usebtxdefinitions</span></span>
   <span class="brx">[</span>apa<span class="brx">]</span>
@@ -919,10 +936,9 @@ Ameriks offers a modern discussion of Kant's categories
 </pre>
     <p>The important difference from the first MWE is:
 </p>
-    <p>\usebtxdataset
-</p>
-    <pre> [default]
- [references.bib]
+    <pre class="tex"><span class="cs"><span class="stylecs">\usebtxdataset</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>references.bib<span class="brx">]</span>
 </pre>
     <p>The records now come from an external file rather than a buffer.
 </p>
@@ -1092,8 +1108,8 @@ because it has not been cited or otherwise selected.
 </p>
     <pre class="tex"><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>authoryear<span class="brx">]</span><span class="brx">[</span>beiser1987<span class="brx">]</span>
 </pre>
-    <p>The relation between loaded records, cited records, local selection, and
-global selection is explained in Guide 2.
+    <p>The relation between loaded records, cited records, bibliography selection,
+and rendering scope is explained in Guide 2.
 </p>
     <h3>
      <span class="mw-headline" id="7.7._The_record_category_is_unsuitable">
@@ -1169,7 +1185,7 @@ or fields are unsuitable.
     <p><a href="Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">Guide 2 &mdash; Understanding datasets, styles, renderings, selection, and sorting</a>
 </p>
     <p>The next guide explains how sources, datasets, specifications, citation
-alternatives, renderings, selection methods, sorting rules, and placement work
+alternatives, renderings, selection criteria, sorting rules, and placement work
 together.
 </p>
     <h2>
@@ -1242,7 +1258,7 @@ together.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-28
+     Mirrored on 2026-08-29
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

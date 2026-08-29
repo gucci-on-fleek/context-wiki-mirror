@@ -18,11 +18,41 @@
     References notes and floats/References
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1021&diff=41460">2025-01-18</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=1021&diff=43704">2026-08-28</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-bottom:1em;">
+     <p><b>References in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="../References_notes_and_floats.html" title="References notes and floats">References, notes and floats</a> &nbsp;&middot;&nbsp;
+<b>References</b> &nbsp;&middot;&nbsp;
+<a href="Visual_debugging.html" title="References notes and floats/Visual debugging">Visual debugging</a> &nbsp;&middot;&nbsp;
+<a href="URL.html" title="References notes and floats/URL">URLs and external links</a> &nbsp;&middot;&nbsp;
+<a href="Crossref_module.html" title="References notes and floats/Crossref module">Cross Referencing module</a>
+</p>
+    </div>
+    <div style="margin:0 0 1.5em 0; padding:0.85em 1em; border:1px solid #d6a34a; border-left:6px solid #d6a34a; background:#fff8e8;">
+     <p><span style="font-size:1.35em;">🚧</span>
+<b>This page is currently being revised and reconstructed.</b>
+</p>
+     <p>Its structure, examples, and explanations are being updated for current
+ConTeXt and LuaMetaTeX. Please feel free to edit, correct, or improve this
+page while the revision is in progress.
+</p>
+    </div>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>What this page is about</b>
+</p>
+     <p>ConTeXt provides a built-in system for assigning stable identifiers to
+document objects or locations and referring to them elsewhere.
+</p>
+     <p>A reference may retrieve a structural number, a page number, a title, or
+other information. PDF interaction can then make that reference clickable.
+</p>
+     <p>No third-party module is required for ordinary ConTeXt cross-references.
+</p>
+    </div>
     <div class="toc" id="toc">
      <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
      <div class="toctitle" dir="ltr" lang="en">
@@ -36,316 +66,1434 @@
      </div>
      <ul>
       <li class="toclevel-1 tocsection-1">
-       <a href="#General_Use">
+       <a href="#1._The_reference_model">
         <span class="tocnumber">
          1
         </span>
         <span class="toctext">
-         General Use
+         1. The reference model
         </span>
        </a>
        <ul>
         <li class="toclevel-2 tocsection-2">
-         <a href="#showreferences">
+         <a href="#1.1._Where_this_page_fits">
           <span class="tocnumber">
            1.1
           </span>
           <span class="toctext">
-           showreferences
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-3">
-         <a href="#Example">
-          <span class="tocnumber">
-           1.2
-          </span>
-          <span class="toctext">
-           Example
+           1.1. Where this page fits
           </span>
          </a>
         </li>
        </ul>
       </li>
-      <li class="toclevel-1 tocsection-4">
-       <a href="#Different_layouts_for_different_kinds_of_references">
+      <li class="toclevel-1 tocsection-3">
+       <a href="#2._First_working_reference">
         <span class="tocnumber">
          2
         </span>
         <span class="toctext">
-         Different layouts for different kinds of references
+         2. First working reference
         </span>
        </a>
       </li>
-      <li class="toclevel-1 tocsection-5">
-       <a href="#Adjusting_the_level_of_referenced_prefixes">
+      <li class="toclevel-1 tocsection-4">
+       <a href="#3._Targets_and_stable_identifiers">
         <span class="tocnumber">
          3
         </span>
         <span class="toctext">
-         Adjusting the level of referenced prefixes
+         3. Targets and stable identifiers
         </span>
        </a>
        <ul>
-        <li class="toclevel-2 tocsection-6">
-         <a href="#Example_2">
+        <li class="toclevel-2 tocsection-5">
+         <a href="#3.1._Structural_targets">
           <span class="tocnumber">
            3.1
           </span>
           <span class="toctext">
-           Example
+           3.1. Structural targets
           </span>
          </a>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-7">
-       <a href="#Adjusting_the_separator_in_between_the_referenced_prefixes">
-        <span class="tocnumber">
-         4
-        </span>
-        <span class="toctext">
-         Adjusting the separator in between the referenced prefixes
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-8">
-         <a href="#Example_3">
+        <li class="toclevel-2 tocsection-6">
+         <a href="#3.2._Explicit_targets">
           <span class="tocnumber">
-           4.1
+           3.2
           </span>
           <span class="toctext">
-           Example
+           3.2. Explicit targets
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#pagereference">
+            <span class="tocnumber">
+             3.2.1
+            </span>
+            <span class="toctext">
+             pagereference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#textreference">
+            <span class="tocnumber">
+             3.2.2
+            </span>
+            <span class="toctext">
+             textreference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#reference">
+            <span class="tocnumber">
+             3.2.3
+            </span>
+            <span class="toctext">
+             reference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#contentreference">
+            <span class="tocnumber">
+             3.2.4
+            </span>
+            <span class="toctext">
+             contentreference
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-9">
-       <a href="#Putting_a_separator_in_the_heading_but_not_the_reference">
-        <span class="tocnumber">
-         5
-        </span>
-        <span class="toctext">
-         Putting a separator in the heading but not the reference
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-10">
-       <a href="#References_to_an_external_file">
-        <span class="tocnumber">
-         6
-        </span>
-        <span class="toctext">
-         References to an external file
-        </span>
-       </a>
-       <ul>
         <li class="toclevel-2 tocsection-11">
-         <a href="#Example_4">
+         <a href="#3.3._More_than_one_identifier">
           <span class="tocnumber">
-           6.1
+           3.3
           </span>
           <span class="toctext">
-           Example
+           3.3. More than one identifier
           </span>
          </a>
         </li>
        </ul>
       </li>
       <li class="toclevel-1 tocsection-12">
-       <a href="#Related_Modules">
+       <a href="#4._Retrieving_information_from_a_reference">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Retrieving information from a reference
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-13">
+         <a href="#4.1._A_useful_mental_distinction">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           4.1. A useful mental distinction
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#5._A_simple_example_with_an_arbitrary_page_target">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. A simple example with an arbitrary page target
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#6._Interaction_and_PDF_links">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Interaction and PDF links
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#7._Debugging_references">
         <span class="tocnumber">
          7
         </span>
         <span class="toctext">
-         Related Modules
+         7. Debugging references
         </span>
        </a>
       </li>
-      <li class="toclevel-1 tocsection-13">
-       <a href="#Related_pages">
+      <li class="toclevel-1 tocsection-17">
+       <a href="#8._Defining_reusable_reference_formats">
         <span class="tocnumber">
          8
         </span>
         <span class="toctext">
-         Related pages
+         8. Defining reusable reference formats
         </span>
        </a>
+      </li>
+      <li class="toclevel-1 tocsection-18">
+       <a href="#9._Structural_prefixes_in_references">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Structural prefixes in references
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#10._Changing_separators_in_referenced_prefixes">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Changing separators in referenced prefixes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-20">
+       <a href="#11._Heading_punctuation_and_reference_punctuation">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Heading punctuation and reference punctuation
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#11.1._Dispatching_by_an_identifier_prefix">
+          <span class="tocnumber">
+           11.1
+          </span>
+          <span class="toctext">
+           11.1. Dispatching by an identifier prefix
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-22">
+       <a href="#12._References_to_another_document">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. References to another document
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#12.1._Prepare_the_referenced_document">
+          <span class="tocnumber">
+           12.1
+          </span>
+          <span class="toctext">
+           12.1. Prepare the referenced document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-24">
+         <a href="#12.2._Register_the_external_document">
+          <span class="tocnumber">
+           12.2
+          </span>
+          <span class="toctext">
+           12.2. Register the external document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#12.3._Refer_to_the_document">
+          <span class="tocnumber">
+           12.3
+          </span>
+          <span class="toctext">
+           12.3. Refer to the document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#12.4._Refer_to_a_target_inside_the_external_document">
+          <span class="tocnumber">
+           12.4
+          </span>
+          <span class="toctext">
+           12.4. Refer to a target inside the external document
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#12.5._Same-document_and_external-document_references">
+          <span class="tocnumber">
+           12.5
+          </span>
+          <span class="toctext">
+           12.5. Same-document and external-document references
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#12.6._Files_in_other_directories">
+          <span class="tocnumber">
+           12.6
+          </span>
+          <span class="toctext">
+           12.6. Files in other directories
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-29">
+         <a href="#12.7._Products_and_components">
+          <span class="tocnumber">
+           12.7
+          </span>
+          <span class="toctext">
+           12.7. Products and components
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-30">
+       <a href="#13._Troubleshooting_unresolved_references">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Troubleshooting unresolved references
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-31">
+         <a href="#13.1._Does_the_target_exist.3F">
+          <span class="tocnumber">
+           13.1
+          </span>
+          <span class="toctext">
+           13.1. Does the target exist?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#13.2._Does_the_identifier_match_exactly.3F">
+          <span class="tocnumber">
+           13.2
+          </span>
+          <span class="toctext">
+           13.2. Does the identifier match exactly?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-33">
+         <a href="#13.3._Are_you_asking_for_the_right_property.3F">
+          <span class="tocnumber">
+           13.3
+          </span>
+          <span class="toctext">
+           13.3. Are you asking for the right property?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-34">
+         <a href="#13.4._Is_interaction_relevant_to_the_problem.3F">
+          <span class="tocnumber">
+           13.4
+          </span>
+          <span class="toctext">
+           13.4. Is interaction relevant to the problem?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-35">
+         <a href="#13.5._Is_the_target_in_another_document.3F">
+          <span class="tocnumber">
+           13.5
+          </span>
+          <span class="toctext">
+           13.5. Is the target in another document?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-36">
+         <a href="#13.6._Has_the_external_document_been_compiled.3F">
+          <span class="tocnumber">
+           13.6
+          </span>
+          <span class="toctext">
+           13.6. Has the external document been compiled?
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-37">
+         <a href="#13.7._Use_visual_debugging">
+          <span class="tocnumber">
+           13.7
+          </span>
+          <span class="toctext">
+           13.7. Use visual debugging
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-38">
+       <a href="#14._Related_reference_mechanisms">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Related reference mechanisms
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-39">
+         <a href="#14.1._URLs_and_external_resources">
+          <span class="tocnumber">
+           14.1
+          </span>
+          <span class="toctext">
+           14.1. URLs and external resources
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-40">
+         <a href="#14.2._Bibliographic_citations">
+          <span class="tocnumber">
+           14.2
+          </span>
+          <span class="toctext">
+           14.2. Bibliographic citations
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-41">
+         <a href="#14.3._Cross_Referencing_module">
+          <span class="tocnumber">
+           14.3
+          </span>
+          <span class="toctext">
+           14.3. Cross Referencing module
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-42">
+         <a href="#14.4._Paragraph_referencing">
+          <span class="tocnumber">
+           14.4
+          </span>
+          <span class="toctext">
+           14.4. Paragraph referencing
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-43">
+       <a href="#15._Command_reference">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. Command reference
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-44">
+         <a href="#15.1._Creating_reference_targets">
+          <span class="tocnumber">
+           15.1
+          </span>
+          <span class="toctext">
+           15.1. Creating reference targets
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-45">
+         <a href="#15.2._Using_references">
+          <span class="tocnumber">
+           15.2
+          </span>
+          <span class="toctext">
+           15.2. Using references
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-46">
+         <a href="#15.3._Formatting_references">
+          <span class="tocnumber">
+           15.3
+          </span>
+          <span class="toctext">
+           15.3. Formatting references
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-47">
+         <a href="#15.4._Interaction">
+          <span class="tocnumber">
+           15.4
+          </span>
+          <span class="toctext">
+           15.4. Interaction
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-48">
+       <a href="#16._Mental_map">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         16. Mental map
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-49">
+       <a href="#17._Where_to_go_next">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         17. Where to go next
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-50">
+       <a href="#18._Related_pages">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         18. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-51">
+         <a href="#18.1._References_and_interaction">
+          <span class="tocnumber">
+           18.1
+          </span>
+          <span class="toctext">
+           18.1. References and interaction
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-52">
+         <a href="#18.2._Bibliography">
+          <span class="tocnumber">
+           18.2
+          </span>
+          <span class="toctext">
+           18.2. Bibliography
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-53">
+         <a href="#18.3._Specialized_modules">
+          <span class="tocnumber">
+           18.3
+          </span>
+          <span class="toctext">
+           18.3. Specialized modules
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-54">
+         <a href="#18.4._Command_reference">
+          <span class="tocnumber">
+           18.4
+          </span>
+          <span class="toctext">
+           18.4. Command reference
+          </span>
+         </a>
+        </li>
+       </ul>
       </li>
      </ul>
     </div>
     <h2>
-     <span class="mw-headline" id="General_Use">
-      General Use
+     <span class="mw-headline" id="1._The_reference_model">
+      1. The reference model
      </span>
     </h2>
-    <p>If you want to refer to any text element, you must first define the target's reference label. All titling commands and a lot of others take one as optional parameter, e.g.
+    <p>Cross-referencing is easier to understand if four things are kept separate:
 </p>
-    <pre class="tex"><span class="cs"><span class="documentcs">\chapter</span></span><span class="brx">[</span>preface<span class="brx">]</span><span class="br">{</span>Dear Reader<span class="br">}</span>
-</pre>
-    <p>Then you can refer to this spot with
-</p>
-    <pre class="tex">As I told you in <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>preface<span class="brx">]</span> on <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>preface<span class="brx">]</span>, I really like ConTeXt...
-</pre>
-    <p>That will typeset the text in braces and add the number of the refered element, e.g. "chapter 1 on page 1".
-</p>
-    <p>To define a reference label anywhere you can also use <tt><a href="../Command/pagereference.html" title="Command/pagereference">\pagereference</a>[reference]</tt> and <tt><a href="../Command/textreference.html" title="Command/textreference">\textreference</a>[reference]{text</tt>}. Everwhere where you can define one label, you can also define more at once, if you separate them with commas. It's also possible to use "namespaces" like <code>[fig:cow]</code>.
-</p>
-    <p>If you activated interaction, references become links automatically.
-</p>
-    <p>Starting with ConTeXt 2012.06.22, there is a third command: <tt><a class="new" href="../index.php?title=Command/contentreference&action=edit&redlink=1.html" title="Command/contentreference (page does not exist)">\contentreference</a>[reference][framedsettings]{text</tt>} which wraps the <code>text</code> argument inside a <tt><a href="../Command/framed.html" title="Command/framed">\framed</a></tt>. The main difference with <tt><a href="../Command/textreference.html" title="Command/textreference">\textreference</a></tt> where the <code>text</code> contains a <tt><a href="../Command/framed.html" title="Command/framed">\framed</a></tt> itself is that, when interaction is enabled, <tt><a class="new" href="../index.php?title=Command/contentreference&action=edit&redlink=1.html" title="Command/contentreference (page does not exist)">\contentreference</a></tt> places the top left of the target area at the top left of the framed box whereas <tt><a href="../Command/textreference.html" title="Command/textreference">\textreference</a></tt> uses its baseline.
-</p>
-    <h3>
-     <span class="mw-headline" id="showreferences">
-      showreferences
-     </span>
-    </h3>
-    <p>You can see <a href="Visual_debugging.html" title="References notes and floats/Visual debugging">References Visual debugging</a> and <tt><a class="new" href="../index.php?title=Command/showreferences&action=edit&redlink=1.html" title="Command/showreferences (page does not exist)">\showreferences</a></tt>, when writing a long document with many cross references, to visualize the names given to various nodes.
-</p>
-    <h3>
-     <span class="mw-headline" id="Example">
-      Example
-     </span>
-    </h3>
-    <pre class="tex"><span class="cs"><span class="documentcs">\chapter</span></span><span class="brx">[</span>preface<span class="brx">]</span><span class="br">{</span>Dear Reader<span class="br">}</span>
-
-<span class="cs"><span class="documentcs">\pagereference</span></span><span class="brx">[</span>zapfquote<span class="brx">]</span><span class="cs"><span class="documentcs">\input</span></span> zapf
-
-<span class="cs">\dots</span>
-
-As I have told you in <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>preface<span class="brx">]</span> on <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>preface<span class="brx">]</span>, I really like <span class="cs"><span class="documentcs">\ConTeXt</span></span>.
-And Mr.\,Zapf <span class="brx">(</span>see <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>zapfquote<span class="brx">]</span><span class="brx">)</span> at least likes <span class="cs"><span class="documentcs">\TeX</span></span>\ in general.
-</pre>
-    <ul class="demo">
-     <li class="rendering">
-      <img height="285" src="../wikiteximage/4ed8365fc73994cfe57810f819a20e22.webp" width="631">
+    <ol>
+     <li>
+      the
+      <b>
+       target
+      </b>
+      &mdash; a document object or position;
      </li>
-    </ul>
-    <h2>
-     <span class="mw-headline" id="Different_layouts_for_different_kinds_of_references">
-      Different layouts for different kinds of references
+     <li>
+      the
+      <b>
+       reference identifier
+      </b>
+      &mdash; a stable name assigned to that target;
+     </li>
+     <li>
+      the
+      <b>
+       representation
+      </b>
+      &mdash; what a command such as
+      <code>\in</code>
+      ,
+      <code>\at</code>
+      , or
+      <code>\about</code>
+      prints;
+     </li>
+     <li>
+      the optional
+      <b>
+       interactive link
+      </b>
+      &mdash; PDF navigation added by ConTeXt.
+     </li>
+    </ol>
+    <p>A useful mental model is:
+</p>
+    <pre>document object or position
+          |
+          v
+    reference target
+          |
+          v
+ stable identifier
+  sec:introduction
+          |
+    +-----+------+------+
+    |            |      |
+    v            v      v
+   \in          \at   \about
+    |            |      |
+number/value     page   title/text
+    \            |      /
+     \           |     /
+      +----------+----+
+                 |
+        optional interaction
+                 |
+                 v
+          clickable PDF link
+</pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Reference structure and interaction are different</b>
+</p>
+     <p>A reference works as a document reference even when PDF interaction is
+disabled.
+</p>
+     <p><code>\setupinteraction[state=start]</code> adds navigation to the resulting
+PDF; it does not create the logical relationship between the target and its
+reference.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="1.1._Where_this_page_fits">
+      1.1. Where this page fits
      </span>
-    </h2>
-    <p>If you want less typing to get special formatting for the references to sections, equations, ... here's Aditya's recipe to do it.
+    </h3>
+    <p>This page combines orientation, explanation, and small working examples.
 </p>
-    <p>Suppose that you want to get
+    <p>The surrounding documentation has different roles:
 </p>
-    <dl>
-     <dd>
-      See
-      <i>
-       equation (2.3)
-      </i>
-      or
-      <i>
-       section 4.2
-      </i>
-      .
-     </dd>
-    </dl>
-    <p>where the slanted content is typeset automatically. You first need to define the formatting with <tt><a href="../Command/definereferenceformat.html" title="Command/definereferenceformat">\definereferenceformat</a></tt>:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definereferenceformat</span></span><span class="brx">[</span>insec<span class="brx">]</span><span class="brx">[</span>text<span class="brx">=</span>section<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definereferenceformat</span></span><span class="brx">[</span>ineq<span class="brx">]</span> <span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,right<span class="brx">=</span><span class="brx">)</span>,text<span class="brx">=</span>equation<span class="brx">]</span>
-</pre>
-    <p>Then you can simply type
-</p>
-    <pre class="tex">See <span class="cs">\ineq</span><span class="brx">[</span>eq:some equation<span class="brx">]</span> or <span class="cs">\insec</span><span class="brx">[</span>sec:some section<span class="brx">]</span>.
-</pre>
-    <p>A more automated solution uses the following macro:
-</p>
-    <pre class="tex"><span class="cs">\def</span><span class="cs">\myin</span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
-  <span class="cs">\expandafter</span><span class="cs">\ifx</span><span class="cs">\csname</span> in<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="cs">\relax</span>
-    <span class="cs"><span class="systemcs">\writestatus</span></span><span class="br">{</span>warning<span class="br">}</span><span class="br">{</span>referenceformat in<span class="brx">#</span>1 not defined<span class="br">}</span><span class="comment">%</span>
-    <span class="cs"><span class="documentcs">\in</span></span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
-  <span class="cs">\else</span>
-    <span class="cs">\csname</span> in<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
-  <span class="cs">\fi</span><span class="br">}</span>
-</pre>
-    <p>and requires you to write the following code:
-</p>
-    <pre class="tex">See <span class="cs">\myin</span><span class="brx">[</span>eq:some equation<span class="brx">]</span> or <span class="cs">\myin</span><span class="brx">[</span>sec:some section<span class="brx">]</span>.
-</pre>
-    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+    <table class="wikitable">
      <tbody>
       <tr>
-       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+       <th>
+        Need
+       </th>
+       <th>
+        Where to look
+       </th>
+      </tr>
+      <tr>
+       <td>Understand the reference model
 </td>
-       <td style="padding:0.5em 0.5em;"><b>TODO:</b> complete example would be better <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+       <td>This page
+</td>
+      </tr>
+      <tr>
+       <td>Create ordinary references
+</td>
+       <td>Sections 2&ndash;6 below
+</td>
+      </tr>
+      <tr>
+       <td>Format structural references
+</td>
+       <td>Sections 8&ndash;11 below
+</td>
+      </tr>
+      <tr>
+       <td>Debug a large reference system
+</td>
+       <td><a href="Visual_debugging.html" title="References notes and floats/Visual debugging">References &mdash; Visual debugging</a>
+</td>
+      </tr>
+      <tr>
+       <td>Work with URLs and web links
+</td>
+       <td><a href="URL.html" title="References notes and floats/URL">URLs and external links</a>
+</td>
+      </tr>
+      <tr>
+       <td>Look up exact command syntax
+</td>
+       <td>The corresponding <code>Command/*</code> pages
+</td>
+      </tr>
+      <tr>
+       <td>Use a specialized third-party interface
+</td>
+       <td><a href="Crossref_module.html" title="References notes and floats/Crossref module">Cross Referencing module</a>
 </td>
       </tr>
      </tbody>
     </table>
+    <p>The documentation can therefore be read as:
+</p>
+    <pre>orientation / explanation
+          |
+          v
+ understand the model
+          |
+          +--------&gt; practical examples
+          |
+          +--------&gt; command reference
+          |
+          `--------&gt; specialized mechanisms
+</pre>
     <h2>
-     <span class="mw-headline" id="Adjusting_the_level_of_referenced_prefixes">
-      Adjusting the level of referenced prefixes
+     <span class="mw-headline" id="2._First_working_reference">
+      2. First working reference
      </span>
     </h2>
-    <p>When the default chapter and section prefixes are used, the chapters are
-prefixed by a number, so are the sections. When referring to a section using
-the command <tt><a href="../Command/in.html" title="Command/in">\in</a>{section}[sec:foo]</tt> the chapter number is prefixed
-following by a dot and the according section number.
+    <p>Structural commands can define a reference at the same time as they create
+the document object.
 </p>
-    <p>However, some styles do not show the chapter prefix while displaying the
-sections. In this case the referencing commands, like <tt><a href="../Command/in.html" title="Command/in">\in</a></tt> just output the
-section number, which is of course ambiguous.
+    <p>For example:
 </p>
-    <p>To fix this problem, the command <tt><a href="../Command/setupreferencestructureprefix.html" title="Command/setupreferencestructureprefix">\setupreferencestructureprefix</a></tt> can be
-incorporated to adjust the prefixes displayed by the referencing commands.
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Dear Reader<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>ch:preface<span class="br">}</span><span class="brx">]</span>
+
+I really like ConTeXt.
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+As I told you in
+<span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>
+on
+<span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>,
+I really like ConTeXt.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/9616937d317d917397493e3c3fb805bb.webp" width="620">
+     </li>
+    </ul>
+    <p>The chapter creates the target:
 </p>
+    <pre class="tex">reference<span class="brx">=</span><span class="br">{</span>ch:preface<span class="br">}</span>
+</pre>
+    <p>The stable identifier is:
+</p>
+    <pre>ch:preface
+</pre>
+    <p>The same target can then be queried in different ways.
+</p>
+    <p>This:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>
+</pre>
+    <p>asks ConTeXt for its structural number, while:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>
+</pre>
+    <p>asks for its page.
+</p>
+    <p>The compact heading syntax found in many existing documents also allows a
+reference identifier:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\chapter</span></span><span class="brx">[</span>ch:preface<span class="brx">]</span><span class="br">{</span>Dear Reader<span class="br">}</span>
+</pre>
+    <p>Both forms illustrate the same principle: assign a stable identifier to the
+object rather than hard-coding its current number or page.
+</p>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>First principle</b>
+</p>
+     <p>Do not think of <code>ch:preface</code> as &ldquo;chapter 1&rdquo;.
+</p>
+     <p>Think of it as the stable name of the preface.
+</p>
+     <p>ConTeXt determines whether the reference should be displayed as chapter 1,
+page 3, a title, or another representation according to the command used at
+the point of reference.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Targets_and_stable_identifiers">
+      3. Targets and stable identifiers
+     </span>
+    </h2>
     <h3>
-     <span class="mw-headline" id="Example_2">
-      Example
+     <span class="mw-headline" id="3.1._Structural_targets">
+      3.1. Structural targets
      </span>
     </h3>
-    <p>Given that <tt><a class="new" href="../index.php?title=Command/start&action=edit&redlink=1.html" title="Command/start (page does not exist)">\start</a></tt>/<tt><a class="new" href="../index.php?title=Command/stopchapter&action=edit&redlink=1.html" title="Command/stopchapter (page does not exist)">\stopchapter</a></tt> output <code>Romannumerals</code> prefixes (<tt>I,
-II, III, &hellip;</tt>) and <tt><a class="new" href="../index.php?title=Command/start&action=edit&redlink=1.html" title="Command/start (page does not exist)">\start</a></tt>/<tt><a class="new" href="../index.php?title=Command/stopsection&action=edit&redlink=1.html" title="Command/stopsection (page does not exist)">\stopsection</a></tt> output <code>Character</code> prefixes (<tt>A,B, C, &hellip;</tt>), the following commands give the results provided in the comments.
+    <p>Many ConTeXt structural commands accept a reference identifier directly.
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:2<span class="brx">]</span> <span class="comment">% nothing</span>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Reference systems<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>sec:references<span class="br">}</span><span class="brx">]</span>
+
+...
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+</pre>
+    <p>Other document objects can be referenced in the same manner, including
+chapters, sections, figures, tables, formulas, items, and notes.
+</p>
+    <p>A useful naming convention is:
+</p>
+    <pre>ch:preface
+sec:references
+fig:architecture
+tab:results
+eq:identity
+note:source
+</pre>
+    <p>Such identifiers remain meaningful even when numbering or pagination changes.
+</p>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>A colon is normally a naming convention</b>
+</p>
+     <p>An identifier such as:
+</p>
+     <pre>fig:cow
+</pre>
+     <p>uses the colon merely to organize the name.
+</p>
+     <p>Do not confuse this convention with the double-colon syntax:
+</p>
+     <pre>document::reference
+</pre>
+     <p>which has a specific role when referring to a target imported from another
+document.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="3.2._Explicit_targets">
+      3.2. Explicit targets
+     </span>
+    </h3>
+    <p>Sometimes there is no chapter, section, figure, or other structural command
+to which the reference can naturally be attached.
+</p>
+    <p>ConTeXt therefore provides commands for creating explicit reference targets.
+</p>
+    <h4>
+     <span class="mw-headline" id="pagereference">
+      pagereference
+     </span>
+    </h4>
+    <pre class="tex"><span class="cs"><span class="documentcs">\pagereference</span></span><span class="brx">[</span>zapfquote<span class="brx">]</span>
+</pre>
+    <p>This associates the identifier with a document position.
+</p>
+    <p>It can subsequently be queried, for example, with:
+</p>
+    <pre class="tex">See <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>zapfquote<span class="brx">]</span>.
+</pre>
+    <h4>
+     <span class="mw-headline" id="textreference">
+      textreference
+     </span>
+    </h4>
+    <pre class="tex"><span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref:zapf<span class="brx">]</span><span class="br">{</span>Zapf<span class="br">}</span>
+</pre>
+    <p>creates a target and associates text with that reference.
+</p>
+    <h4>
+     <span class="mw-headline" id="reference">
+      reference
+     </span>
+    </h4>
+    <p><code>\reference</code> provides a target with associated reference text:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\reference</span></span><span class="brx">[</span>ref:example<span class="brx">]</span><span class="br">{</span>Example text<span class="br">}</span>
+</pre>
+    <p>It is useful when both the position and associated text belong to the same
+reference.
+</p>
+    <h4>
+     <span class="mw-headline" id="contentreference">
+      contentreference
+     </span>
+    </h4>
+    <p>For content whose destination area must correspond to a framed or boxed
+region, ConTeXt also provides <code>\contentreference</code>:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\contentreference</span></span>
+  <span class="brx">[</span>reference<span class="brx">]</span>
+  <span class="brx">[</span>framed settings<span class="brx">]</span>
+  <span class="br">{</span>text<span class="br">}</span>
+</pre>
+    <p>This is a more specialized mechanism.
+</p>
+    <p>With interaction enabled, its destination can be associated with the area of
+the content rather than merely with a baseline position.
+</p>
+    <p>For ordinary structural references, attach
+<code>reference=...</code> directly to the structural object whenever
+possible.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.3._More_than_one_identifier">
+      3.3. More than one identifier
+     </span>
+    </h3>
+    <p>Interfaces that accept several reference labels can use comma-separated
+identifiers where supported.
+</p>
+    <p>For example, this can be useful while migrating an older reference naming
+scheme to a newer one.
+</p>
+    <p>In ordinary documents, however, one clear and systematic identifier for each
+target is usually easier to maintain.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Retrieving_information_from_a_reference">
+      4. Retrieving information from a reference
+     </span>
+    </h2>
+    <p>A reference identifier does not determine by itself what will be printed.
+</p>
+    <p>Different commands ask ConTeXt for different information about the same
+target.
+</p>
+    <p>Suppose we define:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A theory of reference<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>sec:theory<span class="br">}</span><span class="brx">]</span>
+
+...
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+</pre>
+    <p>We can then use:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:theory<span class="brx">]</span>
+</pre>
+    <p>to retrieve the structural number,
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>sec:theory<span class="brx">]</span>
+</pre>
+    <p>to retrieve the page,
+</p>
+    <p>and:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\about</span></span><span class="brx">[</span>sec:theory<span class="brx">]</span>
+</pre>
+    <p>to retrieve descriptive text associated with the reference, such as the
+title where applicable.
+</p>
+    <p>The central distinction is:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Command
+       </th>
+       <th>
+        Typical purpose
+       </th>
+       <th>
+        Target
+       </th>
+      </tr>
+      <tr>
+       <td><code>\in</code>
+</td>
+       <td>Structural number or reference value
+</td>
+       <td><code>sec:theory</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\at</code>
+</td>
+       <td>Page
+</td>
+       <td><code>sec:theory</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>\about</code>
+</td>
+       <td>Associated title or descriptive text
+</td>
+       <td><code>sec:theory</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>One target, several representations</b>
+</p>
+     <p>The target does not need to be recreated for each kind of reference.
+</p>
+     <p>The single identifier <code>sec:theory</code> may provide a section number,
+a page number, and associated descriptive text.
+</p>
+     <p>This is why a stable identifier should describe the target rather than the
+information that happens to be printed at one particular place.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="4.1._A_useful_mental_distinction">
+      4.1. A useful mental distinction
+     </span>
+    </h3>
+    <p>Do not confuse:
+</p>
+    <pre>sec:theory
+</pre>
+    <p>with:
+</p>
+    <pre>3.2
+</pre>
+    <p>or:
+</p>
+    <pre>page 17
+</pre>
+    <p>The first is the stable identifier.
+</p>
+    <p>The other values are representations obtained from that target.
+</p>
+    <p>In schematic form:
+</p>
+    <pre>sec:theory
+    |
+    +---- \in ----&gt; 3.2
+    |
+    +---- \at ----&gt; 17
+    |
+    `---- \about -&gt; A theory of reference
+</pre>
+    <h2>
+     <span class="mw-headline" id="5._A_simple_example_with_an_arbitrary_page_target">
+      5. A simple example with an arbitrary page target
+     </span>
+    </h2>
+    <p>The traditional Zapf example can now be understood as a combination of a
+structural target and an explicit page target:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Dear Reader<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>ch:preface<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\pagereference</span></span><span class="brx">[</span>zapfquote<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> zapf
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+As I have told you in
+<span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>
+on
+<span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>ch:preface<span class="brx">]</span>,
+I really like <span class="cs"><span class="documentcs">\ConTeXt</span></span>.
+
+And Mr.\,Zapf
+<span class="brx">(</span>see <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>zapfquote<span class="brx">]</span><span class="brx">)</span>
+at least likes <span class="cs"><span class="documentcs">\TeX</span></span>\ in general.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/24a87a2de140746cd13211301a3d26d4.webp" width="620">
+     </li>
+    </ul>
+    <p>Here:
+</p>
+    <ul>
+     <li>
+      <code>ch:preface</code>
+      identifies a structural target;
+     </li>
+     <li>
+      <code>zapfquote</code>
+      identifies an explicit position;
+     </li>
+     <li>
+      <code>\in</code>
+      retrieves structural information;
+     </li>
+     <li>
+      <code>\at</code>
+      retrieves page information.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="6._Interaction_and_PDF_links">
+      6. Interaction and PDF links
+     </span>
+    </h2>
+    <p>Enable PDF interaction with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+</pre>
+    <p>References can then become interactive links automatically.
+</p>
+    <p>Presentation can also be configured, for example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start,
+   color<span class="brx">=</span>green,
+   style<span class="brx">=</span>bold<span class="brx">]</span>
+</pre>
+    <p>For detailed interaction parameters, see:
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+        \setupinteraction
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <p>For URLs and links to web resources, see:
+</p>
+    <ul>
+     <li>
+      <a href="URL.html" title="References notes and floats/URL">
+       URLs and external links
+      </a>
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Interaction adds navigation, not reference structure</b>
+</p>
+     <p>The reference target and its identifier exist independently of PDF
+interaction.
+</p>
+     <p>Turning interaction on adds navigation between the printed reference and its
+target.
+</p>
+    </div>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not hard-code page numbers</b>
+</p>
+     <p>Avoid writing:
+</p>
+     <pre>see page 23
+</pre>
+     <p>when page 23 is the page of an object that ConTeXt already knows.
+</p>
+     <p>Use:
+</p>
+     <pre class="tex">see <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>sec:example<span class="brx">]</span>
+</pre>
+     <p>The reference then remains valid when pagination changes.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="7._Debugging_references">
+      7. Debugging references
+     </span>
+    </h2>
+    <p>Large documents can contain hundreds or thousands of reference targets.
+</p>
+    <p>A dedicated page describes tools for visualizing reference targets and
+references:
+</p>
+    <ul>
+     <li>
+      <a href="Visual_debugging.html" title="References notes and floats/Visual debugging">
+       References &mdash; Visual debugging
+      </a>
+     </li>
+    </ul>
+    <p>The command:
+</p>
+    <pre class="tex"><span class="cs">\showreferences</span>
+</pre>
+    <p>has historically been used when examining reference and destination
+information during debugging.
+</p>
+    <p>Its precise visible effect may depend on the current ConTeXt version and
+enabled trackers, so the dedicated visual-debugging page should be consulted
+when diagnosing a current LMTX document.
+</p>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Debugging is not document markup</b>
+</p>
+     <p>Commands and trackers used to visualize reference targets are development
+aids.
+</p>
+     <p>They should not be confused with the stable reference identifiers that form
+part of the logical structure of the document.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Defining_reusable_reference_formats">
+      8. Defining reusable reference formats
+     </span>
+    </h2>
+    <p>Repeated constructions such as:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:example<span class="brx">]</span>
+</pre>
+    <p>can be given a semantic formatting command with
+<tt><a href="../Command/definereferenceformat.html" title="Command/definereferenceformat">\definereferenceformat</a></tt>.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definereferenceformat</span></span>
+  <span class="brx">[</span>insec<span class="brx">]</span>
+  <span class="brx">[</span>text<span class="brx">=</span>section<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definereferenceformat</span></span>
+  <span class="brx">[</span>ineq<span class="brx">]</span>
+  <span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,
+   right<span class="brx">=</span><span class="brx">)</span>,
+   text<span class="brx">=</span>equation<span class="brx">]</span>
+</pre>
+    <p>You can then write:
+</p>
+    <pre class="tex">See <span class="cs">\ineq</span><span class="brx">[</span>eq:identity<span class="brx">]</span> or <span class="cs">\insec</span><span class="brx">[</span>sec:example<span class="brx">]</span>.
+</pre>
+    <p>instead of repeatedly specifying the presentation at every reference.
+</p>
+    <p>A complete example is:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definereferenceformat</span></span>
+  <span class="brx">[</span>insec<span class="brx">]</span>
+  <span class="brx">[</span>text<span class="brx">=</span>section<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definereferenceformat</span></span>
+  <span class="brx">[</span>ineq<span class="brx">]</span>
+  <span class="brx">[</span>left<span class="brx">=</span><span class="brx">(</span>,
+   right<span class="brx">=</span><span class="brx">)</span>,
+   text<span class="brx">=</span>equation<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>An example<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>sec:example<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\placeformula</span></span><span class="brx">[</span>eq:identity<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startformula</span></span>
+<span class="brx">(</span>a+b<span class="brx">)</span>^2<span class="brx">=</span>a^2+2ab+b^2
+<span class="cs"><span class="documentcs">\stopformula</span></span>
+
+See <span class="cs">\ineq</span><span class="brx">[</span>eq:identity<span class="brx">]</span>
+or <span class="cs">\insec</span><span class="brx">[</span>sec:example<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/6df3b9ff3a5acd72b80fdaf418ec3be5.webp" width="620">
+     </li>
+    </ul>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Prefer semantic interfaces for repeated styles</b>
+</p>
+     <p>If all equation references or all section references must have the same form,
+define that form once.
+</p>
+     <p>This separates:
+</p>
+     <pre>reference identity
+       !=
+reference presentation
+</pre>
+     <p>and makes later typographic changes much easier.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._Structural_prefixes_in_references">
+      9. Structural prefixes in references
+     </span>
+    </h2>
+    <p>The structure printed in a heading and the structure printed in a reference
+are related, but they need not be identical.
+</p>
+    <p>For example, a document may display sections without the chapter prefix while
+a reference must include the chapter number to remain unambiguous.
+</p>
+    <p><tt><a href="../Command/setupreferencestructureprefix.html" title="Command/setupreferencestructureprefix">\setupreferencestructureprefix</a></tt> controls which structural prefix
+segments appear in references.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:2<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:3<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:4<span class="brx">]</span>
+</pre>
+    <p>With a structure in which chapters use Roman numerals and sections use
+letters, different segment ranges can produce progressively more structural
+context.
+</p>
+    <p>The traditional shorthand illustration is:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:2<span class="brx">]</span> <span class="comment">% no prefix</span>
 <span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:3<span class="brx">]</span> <span class="comment">% I</span>
 <span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>2:4<span class="brx">]</span> <span class="comment">% I.A</span>
 
 <span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>3:4<span class="brx">]</span> <span class="comment">% I.A</span>
 <span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>4:4<span class="brx">]</span> <span class="comment">% A</span>
-<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>5:4<span class="brx">]</span> <span class="comment">% nothing</span>
+<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>prefixsegments<span class="brx">=</span>5:4<span class="brx">]</span> <span class="comment">% no prefix</span>
 </pre>
+    <p>The exact result depends on the document's structural hierarchy and numbering
+configuration.
+</p>
     <h2>
-     <span class="mw-headline" id="Adjusting_the_separator_in_between_the_referenced_prefixes">
-      Adjusting the separator in between the referenced prefixes
+     <span class="mw-headline" id="10._Changing_separators_in_referenced_prefixes">
+      10. Changing separators in referenced prefixes
      </span>
     </h2>
-    <p>To adjust the separator between the different structure
-levels in the referencing commands, like <tt><a href="../Command/in.html" title="Command/in">\in</a></tt>, the command
-<tt><a class="new" href="../index.php?title=Command/definestructureseparatorset&action=edit&redlink=1.html" title="Command/definestructureseparatorset (page does not exist)">\definestructureseparatorset</a></tt> is used.
+    <p>The separator used between structural levels can be configured independently.
 </p>
-    <h3>
-     <span class="mw-headline" id="Example_3">
-      Example
-     </span>
-    </h3>
-    <p>To change the separator between chapter and section from a dot to a hyphen use
-<tt><a class="new" href="../index.php?title=Command/definestructureseparatorset&action=edit&redlink=1.html" title="Command/definestructureseparatorset (page does not exist)">\definestructureseparatorset</a></tt> as follows.
+    <p>For example, to use a hyphen rather than a dot between structural components:
 </p>
-    <pre class="tex"><span class="cs">\definestructureseparatorset</span> <span class="brx">[</span>default<span class="brx">]</span> <span class="brx">[</span>,,-<span class="brx">]</span>
+    <pre class="tex"><span class="cs">\definestructureseparatorset</span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>,,-<span class="brx">]</span>
 </pre>
+    <p>See:
+</p>
+    <ul>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/definestructureseparatorset&action=edit&redlink=1.html" title="Command/definestructureseparatorset (page does not exist)">
+        \definestructureseparatorset
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <p>This can be useful when a reference such as:
+</p>
+    <pre>2.3
+</pre>
+    <p>must instead be presented as:
+</p>
+    <pre>2-3
+</pre>
+    <p>according to the document's house style.
+</p>
     <h2>
-     <span class="mw-headline" id="Putting_a_separator_in_the_heading_but_not_the_reference">
-      Putting a separator in the heading but not the reference
+     <span class="mw-headline" id="11._Heading_punctuation_and_reference_punctuation">
+      11. Heading punctuation and reference punctuation
      </span>
     </h2>
-    <p>Sometimes you want to have a separator in the heading but not the reference.  For example, you want section heading to look like "3. This is a new section" (with a dot after the section number), but references to the section should not have the dot (they should be like "In section 3 we found...").  Wolfgang Schuster gave a solution (for MkIV) <a class="external text" href="http://www.ntg.nl/pipermail/ntg-context/2013/072650.html" rel="nofollow">on the list</a>:
+    <p>Sometimes punctuation that belongs in a heading number should not be repeated
+when that number is referenced.
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\defineprocessor</span></span><span class="brx">[</span>dostopper<span class="brx">]</span><span class="brx">[</span>right<span class="brx">=</span>.<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\defineprocessor</span></span><span class="brx">[</span>nostopper<span class="brx">]</span><span class="brx">[</span>right<span class="brx">=</span><span class="brx">]</span>
+    <p>For example:
+</p>
+    <pre>3. This is a new section
+</pre>
+    <p>may be desirable as a heading, while the prose should say:
+</p>
+    <pre>In section 3 we found ...
+</pre>
+    <p>rather than:
+</p>
+    <pre>In section 3. we found ...
+</pre>
+    <p>A long-standing solution uses processors and conversion sets:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineprocessor</span></span>
+  <span class="brx">[</span>dostopper<span class="brx">]</span>
+  <span class="brx">[</span>right<span class="brx">=</span>.<span class="brx">]</span>
 
-<span class="cs"><span class="stylecs">\defineconversionset</span></span><span class="brx">[</span>stopperconversionyes<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>dostopper-&gt;n<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\defineconversionset</span></span><span class="brx">[</span>stopperconversionnop<span class="brx">]</span><span class="brx">[</span><span class="brx">]</span><span class="brx">[</span>nostopper-&gt;n<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineprocessor</span></span>
+  <span class="brx">[</span>nostopper<span class="brx">]</span>
+  <span class="brx">[</span>right<span class="brx">=</span><span class="brx">]</span>
 
-<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>sectionconversionset<span class="brx">=</span>stopperconversionyes<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineconversionset</span></span>
+  <span class="brx">[</span>stopperconversionyes<span class="brx">]</span>
+  <span class="brx">[</span><span class="brx">]</span>
+  <span class="brx">[</span>dostopper-&gt;n<span class="brx">]</span>
 
-<span class="comment">%\setupreferencestructureprefix[chapter][default][prefixconversionset=stopperconversionnop]</span>
-<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>prefixconversionset<span class="brx">=</span>stopperconversionnop<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\defineconversionset</span></span>
+  <span class="brx">[</span>stopperconversionnop<span class="brx">]</span>
+  <span class="brx">[</span><span class="brx">]</span>
+  <span class="brx">[</span>nostopper-&gt;n<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>sectionconversionset<span class="brx">=</span>stopperconversionyes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupreferencestructureprefix</span></span>
+  <span class="brx">[</span>default<span class="brx">]</span>
+  <span class="brx">[</span>prefixconversionset<span class="brx">=</span>stopperconversionnop<span class="brx">]</span>
 
 <span class="cs"><span class="documentcs">\starttext</span></span>
 
@@ -356,23 +1504,96 @@ levels in the referencing commands, like <tt><a href="../Command/in.html" title=
 In <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>Chapter<span class="br">}</span><span class="brx">[</span>one<span class="brx">]</span> we learn.
 
 <span class="cs"><span class="documentcs">\stoptext</span></span>
-
 </pre>
-    <h2>
-     <span class="mw-headline" id="References_to_an_external_file">
-      References to an external file
-     </span>
-    </h2>
-    <p>You can refer to referenced elements in an external file. MkIV requires for this the presence of the <b>tuc-file</b> of the referenced file. ConTeXt will catch the information to be included from this file.
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Advanced formatting recipe</b>
 </p>
+     <p>This example controls the presentation of structural numbering rather than
+the identity of the reference itself.
+</p>
+     <p>Use such machinery only when the required document style cannot be expressed
+by simpler reference-format and prefix settings.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="Example_4">
-      Example
+     <span class="mw-headline" id="11.1._Dispatching_by_an_identifier_prefix">
+      11.1. Dispatching by an identifier prefix
      </span>
     </h3>
-    <p>External files: hasseltbook.tex/pdf/<b>tuc</b>
+    <p>An older convenience recipe automatically chooses a defined reference format
+according to a prefix such as <code>eq:</code> or <code>sec:</code>:
 </p>
-    <p>The contents of hasseltbook.tex could be:
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\myin</span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="br">{</span><span class="comment">%</span>
+  <span class="cs">\expandafter</span><span class="cs">\ifx</span><span class="cs">\csname</span> in<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="cs">\relax</span>
+    <span class="cs"><span class="systemcs">\writestatus</span></span><span class="br">{</span>warning<span class="br">}</span><span class="br">{</span>referenceformat in<span class="brx">#</span>1 not defined<span class="br">}</span><span class="comment">%</span>
+    <span class="cs"><span class="documentcs">\in</span></span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs">\else</span>
+    <span class="cs">\csname</span> in<span class="brx">#</span>1<span class="cs">\endcsname</span><span class="brx">[</span><span class="brx">#</span>1:<span class="brx">#</span>2<span class="brx">]</span><span class="comment">%</span>
+  <span class="cs">\fi</span><span class="br">}</span>
+</pre>
+    <p>With formats such as <code>\ineq</code> and <code>\insec</code> already
+defined, this permits:
+</p>
+    <pre class="tex">See <span class="cs">\myin</span><span class="brx">[</span>eq:some equation<span class="brx">]</span>
+or <span class="cs">\myin</span><span class="brx">[</span>sec:some section<span class="brx">]</span>.
+</pre>
+    <p>This is a user-defined convenience macro, not a fundamental part of the
+ConTeXt reference mechanism.
+</p>
+    <p>For most documents, explicitly named semantic formats are easier to read and
+maintain.
+</p>
+    <h2>
+     <span class="mw-headline" id="12._References_to_another_document">
+      12. References to another document
+     </span>
+    </h2>
+    <p>ConTeXt can also use reference information produced by another document.
+</p>
+    <p>This is a different problem from referring to another section within the
+same compiled document.
+</p>
+    <p>The basic model is:
+</p>
+    <pre>external document
+      |
+      | compile
+      v
+reference information
+      |
+      | imported with
+      v
+\useexternaldocument
+      |
+      v
+logical document name
+      |
+      +-------------------------+
+      |                         |
+      v                         v
+\from[document]       document::reference
+                                |
+                      +---------+---------+
+                      |         |         |
+                     \in       \at      \about
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>External document does not mean the crossref module</b>
+</p>
+     <p>The external-document mechanism described here is part of ConTeXt's native
+reference system.
+</p>
+     <p>It is unrelated to the <code>type=external</code> terminology of the
+third-party <a href="Crossref_module.html" title="References notes and floats/Crossref module">Cross Referencing
+module</a>.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="12.1._Prepare_the_referenced_document">
+      12.1. Prepare the referenced document
+     </span>
+    </h3>
+    <p>Suppose <code>hasseltbook.tex</code> contains:
 </p>
     <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
 
@@ -380,78 +1601,949 @@ In <span class="cs"><span class="documentcs">\in</span></span><span class="br">{
   <span class="cs"><span class="documentcs">\midaligned</span></span><span class="br">{</span><span class="cs">\tfd</span> Festivities in Hasselt<span class="br">}</span>
 <span class="cs"><span class="documentcs">\stopstandardmakeup</span></span>
 
-<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span>Euifeest,reference<span class="brx">=</span>euifeest<span class="brx">]</span>
-  Something about the Euifeest.<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>Euifeest<span class="br">}</span>
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Euifeest<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>euifeest<span class="br">}</span><span class="brx">]</span>
+
+Something about the Euifeest.
+
+<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>Euifeest<span class="br">}</span>
+
 <span class="cs"><span class="documentcs">\stopchapter</span></span>
 
 <span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
-    <p>In your document you can say:
+    <p>Compile this document first.
+</p>
+    <p>ConTeXt writes reference information generated during compilation to its
+auxiliary data, normally including the document's <code>.tuc</code> file.
+</p>
+    <p>For example:
+</p>
+    <pre>hasseltbook.tex
+       |
+       | context hasseltbook.tex
+       v
+hasseltbook.pdf
+hasseltbook.tuc
+</pre>
+    <p>The reference metadata must be available when the referring document is
+compiled.
+</p>
+    <h3>
+     <span class="mw-headline" id="12.2._Register_the_external_document">
+      12.2. Register the external document
+     </span>
+    </h3>
+    <p>In the referring document:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\useexternaldocument</span></span>
+  <span class="brx">[</span>hia<span class="brx">]</span>
+  <span class="brx">[</span>hasseltbook<span class="brx">]</span>
+  <span class="brx">[</span>Festivities in Hasselt<span class="brx">]</span>
+</pre>
+    <p>Here:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Value
+       </th>
+       <th>
+        Role
+       </th>
+      </tr>
+      <tr>
+       <td><code>hia</code>
+</td>
+       <td>Logical name used inside the referring document
+</td>
+      </tr>
+      <tr>
+       <td><code>hasseltbook</code>
+</td>
+       <td>External document/file
+</td>
+      </tr>
+      <tr>
+       <td><code>Festivities in Hasselt</code>
+</td>
+       <td>Descriptive document title
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The logical name is independent of the reference identifiers inside the
+external document.
+</p>
+    <h3>
+     <span class="mw-headline" id="12.3._Refer_to_the_document">
+      12.3. Refer to the document
+     </span>
+    </h3>
+    <p>The document itself can be referred to with:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>
+</pre>
+    <p>For example:
+</p>
+    <pre class="tex">Most tourist attractions are described in <span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.4._Refer_to_a_target_inside_the_external_document">
+      12.4. Refer to a target inside the external document
+     </span>
+    </h3>
+    <p>Use:
+</p>
+    <pre>logical-document-name::reference
+</pre>
+    <p>For example:
+</p>
+    <pre>hia::euifeest
+</pre>
+    <p>Ordinary reference commands can then query the imported target:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\about</span></span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+</pre>
+    <pre class="tex"><span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+</pre>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+</pre>
+    <p>A complete example is:
 </p>
     <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
-  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\useexternaldocument</span></span>
-  <span class="brx">[</span>hia<span class="brx">]</span><span class="brx">[</span>hasseltbook<span class="brx">]</span><span class="brx">[</span>Festivities in Hasselt<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\setupinteraction</span></span>
   <span class="brx">[</span>state<span class="brx">=</span>start,
    color<span class="brx">=</span>green,
    style<span class="brx">=</span>bold<span class="brx">]</span>
 
+<span class="cs"><span class="stylecs">\useexternaldocument</span></span>
+  <span class="brx">[</span>hia<span class="brx">]</span>
+  <span class="brx">[</span>hasseltbook<span class="brx">]</span>
+  <span class="brx">[</span>Festivities in Hasselt<span class="brx">]</span>
+
 <span class="cs"><span class="documentcs">\starttext</span></span>
-Most tourist attractions are described in <span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.<span class="cs"><span class="documentcs">\crlf</span></span>
-A description of the <span class="cs"><span class="documentcs">\about</span></span><span class="brx">[</span>hia::euifeest<span class="brx">]</span> is found in <span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.<span class="cs"><span class="documentcs">\crlf</span></span>
-The eui||feest is described on <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span> in <span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.<span class="cs"><span class="documentcs">\crlf</span></span>
-See for more information <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span> in <span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+
+Most tourist attractions are described in
+<span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+
+A description of
+<span class="cs"><span class="documentcs">\about</span></span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+is found in
+<span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+
+The Euifeest is described on
+<span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+in
+<span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+
+See for more information
+<span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="brx">[</span>hia::euifeest<span class="brx">]</span>
+in
+<span class="cs"><span class="documentcs">\from</span></span><span class="brx">[</span>hia<span class="brx">]</span>.
+
 <span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
-    <p>Note how the link is established to the externalfile: 
+    <p>The important syntax is:
 </p>
-    <pre class="tex"><span class="cs">\command</span><span class="brx">[</span>symbolic-name::reference<span class="brx">]</span></pre>
+    <pre>external-document::reference
+</pre>
+    <p>rather than merely:
+</p>
+    <pre>reference
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.5._Same-document_and_external-document_references">
+      12.5. Same-document and external-document references
+     </span>
+    </h3>
+    <p>This distinction becomes especially important in large projects.
+</p>
+    <p>A reference in the same assembled document may look like:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>comp:A1<span class="brx">]</span>
+</pre>
+    <p>while a target imported through an external-document name uses:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>refB::comp:B1<span class="brx">]</span>
+</pre>
+    <p>where <code>refB</code> has first been declared with
+<code>\useexternaldocument</code>.
+</p>
+    <p>Thus:
+</p>
+    <pre>local stable identifier
+       comp:A1
+
+external document prefix
+       refB
+
+combined external reference
+       refB::comp:B1
+</pre>
+    <h3>
+     <span class="mw-headline" id="12.6._Files_in_other_directories">
+      12.6. Files in other directories
+     </span>
+    </h3>
+    <p>The external document need not necessarily have the same base directory as
+the referring source.
+</p>
+    <p>A relative path may be used, for example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\useexternaldocument</span></span>
+  <span class="brx">[</span>refB<span class="brx">]</span>
+  <span class="brx">[</span>../volume-b/product-b<span class="brx">]</span>
+  <span class="brx">[</span>Volume B<span class="brx">]</span>
+</pre>
+    <p>The important practical questions are:
+</p>
+    <ol>
+     <li>
+      can ConTeXt find the referenced document data?
+     </li>
+     <li>
+      has the external document been compiled recently enough?
+     </li>
+     <li>
+      is its reference metadata available?
+     </li>
+     <li>
+      does the logical prefix match the one used before
+      <code>::</code>
+      ?
+     </li>
+     <li>
+      is the external PDF available where interactive navigation expects it?
+     </li>
+    </ol>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Compilation order</b>
+</p>
+     <p>For a reference to another independently compiled document, a safe workflow
+is:
+</p>
+     <pre>1. compile the referenced document
+           |
+           v
+2. make its reference data available
+           |
+           v
+3. compile the referring document
+           |
+           v
+4. after structural changes, refresh both
+</pre>
+     <p>If the external document changes its structure or pagination, regenerate its
+reference information before expecting the referring document to show the
+new values.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="12.7._Products_and_components">
+      12.7. Products and components
+     </span>
+    </h3>
+    <p>A <code>product</code>/<code>component</code> project introduces an important
+distinction.
+</p>
+    <p>Components assembled into the <b>same product</b> normally participate in the
+same document reference space. They should not automatically be treated as
+external documents merely because their source is stored in separate files.
+</p>
+    <p>By contrast, two independently compiled products may need the
+<code>\useexternaldocument</code> mechanism.
+</p>
+    <p>Think in terms of the compiled document rather than merely the source-file
+layout:
+</p>
+    <pre>product A
+   |
+   +-- component A1
+   +-- component A2
+          |
+          | ordinary product references
+          v
+      same reference space
+
+
+product A                 product B
+   |                          |
+   |                          |
+   +---- external reference --+
+          refB::target
+</pre>
+    <p>See also:
+</p>
+    <ul>
+     <li>
+      <a class="new" href="../index.php?title=Project_structure&action=edit&redlink=1" title="Project structure (page does not exist)">
+       Project structure
+      </a>
+     </li>
+    </ul>
     <h2>
-     <span class="mw-headline" id="Related_Modules">
-      Related Modules
+     <span class="mw-headline" id="13._Troubleshooting_unresolved_references">
+      13. Troubleshooting unresolved references
      </span>
     </h2>
+    <p>An unresolved reference is usually a problem with the target, identifier,
+compilation state, or external-document prefix.
+</p>
+    <p>Check the following.
+</p>
+    <h3>
+     <span id="13.1._Does_the_target_exist?">
+     </span>
+     <span class="mw-headline" id="13.1._Does_the_target_exist.3F">
+      13.1. Does the target exist?
+     </span>
+    </h3>
+    <p>If the source says:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:method<span class="brx">]</span>
+</pre>
+    <p>there must be a target named:
+</p>
+    <pre>sec:method
+</pre>
+    <h3>
+     <span id="13.2._Does_the_identifier_match_exactly?">
+     </span>
+     <span class="mw-headline" id="13.2._Does_the_identifier_match_exactly.3F">
+      13.2. Does the identifier match exactly?
+     </span>
+    </h3>
+    <p>Keep reference identifiers systematic and avoid accidental changes in
+capitalization or spelling.
+</p>
+    <h3>
+     <span id="13.3._Are_you_asking_for_the_right_property?">
+     </span>
+     <span class="mw-headline" id="13.3._Are_you_asking_for_the_right_property.3F">
+      13.3. Are you asking for the right property?
+     </span>
+    </h3>
+    <p>Remember:
+</p>
+    <pre>\in      structural number/value
+\at      page
+\about   associated text/title
+</pre>
+    <h3>
+     <span id="13.4._Is_interaction_relevant_to_the_problem?">
+     </span>
+     <span class="mw-headline" id="13.4._Is_interaction_relevant_to_the_problem.3F">
+      13.4. Is interaction relevant to the problem?
+     </span>
+    </h3>
+    <p>A missing link and an unresolved reference are not necessarily the same
+problem.
+</p>
+    <p>First determine whether the reference itself resolves.
+</p>
+    <p>Then check:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+</pre>
+    <p>if interactive PDF navigation is required.
+</p>
+    <h3>
+     <span id="13.5._Is_the_target_in_another_document?">
+     </span>
+     <span class="mw-headline" id="13.5._Is_the_target_in_another_document.3F">
+      13.5. Is the target in another document?
+     </span>
+    </h3>
+    <p>For an imported document, check both parts:
+</p>
+    <pre>document::reference
+</pre>
+    <p>For example:
+</p>
+    <pre>hia::euifeest
+</pre>
+    <h3>
+     <span id="13.6._Has_the_external_document_been_compiled?">
+     </span>
+     <span class="mw-headline" id="13.6._Has_the_external_document_been_compiled.3F">
+      13.6. Has the external document been compiled?
+     </span>
+    </h3>
+    <p>An external PDF alone should not be treated as a substitute for ConTeXt's
+reference metadata.
+</p>
+    <p>Compile the referenced source and make its generated reference information
+available to the referring document.
+</p>
+    <h3>
+     <span class="mw-headline" id="13.7._Use_visual_debugging">
+      13.7. Use visual debugging
+     </span>
+    </h3>
+    <p>For complicated cases, see:
+</p>
+    <ul>
+     <li>
+      <a href="Visual_debugging.html" title="References notes and floats/Visual debugging">
+       References &mdash; Visual debugging
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="14._Related_reference_mechanisms">
+      14. Related reference mechanisms
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="14.1._URLs_and_external_resources">
+      14.1. URLs and external resources
+     </span>
+    </h3>
+    <p>A URL is not the same thing as a named structural reference inside a ConTeXt
+document.
+</p>
+    <p>For web addresses, mail links, and related mechanisms, see:
+</p>
+    <ul>
+     <li>
+      <a href="URL.html" title="References notes and floats/URL">
+       URLs and external links
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="14.2._Bibliographic_citations">
+      14.2. Bibliographic citations
+     </span>
+    </h3>
+    <p>A bibliographic citation also refers to something by a stable key, but it
+belongs to the bibliography system rather than the structural reference
+system described on this page.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>authoryear<span class="brx">]</span><span class="brx">[</span>beiser1987<span class="brx">]</span>
+</pre>
+    <p>points to a bibliographic record, whereas:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:references<span class="brx">]</span>
+</pre>
+    <p>points to a document object.
+</p>
+    <p>The conceptual resemblance is useful:
+</p>
+    <pre>stable identifier
+       |
+       v
+known target
+       |
+       v
+chosen representation
+</pre>
+    <p>but the mechanisms are different.
+</p>
+    <p>See:
+</p>
+    <ul>
+     <li>
+      <a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations
+      </a>
+     </li>
+    </ul>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not confuse reference systems</b>
+</p>
+     <pre>native ConTeXt reference
+        !=
+bibliographic citation
+        !=
+third-party crossref module
+        !=
+bibliographic crossref data
+</pre>
+    </div>
+    <h3>
+     <span class="mw-headline" id="14.3._Cross_Referencing_module">
+      14.3. Cross Referencing module
+     </span>
+    </h3>
+    <p>The third-party <code>crossref</code> module provides a specialized
+<code>\crossref</code> presentation interface.
+</p>
+    <p>It is not required for ordinary ConTeXt references.
+</p>
+    <p>See:
+</p>
     <ul>
      <li>
       <a href="Crossref_module.html" title="References notes and floats/Crossref module">
-       Cross Referencing
+       Cross Referencing module
       </a>
-      : Cross references in a (academic) text are either internal (linking to an other point inside the same document) or external (linking to a entity of the bibliography that points to a different document).
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="14.4._Paragraph_referencing">
+      14.4. Paragraph referencing
+     </span>
+    </h3>
+    <p>The third-party <code>pararef</code> module provides specialized
+paragraph-level referencing.
+</p>
+    <p>See:
+</p>
+    <ul>
+     <li>
+      <a href="../Text_blocks/Environments/Paragraph_referencing.html" title="Text blocks/Environments/Paragraph referencing">
+       Paragraph referencing
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="15._Command_reference">
+      15. Command reference
+     </span>
+    </h2>
+    <p>For exact syntax and parameter descriptions, use the command reference pages.
+</p>
+    <h3>
+     <span class="mw-headline" id="15.1._Creating_reference_targets">
+      15.1. Creating reference targets
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/reference.html" title="Command/reference">
+        \reference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/pagereference.html" title="Command/pagereference">
+        \pagereference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/textreference.html" title="Command/textreference">
+        \textreference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/contentreference&action=edit&redlink=1.html" title="Command/contentreference (page does not exist)">
+        \contentreference
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="15.2._Using_references">
+      15.2. Using references
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/in.html" title="Command/in">
+        \in
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/at.html" title="Command/at">
+        \at
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/about.html" title="Command/about">
+        \about
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="15.3._Formatting_references">
+      15.3. Formatting references
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/definereferenceformat.html" title="Command/definereferenceformat">
+        \definereferenceformat
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupreferencestructureprefix.html" title="Command/setupreferencestructureprefix">
+        \setupreferencestructureprefix
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/definestructureseparatorset&action=edit&redlink=1.html" title="Command/definestructureseparatorset (page does not exist)">
+        \definestructureseparatorset
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="15.4._Interaction">
+      15.4. Interaction
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+        \setupinteraction
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Orientation page versus command reference</b>
+</p>
+     <p>This page explains how the pieces fit together.
+</p>
+     <p>The <code>Command/*</code> pages are the appropriate place for exhaustive
+argument lists and parameter definitions.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="16._Mental_map">
+      16. Mental map
+     </span>
+    </h2>
+    <p>The native reference system can be summarized as follows:
+</p>
+    <pre>                         ConTeXt / LMTX
+                              |
+                              v
+                    document structure
+                              |
+             +----------------+----------------+
+             |                                 |
+             v                                 v
+    structural target                  explicit target
+ chapter / section / figure          \pagereference
+ table / formula / note              \textreference
+             |                        \reference
+             |                        \contentreference
+             +---------------+-----------------+
+                             |
+                             v
+                     stable identifier
+                      sec:introduction
+                             |
+              +--------------+--------------+
+              |              |              |
+              v              v              v
+             \in            \at           \about
+              |              |              |
+              v              v              v
+       number / value       page        title / text
+              \              |              /
+               +-------------+-------------+
+                             |
+                             v
+                    optional interaction
+                 \setupinteraction[state=start]
+                             |
+                             v
+                     PDF navigation
+
+
+                    another document
+                           |
+                           v
+                 \useexternaldocument
+                           |
+                           v
+                    logical prefix
+                           |
+                           v
+                document::reference
+                           |
+                +----------+----------+
+                |          |          |
+               \in        \at       \about
+</pre>
+    <p>The most useful distinctions to remember are:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Do not confuse
+       </th>
+       <th>
+        With
+       </th>
+      </tr>
+      <tr>
+       <td>Target
+</td>
+       <td>Reference identifier
+</td>
+      </tr>
+      <tr>
+       <td>Reference identifier
+</td>
+       <td>Printed number or page
+</td>
+      </tr>
+      <tr>
+       <td>Printed reference
+</td>
+       <td>Interactive PDF link
+</td>
+      </tr>
+      <tr>
+       <td><code>fig:cow</code>
+</td>
+       <td><code>document::reference</code>
+</td>
+      </tr>
+      <tr>
+       <td>Source-file boundary
+</td>
+       <td>Compiled-document boundary
+</td>
+      </tr>
+      <tr>
+       <td>Native ConTeXt reference
+</td>
+       <td>Third-party <code>crossref</code> module
+</td>
+      </tr>
+      <tr>
+       <td>Structural reference
+</td>
+       <td>Bibliographic citation
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="17._Where_to_go_next">
+      17. Where to go next
+     </span>
+    </h2>
+    <p>The reference system covers several levels of complexity.
+</p>
+    <p>For ordinary documents:
+</p>
+    <pre>start here
+    |
+    v
+create a stable target
+    |
+    v
+use \in / \at / \about
+    |
+    v
+enable interaction if needed
+</pre>
+    <p>For repeated typographic conventions:
+</p>
+    <pre>reference target
+      |
+      v
+\definereferenceformat
+      |
+      v
+semantic reference command
+</pre>
+    <p>For large multifile projects:
+</p>
+    <pre>same compiled product?
+      |
+   +--+--+
+   |     |
+  yes    no
+   |     |
+   v     v
+normal   \useexternaldocument
+reference       |
+                v
+        document::reference
+</pre>
+    <p>For exact command syntax, continue with the command reference pages rather
+than treating this orientation page as an exhaustive command manual.
+</p>
+    <h2>
+     <span class="mw-headline" id="18._Related_pages">
+      18. Related pages
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="18.1._References_and_interaction">
+      18.1. References and interaction
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="../References_notes_and_floats.html" title="References notes and floats">
+       References, notes and floats
+      </a>
+     </li>
+     <li>
+      <a href="Visual_debugging.html" title="References notes and floats/Visual debugging">
+       References &mdash; Visual debugging
+      </a>
+     </li>
+     <li>
+      <a href="URL.html" title="References notes and floats/URL">
+       URLs and external links
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Project_structure&action=edit&redlink=1" title="Project structure (page does not exist)">
+       Project structure
+      </a>
+     </li>
+     <li>
+      <a href="../Document_structure_and_headlines/Collections_of_tips_and_tricks#Access_to_head_number.html" title="Document structure and headlines/Collections of tips and tricks">
+       Access to head numbers
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="18.2._Bibliography">
+      18.2. Bibliography
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="18.3._Specialized_modules">
+      18.3. Specialized modules
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="Crossref_module.html" title="References notes and floats/Crossref module">
+       Cross Referencing module
+      </a>
      </li>
      <li>
       <a href="../Text_blocks/Environments/Paragraph_referencing.html" title="Text blocks/Environments/Paragraph referencing">
        Paragraph referencing
       </a>
-      : The pararef module understands a paragraph as a full closed block of one thought.
      </li>
     </ul>
-    <h2>
-     <span class="mw-headline" id="Related_pages">
-      Related pages
+    <h3>
+     <span class="mw-headline" id="18.4._Command_reference">
+      18.4. Command reference
      </span>
-    </h2>
+    </h3>
     <ul>
      <li>
-      How to access the
-      <a href="../Document_structure_and_headlines/Collections_of_tips_and_tricks#Access_to_head_number.html" title="Document structure and headlines/Collections of tips and tricks">
-       head numbers
-      </a>
-      in a document.
+      <tt>
+       <a href="../Command/reference.html" title="Command/reference">
+        \reference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/pagereference.html" title="Command/pagereference">
+        \pagereference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/textreference.html" title="Command/textreference">
+        \textreference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/contentreference&action=edit&redlink=1.html" title="Command/contentreference (page does not exist)">
+        \contentreference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/in.html" title="Command/in">
+        \in
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/at.html" title="Command/at">
+        \at
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/about.html" title="Command/about">
+        \about
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/definereferenceformat.html" title="Command/definereferenceformat">
+        \definereferenceformat
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupreferencestructureprefix.html" title="Command/setupreferencestructureprefix">
+        \setupreferencestructureprefix
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/definestructureseparatorset&action=edit&redlink=1.html" title="Command/definestructureseparatorset (page does not exist)">
+        \definestructureseparatorset
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+        \setupinteraction
+       </a>
+      </tt>
      </li>
     </ul>
-    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
-     <tbody>
-      <tr>
-       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
-</td>
-       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Describe what the arguments of the commands do and how the commands work <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
-</td>
-      </tr>
-     </tbody>
-    </table>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-top:1.5em;">
+     <p><b>References in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="../References_notes_and_floats.html" title="References notes and floats">References, notes and floats</a> &nbsp;&middot;&nbsp;
+<b>References</b> &nbsp;&middot;&nbsp;
+<a href="Visual_debugging.html" title="References notes and floats/Visual debugging">Visual debugging</a> &nbsp;&middot;&nbsp;
+<a href="URL.html" title="References notes and floats/URL">URLs and external links</a> &nbsp;&middot;&nbsp;
+<a href="Crossref_module.html" title="References notes and floats/Crossref module">Cross Referencing module</a>
+</p>
+    </div>
    </div>
   </article>
   <footer>
@@ -462,7 +2554,7 @@ See for more information <span class="cs"><span class="documentcs">\in</span></s
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-28
+     Mirrored on 2026-08-29
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

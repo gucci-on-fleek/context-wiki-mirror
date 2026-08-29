@@ -18,7 +18,7 @@
     Understanding bibliography datasets, styles, renderings, selection, and sorting
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7557&diff=43660">2026-08-03</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7557&diff=43697">2026-08-28</a>
         </p>
   </header>
   <article>
@@ -247,22 +247,22 @@
        </ul>
       </li>
       <li class="toclevel-1 tocsection-20">
-       <a href="#6._Selecting_records_with_method">
+       <a href="#6._Controlling_bibliography_scope_and_reuse">
         <span class="tocnumber">
          6
         </span>
         <span class="toctext">
-         6. Selecting records with method
+         6. Controlling bibliography scope and reuse
         </span>
        </a>
        <ul>
         <li class="toclevel-2 tocsection-21">
-         <a href="#6.1._Selection_answers_.E2.80.9Cwhich_records.3F.E2.80.9D">
+         <a href="#6.1._The_role_of_method">
           <span class="tocnumber">
            6.1
           </span>
           <span class="toctext">
-           6.1. Selection answers &ldquo;which records?&rdquo;
+           6.1. The role of method
           </span>
          </a>
         </li>
@@ -277,38 +277,48 @@
          </a>
         </li>
         <li class="toclevel-2 tocsection-23">
-         <a href="#6.3._method.3Dglobal">
+         <a href="#6.3._Structural_scope_with_criterium">
           <span class="tocnumber">
            6.3
           </span>
           <span class="toctext">
-           6.3. method=global
+           6.3. Structural scope with criterium
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-24">
-         <a href="#6.4._method.3Dlocal">
+         <a href="#6.4._Reusing_already_rendered_records_with_repeat">
           <span class="tocnumber">
            6.4
           </span>
           <span class="toctext">
-           6.4. method=local
+           6.4. Reusing already rendered records with repeat
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-25">
-         <a href="#6.5._MWE:_dataset_selection_versus_global_selection">
+         <a href="#6.5._Combining_method.2C_criterium.2C_and_repeat">
           <span class="tocnumber">
            6.5
           </span>
           <span class="toctext">
-           6.5. MWE: dataset selection versus global selection
+           6.5. Combining method, criterium, and repeat
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#6.6._MWE:_cited_records_versus_the_complete_dataset">
+          <span class="tocnumber">
+           6.6
+          </span>
+          <span class="toctext">
+           6.6. MWE: cited records versus the complete dataset
           </span>
          </a>
         </li>
        </ul>
       </li>
-      <li class="toclevel-1 tocsection-26">
+      <li class="toclevel-1 tocsection-27">
        <a href="#7._Sorting_records_with_sorttype">
         <span class="tocnumber">
          7
@@ -318,7 +328,7 @@
         </span>
        </a>
        <ul>
-        <li class="toclevel-2 tocsection-27">
+        <li class="toclevel-2 tocsection-28">
          <a href="#7.1._Sorting_answers_.E2.80.9Cin_which_order.3F.E2.80.9D">
           <span class="tocnumber">
            7.1
@@ -328,17 +338,17 @@
           </span>
          </a>
         </li>
-        <li class="toclevel-2 tocsection-28">
-         <a href="#7.2._Selection_and_sorting_are_independent">
+        <li class="toclevel-2 tocsection-29">
+         <a href="#7.2._Bibliography_scope_and_sorting_are_independent">
           <span class="tocnumber">
            7.2
           </span>
           <span class="toctext">
-           7.2. Selection and sorting are independent
+           7.2. Bibliography scope and sorting are independent
           </span>
          </a>
         </li>
-        <li class="toclevel-2 tocsection-29">
+        <li class="toclevel-2 tocsection-30">
          <a href="#7.3._Common_sorting_intentions">
           <span class="tocnumber">
            7.3
@@ -350,7 +360,7 @@
         </li>
        </ul>
       </li>
-      <li class="toclevel-1 tocsection-30">
+      <li class="toclevel-1 tocsection-31">
        <a href="#8._MWE:_putting_the_layers_together">
         <span class="tocnumber">
          8
@@ -360,7 +370,7 @@
         </span>
        </a>
       </li>
-      <li class="toclevel-1 tocsection-31">
+      <li class="toclevel-1 tocsection-32">
        <a href="#9._Diagnosing_the_wrong_layer">
         <span class="tocnumber">
          9
@@ -370,7 +380,7 @@
         </span>
        </a>
       </li>
-      <li class="toclevel-1 tocsection-32">
+      <li class="toclevel-1 tocsection-33">
        <a href="#10._What_you_have_learned">
         <span class="tocnumber">
          10
@@ -380,7 +390,7 @@
         </span>
        </a>
       </li>
-      <li class="toclevel-1 tocsection-33">
+      <li class="toclevel-1 tocsection-34">
        <a href="#11._Related_pages_and_commands">
         <span class="tocnumber">
          11
@@ -417,6 +427,12 @@ explain:
       how the same records can be presented in different ways;
      </li>
      <li>
+      how chapter-level or document-wide bibliography scope is controlled;
+     </li>
+     <li>
+      why an already rendered record may or may not appear again;
+     </li>
+     <li>
       which part of the setup must be changed when the output is wrong.
      </li>
     </ul>
@@ -438,17 +454,27 @@ explain:
       define and place a named rendering;
      </li>
      <li>
-      select records with
+      understand the distinct roles of
       <code>method</code>
-      ;
+      ,
+     </li>
+    </ul>
+    <pre> <code>criterium</code>, and <code>repeat</code>;
+</pre>
+    <ul>
+     <li>
+      control the scope from which a bibliography is rendered;
      </li>
      <li>
-      sort selected records with
+      understand when already rendered records may be reused;
+     </li>
+     <li>
+      sort resulting records with
       <code>sorttype</code>
       ;
      </li>
      <li>
-      distinguish selection from sorting;
+      distinguish bibliography scope from sorting;
      </li>
      <li>
       identify the layer responsible for an unexpected result.
@@ -457,9 +483,9 @@ explain:
     <div style="margin:1em 0; padding:1em 1.2em; border:1px solid #aac7aa; border-left:6px solid #5f9f68; background:#f4faf4;">
      <p><b>The main difficulty is not the syntax.</b>
 </p>
-     <p>Loading data, formatting citations, defining a bibliography list, selecting
-records, sorting them, and placing the list are related operations, but they
-are not the same operation.
+     <p>Loading data, formatting citations, defining a bibliography list, determining
+its scope, deciding whether entries may be rendered again, sorting them, and
+placing the list are related operations, but they are not the same operation.
 </p>
     </div>
     <h2>
@@ -480,7 +506,11 @@ are not the same operation.
  specification + rendering
         |
         v
- selection with method
+ bibliography scope
+ method + criterium
+        |
+        v
+    repeat policy
         |
         v
  sorting with sorttype
@@ -544,17 +574,33 @@ are not the same operation.
 </td>
       </tr>
       <tr>
-       <td><b>Selection</b>
+       <td><code>method</code>
 </td>
-       <td>Determines which records belong in a particular list.
+       <td>Controls how the rendering uses the available bibliography reference state, for example the dataset or globally registered references.
 </td>
        <td><code>method=dataset</code>, <code>global</code>, or <code>local</code>
 </td>
       </tr>
       <tr>
+       <td><code>criterium</code>
+</td>
+       <td>Restricts the rendering to a particular reference or structural scope, such as the current chapter.
+</td>
+       <td><code>criterium=chapter</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>repeat</code>
+</td>
+       <td>Controls whether records that have already been rendered may be rendered again.
+</td>
+       <td><code>repeat=yes</code>
+</td>
+      </tr>
+      <tr>
        <td><b>Sorting</b>
 </td>
-       <td>Determines the order of the selected records.
+       <td>Determines the order of the resulting records.
 </td>
        <td><code>sorttype=authoryear</code>
 </td>
@@ -582,13 +628,25 @@ are not the same operation.
        Has it been loaded into the expected dataset?
       </li>
       <li>
-       Has the record been cited or otherwise selected?
+       Has the record been cited or otherwise registered for use?
       </li>
       <li>
        Is the correct rendering associated with the correct dataset?
       </li>
       <li>
-       Is the selected record sorted as expected?
+       Do
+       <code>method</code>
+       and
+       <code>criterium</code>
+       describe the intended bibliography scope?
+      </li>
+      <li>
+       Does
+       <code>repeat</code>
+       allow an already rendered record to appear again?
+      </li>
+      <li>
+       Are the resulting records sorted as expected?
       </li>
       <li>
        Is the list placed at the intended location?
@@ -883,13 +941,13 @@ Jacobi's intervention changed the terms of the debate
       <tr>
        <td><code>method=global</code>
 </td>
-       <td>Selection of records used in the document
+       <td>Uses bibliography references registered globally in the document
 </td>
       </tr>
       <tr>
        <td><code>sorttype=authoryear</code>
 </td>
-       <td>Ordering of the selected records
+       <td>Orders the resulting records by author and year
 </td>
       </tr>
      </tbody>
@@ -1077,7 +1135,7 @@ records.
      </li>
      <li>
       <code>sorttype=authoryear</code>
-      defines the order of the selected records.
+      defines the order of the resulting records.
      </li>
     </ul>
     <h3>
@@ -1127,10 +1185,14 @@ file.
        The rendering answers: &ldquo;Which list is this, and how is it configured?&rdquo;
       </li>
       <li>
-       The placement command answers: &ldquo;Where should this list appear?&rdquo;
+       The placement command answers: &ldquo;Where should this list appear, and with what scope for this placement?&rdquo;
       </li>
      </ul>
     </div>
+    <p>Placement options may further restrict the scope of a rendering. In particular,
+<code>criterium</code> can identify a reference or structural scope. This
+becomes important for chapter-level bibliographies.
+</p>
     <h3>
      <span class="mw-headline" id="5.4._Two_placement_interfaces">
       5.4. Two placement interfaces
@@ -1151,21 +1213,39 @@ been defined, because the relation between the rendering and its placement is
 then explicit.
 </p>
     <h2>
-     <span class="mw-headline" id="6._Selecting_records_with_method">
-      6. Selecting records with method
+     <span class="mw-headline" id="6._Controlling_bibliography_scope_and_reuse">
+      6. Controlling bibliography scope and reuse
      </span>
     </h2>
+    <p>Bibliography output depends on more than one setting.
+</p>
+    <p>Three parameters are especially easy to confuse:
+</p>
+    <ul>
+     <li>
+      <code>method</code>
+      ;
+     </li>
+     <li>
+      <code>criterium</code>
+      ;
+     </li>
+     <li>
+      <code>repeat</code>
+      .
+     </li>
+    </ul>
+    <p>They answer different questions and should not be treated as synonyms.
+</p>
     <h3>
-     <span id="6.1._Selection_answers_&ldquo;which_records?&rdquo;">
-     </span>
-     <span class="mw-headline" id="6.1._Selection_answers_.E2.80.9Cwhich_records.3F.E2.80.9D">
-      6.1. Selection answers &ldquo;which records?&rdquo;
+     <span class="mw-headline" id="6.1._The_role_of_method">
+      6.1. The role of method
      </span>
     </h3>
-    <p>A dataset may contain more records than a particular bibliography should
-display.
+    <p>The <code>method</code> setting controls how a rendering uses the bibliography
+reference state available to it.
 </p>
-    <p>The setting <code>method</code> determines which records are selected.
+    <p>Common values include:
 </p>
     <table class="wikitable">
      <tbody>
@@ -1174,29 +1254,33 @@ display.
         Method
        </th>
        <th>
-        Selected records
+        General role
        </th>
       </tr>
       <tr>
        <td><code>dataset</code>
 </td>
-       <td>All records contained in the dataset.
+       <td>Uses the records contained in the dataset itself.
 </td>
       </tr>
       <tr>
        <td><code>global</code>
 </td>
-       <td>Records used throughout the document.
+       <td>Uses bibliography references registered globally in the document.
 </td>
       </tr>
       <tr>
        <td><code>local</code>
 </td>
-       <td>Records used in the current structural scope.
+       <td>Uses a local rendering context rather than the global rendering state.
 </td>
       </tr>
      </tbody>
     </table>
+    <p>The exact effect of <code>local</code> should not be reduced to &ldquo;the current
+chapter&rdquo;. Structural scope is controlled separately with
+<code>criterium</code>.
+</p>
     <h3>
      <span id="6.2._method=dataset">
      </span>
@@ -1210,8 +1294,8 @@ display.
   <span class="brx">[</span>mainlist<span class="brx">]</span>
   <span class="brx">[</span>method<span class="brx">=</span>dataset<span class="brx">]</span>
 </pre>
-    <p>selects every record in the dataset, including records that have not been
-cited.
+    <p>can render records from the dataset independently of whether they have been
+cited in the running text.
 </p>
     <p>This is appropriate for:
 </p>
@@ -1227,43 +1311,106 @@ cited.
      </li>
     </ul>
     <h3>
-     <span id="6.3._method=global">
-     </span>
-     <span class="mw-headline" id="6.3._method.3Dglobal">
-      6.3. method=global
+     <span class="mw-headline" id="6.3._Structural_scope_with_criterium">
+      6.3. Structural scope with criterium
      </span>
     </h3>
-    <p>The setting:
+    <p>The option <code>criterium</code> can restrict a bibliography rendering to a
+particular reference or structural scope.
+</p>
+    <p>A common example is:
 </p>
     <pre class="tex"><span class="cs"><span class="documentcs">\placebtxrendering</span></span>
   <span class="brx">[</span>mainlist<span class="brx">]</span>
-  <span class="brx">[</span>method<span class="brx">=</span>global<span class="brx">]</span>
+  <span class="brx">[</span>criterium<span class="brx">=</span>chapter<span class="brx">]</span>
 </pre>
-    <p>selects records used throughout the document.
+    <p>This asks for a rendering associated with the current chapter.
 </p>
-    <p>This is appropriate when the final bibliography should contain only records
-that have been cited or otherwise registered as used.
+    <p>The important distinction is:
+</p>
+    <pre>method     = rendering/reference-state behaviour
+criterium  = requested structural or reference scope
+</pre>
+    <p>Therefore:
+</p>
+    <pre class="tex">method<span class="brx">=</span>local
+</pre>
+    <p>should not automatically be read as meaning:
+</p>
+    <pre>only records cited in the current chapter
+</pre>
+    <p>Chapter-level bibliographies are developed more fully in Guide 3.
 </p>
     <h3>
-     <span id="6.4._method=local">
-     </span>
-     <span class="mw-headline" id="6.4._method.3Dlocal">
-      6.4. method=local
+     <span class="mw-headline" id="6.4._Reusing_already_rendered_records_with_repeat">
+      6.4. Reusing already rendered records with repeat
      </span>
     </h3>
-    <p>The setting:
+    <p>A record may already have been rendered in an earlier bibliography list.
+</p>
+    <p>The option:
+</p>
+    <pre class="tex">repeat<span class="brx">=</span>yes
+</pre>
+    <p>allows such records to be rendered again.
+</p>
+    <p>This becomes important when, for example:
+</p>
+    <ul>
+     <li>
+      the same work is cited in more than one chapter bibliography;
+     </li>
+     <li>
+      a work appears in a chapter bibliography and later in a final bibliography;
+     </li>
+     <li>
+      several different renderings intentionally reuse the same cited records.
+     </li>
+    </ul>
+    <p>Thus <code>repeat</code> answers a different question from both
+<code>method</code> and <code>criterium</code>:
+</p>
+    <pre>method     -&gt; which rendering/reference state is used?
+criterium  -&gt; which scope is requested?
+repeat     -&gt; may an already rendered record appear again?
+</pre>
+    <h3>
+     <span id="6.5._Combining_method,_criterium,_and_repeat">
+     </span>
+     <span class="mw-headline" id="6.5._Combining_method.2C_criterium.2C_and_repeat">
+      6.5. Combining method, criterium, and repeat
+     </span>
+    </h3>
+    <p>A chapter-level placement may therefore combine parameters:
 </p>
     <pre class="tex"><span class="cs"><span class="documentcs">\placebtxrendering</span></span>
   <span class="brx">[</span>mainlist<span class="brx">]</span>
-  <span class="brx">[</span>method<span class="brx">=</span>local<span class="brx">]</span>
+  <span class="brx">[</span>method<span class="brx">=</span>global,
+   criterium<span class="brx">=</span>chapter,
+   repeat<span class="brx">=</span>yes<span class="brx">]</span>
 </pre>
-    <p>selects records used in the current structural scope.
+    <p>The three settings should be read separately:
 </p>
-    <p>Local chapter and section bibliographies are developed in Guide 3.
+    <ul>
+     <li>
+      <code>method=global</code>
+      uses the globally registered bibliography references;
+     </li>
+     <li>
+      <code>criterium=chapter</code>
+      restricts the rendering to the chapter scope;
+     </li>
+     <li>
+      <code>repeat=yes</code>
+      permits entries already rendered elsewhere to appear again.
+     </li>
+    </ul>
+    <p>This distinction is especially important in documents containing both
+chapter-level and final bibliographies.
 </p>
     <h3>
-     <span class="mw-headline" id="6.5._MWE:_dataset_selection_versus_global_selection">
-      6.5. MWE: dataset selection versus global selection
+     <span class="mw-headline" id="6.6._MWE:_cited_records_versus_the_complete_dataset">
+      6.6. MWE: cited records versus the complete dataset
      </span>
     </h3>
     <p>The following example contains three records, but only two are cited.
@@ -1360,17 +1507,26 @@ Jacobi's intervention transformed the controversy
       <img height="1240" src="wikiteximage/1d0ed0233eebd293a08e37cd450ce13f.webp" width="874">
      </li>
     </ul>
-    <p>The first list contains only the two cited records.
+    <p>The first list contains the two records registered through the citations.
 </p>
-    <p>The second list contains all three records, including
-<code>uncited2020</code>.
+    <p>The second list uses <code>method=dataset</code> and therefore contains all
+three records, including <code>uncited2020</code>.
+</p>
+    <p>It also uses <code>repeat=yes</code>. This permits Beiser and Jacobi, which
+have already appeared in the first bibliography, to be rendered again in the
+second one.
 </p>
     <div style="margin:1em 0; padding:1em 1.2em; border:1px solid #aac7aa; border-left:6px solid #5f9f68; background:#f4faf4;">
      <p><b>What this example demonstrates</b>
 </p>
-     <p>The dataset determines what is available.
+     <p>The dataset determines which records are available.
 </p>
-     <p>The selection method determines what is included in a particular list.
+     <p><code>method</code> influences which bibliography reference state is used.
+</p>
+     <p><code>repeat</code> determines whether already rendered records may appear
+again.
+</p>
+     <p>Structural restriction with <code>criterium</code> is a separate operation.
 </p>
     </div>
     <h2>
@@ -1385,8 +1541,8 @@ Jacobi's intervention transformed the controversy
       7.1. Sorting answers &ldquo;in which order?&rdquo;
      </span>
     </h3>
-    <p>After records have been selected, <code>sorttype</code> determines their
-order.
+    <p>After the bibliography scope has been determined,
+<code>sorttype</code> determines the order of the resulting records.
 </p>
     <p>For example:
 </p>
@@ -1394,15 +1550,21 @@ order.
   <span class="brx">[</span>mainlist<span class="brx">]</span>
   <span class="brx">[</span>sorttype<span class="brx">=</span>authoryear<span class="brx">]</span>
 </pre>
-    <p>sorts the selected records primarily by author and then by year.
+    <p>sorts the resulting records primarily by author and then by year.
 </p>
     <h3>
-     <span class="mw-headline" id="7.2._Selection_and_sorting_are_independent">
-      7.2. Selection and sorting are independent
+     <span class="mw-headline" id="7.2._Bibliography_scope_and_sorting_are_independent">
+      7.2. Bibliography scope and sorting are independent
      </span>
     </h3>
-    <p>If <code>method=global</code> selects four records from a dataset containing
-ten records, then <code>sorttype=authoryear</code> sorts those four records.
+    <p>Suppose a bibliography rendering results in four records from a dataset
+containing ten records.
+</p>
+    <p>Then:
+</p>
+    <pre class="tex">sorttype<span class="brx">=</span>authoryear
+</pre>
+    <p>sorts those four records.
 </p>
     <p>It does not add the other six.
 </p>
@@ -1414,14 +1576,15 @@ ten records, then <code>sorttype=authoryear</code> sorts those four records.
 </p>
     <pre class="tex">sorttype<span class="brx">=</span>authoryear
 </pre>
-    <p>changes only the order of the selected records.
+    <p>changes only their order.
 </p>
     <div style="margin:1em 0; padding:1em 1.2em; border:1px solid #dfb2b2; border-left:6px solid #b85c5c; background:#fff5f5;">
      <p><b>Common misunderstanding</b>
 </p>
-     <p><code>method</code> changes membership.
+     <p><code>method</code>, <code>criterium</code>, and <code>repeat</code> affect
+which records a rendering can produce.
 </p>
-     <p><code>sorttype</code> changes order.
+     <p><code>sorttype</code> changes only the order of the resulting records.
 </p>
     </div>
     <h3>
@@ -1488,7 +1651,7 @@ against the current distribution and publications manual.
       a named rendering;
      </li>
      <li>
-      global selection;
+      a global rendering method;
      </li>
      <li>
       author&ndash;year sorting;
@@ -1581,11 +1744,16 @@ depends
      </li>
     </ul>
     <p>The record <code>unused1790</code> is loaded into the dataset but does not
-appear because <code>method=global</code> selects only records used in the
-document.
+appear because the rendering uses <code>method=global</code>, whereas that
+record has not been cited or otherwise registered for use.
 </p>
-    <p>The selected records are ordered by
-<code>sorttype=authoryear</code>.
+    <p>The resulting records are ordered by:
+</p>
+    <pre class="tex">sorttype<span class="brx">=</span>authoryear
+</pre>
+    <p>This MWE does not use a structural <code>criterium</code>, because it contains
+only one bibliography scope. Chapter-level restrictions are introduced in the
+next guide.
 </p>
     <h2>
      <span class="mw-headline" id="9._Diagnosing_the_wrong_layer">
@@ -1611,13 +1779,19 @@ document.
       <tr>
        <td>A record exists but is absent from the bibliography
 </td>
-       <td>Selection method
+       <td>Rendering scope: <code>method</code>, <code>criterium</code>, and whether the record was cited or otherwise registered
 </td>
       </tr>
       <tr>
        <td>Too many records appear
 </td>
-       <td>Selection method
+       <td>Rendering scope: <code>method</code> and <code>criterium</code>
+</td>
+      </tr>
+      <tr>
+       <td>A record appeared earlier but is missing from a later list
+</td>
+       <td><code>repeat</code>
 </td>
       </tr>
       <tr>
@@ -1641,7 +1815,13 @@ document.
       <tr>
        <td>A citation works but a named list is empty
 </td>
-       <td>Dataset associated with the rendering and selection method
+       <td>Dataset associated with the rendering and rendering scope
+</td>
+      </tr>
+      <tr>
+       <td>A chapter bibliography contains records from the wrong structural scope
+</td>
+       <td><code>criterium</code> and the placement context
 </td>
       </tr>
       <tr>
@@ -1658,6 +1838,11 @@ document.
      <p>Changing <code>sorttype</code> cannot add a missing record.
 </p>
      <p>Changing <code>method</code> cannot correct punctuation.
+</p>
+     <p>Changing <code>criterium</code> cannot repair an unresolved key.
+</p>
+     <p>Changing <code>repeat</code> matters only when records have already been
+rendered and need to appear again.
 </p>
      <p>Loading a dataset does not automatically place a bibliography list.
 </p>
@@ -1710,13 +1895,25 @@ document.
 </td>
       </tr>
       <tr>
-       <td>Which records are included?
+       <td>Which bibliography reference state is used?
 </td>
        <td><code>method</code>
 </td>
       </tr>
       <tr>
-       <td>In which order do they appear?
+       <td>Which structural or reference scope is requested?
+</td>
+       <td><code>criterium</code>
+</td>
+      </tr>
+      <tr>
+       <td>May an already rendered record appear again?
+</td>
+       <td><code>repeat</code>
+</td>
+      </tr>
+      <tr>
+       <td>In which order do the resulting records appear?
 </td>
        <td><code>sorttype</code>
 </td>
@@ -1729,6 +1926,14 @@ document.
       </tr>
      </tbody>
     </table>
+    <p>The most important distinction for the following guide is:
+</p>
+    <pre>method     &ne; criterium &ne; repeat
+
+method     -&gt; rendering/reference-state behaviour
+criterium  -&gt; structural or reference scope
+repeat     -&gt; reuse of already rendered records
+</pre>
     <p>Continue with:
 </p>
     <p><a href="Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">Guide 3 &mdash; Creating local and multiple bibliographies</a>
@@ -1740,8 +1945,26 @@ document.
       place a bibliography at the end of each chapter;
      </li>
      <li>
-      produce a final bibliography;
+      produce chapter bibliographies and a final bibliography;
      </li>
+     <li>
+      use
+      <code>criterium=chapter</code>
+      without confusing it with
+     </li>
+    </ul>
+    <pre> <code>method=local</code>;
+</pre>
+    <ul>
+     <li>
+      use
+      <code>repeat=yes</code>
+      when the same records must appear in more than
+     </li>
+    </ul>
+    <pre> one bibliography;
+</pre>
+    <ul>
      <li>
       use several renderings with one dataset;
      </li>
@@ -1749,9 +1972,11 @@ document.
       use several independent datasets;
      </li>
      <li>
-      distinguish several views of one collection from genuinely different collections.
+      distinguish several views of one collection from genuinely different
      </li>
     </ul>
+    <pre> collections.
+</pre>
     <h2>
      <span class="mw-headline" id="11._Related_pages_and_commands">
       11. Related pages and commands
@@ -1855,7 +2080,7 @@ document.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-28
+     Mirrored on 2026-08-29
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

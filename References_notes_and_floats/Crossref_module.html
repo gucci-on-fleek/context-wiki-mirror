@@ -18,243 +18,1772 @@
     References notes and floats/Crossref module
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4593&diff=38443">2025-01-08</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4593&diff=43703">2026-08-28</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <p>(This module is currently not in die distribution. Until it is, you can download it from <a class="external text" href="http://zenlima.com/context/t-crossref-0.9.3.zip" rel="nofollow">here</a>).
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-bottom:1em;">
+     <p><b>Bibliography and citations in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">Overview</a> &nbsp;&middot;&nbsp;
+<a href="../Creating_a_bibliography_and_citing_sources.html" title="Creating a bibliography and citing sources">Guide 1</a> &nbsp;&middot;&nbsp;
+<a href="../Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">Guide 2</a> &nbsp;&middot;&nbsp;
+<a href="../Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">Guide 3</a> &nbsp;&middot;&nbsp;
+<a href="../Organising_bibliographies_in_complex_editorial_projects.html" title="Organising bibliographies in complex editorial projects">Guide 4</a> &nbsp;&middot;&nbsp;
+<a href="Simple_bibliography.html" title="References notes and floats/Simple bibliography">Manual bibliography with simplebib</a> &nbsp;&middot;&nbsp;
+<b>Cross Referencing module</b>
 </p>
-    <p>Cross references in a (academic) text are either internal (linking to an other point inside the same document) or external (linking to a entity of the bibliography that points to a different document). 
+    </div>
+    <div style="margin:0 0 1.5em 0; padding:0.85em 1em; border:1px solid #d6a34a; border-left:6px solid #d6a34a; background:#fff8e8;">
+     <p><span style="font-size:1.35em;">🚧</span>
+<b>This page is under revision.</b> It documents a specialized third-party
+module. Test the examples with the version installed in your current ConTeXt
+distribution.
 </p>
-    <p>Here are some concrete examples of cross references:
+    </div>
+    <div style="background:#fff4df; border:1px solid #dfb56a; border-left:6px solid #d08a24; padding:0.85em 1em; margin:1em 0;">
+     <p><b>Third-party module &mdash; not the built-in ConTeXt reference system</b>
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        "Classic" style
-       </th>
-       <th>
-        "New" style
-        <br>
-        (&uarr; = external link - &nearrow; = internal link)
-       </th>
-      </tr>
-      <tr>
-       <td>[XYZ]
-</td>
-       <td>(&uarr;XYZ) and <br>if directly addressed &uarr;XYZ
-</td>
-      </tr>
-      <tr>
-       <td>[XYZ, p. 23]
-</td>
-       <td>(&uarr;XYZ, p. 23) <br>&uarr;XYZ, p. 23,
-</td>
-      </tr>
-      <tr>
-       <td>[XYZ, p. 22] and [ABC, p. 22-45]
-</td>
-       <td>(&uarr;XYZ, p. 22, and &uarr;ABC, p. 22-45)
-</td>
-      </tr>
-      <tr>
-       <td>
-</td>
-       <td>
-</td>
-      </tr>
-      <tr>
-       <td>
-</td>
-       <td>
-</td>
-      </tr>
-      <tr>
-       <td>Abbildung 2.2
-</td>
-       <td>&nearrow;Abbildung 2.2
-</td>
-      </tr>
-      <tr>
-       <td>Abbildung 2.2 auf Seite 23
-</td>
-       <td>&nearrow;Abbildung 2.2 auf Seite 23
-</td>
-      </tr>
-      <tr>
-       <td>(Absatz 2.4.9/12 auf Seite 23 bis 2.4.2/10 auf Seite 25)
-</td>
-       <td>(&nearrow;Absatz 2.4.9/12 auf Seite 23 bis &nearrow;Absatz 2.4.2/10 auf Seite 25)
-</td>
-      </tr>
-      <tr>
-       <td>(siehe Abs. 3/21)
-</td>
-       <td>(siehe &nearrow;Absatz 3/21)
-</td>
-      </tr>
-      <tr>
-       <td>(siehe Abs&auml;tze 3.1/35 und 3.1/38)
-</td>
-       <td>(siehe Abs&auml;tze &nearrow;3.1/35 und &nearrow;3.1/38)
-</td>
-      </tr>
-      <tr>
-       <td>
-</td>
-       <td>
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>This cross references have following structure in common:
+     <p>This page documents the third-party <code>crossref</code> module and its
+<code>\crossref</code> command.
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        left
-       </th>
-       <th>
-        refprefix
-       </th>
-       <th>
-        label
-       </th>
-       <th>
-        ref
-       </th>
-       <th>
-        detail
-       </th>
-       <th>
-        refsuffix
-       </th>
-       <th>
-        right
-       </th>
-      </tr>
-      <tr valign="top">
-       <td>( <br> (siehe <br> Abs&auml;tze <br> und <br> bis
-</td>
-       <td>&uarr; <br> &nearrow; <br> [
-</td>
-       <td>Abbildung<br>Absatz<br>Abs.
-</td>
-       <td>XYZ<br>2.2<br>2.2 auf Seite 23<br>2.4.9/12 auf Seite 23<br>2.4.2/10 auf Seite 25<br>3/21
-</td>
-       <td>, p. 23
-</td>
-       <td>]
-</td>
-       <td>)
-</td>
-      </tr>
-     </tbody>
-    </table>
+     <p>ConTeXt and LuaMetaTeX already provide their own mechanisms for named
+references, structural references, page references, and interactive PDF
+links. The <code>crossref</code> module adds a specialized interface for
+composing the visible form of a reference.
+</p>
+     <p>It should therefore be understood as an additional presentation layer, not
+as the foundation of cross-referencing in LMTX.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h2>
+       Contents
+      </h2>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._Purpose_and_scope">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. Purpose and scope
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Installation_with_LMTX">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Installation with LMTX
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._What_LMTX_already_provides">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. What LMTX already provides
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#4._Do_not_confuse_three_meanings_of_.E2.80.9Ccross-reference.E2.80.9D">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Do not confuse three meanings of &ldquo;cross-reference&rdquo;
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#5._Module-specific_terminology:_internal_and_external">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Module-specific terminology: internal and external
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#6._Minimal_module_example">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Minimal module example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#7._Syntax_of_crossref">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Syntax of crossref
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#8._Anatomy_of_a_composed_reference">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Anatomy of a composed reference
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#9._More_reference_examples">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. More reference examples
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#10._Configure_prefixes_and_suffixes">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Configure prefixes and suffixes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#11._Distinguish_reference_types_visually">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Distinguish reference types visually
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#12._Reference_colours">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Reference colours
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#13._Language-dependent_text">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Language-dependent text
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#14._Relation_to_simplebib">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Relation to simplebib
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#15._A_complete_module_example">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. A complete module example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#16._Common_mistakes">
+        <span class="tocnumber">
+         16
+        </span>
+        <span class="toctext">
+         16. Common mistakes
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-17">
+         <a href="#16.1._Assuming_crossref_is_the_ConTeXt_reference_system">
+          <span class="tocnumber">
+           16.1
+          </span>
+          <span class="toctext">
+           16.1. Assuming crossref is the ConTeXt reference system
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#16.2._Confusing_module_external_references_with_external_documents">
+          <span class="tocnumber">
+           16.2
+          </span>
+          <span class="toctext">
+           16.2. Confusing module external references with external documents
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-19">
+         <a href="#16.3._Confusing_the_module_with_a_bibliographic_crossref_field">
+          <span class="tocnumber">
+           16.3
+          </span>
+          <span class="toctext">
+           16.3. Confusing the module with a bibliographic crossref field
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#16.4._Treating_a_text_reference_as_bibliographic_data">
+          <span class="tocnumber">
+           16.4
+          </span>
+          <span class="toctext">
+           16.4. Treating a text reference as bibliographic data
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#16.5._Loading_simplebib_when_only_crossref_is_required">
+          <span class="tocnumber">
+           16.5
+          </span>
+          <span class="toctext">
+           16.5. Loading simplebib when only crossref is required
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#16.6._Using_old_module_download_instructions">
+          <span class="tocnumber">
+           16.6
+          </span>
+          <span class="toctext">
+           16.6. Using old module download instructions
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-23">
+         <a href="#16.7._Assuming_old_presentation_settings_are_guaranteed_forever">
+          <span class="tocnumber">
+           16.7
+          </span>
+          <span class="toctext">
+           16.7. Assuming old presentation settings are guaranteed forever
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-24">
+       <a href="#17._Diagnostic_checklist">
+        <span class="tocnumber">
+         17
+        </span>
+        <span class="toctext">
+         17. Diagnostic checklist
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-25">
+       <a href="#18._What_this_page_has_established">
+        <span class="tocnumber">
+         18
+        </span>
+        <span class="toctext">
+         18. What this page has established
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-26">
+       <a href="#19._Related_pages">
+        <span class="tocnumber">
+         19
+        </span>
+        <span class="toctext">
+         19. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-27">
+         <a href="#19.1._Bibliography_and_citations">
+          <span class="tocnumber">
+           19.1
+          </span>
+          <span class="toctext">
+           19.1. Bibliography and citations
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-28">
+         <a href="#19.2._Built-in_ConTeXt_reference_commands">
+          <span class="tocnumber">
+           19.2
+          </span>
+          <span class="toctext">
+           19.2. Built-in ConTeXt reference commands
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-29">
+         <a href="#19.3._Modules_and_project_mechanisms">
+          <span class="tocnumber">
+           19.3
+          </span>
+          <span class="toctext">
+           19.3. Modules and project mechanisms
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-30">
+         <a href="#19.4._External_module_information">
+          <span class="tocnumber">
+           19.4
+          </span>
+          <span class="toctext">
+           19.4. External module information
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
     <h2>
-     <span class="mw-headline" id="Referencing">
-      Referencing
+     <span class="mw-headline" id="1._Purpose_and_scope">
+      1. Purpose and scope
      </span>
     </h2>
-    <p>For cross reference the method \crossref is created. It has follow syntax:
+    <p>References in a scholarly document may point to many kinds of objects:
 </p>
-    <pre>\crossref[#2]
-\crossref[#1][#2]
-
-#1	type	   	= *internal external none
-	left		= ..text..
-	right    	= ..text..
-	label		= ..text..
-	detail 		= ..text..
-
-#2	&lt;reference&gt;
+    <ul>
+     <li>
+      another chapter or section;
+     </li>
+     <li>
+      a figure, table, or numbered item;
+     </li>
+     <li>
+      a page;
+     </li>
+     <li>
+      a named location in the document;
+     </li>
+     <li>
+      a manually identified documentary or bibliographic source.
+     </li>
+    </ul>
+    <p>ConTeXt already provides a built-in reference mechanism for the first kinds
+of references.
+</p>
+    <p>The <code>crossref</code> module provides an additional command:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
 </pre>
-    <p>Here a simple usage example: 
+    <p>for constructing references whose visible form may contain:
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\setupcolors</span></span><span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+    <ul>
+     <li>
+      text before or after the reference;
+     </li>
+     <li>
+      a label;
+     </li>
+     <li>
+      a reference value;
+     </li>
+     <li>
+      a detail such as a page number;
+     </li>
+     <li>
+      configurable prefixes and suffixes;
+     </li>
+     <li>
+      distinct visual treatment for module-defined reference types.
+     </li>
+    </ul>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>What the module adds</b>
+</p>
+     <p>ConTeXt already knows how to create, resolve, and interact with references.
+</p>
+     <p>The <code>crossref</code> module adds a specialized interface for composing
+how such a reference is presented: labels, details, surrounding text,
+configurable markers, and colours.
+</p>
+     <p>The distinction between the underlying reference and its visible presentation
+is important.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Installation_with_LMTX">
+      2. Installation with LMTX
+     </span>
+    </h2>
+    <p><code>crossref</code> is distributed as a third-party ConTeXt module rather
+than as part of the core reference interface.
+</p>
+    <p>With a current LMTX installation, available modules can be listed with:
+</p>
+    <pre>mtxrun --script install-modules --list
+</pre>
+    <p>Install the module with:
+</p>
+    <pre>mtxrun --script install-modules --install crossref
+</pre>
+    <p>For a project that also uses <code>simplebib</code>, both modules can be
+installed together:
+</p>
+    <pre>mtxrun --script install-modules --install crossref simplebib
+</pre>
+    <p>Then load the module in a document with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not use the obsolete download instructions</b>
+</p>
+     <p>Older versions of this page referred readers to a separate ZIP archive on
+an external website. With LMTX, use the current ConTeXt module installer
+instead.
+</p>
+     <p>Because this is a third-party module with historical documentation, test the
+features you depend on after updating ConTeXt or the module.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._What_LMTX_already_provides">
+      3. What LMTX already provides
+     </span>
+    </h2>
+    <p>Before using the module, it is useful to distinguish it from ConTeXt's own
+reference system.
+</p>
+    <p>ConTeXt can associate stable names with structural elements and other
+document locations. References can then be resolved elsewhere in the
+document.
+</p>
+    <p>A small built-in example is:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
 
-<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>red<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>1<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>green<span class="brx">]</span><span class="brx">[</span>g<span class="brx">=</span>1<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>blue<span class="brx">]</span><span class="brx">[</span>b<span class="brx">=</span>1<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
 
-<span class="cs"><span class="stylecs">\setupinteraction</span></span><span class="brx">[</span>state<span class="brx">=</span>start,style<span class="brx">=</span>normal,color<span class="brx">=</span>red,contrastcolor<span class="brx">=</span>red<span class="brx">]</span>
-<span class="comment">% color and contrastcolor must be the the final color of the refref area in crossref</span>
+<span class="cs"><span class="documentcs">\starttext</span></span>
 
-<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span><span class="brx">[</span>refColor<span class="brx">=</span>green,reffixColor<span class="brx">=</span>blue,refrefColor<span class="brx">=</span>red<span class="brx">]</span>
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First section<span class="br">}</span>,
+   reference<span class="brx">=</span><span class="br">{</span>sec:first<span class="br">}</span><span class="brx">]</span>
+
+This section has a stable reference.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Second section<span class="br">}</span><span class="brx">]</span>
+
+See <span class="cs"><span class="documentcs">\in</span></span><span class="br">{</span>section<span class="br">}</span><span class="brx">[</span>sec:first<span class="brx">]</span> on <span class="cs"><span class="documentcs">\at</span></span><span class="br">{</span>page<span class="br">}</span><span class="brx">[</span>sec:first<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/655b746fce2f830159f2f35fede43bca.webp" width="620">
+     </li>
+    </ul>
+    <p>Here:
+</p>
+    <ul>
+     <li>
+      <code>reference={sec:first}</code>
+      creates a stable structural reference;
+     </li>
+     <li>
+      <code>\in</code>
+      refers to the numbered object;
+     </li>
+     <li>
+      <code>\at</code>
+      refers to its page;
+     </li>
+     <li>
+      <code>\setupinteraction[state=start]</code>
+      enables interactive PDF links.
+     </li>
+    </ul>
+    <p>ConTeXt also provides commands such as:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\reference</span></span>
+<span class="cs"><span class="documentcs">\textreference</span></span>
+<span class="cs"><span class="documentcs">\in</span></span>
+<span class="cs"><span class="documentcs">\at</span></span>
+<span class="cs"><span class="documentcs">\about</span></span>
+</pre>
+    <p>for different reference tasks.
+</p>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>LMTX does not require crossref for cross-references</b>
+</p>
+     <p>The <code>crossref</code> module is optional.
+</p>
+     <p>For ordinary references to chapters, sections, figures, tables, pages, and
+other structured document objects, first consider the built-in ConTeXt
+reference commands.
+</p>
+     <p>See also:
+</p>
+     <ul>
+      <li>
+       <tt>
+        <a href="../Command/reference.html" title="Command/reference">
+         \reference
+        </a>
+       </tt>
+      </li>
+      <li>
+       <tt>
+        <a href="../Command/textreference.html" title="Command/textreference">
+         \textreference
+        </a>
+       </tt>
+      </li>
+      <li>
+       <tt>
+        <a href="../Command/in.html" title="Command/in">
+         \in
+        </a>
+       </tt>
+      </li>
+      <li>
+       <tt>
+        <a href="../Command/at.html" title="Command/at">
+         \at
+        </a>
+       </tt>
+      </li>
+      <li>
+       <tt>
+        <a href="../Command/about.html" title="Command/about">
+         \about
+        </a>
+       </tt>
+      </li>
+      <li>
+       <tt>
+        <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+         \setupinteraction
+        </a>
+       </tt>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="4._Do_not_confuse_three_meanings_of_&ldquo;cross-reference&rdquo;">
+     </span>
+     <span class="mw-headline" id="4._Do_not_confuse_three_meanings_of_.E2.80.9Ccross-reference.E2.80.9D">
+      4. Do not confuse three meanings of &ldquo;cross-reference&rdquo;
+     </span>
+    </h2>
+    <p>The word <em>cross-reference</em> occurs in several different contexts.
+</p>
+    <div style="background:#fbeaea; border-left:5px solid #b74d4d; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Three different mechanisms</b>
+</p>
+     <ol>
+      <li>
+       A normal ConTeXt cross-reference links one document location or structural object to another.
+      </li>
+      <li>
+       The third-party
+       <code>crossref</code>
+       module provides the
+       <code>\crossref</code>
+       command documented on this page.
+      </li>
+      <li>
+       A bibliographic
+       <code>crossref</code>
+       field may describe a relationship between bibliographic records in a structured bibliography.
+      </li>
+     </ol>
+     <p>These mechanisms are conceptually different and should not be identified with
+one another.
+</p>
+    </div>
+    <p>In particular:
+</p>
+    <pre>ConTeXt reference system
+        |
+        | optional presentation interface
+        v
+third-party crossref module
+        |
+        | used as a reference mechanism by
+        v
+simplebib module
+</pre>
+    <p>The modern BTX bibliography system is a separate bibliography architecture.
+</p>
+    <h2>
+     <span class="mw-headline" id="5._Module-specific_terminology:_internal_and_external">
+      5. Module-specific terminology: internal and external
+     </span>
+    </h2>
+    <p>The module distinguishes reference types with the parameter:
+</p>
+    <pre class="tex">type<span class="brx">=</span>internal
+</pre>
+    <p>or:
+</p>
+    <pre class="tex">type<span class="brx">=</span>external
+</pre>
+    <p>These names are <b>module-specific</b>.
+</p>
+    <p>In the historical design of the module:
+</p>
+    <ul>
+     <li>
+      <code>internal</code>
+      is normally used for references presented as references to objects within the document;
+     </li>
+     <li>
+      <code>external</code>
+      is normally used for source-like references, for example an identifier displayed like a bibliographic reference.
+     </li>
+    </ul>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Important terminology warning</b>
+</p>
+     <p><code>type=external</code> does not by itself mean &ldquo;a PDF link to another
+document&rdquo; or &ldquo;a URL&rdquo;.
+</p>
+     <p>It selects the module's <em>external reference presentation</em>.
+</p>
+     <p>Do not confuse this terminology with ConTeXt's general mechanisms for
+references between separate documents.
+</p>
+    </div>
+    <p>For example, the historical module convention may visually distinguish:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Reference purpose
+       </th>
+       <th>
+        Traditional presentation
+       </th>
+       <th>
+        Alternative presentation
+       </th>
+      </tr>
+      <tr>
+       <td>Source identifier
+</td>
+       <td><code>[XYZ]</code>
+</td>
+       <td><code>&uarr;XYZ</code>
+</td>
+      </tr>
+      <tr>
+       <td>Source identifier with detail
+</td>
+       <td><code>[XYZ, p. 23]</code>
+</td>
+       <td><code>&uarr;XYZ, p. 23</code>
+</td>
+      </tr>
+      <tr>
+       <td>Internal figure
+</td>
+       <td><code>Figure 2.2</code>
+</td>
+       <td><code>&nearrow;Figure 2.2</code>
+</td>
+      </tr>
+      <tr>
+       <td>Internal section
+</td>
+       <td><code>Section 3.1</code>
+</td>
+       <td><code>&nearrow;Section 3.1</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The arrows are configurable printed markers. They are not themselves what
+makes a PDF reference interactive.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._Minimal_module_example">
+      6. Minimal module example
+     </span>
+    </h2>
+    <p>The following example demonstrates the module without introducing colours or
+advanced formatting.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
 
 <span class="cs"><span class="documentcs">\starttext</span></span>
 
 <span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref1<span class="brx">]</span><span class="br">{</span>1.1/3<span class="br">}</span>
 
-Should be: 1.1/3 and is: <span class="cs">\crossref</span><span class="brx">[</span>ref1<span class="brx">]</span>
+The reference value is <span class="cs">\crossref</span><span class="brx">[</span>ref1<span class="brx">]</span>.
 
-Should be: <span class="brx">(</span>Abs. 1.1/3<span class="brx">)</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>internal,left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,label<span class="brx">=</span>Abs.,right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref1<span class="brx">]</span>
-
-Should be: <span class="brx">[</span>Zen12, p 23<span class="brx">]</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external,detail<span class="brx">=</span><span class="br">{</span>p. 23<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
-
-Should be: <span class="brx">(</span>nach <span class="brx">[</span>Zen12, S. 32-33<span class="brx">]</span> und weitere<span class="brx">)</span> and is: <span class="cs">\crossref</span><span class="brx">[</span>type<span class="brx">=</span>external, left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>nach <span class="br">}</span>, right<span class="brx">=</span><span class="br">{</span> und weitere<span class="brx">)</span><span class="br">}</span>,detail<span class="brx">=</span><span class="br">{</span>S. 32-33<span class="br">}</span><span class="brx">]</span><span class="brx">[</span>ref2<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref2<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span> Biblio blabla fasel
+With additional presentation:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>internal,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,
+   label<span class="brx">=</span><span class="br">{</span>Section <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>.
 
 <span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
-    <h2>
-     <span class="mw-headline" id="Settings">
-      Settings
-     </span>
-    </h2>
-    <p>Often references (or links) are printed in a different color than the normal text. In pararef the colors can be set via three paramters:
-</p>
-    <ul>
-     <li>
-      <code>refColor</code>
-      for the entire reference text,
      </li>
-     <li>
-      <code>reffixColor</code>
-      for the color of the prefix and suffix if different from
-      <code>refColor</code>
-     </li>
-     <li>
-      <code>refrefColor</code>
-      for the detail, ref itself and ref details if different from
-      <code>refColor</code>
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/02bf4f0115fe32b2b9948f2dfc107847.webp" width="55">
      </li>
     </ul>
-    <p>They are defined as parameters of the <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/ruid=1253027735/action=view/id=67" rel="nofollow">module</a>:
+    <p>The underlying target is created with:
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span><span class="brx">[</span>refColor<span class="brx">=</span>...,reffixColor<span class="brx">=</span>...,refrefColor<span class="brx">=</span>...<span class="brx">]</span>
-...
+    <pre class="tex"><span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref1<span class="brx">]</span><span class="br">{</span>1.1/3<span class="br">}</span>
 </pre>
-    <p>The brackets and text part for <code>\crossref</code> can also be adjusted or extended with other languages:
+    <p>The module then constructs a visible reference with:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span><span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <p>or with additional parameters:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>internal,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,
+   label<span class="brx">=</span><span class="br">{</span>Section <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Separate target creation from reference presentation</b>
+</p>
+     <p>The target exists independently of the visual form produced by
+<code>\crossref</code>.
+</p>
+     <p>This is the same general design principle found throughout ConTeXt:
+stable references and their presentation are related, but they are not the
+same thing.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="7._Syntax_of_crossref">
+      7. Syntax of crossref
+     </span>
+    </h2>
+    <p>The module provides two principal forms:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span><span class="brx">[</span>reference<span class="brx">]</span>
+</pre>
+    <p>and:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>options<span class="brx">]</span>
+  <span class="brx">[</span>reference<span class="brx">]</span>
+</pre>
+    <p>The historical module interface provides options including:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Option
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td><code>type</code>
+</td>
+       <td>Selects the module-defined reference type: <code>internal</code>, <code>external</code>, or <code>none</code>.
+</td>
+      </tr>
+      <tr>
+       <td><code>left</code>
+</td>
+       <td>Text placed before the composed reference.
+</td>
+      </tr>
+      <tr>
+       <td><code>right</code>
+</td>
+       <td>Text placed after the composed reference.
+</td>
+      </tr>
+      <tr>
+       <td><code>label</code>
+</td>
+       <td>A descriptive label such as &ldquo;Figure&rdquo;, &ldquo;Section&rdquo;, or an abbreviation.
+</td>
+      </tr>
+      <tr>
+       <td><code>detail</code>
+</td>
+       <td>Additional information, for example a page number or page range.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>The second argument is the stable reference identifier:
+</p>
+    <pre class="tex"><span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <p>Thus:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   detail<span class="brx">=</span><span class="br">{</span>p. 23<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref2<span class="brx">]</span>
+</pre>
+    <p>combines the reference identified by <code>ref2</code> with the module's
+external-reference presentation and the supplied detail.
+</p>
+    <h2>
+     <span class="mw-headline" id="8._Anatomy_of_a_composed_reference">
+      8. Anatomy of a composed reference
+     </span>
+    </h2>
+    <p>A visible reference can contain several distinct parts.
+</p>
+    <p>A useful conceptual model is:
+</p>
+    <pre>left
+    module prefix
+        label
+            reference
+                detail
+                    module suffix
+                        right
+</pre>
+    <p>For example:
+</p>
+    <pre>(nach [Zen12, p. 23] und weitere)
+</pre>
+    <p>may be understood as:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Part
+       </th>
+       <th>
+        Example
+       </th>
+      </tr>
+      <tr>
+       <td><code>left</code>
+</td>
+       <td><code>(nach </code>
+</td>
+      </tr>
+      <tr>
+       <td>module prefix
+</td>
+       <td><code>[</code>
+</td>
+      </tr>
+      <tr>
+       <td>reference
+</td>
+       <td><code>Zen12</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>detail</code>
+</td>
+       <td><code>p. 23</code>
+</td>
+      </tr>
+      <tr>
+       <td>module suffix
+</td>
+       <td><code>]</code>
+</td>
+      </tr>
+      <tr>
+       <td><code>right</code>
+</td>
+       <td><code> und weitere)</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Command options and module text settings are different</b>
+</p>
+     <p>Values such as <code>left</code>, <code>right</code>, <code>label</code>,
+and <code>detail</code> can be supplied to an individual
+<code>\crossref</code> call.
+</p>
+     <p>Reference prefixes and suffixes such as <code>internalPrefix</code> and
+<code>externalPrefix</code> are configured separately with
+<code>\setupcrossreftext</code>.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._More_reference_examples">
+      9. More reference examples
+     </span>
+    </h2>
+    <p>Create two demonstration targets:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref1<span class="brx">]</span><span class="br">{</span>1.1/3<span class="br">}</span>
+<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref2<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span>
+</pre>
+    <p>A plain reference:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span><span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <p>An internal-style reference with label and surrounding punctuation:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>internal,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span><span class="br">}</span>,
+   label<span class="brx">=</span><span class="br">{</span>Section <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref1<span class="brx">]</span>
+</pre>
+    <p>A source-style reference with a detail:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   detail<span class="brx">=</span><span class="br">{</span>p. 23<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref2<span class="brx">]</span>
+</pre>
+    <p>A reference embedded in explanatory text:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>see <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span> for further discussion<span class="brx">)</span><span class="br">}</span>,
+   detail<span class="brx">=</span><span class="br">{</span>pp. 32-33<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref2<span class="brx">]</span>
+</pre>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>This is a reference demonstration, not a bibliography database</b>
+</p>
+     <p>A construction such as:
+</p>
+     <pre class="tex"><span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref2<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span>
+</pre>
+     <p>only creates a reference target whose displayed value is
+<code>Zen12</code>.
+</p>
+     <p>It does not create structured bibliographic data.
+</p>
+     <p>For a manual bibliography interface built on this module, see
+<a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Creating_a_flexible_manual_bibliography_with_simplebib&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Creating a flexible manual bibliography with simplebib (page does not exist)">Creating a flexible manual bibliography with simplebib</a>.
+</p>
+     <p>For structured bibliographic data, see
+<a href="../Creating_a_bibliography_and_citing_sources.html" title="Creating a bibliography and citing sources">Guide 1 &mdash; Creating a bibliography and citing sources</a>.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Configure_prefixes_and_suffixes">
+      10. Configure prefixes and suffixes
+     </span>
+    </h2>
+    <p>The module provides configurable text surrounding internal and external
+references.
+</p>
+    <p>For example:
 </p>
     <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalPrefix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalPrefix<span class="brx">=</span><span class="br">{</span><span class="brx">[</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalSuffix<span class="brx">=</span><span class="br">{</span><span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>refDetailDivider<span class="brx">=</span><span class="br">{</span><span class="cs">\textcomma</span><span class="cs"><span class="stylecs">\space</span></span><span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> na stran&ecaron; <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span> <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> auf Seite <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> on page <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&iecy; <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&ocy;&rcy;&iukcy;&ncy;&tscy;&iukcy; <span class="br">}</span><span class="brx">]</span>
-<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
-
 </pre>
-    <p>If you want to change the "classic" style of referencing to the "new" style you only need to add:
+    <p>With this configuration, an external-style reference may be presented in
+square brackets.
+</p>
+    <p>For example:
+</p>
+    <pre>[Zen12, p. 23]
+</pre>
+    <h2>
+     <span class="mw-headline" id="11._Distinguish_reference_types_visually">
+      11. Distinguish reference types visually
+     </span>
+    </h2>
+    <p>The historical module documentation proposes an alternative presentation in
+which arrows distinguish the two module-defined reference styles.
+</p>
+    <p>Configure:
 </p>
     <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalPrefix<span class="brx">=</span><span class="br">{</span>&nearrow;<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>internalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalPrefix<span class="brx">=</span><span class="br">{</span>&uarr;<span class="br">}</span><span class="brx">]</span>
 <span class="cs">\setupcrossreftext</span><span class="brx">[</span>externalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
 </pre>
+    <p>This can produce forms such as:
+</p>
+    <pre>&nearrow;Figure 2.2
+&uarr;Zen12
+&uarr;Zen12, p. 23
+</pre>
+    <div style="background:#eef5fb; border-left:5px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>The arrows are typographical markers</b>
+</p>
+     <p>The characters <code>&nearrow;</code> and <code>&uarr;</code> are part of the printed
+presentation configured by the module.
+</p>
+     <p>They should not be confused with the interactive link itself.
+</p>
+     <p>PDF interaction is controlled by ConTeXt, for example with:
+</p>
+     <pre class="tex"><span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+</pre>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._Reference_colours">
+      12. Reference colours
+     </span>
+    </h2>
+    <p>The historical module interface provides three colour parameters:
+</p>
+    <ul>
+     <li>
+      <code>refColor</code>
+      &mdash; general colour of the composed reference;
+     </li>
+     <li>
+      <code>reffixColor</code>
+      &mdash; colour used for reference prefixes and suffixes;
+     </li>
+     <li>
+      <code>refrefColor</code>
+      &mdash; colour used for the central reference portion and its detail.
+     </li>
+    </ul>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>referencegreen<span class="brx">]</span><span class="brx">[</span>g<span class="brx">=</span>.55<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>referenceblue<span class="brx">]</span><span class="brx">[</span>b<span class="brx">=</span>.7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\definecolor</span></span><span class="brx">[</span>referencered<span class="brx">]</span><span class="brx">[</span>r<span class="brx">=</span>.75<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start,
+   style<span class="brx">=</span>normal,
+   color<span class="brx">=</span>referencered,
+   contrastcolor<span class="brx">=</span>referencered<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+  <span class="brx">[</span>refColor<span class="brx">=</span>referencegreen,
+   reffixColor<span class="brx">=</span>referenceblue,
+   refrefColor<span class="brx">=</span>referencered<span class="brx">]</span>
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Version-dependent presentation</b>
+</p>
+     <p>These colour parameters belong to the third-party module.
+</p>
+     <p>If they are not recognized, or if interactive PDF colouring differs from the
+expected result, check the installed module version and test the behaviour
+with the current LMTX release.
+</p>
+     <p>The module's colours and ConTeXt's interaction colours may both contribute
+to the final appearance.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="13._Language-dependent_text">
+      13. Language-dependent text
+     </span>
+    </h2>
+    <p>The module provides configurable language-dependent text.
+</p>
+    <p>General form:
+</p>
+    <pre class="tex"><span class="cs">\setupcrossreftext</span>
+  <span class="brx">[</span>language<span class="brx">]</span>
+  <span class="brx">[</span>key<span class="brx">=</span><span class="br">{</span>text<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Examples from the historical module configuration include:
+</p>
+    <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> auf Seite <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>de<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> on page <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&rcy;&acy;&ncy;&icy;&tscy;&iecy; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>ru<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> &ncy;&acy; &scy;&tcy;&ocy;&rcy;&iukcy;&ncy;&tscy;&iukcy; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>uk<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The historical documentation also uses:
+</p>
+    <pre class="tex"><span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageLeft<span class="brx">=</span><span class="br">{</span> na stran&ecaron; <span class="br">}</span><span class="brx">]</span>
+<span class="cs">\setupcrossreftext</span><span class="brx">[</span>cz<span class="brx">]</span><span class="brx">[</span>atpageRight<span class="brx">=</span><span class="br">{</span> <span class="br">}</span><span class="brx">]</span>
+</pre>
+    <div style="background:#fff4df; border-left:5px solid #d08a24; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Historical language keys</b>
+</p>
+     <p>The language keys shown above belong to the module's historical
+configuration.
+</p>
+     <p>In particular, do not silently replace the module's <code>cz</code> key with
+another language identifier without first checking the installed module
+source and testing the result.
+</p>
+    </div>
+    <p>Changing these texts affects the presentation of references. It does not
+change the stable reference identifiers.
+</p>
+    <h2>
+     <span class="mw-headline" id="14._Relation_to_simplebib">
+      14. Relation to simplebib
+     </span>
+    </h2>
+    <p>The <code>simplebib</code> module uses <code>crossref</code> as its reference
+mechanism.
+</p>
+    <p>For example, <code>simplebib</code> provides the bibliography-oriented command:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span><span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <p>and a form with an additional detail:
+</p>
+    <pre class="tex"><span class="cs">\bibref</span>
+  <span class="brx">[</span>detail<span class="brx">=</span><span class="br">{</span>p. 38<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>brk<span class="brx">]</span>
+</pre>
+    <p>These provide a more convenient interface when the target is a manually
+constructed bibliography item.
+</p>
+    <p>Conceptually:
+</p>
+    <pre>crossref module
+      |
+      v
+reference formatting and linking
+      |
+      v
+simplebib
+      |
+      v
+manual bibliography interface
+</pre>
+    <div style="background:#f2f8ee; border-left:5px solid #6f9b55; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Use the interface appropriate to the task</b>
+</p>
+     <p>For ordinary <code>simplebib</code> citations, use <code>\bibref</code>.
+</p>
+     <p>Use <code>\crossref</code> directly when you need the lower-level presentation
+features of the Cross Referencing module.
+</p>
+     <p>For modern structured bibliographies, use ConTeXt's BTX system instead.
+</p>
+    </div>
+    <p>See:
+</p>
+    <ul>
+     <li>
+      <a href="Simple_bibliography.html" title="References notes and floats/Simple bibliography">
+       Creating a flexible manual bibliography with simplebib
+      </a>
+     </li>
+     <li>
+      <a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations &mdash; Overview
+      </a>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="15._A_complete_module_example">
+      15. A complete module example
+     </span>
+    </h2>
+    <p>The following example combines interaction, internal-style references,
+source-style references, details, and configurable prefixes.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span>
+  <span class="brx">[</span>internalPrefix<span class="brx">=</span><span class="br">{</span>&nearrow;<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span>
+  <span class="brx">[</span>internalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span>
+  <span class="brx">[</span>externalPrefix<span class="brx">=</span><span class="br">{</span>&uarr;<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs">\setupcrossreftext</span>
+  <span class="brx">[</span>externalSuffix<span class="brx">=</span><span class="br">{</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Reference targets<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref:section<span class="brx">]</span><span class="br">{</span>2.4<span class="br">}</span>
+
+The first target represents a document location.
+
+<span class="cs"><span class="documentcs">\blank</span></span>
+
+<span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>ref:source<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span>
+
+The second target represents a source-like identifier for demonstration
+purposes.
+
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>References<span class="br">}</span>
+
+Internal-style reference:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>internal,
+   label<span class="brx">=</span><span class="br">{</span>Section <span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref:section<span class="brx">]</span>.
+
+Internal-style reference with surrounding text:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>internal,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>see <span class="br">}</span>,
+   label<span class="brx">=</span><span class="br">{</span>Section <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span><span class="brx">)</span><span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref:section<span class="brx">]</span>.
+
+Source-style reference:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external<span class="brx">]</span>
+  <span class="brx">[</span>ref:source<span class="brx">]</span>.
+
+Source-style reference with detail:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   detail<span class="brx">=</span><span class="br">{</span>p. 23<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref:source<span class="brx">]</span>.
+
+Source-style reference in a phrase:
+<span class="cs">\crossref</span>
+  <span class="brx">[</span>type<span class="brx">=</span>external,
+   left<span class="brx">=</span><span class="br">{</span><span class="brx">(</span>see <span class="br">}</span>,
+   right<span class="brx">=</span><span class="br">{</span> for discussion<span class="brx">)</span><span class="br">}</span>,
+   detail<span class="brx">=</span><span class="br">{</span>pp. 23-25<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>ref:source<span class="brx">]</span>.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="../wikiteximage/771ac315d7e68b622850e88baf36e836.webp" width="55">
+     </li>
+    </ul>
+    <p>Compile the example and verify that:
+</p>
+    <ol>
+     <li>
+      both reference identifiers resolve;
+     </li>
+     <li>
+      internal and external module styles are visually distinguishable;
+     </li>
+     <li>
+      the detail appears with the source-style reference;
+     </li>
+     <li>
+      <code>left</code>
+      and
+      <code>right</code>
+      surround the complete reference;
+     </li>
+     <li>
+      interactive links are active when supported by the reference target and PDF interaction;
+     </li>
+     <li>
+      the arrows are presentation markers rather than the underlying link mechanism.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="16._Common_mistakes">
+      16. Common mistakes
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="16.1._Assuming_crossref_is_the_ConTeXt_reference_system">
+      16.1. Assuming crossref is the ConTeXt reference system
+     </span>
+    </h3>
+    <p>Incorrect assumption:
+</p>
+    <pre>I need the crossref module whenever I want to refer to a section or figure.
+</pre>
+    <p>For ordinary structural references, ConTeXt's native reference system is
+normally sufficient.
+</p>
+    <p>Use the module when its additional reference-composition interface is useful.
+</p>
+    <h3>
+     <span class="mw-headline" id="16.2._Confusing_module_external_references_with_external_documents">
+      16.2. Confusing module external references with external documents
+     </span>
+    </h3>
+    <p>The setting:
+</p>
+    <pre class="tex">type<span class="brx">=</span>external
+</pre>
+    <p>selects a module-defined reference style.
+</p>
+    <p>It does not automatically make the target a separate PDF, website, or external
+document.
+</p>
+    <h3>
+     <span class="mw-headline" id="16.3._Confusing_the_module_with_a_bibliographic_crossref_field">
+      16.3. Confusing the module with a bibliographic crossref field
+     </span>
+    </h3>
+    <p>A bibliographic field named:
+</p>
+    <pre class="tex">crossref
+</pre>
+    <p>belongs to bibliographic data modelling.
+</p>
+    <p>The command:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+</pre>
+    <p>belongs to this third-party reference module.
+</p>
+    <p>They are unrelated mechanisms.
+</p>
+    <h3>
+     <span class="mw-headline" id="16.4._Treating_a_text_reference_as_bibliographic_data">
+      16.4. Treating a text reference as bibliographic data
+     </span>
+    </h3>
+    <p>This:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\textreference</span></span><span class="brx">[</span>source<span class="brx">]</span><span class="br">{</span>Zen12<span class="br">}</span>
+</pre>
+    <p>creates a reference target.
+</p>
+    <p>It does not create author, title, publisher, year, or other bibliographic
+metadata.
+</p>
+    <p>Use <code>simplebib</code> for a small manually constructed bibliography or
+BTX for structured bibliographic data.
+</p>
+    <h3>
+     <span class="mw-headline" id="16.5._Loading_simplebib_when_only_crossref_is_required">
+      16.5. Loading simplebib when only crossref is required
+     </span>
+    </h3>
+    <p>If the document uses only:
+</p>
+    <pre class="tex"><span class="cs">\crossref</span>
+</pre>
+    <p>load:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usemodule</span></span><span class="brx">[</span>crossref<span class="brx">]</span>
+</pre>
+    <p>There is no need to load <code>simplebib</code> unless its bibliography
+interface is required.
+</p>
+    <h3>
+     <span class="mw-headline" id="16.6._Using_old_module_download_instructions">
+      16.6. Using old module download instructions
+     </span>
+    </h3>
+    <p>Do not rely on historical third-party ZIP links copied from old versions of
+this page.
+</p>
+    <p>With LMTX, use:
+</p>
+    <pre>mtxrun --script install-modules --install crossref
+</pre>
+    <h3>
+     <span class="mw-headline" id="16.7._Assuming_old_presentation_settings_are_guaranteed_forever">
+      16.7. Assuming old presentation settings are guaranteed forever
+     </span>
+    </h3>
+    <p>The module has existed for a long time and some documentation reflects older
+ConTeXt releases.
+</p>
+    <p>When relying on colours, language texts, or specialized presentation options,
+compile a small test with the module installed in the current LMTX release.
+</p>
+    <h2>
+     <span class="mw-headline" id="17._Diagnostic_checklist">
+      17. Diagnostic checklist
+     </span>
+    </h2>
+    <p>If a reference does not behave as expected, check:
+</p>
+    <ol>
+     <li>
+      whether
+      <code>crossref</code>
+      is installed;
+     </li>
+     <li>
+      whether
+      <code>\usemodule[crossref]</code>
+      is present;
+     </li>
+     <li>
+      whether the target reference exists;
+     </li>
+     <li>
+      whether the spelling and capitalization of the reference identifier match;
+     </li>
+     <li>
+      whether the desired behaviour actually requires this module rather than a built-in ConTeXt reference command;
+     </li>
+     <li>
+      whether
+      <code>type=internal</code>
+      ,
+      <code>external</code>
+      , or
+      <code>none</code>
+      is appropriate for the intended module presentation;
+     </li>
+     <li>
+      whether
+      <code>left</code>
+      ,
+      <code>right</code>
+      ,
+      <code>label</code>
+      , and
+      <code>detail</code>
+      are balanced correctly;
+     </li>
+     <li>
+      whether
+      <code>\setupinteraction[state=start]</code>
+      is enabled when interactive PDF behaviour is expected;
+     </li>
+     <li>
+      whether custom prefix and suffix settings are producing the intended visible form;
+     </li>
+     <li>
+      whether module-specific colour settings still behave as expected with the installed version;
+     </li>
+     <li>
+      whether language-dependent text keys are supported by the installed module;
+     </li>
+     <li>
+      whether a bibliography task would be better handled by
+      <code>simplebib</code>
+      or the modern BTX system.
+     </li>
+    </ol>
+    <h2>
+     <span class="mw-headline" id="18._What_this_page_has_established">
+      18. What this page has established
+     </span>
+    </h2>
+    <p>The <code>crossref</code> module is an optional presentation interface built
+on top of reference mechanisms available to a ConTeXt document.
+</p>
+    <p>The essential workflow is:
+</p>
+    <pre>create or identify a reference target
+        |
+        v
+choose a stable reference identifier
+        |
+        v
+load the crossref module
+        |
+        v
+compose the visible reference with \crossref
+        |
+        +---- type
+        +---- label
+        +---- detail
+        +---- left / right
+        |
+        v
+optionally enable PDF interaction
+</pre>
+    <p>The most important distinctions are:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Mechanism
+       </th>
+       <th>
+        Purpose
+       </th>
+      </tr>
+      <tr>
+       <td>Built-in ConTeXt references
+</td>
+       <td>Create and resolve structural, textual, page, and other document references.
+</td>
+      </tr>
+      <tr>
+       <td><code>crossref</code> module
+</td>
+       <td>Adds a specialized interface for composing the visible form of references.
+</td>
+      </tr>
+      <tr>
+       <td><code>simplebib</code>
+</td>
+       <td>Uses the module mechanism for a manually constructed bibliography interface.
+</td>
+      </tr>
+      <tr>
+       <td>BTX
+</td>
+       <td>Provides structured bibliographic data, citation alternatives, datasets, and bibliography renderings.
+</td>
+      </tr>
+      <tr>
+       <td>Bibliographic <code>crossref</code> data
+</td>
+       <td>Expresses a relationship between bibliographic records; unrelated to the module command.
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>A useful mental model is:
+</p>
+    <pre>                 ConTeXt / LMTX
+                       |
+          built-in reference mechanism
+                       |
+             +---------+---------+
+             |                   |
+       ordinary references   crossref module
+                                 |
+                              simplebib
+
+BTX bibliography system
+        |
+        +-- datasets
+        +-- citations
+        +-- renderings
+        +-- bibliographic record relationships
+</pre>
+    <h2>
+     <span class="mw-headline" id="19._Related_pages">
+      19. Related pages
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="19.1._Bibliography_and_citations">
+      19.1. Bibliography and citations
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations &mdash; Overview
+      </a>
+     </li>
+     <li>
+      <a href="../Creating_a_bibliography_and_citing_sources.html" title="Creating a bibliography and citing sources">
+       Guide 1 &mdash; Creating a bibliography and citing sources
+      </a>
+     </li>
+     <li>
+      <a href="../Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">
+       Guide 2 &mdash; Understanding datasets, styles, renderings, selection, and sorting
+      </a>
+     </li>
+     <li>
+      <a href="../Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">
+       Guide 3 &mdash; Creating local and multiple bibliographies
+      </a>
+     </li>
+     <li>
+      <a href="../Organising_bibliographies_in_complex_editorial_projects.html" title="Organising bibliographies in complex editorial projects">
+       Guide 4 &mdash; Organising bibliographies in complex editorial projects
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Creating_a_flexible_manual_bibliography_with_simplebib&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Creating a flexible manual bibliography with simplebib (page does not exist)">
+       Creating a flexible manual bibliography with simplebib
+      </a>
+     </li>
+     <li>
+      <a href="../Category:Command/Bibliography.html" title="Category:Command/Bibliography">
+       Bibliography-related commands
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="19.2._Built-in_ConTeXt_reference_commands">
+      19.2. Built-in ConTeXt reference commands
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/reference.html" title="Command/reference">
+        \reference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/textreference.html" title="Command/textreference">
+        \textreference
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/in.html" title="Command/in">
+        \in
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/at.html" title="Command/at">
+        \at
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/about.html" title="Command/about">
+        \about
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupinteraction.html" title="Command/setupinteraction">
+        \setupinteraction
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="19.3._Modules_and_project_mechanisms">
+      19.3. Modules and project mechanisms
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="new" href="../index.php?title=Simple_Bibliography&action=edit&redlink=1" title="Simple Bibliography (page does not exist)">
+       Original Simple Bibliography module documentation
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Modules&action=edit&redlink=1" title="Modules (page does not exist)">
+       ConTeXt modules
+      </a>
+     </li>
+     <li>
+      <a class="new" href="../index.php?title=Project_structure&action=edit&redlink=1" title="Project structure (page does not exist)">
+       Project structure
+      </a>
+     </li>
+     <li>
+      <a href="../References_notes_and_floats.html" title="References notes and floats">
+       References, notes and floats
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="19.4._External_module_information">
+      19.4. External module information
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <a class="external text" href="https://modules.contextgarden.net/" rel="nofollow">
+       ConTeXt Modules
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://modules.contextgarden.net/usage.html" rel="nofollow">
+       Installing ConTeXt modules
+      </a>
+     </li>
+     <li>
+      <a class="external text" href="https://modules.contextgarden.net/cgi-bin/module.cgi/action%3Dlistall" rel="nofollow">
+       Complete module list
+      </a>
+      &mdash; see
+      <i>
+       Cross Referencing
+      </i>
+      and
+      <i>
+       Simple Bibliography
+      </i>
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; padding:0.65em 0.9em; margin-top:1.5em;">
+     <p><b>Bibliography and citations in ConTeXt</b> &nbsp;&middot;&nbsp;
+<a href="Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">Overview</a> &nbsp;&middot;&nbsp;
+<a href="../Creating_a_bibliography_and_citing_sources.html" title="Creating a bibliography and citing sources">Guide 1</a> &nbsp;&middot;&nbsp;
+<a href="../Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">Guide 2</a> &nbsp;&middot;&nbsp;
+<a href="../Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">Guide 3</a> &nbsp;&middot;&nbsp;
+<a href="../Organising_bibliographies_in_complex_editorial_projects.html" title="Organising bibliographies in complex editorial projects">Guide 4</a> &nbsp;&middot;&nbsp;
+<a class="new" href="../index.php?title=Bibliography_and_citations/How-to_guides/Creating_a_flexible_manual_bibliography_with_simplebib&action=edit&redlink=1.html" title="Bibliography and citations/How-to guides/Creating a flexible manual bibliography with simplebib (page does not exist)">Manual bibliography with simplebib</a> &nbsp;&middot;&nbsp;
+<b>Cross Referencing module</b>
+</p>
+    </div>
    </div>
   </article>
   <footer>
@@ -265,7 +1794,7 @@ Should be: <span class="brx">(</span>nach <span class="brx">[</span>Zen12, S. 32
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-28
+     Mirrored on 2026-08-29
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

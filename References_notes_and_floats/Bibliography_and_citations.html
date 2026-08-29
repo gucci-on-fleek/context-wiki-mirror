@@ -18,7 +18,7 @@
     References notes and floats/Bibliography and citations
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5073&diff=43656">2026-08-03</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=5073&diff=43695">2026-08-28</a>
         </p>
   </header>
   <article>
@@ -123,12 +123,12 @@
        </a>
       </li>
       <li class="toclevel-1 tocsection-8">
-       <a href="#6._Bibliographic_styles">
+       <a href="#6._Bibliographic_styles_and_specifications">
         <span class="tocnumber">
          6
         </span>
         <span class="toctext">
-         6. Bibliographic styles
+         6. Bibliographic styles and specifications
         </span>
        </a>
       </li>
@@ -206,7 +206,7 @@
       citing selected records in running text or notes;
      </li>
      <li>
-      deciding which records belong in a bibliography;
+      deciding which records belong in a particular bibliography;
      </li>
      <li>
       sorting and formatting those records;
@@ -237,6 +237,15 @@ subsystem.
       as an item in one of several specialised lists.
      </li>
     </ul>
+    <p>Citation and bibliography selection are related operations, but they are not
+the same operation. A citation identifies or refers to a record at a particular
+point in the document, while a bibliography rendering determines which records
+belong to a particular list and how they are presented.
+</p>
+    <p>This distinction becomes especially important when a document contains
+chapter bibliographies, several thematic lists, or a final bibliography that
+reuses records already rendered elsewhere.
+</p>
     <p>This page introduces the main elements of the system and provides a route
 through four practical guides.
 </p>
@@ -349,9 +358,21 @@ the bibliographic records.
 </td>
       </tr>
       <tr>
+       <td><code>criterium</code>
+</td>
+       <td>The rule determining the scope from which records are selected for a bibliography list, for example a chapter, section, or the whole document.
+</td>
+      </tr>
+      <tr>
        <td><code>method</code>
 </td>
-       <td>The rule determining which records are selected for a list.
+       <td>A rendering setting controlling how the bibliography list is processed. It should not be confused with the structural scope selected by <code>criterium</code>.
+</td>
+      </tr>
+      <tr>
+       <td><code>repeat</code>
+</td>
+       <td>Determines whether records that have already been rendered may be rendered again in another bibliography list.
 </td>
       </tr>
       <tr>
@@ -378,11 +399,22 @@ the bibliographic records.
         +----------&gt; citations
         |
         v
+     selection
+    (criterium)
+        |
+        v
  specification + rendering
         |
         v
  bibliography list
 </pre>
+    <p>The distinction between selection and rendering is important.
+</p>
+    <p>For example, selecting records belonging to the current chapter is a question
+of scope. Whether already rendered records may be used again is a separate
+question. Likewise, a local rendering method should not automatically be read
+as meaning &ldquo;select only records cited locally&rdquo;.
+</p>
     <p>The guides explain these elements progressively.
 </p>
     <h2>
@@ -393,8 +425,9 @@ the bibliographic records.
     <div style="margin:1em 0; padding:1em 1.2em; border:1px solid #aac7aa; border-left:6px solid #5f9f68; background:#f4faf4;">
      <p><b>The guides form a progression.</b>
 </p>
-     <p>They begin with a small self-contained example and move toward local
-bibliographies, multiple datasets, and multifile editorial projects.
+     <p>They begin with a small self-contained example and move toward chapter-level
+bibliographies, multiple datasets, repeated renderings, and multifile editorial
+projects.
 </p>
     </div>
     <table class="wikitable">
@@ -423,7 +456,7 @@ bibliographies, multiple datasets, and multifile editorial projects.
 </td>
        <td>Understand the main layers of the ConTeXt bibliography system.
 </td>
-       <td>Sources and datasets; specifications; citation alternatives; renderings; <code>method</code>; <code>sorttype</code>; placement; layer-based diagnosis.
+       <td>Sources and datasets; specifications; citation alternatives; renderings; <code>criterium</code>; <code>method</code>; <code>sorttype</code>; placement; layer-based diagnosis.
 </td>
       </tr>
       <tr>
@@ -431,7 +464,7 @@ bibliographies, multiple datasets, and multifile editorial projects.
 </td>
        <td>Produce several coherent bibliography lists in the same document.
 </td>
-       <td>Local and global bibliographies; several renderings from one dataset; several datasets; primary and secondary collections; repeated placement.
+       <td>Chapter-level and document-wide bibliographies; several renderings from one dataset; several datasets; primary and secondary collections; repeated placement; <code>repeat=yes</code>.
 </td>
       </tr>
       <tr>
@@ -484,6 +517,12 @@ bibliographies, multiple datasets, and multifile editorial projects.
 </td>
       </tr>
       <tr>
+       <td>Understand the difference between <code>criterium</code>, <code>method</code>, and <code>repeat</code>
+</td>
+       <td><a href="../Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">Guide 2</a>
+</td>
+      </tr>
+      <tr>
        <td>Diagnose why a record is missing, incorrectly selected, or badly ordered
 </td>
        <td><a href="../Understanding_bibliography_datasets,_styles,_renderings,_selection,_and_sorting.html" title="Understanding bibliography datasets, styles, renderings, selection, and sorting">Guide 2</a>
@@ -497,6 +536,12 @@ bibliographies, multiple datasets, and multifile editorial projects.
       </tr>
       <tr>
        <td>Produce chapter bibliographies and a final bibliography
+</td>
+       <td><a href="../Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">Guide 3</a>
+</td>
+      </tr>
+      <tr>
+       <td>Allow the same record to appear in more than one bibliography
 </td>
        <td><a href="../Creating_local_and_multiple_bibliographies.html" title="Creating local and multiple bibliographies">Guide 3</a>
 </td>
@@ -549,11 +594,11 @@ transformed as part of a larger automated workflow.
 workflows.
 </p>
     <h2>
-     <span class="mw-headline" id="6._Bibliographic_styles">
-      6. Bibliographic styles
+     <span class="mw-headline" id="6._Bibliographic_styles_and_specifications">
+      6. Bibliographic styles and specifications
      </span>
     </h2>
-    <p>A bibliographic style may determine:
+    <p>A bibliographic style or specification may determine:
 </p>
     <ul>
      <li>
@@ -572,7 +617,7 @@ workflows.
       the ordering and formatting of bibliography entries;
      </li>
      <li>
-      the treatment of repeated citations.
+      the treatment of repeated citations or other style-specific conventions.
      </li>
     </ul>
     <p>Major style families include:
@@ -594,11 +639,15 @@ workflows.
       project-specific or publisher-specific styles.
      </li>
     </ul>
+    <p>In ConTeXt, a bibliographic <b>specification</b> provides the rules used by the
+bibliography subsystem to implement such conventions.
+</p>
     <p>The names and scope of the specifications available in a particular ConTeXt
 installation should be verified before they are used in production.
 </p>
-    <p>A familiar style name does not necessarily imply that every variant of that
-style is supplied or fully implemented.
+    <p>A familiar bibliographic style name does not necessarily imply that every
+variant of that style is supplied or fully implemented by a corresponding
+ConTeXt specification.
 </p>
     <h2>
      <span class="mw-headline" id="7._Scope_of_this_collection">
@@ -626,7 +675,10 @@ style is supplied or fully implemented.
       selection and sorting;
      </li>
      <li>
-      local and multiple bibliographies;
+      chapter-level and multiple bibliographies;
+     </li>
+     <li>
+      repeated rendering of bibliographic records;
      </li>
      <li>
       structured multifile projects;
@@ -636,14 +688,15 @@ style is supplied or fully implemented.
      </li>
     </ul>
     <p>They do not attempt to document every low-level BTX command or every
-bibliographic style.
+bibliographic specification.
 </p>
     <p>Detailed command information belongs in the command reference and in the
 official publications manual.
 </p>
     <p>Advanced subjects such as complete note-citation systems, custom
 bibliographic specifications, complex parent&ndash;child records, critical editions,
-and specialised philological references require separate treatment.
+multilingual and multiscript bibliographies, and specialised philological
+references require separate treatment.
 </p>
     <h2>
      <span class="mw-headline" id="8._Related_pages_and_further_reading">
@@ -815,7 +868,7 @@ and specialised philological references require separate treatment.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-28
+     Mirrored on 2026-08-29
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
