@@ -18,25 +18,61 @@
     Declaring witnesses in TEI critical editions
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7540&diff=43619">2026-07-30</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7540&diff=43821">2026-08-30</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <div style="margin: 0 0 1.2em 0; padding: 0.75em 1em; border: 1px solid #d6b656; background: #fff4cc; text-align: center;">
-     <p><b>🚧 🚧 </b>Documentation under construction<b> &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to correct, expand, and improve them.</b>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.15em; margin-right:0.35em;">🚧</span>
+<b>Under construction</b> &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to edit and <b>improve</b> them.
 </p>
     </div>
-    <div style="margin: 0 0 1.5em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+    <div style="margin:0 0 1.5em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
      <p><b>Guide 2 of 6 &mdash; Declaring witnesses in TEI critical editions</b>
 </p>
-     <p><b>Previous:</b> <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Understanding TEI documents for critical editions</a>
+     <p><b>Previous Guide 1:</b> <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Understanding TEI documents for critical editions</a>
 &nbsp;&middot;&nbsp;
 <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
 &nbsp;&middot;&nbsp;
 <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
 &nbsp;&middot;&nbsp;
-<b>Next:</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
+<b>Next to Guide 3&nbsp;:</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
+</p>
+    </div>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.9em 1.1em; margin:1.2em 0;">
+     <p><b>What you will build in this guide</b>
+</p>
+     <p>Guide 1 ended with a minimal TEI document:
+</p>
+     <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; fileDesc
+&boxv;       &boxur;&boxh;&boxh; sourceDesc
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
+</pre>
+     <p>Guide 2 keeps that structure and adds a registry of three textual
+witnesses:
+</p>
+     <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; fileDesc
+&boxv;       &boxur;&boxh;&boxh; sourceDesc
+&boxv;           &boxur;&boxh;&boxh; listWit
+&boxv;               &boxvr;&boxh;&boxh; witness A
+&boxv;               &boxvr;&boxh;&boxh; witness B
+&boxv;               &boxur;&boxh;&boxh; witness C
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
+</pre>
+     <p>You will then use ConTeXt to retrieve the reader-facing labels and
+descriptions of those witnesses.
+</p>
+     <p>No apparatus entry is encoded yet. Guide 3 will use the witness identities
+created here.
 </p>
     </div>
     <div class="toc" id="toc">
@@ -52,689 +88,620 @@
      </div>
      <ul>
       <li class="toclevel-1 tocsection-1">
-       <a href="#1._Where_this_guide_fits_in_the_collection">
+       <a href="#Declaring_witnesses_in_TEI_critical_editions">
         <span class="tocnumber">
          1
         </span>
         <span class="toctext">
-         1. Where this guide fits in the collection
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-2">
-       <a href="#2._Understanding_textual_witnesses">
-        <span class="tocnumber">
-         2
-        </span>
-        <span class="toctext">
-         2. Understanding textual witnesses
+         Declaring witnesses in TEI critical editions
         </span>
        </a>
        <ul>
-        <li class="toclevel-2 tocsection-3">
-         <a href="#2.1._What_is_a_witness.3F">
+        <li class="toclevel-2 tocsection-2">
+         <a href="#1._Where_this_guide_fits_in_the_collection">
           <span class="tocnumber">
-           2.1
+           1.1
           </span>
           <span class="toctext">
-           2.1. What is a witness?
+           1. Where this guide fits in the collection
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Part_I_.E2.80.94_Declare_the_witnesses">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Part I &mdash; Declare the witnesses
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-4">
-         <a href="#2.2._Witness.2C_source.2C_and_edition">
+         <a href="#2._What_is_a_textual_witness.3F">
           <span class="tocnumber">
-           2.2
+           1.3
           </span>
           <span class="toctext">
-           2.2. Witness, source, and edition
+           2. What is a textual witness?
           </span>
          </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-5">
-       <a href="#3._Declarations_and_references">
-        <span class="tocnumber">
-         3
-        </span>
-        <span class="toctext">
-         3. Declarations and references
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-6">
-         <a href="#3.1._Why_witnesses_must_be_declared">
-          <span class="tocnumber">
-           3.1
-          </span>
-          <span class="toctext">
-           3.1. Why witnesses must be declared
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-5">
+           <a href="#2.1._The_basic_idea">
+            <span class="tocnumber">
+             1.3.1
+            </span>
+            <span class="toctext">
+             2.1. The basic idea
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#2.2._Source.2C_witness.2C_and_edited_text">
+            <span class="tocnumber">
+             1.3.2
+            </span>
+            <span class="toctext">
+             2.2. Source, witness, and edited text
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-7">
-         <a href="#3.2._The_declaration-and-reference_model">
+         <a href="#3._The_central_model:_declare_once.2C_refer_many_times">
           <span class="tocnumber">
-           3.2
+           1.4
           </span>
           <span class="toctext">
-           3.2. The declaration-and-reference model
+           3. The central model: declare once, refer many times
           </span>
          </a>
          <ul>
           <li class="toclevel-3 tocsection-8">
-           <a href="#3.2.1._Declaration">
+           <a href="#3.1._Declaration">
             <span class="tocnumber">
-             3.2.1
+             1.4.1
             </span>
             <span class="toctext">
-             3.2.1. Declaration
+             3.1. Declaration
             </span>
            </a>
           </li>
           <li class="toclevel-3 tocsection-9">
-           <a href="#3.2.2._Reference">
+           <a href="#3.2._Reference">
             <span class="tocnumber">
-             3.2.2
+             1.4.2
             </span>
             <span class="toctext">
-             3.2.2. Reference
+             3.2. Reference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#3.3._Why_declaration_comes_before_apparatus">
+            <span class="tocnumber">
+             1.4.3
+            </span>
+            <span class="toctext">
+             3.3. Why declaration comes before apparatus
             </span>
            </a>
           </li>
          </ul>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-10">
-       <a href="#4._Building_the_witness_list">
-        <span class="tocnumber">
-         4
-        </span>
-        <span class="toctext">
-         4. Building the witness list
-        </span>
-       </a>
-       <ul>
         <li class="toclevel-2 tocsection-11">
-         <a href="#4.1._The_witness_list">
+         <a href="#4._Build_the_witness_registry">
           <span class="tocnumber">
-           4.1
+           1.5
           </span>
           <span class="toctext">
-           4.1. The witness list
+           4. Build the witness registry
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-12">
+           <a href="#4.1._The_.3ClistWit.3E_element">
+            <span class="tocnumber">
+             1.5.1
+            </span>
+            <span class="toctext">
+             4.1. The &lt;listWit&gt; element
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-13">
+           <a href="#4.2._Where_the_registry_belongs">
+            <span class="tocnumber">
+             1.5.2
+            </span>
+            <span class="toctext">
+             4.2. Where the registry belongs
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-14">
+           <a href="#4.3._Update_the_Guide_1_document">
+            <span class="tocnumber">
+             1.5.3
+            </span>
+            <span class="toctext">
+             4.3. Update the Guide 1 document
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-15">
+           <a href="#4.4._Inspect_the_resulting_tree">
+            <span class="tocnumber">
+             1.5.4
+            </span>
+            <span class="toctext">
+             4.4. Inspect the resulting tree
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-12">
-         <a href="#4.2._Where_the_witness_list_belongs">
-          <span class="tocnumber">
-           4.2
-          </span>
-          <span class="toctext">
-           4.2. Where the witness list belongs
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-13">
-         <a href="#4.3._The_.3ClistWit.3E_element">
-          <span class="tocnumber">
-           4.3
-          </span>
-          <span class="toctext">
-           4.3. The &lt;listWit&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-14">
-         <a href="#4.4._The_.3Cwitness.3E_element">
-          <span class="tocnumber">
-           4.4
-          </span>
-          <span class="toctext">
-           4.4. The &lt;witness&gt; element
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-15">
-       <a href="#5._Identifiers.2C_sigla.2C_and_descriptions">
-        <span class="tocnumber">
-         5
-        </span>
-        <span class="toctext">
-         5. Identifiers, sigla, and descriptions
-        </span>
-       </a>
-       <ul>
         <li class="toclevel-2 tocsection-16">
-         <a href="#5.1._XML_identifier_and_siglum_are_not_the_same_thing">
+         <a href="#Part_II_.E2.80.94_Identity_and_references">
           <span class="tocnumber">
-           5.1
+           1.6
           </span>
           <span class="toctext">
-           5.1. XML identifier and siglum are not the same thing
+           Part II &mdash; Identity and references
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-17">
-         <a href="#5.2._Choosing_stable_XML_identifiers">
+         <a href="#5._Anatomy_of_a_witness_declaration">
           <span class="tocnumber">
-           5.2
+           1.7
           </span>
           <span class="toctext">
-           5.2. Choosing stable XML identifiers
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-18">
-         <a href="#5.3._Choosing_witness_sigla">
-          <span class="tocnumber">
-           5.3
-          </span>
-          <span class="toctext">
-           5.3. Choosing witness sigla
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-19">
-         <a href="#5.4._Describing_different_witness_types">
-          <span class="tocnumber">
-           5.4
-          </span>
-          <span class="toctext">
-           5.4. Describing different witness types
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-20">
-         <a href="#5.5._A_first_witness_list">
-          <span class="tocnumber">
-           5.5
-          </span>
-          <span class="toctext">
-           5.5. A first witness list
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-21">
-       <a href="#6._Extending_the_TEI_document">
-        <span class="tocnumber">
-         6
-        </span>
-        <span class="toctext">
-         6. Extending the TEI document
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-22">
-         <a href="#6.1._Extending_the_TEI_file_from_Guide_1">
-          <span class="tocnumber">
-           6.1
-          </span>
-          <span class="toctext">
-           6.1. Extending the TEI file from Guide 1
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-23">
-         <a href="#6.2._Complete_TEI_MWE">
-          <span class="tocnumber">
-           6.2
-          </span>
-          <span class="toctext">
-           6.2. Complete TEI MWE
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-24">
-         <a href="#6.3._Reading_the_witness_declarations_line_by_line">
-          <span class="tocnumber">
-           6.3
-          </span>
-          <span class="toctext">
-           6.3. Reading the witness declarations line by line
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-25">
-       <a href="#7._Reusing_witness_declarations">
-        <span class="tocnumber">
-         7
-        </span>
-        <span class="toctext">
-         7. Reusing witness declarations
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-26">
-         <a href="#7.1._How_apparatus_entries_will_refer_to_witnesses">
-          <span class="tocnumber">
-           7.1
-          </span>
-          <span class="toctext">
-           7.1. How apparatus entries will refer to witnesses
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-27">
-         <a href="#7.2._One_declaration.2C_many_references">
-          <span class="tocnumber">
-           7.2
-          </span>
-          <span class="toctext">
-           7.2. One declaration, many references
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-28">
-         <a href="#7.3._Referencing_several_witnesses">
-          <span class="tocnumber">
-           7.3
-          </span>
-          <span class="toctext">
-           7.3. Referencing several witnesses
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-29">
-         <a href="#7.4._Declaration_order_and_display_order">
-          <span class="tocnumber">
-           7.4
-          </span>
-          <span class="toctext">
-           7.4. Declaration order and display order
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-30">
-       <a href="#8._Extending_the_witness_model">
-        <span class="tocnumber">
-         8
-        </span>
-        <span class="toctext">
-         8. Extending the witness model
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-31">
-         <a href="#8.1._Witness_type_and_witness_identity">
-          <span class="tocnumber">
-           8.1
-          </span>
-          <span class="toctext">
-           8.1. Witness type and witness identity
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-32">
-         <a href="#8.2._Simple_and_fuller_declarations">
-          <span class="tocnumber">
-           8.2
-          </span>
-          <span class="toctext">
-           8.2. Simple and fuller declarations
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-33">
-         <a href="#8.3._Witness_groups_and_families">
-          <span class="tocnumber">
-           8.3
-          </span>
-          <span class="toctext">
-           8.3. Witness groups and families
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-34">
-       <a href="#9._Validation_and_common_errors">
-        <span class="tocnumber">
-         9
-        </span>
-        <span class="toctext">
-         9. Validation and common errors
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-35">
-         <a href="#9.1._Consistency_rules_for_witness_declarations">
-          <span class="tocnumber">
-           9.1
-          </span>
-          <span class="toctext">
-           9.1. Consistency rules for witness declarations
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-36">
-         <a href="#9.2._Common_declaration_errors">
-          <span class="tocnumber">
-           9.2
-          </span>
-          <span class="toctext">
-           9.2. Common declaration errors
+           5. Anatomy of a witness declaration
           </span>
          </a>
          <ul>
-          <li class="toclevel-3 tocsection-37">
-           <a href="#9.2.1._Duplicate_identifiers">
+          <li class="toclevel-3 tocsection-18">
+           <a href="#5.1._Stable_TEI_identifier:_xml:id">
             <span class="tocnumber">
-             9.2.1
+             1.7.1
             </span>
             <span class="toctext">
-             9.2.1. Duplicate identifiers
+             5.1. Stable TEI identifier: xml:id
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-38">
-           <a href="#9.2.2._Reusing_one_identifier_for_a_type">
+          <li class="toclevel-3 tocsection-19">
+           <a href="#5.2._Reader-facing_label:_.40n_in_this_tutorial">
             <span class="tocnumber">
-             9.2.2
+             1.7.2
             </span>
             <span class="toctext">
-             9.2.2. Reusing one identifier for a type
+             5.2. Reader-facing label: @n in this tutorial
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-39">
-           <a href="#9.2.3._Confusing_the_reference_with_the_identifier">
+          <li class="toclevel-3 tocsection-20">
+           <a href="#5.3._Description">
             <span class="tocnumber">
-             9.2.3
+             1.7.3
             </span>
             <span class="toctext">
-             9.2.3. Confusing the reference with the identifier
-            </span>
-           </a>
-          </li>
-          <li class="toclevel-3 tocsection-40">
-           <a href="#9.2.4._Using_the_siglum_as_an_unexplained_string">
-            <span class="tocnumber">
-             9.2.4
-            </span>
-            <span class="toctext">
-             9.2.4. Using the siglum as an unexplained string
+             5.3. Description
             </span>
            </a>
           </li>
          </ul>
         </li>
-        <li class="toclevel-2 tocsection-41">
-         <a href="#9.3._Well-formedness_and_witness_declarations">
+        <li class="toclevel-2 tocsection-21">
+         <a href="#6._How_apparatus_references_will_use_the_registry">
           <span class="tocnumber">
-           9.3
+           1.8
           </span>
           <span class="toctext">
-           9.3. Well-formedness and witness declarations
+           6. How apparatus references will use the registry
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-22">
+           <a href="#6.1._Resolve_one_reference">
+            <span class="tocnumber">
+             1.8.1
+            </span>
+            <span class="toctext">
+             6.1. Resolve one reference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-23">
+           <a href="#6.2._One_declaration.2C_many_apparatus_entries">
+            <span class="tocnumber">
+             1.8.2
+            </span>
+            <span class="toctext">
+             6.2. One declaration, many apparatus entries
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-24">
+           <a href="#6.3._Several_witnesses_may_support_one_reading">
+            <span class="tocnumber">
+             1.8.3
+            </span>
+            <span class="toctext">
+             6.3. Several witnesses may support one reading
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-25">
+         <a href="#Part_III_.E2.80.94_Check_and_process_the_registry">
+          <span class="tocnumber">
+           1.9
+          </span>
+          <span class="toctext">
+           Part III &mdash; Check and process the registry
           </span>
          </a>
         </li>
-        <li class="toclevel-2 tocsection-42">
-         <a href="#9.4._Structural_validity_and_editorial_correctness">
+        <li class="toclevel-2 tocsection-26">
+         <a href="#7._Check_the_witness_registry">
           <span class="tocnumber">
-           9.4
+           1.10
           </span>
           <span class="toctext">
-           9.4. Structural validity and editorial correctness
+           7. Check the witness registry
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-27">
+           <a href="#7.1._Witness-specific_checks">
+            <span class="tocnumber">
+             1.10.1
+            </span>
+            <span class="toctext">
+             7.1. Witness-specific checks
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-28">
+           <a href="#7.2._Duplicate_identifiers">
+            <span class="tocnumber">
+             1.10.2
+            </span>
+            <span class="toctext">
+             7.2. Duplicate identifiers
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-29">
+           <a href="#7.3._Identifier_and_reference_use_different_forms">
+            <span class="tocnumber">
+             1.10.3
+            </span>
+            <span class="toctext">
+             7.3. Identifier and reference use different forms
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-30">
+           <a href="#7.4._A_literal_label_is_not_a_structured_reference">
+            <span class="tocnumber">
+             1.10.4
+            </span>
+            <span class="toctext">
+             7.4. A literal label is not a structured reference
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-31">
+           <a href="#7.5._Formal_correctness_is_not_scholarly_correctness">
+            <span class="tocnumber">
+             1.10.5
+            </span>
+            <span class="toctext">
+             7.5. Formal correctness is not scholarly correctness
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-32">
+         <a href="#8._Inspect_the_witness_registry_with_ConTeXt">
+          <span class="tocnumber">
+           1.11
+          </span>
+          <span class="toctext">
+           8. Inspect the witness registry with ConTeXt
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-33">
+           <a href="#8.1._The_processing_map">
+            <span class="tocnumber">
+             1.11.1
+            </span>
+            <span class="toctext">
+             8.1. The processing map
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-34">
+           <a href="#8.2._Local_two-file_test">
+            <span class="tocnumber">
+             1.11.2
+            </span>
+            <span class="toctext">
+             8.2. Local two-file test
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-35">
+           <a href="#8.3._Garden_demonstration_with_source_and_result">
+            <span class="tocnumber">
+             1.11.3
+            </span>
+            <span class="toctext">
+             8.3. Garden demonstration with source and result
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-36">
+           <a href="#8.4._Follow_the_ConTeXt_processing_path">
+            <span class="tocnumber">
+             1.11.4
+            </span>
+            <span class="toctext">
+             8.4. Follow the ConTeXt processing path
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-37">
+           <a href="#8.5._Namespace_and_processing_prefix">
+            <span class="tocnumber">
+             1.11.5
+            </span>
+            <span class="toctext">
+             8.5. Namespace and processing prefix
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-38">
+           <a href="#8.6._Source_data_and_display_remain_separate">
+            <span class="tocnumber">
+             1.11.6
+            </span>
+            <span class="toctext">
+             8.6. Source data and display remain separate
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-39">
+         <a href="#Part_IV_.E2.80.94_Further_considerations_for_larger_projects">
+          <span class="tocnumber">
+           1.12
+          </span>
+          <span class="toctext">
+           Part IV &mdash; Further considerations for larger projects
           </span>
          </a>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-43">
-       <a href="#10._Inspecting_the_witness_list_with_ConTeXt">
-        <span class="tocnumber">
-         10
-        </span>
-        <span class="toctext">
-         10. Inspecting the witness list with ConTeXt
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-44">
-         <a href="#10.1._The_role_of_the_TEI_namespace">
+        <li class="toclevel-2 tocsection-40">
+         <a href="#9._Identity.2C_type.2C_description.2C_grouping.2C_and_order">
           <span class="tocnumber">
-           10.1
+           1.13
           </span>
           <span class="toctext">
-           10.1. The role of the TEI namespace
+           9. Identity, type, description, grouping, and order
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-41">
+           <a href="#9.1._Witness_type_is_not_witness_identity">
+            <span class="tocnumber">
+             1.13.1
+            </span>
+            <span class="toctext">
+             9.1. Witness type is not witness identity
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-42">
+           <a href="#9.2._Simple_and_fuller_descriptions">
+            <span class="tocnumber">
+             1.13.2
+            </span>
+            <span class="toctext">
+             9.2. Simple and fuller descriptions
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-43">
+           <a href="#9.3._Witness_groups_and_families">
+            <span class="tocnumber">
+             1.13.3
+            </span>
+            <span class="toctext">
+             9.3. Witness groups and families
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-44">
+           <a href="#9.4._Declaration_order_is_not_necessarily_printed_order">
+            <span class="tocnumber">
+             1.13.4
+            </span>
+            <span class="toctext">
+             9.4. Declaration order is not necessarily printed order
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-45">
-         <a href="#10.2._Retrieving_the_siglum">
+         <a href="#10._What_you_have_built">
           <span class="tocnumber">
-           10.2
+           1.14
           </span>
           <span class="toctext">
-           10.2. Retrieving the siglum
+           10. What you have built
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-46">
+           <a href="#10.1._Final_checklist">
+            <span class="tocnumber">
+             1.14.1
+            </span>
+            <span class="toctext">
+             10.1. Final checklist
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-47">
+         <a href="#11._Continue_with_Guide_3">
+          <span class="tocnumber">
+           1.15
+          </span>
+          <span class="toctext">
+           11. Continue with Guide 3
           </span>
          </a>
         </li>
-        <li class="toclevel-2 tocsection-46">
-         <a href="#10.3._Source_data_and_display_remain_separate">
+        <li class="toclevel-2 tocsection-48">
+         <a href="#Related_pages">
           <span class="tocnumber">
-           10.3
+           1.16
           </span>
           <span class="toctext">
-           10.3. Source data and display remain separate
+           Related pages
           </span>
          </a>
         </li>
        </ul>
-      </li>
-      <li class="toclevel-1 tocsection-47">
-       <a href="#11._A_practical_witness_checklist">
-        <span class="tocnumber">
-         11
-        </span>
-        <span class="toctext">
-         11. A practical witness checklist
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-48">
-       <a href="#12._What_this_guide_has_established">
-        <span class="tocnumber">
-         12
-        </span>
-        <span class="toctext">
-         12. What this guide has established
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-49">
-       <a href="#13._Next_guide">
-        <span class="tocnumber">
-         13
-        </span>
-        <span class="toctext">
-         13. Next guide
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-50">
-       <a href="#Related_pages">
-        <span class="tocnumber">
-         14
-        </span>
-        <span class="toctext">
-         Related pages
-        </span>
-       </a>
       </li>
      </ul>
     </div>
-    <p>A critical edition depends on textual evidence.
+    <p>A critical edition depends on identifiable textual evidence. Before an
+apparatus can say that one source reads
 </p>
-    <p>Before an apparatus can state that one witness reads
-<code>soul</code> while another reads <code>mind</code>, the witnesses
-themselves must be identified.
-</p>
-    <p>This guide extends the TEI document created in
-<a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Guide 1</a>.
-</p>
-    <p>The document will move from:
-</p>
-    <pre>TEI
-&boxvr;&boxh;&boxh; teiHeader
-&boxv;   &boxur;&boxh;&boxh; file description
-&boxur;&boxh;&boxh; text
-    &boxur;&boxh;&boxh; body
-        &boxur;&boxh;&boxh; paragraph
+    <pre>mind
 </pre>
-    <p>to:
+    <p>while another reads
 </p>
-    <pre>TEI
-&boxvr;&boxh;&boxh; teiHeader
-&boxv;   &boxur;&boxh;&boxh; fileDesc
-&boxv;       &boxur;&boxh;&boxh; sourceDesc
-&boxv;           &boxur;&boxh;&boxh; listWit
-&boxv;               &boxvr;&boxh;&boxh; witness A
-&boxv;               &boxvr;&boxh;&boxh; witness B
-&boxv;               &boxur;&boxh;&boxh; witness C
-&boxur;&boxh;&boxh; text
-    &boxur;&boxh;&boxh; body
-        &boxur;&boxh;&boxh; paragraph
+    <pre>soul
 </pre>
-    <p>The progression followed in this guide is:
+    <p>the sources themselves must be declared in a form that later apparatus
+entries can reference consistently.
 </p>
-    <pre>textual source
-      &darr;
-witness
-      &darr;
-witness declaration
-      &darr;
-XML identifier
-      &darr;
-editorial siglum
-      &darr;
-reference from later apparatus data
+    <p>This guide therefore concentrates on one principle:
+</p>
+    <pre>DECLARE ONCE
+     &boxv;
+     ▼
+GIVE A STABLE IDENTITY
+     &boxv;
+     ▼
+REFERENCE WHEN NEEDED
 </pre>
-    <p>At the end of the guide, the TEI file will contain a small but coherent
-witness list that can later be cited from lemmas and readings.
+    <p><b>How to read this diagram.</b> The witness description is stored once. A
+later reading does not repeat that description; it points back to the
+witness through its stable identifier.
 </p>
     <h2>
      <span class="mw-headline" id="1._Where_this_guide_fits_in_the_collection">
       1. Where this guide fits in the collection
      </span>
     </h2>
-    <p>The six-guide workflow is:
+    <p>The six guides construct one progressively richer scholarly source. The
+following cumulative map deliberately repeats structures introduced in
+Guide 1: the repetition helps the reader see what remains stable and what
+Guide 2 adds.
 </p>
-    <pre>TEI document
-      &darr;
-[WITNESS DECLARATIONS]        &larr; Guide 2
-      &darr;
-basic apparatus entries
-      &darr;
-complex textual variation
-      &darr;
-Lua processing
-      &darr;
-ConTeXt typesetting
+    <pre>GUIDE 1
+basic TEI document
+
+TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
+        &boxv;
+        ▼
+GUIDE 2                                      &larr; YOU ARE HERE
+add witness declarations
+
+TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; witness A
+&boxv;           &boxvr;&boxh;&boxh; witness B
+&boxv;           &boxur;&boxh;&boxh; witness C
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
+        &boxv;
+        ▼
+GUIDE 3
+add basic apparatus relations
+app / lem / rdg / @wit
+        &boxv;
+        ▼
+GUIDE 4
+add complex textual variation
+omissions / corrections / conjectures / groups
+        &boxv;
+        ▼
+GUIDE 5
+process and validate encoded relations
+Lua where additional processing is useful
+        &boxv;
+        ▼
+GUIDE 6
+compose the scholarly page with ConTeXt
 </pre>
-    <p>Guide 1 established:
+    <p><b>How to read this diagram.</b> Guide 2 does not replace the document
+created in Guide 1. It enriches the documentary branch of that same TEI
+structure. Guide 3 will then use the identities created here to connect
+textual readings with the witnesses that support them.
 </p>
-    <ul>
-     <li>
-      the TEI root element;
-     </li>
-     <li>
-      the TEI namespace;
-     </li>
-     <li>
-      the TEI header;
-     </li>
-     <li>
-      the textual body;
-     </li>
-     <li>
-      a paragraph with an XML identifier.
-     </li>
-    </ul>
-    <p>This guide adds:
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> We know the task of Guide 2: add a stable witness
+registry while leaving the textual branch essentially unchanged.
 </p>
-    <ul>
-     <li>
-      the concept of a textual witness;
-     </li>
-     <li>
-      witness declarations;
-     </li>
-     <li>
-      a witness list;
-     </li>
-     <li>
-      stable XML identifiers;
-     </li>
-     <li>
-      reader-facing sigla;
-     </li>
-     <li>
-      descriptions of manuscripts and printed editions;
-     </li>
-     <li>
-      the distinction between declarations and references;
-     </li>
-     <li>
-      the basic structure that apparatus entries will later use.
-     </li>
-    </ul>
-    <p>This guide does not yet explain:
-</p>
-    <ul>
-     <li>
-      <code>&lt;app&gt;</code>
-      ;
-     </li>
-     <li>
-      <code>&lt;lem&gt;</code>
-      ;
-     </li>
-     <li>
-      <code>&lt;rdg&gt;</code>
-      ;
-     </li>
-     <li>
-      the detailed encoding of witness agreement;
-     </li>
-     <li>
-      complex witness families;
-     </li>
-     <li>
-      Lua-based validation;
-     </li>
-     <li>
-      final apparatus typography.
-     </li>
-    </ul>
-    <p>Those subjects belong to later guides.
-</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="2._Understanding_textual_witnesses">
-      2. Understanding textual witnesses
+     <span id="Part_I_&mdash;_Declare_the_witnesses">
+     </span>
+     <span class="mw-headline" id="Part_I_.E2.80.94_Declare_the_witnesses">
+      Part I &mdash; Declare the witnesses
+     </span>
+    </h2>
+    <h2>
+     <span id="2._What_is_a_textual_witness?">
+     </span>
+     <span class="mw-headline" id="2._What_is_a_textual_witness.3F">
+      2. What is a textual witness?
      </span>
     </h2>
     <h3>
-     <span id="2.1._What_is_a_witness?">
-     </span>
-     <span class="mw-headline" id="2.1._What_is_a_witness.3F">
-      2.1. What is a witness?
+     <span class="mw-headline" id="2.1._The_basic_idea">
+      2.1. The basic idea
      </span>
     </h3>
-    <p>A <b>witness</b> is a source that preserves or transmits a form of the text.
+    <p>A <b>witness</b> is an identifiable source that preserves or transmits a
+form of the text.
 </p>
-    <p>Depending on the work being edited, a witness may be:
+    <p>Depending on the project, a witness may be:
 </p>
     <ul>
      <li>
@@ -762,41 +729,46 @@ ConTeXt typesetting
       a quotation in another work;
      </li>
      <li>
-      a translation;
+      an early translation;
      </li>
      <li>
       another identifiable textual source.
      </li>
     </ul>
-    <p>Suppose that the sentence used in Guide 1 survives in three sources:
+    <p>Suppose our sentence survives in three sources:
 </p>
-    <pre>A  The mind seeks unity.
-B  The soul seeks unity.
-C  The mind desires unity.
+    <pre>A   The mind seeks unity.
+
+B   The soul seeks unity.
+
+C   The mind desires unity.
 </pre>
-    <p>The three lines are not merely three copies of the same file.
+    <p>The textual situation can be visualised as:
 </p>
-    <p>They represent three textual witnesses:
-</p>
-    <pre>textual tradition
-&boxvr;&boxh;&boxh; witness A
-&boxvr;&boxh;&boxh; witness B
-&boxur;&boxh;&boxh; witness C
+    <pre>                     textual tradition
+                          &boxv;
+              +-----------+-----------+
+              &boxv;           &boxv;           &boxv;
+              ▼           ▼           ▼
+          witness A   witness B   witness C
+              &boxv;           &boxv;           &boxv;
+              ▼           ▼           ▼
+            mind         soul         mind
+            seeks        seeks        desires
+            unity        unity        unity
 </pre>
-    <p>Each witness has its own identity, history, and textual content.
-</p>
-    <p>A critical edition compares those witnesses and records their agreements and
-differences.
+    <p><b>How to read this diagram.</b> The three sources transmit related but not
+identical forms of the sentence. Guide 2 identifies the three witnesses.
+The comparison of their readings belongs to Guides 3 and 4.
 </p>
     <h3>
-     <span id="2.2._Witness,_source,_and_edition">
+     <span id="2.2._Source,_witness,_and_edited_text">
      </span>
-     <span class="mw-headline" id="2.2._Witness.2C_source.2C_and_edition">
-      2.2. Witness, source, and edition
+     <span class="mw-headline" id="2.2._Source.2C_witness.2C_and_edited_text">
+      2.2. Source, witness, and edited text
      </span>
     </h3>
-    <p>The words <i>witness</i>, <i>source</i>, and <i>edition</i> are related but should not
-be treated as automatic synonyms.
+    <p>The terms are related, but they are not automatic synonyms.
 </p>
     <table class="wikitable">
      <tbody>
@@ -805,7 +777,7 @@ be treated as automatic synonyms.
         Term
        </th>
        <th>
-        Principal meaning in this collection
+        Meaning in these guides
        </th>
       </tr>
       <tr>
@@ -817,7 +789,7 @@ be treated as automatic synonyms.
       <tr>
        <td>Witness
 </td>
-       <td>An identifiable source that preserves or transmits a form of the text
+       <td>An identifiable source preserving or transmitting a form of the text
 </td>
       </tr>
       <tr>
@@ -829,710 +801,275 @@ be treated as automatic synonyms.
       <tr>
        <td>Critical edition
 </td>
-       <td>The complete scholarly publication containing the edited text and its documentation
+       <td>The scholarly publication containing the edited text and its documentation
 </td>
       </tr>
      </tbody>
     </table>
-    <p>A printed book may function as a witness when its readings are included in
-the textual comparison.
+    <p>A printed book may function as a witness if its readings form part of the
+textual comparison.
 </p>
-    <p>A modern critical edition may also be used as a secondary source without being
-treated as one of the primary witnesses.
+    <p>A modern critical edition might instead be used only as a secondary
+scholarly source. The role depends on the editorial model.
 </p>
-    <p>The status of a source therefore depends partly on the editorial project.
-</p>
-    <h2>
-     <span class="mw-headline" id="3._Declarations_and_references">
-      3. Declarations and references
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="3.1._Why_witnesses_must_be_declared">
-      3.1. Why witnesses must be declared
-     </span>
-    </h3>
-    <p>A printed apparatus may use compact sigla:
-</p>
-    <pre>A B C
-</pre>
-    <p>To a human reader, these may appear sufficient.
-</p>
-    <p>A structured edition, however, must know what those sigla identify.
-</p>
-    <p>A witness declaration can connect:
-</p>
-    <pre>machine-readable identity
-        &darr;
-reader-facing siglum
-        &darr;
-witness type
-        &darr;
-description
-        &darr;
-later references
-</pre>
-    <p>For example:
-</p>
-    <pre>XML identifier:  ms-A
-printed siglum:  A
-type:            manuscript
-description:     the principal manuscript
-</pre>
-    <p>Without declarations, a reference such as:
-</p>
-    <pre>wit="#ms-A"
-</pre>
-    <p>has no defined target.
-</p>
-    <p>The declaration establishes that target.
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Guiding principle.</b> Declare each witness once, then refer to it by its stable XML identifier. The declaration stores identity and description; later references reuse that information without duplicating it.
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not confuse source and witness.</b> A source becomes a witness in this
+workflow when the project treats it as an identifiable transmitter of
+textual readings. The category is therefore partly determined by editorial
+practice.
 </p>
     </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the vocabulary used here, see the
+<a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>.
+</p>
+     <p>For the TEI model of textual witnesses and variant readings, consult the
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow">TEI P5 chapter <i>Critical Apparatus</i></a>.
+</p>
+    </div>
+    <h2>
+     <span id="3._The_central_model:_declare_once,_refer_many_times">
+     </span>
+     <span class="mw-headline" id="3._The_central_model:_declare_once.2C_refer_many_times">
+      3. The central model: declare once, refer many times
+     </span>
+    </h2>
+    <p>This is the most important concept in Guide 2.
+</p>
+    <p>A witness is described once. Later parts of the TEI source refer back to
+that declaration.
+</p>
     <h3>
-     <span class="mw-headline" id="3.2._The_declaration-and-reference_model">
-      3.2. The declaration-and-reference model
+     <span class="mw-headline" id="3.1._Declaration">
+      3.1. Declaration
      </span>
     </h3>
-    <p>The witness system contains two complementary operations.
-</p>
-    <h4>
-     <span class="mw-headline" id="3.2.1._Declaration">
-      3.2.1. Declaration
-     </span>
-    </h4>
-    <p>A declaration creates and describes an identifiable witness:
+    <p>A witness declaration creates an identifiable documentary object:
 </p>
     <pre>&lt;witness xml:id="ms-A" n="A"&gt;
   The principal manuscript.
 &lt;/witness&gt;
 </pre>
-    <h4>
-     <span class="mw-headline" id="3.2.2._Reference">
-      3.2.2. Reference
+    <p>For this tutorial, the declaration stores:
+</p>
+    <pre>stable TEI identifier:   ms-A
+reader-facing label:     A
+description:             The principal manuscript.
+</pre>
+    <p>The distinction between the first two lines will be examined more closely
+in Section 5.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.2._Reference">
+      3.2. Reference
      </span>
-    </h4>
-    <p>A later element can refer to that witness:
+    </h3>
+    <p>A later apparatus entry will be able to point to the declaration:
 </p>
     <pre>wit="#ms-A"
 </pre>
     <p>The relation is:
 </p>
-    <pre>declaration
-xml:id="ms-A"
-        &uarr;
-        &boxv;
-reference
-#ms-A
+    <pre>                      DECLARATION
+                 stored once in header
+
+        &lt;witness xml:id="ms-A" n="A"&gt;
+          The principal manuscript.
+        &lt;/witness&gt;
+
+                    &boxv;
+                    &boxv; stable target
+                    &boxv;
+          +---------+---------+---------+
+          &boxv;                   &boxv;         &boxv;
+          ▼                   ▼         ▼
+      reference 1         reference 2  reference 3
+      wit="#ms-A"         wit="#ms-A"  wit="#ms-A"
 </pre>
-    <p>The declaration stores the <i>identity</i>.
+    <p><b>How to read this diagram.</b> The declaration is the stable source of
+identity and descriptive information. Repeated apparatus entries can point
+to that identity without copying the witness metadata each time.
 </p>
-    <p>The reference points back to it.
+    <p>Or, more compactly:
 </p>
-    <p>This principle will later allow apparatus entries to remain compact and
-consistent.
+    <pre>DECLARE ONCE
+     &boxv;
+     &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► REFERENCE MANY TIMES
+</pre>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> The declaration stores identity and description.
+References reuse that identity wherever the witness is needed. This keeps
+the scholarly data consistent and avoids repeating witness metadata in
+every apparatus entry.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="3.3._Why_declaration_comes_before_apparatus">
+      3.3. Why declaration comes before apparatus
+     </span>
+    </h3>
+    <p>Without a declaration:
+</p>
+    <pre>wit="#ms-A"
+</pre>
+    <p>has no locally defined witness target.
+</p>
+    <p>With:
+</p>
+    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
+  The principal manuscript.
+&lt;/witness&gt;
+</pre>
+    <p>the relationship becomes:
+</p>
+    <pre>wit="#ms-A"
+     &boxv;
+     ▼
+find xml:id="ms-A"
+     &boxv;
+     ▼
+retrieve witness declaration
+     &boxv;
+     &boxvr;&boxh;&boxh; reader-facing label: A
+     &boxur;&boxh;&boxh; description: The principal manuscript.
+</pre>
+    <p><b>How to read this diagram.</b> The apparatus reference is meaningful
+because the identifier resolves to a declared witness. This is why witness
+declarations are established before Guide 3 introduces
+<code>&lt;app&gt;</code>, <code>&lt;lem&gt;</code>, and
+<code>&lt;rdg&gt;</code>.
 </p>
     <h2>
-     <span class="mw-headline" id="4._Building_the_witness_list">
-      4. Building the witness list
+     <span class="mw-headline" id="4._Build_the_witness_registry">
+      4. Build the witness registry
      </span>
     </h2>
     <h3>
-     <span class="mw-headline" id="4.1._The_witness_list">
-      4.1. The witness list
+     <span id="4.1._The_&lt;listWit&gt;_element">
+     </span>
+     <span class="mw-headline" id="4.1._The_.3ClistWit.3E_element">
+      4.1. The
+      <code>&lt;listWit&gt;</code>
+      element
      </span>
     </h3>
-    <p>TEI provides the element <code>&lt;listWit&gt;</code> for a list of
-witnesses.
+    <p>TEI provides <code>&lt;listWit&gt;</code> for grouping witness
+declarations.
 </p>
-    <p>A small witness list may look like this:
+    <p>For the three teaching witnesses:
 </p>
     <pre>&lt;listWit&gt;
   &lt;witness xml:id="ms-A" n="A"&gt;
     The principal manuscript.
   &lt;/witness&gt;
+
   &lt;witness xml:id="ms-B" n="B"&gt;
-    A second manuscript containing several alternative readings.
+    A later manuscript containing several alternative readings.
   &lt;/witness&gt;
+
   &lt;witness xml:id="ed-C" n="C"&gt;
     An early printed edition.
   &lt;/witness&gt;
 &lt;/listWit&gt;
 </pre>
-    <p>Its structure is:
+    <p>Think of <code>&lt;listWit&gt;</code> as a registry:
 </p>
-    <pre>listWit
-&boxvr;&boxh;&boxh; witness
-&boxv;   &boxvr;&boxh;&boxh; xml:id: ms-A
-&boxv;   &boxvr;&boxh;&boxh; n: A
-&boxv;   &boxur;&boxh;&boxh; description
-&boxvr;&boxh;&boxh; witness
-&boxv;   &boxvr;&boxh;&boxh; xml:id: ms-B
-&boxv;   &boxvr;&boxh;&boxh; n: B
-&boxv;   &boxur;&boxh;&boxh; description
-&boxur;&boxh;&boxh; witness
-    &boxvr;&boxh;&boxh; xml:id: ed-C
-    &boxvr;&boxh;&boxh; n: C
-    &boxur;&boxh;&boxh; description
+    <pre>                    listWit
+               WITNESS REGISTRY
+                     &boxv;
+       +-------------+-------------+
+       &boxv;             &boxv;             &boxv;
+       ▼             ▼             ▼
+      ms-A          ms-B          ed-C
+       &boxv;             &boxv;             &boxv;
+       ▼             ▼             ▼
+       A             B             C
+ principal ms.   later ms.   printed edition
+       &boxv;             &boxv;             &boxv;
+       +-------------+-------------+
+                     &boxv;
+                     ▼
+             available to apparatus
 </pre>
-    <p>The witness list acts as a small registry.
-</p>
-    <p>Each witness is declared once and can be referenced many times.
+    <p><b>How to read this diagram.</b> Each witness has a stable declaration in
+the registry. Later apparatus structures can retrieve the same witness by
+identifier whenever they need to associate a reading with that source.
 </p>
     <h3>
-     <span class="mw-headline" id="4.2._Where_the_witness_list_belongs">
-      4.2. Where the witness list belongs
+     <span class="mw-headline" id="4.2._Where_the_registry_belongs">
+      4.2. Where the registry belongs
      </span>
     </h3>
-    <p>In the document used by these guides, the witness list is placed inside the
-source description of the TEI header:
+    <p>In this series, the witness list is placed in the source description:
 </p>
-    <pre>teiHeader
-&boxur;&boxh;&boxh; fileDesc
-    &boxvr;&boxh;&boxh; titleStmt
-    &boxvr;&boxh;&boxh; publicationStmt
-    &boxur;&boxh;&boxh; sourceDesc
-        &boxur;&boxh;&boxh; listWit
-            &boxvr;&boxh;&boxh; witness
-            &boxvr;&boxh;&boxh; witness
-            &boxur;&boxh;&boxh; witness
+    <pre>TEI
+&boxur;&boxh;&boxh; teiHeader
+    &boxur;&boxh;&boxh; fileDesc
+        &boxur;&boxh;&boxh; sourceDesc
+            &boxur;&boxh;&boxh; listWit
+                &boxvr;&boxh;&boxh; witness
+                &boxvr;&boxh;&boxh; witness
+                &boxur;&boxh;&boxh; witness
 </pre>
-    <p>The relevant source fragment is:
+    <p>This placement makes its documentary function visible:
+</p>
+    <pre>TEI header
+    &boxv;
+    ▼
+documentation of the encoded resource
+    &boxv;
+    ▼
+description of sources
+    &boxv;
+    ▼
+textual witness registry
+</pre>
+    <p>The source fragment is:
 </p>
     <pre>&lt;sourceDesc&gt;
   &lt;listWit&gt;
     &lt;witness xml:id="ms-A" n="A"&gt;
       The principal manuscript.
     &lt;/witness&gt;
+
     &lt;witness xml:id="ms-B" n="B"&gt;
-      A second manuscript containing several alternative readings.
+      A later manuscript containing several alternative readings.
     &lt;/witness&gt;
+
     &lt;witness xml:id="ed-C" n="C"&gt;
       An early printed edition.
     &lt;/witness&gt;
   &lt;/listWit&gt;
 &lt;/sourceDesc&gt;
 </pre>
-    <p>This placement reflects the role of the witness list:
-</p>
-    <pre>TEI header
-    &darr;
-documentation of the encoded resource
-    &darr;
-description of its sources
-    &darr;
-declaration of textual witnesses
-</pre>
     <h3>
-     <span id="4.3._The_&lt;listWit&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.3._The_.3ClistWit.3E_element">
-      4.3. The
-      <code>&lt;listWit&gt;</code>
-      element
+     <span class="mw-headline" id="4.3._Update_the_Guide_1_document">
+      4.3. Update the Guide 1 document
      </span>
     </h3>
-    <p>The TEI element <code>&lt;listWit&gt;</code> groups witness declarations.
-</p>
-    <p>In the examples used here, it contains several
-<code>&lt;witness&gt;</code> elements:
-</p>
-    <pre>&lt;listWit&gt;
-  &lt;witness&gt;...&lt;/witness&gt;
-  &lt;witness&gt;...&lt;/witness&gt;
-  &lt;witness&gt;...&lt;/witness&gt;
-&lt;/listWit&gt;
-</pre>
-    <p>The list has two principal functions:
-</p>
-    <ul>
-     <li>
-      it gives the witness declarations a common location;
-     </li>
-     <li>
-      it allows processing systems to retrieve the declared witnesses together.
-     </li>
-    </ul>
-    <p>Conceptually:
-</p>
-    <pre>listWit
-&boxur;&boxh;&boxh; witness registry
-    &boxvr;&boxh;&boxh; A
-    &boxvr;&boxh;&boxh; B
-    &boxur;&boxh;&boxh; C
-</pre>
-    <p>A larger project may use several lists or more elaborate source descriptions.
-The present guide keeps the structure deliberately small.
-</p>
-    <h3>
-     <span id="4.4._The_&lt;witness&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.4._The_.3Cwitness.3E_element">
-      4.4. The
-      <code>&lt;witness&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>Each <code>&lt;witness&gt;</code> element declares one witness.
-</p>
-    <p>For example:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>This declaration contains three distinct parts:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Part
-       </th>
-       <th>
-        Example
-       </th>
-       <th>
-        Function
-       </th>
-      </tr>
-      <tr>
-       <td>Element
-</td>
-       <td><code>&lt;witness&gt;</code>
-</td>
-       <td>Declares a textual witness
-</td>
-      </tr>
-      <tr>
-       <td>XML identifier
-</td>
-       <td><code>xml:id="ms-A"</code>
-</td>
-       <td>Provides a stable machine-readable identity
-</td>
-      </tr>
-      <tr>
-       <td>Editorial label
-</td>
-       <td><code>n="A"</code>
-</td>
-       <td>Supplies a short value that can be used as a siglum
-</td>
-      </tr>
-      <tr>
-       <td>Content
-</td>
-       <td><code>The principal manuscript.</code>
-</td>
-       <td>Describes the witness
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The same model is repeated for each witness.
-</p>
-    <h2>
-     <span id="5._Identifiers,_sigla,_and_descriptions">
-     </span>
-     <span class="mw-headline" id="5._Identifiers.2C_sigla.2C_and_descriptions">
-      5. Identifiers, sigla, and descriptions
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="5.1._XML_identifier_and_siglum_are_not_the_same_thing">
-      5.1. XML identifier and siglum are not the same thing
-     </span>
-    </h3>
-    <p>This distinction is <b>fundamental</b>.
-</p>
-    <p>Consider:
-</p>
-    <pre>&lt;witness xml:id="ms-paris-123" n="P"&gt;
-  Paris, Biblioth&egrave;que nationale de France, manuscript 123.
-&lt;/witness&gt;
-</pre>
-    <p>The declaration contains:
-</p>
-    <pre>XML identifier:  ms-paris-123
-siglum:          P
-description:     Paris, Biblioth&egrave;que nationale de France,
-                 manuscript 123
-</pre>
-    <p>The identifier and siglum serve different audiences.
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        XML identifier
-       </th>
-       <th>
-        Siglum
-       </th>
-      </tr>
-      <tr>
-       <td>Used for machine-readable linking
-</td>
-       <td>Used for compact scholarly display
-</td>
-      </tr>
-      <tr>
-       <td>Must follow XML identifier rules
-</td>
-       <td>Follows the editorial conventions of the edition
-</td>
-      </tr>
-      <tr>
-       <td>Should remain stable in the source
-</td>
-       <td>May vary between publications
-</td>
-      </tr>
-      <tr>
-       <td>Need not be elegant
-</td>
-       <td>Should be concise and readable
-</td>
-      </tr>
-      <tr>
-       <td>Example: <code>ms-paris-123</code>
-</td>
-       <td>Example: <code>P</code>
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The distinction can be visualised as:
-</p>
-    <pre>&lt;witness xml:id="ms-paris-123" n="P"&gt;
-          &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxul;    &boxur;&boxh;&boxul;
-           machine identity   display siglum
-&lt;/witness&gt;
-</pre>
-    <p>A project may choose identical values:
-</p>
-    <pre>xml:id="A"
-n="A"
-</pre>
-    <p>but that does not make their functions identical.
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>Do not confuse identity with display.</b> The value of <code>xml:id</code> is a linking target inside the XML document. The siglum is the compact label presented to readers. They may look alike, but they serve different purposes.
-</p>
-    </div>
-    <h3>
-     <span class="mw-headline" id="5.2._Choosing_stable_XML_identifiers">
-      5.2. Choosing stable XML identifiers
-     </span>
-    </h3>
-    <p>For these guides, witness identifiers should:
-</p>
-    <ul>
-     <li>
-      be unique within the document;
-     </li>
-     <li>
-      begin with a letter or underscore;
-     </li>
-     <li>
-      contain no spaces;
-     </li>
-     <li>
-      remain stable when possible;
-     </li>
-     <li>
-      identify the witness rather than its current visual form;
-     </li>
-     <li>
-      avoid depending on page layout or apparatus order.
-     </li>
-    </ul>
-    <p>Useful identifiers include:
-</p>
-    <pre>ms-A
-ms-B
-ed-C
-papyrus-46
-ms-paris-123
-print-basel-1781
-translation-latin-01
-</pre>
-    <p>Less useful identifiers include:
-</p>
-    <pre>first-witness
-red-siglum
-bottom-note-source
-page-7-manuscript
-temporary-B
-</pre>
-    <p>The second group describes a temporary role or visual appearance rather than
-a stable identity.
-</p>
-    <h3>
-     <span class="mw-headline" id="5.3._Choosing_witness_sigla">
-      5.3. Choosing witness sigla
-     </span>
-    </h3>
-    <p>A siglum is a compact editorial label.
-</p>
-    <p>Common sigla include:
-</p>
-    <pre>A
-B
-C
-P
-M
-P46
-Vat.
-&alpha;
-&beta;
-</pre>
-    <p>A useful siglum should normally be:
-</p>
-    <ul>
-     <li>
-      short;
-     </li>
-     <li>
-      distinguishable from other sigla;
-     </li>
-     <li>
-      stable within the edition;
-     </li>
-     <li>
-      documented in the witness list;
-     </li>
-     <li>
-      suitable for repeated use in the apparatus.
-     </li>
-    </ul>
-    <p>The siglum belongs to the presentation of the scholarly data.
-</p>
-    <p>For example:
-</p>
-    <pre>machine reference:  #ms-paris-123
-printed siglum:     P
-</pre>
-    <p>A later ConTeXt process can resolve the reference and retrieve the siglum:
-</p>
-    <pre>#ms-paris-123
-      &darr;
-find xml:id="ms-paris-123"
-      &darr;
-retrieve n="P"
-      &darr;
-print P
-</pre>
-    <h3>
-     <span class="mw-headline" id="5.4._Describing_different_witness_types">
-      5.4. Describing different witness types
-     </span>
-    </h3>
-    <p>The witness content should give the reader enough information to understand
-what the witness represents.
-</p>
-    <p>A simple manuscript declaration might be:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>A second manuscript:
-</p>
-    <pre>&lt;witness xml:id="ms-B" n="B"&gt;
-  A later manuscript containing several alternative readings.
-&lt;/witness&gt;
-</pre>
-    <p>A printed edition:
-</p>
-    <pre>&lt;witness xml:id="ed-C" n="C"&gt;
-  An early printed edition.
-&lt;/witness&gt;
-</pre>
-    <p>A fuller project may record substantially more information, but the basic
-distinction is already visible:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Identifier
-       </th>
-       <th>
-        Siglum
-       </th>
-       <th>
-        Type represented by the description
-       </th>
-      </tr>
-      <tr>
-       <td><code>ms-A</code>
-</td>
-       <td><code>A</code>
-</td>
-       <td>Principal manuscript
-</td>
-      </tr>
-      <tr>
-       <td><code>ms-B</code>
-</td>
-       <td><code>B</code>
-</td>
-       <td>Later manuscript
-</td>
-      </tr>
-      <tr>
-       <td><code>ed-C</code>
-</td>
-       <td><code>C</code>
-</td>
-       <td>Printed edition
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The prefixes used here are project conventions:
-</p>
-    <pre>ms-     manuscript
-ed-     printed edition
-</pre>
-    <p>TEI does not require these particular prefixes.
-</p>
-    <p>They simply make the identifiers easier to understand.
-</p>
-    <h3>
-     <span class="mw-headline" id="5.5._A_first_witness_list">
-      5.5. A first witness list
-     </span>
-    </h3>
-    <p>The minimal witness list for this guide is:
-</p>
-    <pre>&lt;listWit&gt;
-  &lt;witness xml:id="ms-A" n="A"&gt;
-    The principal manuscript.
-  &lt;/witness&gt;
-  &lt;witness xml:id="ms-B" n="B"&gt;
-    A later manuscript containing several alternative readings.
-  &lt;/witness&gt;
-  &lt;witness xml:id="ed-C" n="C"&gt;
-    An early printed edition.
-  &lt;/witness&gt;
-&lt;/listWit&gt;
-</pre>
-    <p>The corresponding editorial inventory is:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Siglum
-       </th>
-       <th>
-        XML identifier
-       </th>
-       <th>
-        Description
-       </th>
-      </tr>
-      <tr>
-       <td>A
-</td>
-       <td><code>ms-A</code>
-</td>
-       <td>The principal manuscript
-</td>
-      </tr>
-      <tr>
-       <td>B
-</td>
-       <td><code>ms-B</code>
-</td>
-       <td>A later manuscript containing several alternative readings
-</td>
-      </tr>
-      <tr>
-       <td>C
-</td>
-       <td><code>ed-C</code>
-</td>
-       <td>An early printed edition
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The same information appears in three forms:
-</p>
-    <pre>editorial inventory
-        &darr;
-TEI witness declarations
-        &darr;
-later apparatus references
-</pre>
-    <h2>
-     <span class="mw-headline" id="6._Extending_the_TEI_document">
-      6. Extending the TEI document
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="6.1._Extending_the_TEI_file_from_Guide_1">
-      6.1. Extending the TEI file from Guide 1
-     </span>
-    </h3>
-    <p>In Guide 1, the source description contained only a short paragraph:
+    <p>Guide 1 used:
 </p>
     <pre>&lt;sourceDesc&gt;
   &lt;p&gt;Created for the ConTeXt Garden TEI guides.&lt;/p&gt;
 &lt;/sourceDesc&gt;
 </pre>
-    <p>Replace that paragraph with the witness list:
+    <p>For Guide 2, replace that small placeholder source description with the
+witness registry above.
 </p>
-    <pre>&lt;sourceDesc&gt;
-  &lt;listWit&gt;
-    &lt;witness xml:id="ms-A" n="A"&gt;
-      The principal manuscript.
-    &lt;/witness&gt;
-    &lt;witness xml:id="ms-B" n="B"&gt;
-      A later manuscript containing several alternative readings.
-    &lt;/witness&gt;
-    &lt;witness xml:id="ed-C" n="C"&gt;
-      An early printed edition.
-    &lt;/witness&gt;
-  &lt;/listWit&gt;
-&lt;/sourceDesc&gt;
-</pre>
-    <p>The document now has this structure:
-</p>
-    <pre>TEI
-&boxvr;&boxh;&boxh; teiHeader
-&boxv;   &boxur;&boxh;&boxh; fileDesc
-&boxv;       &boxvr;&boxh;&boxh; titleStmt
-&boxv;       &boxvr;&boxh;&boxh; publicationStmt
-&boxv;       &boxur;&boxh;&boxh; sourceDesc
-&boxv;           &boxur;&boxh;&boxh; listWit
-&boxv;               &boxvr;&boxh;&boxh; witness [xml:id="ms-A", n="A"]
-&boxv;               &boxvr;&boxh;&boxh; witness [xml:id="ms-B", n="B"]
-&boxv;               &boxur;&boxh;&boxh; witness [xml:id="ed-C", n="C"]
-&boxur;&boxh;&boxh; text
-    &boxur;&boxh;&boxh; body
-        &boxur;&boxh;&boxh; p [xml:id="p1"]
-</pre>
-    <h3>
-     <span class="mw-headline" id="6.2._Complete_TEI_MWE">
-      6.2. Complete TEI MWE
-     </span>
-    </h3>
-    <p>Save the following document as:
+    <p>Save the result as:
 </p>
     <pre>tei-guide-02.xml
 </pre>
+    <p>The complete source is now:
+</p>
     <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;TEI xmlns="http://www.tei-c.org/ns/1.0"&gt;
   &lt;teiHeader&gt;
     &lt;fileDesc&gt;
+
       &lt;titleStmt&gt;
         &lt;title&gt;A small critical-edition example&lt;/title&gt;
       &lt;/titleStmt&gt;
@@ -1543,6 +1080,7 @@ later apparatus references
 
       &lt;sourceDesc&gt;
         &lt;listWit&gt;
+
           &lt;witness xml:id="ms-A" n="A"&gt;
             The principal manuscript.
           &lt;/witness&gt;
@@ -1554,8 +1092,10 @@ later apparatus references
           &lt;witness xml:id="ed-C" n="C"&gt;
             An early printed edition.
           &lt;/witness&gt;
+
         &lt;/listWit&gt;
       &lt;/sourceDesc&gt;
+
     &lt;/fileDesc&gt;
   &lt;/teiHeader&gt;
 
@@ -1564,677 +1104,542 @@ later apparatus references
       &lt;p xml:id="p1"&gt;The mind seeks unity.&lt;/p&gt;
     &lt;/body&gt;
   &lt;/text&gt;
+
 &lt;/TEI&gt;
 </pre>
-    <p>This document contains:
+    <h3>
+     <span class="mw-headline" id="4.4._Inspect_the_resulting_tree">
+      4.4. Inspect the resulting tree
+     </span>
+    </h3>
+    <p>The document now has:
+</p>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; fileDesc
+&boxv;       &boxvr;&boxh;&boxh; titleStmt
+&boxv;       &boxvr;&boxh;&boxh; publicationStmt
+&boxv;       &boxur;&boxh;&boxh; sourceDesc
+&boxv;           &boxur;&boxh;&boxh; listWit
+&boxv;               &boxvr;&boxh;&boxh; witness
+&boxv;               &boxv;   &boxvr;&boxh;&boxh; xml:id: ms-A
+&boxv;               &boxv;   &boxvr;&boxh;&boxh; n: A
+&boxv;               &boxv;   &boxur;&boxh;&boxh; description
+&boxv;               &boxvr;&boxh;&boxh; witness
+&boxv;               &boxv;   &boxvr;&boxh;&boxh; xml:id: ms-B
+&boxv;               &boxv;   &boxvr;&boxh;&boxh; n: B
+&boxv;               &boxv;   &boxur;&boxh;&boxh; description
+&boxv;               &boxur;&boxh;&boxh; witness
+&boxv;                   &boxvr;&boxh;&boxh; xml:id: ed-C
+&boxv;                   &boxvr;&boxh;&boxh; n: C
+&boxv;                   &boxur;&boxh;&boxh; description
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
+</pre>
+    <p><b>How to read this tree.</b> The textual branch inherited from Guide 1 is
+still present. The new structure is concentrated in
+<code>&lt;sourceDesc&gt;</code>: Guide 2 has added one registry containing
+three identifiable witnesses.
+</p>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the formal TEI model, see the P5 reference pages for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-listWit.html" rel="nofollow"><code>&lt;listWit&gt;</code></a>
+and
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-witness.html" rel="nofollow"><code>&lt;witness&gt;</code></a>,
+together with the
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow">TEI P5 chapter <i>Critical Apparatus</i></a>.
+</p>
+     <p>The tutorial uses a deliberately small registry. The TEI reference
+documentation describes the wider content model and available attributes.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The TEI document now contains a reusable witness
+registry. The edition knows which witnesses exist, even though the text
+still contains no critical apparatus.
+</p>
+    </div>
+    <h2>
+     <span id="Part_II_&mdash;_Identity_and_references">
+     </span>
+     <span class="mw-headline" id="Part_II_.E2.80.94_Identity_and_references">
+      Part II &mdash; Identity and references
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="5._Anatomy_of_a_witness_declaration">
+      5. Anatomy of a witness declaration
+     </span>
+    </h2>
+    <p>Consider:
+</p>
+    <pre>&lt;witness xml:id="ms-paris-123" n="P"&gt;
+  Paris, Biblioth&egrave;que nationale de France, manuscript 123.
+&lt;/witness&gt;
+</pre>
+    <p>The declaration contains three functions:
+</p>
+    <pre>&lt;witness xml:id="ms-paris-123" n="P"&gt;
+             &boxv;                 &boxv;
+             &boxv;                 &boxur;&boxh;&boxh;&boxh;&boxh; reader-facing label
+             &boxv;                       used by this tutorial
+             &boxv;
+             &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; stable TEI identifier
+                                     and reference target
+
+  Paris, Biblioth&egrave;que nationale de France,
+  manuscript 123.
+             &boxv;
+             &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh; readable description
+&lt;/witness&gt;
+</pre>
+    <p><b>How to read this diagram.</b> <code>xml:id</code> supplies the stable
+identifier to which local references can point. In these teaching examples,
+<code>@n</code> stores a short reader-facing label. The element content
+provides a human-readable description.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.1._Stable_TEI_identifier:_xml:id">
+      5.1. Stable TEI identifier:
+      <code>xml:id</code>
+     </span>
+    </h3>
+    <p>The value
+</p>
+    <pre>xml:id="ms-paris-123"
+</pre>
+    <p>provides the reference target.
+</p>
+    <p>A later local reference uses:
+</p>
+    <pre>#ms-paris-123
+</pre>
+    <p>For these guides, witness identifiers should:
 </p>
     <ul>
      <li>
-      one TEI root;
+      be unique within the document;
      </li>
      <li>
-      one TEI header;
+      contain no spaces;
      </li>
      <li>
-      one file description;
+      remain stable where possible;
      </li>
      <li>
-      one source description;
+      identify the witness rather than its current display;
      </li>
      <li>
-      one witness list;
-     </li>
-     <li>
-      three witness declarations;
-     </li>
-     <li>
-      one textual body;
-     </li>
-     <li>
-      one identifiable paragraph.
+      avoid depending on page layout or apparatus order.
      </li>
     </ul>
-    <p>It does not yet contain an apparatus entry.
+    <p>Useful examples include:
 </p>
-    <p>That addition belongs to Guide 3.
+    <pre>ms-A
+ms-B
+ed-C
+papyrus-46
+ms-paris-123
+print-basel-1781
+translation-latin-01
+</pre>
+    <p>Less useful choices include:
 </p>
+    <pre>first-witness
+red-siglum
+bottom-note-source
+page-7-manuscript
+temporary-B
+</pre>
+    <p>The prefixes used here are project conventions:
+</p>
+    <pre>ms-     manuscript
+ed-     printed edition
+</pre>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> Prefixes such as <code>ms-</code> and
+<code>ed-</code> are conventions used by these examples, not TEI
+requirements. A project may adopt another stable identifier scheme.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="6.3._Reading_the_witness_declarations_line_by_line">
-      6.3. Reading the witness declarations line by line
+     <span id="5.2._Reader-facing_label:_@n_in_this_tutorial">
+     </span>
+     <span class="mw-headline" id="5.2._Reader-facing_label:_.40n_in_this_tutorial">
+      5.2. Reader-facing label:
+      <code>@n</code>
+      in this tutorial
      </span>
     </h3>
-    <p>Consider the first declaration:
+    <p>The examples use:
 </p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
+    <pre>n="P"
 </pre>
+    <p>as a compact label that ConTeXt can retrieve for display.
+</p>
+    <p>Thus the same witness can have:
+</p>
+    <pre>stable TEI identifier:   ms-paris-123
+reader-facing label:     P
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>TEI identifier and display label.</b>
+</p>
+     <p>In TEI, <code>xml:id</code> supplies the unique identifier to which local
+<code>@wit</code> references point. The examples in this tutorial add
+<code>@n</code> as a convenient reader-facing label.
+</p>
+     <p>This use of <code>@n</code> is a project convention. TEI defines
+<code>@n</code> more generally as a number or other label; it should not be
+confused with the identifier itself.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="5.3._Description">
+      5.3. Description
+     </span>
+    </h3>
+    <p>The element content supplies a readable description:
+</p>
+    <pre>Paris, Biblioth&egrave;que nationale de France, manuscript 123.
+</pre>
+    <p>The three functions therefore remain distinct:
+</p>
     <table class="wikitable">
      <tbody>
       <tr>
        <th>
-        Source fragment
+        Information
+       </th>
+       <th>
+        Example
        </th>
        <th>
         Function
        </th>
       </tr>
       <tr>
-       <td><code>&lt;witness&gt;</code>
+       <td>TEI identifier
 </td>
-       <td>Declares one textual witness
+       <td><code>ms-paris-123</code>
 </td>
-      </tr>
-      <tr>
-       <td><code>xml:id="ms-A"</code>
-</td>
-       <td>Assigns a unique XML identifier
+       <td>Stable machine-readable identity and reference target
 </td>
       </tr>
       <tr>
-       <td><code>n="A"</code>
+       <td>Reader-facing label
 </td>
-       <td>Supplies a concise editorial label
+       <td><code>P</code>
 </td>
-      </tr>
-      <tr>
-       <td><code>The principal manuscript.</code>
-</td>
-       <td>Describes the witness
+       <td>Compact label used by this tutorial for display
 </td>
       </tr>
       <tr>
-       <td><code>&lt;/witness&gt;</code>
+       <td>Description
 </td>
-       <td>Closes the declaration
+       <td><code>Paris ... manuscript 123</code>
+</td>
+       <td>Human-readable information about the witness
 </td>
       </tr>
      </tbody>
     </table>
-    <p>The declaration can also be represented as:
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not confuse identity, label, and description.</b> All three concern
+the same witness, but they perform different functions. A project may
+choose different conventions for reader-facing sigla while keeping stable
+TEI identifiers.
 </p>
-    <pre>witness
-&boxvr;&boxh;&boxh; machine identity: ms-A
-&boxvr;&boxh;&boxh; display siglum: A
-&boxur;&boxh;&boxh; description: The principal manuscript.
-</pre>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For <code>xml:id</code> and <code>@n</code>, see the TEI P5 reference for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-att.global.html" rel="nofollow">global attributes</a>.
+</p>
+     <p>For the use of witness identifiers by <code>@wit</code>, see
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html#TCAPEN" rel="nofollow">the TEI P5 discussion of apparatus entries, readings, and witnesses</a>.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="7._Reusing_witness_declarations">
-      7. Reusing witness declarations
+     <span class="mw-headline" id="6._How_apparatus_references_will_use_the_registry">
+      6. How apparatus references will use the registry
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="7.1._How_apparatus_entries_will_refer_to_witnesses">
-      7.1. How apparatus entries will refer to witnesses
-     </span>
-    </h3>
-    <p>Guide 3 will introduce elements such as:
+    <p>The apparatus itself belongs to Guide 3, but a short preview makes the
+purpose of the witness registry concrete.
+</p>
+    <p>Guide 3 will introduce structures such as:
 </p>
     <pre>&lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
+
 &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>These lines are not yet part of the Guide 2 MWE.
+    <p>These fragments are shown here only to demonstrate the reference mechanism.
 </p>
-    <p>They are shown here only to explain the purpose of the declarations.
-</p>
-    <p>The references resolve as follows:
+    <h3>
+     <span class="mw-headline" id="6.1._Resolve_one_reference">
+      6.1. Resolve one reference
+     </span>
+    </h3>
+    <p>For:
 </p>
     <pre>wit="#ms-A"
-      &darr;
+</pre>
+    <p>processing can follow:
+</p>
+    <pre>wit="#ms-A"
+      &boxv;
+      ▼
 find xml:id="ms-A"
-      &darr;
-retrieve n="A"
-      &darr;
-display A
+      &boxv;
+      ▼
+&lt;witness xml:id="ms-A" n="A"&gt;
+      &boxv;
+      ▼
+retrieve reader-facing label
+      &boxv;
+      ▼
+      A
 </pre>
-    <p>and:
-</p>
-    <pre>wit="#ms-B"
-      &darr;
-find xml:id="ms-B"
-      &darr;
-retrieve n="B"
-      &darr;
-display B
-</pre>
-    <p>The complete relation will be:
-</p>
-    <pre>witness declarations
-&boxvr;&boxh;&boxh; ms-A &rarr; A
-&boxvr;&boxh;&boxh; ms-B &rarr; B
-&boxur;&boxh;&boxh; ed-C &rarr; C
-
-apparatus references
-&boxvr;&boxh;&boxh; #ms-A
-&boxvr;&boxh;&boxh; #ms-B
-&boxur;&boxh;&boxh; #ed-C
-</pre>
-    <h3>
-     <span id="7.2._One_declaration,_many_references">
-     </span>
-     <span class="mw-headline" id="7.2._One_declaration.2C_many_references">
-      7.2. One declaration, many references
-     </span>
-    </h3>
-    <p>A witness should normally be <b>declared once</b>.
-</p>
-    <p>It may then be referenced from many apparatus entries:
-</p>
-    <pre>declaration
-xml:id="ms-B"
-      &uarr;
-      &boxvr;&boxh;&boxh; reading in apparatus entry 1
-      &boxvr;&boxh;&boxh; reading in apparatus entry 2
-      &boxvr;&boxh;&boxh; reading in apparatus entry 3
-      &boxur;&boxh;&boxh; reading in apparatus entry 4
-</pre>
-    <p>This avoids repeating the full description every time the witness is cited.
-</p>
-    <p>Instead of storing:
-</p>
-    <pre>soul &mdash; A later manuscript containing several alternative readings
-</pre>
-    <p>inside every apparatus entry, the source can store a reference:
-</p>
-    <pre>wit="#ms-B"
-</pre>
-    <p>The declaration supplies the reusable information.
+    <p><b>How to read this diagram.</b> The apparatus does not need to contain the
+printed letter <code>A</code> as unstructured text. It contains a pointer
+to the witness identity; processing can then retrieve the label required
+for the chosen output.
 </p>
     <h3>
-     <span class="mw-headline" id="7.3._Referencing_several_witnesses">
-      7.3. Referencing several witnesses
+     <span id="6.2._One_declaration,_many_apparatus_entries">
+     </span>
+     <span class="mw-headline" id="6.2._One_declaration.2C_many_apparatus_entries">
+      6.2. One declaration, many apparatus entries
      </span>
     </h3>
-    <p>When several witnesses support the same reading, TEI references can be
-written as a space-separated list:
+    <p>Witness B needs only one declaration:
+</p>
+    <pre>&lt;witness xml:id="ms-B" n="B"&gt;
+  A later manuscript containing several alternative readings.
+&lt;/witness&gt;
+</pre>
+    <p>Many later entries may point to it:
+</p>
+    <pre>                        ms-B
+                     DECLARATION
+                         ▲
+             +-----------+-----------+
+             &boxv;           &boxv;           &boxv;
+         apparatus 1 apparatus 2 apparatus 3
+         wit="#ms-B" wit="#ms-B" wit="#ms-B"
+</pre>
+    <p><b>How to read this diagram.</b> The repeated references are useful
+mnemonically because they show why the declaration was created: many
+textual locations can reuse the same witness identity without duplicating
+its description.
+</p>
+    <h3>
+     <span class="mw-headline" id="6.3._Several_witnesses_may_support_one_reading">
+      6.3. Several witnesses may support one reading
+     </span>
+    </h3>
+    <p>A reading may be supported by more than one witness:
 </p>
     <pre>wit="#ms-B #ed-C"
 </pre>
     <p>Conceptually:
 </p>
-    <pre>one reading
-&boxvr;&boxh;&boxh; supported by ms-B
-&boxur;&boxh;&boxh; supported by ed-C
+    <pre>                       reading
+                          &boxv;
+                     wit attribute
+                          &boxv;
+                  "#ms-B #ed-C"
+                     /         \
+                    /           \
+                   ▼             ▼
+                 ms-B           ed-C
+                   &boxv;              &boxv;
+                   ▼              ▼
+             label B          label C
+                    \           /
+                     \         /
+                      ▼       ▼
+                    printed as
+                       B C
 </pre>
-    <p>The processing system must therefore distinguish:
+    <p><b>How to read this diagram.</b> The single attribute value contains two
+space-separated witness pointers. Each pointer resolves independently to a
+declared witness.
 </p>
-    <pre>attribute value:
-    "#ms-B #ed-C"
-
-individual references:
-    #ms-B
-    #ed-C
-
-resolved sigla:
-    B
-    C
-</pre>
-    <p>Guide 3 will show this structure inside an actual reading.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> A reading is not merely followed by the letters
+<code>B C</code>. It is structurally connected to the declarations of the
+witnesses that support it. Reader-facing labels can then be generated
+during processing.
 </p>
-    <h3>
-     <span class="mw-headline" id="7.4._Declaration_order_and_display_order">
-      7.4. Declaration order and display order
-     </span>
-    </h3>
-    <p>The order of declarations in the witness list does not necessarily have to
-determine the final printed order.
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
 </p>
-    <p>For example, the source may declare:
+     <p>The TEI P5
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>
+chapter defines <code>@wit</code> for associating readings with witnesses.
+Its value may contain one or more space-separated pointers to witness
+identifiers.
 </p>
-    <pre>A
-B
-C
-</pre>
-    <p>while an edition may require:
+     <p>Guide 3 applies this mechanism directly to
+<code>&lt;lem&gt;</code> and <code>&lt;rdg&gt;</code>.
 </p>
-    <pre>A C B
-</pre>
-    <p>or group witnesses by type:
-</p>
-    <pre>manuscripts: A B
-printed editions: C
-</pre>
-    <p>Three orders should therefore be distinguished:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Order
-       </th>
-       <th>
-        Meaning
-       </th>
-      </tr>
-      <tr>
-       <td>Declaration order
-</td>
-       <td>Order in which witnesses occur in the TEI source
-</td>
-      </tr>
-      <tr>
-       <td>Editorial order
-</td>
-       <td>Order established by the edition&rsquo;s scholarly conventions
-</td>
-      </tr>
-      <tr>
-       <td>Printed order
-</td>
-       <td>Order used in a particular output
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>A small project may use the same order for all three.
-</p>
-    <p>A larger project may define an explicit sorting rule with Lua.
-</p>
-    <p>That processing belongs principally to Guide 5.
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Order is a separate editorial decision.</b> Declaration order records how witnesses occur in the source file; editorial and printed order may later be established independently.
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> We have moved from a mere list of source labels to a
+referenceable data model: every witness has a declaration and later
+readings will be able to point back to it.
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="8._Extending_the_witness_model">
-      8. Extending the witness model
+     <span id="Part_III_&mdash;_Check_and_process_the_registry">
+     </span>
+     <span class="mw-headline" id="Part_III_.E2.80.94_Check_and_process_the_registry">
+      Part III &mdash; Check and process the registry
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="8.1._Witness_type_and_witness_identity">
-      8.1. Witness type and witness identity
-     </span>
-    </h3>
-    <p>A witness type classifies the witness.
-</p>
-    <p>A witness identity distinguishes one particular witness from another.
-</p>
-    <p>For example:
-</p>
-    <pre>type: manuscript
-identity: ms-A
-
-type: manuscript
-identity: ms-B
-
-type: printed edition
-identity: ed-C
-</pre>
-    <p>Two witnesses may share a type while remaining distinct:
-</p>
-    <pre>manuscript
-&boxvr;&boxh;&boxh; ms-A
-&boxur;&boxh;&boxh; ms-B
-</pre>
-    <p>The <i>identity</i> must therefore not be replaced by the <i>type</i>.
-</p>
-    <p>This would be insufficient:
-</p>
-    <pre>xml:id="manuscript"
-</pre>
-    <p>when two different manuscripts exist.
-</p>
-    <p>Each witness needs its own unique identifier.
-</p>
-    <h3>
-     <span class="mw-headline" id="8.2._Simple_and_fuller_declarations">
-      8.2. Simple and fuller declarations
-     </span>
-    </h3>
-    <p>The declarations in the MWE are deliberately small:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>A real project may eventually record more information, such as:
-</p>
-    <ul>
-     <li>
-      repository;
-     </li>
-     <li>
-      shelfmark;
-     </li>
-     <li>
-      date;
-     </li>
-     <li>
-      material;
-     </li>
-     <li>
-      extent;
-     </li>
-     <li>
-      provenance;
-     </li>
-     <li>
-      scribal hands;
-     </li>
-     <li>
-      bibliographical description;
-     </li>
-     <li>
-      relation to other witnesses.
-     </li>
-    </ul>
-    <p>The conceptual progression is:
-</p>
-    <pre>simple declaration
-      &darr;
-stable identifier and siglum
-      &darr;
-fuller source description
-      &darr;
-project-specific manuscript metadata
-</pre>
-    <p>The present guide establishes the first two levels.
-</p>
-    <p>It does not attempt to replace a full TEI manuscript description.
-</p>
-    <h3>
-     <span class="mw-headline" id="8.3._Witness_groups_and_families">
-      8.3. Witness groups and families
-     </span>
-    </h3>
-    <p>Witnesses may sometimes be associated with a textual family, recension, or
-other editorial group.
-</p>
-    <p>For example:
-</p>
-    <pre>family &alpha;
-&boxvr;&boxh;&boxh; A
-&boxur;&boxh;&boxh; B
-
-printed tradition
-&boxur;&boxh;&boxh; C
-</pre>
-    <p>A group may be useful for:
-</p>
-    <ul>
-     <li>
-      analysis;
-     </li>
-     <li>
-      filtering;
-     </li>
-     <li>
-      ordering;
-     </li>
-     <li>
-      apparatus abbreviation;
-     </li>
-     <li>
-      reporting shared readings.
-     </li>
-    </ul>
-    <p>However, a group should not erase the identities of its members.
-</p>
-    <p>The following information remains distinct:
-</p>
-    <pre>individual witness identity
-        +
-group membership
-</pre>
-    <p>For example:
-</p>
-    <pre>A belongs to family &alpha;
-B belongs to family &alpha;
-C belongs to the printed tradition
-</pre>
-    <p>The exact TEI representation of complex witness groups depends on the
-project&rsquo;s encoding model and selected schema.
-</p>
-    <p>This guide therefore keeps the MWE at the level of individual declarations.
-</p>
-    <p>Grouping and project-specific classification can be developed after the basic
-reference system is stable.
-</p>
     <h2>
-     <span class="mw-headline" id="9._Validation_and_common_errors">
-      9. Validation and common errors
+     <span class="mw-headline" id="7._Check_the_witness_registry">
+      7. Check the witness registry
      </span>
     </h2>
+    <p>Guide 1 introduced three different levels of checking:
+</p>
+    <pre>XML well-formedness
+        &boxv;
+        ▼
+TEI validation
+        &boxv;
+        ▼
+editorial correctness
+</pre>
+    <p>That distinction remains important, but Guide 2 does not need to repeat the
+whole XML tutorial. Here we concentrate on witness-specific consistency.
+</p>
     <h3>
-     <span class="mw-headline" id="9.1._Consistency_rules_for_witness_declarations">
-      9.1. Consistency rules for witness declarations
+     <span class="mw-headline" id="7.1._Witness-specific_checks">
+      7.1. Witness-specific checks
      </span>
     </h3>
-    <p>A small witness registry should satisfy the following rules:
+    <p>A small witness registry should satisfy:
 </p>
     <pre>Every witness has one unique xml:id.
-Every witness has a documented siglum or display label.
-Every later witness reference points to a declaration.
-No two declarations use the same xml:id.
-The same witness is not declared repeatedly under different identifiers
-without an explicit editorial reason.
+
+Every local witness reference points to a declaration.
+
+The declaration uses xml:id="ms-A",
+while a local reference uses "#ms-A".
+
+Stable witnesses are not repeatedly redeclared under
+different identifiers without an editorial reason.
+
+Reader-facing labels and descriptions identify the
+intended witnesses correctly.
 </pre>
-    <p>These rules can be summarised as:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Rule
-       </th>
-       <th>
-        Reason
-       </th>
-      </tr>
-      <tr>
-       <td>One unique identifier per witness
-</td>
-       <td>Prevents ambiguous references
-</td>
-      </tr>
-      <tr>
-       <td>One declaration per witness
-</td>
-       <td>Avoids duplicated metadata
-</td>
-      </tr>
-      <tr>
-       <td>Stable identifiers
-</td>
-       <td>Keeps references valid during revision
-</td>
-      </tr>
-      <tr>
-       <td>Documented sigla
-</td>
-       <td>Makes printed output understandable
-</td>
-      </tr>
-      <tr>
-       <td>All references resolve
-</td>
-       <td>Prevents undeclared witnesses from appearing in the apparatus
-</td>
-      </tr>
-     </tbody>
-    </table>
     <h3>
-     <span class="mw-headline" id="9.2._Common_declaration_errors">
-      9.2. Common declaration errors
+     <span class="mw-headline" id="7.2._Duplicate_identifiers">
+      7.2. Duplicate identifiers
      </span>
     </h3>
-    <h4>
-     <span class="mw-headline" id="9.2.1._Duplicate_identifiers">
-      9.2.1. Duplicate identifiers
-     </span>
-    </h4>
     <p>Incorrect:
 </p>
     <pre>&lt;witness xml:id="ms-A" n="A"&gt;
   The principal manuscript.
 &lt;/witness&gt;
+
 &lt;witness xml:id="ms-A" n="B"&gt;
   A later manuscript.
 &lt;/witness&gt;
 </pre>
-    <p>Both witnesses use:
-</p>
-    <pre>xml:id="ms-A"
-</pre>
-    <p>The identifier is no longer unique.
-</p>
     <p>Correct:
 </p>
     <pre>&lt;witness xml:id="ms-A" n="A"&gt;
   The principal manuscript.
 &lt;/witness&gt;
+
 &lt;witness xml:id="ms-B" n="B"&gt;
   A later manuscript.
 &lt;/witness&gt;
 </pre>
-    <h4>
-     <span class="mw-headline" id="9.2.2._Reusing_one_identifier_for_a_type">
-      9.2.2. Reusing one identifier for a type
+    <h3>
+     <span class="mw-headline" id="7.3._Identifier_and_reference_use_different_forms">
+      7.3. Identifier and reference use different forms
      </span>
-    </h4>
-    <p>Incorrect:
-</p>
-    <pre>&lt;witness xml:id="manuscript" n="A"&gt;...&lt;/witness&gt;
-&lt;witness xml:id="manuscript" n="B"&gt;...&lt;/witness&gt;
-</pre>
-    <p>The word <code>manuscript</code> describes a type, not the identity of each
-object.
-</p>
-    <p>Correct:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;...&lt;/witness&gt;
-&lt;witness xml:id="ms-B" n="B"&gt;...&lt;/witness&gt;
-</pre>
-    <h4>
-     <span class="mw-headline" id="9.2.3._Confusing_the_reference_with_the_identifier">
-      9.2.3. Confusing the reference with the identifier
-     </span>
-    </h4>
+    </h3>
     <p>Declaration:
 </p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
+    <pre>xml:id="ms-A"
 </pre>
-    <p>Correct later reference:
+    <p>Local reference:
 </p>
     <pre>#ms-A
 </pre>
-    <p>The number sign belongs to the reference, not to the identifier declaration.
+    <p>The relation is:
 </p>
-    <p>Incorrect declaration:
-</p>
-    <pre>&lt;witness xml:id="#ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
+    <pre>DECLARATION                    REFERENCE
+
+xml:id="ms-A"  ◄&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;  "#ms-A"
 </pre>
-    <p>Correct relation:
+    <p><b>How to read this diagram.</b> The identifier itself does not contain the
+hash sign. The hash marks a local pointer to that identifier.
 </p>
-    <pre>xml:id="ms-A"
-      &uarr;
-      &boxv;
-reference="#ms-A"
-</pre>
-    <h4>
-     <span class="mw-headline" id="9.2.4._Using_the_siglum_as_an_unexplained_string">
-      9.2.4. Using the siglum as an unexplained string
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Identifier and reference use different forms.</b> The declaration creates
+<code>ms-A</code>. A local reference to that identifier uses
+<code>#ms-A</code>.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="7.4._A_literal_label_is_not_a_structured_reference">
+      7.4. A literal label is not a structured reference
      </span>
-    </h4>
-    <p>A later apparatus could contain:
+    </h3>
+    <p>A literal:
 </p>
     <pre>B
 </pre>
-    <p>as an ordinary character.
+    <p>inside an apparatus does not by itself establish a structured relationship
+with the witness registry.
 </p>
-    <p>But this does not create a structured connection with the witness declaration.
-</p>
-    <p>A reference such as:
+    <p>By contrast:
 </p>
     <pre>wit="#ms-B"
 </pre>
-    <p>preserves the link:
+    <p>preserves the path:
 </p>
     <pre>apparatus reading
-        &darr;
+       &boxv;
+       ▼
+wit="#ms-B"
+       &boxv;
+       ▼
 witness declaration
-        &darr;
-siglum and metadata
+       &boxv;
+       &boxvr;&boxh;&boxh; xml:id="ms-B"
+       &boxvr;&boxh;&boxh; n="B"
+       &boxur;&boxh;&boxh; description
 </pre>
     <h3>
-     <span class="mw-headline" id="9.3._Well-formedness_and_witness_declarations">
-      9.3. Well-formedness and witness declarations
+     <span class="mw-headline" id="7.5._Formal_correctness_is_not_scholarly_correctness">
+      7.5. Formal correctness is not scholarly correctness
      </span>
     </h3>
-    <p>The witness list must still follow the XML rules established in Guide 1.
-</p>
-    <p>Correct:
-</p>
-    <pre>&lt;listWit&gt;
-  &lt;witness xml:id="ms-A" n="A"&gt;
-    The principal manuscript.
-  &lt;/witness&gt;
-&lt;/listWit&gt;
-</pre>
-    <p>Incorrect, because the element is not closed:
-</p>
-    <pre>&lt;listWit&gt;
-  &lt;witness xml:id="ms-A" n="A"&gt;
-    The principal manuscript.
-&lt;/listWit&gt;
-</pre>
-    <p>Incorrect, because the attribute value is not quoted:
-</p>
-    <pre>&lt;witness xml:id=ms-A n=A&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>Incorrect, because the nesting crosses:
-</p>
-    <pre>&lt;sourceDesc&gt;
-  &lt;listWit&gt;
-&lt;/sourceDesc&gt;
-  &lt;/listWit&gt;
-</pre>
-    <p>The proper structure is:
-</p>
-    <pre>sourceDesc
-&boxur;&boxh;&boxh; listWit
-    &boxur;&boxh;&boxh; witness
-</pre>
-    <p>The closing order must be reversed:
-</p>
-    <pre>open sourceDesc
-open listWit
-open witness
-close witness
-close listWit
-close sourceDesc
-</pre>
-    <h3>
-     <span class="mw-headline" id="9.4._Structural_validity_and_editorial_correctness">
-      9.4. Structural validity and editorial correctness
-     </span>
-    </h3>
-    <p>A witness declaration may be structurally valid but editorially wrong.
-</p>
-    <p>For example:
+    <p>This declaration may be structurally valid:
 </p>
     <pre>&lt;witness xml:id="ms-A" n="A"&gt;
   A fifteenth-century manuscript.
 &lt;/witness&gt;
 </pre>
-    <p>may be valid XML and valid TEI.
+    <p>But if the manuscript belongs to another century, the scholarly
+information is still wrong.
 </p>
-    <p>But if the manuscript actually dates from the thirteenth century, the
-declaration is editorially inaccurate.
-</p>
-    <p>Three levels must therefore remain distinct:
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>A valid file can still be wrong.</b> XML well-formedness and TEI validity cannot confirm that a shelfmark, date, siglum, or witness description is historically accurate. Editorial verification remains necessary.
-</p>
-    </div>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -2248,56 +1653,119 @@ declaration is editorially inaccurate.
       <tr>
        <td>Well-formed XML
 </td>
-       <td>Are the XML tags and attributes syntactically correct?
+       <td>Are tags, nesting, and attributes syntactically coherent?
 </td>
       </tr>
       <tr>
        <td>Valid TEI
 </td>
-       <td>Is the witness declaration permitted by the selected TEI model?
+       <td>Is the witness structure permitted by the selected TEI model?
 </td>
       </tr>
       <tr>
        <td>Editorial correctness
 </td>
-       <td>Does the declaration describe the witness accurately?
+       <td>Does the declaration accurately describe the witness?
 </td>
       </tr>
      </tbody>
     </table>
-    <h2>
-     <span class="mw-headline" id="10._Inspecting_the_witness_list_with_ConTeXt">
-      10. Inspecting the witness list with ConTeXt
-     </span>
-    </h2>
-    <p>The complete XML source used by this test was created in
-<a href="#6.2._Complete_TEI_MWE">section 6.2</a> and saved as
-<code>tei-guide-02.xml</code>.
-</p>
-    <p>The final typesetting of witness sigla and apparatus entries belongs to
-<a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">Guide 6</a>.
-</p>
-    <p>A small ConTeXt test can nevertheless verify that the witness declarations
-contained in <code>tei-guide-02.xml</code> are accessible.
-</p>
-    <div style="margin: 1em 0; padding: 0.7em 1em; border-left: 4px solid #6fa8dc; background: #eef6fc;">
-     <p><b>Practical note.</b> Save <code>tei-guide-02.xml</code> and
-<code>tei-guide-02.tex</code> in the same directory. The ConTeXt file loads
-the XML source directly with <code>\xmlprocessfile</code>.
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>A valid file can still be wrong.</b> XML syntax and TEI validation cannot
+establish whether a shelfmark, date, source attribution, label, or witness
+description is historically or philologically correct. Editorial
+verification remains necessary.
 </p>
     </div>
-    <p><br>
-Save the ConTeXt file as:
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
 </p>
-    <pre>tei-guide-02.tex
+     <p>For the general distinction between XML well-formedness, TEI validation,
+and editorial correctness, return to
+<a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Guide 1</a>.
+</p>
+     <p>For the formal TEI notion of conformance, consult the TEI P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/USE.html" rel="nofollow"><i>Using the TEI</i></a>.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The witness registry now has a set of explicit
+consistency checks. Formal validation and editorial verification remain
+distinct responsibilities.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Inspect_the_witness_registry_with_ConTeXt">
+      8. Inspect the witness registry with ConTeXt
+     </span>
+    </h2>
+    <p>Final apparatus typesetting belongs to Guide 6. For now we perform a
+smaller test:
+</p>
+    <pre>Can ConTeXt load the TEI source,
+find the witness declarations,
+retrieve their reader-facing labels,
+and display their descriptions?
 </pre>
-    <p>Use:
+    <h3>
+     <span class="mw-headline" id="8.1._The_processing_map">
+      8.1. The processing map
+     </span>
+    </h3>
+    <p>Before looking at the ConTeXt code, follow the intended operation:
+</p>
+    <pre>                 TEI XML
+            tei-guide-02.xml
+                  &boxv;
+                  ▼
+          +------------------+
+          |    sourceDesc    |
+          |     listWit      |
+          +------------------+
+                  &boxv;
+                  &boxv; select
+                  ▼
+              tei:witness
+                  &boxv;
+            +-----+-----+
+            &boxv;           &boxv;
+            ▼           ▼
+       attribute n   text content
+            &boxv;           &boxv;
+            ▼           ▼
+            A     principal manuscript
+             \         /
+              \       /
+               +-----+
+                  &boxv;
+                  ▼
+            typeset witness list
+</pre>
+    <p><b>How to read this diagram.</b> ConTeXt selects each
+<code>&lt;witness&gt;</code>, retrieves its <code>@n</code> value for this
+tutorial's display label, flushes the descriptive content, and composes the
+result as a readable list.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.2._Local_two-file_test">
+      8.2. Local two-file test
+     </span>
+    </h3>
+    <p>The tutorial uses:
+</p>
+    <pre>tei-guide-02.xml
+tei-guide-02.tex
+</pre>
+    <p>Save both files in the same directory.
+</p>
+    <p>Save the following as <code>tei-guide-02.tex</code>:
 </p>
     <pre>\xmlregisterns
   {tei}
   {http://www.tei-c.org/ns/1.0}
 
 \startxmlsetups xml:tei:document
+
   \xmlsetsetup
     {#1}
     {tei:TEI|tei:teiHeader|tei:fileDesc|tei:sourceDesc|tei:listWit}
@@ -2312,6 +1780,7 @@ Save the ConTeXt file as:
     {#1}
     {tei:witness}
     {xml:tei:witness}
+
 \stopxmlsetups
 
 \xmlregistersetup{xml:tei:document}
@@ -2343,149 +1812,189 @@ Save the ConTeXt file as:
 
 \stoptext
 </pre>
-    <p>The intended output is (The PNG output isn't shown here because there are only these three lines):
+    <p>Compile with:
+</p>
+    <pre>context tei-guide-02.tex
+</pre>
+    <p>The intended visible result is:
 </p>
     <pre>Declared witnesses
 
-A  The principal manuscript.
+A   The principal manuscript.
 
-B  A later manuscript containing several alternative readings.
+B   A later manuscript containing several alternative readings.
 
-C  An early printed edition.
-
+C   An early printed edition.
 </pre>
-    <p>The processing path is:
+    <h3>
+     <span class="mw-headline" id="8.3._Garden_demonstration_with_source_and_result">
+      8.3. Garden demonstration with source and result
+     </span>
+    </h3>
+    <p>The preceding two-file example is useful for local work because it keeps
+the TEI source separate from its ConTeXt processing. The following compact
+Garden demonstration embeds the same witness registry in a buffer so that
+the source and result can be displayed together.
 </p>
-    <pre>tei-guide-02.xml
-        &darr;
-ConTeXt loads the TEI document
-        &darr;
-the TEI namespace is associated with the prefix tei
-        &darr;
-the witness elements are selected
-        &darr;
-the n attribute is retrieved
-        &darr;
-the witness description is flushed
-        &darr;
-a readable witness list is typeset
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>witnesses<span class="brx">]</span>
+<tei class="brx" xmlns<span>="http://www.tei-c.org/ns/1.0"&gt;
+  <teiheader>
+    <filedesc>
+      <titlestmt>
+        <title>A small critical-edition example</title>
+      </titlestmt>
+      <publicationstmt>
+        <p>Unpublished teaching example.</p>
+      </publicationstmt>
+      <sourcedesc>
+        <listwit>
+          <witness class="brx" xml:id<span>="ms-A" n<span class="brx">=</span>"A"&gt;
+            The principal manuscript.
+          </witness>
+          <witness class="brx" xml:id<span>="ms-B" n<span class="brx">=</span>"B"&gt;
+            A later manuscript containing several alternative readings.
+          </witness>
+          <witness class="brx" xml:id<span>="ed-C" n<span class="brx">=</span>"C"&gt;
+            An early printed edition.
+          </witness>
+        </listwit>
+      </sourcedesc>
+    </filedesc>
+  </teiheader>
+  <text>
+    
+      <p class="brx" xml:id<span>="p1"&gt;The mind seeks unity.</p>
+    
+  </text>
+</tei>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
 
+<span class="cs"><span class="stylecs">\xmlregisterns</span></span>
+  <span class="br">{</span>tei<span class="br">}</span>
+  <span class="br">{</span>http://www.tei-c.org/ns/1.0<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:document
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+    <span class="br">{</span>tei:TEI|tei:teiHeader|tei:fileDesc|tei:sourceDesc|tei:listWit<span class="br">}</span>
+    <span class="br">{</span>xml:tei:flush<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+    <span class="br">{</span>tei:titleStmt|tei:publicationStmt|tei:text<span class="br">}</span>
+    <span class="br">{</span>xml:tei:ignore<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+    <span class="br">{</span>tei:witness<span class="br">}</span>
+    <span class="br">{</span>xml:tei:witness<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:tei:document<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:flush
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:ignore
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:witness
+  <span class="cs">\noindent</span>
+  <span class="cs"><span class="documentcs">\bold</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>n<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="stylecs">\quad</span></span>
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+  <span class="cs">\par</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Declared witnesses<span class="br">}</span>
+<span class="cs"><span class="stylecs">\xmlprocessbuffer</span></span><span class="br">{</span>tei<span class="br">}</span><span class="br">{</span>witnesses<span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
-    <p>This is still only an inspection test.
-</p>
-    <p>It does not yet:
-</p>
-    <ul>
-     <li>
-      process apparatus entries;
      </li>
-     <li>
-      resolve
-      <code>@wit</code>
-      references;
-     </li>
-     <li>
-      sort witnesses;
-     </li>
-     <li>
-      group witness families;
-     </li>
-     <li>
-      validate missing declarations;
-     </li>
-     <li>
-      apply final siglum typography.
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/7493c0a8bf26d0793c29359e441f2fe3.webp" width="874">
      </li>
     </ul>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> The two examples demonstrate the same architecture.
+The local version processes an external XML file with
+<code>\xmlprocessfile</code>; the Garden version uses
+<code>\xmlprocessbuffer</code> only so that source and compiled result can
+be shown on one wiki page.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="10.1._The_role_of_the_TEI_namespace">
-      10.1. The role of the TEI namespace
+     <span class="mw-headline" id="8.4._Follow_the_ConTeXt_processing_path">
+      8.4. Follow the ConTeXt processing path
+     </span>
+    </h3>
+    <pre>TEI source
+    &boxv;
+    ▼
+TEI namespace registered as "tei"
+    &boxv;
+    ▼
+tei:witness elements selected
+    &boxv;
+    ▼
+attribute n retrieved
+    &boxv;
+    ▼
+witness content flushed
+    &boxv;
+    ▼
+readable witness list
+</pre>
+    <p><b>How to read this diagram.</b> The namespace prefix belongs to the ConTeXt
+processing layer. It lets the setups select TEI elements unambiguously.
+Once a witness is selected, <code>\xmlatt</code> retrieves an attribute and
+<code>\xmlflush</code> emits the element content.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.5._Namespace_and_processing_prefix">
+      8.5. Namespace and processing prefix
      </span>
     </h3>
     <p>The XML source declares:
 </p>
     <pre>xmlns="http://www.tei-c.org/ns/1.0"
 </pre>
-    <p>The ConTeXt file registers a shorter processing prefix:
+    <p>The ConTeXt file uses:
 </p>
     <pre>\xmlregisterns
   {tei}
   {http://www.tei-c.org/ns/1.0}
 </pre>
-    <p>This allows selectors such as:
-</p>
-    <pre>tei:witness
-</pre>
-    <p>to identify TEI witness elements.
-</p>
     <p>The relation is:
 </p>
     <pre>TEI namespace URI
 http://www.tei-c.org/ns/1.0
-        &darr;
+        &boxv;
+        ▼
 ConTeXt processing prefix
 tei
-        &darr;
+        &boxv;
+        ▼
 selector
 tei:witness
 </pre>
-    <p>The prefix used in the ConTeXt file is a local processing convention.
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> The prefix <code>tei</code> used by the ConTeXt
+processing file is a local processing convention. It does not rewrite or
+alter the namespace declaration stored in the XML source.
 </p>
-    <p>It does not change the XML source.
-</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="10.2._Retrieving_the_siglum">
-      10.2. Retrieving the siglum
+     <span class="mw-headline" id="8.6._Source_data_and_display_remain_separate">
+      8.6. Source data and display remain separate
      </span>
     </h3>
-    <p>The witness declaration contains:
-</p>
-    <pre>n="A"
-</pre>
-    <p>The ConTeXt setup retrieves it with:
-</p>
-    <pre>\xmlatt{#1}{n}
-</pre>
-    <p>Conceptually:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-                         &uarr;
-                         &boxv;
-                retrieve attribute n
-                         &darr;
-                         A
-</pre>
-    <p>The setup then typesets it in bold:
-</p>
-    <pre>\bold{\xmlatt{#1}{n}}
-</pre>
-    <p>This bold form is only a demonstration.
-</p>
-    <p>The final appearance of witness sigla will be defined in the typesetting
-guide.
-</p>
-    <h3>
-     <span class="mw-headline" id="10.3._Source_data_and_display_remain_separate">
-      10.3. Source data and display remain separate
-     </span>
-    </h3>
-    <p>The XML source stores:
+    <p>The TEI source stores:
 </p>
     <pre>&lt;witness xml:id="ms-A" n="A"&gt;
   The principal manuscript.
 &lt;/witness&gt;
 </pre>
-    <p>The ConTeXt setup controls the display:
-</p>
-    <pre>\startxmlsetups xml:tei:witness
-  \noindent
-  \bold{\xmlatt{#1}{n}}
-  \quad
-  \xmlflush{#1}
-  \par
-\stopxmlsetups
-</pre>
-    <p>The separation is:
+    <p>The ConTeXt setup determines how it appears.
 </p>
     <table class="wikitable">
      <tbody>
@@ -2504,15 +2013,15 @@ guide.
 </td>
       </tr>
       <tr>
-       <td>Stores its identifier
+       <td>Stores its stable identity
 </td>
-       <td>Retrieves attributes
+       <td>Resolves or retrieves attributes when needed
 </td>
       </tr>
       <tr>
-       <td>Stores its siglum value
+       <td>Stores the tutorial's display label
 </td>
-       <td>Determines siglum typography
+       <td>Determines label typography
 </td>
       </tr>
       <tr>
@@ -2523,15 +2032,326 @@ guide.
       </tr>
      </tbody>
     </table>
-    <p>A change from bold sigla to small capitals does not require the TEI witness
-declarations to be rewritten.
+    <p>Changing bold labels to another typographical treatment does not require
+rewriting the TEI witness declarations.
 </p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> TEI stores the scholarly data. ConTeXt controls
+the presentation. The same witness registry can therefore support different
+typographical outputs.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For ConTeXt's XML setup, selection, attribute-access, and flushing
+mechanisms, see
+<a href="Input_and_compilation/XML_source/XML_setup_commands.html" title="Input and compilation/XML source/XML setup commands">XML setup commands</a>.
+</p>
+     <p>For the broader TEI &rarr; ConTeXt workflow, see <a href="TEI_xml.html" title="TEI xml">TEI XML</a>.
+</p>
+     <p>This tutorial uses only the small subset of XML commands needed to locate
+<code>&lt;witness&gt;</code>, retrieve <code>@n</code>, and display the
+witness description.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> ConTeXt can now load the witness registry, select its
+declarations, retrieve a display label, and typeset their descriptions.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="11._A_practical_witness_checklist">
-      11. A practical witness checklist
+     <span id="Part_IV_&mdash;_Further_considerations_for_larger_projects">
+     </span>
+     <span class="mw-headline" id="Part_IV_.E2.80.94_Further_considerations_for_larger_projects">
+      Part IV &mdash; Further considerations for larger projects
      </span>
     </h2>
-    <p>Before moving to Guide 3, verify the following.
+    <p>The tutorial is already complete at the basic level. The following
+distinctions prepare the same model for larger scholarly projects. They are
+kept here because they clarify decisions the reader will meet later, but
+they are not prerequisites for the three-witness example.
+</p>
+    <h2>
+     <span id="9._Identity,_type,_description,_grouping,_and_order">
+     </span>
+     <span class="mw-headline" id="9._Identity.2C_type.2C_description.2C_grouping.2C_and_order">
+      9. Identity, type, description, grouping, and order
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="9.1._Witness_type_is_not_witness_identity">
+      9.1. Witness type is not witness identity
+     </span>
+    </h3>
+    <p>For example:
+</p>
+    <pre>type:      manuscript
+identity:  ms-A
+
+type:      manuscript
+identity:  ms-B
+
+type:      printed edition
+identity:  ed-C
+</pre>
+    <p>Two witnesses may have the same type:
+</p>
+    <pre>manuscript
+&boxvr;&boxh;&boxh; ms-A
+&boxur;&boxh;&boxh; ms-B
+</pre>
+    <p>but they remain different witnesses.
+</p>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not confuse type with identity.</b> <code>manuscript</code> describes
+a category. <code>ms-A</code> and <code>ms-B</code> identify two distinct
+members of that category.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="9.2._Simple_and_fuller_descriptions">
+      9.2. Simple and fuller descriptions
+     </span>
+    </h3>
+    <p>The tutorial uses deliberately small declarations:
+</p>
+    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
+  The principal manuscript.
+&lt;/witness&gt;
+</pre>
+    <p>A larger project may record:
+</p>
+    <ul>
+     <li>
+      repository;
+     </li>
+     <li>
+      shelfmark;
+     </li>
+     <li>
+      date;
+     </li>
+     <li>
+      material;
+     </li>
+     <li>
+      extent;
+     </li>
+     <li>
+      provenance;
+     </li>
+     <li>
+      scribal hands;
+     </li>
+     <li>
+      bibliographical description;
+     </li>
+     <li>
+      relations to other witnesses.
+     </li>
+    </ul>
+    <p>The progression can be understood as:
+</p>
+    <pre>simple witness declaration
+        &boxv;
+        ▼
+stable identifier + display convention
+        &boxv;
+        ▼
+fuller documentary description
+        &boxv;
+        ▼
+project-specific source metadata
+</pre>
+    <p><b>How to read this diagram.</b> The compact witness registry used in this
+tutorial establishes identity and reference. A real manuscript project may
+then attach or connect much richer documentary descriptions.
+</p>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>Projects requiring detailed manuscript descriptions should consult the TEI
+P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/MS.html" rel="nofollow"><i>Manuscript Description</i></a>,
+especially the structures around <code>&lt;msDesc&gt;</code> and
+<code>&lt;msIdentifier&gt;</code>.
+</p>
+     <p>Guide 2 deliberately establishes only the basic witness
+identity/reference model.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="9.3._Witness_groups_and_families">
+      9.3. Witness groups and families
+     </span>
+    </h3>
+    <p>Some projects group witnesses according to editorial analysis:
+</p>
+    <pre>                     WITNESSES
+                        &boxv;
+          +-------------+-------------+
+          &boxv;                           &boxv;
+          ▼                           ▼
+      family &alpha;                  printed tradition
+          &boxv;                           &boxv;
+      +---+---+                       &boxv;
+      &boxv;       &boxv;                       &boxv;
+      ▼       ▼                       ▼
+      A       B                       C
+      &boxv;       &boxv;                       &boxv;
+      &boxur;&boxh;&boxh;&boxh;&boxh; individual identities &boxh;&boxh;&boxh;&boxh;&boxul;
+                     remain intact
+</pre>
+    <p><b>How to read this diagram.</b> A and B may be grouped because an editor
+perceives a meaningful relationship between them. The group does not erase
+their individual identities.
+</p>
+    <p>Grouping may be useful for:
+</p>
+    <ul>
+     <li>
+      analysis;
+     </li>
+     <li>
+      filtering;
+     </li>
+     <li>
+      ordering;
+     </li>
+     <li>
+      reporting shared readings;
+     </li>
+     <li>
+      apparatus conventions.
+     </li>
+    </ul>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Grouping does not replace identity.</b> A and B may belong to the same
+family while remaining two distinct witnesses. The exact representation of
+more complex groups depends on the project's encoding model.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="9.4._Declaration_order_is_not_necessarily_printed_order">
+      9.4. Declaration order is not necessarily printed order
+     </span>
+    </h3>
+    <p>The TEI source may declare:
+</p>
+    <pre>A  B  C
+</pre>
+    <p>while an editorial output uses:
+</p>
+    <pre>A  C  B
+</pre>
+    <p>or groups them:
+</p>
+    <pre>manuscripts:       A B
+printed editions:  C
+</pre>
+    <p>Three kinds of order should therefore be distinguished:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Order
+       </th>
+       <th>
+        Meaning
+       </th>
+      </tr>
+      <tr>
+       <td>Declaration order
+</td>
+       <td>Order in which witness declarations occur in the TEI source
+</td>
+      </tr>
+      <tr>
+       <td>Editorial order
+</td>
+       <td>Order determined by the scholarly model
+</td>
+      </tr>
+      <tr>
+       <td>Printed order
+</td>
+       <td>Order used in a particular output
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <pre>TEI SOURCE
+declaration order
+A  B  C
+    &boxv;
+    &boxv; editorial rules
+    ▼
+EDITORIAL ORDER
+A  C  B
+    &boxv;
+    &boxv; output processing
+    ▼
+PRINTED ORDER
+A  C  B
+</pre>
+    <p><b>How to read this diagram.</b> Source order is a property of the encoded
+document. Editorial or printed order may be derived later and need not be
+hard-wired into the witness declarations.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> Declaration order is not automatically editorial
+order. Presentation may reorganise witnesses without changing their stable
+identities.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._What_you_have_built">
+      10. What you have built
+     </span>
+    </h2>
+    <p>Guide 2 has transformed textual sources into a reusable witness registry:
+</p>
+    <pre>textual sources
+       &boxv;
+       ▼
+individual witnesses
+       &boxv;
+       ▼
+TEI witness declarations
+       &boxv;
+       ▼
+stable xml:id values
+       &boxv;
+       ▼
+display labels + descriptions
+       &boxv;
+       ▼
+references available to apparatus entries
+</pre>
+    <p><b>How to read this diagram.</b> The result of Guide 2 is not merely a list
+of three names. It is a registry whose members can be addressed by stable
+references.
+</p>
+    <p>The central distinction remains:
+</p>
+    <pre>DECLARATION
+identifies and describes once
+        &boxv;
+        ▼
+REFERENCE
+points back whenever needed
+</pre>
+    <p>This repetition is intentional: it restates the concept that the reader
+will immediately use in Guide 3.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.1._Final_checklist">
+      10.1. Final checklist
+     </span>
+    </h3>
+    <p>Before moving on, verify:
 </p>
     <table class="wikitable">
      <tbody>
@@ -2544,21 +2364,21 @@ declarations to be rewritten.
        </th>
       </tr>
       <tr>
-       <td>Witness list
+       <td>Witness registry
 </td>
-       <td>One <code>&lt;listWit&gt;</code> in the source description
+       <td>One <code>&lt;listWit&gt;</code> in <code>&lt;sourceDesc&gt;</code>
 </td>
       </tr>
       <tr>
        <td>Witness count
 </td>
-       <td>Three <code>&lt;witness&gt;</code> elements
+       <td>Three <code>&lt;witness&gt;</code> declarations
 </td>
       </tr>
       <tr>
        <td>Identifiers
 </td>
-       <td><code>ms-A</code>, <code>ms-B</code>, and <code>ed-C</code>
+       <td><code>ms-A</code>, <code>ms-B</code>, <code>ed-C</code>
 </td>
       </tr>
       <tr>
@@ -2568,38 +2388,38 @@ declarations to be rewritten.
 </td>
       </tr>
       <tr>
-       <td>Sigla
+       <td>Tutorial labels
 </td>
-       <td><code>A</code>, <code>B</code>, and <code>C</code>
+       <td><code>A</code>, <code>B</code>, <code>C</code> in <code>@n</code>
 </td>
       </tr>
       <tr>
        <td>Descriptions
 </td>
-       <td>Every witness has readable descriptive content
+       <td>Each witness has readable descriptive content
 </td>
       </tr>
       <tr>
        <td>Namespace
 </td>
-       <td>The TEI namespace remains declared on <code>&lt;TEI&gt;</code>
+       <td>TEI namespace remains declared
 </td>
       </tr>
       <tr>
        <td>XML structure
 </td>
-       <td>All elements are properly nested and closed
+       <td>Elements are correctly nested and closed
 </td>
       </tr>
       <tr>
-       <td>ConTeXt inspection
+       <td>ConTeXt test
 </td>
-       <td>The three witnesses can be displayed from the XML source
+       <td>The three witness declarations can be displayed
 </td>
       </tr>
      </tbody>
     </table>
-    <p>The expected witness tree is:
+    <p>The expected registry tree is:
 </p>
     <pre>sourceDesc
 &boxur;&boxh;&boxh; listWit
@@ -2607,67 +2427,102 @@ declarations to be rewritten.
     &boxv;   &boxvr;&boxh;&boxh; xml:id: ms-A
     &boxv;   &boxvr;&boxh;&boxh; n: A
     &boxv;   &boxur;&boxh;&boxh; The principal manuscript.
+    &boxv;
     &boxvr;&boxh;&boxh; witness
     &boxv;   &boxvr;&boxh;&boxh; xml:id: ms-B
     &boxv;   &boxvr;&boxh;&boxh; n: B
-    &boxv;   &boxur;&boxh;&boxh; A later manuscript containing several alternative readings.
+    &boxv;   &boxur;&boxh;&boxh; A later manuscript containing
+    &boxv;       several alternative readings.
+    &boxv;
     &boxur;&boxh;&boxh; witness
         &boxvr;&boxh;&boxh; xml:id: ed-C
         &boxvr;&boxh;&boxh; n: C
         &boxur;&boxh;&boxh; An early printed edition.
 </pre>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guide 2 complete.</b> The edition now has a stable registry of textual
+witnesses. Those witnesses have machine-readable identities, project-level
+display labels, and descriptions, and they are ready to be referenced from
+the apparatus.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="12._What_this_guide_has_established">
-      12. What this guide has established
+     <span class="mw-headline" id="11._Continue_with_Guide_3">
+      11. Continue with Guide 3
      </span>
     </h2>
-    <p>This guide has moved from unidentified textual sources to a reusable witness
-registry:
+    <p>The cumulative structure is worth repeating here because the next
+operation acts on a different branch of the same TEI document.
 </p>
-    <pre>textual sources
-        &darr;
-individual witnesses
-        &darr;
-TEI witness declarations
-        &darr;
-stable XML identifiers
-        &darr;
-editorial sigla and descriptions
-        &darr;
-references available to later apparatus entries
-</pre>
-    <p>The central distinction is between a <i>declaration</i> and a <i>reference</i>. A
-declaration identifies and describes a witness once; a reference points back
-to that declaration wherever the witness supports a lemma or reading.
-</p>
-    <p>The TEI source now has this structure:
+    <p>Guide 1 established:
 </p>
     <pre>TEI
 &boxvr;&boxh;&boxh; teiHeader
-&boxv;   &boxur;&boxh;&boxh; fileDesc
-&boxv;       &boxur;&boxh;&boxh; sourceDesc
-&boxv;           &boxur;&boxh;&boxh; listWit
-&boxv;               &boxvr;&boxh;&boxh; witness A
-&boxv;               &boxvr;&boxh;&boxh; witness B
-&boxv;               &boxur;&boxh;&boxh; witness C
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
 &boxur;&boxh;&boxh; text
     &boxur;&boxh;&boxh; body
-        &boxur;&boxh;&boxh; paragraph
+        &boxur;&boxh;&boxh; p
 </pre>
-    <p>The next guide will use these declarations inside the first apparatus entry.
+    <p>Guide 2 added:
 </p>
-    <h2>
-     <span class="mw-headline" id="13._Next_guide">
-      13. Next guide
-     </span>
-    </h2>
-    <p>The witnesses are now declared, identified, and available for reuse. Guide 3
-introduces <code>&lt;app&gt;</code>, <code>&lt;lem&gt;</code>,
-<code>&lt;rdg&gt;</code>, and <code>@wit</code>, and shows how readings are
-connected to the witnesses that support them.
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; witness A
+&boxv;           &boxvr;&boxh;&boxh; witness B
+&boxv;           &boxur;&boxh;&boxh; witness C
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+</pre>
+    <p>Guide 3 will enrich the textual branch:
 </p>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; witness A
+&boxv;           &boxvr;&boxh;&boxh; witness B
+&boxv;           &boxur;&boxh;&boxh; witness C
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+            &boxur;&boxh;&boxh; app                         &larr; NEXT
+                &boxvr;&boxh;&boxh; lem
+                &boxv;   &boxur;&boxh;&boxh; wit="#ms-A"
+                &boxur;&boxh;&boxh; rdg
+                    &boxur;&boxh;&boxh; wit="#ms-B"
+</pre>
+    <p><b>How to read these diagrams.</b> The repetition is mnemonic and
+comparative. Guide 1 supplies the container; Guide 2 enriches the
+documentary branch; Guide 3 keeps both of those structures and adds
+apparatus relations inside the textual branch.
+</p>
+    <p>The connection can be summarised as:
+</p>
+    <pre>WITNESS REGISTRY
+       &boxv;
+       &boxv; supplies stable identities
+       ▼
+APPARATUS REFERENCES
+       &boxv;
+       &boxv; associate readings with witnesses
+       ▼
+STRUCTURED TEXTUAL EVIDENCE
+</pre>
+    <dl>
+     <dd>
+      <b>
+       Next:
+      </b>
+      <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">
+       Encoding a basic critical apparatus in TEI
+      </a>
+     </dd>
+    </dl>
     <hr>
-    <div style="margin: 1.5em 0 1em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+    <div style="margin:1.5em 0 1em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
      <p><b>Guide 2 of 6 &mdash; Declaring witnesses in TEI critical editions</b>
 </p>
      <p><b>Previous:</b> <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Understanding TEI documents for critical editions</a>
@@ -2696,6 +2551,11 @@ connected to the witnesses that support them.
       </a>
      </li>
      <li>
+      <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">
+       Encoding a basic critical apparatus in TEI
+      </a>
+     </li>
+     <li>
       <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">
        Glossary of terms used in the TEI XML critical edition guides
       </a>
@@ -2711,6 +2571,11 @@ connected to the witnesses that support them.
       </a>
      </li>
      <li>
+      <a href="Input_and_compilation/XML_source/XML_setup_commands.html" title="Input and compilation/XML source/XML setup commands">
+       XML setup commands
+      </a>
+     </li>
+     <li>
       <a href="ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">
        ConTeXt and Lua programming
       </a>
@@ -2718,6 +2583,11 @@ connected to the witnesses that support them.
      <li>
       <a href="ConTeXt_and_Lua_programming/Processing_XML_with_Lua.html" title="ConTeXt and Lua programming/Processing XML with Lua">
        Processing XML with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">
+       Typesetting a TEI critical apparatus with ConTeXt
       </a>
      </li>
     </ul>
@@ -2731,7 +2601,7 @@ connected to the witnesses that support them.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-29
+     Mirrored on 2026-08-31
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

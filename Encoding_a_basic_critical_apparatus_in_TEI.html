@@ -18,25 +18,60 @@
     Encoding a basic critical apparatus in TEI
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7541&diff=43620">2026-07-30</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7541&diff=43823">2026-08-30</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <div style="margin: 0 0 1.2em 0; padding: 0.75em 1em; border: 1px solid #d6b656; background: #fff4cc; text-align: center;">
-     <p><b>🚧 Documentation under construction &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to correct, expand, and </b>improve<b> them.</b>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.15em; margin-right:0.35em;">🚧</span>
+<b>Under construction</b> &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to edit and <b>improve</b> them.
 </p>
     </div>
-    <div style="margin: 0 0 1.5em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+    <div style="margin:0 0 1.5em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
      <p><b>Guide 3 of 6 &mdash; Encoding a basic critical apparatus in TEI</b>
 </p>
-     <p><b>Previous:</b> <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">Declaring witnesses in TEI critical editions</a>
+     <p><b>Previous: Guide 2 &mdash;</b> <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">Declaring witnesses in TEI critical editions</a>
 &nbsp;&middot;&nbsp;
 <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
 &nbsp;&middot;&nbsp;
 <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
 &nbsp;&middot;&nbsp;
-<b>Next:</b> <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">Encoding complex textual variation in TEI</a>
+<b>Next: Guide 4 &mdash;</b> <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">Encoding complex textual variation in TEI</a>
+</p>
+    </div>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.9em 1.1em; margin:1.2em 0;">
+     <p><b>What you will build in this guide</b>
+</p>
+     <p>Guide 2 ended with a stable witness registry:
+</p>
+     <pre>sourceDesc
+&boxur;&boxh;&boxh; listWit
+    &boxvr;&boxh;&boxh; witness A [xml:id="ms-A"]
+    &boxvr;&boxh;&boxh; witness B [xml:id="ms-B"]
+    &boxur;&boxh;&boxh; witness C [xml:id="ed-C"]
+</pre>
+     <p>Guide 3 keeps those declarations and adds two simple apparatus entries
+inside the text:
+</p>
+     <pre>&lt;p xml:id="p1"&gt;The
+  &lt;app&gt;
+    &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
+    &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+  &lt;/app&gt;
+  &lt;app&gt;
+    &lt;lem wit="#ms-A #ms-B"&gt;seeks&lt;/lem&gt;
+    &lt;rdg wit="#ed-C"&gt;desires&lt;/rdg&gt;
+  &lt;/app&gt;
+  unity.
+&lt;/p&gt;
+</pre>
+     <p>The working XML will use TEI's <i>parallel segmentation</i> method. ConTeXt
+will then inspect the apparatus by selecting lemmas, readings, and raw
+witness references.
+</p>
+     <p>The final typography of a continuous critical apparatus belongs to
+Guide 6.
 </p>
     </div>
     <div class="toc" id="toc">
@@ -52,1434 +87,831 @@
      </div>
      <ul>
       <li class="toclevel-1 tocsection-1">
-       <a href="#1._From_declared_witnesses_to_textual_variation">
+       <a href="#Encoding_a_basic_critical_apparatus_in_TEI">
         <span class="tocnumber">
          1
         </span>
         <span class="toctext">
-         1. From declared witnesses to textual variation
+         Encoding a basic critical apparatus in TEI
         </span>
        </a>
        <ul>
         <li class="toclevel-2 tocsection-2">
-         <a href="#1.1._What_the_preceding_guide_established">
+         <a href="#1._Where_this_guide_fits_in_the_collection">
           <span class="tocnumber">
            1.1
           </span>
           <span class="toctext">
-           1.1. What the preceding guide established
+           1. Where this guide fits in the collection
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-3">
-         <a href="#1.2._The_next_editorial_task">
+         <a href="#Part_I_.E2.80.94_From_witnesses_to_apparatus_entries">
           <span class="tocnumber">
            1.2
           </span>
           <span class="toctext">
-           1.2. The next editorial task
+           Part I &mdash; From witnesses to apparatus entries
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-4">
-         <a href="#1.3._The_two_variable_passages">
+         <a href="#2._Identify_one_place_of_textual_variation">
           <span class="tocnumber">
            1.3
           </span>
           <span class="toctext">
-           1.3. The two variable passages
+           2. Identify one place of textual variation
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-5">
-         <a href="#1.4._The_progression_followed_in_this_guide">
+         <a href="#3._Add_.3Capp.3E.2C_.3Clem.3E.2C_and_.3Crdg.3E">
           <span class="tocnumber">
            1.4
           </span>
           <span class="toctext">
-           1.4. The progression followed in this guide
+           3. Add &lt;app&gt;, &lt;lem&gt;, and &lt;rdg&gt;
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-6">
+           <a href="#3.1._Add_the_apparatus_location">
+            <span class="tocnumber">
+             1.4.1
+            </span>
+            <span class="toctext">
+             3.1. Add the apparatus location
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-7">
+           <a href="#3.2._Add_the_lemma_and_the_alternative_reading">
+            <span class="tocnumber">
+             1.4.2
+            </span>
+            <span class="toctext">
+             3.2. Add the lemma and the alternative reading
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-6">
-         <a href="#1.5._What_the_completed_example_will_contain">
+        <li class="toclevel-2 tocsection-8">
+         <a href="#4._Connect_readings_to_witnesses_with_.40wit">
           <span class="tocnumber">
            1.5
           </span>
           <span class="toctext">
-           1.5. What the completed example will contain
+           4. Connect readings to witnesses with @wit
           </span>
          </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-7">
-       <a href="#2._Where_this_guide_fits_in_the_collection">
-        <span class="tocnumber">
-         2
-        </span>
-        <span class="toctext">
-         2. Where this guide fits in the collection
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-8">
-       <a href="#3._From_witness_declarations_to_textual_variation">
-        <span class="tocnumber">
-         3
-        </span>
-        <span class="toctext">
-         3. From witness declarations to textual variation
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-9">
-         <a href="#3.1._The_witness_registry">
-          <span class="tocnumber">
-           3.1
-          </span>
-          <span class="toctext">
-           3.1. The witness registry
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-10">
-         <a href="#3.2._What_witness_declarations_do_and_do_not_say">
-          <span class="tocnumber">
-           3.2
-          </span>
-          <span class="toctext">
-           3.2. What witness declarations do and do not say
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#4.1._The_two_branches_are_now_connected">
+            <span class="tocnumber">
+             1.5.1
+            </span>
+            <span class="toctext">
+             4.1. The two branches are now connected
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-10">
+           <a href="#4.2._One_witness_and_several_witnesses">
+            <span class="tocnumber">
+             1.5.2
+            </span>
+            <span class="toctext">
+             4.2. One witness and several witnesses
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-11">
-         <a href="#3.3._From_witness_identity_to_textual_relation">
+         <a href="#Part_II_.E2.80.94_Build_the_apparatus_in_the_text">
           <span class="tocnumber">
-           3.3
+           1.6
           </span>
           <span class="toctext">
-           3.3. From witness identity to textual relation
+           Part II &mdash; Build the apparatus in the text
           </span>
          </a>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-12">
-       <a href="#4._The_basic_apparatus_structure">
-        <span class="tocnumber">
-         4
-        </span>
-        <span class="toctext">
-         4. The basic apparatus structure
-        </span>
-       </a>
-       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#5._Declare_the_variant-encoding_method">
+          <span class="tocnumber">
+           1.7
+          </span>
+          <span class="toctext">
+           5. Declare the variant-encoding method
+          </span>
+         </a>
+        </li>
         <li class="toclevel-2 tocsection-13">
-         <a href="#4.1._What_an_apparatus_entry_represents">
+         <a href="#6._Insert_the_first_apparatus_entry_into_the_paragraph">
           <span class="tocnumber">
-           4.1
+           1.8
           </span>
           <span class="toctext">
-           4.1. What an apparatus entry represents
+           6. Insert the first apparatus entry into the paragraph
           </span>
          </a>
-        </li>
-        <li class="toclevel-2 tocsection-14">
-         <a href="#4.2._The_.3Capp.3E_element">
-          <span class="tocnumber">
-           4.2
-          </span>
-          <span class="toctext">
-           4.2. The &lt;app&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-15">
-         <a href="#4.3._The_.3Clem.3E_element">
-          <span class="tocnumber">
-           4.3
-          </span>
-          <span class="toctext">
-           4.3. The &lt;lem&gt; element
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-14">
+           <a href="#6.1._One_encoded_location.2C_several_possible_texts">
+            <span class="tocnumber">
+             1.8.1
+            </span>
+            <span class="toctext">
+             6.1. One encoded location, several possible texts
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-15">
+           <a href="#6.2._Mixed-content_whitespace">
+            <span class="tocnumber">
+             1.8.2
+            </span>
+            <span class="toctext">
+             6.2. Mixed-content whitespace
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-16">
-         <a href="#4.4._The_.3Crdg.3E_element">
+         <a href="#7._Add_a_second_apparatus_entry">
           <span class="tocnumber">
-           4.4
+           1.9
           </span>
           <span class="toctext">
-           4.4. The &lt;rdg&gt; element
+           7. Add a second apparatus entry
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-17">
-         <a href="#4.5._The_.40wit_attribute">
+         <a href="#8._Derive_edited_and_witness-oriented_views">
           <span class="tocnumber">
-           4.5
+           1.10
           </span>
           <span class="toctext">
-           4.5. The @wit attribute
+           8. Derive edited and witness-oriented views
           </span>
          </a>
-        </li>
-        <li class="toclevel-2 tocsection-18">
-         <a href="#4.6._One_witness_and_several_witnesses">
-          <span class="tocnumber">
-           4.6
-          </span>
-          <span class="toctext">
-           4.6. One witness and several witnesses
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-19">
-       <a href="#5._Encoding_inline_apparatus_entries">
-        <span class="tocnumber">
-         5
-        </span>
-        <span class="toctext">
-         5. Encoding inline apparatus entries
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-20">
-         <a href="#5.1._Encoding_the_first_variant">
-          <span class="tocnumber">
-           5.1
-          </span>
-          <span class="toctext">
-           5.1. Encoding the first variant
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-21">
-         <a href="#5.2._Reading_the_first_apparatus_entry_as_a_tree">
-          <span class="tocnumber">
-           5.2
-          </span>
-          <span class="toctext">
-           5.2. Reading the first apparatus entry as a tree
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-18">
+           <a href="#8.1._Edited_text">
+            <span class="tocnumber">
+             1.10.1
+            </span>
+            <span class="toctext">
+             8.1. Edited text
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-19">
+           <a href="#8.2._Witness-oriented_view_for_A">
+            <span class="tocnumber">
+             1.10.2
+            </span>
+            <span class="toctext">
+             8.2. Witness-oriented view for A
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-20">
+           <a href="#8.3._Witness-oriented_view_for_B">
+            <span class="tocnumber">
+             1.10.3
+            </span>
+            <span class="toctext">
+             8.3. Witness-oriented view for B
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-21">
+           <a href="#8.4._Witness-oriented_view_for_C">
+            <span class="tocnumber">
+             1.10.4
+            </span>
+            <span class="toctext">
+             8.4. Witness-oriented view for C
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-22">
-         <a href="#5.3._Inline_apparatus">
+         <a href="#Part_III_.E2.80.94_Keep_evidence_separate_from_presentation">
           <span class="tocnumber">
-           5.3
+           1.11
           </span>
           <span class="toctext">
-           5.3. Inline apparatus
+           Part III &mdash; Keep evidence separate from presentation
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-23">
-         <a href="#5.4._Markup_boundaries_and_spaces">
+         <a href="#9._Several_readings_and_shared_witness_support">
           <span class="tocnumber">
-           5.4
+           1.12
           </span>
           <span class="toctext">
-           5.4. Markup boundaries and spaces
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-24">
-         <a href="#5.5._Adding_the_second_apparatus_entry">
-          <span class="tocnumber">
-           5.5
-          </span>
-          <span class="toctext">
-           5.5. Adding the second apparatus entry
+           9. Several readings and shared witness support
           </span>
          </a>
          <ul>
+          <li class="toclevel-3 tocsection-24">
+           <a href="#9.1._Several_alternative_readings">
+            <span class="tocnumber">
+             1.12.1
+            </span>
+            <span class="toctext">
+             9.1. Several alternative readings
+            </span>
+           </a>
+          </li>
           <li class="toclevel-3 tocsection-25">
-           <a href="#5.5.1._The_second_variation">
+           <a href="#9.2._Several_witnesses_supporting_the_same_reading">
             <span class="tocnumber">
-             5.5.1
+             1.12.2
             </span>
             <span class="toctext">
-             5.5.1. The second variation
+             9.2. Several witnesses supporting the same reading
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-26">
-           <a href="#5.5.2._The_editorial_relation">
-            <span class="tocnumber">
-             5.5.2
-            </span>
-            <span class="toctext">
-             5.5.2. The editorial relation
-            </span>
-           </a>
-          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-26">
+         <a href="#10._Encoded_evidence_is_not_printed_notation">
+          <span class="tocnumber">
+           1.13
+          </span>
+          <span class="toctext">
+           10. Encoded evidence is not printed notation
+          </span>
+         </a>
+         <ul>
           <li class="toclevel-3 tocsection-27">
-           <a href="#5.5.3._Encoding_the_second_apparatus_entry">
+           <a href="#10.1._Negative_apparatus">
             <span class="tocnumber">
-             5.5.3
+             1.13.1
             </span>
             <span class="toctext">
-             5.5.3. Encoding the second apparatus entry
+             10.1. Negative apparatus
             </span>
            </a>
           </li>
           <li class="toclevel-3 tocsection-28">
-           <a href="#5.5.4._Combining_both_apparatus_entries">
+           <a href="#10.2._Positive_apparatus">
             <span class="tocnumber">
-             5.5.4
+             1.13.2
             </span>
             <span class="toctext">
-             5.5.4. Combining both apparatus entries
+             10.2. Positive apparatus
             </span>
            </a>
           </li>
           <li class="toclevel-3 tocsection-29">
-           <a href="#5.5.5._Reading_the_resulting_XML_tree">
+           <a href="#10.3._Prose_report">
             <span class="tocnumber">
-             5.5.5
+             1.13.3
             </span>
             <span class="toctext">
-             5.5.5. Reading the resulting XML tree
+             10.3. Prose report
             </span>
            </a>
           </li>
           <li class="toclevel-3 tocsection-30">
-           <a href="#5.5.6._The_edited_text">
+           <a href="#10.4._Reading_edition">
             <span class="tocnumber">
-             5.5.6
+             1.13.4
             </span>
             <span class="toctext">
-             5.5.6. The edited text
+             10.4. Reading edition
             </span>
            </a>
           </li>
           <li class="toclevel-3 tocsection-31">
-           <a href="#5.5.7._A_possible_printed_apparatus">
+           <a href="#10.5._Positive_encoded_information_and_negative_display">
             <span class="tocnumber">
-             5.5.7
+             1.13.5
             </span>
             <span class="toctext">
-             5.5.7. A possible printed apparatus
+             10.5. Positive encoded information and negative display
             </span>
            </a>
           </li>
          </ul>
         </li>
         <li class="toclevel-2 tocsection-32">
-         <a href="#5.6._Several_readings_in_one_apparatus_entry">
+         <a href="#11._What_should_not_be_encoded_as_reading_content">
           <span class="tocnumber">
-           5.6
+           1.14
           </span>
           <span class="toctext">
-           5.6. Several readings in one apparatus entry
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-33">
-         <a href="#5.7._Several_witnesses_supporting_one_reading">
-          <span class="tocnumber">
-           5.7
-          </span>
-          <span class="toctext">
-           5.7. Several witnesses supporting one reading
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-34">
-       <a href="#6._Encoded_data_and_printed_notation">
-        <span class="tocnumber">
-         6
-        </span>
-        <span class="toctext">
-         6. Encoded data and printed notation
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-35">
-         <a href="#6.1._TEI_encoding_and_printed_notation">
-          <span class="tocnumber">
-           6.1
-          </span>
-          <span class="toctext">
-           6.1. TEI encoding and printed notation
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-36">
-         <a href="#6.2._Positive_and_negative_information">
-          <span class="tocnumber">
-           6.2
-          </span>
-          <span class="toctext">
-           6.2. Positive and negative information
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-37">
-       <a href="#7._Complete_TEI_MWE">
-        <span class="tocnumber">
-         7
-        </span>
-        <span class="toctext">
-         7. Complete TEI MWE
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-38">
-         <a href="#7.1._File_name">
-          <span class="tocnumber">
-           7.1
-          </span>
-          <span class="toctext">
-           7.1. File name
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-39">
-         <a href="#7.2._Complete_XML_source">
-          <span class="tocnumber">
-           7.2
-          </span>
-          <span class="toctext">
-           7.2. Complete XML source
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-40">
-         <a href="#7.3._What_the_complete_document_contains">
-          <span class="tocnumber">
-           7.3
-          </span>
-          <span class="toctext">
-           7.3. What the complete document contains
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-41">
-         <a href="#7.4._Reading_the_complete_TEI_document_as_a_tree">
-          <span class="tocnumber">
-           7.4
-          </span>
-          <span class="toctext">
-           7.4. Reading the complete TEI document as a tree
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-42">
-         <a href="#7.5._From_the_TEI_source_to_witness_texts">
-          <span class="tocnumber">
-           7.5
-          </span>
-          <span class="toctext">
-           7.5. From the TEI source to witness texts
+           11. What should not be encoded as reading content
           </span>
          </a>
          <ul>
-          <li class="toclevel-3 tocsection-43">
-           <a href="#7.5.1._Witness_A">
+          <li class="toclevel-3 tocsection-33">
+           <a href="#11.1._Do_not_put_the_printed_siglum_inside_the_reading">
             <span class="tocnumber">
-             7.5.1
+             1.14.1
             </span>
             <span class="toctext">
-             7.5.1. Witness A
+             11.1. Do not put the printed siglum inside the reading
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-44">
-           <a href="#7.5.2._Witness_B">
+          <li class="toclevel-3 tocsection-34">
+           <a href="#11.2._Do_not_store_the_lemma_separator">
             <span class="tocnumber">
-             7.5.2
+             1.14.2
             </span>
             <span class="toctext">
-             7.5.2. Witness B
+             11.2. Do not store the lemma separator
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-45">
-           <a href="#7.5.3._Witness_C">
+          <li class="toclevel-3 tocsection-35">
+           <a href="#11.3._Do_not_store_a_preformatted_apparatus_string">
             <span class="tocnumber">
-             7.5.3
+             1.14.3
             </span>
             <span class="toctext">
-             7.5.3. Witness C
+             11.3. Do not store a preformatted apparatus string
             </span>
            </a>
           </li>
          </ul>
         </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-46">
-       <a href="#8._Common_encoding_errors">
-        <span class="tocnumber">
-         8
-        </span>
-        <span class="toctext">
-         8. Common encoding errors
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-47">
-         <a href="#8.1._Placing_the_witness_siglum_directly_in_the_reading_text">
+        <li class="toclevel-2 tocsection-36">
+         <a href="#Part_IV_.E2.80.94_Complete.2C_check.2C_and_inspect">
           <span class="tocnumber">
-           8.1
+           1.15
           </span>
           <span class="toctext">
-           8.1. Placing the witness siglum directly in the reading text
+           Part IV &mdash; Complete, check, and inspect
           </span>
          </a>
         </li>
-        <li class="toclevel-2 tocsection-48">
-         <a href="#8.2._Referring_to_an_undeclared_witness">
+        <li class="toclevel-2 tocsection-37">
+         <a href="#12._Complete_Guide_3_TEI_document">
           <span class="tocnumber">
-           8.2
+           1.16
           </span>
           <span class="toctext">
-           8.2. Referring to an undeclared witness
+           12. Complete Guide 3 TEI document
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-38">
+           <a href="#12.1._Read_the_complete_source_as_a_tree">
+            <span class="tocnumber">
+             1.16.1
+            </span>
+            <span class="toctext">
+             12.1. Read the complete source as a tree
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-49">
-         <a href="#8.3._Adding_the_number_sign_to_xml:id">
+        <li class="toclevel-2 tocsection-39">
+         <a href="#13._Check_the_apparatus">
           <span class="tocnumber">
-           8.3
+           1.17
           </span>
           <span class="toctext">
-           8.3. Adding the number sign to xml:id
+           13. Check the apparatus
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-40">
+           <a href="#13.1._Basic_checklist">
+            <span class="tocnumber">
+             1.17.1
+            </span>
+            <span class="toctext">
+             13.1. Basic checklist
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-41">
+           <a href="#13.2._Undeclared_witness">
+            <span class="tocnumber">
+             1.17.2
+            </span>
+            <span class="toctext">
+             13.2. Undeclared witness
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-42">
+           <a href="#13.3._Number_sign_in_the_wrong_place">
+            <span class="tocnumber">
+             1.17.3
+            </span>
+            <span class="toctext">
+             13.3. Number sign in the wrong place
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-43">
+           <a href="#13.4._Reading_outside_its_apparatus_entry">
+            <span class="tocnumber">
+             1.17.4
+            </span>
+            <span class="toctext">
+             13.4. Reading outside its apparatus entry
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-44">
+           <a href="#13.5._Structurally_correct_can_still_be_editorially_wrong">
+            <span class="tocnumber">
+             1.17.5
+            </span>
+            <span class="toctext">
+             13.5. Structurally correct can still be editorially wrong
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-50">
-         <a href="#8.4._Using_commas_inside_.40wit">
+        <li class="toclevel-2 tocsection-45">
+         <a href="#14._Inspect_the_apparatus_with_ConTeXt">
           <span class="tocnumber">
-           8.4
+           1.18
           </span>
           <span class="toctext">
-           8.4. Using commas inside @wit
+           14. Inspect the apparatus with ConTeXt
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-46">
+           <a href="#14.1._Processing_map_before_the_code">
+            <span class="tocnumber">
+             1.18.1
+            </span>
+            <span class="toctext">
+             14.1. Processing map before the code
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-47">
+           <a href="#14.2._Local_two-file_test">
+            <span class="tocnumber">
+             1.18.2
+            </span>
+            <span class="toctext">
+             14.2. Local two-file test
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-48">
+           <a href="#14.3._Follow_the_processing_path">
+            <span class="tocnumber">
+             1.18.3
+            </span>
+            <span class="toctext">
+             14.3. Follow the processing path
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-49">
+           <a href="#14.4._Deliberate_limitations">
+            <span class="tocnumber">
+             1.18.4
+            </span>
+            <span class="toctext">
+             14.4. Deliberate limitations
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-50">
+           <a href="#14.5._Garden_source-and-result_demonstration">
+            <span class="tocnumber">
+             1.18.5
+            </span>
+            <span class="toctext">
+             14.5. Garden source-and-result demonstration
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-51">
-         <a href="#8.5._Repeating_.40wit">
+         <a href="#15._What_you_have_built">
           <span class="tocnumber">
-           8.5
+           1.19
           </span>
           <span class="toctext">
-           8.5. Repeating @wit
+           15. What you have built
           </span>
          </a>
-        </li>
-        <li class="toclevel-2 tocsection-52">
-         <a href="#8.6._Leaving_the_reading_outside_the_apparatus_entry">
-          <span class="tocnumber">
-           8.6
-          </span>
-          <span class="toctext">
-           8.6. Leaving the reading outside the apparatus entry
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-52">
+           <a href="#15.1._Final_checklist">
+            <span class="tocnumber">
+             1.19.1
+            </span>
+            <span class="toctext">
+             15.1. Final checklist
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-53">
-         <a href="#8.7._Storing_the_lemma_separator_in_the_TEI_source">
+         <a href="#16._Continue_with_Guide_4">
           <span class="tocnumber">
-           8.7
+           1.20
           </span>
           <span class="toctext">
-           8.7. Storing the lemma separator in the TEI source
+           16. Continue with Guide 4
           </span>
          </a>
-        </li>
-        <li class="toclevel-2 tocsection-54">
-         <a href="#8.8._Encoding_a_preformatted_apparatus_string">
-          <span class="tocnumber">
-           8.8
-          </span>
-          <span class="toctext">
-           8.8. Encoding a preformatted apparatus string
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-55">
-       <a href="#9._Structural_and_editorial_checks">
-        <span class="tocnumber">
-         9
-        </span>
-        <span class="toctext">
-         9. Structural and editorial checks
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-56">
-         <a href="#9.1._Structural_checks">
-          <span class="tocnumber">
-           9.1
-          </span>
-          <span class="toctext">
-           9.1. Structural checks
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-57">
-         <a href="#9.2._Editorial_correctness">
-          <span class="tocnumber">
-           9.2
-          </span>
-          <span class="toctext">
-           9.2. Editorial correctness
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-54">
+           <a href="#Guide_1_.E2.80.94_build_the_container">
+            <span class="tocnumber">
+             1.20.1
+            </span>
+            <span class="toctext">
+             Guide 1 &mdash; build the container
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-55">
+           <a href="#Guide_2_.E2.80.94_add_witnesses">
+            <span class="tocnumber">
+             1.20.2
+            </span>
+            <span class="toctext">
+             Guide 2 &mdash; add witnesses
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-56">
+           <a href="#Guide_3_.E2.80.94_add_basic_textual_variation">
+            <span class="tocnumber">
+             1.20.3
+            </span>
+            <span class="toctext">
+             Guide 3 &mdash; add basic textual variation
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-57">
+           <a href="#Guide_4_.E2.80.94_next_expansion">
+            <span class="tocnumber">
+             1.20.4
+            </span>
+            <span class="toctext">
+             Guide 4 &mdash; next expansion
+            </span>
+           </a>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-58">
-         <a href="#9.3._Three_levels_of_verification">
+         <a href="#Related_pages">
           <span class="tocnumber">
-           9.3
+           1.21
           </span>
           <span class="toctext">
-           9.3. Three levels of verification
+           Related pages
           </span>
          </a>
         </li>
        </ul>
-      </li>
-      <li class="toclevel-1 tocsection-59">
-       <a href="#10._Inspecting_the_basic_apparatus_with_ConTeXt">
-        <span class="tocnumber">
-         10
-        </span>
-        <span class="toctext">
-         10. Inspecting the basic apparatus with ConTeXt
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-60">
-         <a href="#10.1._Purpose_of_the_inspection_test">
-          <span class="tocnumber">
-           10.1
-          </span>
-          <span class="toctext">
-           10.1. Purpose of the inspection test
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-61">
-         <a href="#10.2._Why_the_raw_witness_identifier_is_retained">
-          <span class="tocnumber">
-           10.2
-          </span>
-          <span class="toctext">
-           10.2. Why the raw witness identifier is retained
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-62">
-         <a href="#10.3._ConTeXt_source_file">
-          <span class="tocnumber">
-           10.3
-          </span>
-          <span class="toctext">
-           10.3. ConTeXt source file
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-63">
-         <a href="#10.4._Compilation">
-          <span class="tocnumber">
-           10.4
-          </span>
-          <span class="toctext">
-           10.4. Compilation
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-64">
-         <a href="#10.5._Expected_output">
-          <span class="tocnumber">
-           10.5
-          </span>
-          <span class="toctext">
-           10.5. Expected output
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-65">
-         <a href="#10.6._Processing_path">
-          <span class="tocnumber">
-           10.6
-          </span>
-          <span class="toctext">
-           10.6. Processing path
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-66">
-         <a href="#10.7._Deliberate_limitations_of_the_test">
-          <span class="tocnumber">
-           10.7
-          </span>
-          <span class="toctext">
-           10.7. Deliberate limitations of the test
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-67">
-         <a href="#10.8._A_simpler_fallback_inspection_test">
-          <span class="tocnumber">
-           10.8
-          </span>
-          <span class="toctext">
-           10.8. A simpler fallback inspection test
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-68">
-         <a href="#10.9._The_role_of_each_ConTeXt_setup">
-          <span class="tocnumber">
-           10.9
-          </span>
-          <span class="toctext">
-           10.9. The role of each ConTeXt setup
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-69">
-         <a href="#10.10._Source_data_and_presentation_remain_separate">
-          <span class="tocnumber">
-           10.10
-          </span>
-          <span class="toctext">
-           10.10. Source data and presentation remain separate
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-70">
-       <a href="#11._A_practical_apparatus_checklist">
-        <span class="tocnumber">
-         11
-        </span>
-        <span class="toctext">
-         11. A practical apparatus checklist
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-71">
-       <a href="#12._What_this_guide_has_established">
-        <span class="tocnumber">
-         12
-        </span>
-        <span class="toctext">
-         12. What this guide has established
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-72">
-         <a href="#12.1._The_completed_progression">
-          <span class="tocnumber">
-           12.1
-          </span>
-          <span class="toctext">
-           12.1. The completed progression
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-73">
-         <a href="#12.2._The_essential_distinction">
-          <span class="tocnumber">
-           12.2
-          </span>
-          <span class="toctext">
-           12.2. The essential distinction
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-74">
-         <a href="#12.3._Skills_acquired">
-          <span class="tocnumber">
-           12.3
-          </span>
-          <span class="toctext">
-           12.3. Skills acquired
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-75">
-       <a href="#13._Next_guide">
-        <span class="tocnumber">
-         13
-        </span>
-        <span class="toctext">
-         13. Next guide
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-76">
-       <a href="#14._Related_pages">
-        <span class="tocnumber">
-         14
-        </span>
-        <span class="toctext">
-         14. Related pages
-        </span>
-       </a>
       </li>
      </ul>
     </div>
-    <h2>
-     <span class="mw-headline" id="1._From_declared_witnesses_to_textual_variation">
-      1. From declared witnesses to textual variation
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="1.1._What_the_preceding_guide_established">
-      1.1. What the preceding guide established
-     </span>
-    </h3>
-    <p>The preceding guide declared the textual witnesses used by the edition.
+    <p>Guide 1 created the TEI document.
 </p>
-    <p>The TEI document now knows that:
+    <p>Guide 2 added a registry of textual witnesses.
 </p>
-    <pre>ms-A
-    &darr;
-witness A
+    <p>Guide 3 now connects those witnesses to the places where their texts agree
+or differ.
+</p>
+    <p>Suppose the three witnesses preserve:
+</p>
+    <pre>A   The mind seeks unity.
 
-ms-B
-    &darr;
-witness B
+B   The soul seeks unity.
 
-ed-C
-    &darr;
-witness C
+C   The mind desires unity.
 </pre>
-    <h3>
-     <span class="mw-headline" id="1.2._The_next_editorial_task">
-      1.2. The next editorial task
-     </span>
-    </h3>
-    <p>The next task is to record how those witnesses differ.
-</p>
-    <p>Suppose that the three witnesses preserve these forms:
-</p>
-    <pre>A  The mind seeks unity.
-B  The soul seeks unity.
-C  The mind desires unity.
-</pre>
-    <h3>
-     <span class="mw-headline" id="1.3._The_two_variable_passages">
-      1.3. The two variable passages
-     </span>
-    </h3>
-    <p>The differences concern two passages:
+    <p>Two places vary:
 </p>
     <pre>mind / soul
 
 seeks / desires
 </pre>
-    <p>This guide explains how those relations can be encoded as structured TEI
-apparatus entries.
-</p>
-    <h3>
-     <span class="mw-headline" id="1.4._The_progression_followed_in_this_guide">
-      1.4. The progression followed in this guide
-     </span>
-    </h3>
-    <p>The progression is:
+    <p>The basic movement of this guide is:
 </p>
     <pre>declared witnesses
-        &darr;
-variable passage
-        &darr;
-apparatus entry
-        &darr;
-lemma and readings
-        &darr;
-witness references
-        &darr;
-possible printed apparatus
+        &boxv;
+        ▼
+textual evidence
+        &boxv;
+        ▼
+editorial relation
+        &boxv;
+        ▼
+app / lem / rdg
+        &boxv;
+        ▼
+@wit references
+        &boxv;
+        ▼
+reusable critical-apparatus data
 </pre>
-    <h3>
-     <span class="mw-headline" id="1.5._What_the_completed_example_will_contain">
-      1.5. What the completed example will contain
-     </span>
-    </h3>
-    <p>At the end of the guide, the TEI source will contain:
+    <p><b>How to read this diagram.</b> The apparatus is built from editorial
+relations, not from a preformatted note string. The same witness identities
+created in Guide 2 are reused here to connect textual forms with their
+documentary support.
 </p>
-    <ul>
-     <li>
-      the witness declarations created in Guide 2;
-     </li>
-     <li>
-      two inline apparatus entries;
-     </li>
-     <li>
-      one lemma in each entry;
-     </li>
-     <li>
-      one variant reading in each entry;
-     </li>
-     <li>
-      explicit witness references;
-     </li>
-     <li>
-      enough information to generate a simple lemma-based apparatus.
-     </li>
-    </ul>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Guiding principle.</b> TEI records the <i>relation between readings and witnesses</i>. It should not store the punctuation, abbreviations, or visual compression of one particular printed apparatus.
-</p>
-    </div>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #6fa8dc; background: #eef6fc;">
-     <p><b>Reading the examples.</b> Each major construction is divided into short
-steps: editorial evidence, TEI encoding, XML tree, edited text, and possible
-apparatus output. The frequent subsection headings make each code block easier
-to locate, discuss, and revise independently.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> TEI records the relationship between textual forms
+and the witnesses that support them. It does not need to store the
+punctuation, abbreviations, or visual compression of one particular
+printed apparatus.
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="2._Where_this_guide_fits_in_the_collection">
-      2. Where this guide fits in the collection
+     <span class="mw-headline" id="1._Where_this_guide_fits_in_the_collection">
+      1. Where this guide fits in the collection
      </span>
     </h2>
-    <p>The six-guide workflow is:
+    <p>The six guides construct one progressively richer scholarly source:
 </p>
-    <pre>TEI document
-      &darr;
-witness declarations
-      &darr;
-[BASIC APPARATUS ENTRIES]     &larr; Guide 3
-      &darr;
+    <pre>GUIDE 1
+basic TEI document
+        &boxv;
+        ▼
+GUIDE 2
+witness registry
+A / B / C
+        &boxv;
+        ▼
+GUIDE 3                                      &larr; YOU ARE HERE
+basic apparatus relations
+
+app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxur;&boxh;&boxh; @wit
+&boxur;&boxh;&boxh; rdg
+    &boxur;&boxh;&boxh; @wit
+        &boxv;
+        ▼
+GUIDE 4
 complex textual variation
-      &darr;
-Lua processing
-      &darr;
-ConTeXt typesetting
+        &boxv;
+        ▼
+GUIDE 5
+processing and validation
+        &boxv;
+        ▼
+GUIDE 6
+scholarly page composition
 </pre>
-    <p>Guide 1 established the basic TEI document.
+    <p><b>How to read this diagram.</b> Guide 3 does not create a separate
+apparatus database. It enriches the same TEI document by connecting
+textual forms in the body to witness identities declared in the header.
+Guide 4 will keep this architecture while adding more complex kinds of
+variation.
 </p>
-    <p>Guide 2 declared the witnesses.
+    <p>The state inherited from Guide 2 is:
 </p>
-    <p>This guide introduces:
-</p>
-    <ul>
-     <li>
-      textual variation;
-     </li>
-     <li>
-      apparatus entries;
-     </li>
-     <li>
-      lemmas;
-     </li>
-     <li>
-      variant readings;
-     </li>
-     <li>
-      witness support;
-     </li>
-     <li>
-      inline apparatus encoding;
-     </li>
-     <li>
-      several readings in one entry;
-     </li>
-     <li>
-      several witnesses supporting one reading;
-     </li>
-     <li>
-      the distinction between encoded data and printed notation;
-     </li>
-     <li>
-      a small ConTeXt inspection test.
-     </li>
-    </ul>
-    <p>This guide does not yet develop:
-</p>
-    <ul>
-     <li>
-      omissions;
-     </li>
-     <li>
-      additions;
-     </li>
-     <li>
-      corrections;
-     </li>
-     <li>
-      conjectures;
-     </li>
-     <li>
-      transpositions;
-     </li>
-     <li>
-      uncertain readings;
-     </li>
-     <li>
-      reading groups;
-     </li>
-     <li>
-      overlapping passages;
-     </li>
-     <li>
-      full reference resolution with Lua;
-     </li>
-     <li>
-      final apparatus typography.
-     </li>
-    </ul>
-    <p>Those subjects belong to Guides 4, 5, and 6.
-</p>
-    <h2>
-     <span class="mw-headline" id="3._From_witness_declarations_to_textual_variation">
-      3. From witness declarations to textual variation
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="3.1._The_witness_registry">
-      3.1. The witness registry
-     </span>
-    </h3>
-    <p>The witness list created in Guide 2 identifies the sources:
-</p>
-    <pre>&lt;listWit&gt;
-  &lt;witness xml:id="ms-A" n="A"&gt;
-    The principal manuscript.
-  &lt;/witness&gt;
-
-  &lt;witness xml:id="ms-B" n="B"&gt;
-    A later manuscript containing several alternative readings.
-  &lt;/witness&gt;
-
-  &lt;witness xml:id="ed-C" n="C"&gt;
-    An early printed edition.
-  &lt;/witness&gt;
-&lt;/listWit&gt;
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; fileDesc
+&boxv;       &boxur;&boxh;&boxh; sourceDesc
+&boxv;           &boxur;&boxh;&boxh; listWit
+&boxv;               &boxvr;&boxh;&boxh; witness A [xml:id="ms-A"]
+&boxv;               &boxvr;&boxh;&boxh; witness B [xml:id="ms-B"]
+&boxv;               &boxur;&boxh;&boxh; witness C [xml:id="ed-C"]
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p [xml:id="p1"]
 </pre>
-    <h3>
-     <span class="mw-headline" id="3.2._What_witness_declarations_do_and_do_not_say">
-      3.2. What witness declarations do and do not say
-     </span>
-    </h3>
-    <p>The declarations answer:
+    <p>The witness registry answers:
 </p>
-    <pre>Which witnesses exist?
+    <pre>Which textual sources exist?
 </pre>
-    <p>They do not yet answer:
+    <p>Guide 3 adds the answer to:
 </p>
-    <pre>What does each witness read at a particular location?
+    <pre>What does each witness read
+at a particular place in the text?
 </pre>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>From inventory to relation.</b> The witness list identifies the documentary sources; apparatus entries describe how those sources agree or differ at particular locations.
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The documentary side of the edition is ready. A, B,
+and C have stable identities; Guide 3 can now enrich the textual branch
+with explicit relations between readings and witnesses.
 </p>
     </div>
-    <p>That second question is answered by the apparatus entries.
-</p>
-    <h3>
-     <span class="mw-headline" id="3.3._From_witness_identity_to_textual_relation">
-      3.3. From witness identity to textual relation
-     </span>
-    </h3>
-    <p>The relation is:
-</p>
-    <pre>witness registry
-      &darr;
-declared identities
-      &darr;
-apparatus entries refer to those identities
-      &darr;
-readings are associated with witnesses
-</pre>
     <h2>
-     <span class="mw-headline" id="4._The_basic_apparatus_structure">
-      4. The basic apparatus structure
+     <span id="Part_I_&mdash;_From_witnesses_to_apparatus_entries">
+     </span>
+     <span class="mw-headline" id="Part_I_.E2.80.94_From_witnesses_to_apparatus_entries">
+      Part I &mdash; From witnesses to apparatus entries
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="4.1._What_an_apparatus_entry_represents">
-      4.1. What an apparatus entry represents
+    <h2>
+     <span class="mw-headline" id="2._Identify_one_place_of_textual_variation">
+      2. Identify one place of textual variation
      </span>
-    </h3>
-    <p>An apparatus entry records one location of textual variation.
+    </h2>
+    <p>Begin with the first difference:
 </p>
-    <p>For example:
-</p>
-    <pre>A C  mind
-B    soul
+    <pre>A   mind
+B   soul
+C   mind
 </pre>
-    <p>The editorial relation can be expanded as:
+    <p>Before writing XML, express the editorial relation:
 </p>
-    <pre>apparatus entry
-&boxvr;&boxh;&boxh; edited reading: mind
-&boxv;   &boxvr;&boxh;&boxh; supported by A
-&boxv;   &boxur;&boxh;&boxh; supported by C
-&boxur;&boxh;&boxh; alternative reading: soul
-    &boxur;&boxh;&boxh; supported by B
-</pre>
-    <p>A compact printed apparatus might show:
-</p>
-    <pre>mind] soul B
-</pre>
-    <p>A positive apparatus might show:
-</p>
-    <pre>mind A C] soul B
-</pre>
-    <p>Both forms can be generated from the same structured relation.
-</p>
-    <p>The TEI encoding is:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-&lt;/app&gt;
-</pre>
-    <p>The <b>principal correspondence</b> is:
-</p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Editorial concept
-       </th>
-       <th>
-        TEI representation
-       </th>
-       <th>
-        Example
-       </th>
-      </tr>
-      <tr>
-       <td>Apparatus entry
-</td>
-       <td><code>&lt;app&gt;</code>
-</td>
-       <td>One location containing textual variation
-</td>
-      </tr>
-      <tr>
-       <td>Lemma
-</td>
-       <td><code>&lt;lem&gt;</code>
-</td>
-       <td><code>mind</code>
-</td>
-      </tr>
-      <tr>
-       <td>Variant reading
-</td>
-       <td><code>&lt;rdg&gt;</code>
-</td>
-       <td><code>soul</code>
-</td>
-      </tr>
-      <tr>
-       <td>Witness support
-</td>
-       <td><code>@wit</code>
-</td>
-       <td><code>#ms-A #ed-C</code>
-</td>
-      </tr>
-      <tr>
-       <td>Possible printed form
-</td>
-       <td>Generated during processing
-</td>
-       <td><code>mind] soul B</code>
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <h3>
-     <span id="4.2._The_&lt;app&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.2._The_.3Capp.3E_element">
-      4.2. The
-      <code>&lt;app&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>The TEI element <code>&lt;app&gt;</code> represents one apparatus entry.
-</p>
-    <p>A minimal entry is:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem&gt;mind&lt;/lem&gt;
-  &lt;rdg&gt;soul&lt;/rdg&gt;
-&lt;/app&gt;
-</pre>
-    <p>Its tree is:
-</p>
-    <pre>app
-&boxvr;&boxh;&boxh; lem
-&boxv;   &boxur;&boxh;&boxh; mind
-&boxur;&boxh;&boxh; rdg
-    &boxur;&boxh;&boxh; soul
-</pre>
-    <p>The <code>&lt;app&gt;</code> element groups the textual forms that belong
-to the same location.
-</p>
-    <p>It states that:
-</p>
-    <pre>mind
-and
-soul
-</pre>
-    <p>are not unrelated words elsewhere in the document.
-</p>
-    <p>They are competing textual forms within one apparatus entry.
-</p>
-    <p>The element does not itself determine:
-</p>
-    <ul>
-     <li>
-      which reading appears in the edited text;
-     </li>
-     <li>
-      which witnesses support each reading;
-     </li>
-     <li>
-      how the apparatus is printed;
-     </li>
-     <li>
-      where the printed apparatus is placed;
-     </li>
-     <li>
-      which punctuation separates its parts.
-     </li>
-    </ul>
-    <p>Those functions belong to its child elements, attributes, processing rules,
-and ConTeXt presentation.
-</p>
-    <h3>
-     <span id="4.3._The_&lt;lem&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.3._The_.3Clem.3E_element">
-      4.3. The
-      <code>&lt;lem&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>The TEI element <code>&lt;lem&gt;</code> represents the lemma.
-</p>
-    <p>In the examples used here, the lemma is the reading that appears in the
-edited text:
-</p>
-    <pre>&lt;lem&gt;mind&lt;/lem&gt;
-</pre>
-    <p>The printed edited text contains:
-</p>
-    <pre>The mind seeks unity.
-</pre>
-    <p>The apparatus may refer back to that passage as:
-</p>
-    <pre>mind]
-</pre>
-    <p>The relation is:
-</p>
-    <pre>edited text
-    &darr;
-mind
-
-TEI apparatus
-    &darr;
-&lt;lem&gt;mind&lt;/lem&gt;
-
-printed apparatus
-    &darr;
-mind]
-</pre>
-    <p>A lemma may contain:
-</p>
-    <ul>
-     <li>
-      part of a word;
-     </li>
-     <li>
-      one word;
-     </li>
-     <li>
-      several words;
-     </li>
-     <li>
-      a line;
-     </li>
-     <li>
-      a longer passage.
-     </li>
-    </ul>
-    <p>This guide uses one-word lemmas so that the basic structure remains visible.
-</p>
-    <h3>
-     <span id="4.4._The_&lt;rdg&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.4._The_.3Crdg.3E_element">
-      4.4. The
-      <code>&lt;rdg&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>The TEI element <code>&lt;rdg&gt;</code> represents a reading.
-</p>
-    <p>In this example:
-</p>
-    <pre>&lt;rdg&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>the reading <code>soul</code> differs from the lemma
-<code>mind</code>.
-</p>
-    <p>The relation is:
-</p>
-    <pre>lemma
-&boxur;&boxh;&boxh; mind
-
-variant reading
+    <pre>apparatus location
+&boxvr;&boxh;&boxh; mind
+&boxv;   &boxvr;&boxh;&boxh; A
+&boxv;   &boxur;&boxh;&boxh; C
 &boxur;&boxh;&boxh; soul
+    &boxur;&boxh;&boxh; B
 </pre>
-    <p>An apparatus entry may contain one or several
-<code>&lt;rdg&gt;</code> elements:
+    <p><b>How to read this diagram.</b> One textual location has two distinct
+forms. Witnesses A and C support <code>mind</code>; witness B supports
+<code>soul</code>. The TEI structure should make this relation explicit.
 </p>
-    <pre>&lt;app&gt;
-  &lt;lem&gt;mind&lt;/lem&gt;
-  &lt;rdg&gt;soul&lt;/rdg&gt;
-  &lt;rdg&gt;understanding&lt;/rdg&gt;
-&lt;/app&gt;
+    <p>A useful method throughout the guide is therefore:
+</p>
+    <pre>TEXTUAL EVIDENCE
+       &boxv;
+       ▼
+EDITORIAL ANALYSIS
+       &boxv;
+       ▼
+TEI STRUCTURE
 </pre>
-    <p>The corresponding structure is:
-</p>
-    <pre>app
-&boxvr;&boxh;&boxh; lem
-&boxv;   &boxur;&boxh;&boxh; mind
-&boxvr;&boxh;&boxh; rdg
-&boxv;   &boxur;&boxh;&boxh; soul
-&boxur;&boxh;&boxh; rdg
-    &boxur;&boxh;&boxh; understanding
-</pre>
-    <p>Each reading remains a separate encoded object.
-</p>
-    <h3>
-     <span id="4.5._The_@wit_attribute">
-     </span>
-     <span class="mw-headline" id="4.5._The_.40wit_attribute">
-      4.5. The
-      <code>@wit</code>
-      attribute
-     </span>
-    </h3>
-    <p>The attribute <code>@wit</code> identifies the witnesses supporting a lemma
-or reading.
-</p>
-    <p>For example:
-</p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>states that the lemma <code>mind</code> is supported by:
-</p>
-    <pre>#ms-A
-#ed-C
-</pre>
-    <p>The reading:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>is supported by:
-</p>
-    <pre>#ms-B
-</pre>
-    <p>The declarations from Guide 2 provide the targets:
-</p>
-    <pre>xml:id="ms-A"    &rarr;    siglum A
-xml:id="ms-B"    &rarr;    siglum B
-xml:id="ed-C"    &rarr;    siglum C
-</pre>
-    <p>The references resolve conceptually as:
-</p>
-    <pre>wit="#ms-A #ed-C"
-        &darr;
-split the attribute value
-        &darr;
-#ms-A
-#ed-C
-        &darr;
-find the witness declarations
-        &darr;
-retrieve A and C
-</pre>
-    <p>and:
-</p>
-    <pre>wit="#ms-B"
-        &darr;
-find xml:id="ms-B"
-        &darr;
-retrieve B
-</pre>
-    <h3>
-     <span class="mw-headline" id="4.6._One_witness_and_several_witnesses">
-      4.6. One witness and several witnesses
-     </span>
-    </h3>
-    <p>A single witness reference is written as:
-</p>
-    <pre>wit="#ms-B"
-</pre>
-    <p>Several references are separated by spaces:
-</p>
-    <pre>wit="#ms-A #ed-C"
-</pre>
-    <p>The attribute contains one value, but that value contains several references:
-</p>
-    <pre>attribute:
-    wit="#ms-A #ed-C"
-
-references:
-    #ms-A
-    #ed-C
-</pre>
-    <p>Do not separate the references with commas:
-</p>
-    <pre>wit="#ms-A, #ed-C"
-</pre>
-    <p>Do not repeat the attribute:
-</p>
-    <pre>wit="#ms-A" wit="#ed-C"
-</pre>
-    <p>Use one space-separated list:
-</p>
-    <pre>wit="#ms-A #ed-C"
-</pre>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>Reference syntax matters.</b> The identifiers themselves do not contain the number sign. Write <code>xml:id="ms-A"</code> in the declaration, but <code>#ms-A</code> when referring to it from <code>@wit</code>.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Reading method.</b> Before writing TEI, identify the textual alternatives
+and the witnesses supporting each form. The XML should represent that
+editorial analysis.
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="5._Encoding_inline_apparatus_entries">
-      5. Encoding inline apparatus entries
+     <span id="3._Add_&lt;app&gt;,_&lt;lem&gt;,_and_&lt;rdg&gt;">
+     </span>
+     <span class="mw-headline" id="3._Add_.3Capp.3E.2C_.3Clem.3E.2C_and_.3Crdg.3E">
+      3. Add
+      <code>&lt;app&gt;</code>
+      ,
+      <code>&lt;lem&gt;</code>
+      , and
+      <code>&lt;rdg&gt;</code>
      </span>
     </h2>
     <h3>
-     <span class="mw-headline" id="5.1._Encoding_the_first_variant">
-      5.1. Encoding the first variant
+     <span class="mw-headline" id="3.1._Add_the_apparatus_location">
+      3.1. Add the apparatus location
      </span>
     </h3>
-    <p>The first textual difference is:
+    <p>The first new TEI structure is:
 </p>
-    <pre>A  mind
-B  soul
-C  mind
+    <pre>&lt;app&gt;
 </pre>
-    <p>The edited text adopts <code>mind</code>.
+    <p>Conceptually, the textual branch grows from:
 </p>
-    <p>The relation is:
+    <pre>p
+&boxur;&boxh;&boxh; text
+</pre>
+    <p>to:
+</p>
+    <pre>p
+&boxur;&boxh;&boxh; app                    &larr; NEW
+</pre>
+    <p>An <code>&lt;app&gt;</code> element groups the competing textual forms
+associated with one apparatus location.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>From inventory to relation.</b> The witness list tells us which sources
+exist. An apparatus entry tells us how those sources relate at a particular
+place in the text.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="3.2._Add_the_lemma_and_the_alternative_reading">
+      3.2. Add the lemma and the alternative reading
+     </span>
+    </h3>
+    <p>For the simple model used here:
 </p>
     <pre>mind
 &boxvr;&boxh;&boxh; A
@@ -1488,172 +920,365 @@ C  mind
 soul
 &boxur;&boxh;&boxh; B
 </pre>
-    <p>The TEI entry is:
+    <p>we represent the adopted textual form with <code>&lt;lem&gt;</code> and the
+alternative with <code>&lt;rdg&gt;</code>:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem&gt;mind&lt;/lem&gt;
+  &lt;rdg&gt;soul&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <p>Its local tree is:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxur;&boxh;&boxh; mind
+&boxur;&boxh;&boxh; rdg
+    &boxur;&boxh;&boxh; soul
+</pre>
+    <p><b>How to read this diagram.</b> The <code>&lt;app&gt;</code> groups the
+forms that compete at one location. In this tutorial,
+<code>&lt;lem&gt;</code> is the form selected for the edited text, while
+<code>&lt;rdg&gt;</code> records an alternative reading.
+</p>
+    <p>A single apparatus entry may contain several alternative readings:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem&gt;mind&lt;/lem&gt;
+  &lt;rdg&gt;soul&lt;/rdg&gt;
+  &lt;rdg&gt;understanding&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Tutorial convention.</b> This guide consistently uses one
+<code>&lt;lem&gt;</code> because that makes the relationship between the
+edited text and the apparatus easy to see. TEI does not require every
+apparatus entry to contain a lemma.
+</p>
+     <p>Also, an <i>apparatus lemma</i> is not a <i>lexical lemma</i>. In this guide it
+is the textual form or span used as the base of an apparatus entry.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For <i>apparatus</i>, <i>apparatus lemma</i>, <i>reading</i>, and <i>witness</i>, see
+the <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>.
+</p>
+     <p>For the TEI elements themselves, consult the TEI P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>
+and the reference pages for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-app.html" rel="nofollow"><code>&lt;app&gt;</code></a>,
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-lem.html" rel="nofollow"><code>&lt;lem&gt;</code></a>,
+and
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-rdg.html" rel="nofollow"><code>&lt;rdg&gt;</code></a>.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> We can now represent competing textual forms at one
+location. We have not yet connected those forms to the witnesses that
+support them.
+</p>
+    </div>
+    <h2>
+     <span id="4._Connect_readings_to_witnesses_with_@wit">
+     </span>
+     <span class="mw-headline" id="4._Connect_readings_to_witnesses_with_.40wit">
+      4. Connect readings to witnesses with
+      <code>@wit</code>
+     </span>
+    </h2>
+    <p>This is the decisive step.
+</p>
+    <p>Guide 2 created:
+</p>
+    <pre>ms-A
+ms-B
+ed-C
+</pre>
+    <p>Guide 3 now reuses those identities.
+</p>
+    <p>For the first variation:
+</p>
+    <pre>mind
+&boxvr;&boxh;&boxh; A
+&boxur;&boxh;&boxh; C
+
+soul
+&boxur;&boxh;&boxh; B
+</pre>
+    <p>the TEI entry becomes:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
   &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>Read line by line:
+    <p>The cumulative tree is now:
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Source fragment
-       </th>
-       <th>
-        Meaning
-       </th>
-      </tr>
-      <tr>
-       <td><code>&lt;app&gt;</code>
-</td>
-       <td>Opens one apparatus entry
-</td>
-      </tr>
-      <tr>
-       <td><code>&lt;lem&gt;</code>
-</td>
-       <td>Opens the lemma
-</td>
-      </tr>
-      <tr>
-       <td><code>wit="#ms-A #ed-C"</code>
-</td>
-       <td>States that A and C support the lemma
-</td>
-      </tr>
-      <tr>
-       <td><code>mind</code>
-</td>
-       <td>Supplies the lemma text
-</td>
-      </tr>
-      <tr>
-       <td><code>&lt;rdg&gt;</code>
-</td>
-       <td>Opens one variant reading
-</td>
-      </tr>
-      <tr>
-       <td><code>wit="#ms-B"</code>
-</td>
-       <td>States that B supports the reading
-</td>
-      </tr>
-      <tr>
-       <td><code>soul</code>
-</td>
-       <td>Supplies the variant text
-</td>
-      </tr>
-      <tr>
-       <td><code>&lt;/app&gt;</code>
-</td>
-       <td>Closes the apparatus entry
-</td>
-      </tr>
-     </tbody>
-    </table>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; fileDesc
+&boxv;       &boxur;&boxh;&boxh; sourceDesc
+&boxv;           &boxur;&boxh;&boxh; listWit
+&boxv;               &boxvr;&boxh;&boxh; witness A [xml:id="ms-A"]
+&boxv;               &boxvr;&boxh;&boxh; witness B [xml:id="ms-B"]
+&boxv;               &boxur;&boxh;&boxh; witness C [xml:id="ed-C"]
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+            &boxur;&boxh;&boxh; app
+                &boxvr;&boxh;&boxh; lem
+                &boxv;   &boxvr;&boxh;&boxh; text: mind
+                &boxv;   &boxur;&boxh;&boxh; wit: #ms-A #ed-C
+                &boxur;&boxh;&boxh; rdg
+                    &boxvr;&boxh;&boxh; text: soul
+                    &boxur;&boxh;&boxh; wit: #ms-B
+</pre>
     <h3>
-     <span class="mw-headline" id="5.2._Reading_the_first_apparatus_entry_as_a_tree">
-      5.2. Reading the first apparatus entry as a tree
+     <span class="mw-headline" id="4.1._The_two_branches_are_now_connected">
+      4.1. The two branches are now connected
      </span>
     </h3>
-    <p>The complete tree is:
+    <p>The relation introduced here is not merely hierarchical:
 </p>
-    <pre>app
-&boxvr;&boxh;&boxh; lem
-&boxv;   &boxvr;&boxh;&boxh; wit
-&boxv;   &boxv;   &boxvr;&boxh;&boxh; #ms-A
-&boxv;   &boxv;   &boxur;&boxh;&boxh; #ed-C
-&boxv;   &boxur;&boxh;&boxh; text: mind
-&boxur;&boxh;&boxh; rdg
-    &boxvr;&boxh;&boxh; wit
-    &boxv;   &boxur;&boxh;&boxh; #ms-B
-    &boxur;&boxh;&boxh; text: soul
+    <pre>              TEI HEADER                         TEXT
+
+       witness A
+       xml:id="ms-A" ◄&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;
+                                            &boxv;
+       witness B                            &boxv;
+       xml:id="ms-B" ◄&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;       &boxv;
+                                    &boxv;       &boxv;
+       witness C                    &boxv;       &boxv;
+       xml:id="ed-C" ◄&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;   &boxv;       &boxv;
+                                &boxv;   &boxv;       &boxv;
+                                &boxv;   &boxv;       &boxv;
+                             app&boxv;   &boxv;       &boxv;
+                             &boxvr;&boxh;&boxh;lem: mind   &boxv;
+                             &boxv;   &boxur;&boxh;&boxh; wit="#ms-A #ed-C"
+                             &boxv;
+                             &boxur;&boxh;&boxh;rdg: soul
+                                 &boxur;&boxh;&boxh; wit="#ms-B"
 </pre>
-    <p>At the editorial level:
+    <p><b>How to read this diagram.</b> XML nesting groups the competing forms
+into one apparatus entry. The <code>@wit</code> references cross the tree
+to connect those forms with documentary objects declared in the header.
 </p>
-    <pre>apparatus entry
-&boxvr;&boxh;&boxh; adopted reading: mind
-&boxv;   &boxvr;&boxh;&boxh; witness A
-&boxv;   &boxur;&boxh;&boxh; witness C
-&boxur;&boxh;&boxh; alternative reading: soul
-    &boxur;&boxh;&boxh; witness B
-</pre>
-    <p>At the printed level, one possible result is:
+    <p>The TEI document is therefore simultaneously:
 </p>
-    <pre>mind] soul B
-</pre>
-    <p>The TEI tree is <i>richer than the printed notation</i>.
+    <ul>
+     <li>
+      a hierarchical XML tree;
+     </li>
+     <li>
+      a network of references between identified objects.
+     </li>
+    </ul>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> Nesting groups the lemma and readings into one
+apparatus entry. References connect those textual forms to witnesses
+declared elsewhere in the document.
 </p>
+    </div>
     <h3>
-     <span class="mw-headline" id="5.3._Inline_apparatus">
-      5.3. Inline apparatus
+     <span class="mw-headline" id="4.2._One_witness_and_several_witnesses">
+      4.2. One witness and several witnesses
      </span>
     </h3>
-    <p>In an inline apparatus, the <code>&lt;app&gt;</code> element occurs directly
-at the location of the variation in the text.
+    <p>One witness:
 </p>
-    <p>The paragraph becomes:
-</p>
-    <pre>&lt;p xml:id="p1"&gt;
-  The
-  &lt;app&gt;
-    &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-    &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-  &lt;/app&gt;
-  seeks unity.
-&lt;/p&gt;
+    <pre>wit="#ms-B"
 </pre>
-    <p>The tree contains both textual content and child elements:
+    <p>Several witnesses:
 </p>
-    <pre>p
-&boxvr;&boxh;&boxh; text: The
-&boxvr;&boxh;&boxh; app
-&boxv;   &boxvr;&boxh;&boxh; lem
-&boxv;   &boxv;   &boxur;&boxh;&boxh; mind
-&boxv;   &boxur;&boxh;&boxh; rdg
-&boxv;       &boxur;&boxh;&boxh; soul
-&boxur;&boxh;&boxh; text: seeks unity.
+    <pre>wit="#ms-A #ed-C"
 </pre>
-    <p>The <code>&lt;app&gt;</code> occupies the position of the variable passage.
+    <p>The second form represents two references:
 </p>
-    <p>A processor producing the edited text selects the lemma:
-</p>
-    <pre>The
-  &darr;
-mind
-  &darr;
-seeks unity.
+    <pre>wit="#ms-A #ed-C"
+       &boxv;       &boxv;
+       ▼       ▼
+    #ms-A    #ed-C
+       &boxv;       &boxv;
+       ▼       ▼
+ witness A  witness C
 </pre>
-    <p>The resulting sentence is:
+    <p>Use spaces, not commas:
 </p>
-    <pre>The mind seeks unity.
+    <pre>wit="#ms-A #ed-C"
 </pre>
-    <p>A different output could select witness B&rsquo;s reading:
+    <p>Do not write:
 </p>
-    <pre>The soul seeks unity.
+    <pre>wit="#ms-A, #ed-C"
 </pre>
-    <p>The encoded structure therefore contains more than one possible textual
-realisation.
+    <p>and do not repeat the same XML attribute:
 </p>
-    <h3>
-     <span class="mw-headline" id="5.4._Markup_boundaries_and_spaces">
-      5.4. Markup boundaries and spaces
+    <pre>wit="#ms-A" wit="#ed-C"
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Reference syntax matters.</b> The declaration contains
+<code>xml:id="ms-A"</code>. A local reference contains
+<code>#ms-A</code>. The number sign belongs to the reference, not to the
+identifier itself.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the formal TEI definition of <code>@wit</code>, see the P5
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-att.witnessed.html" rel="nofollow"><code>att.witnessed</code></a>
+attribute class.
+</p>
+     <p>Its value may contain one or more space-separated pointers to witness
+identifiers.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The first apparatus entry now records both the textual
+alternatives and the witnesses supporting each form.
+</p>
+    </div>
+    <h2>
+     <span id="Part_II_&mdash;_Build_the_apparatus_in_the_text">
      </span>
-    </h3>
-    <p>Mixed textual content requires attention to spaces.
+     <span class="mw-headline" id="Part_II_.E2.80.94_Build_the_apparatus_in_the_text">
+      Part II &mdash; Build the apparatus in the text
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="5._Declare_the_variant-encoding_method">
+      5. Declare the variant-encoding method
+     </span>
+    </h2>
+    <p>Before inserting apparatus entries into the running text, declare the
+method used by this tutorial.
 </p>
-    <p>This compact encoding is clear:
+    <p>TEI supports several ways of connecting apparatus entries to textual
+locations. This guide uses <i>parallel segmentation</i>: the competing forms
+are encoded directly at the place where the variation occurs.
+</p>
+    <p>Add the following to the TEI header, after
+<code>&lt;fileDesc&gt;</code>:
+</p>
+    <pre>&lt;encodingDesc&gt;
+  &lt;variantEncoding
+    method="parallel-segmentation"
+    location="internal"/&gt;
+&lt;/encodingDesc&gt;
+</pre>
+    <p>The relevant part of the header is therefore:
+</p>
+    <pre>&lt;teiHeader&gt;
+
+  &lt;fileDesc&gt;
+    ...
+  &lt;/fileDesc&gt;
+
+  &lt;encodingDesc&gt;
+    &lt;variantEncoding
+      method="parallel-segmentation"
+      location="internal"/&gt;
+  &lt;/encodingDesc&gt;
+
+&lt;/teiHeader&gt;
+</pre>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> <i>Parallel segmentation</i> means that each location
+of variation is represented inside the running text by an
+<code>&lt;app&gt;</code> containing the competing forms. In this tutorial
+the apparatus is therefore <code>location="internal"</code>.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>TEI P5 distinguishes three principal methods for linking apparatus entries
+to the text: location-referenced, double-end-point attachment, and parallel
+segmentation.
+</p>
+     <p>This tutorial uses only parallel segmentation. See the
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow">TEI P5 chapter <i>Critical Apparatus</i></a>
+and the reference page for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-variantEncoding.html" rel="nofollow"><code>&lt;variantEncoding&gt;</code></a>
+for the alternatives.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="6._Insert_the_first_apparatus_entry_into_the_paragraph">
+      6. Insert the first apparatus entry into the paragraph
+     </span>
+    </h2>
+    <p>The paragraph inherited from Guide 2 was:
+</p>
+    <pre>&lt;p xml:id="p1"&gt;The mind seeks unity.&lt;/p&gt;
+</pre>
+    <p>Replace the variable word <code>mind</code> with the first inline
+apparatus entry:
 </p>
     <pre>&lt;p xml:id="p1"&gt;The &lt;app&gt;&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;&lt;rdg
 wit="#ms-B"&gt;soul&lt;/rdg&gt;&lt;/app&gt; seeks unity.&lt;/p&gt;
 </pre>
-    <p>For readability, the same structure may be indented:
+    <p>The cumulative tree becomes:
+</p>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxvr;&boxh;&boxh; fileDesc
+&boxv;   &boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;   &boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;   &boxv;           &boxvr;&boxh;&boxh; A
+&boxv;   &boxv;           &boxvr;&boxh;&boxh; B
+&boxv;   &boxv;           &boxur;&boxh;&boxh; C
+&boxv;   &boxur;&boxh;&boxh; encodingDesc
+&boxv;       &boxur;&boxh;&boxh; variantEncoding
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+            &boxvr;&boxh;&boxh; text: "The "
+            &boxvr;&boxh;&boxh; app
+            &boxv;   &boxvr;&boxh;&boxh; lem: mind
+            &boxv;   &boxv;   &boxur;&boxh;&boxh; witnesses: A C
+            &boxv;   &boxur;&boxh;&boxh; rdg: soul
+            &boxv;       &boxur;&boxh;&boxh; witness: B
+            &boxur;&boxh;&boxh; text: " seeks unity."
+</pre>
+    <p><b>How to read this diagram.</b> Guide 2 enriched the documentary branch
+with witness declarations. Guide 3 now enriches the textual branch with an
+apparatus entry while the header also states which variant-encoding method
+the document uses.
+</p>
+    <h3>
+     <span id="6.1._One_encoded_location,_several_possible_texts">
+     </span>
+     <span class="mw-headline" id="6.1._One_encoded_location.2C_several_possible_texts">
+      6.1. One encoded location, several possible texts
+     </span>
+    </h3>
+    <p>Selecting the lemma gives:
+</p>
+    <pre>The mind seeks unity.
+</pre>
+    <p>Selecting the reading supported by B gives:
+</p>
+    <pre>The soul seeks unity.
+</pre>
+    <p>The same encoded location therefore contains more than one possible textual
+realisation.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>One encoded location, several possible texts.</b> The lemma can generate
+the edited text. A witness-oriented process can instead select a reading
+supported by a particular witness.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="6.2._Mixed-content_whitespace">
+      6.2. Mixed-content whitespace
+     </span>
+    </h3>
+    <p>For structural explanation, it is convenient to display:
 </p>
     <pre>&lt;p xml:id="p1"&gt;
   The
@@ -1664,41 +1289,31 @@ wit="#ms-B"&gt;soul&lt;/rdg&gt;&lt;/app&gt; seeks unity.&lt;/p&gt;
   seeks unity.
 &lt;/p&gt;
 </pre>
-    <p>Indentation inside mixed-content elements can create whitespace text nodes.
-The exact effect depends on processing.
+    <p>But mixed XML content requires care because indentation and line breaks can
+become textual whitespace.
 </p>
-    <p>For the MWE used in this guide, the inline paragraph will therefore be written
-compactly:
+    <p>For the working MWE, the textual sequence is therefore kept compact where
+necessary.
 </p>
-    <pre>&lt;p xml:id="p1"&gt;The &lt;app&gt;&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;&lt;rdg
-wit="#ms-B"&gt;soul&lt;/rdg&gt;&lt;/app&gt; &lt;app&gt;&lt;lem wit="#ms-A #ms-B"&gt;seeks&lt;/lem&gt;&lt;rdg
-wit="#ed-C"&gt;desires&lt;/rdg&gt;&lt;/app&gt; unity.&lt;/p&gt;
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> Pretty-printing mixed XML content can introduce
+whitespace text nodes. Indented examples are useful for understanding the
+tree; compact source is used where necessary to keep the MWE's textual
+spacing predictable.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="7._Add_a_second_apparatus_entry">
+      7. Add a second apparatus entry
+     </span>
+    </h2>
+    <p>The witnesses also differ at the second variable word:
+</p>
+    <pre>A   seeks
+B   seeks
+C   desires
 </pre>
-    <p>The line breaks occur inside tags or between complete structures rather than
-inside the ordinary textual phrases.
-</p>
-    <h3>
-     <span class="mw-headline" id="5.5._Adding_the_second_apparatus_entry">
-      5.5. Adding the second apparatus entry
-     </span>
-    </h3>
-    <h4>
-     <span class="mw-headline" id="5.5.1._The_second_variation">
-      5.5.1. The second variation
-     </span>
-    </h4>
-    <p>The second variation is:
-</p>
-    <pre>A  seeks
-B  seeks
-C  desires
-</pre>
-    <h4>
-     <span class="mw-headline" id="5.5.2._The_editorial_relation">
-      5.5.2. The editorial relation
-     </span>
-    </h4>
-    <p>The relation is:
+    <p>The editorial relation is:
 </p>
     <pre>seeks
 &boxvr;&boxh;&boxh; A
@@ -1707,111 +1322,190 @@ C  desires
 desires
 &boxur;&boxh;&boxh; C
 </pre>
-    <h4>
-     <span class="mw-headline" id="5.5.3._Encoding_the_second_apparatus_entry">
-      5.5.3. Encoding the second apparatus entry
-     </span>
-    </h4>
-    <p>The second apparatus entry is encoded as follows:
+    <p>The TEI structure is:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ms-B"&gt;seeks&lt;/lem&gt;
   &lt;rdg wit="#ed-C"&gt;desires&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <h4>
-     <span class="mw-headline" id="5.5.4._Combining_both_apparatus_entries">
-      5.5.4. Combining both apparatus entries
-     </span>
-    </h4>
-    <p>The complete paragraph now contains two apparatus entries:
+    <p>The paragraph now becomes:
 </p>
     <pre>&lt;p xml:id="p1"&gt;The &lt;app&gt;&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;&lt;rdg
 wit="#ms-B"&gt;soul&lt;/rdg&gt;&lt;/app&gt; &lt;app&gt;&lt;lem wit="#ms-A #ms-B"&gt;seeks&lt;/lem&gt;&lt;rdg
 wit="#ed-C"&gt;desires&lt;/rdg&gt;&lt;/app&gt; unity.&lt;/p&gt;
 </pre>
-    <p>For structural inspection, the same paragraph may be displayed in an
-indented form:
-</p>
-    <pre>&lt;p xml:id="p1"&gt;
-  The
-  &lt;app&gt;
-    &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-    &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-  &lt;/app&gt;
-  &lt;app&gt;
-    &lt;lem wit="#ms-A #ms-B"&gt;seeks&lt;/lem&gt;
-    &lt;rdg wit="#ed-C"&gt;desires&lt;/rdg&gt;
-  &lt;/app&gt;
-  unity.
-&lt;/p&gt;
-</pre>
-    <p>The indentation is used here only to make the structure visible. In genuine
-mixed-content processing, whitespace must still be handled carefully.
-</p>
-    <h4>
-     <span class="mw-headline" id="5.5.5._Reading_the_resulting_XML_tree">
-      5.5.5. Reading the resulting XML tree
-     </span>
-    </h4>
-    <p>The resulting XML tree can be represented as follows:
+    <p>Its local tree is:
 </p>
     <pre>p
-&boxvr;&boxh;&boxh; text: The
-&boxvr;&boxh;&boxh; app
+&boxvr;&boxh;&boxh; text: "The "
+&boxv;
+&boxvr;&boxh;&boxh; app 1
 &boxv;   &boxvr;&boxh;&boxh; lem: mind
+&boxv;   &boxv;   &boxur;&boxh;&boxh; witnesses: A C
 &boxv;   &boxur;&boxh;&boxh; rdg: soul
-&boxvr;&boxh;&boxh; app
+&boxv;       &boxur;&boxh;&boxh; witness: B
+&boxv;
+&boxvr;&boxh;&boxh; text: " "
+&boxv;
+&boxvr;&boxh;&boxh; app 2                         &larr; NEW
 &boxv;   &boxvr;&boxh;&boxh; lem: seeks
+&boxv;   &boxv;   &boxur;&boxh;&boxh; witnesses: A B
 &boxv;   &boxur;&boxh;&boxh; rdg: desires
-&boxur;&boxh;&boxh; text: unity.
+&boxv;       &boxur;&boxh;&boxh; witness: C
+&boxv;
+&boxur;&boxh;&boxh; text: " unity."
 </pre>
-    <p>Each <code>&lt;app&gt;</code> element occupies a distinct position in the
-paragraph. Its <code>&lt;lem&gt;</code> supplies the reading printed in the
-edited text, while its <code>&lt;rdg&gt;</code> records an alternative
-reading transmitted by another witness.
+    <p><b>How to read this diagram.</b> The paragraph now contains two independent
+locations of variation. Each <code>&lt;app&gt;</code> groups its own
+textual alternatives and witness support.
 </p>
-    <h4>
-     <span class="mw-headline" id="5.5.6._The_edited_text">
-      5.5.6. The edited text
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The paragraph contains two apparatus entries. Each
+records an adopted form, an alternative form, and the witnesses supporting
+each.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Derive_edited_and_witness-oriented_views">
+      8. Derive edited and witness-oriented views
      </span>
-    </h4>
-    <p>The edited text reads:
+    </h2>
+    <p>The two apparatus entries record:
+</p>
+    <pre>ENTRY 1
+
+mind
+&boxvr;&boxh;&boxh; A
+&boxur;&boxh;&boxh; C
+
+soul
+&boxur;&boxh;&boxh; B
+
+
+ENTRY 2
+
+seeks
+&boxvr;&boxh;&boxh; A
+&boxur;&boxh;&boxh; B
+
+desires
+&boxur;&boxh;&boxh; C
+</pre>
+    <p>The repeated A/B/C evidence is intentional here: it lets us verify what
+the two apparatus entries imply when they are read together.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.1._Edited_text">
+      8.1. Edited text
+     </span>
+    </h3>
+    <p>Selecting both lemmas gives:
 </p>
     <pre>The mind seeks unity.
 </pre>
-    <h4>
-     <span class="mw-headline" id="5.5.7._A_possible_printed_apparatus">
-      5.5.7. A possible printed apparatus
-     </span>
-    </h4>
-    <p>A corresponding critical apparatus could be rendered as:
-</p>
-    <pre>mind] soul B
-seeks] desires C
-</pre>
-    <p>The sequence is therefore:
-</p>
-    <pre>TEI structure
-      &darr;
-edited text
-      &darr;
-critical apparatus
-</pre>
     <h3>
-     <span class="mw-headline" id="5.6._Several_readings_in_one_apparatus_entry">
-      5.6. Several readings in one apparatus entry
+     <span class="mw-headline" id="8.2._Witness-oriented_view_for_A">
+      8.2. Witness-oriented view for A
      </span>
     </h3>
-    <p>An apparatus entry may contain more than one alternative reading.
+    <p>Select the forms supported by A:
 </p>
-    <p>Suppose that the witnesses read:
-</p>
-    <pre>A  mind
-B  soul
-C  understanding
+    <pre>entry 1 &rarr; mind
+entry 2 &rarr; seeks
 </pre>
-    <p>The TEI encoding is:
+    <p>Result:
+</p>
+    <pre>The mind seeks unity.
+</pre>
+    <h3>
+     <span class="mw-headline" id="8.3._Witness-oriented_view_for_B">
+      8.3. Witness-oriented view for B
+     </span>
+    </h3>
+    <p>Select the forms supported by B:
+</p>
+    <pre>entry 1 &rarr; soul
+entry 2 &rarr; seeks
+</pre>
+    <p>Result:
+</p>
+    <pre>The soul seeks unity.
+</pre>
+    <h3>
+     <span class="mw-headline" id="8.4._Witness-oriented_view_for_C">
+      8.4. Witness-oriented view for C
+     </span>
+    </h3>
+    <p>Select the forms supported by C:
+</p>
+    <pre>entry 1 &rarr; mind
+entry 2 &rarr; desires
+</pre>
+    <p>Result:
+</p>
+    <pre>The mind desires unity.
+</pre>
+    <p>The relation can be visualised as:
+</p>
+    <pre>                         TEI APPARATUS DATA
+                               &boxv;
+                 +-------------+-------------+
+                 &boxv;             &boxv;             &boxv;
+                 ▼             ▼             ▼
+             select A      select B      select C
+                 &boxv;             &boxv;             &boxv;
+                 ▼             ▼             ▼
+               mind          soul          mind
+               seeks         seeks         desires
+                 &boxv;             &boxv;             &boxv;
+                 ▼             ▼             ▼
+        The mind seeks  The soul seeks  The mind desires
+            unity.          unity.           unity.
+</pre>
+    <p><b>How to read this diagram.</b> Because each reading remains associated
+with witness identities, processing can derive a view based on the readings
+encoded for a selected witness.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Why structured references matter.</b> The TEI apparatus is not merely a
+printable note. Because readings remain associated with identifiable
+witnesses, the same data can also support witness-oriented views and other
+forms of analysis.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> A witness-oriented text derived from apparatus data
+should not automatically be treated as a complete diplomatic
+transcription of that witness. It represents the encoded variation
+available in the apparatus model; other witness-specific features may not
+have been recorded there.
+</p>
+    </div>
+    <h2>
+     <span id="Part_III_&mdash;_Keep_evidence_separate_from_presentation">
+     </span>
+     <span class="mw-headline" id="Part_III_.E2.80.94_Keep_evidence_separate_from_presentation">
+      Part III &mdash; Keep evidence separate from presentation
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="9._Several_readings_and_shared_witness_support">
+      9. Several readings and shared witness support
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="9.1._Several_alternative_readings">
+      9.1. Several alternative readings
+     </span>
+    </h3>
+    <p>Suppose:
+</p>
+    <pre>A   mind
+B   soul
+C   understanding
+</pre>
+    <p>The TEI entry may contain several readings:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
@@ -1819,40 +1513,32 @@ C  understanding
   &lt;rdg wit="#ed-C"&gt;understanding&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The tree is:
+    <p>Tree:
 </p>
     <pre>app
 &boxvr;&boxh;&boxh; lem
-&boxv;   &boxvr;&boxh;&boxh; text: mind
-&boxv;   &boxur;&boxh;&boxh; witness: A
+&boxv;   &boxvr;&boxh;&boxh; mind
+&boxv;   &boxur;&boxh;&boxh; A
 &boxvr;&boxh;&boxh; rdg
-&boxv;   &boxvr;&boxh;&boxh; text: soul
-&boxv;   &boxur;&boxh;&boxh; witness: B
+&boxv;   &boxvr;&boxh;&boxh; soul
+&boxv;   &boxur;&boxh;&boxh; B
 &boxur;&boxh;&boxh; rdg
-    &boxvr;&boxh;&boxh; text: understanding
-    &boxur;&boxh;&boxh; witness: C
+    &boxvr;&boxh;&boxh; understanding
+    &boxur;&boxh;&boxh; C
 </pre>
-    <p>A possible printed result is:
-</p>
-    <pre>mind] soul B; understanding C
-</pre>
-    <p>The semicolon belongs to the <i>rendering</i>.
-</p>
-    <p>It is not stored as part of either reading.
-</p>
     <h3>
-     <span class="mw-headline" id="5.7._Several_witnesses_supporting_one_reading">
-      5.7. Several witnesses supporting one reading
+     <span class="mw-headline" id="9.2._Several_witnesses_supporting_the_same_reading">
+      9.2. Several witnesses supporting the same reading
      </span>
     </h3>
-    <p>Suppose that four witnesses exist:
+    <p>Suppose:
 </p>
-    <pre>A  mind
-B  soul
-C  mind
-D  soul
+    <pre>A   mind
+B   soul
+C   mind
+D   soul
 </pre>
-    <p>The grouped support is:
+    <p>The relation is:
 </p>
     <pre>mind
 &boxvr;&boxh;&boxh; A
@@ -1862,77 +1548,97 @@ soul
 &boxvr;&boxh;&boxh; B
 &boxur;&boxh;&boxh; D
 </pre>
-    <p>The TEI entry is:
+    <p>Encode each distinct reading once:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
   &lt;rdg wit="#ms-B #ms-D"&gt;soul&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The reading is encoded once:
-</p>
-    <pre>soul
-</pre>
-    <p>Its witness support is expressed as a list:
-</p>
-    <pre>#ms-B #ms-D
-</pre>
-    <p>It should not be duplicated as two identical reading elements merely because
-two witnesses support it:
+    <p>For ordinary shared support, avoid duplicating identical readings merely
+because several witnesses transmit them:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 &lt;rdg wit="#ms-D"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>unless the project has a specific reason to preserve those readings as
-distinct records.
+    <p>unless the project's editorial model has a specific reason to preserve
+those readings as distinct records.
 </p>
-    <p>For ordinary shared support, one reading with several references is clearer:
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> Encode the textual distinction once and record
+shared witness support as structured references. Do not duplicate an
+identical reading only to reproduce a particular printed convention.
 </p>
-    <pre>&lt;rdg wit="#ms-B #ms-D"&gt;soul&lt;/rdg&gt;
-</pre>
+    </div>
     <h2>
-     <span class="mw-headline" id="6._Encoded_data_and_printed_notation">
-      6. Encoded data and printed notation
+     <span class="mw-headline" id="10._Encoded_evidence_is_not_printed_notation">
+      10. Encoded evidence is not printed notation
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="6.1._TEI_encoding_and_printed_notation">
-      6.1. TEI encoding and printed notation
-     </span>
-    </h3>
-    <p>The TEI source and the printed apparatus perform <b>different tasks</b>.
+    <p>This distinction is fundamental.
 </p>
-    <p>TEI records:
+    <p>TEI may store:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
   &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>A negative apparatus may print:
+    <p>The same data can be rendered in several ways.
 </p>
+    <h3>
+     <span class="mw-headline" id="10.1._Negative_apparatus">
+      10.1. Negative apparatus
+     </span>
+    </h3>
     <pre>mind] soul B
 </pre>
-    <p>A positive apparatus may print:
-</p>
+    <h3>
+     <span class="mw-headline" id="10.2._Positive_apparatus">
+      10.2. Positive apparatus
+     </span>
+    </h3>
     <pre>mind A C] soul B
 </pre>
-    <p>A prose report may print:
-</p>
+    <h3>
+     <span class="mw-headline" id="10.3._Prose_report">
+      10.3. Prose report
+     </span>
+    </h3>
     <pre>Witness B reads &ldquo;soul&rdquo;, while A and C read &ldquo;mind&rdquo;.
 </pre>
-    <p>A reading edition may print no apparatus entry at all.
+    <h3>
+     <span class="mw-headline" id="10.4._Reading_edition">
+      10.4. Reading edition
+     </span>
+    </h3>
+    <p>The visible apparatus may be omitted:
 </p>
+    <pre>The mind seeks unity.
+</pre>
     <p>The relation is:
 </p>
-    <pre>one structured apparatus entry
-        &darr;
-several possible renderings
-        &boxvr;&boxh;&boxh; negative apparatus
-        &boxvr;&boxh;&boxh; positive apparatus
-        &boxvr;&boxh;&boxh; prose report
-        &boxur;&boxh;&boxh; no visible apparatus
+    <pre>                       TEI SOURCE
+
+               app
+               &boxvr;&boxh;&boxh; mind&nbsp;: A C
+               &boxur;&boxh;&boxh; soul&nbsp;: B
+                      &boxv;
+                      &boxv; same evidence
+                      ▼
+        +-------------+-------------+-------------+
+        &boxv;             &boxv;             &boxv;             &boxv;
+        ▼             ▼             ▼             ▼
+     negative      positive       prose        reading
+     apparatus     apparatus      report       edition
+
+   mind] soul B   mind A C]      B reads       The mind
+                  soul B         "soul"...     seeks unity.
 </pre>
+    <p><b>How to read this diagram.</b> The encoded scholarly relation remains
+stable. Output conventions select, compress, punctuate, or suppress parts
+of that relation according to the needs of a particular edition.
+</p>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -1940,122 +1646,177 @@ several possible renderings
         TEI source
        </th>
        <th>
-        Printed apparatus
+        Printed output
        </th>
       </tr>
       <tr>
-       <td>Records elements and attributes
+       <td>Records structured elements and attributes
 </td>
        <td>Uses typography and punctuation
 </td>
       </tr>
       <tr>
-       <td>Identifies all encoded witness support
+       <td>Can identify all encoded witness support
 </td>
-       <td>May omit support that can be inferred
+       <td>May suppress support that can be inferred
 </td>
       </tr>
       <tr>
-       <td>Preserves separate readings
+       <td>Preserves readings as distinct records
 </td>
-       <td>Compresses them into one apparatus entry
+       <td>May compress them into a compact apparatus entry
 </td>
       </tr>
       <tr>
        <td>Remains reusable
 </td>
-       <td>Is designed for one output
+       <td>Is designed for one output convention
 </td>
       </tr>
      </tbody>
     </table>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>One source, several outputs.</b> TEI records the textual relation.
+ConTeXt can later decide what to suppress, expand, abbreviate, punctuate,
+or display.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="6.2._Positive_and_negative_information">
-      6.2. Positive and negative information
+     <span class="mw-headline" id="10.5._Positive_encoded_information_and_negative_display">
+      10.5. Positive encoded information and negative display
      </span>
     </h3>
-    <p>The TEI example explicitly records support for both the lemma and the
-alternative reading:
+    <p>The TEI source explicitly records:
 </p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+    <pre>mind &rarr; A C
+soul &rarr; B
 </pre>
-    <p>This is positive encoded information:
-</p>
-    <pre>mind is supported by A and C
-soul is supported by B
-</pre>
-    <p>A printed negative apparatus may suppress the lemma support:
+    <p>A negative apparatus may print only:
 </p>
     <pre>mind] soul B
 </pre>
-    <p>The reader infers that the other relevant witnesses support the lemma.
+    <p>The omission of A and C is a property of the output convention. It need
+not require the source to discard explicit support already known to the
+edition.
 </p>
-    <p>The distinction is:
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Encoded information
-       </th>
-       <th>
-        Printed selection
-       </th>
-      </tr>
-      <tr>
-       <td>Lemma support: A C
-</td>
-       <td>May be omitted in a negative apparatus
-</td>
-      </tr>
-      <tr>
-       <td>Variant support: B
-</td>
-       <td>Printed explicitly
-</td>
-      </tr>
-      <tr>
-       <td>Complete structured relation
-</td>
-       <td>Compact editorial notation
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The TEI source need not imitate the omissions of the printed notation.
+     <p>For <i>positive apparatus</i> and <i>negative apparatus</i>, see the
+<a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>.
 </p>
-    <p>It can preserve explicit information from which several apparatus forms are
-generated.
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>One source, several outputs.</b> A complete TEI apparatus entry can support a negative apparatus, a positive apparatus, a prose report, or a reading text without apparatus. The source remains reusable because it records structure rather than one finished display.
+     <p>The distinction here concerns presentation. The TEI source may retain
+explicit witness relations even when a particular apparatus style
+suppresses some of them.
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="7._Complete_TEI_MWE">
-      7. Complete TEI MWE
+     <span class="mw-headline" id="11._What_should_not_be_encoded_as_reading_content">
+      11. What should not be encoded as reading content
      </span>
     </h2>
     <h3>
-     <span class="mw-headline" id="7.1._File_name">
-      7.1. File name
+     <span class="mw-headline" id="11.1._Do_not_put_the_printed_siglum_inside_the_reading">
+      11.1. Do not put the printed siglum inside the reading
      </span>
     </h3>
-    <p>Save the following document as:
+    <p>Avoid:
+</p>
+    <pre>&lt;rdg&gt;soul B&lt;/rdg&gt;
+</pre>
+    <p>Use:
+</p>
+    <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+</pre>
+    <p>The three layers remain distinct:
+</p>
+    <pre>reading text         soul
+witness reference    #ms-B
+printed siglum       B
+</pre>
+    <h3>
+     <span class="mw-headline" id="11.2._Do_not_store_the_lemma_separator">
+      11.2. Do not store the lemma separator
+     </span>
+    </h3>
+    <p>Avoid:
+</p>
+    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind]&lt;/lem&gt;
+</pre>
+    <p>Use:
+</p>
+    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
+</pre>
+    <p>The closing bracket belongs to a rendering convention.
+</p>
+    <h3>
+     <span class="mw-headline" id="11.3._Do_not_store_a_preformatted_apparatus_string">
+      11.3. Do not store a preformatted apparatus string
+     </span>
+    </h3>
+    <p>Avoid:
+</p>
+    <pre>&lt;app&gt;mind] soul B&lt;/app&gt;
+</pre>
+    <p>This collapses:
+</p>
+    <ul>
+     <li>
+      apparatus structure;
+     </li>
+     <li>
+      lemma;
+     </li>
+     <li>
+      reading;
+     </li>
+     <li>
+      witness support;
+     </li>
+     <li>
+      printed punctuation.
+     </li>
+    </ul>
+    <p>Use:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
+  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not encode one finished display as if it were the evidence.</b>
+<code>mind] soul B</code> is one possible printed representation. The TEI
+source should preserve the separate scholarly objects from which that
+representation can be generated.
+</p>
+    </div>
+    <h2>
+     <span id="Part_IV_&mdash;_Complete,_check,_and_inspect">
+     </span>
+     <span class="mw-headline" id="Part_IV_.E2.80.94_Complete.2C_check.2C_and_inspect">
+      Part IV &mdash; Complete, check, and inspect
+     </span>
+    </h2>
+    <h2>
+     <span class="mw-headline" id="12._Complete_Guide_3_TEI_document">
+      12. Complete Guide 3 TEI document
+     </span>
+    </h2>
+    <p>Save the source as:
 </p>
     <pre>tei-guide-03.xml
 </pre>
-    <h3>
-     <span class="mw-headline" id="7.2._Complete_XML_source">
-      7.2. Complete XML source
-     </span>
-    </h3>
+    <p>Use:
+</p>
     <pre>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;TEI xmlns="http://www.tei-c.org/ns/1.0"&gt;
+
   &lt;teiHeader&gt;
+
     &lt;fileDesc&gt;
+
       &lt;titleStmt&gt;
         &lt;title&gt;A basic TEI critical apparatus&lt;/title&gt;
       &lt;/titleStmt&gt;
@@ -2066,6 +1827,7 @@ generated.
 
       &lt;sourceDesc&gt;
         &lt;listWit&gt;
+
           &lt;witness xml:id="ms-A" n="A"&gt;
             The principal manuscript.
           &lt;/witness&gt;
@@ -2077,9 +1839,18 @@ generated.
           &lt;witness xml:id="ed-C" n="C"&gt;
             An early printed edition.
           &lt;/witness&gt;
+
         &lt;/listWit&gt;
       &lt;/sourceDesc&gt;
+
     &lt;/fileDesc&gt;
+
+    &lt;encodingDesc&gt;
+      &lt;variantEncoding
+        method="parallel-segmentation"
+        location="internal"/&gt;
+    &lt;/encodingDesc&gt;
+
   &lt;/teiHeader&gt;
 
   &lt;text&gt;
@@ -2090,342 +1861,101 @@ generated.
       wit="#ed-C"&gt;desires&lt;/rdg&gt;&lt;/app&gt; unity.&lt;/p&gt;
     &lt;/body&gt;
   &lt;/text&gt;
+
 &lt;/TEI&gt;
 </pre>
     <h3>
-     <span class="mw-headline" id="7.3._What_the_complete_document_contains">
-      7.3. What the complete document contains
-     </span>
-    </h3>
-    <p>The document now contains:
-</p>
-    <ul>
-     <li>
-      three declared witnesses;
-     </li>
-     <li>
-      one paragraph;
-     </li>
-     <li>
-      two inline apparatus entries;
-     </li>
-     <li>
-      two lemmas;
-     </li>
-     <li>
-      two variant readings;
-     </li>
-     <li>
-      explicit witness support for every lemma and reading.
-     </li>
-    </ul>
-    <h3>
-     <span class="mw-headline" id="7.4._Reading_the_complete_TEI_document_as_a_tree">
-      7.4. Reading the complete TEI document as a tree
+     <span class="mw-headline" id="12.1._Read_the_complete_source_as_a_tree">
+      12.1. Read the complete source as a tree
      </span>
     </h3>
     <pre>TEI
 &boxvr;&boxh;&boxh; teiHeader
-&boxv;   &boxur;&boxh;&boxh; fileDesc
-&boxv;       &boxvr;&boxh;&boxh; titleStmt
-&boxv;       &boxv;   &boxur;&boxh;&boxh; title
-&boxv;       &boxvr;&boxh;&boxh; publicationStmt
-&boxv;       &boxv;   &boxur;&boxh;&boxh; p
-&boxv;       &boxur;&boxh;&boxh; sourceDesc
-&boxv;           &boxur;&boxh;&boxh; listWit
-&boxv;               &boxvr;&boxh;&boxh; witness A
-&boxv;               &boxvr;&boxh;&boxh; witness B
-&boxv;               &boxur;&boxh;&boxh; witness C
+&boxv;   &boxvr;&boxh;&boxh; fileDesc
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; titleStmt
+&boxv;   &boxv;   &boxv;   &boxur;&boxh;&boxh; title
+&boxv;   &boxv;   &boxvr;&boxh;&boxh; publicationStmt
+&boxv;   &boxv;   &boxv;   &boxur;&boxh;&boxh; p
+&boxv;   &boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;   &boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;   &boxv;           &boxvr;&boxh;&boxh; witness A
+&boxv;   &boxv;           &boxv;   &boxur;&boxh;&boxh; xml:id="ms-A"
+&boxv;   &boxv;           &boxvr;&boxh;&boxh; witness B
+&boxv;   &boxv;           &boxv;   &boxur;&boxh;&boxh; xml:id="ms-B"
+&boxv;   &boxv;           &boxur;&boxh;&boxh; witness C
+&boxv;   &boxv;               &boxur;&boxh;&boxh; xml:id="ed-C"
+&boxv;   &boxv;
+&boxv;   &boxur;&boxh;&boxh; encodingDesc
+&boxv;       &boxur;&boxh;&boxh; variantEncoding
+&boxv;           &boxvr;&boxh;&boxh; method="parallel-segmentation"
+&boxv;           &boxur;&boxh;&boxh; location="internal"
+&boxv;
 &boxur;&boxh;&boxh; text
     &boxur;&boxh;&boxh; body
         &boxur;&boxh;&boxh; p [xml:id="p1"]
-            &boxvr;&boxh;&boxh; text: The
-            &boxvr;&boxh;&boxh; app
+            &boxvr;&boxh;&boxh; text: "The "
+            &boxv;
+            &boxvr;&boxh;&boxh; app 1
             &boxv;   &boxvr;&boxh;&boxh; lem
             &boxv;   &boxv;   &boxvr;&boxh;&boxh; text: mind
             &boxv;   &boxv;   &boxur;&boxh;&boxh; wit: #ms-A #ed-C
             &boxv;   &boxur;&boxh;&boxh; rdg
             &boxv;       &boxvr;&boxh;&boxh; text: soul
             &boxv;       &boxur;&boxh;&boxh; wit: #ms-B
-            &boxvr;&boxh;&boxh; app
+            &boxv;
+            &boxvr;&boxh;&boxh; text: " "
+            &boxv;
+            &boxvr;&boxh;&boxh; app 2
             &boxv;   &boxvr;&boxh;&boxh; lem
             &boxv;   &boxv;   &boxvr;&boxh;&boxh; text: seeks
             &boxv;   &boxv;   &boxur;&boxh;&boxh; wit: #ms-A #ms-B
             &boxv;   &boxur;&boxh;&boxh; rdg
             &boxv;       &boxvr;&boxh;&boxh; text: desires
             &boxv;       &boxur;&boxh;&boxh; wit: #ed-C
-            &boxur;&boxh;&boxh; text: unity.
+            &boxv;
+            &boxur;&boxh;&boxh; text: " unity."
 </pre>
-    <p>The two textual relations are:
+    <p><b>How to read this diagram.</b> The structure accumulated across Guides
+1&ndash;3 now has three complementary parts: documentary witness declarations,
+a declaration of the variant-encoding method, and apparatus relations
+inside the text. The <code>@wit</code> pointers connect the textual and
+documentary branches.
 </p>
-    <pre>entry 1
-&boxvr;&boxh;&boxh; mind: A C
-&boxur;&boxh;&boxh; soul: B
-
-entry 2
-&boxvr;&boxh;&boxh; seeks: A B
-&boxur;&boxh;&boxh; desires: C
-</pre>
-    <h3>
-     <span class="mw-headline" id="7.5._From_the_TEI_source_to_witness_texts">
-      7.5. From the TEI source to witness texts
-     </span>
-    </h3>
-    <p>The same apparatus data imply three witness texts.
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The TEI source now contains both sides of the basic
+critical-edition model: documentary identities in the header and textual
+variation in the body. References connect the two.
 </p>
-    <h4>
-     <span class="mw-headline" id="7.5.1._Witness_A">
-      7.5.1. Witness A
-     </span>
-    </h4>
-    <p>Select the reading supported by <code>#ms-A</code>:
-</p>
-    <pre>The mind seeks unity.
-</pre>
-    <h4>
-     <span class="mw-headline" id="7.5.2._Witness_B">
-      7.5.2. Witness B
-     </span>
-    </h4>
-    <p>Select the reading supported by <code>#ms-B</code>:
-</p>
-    <pre>The soul seeks unity.
-</pre>
-    <h4>
-     <span class="mw-headline" id="7.5.3._Witness_C">
-      7.5.3. Witness C
-     </span>
-    </h4>
-    <p>Select the reading supported by <code>#ed-C</code>:
-</p>
-    <pre>The mind desires unity.
-</pre>
-    <p>Conceptually:
-</p>
-    <pre>TEI apparatus data
-        &darr;
-select witness A
-        &boxur;&boxh;&boxh; The mind seeks unity.
-
-TEI apparatus data
-        &darr;
-select witness B
-        &boxur;&boxh;&boxh; The soul seeks unity.
-
-TEI apparatus data
-        &darr;
-select witness C
-        &boxur;&boxh;&boxh; The mind desires unity.
-</pre>
-    <p>This reconstruction illustrates why structured witness references are more
-powerful than a preformatted apparatus string.
-</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="8._Common_encoding_errors">
-      8. Common encoding errors
+     <span class="mw-headline" id="13._Check_the_apparatus">
+      13. Check the apparatus
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="8.1._Placing_the_witness_siglum_directly_in_the_reading_text">
-      8.1. Placing the witness siglum directly in the reading text
-     </span>
-    </h3>
-    <p>Incorrect:
+    <p>Guides 1 and 2 introduced the distinction:
 </p>
-    <pre>&lt;rdg&gt;soul B&lt;/rdg&gt;
+    <pre>XML well-formedness
+        &boxv;
+        ▼
+TEI validation
+        &boxv;
+        ▼
+editorial correctness
 </pre>
-    <p>This mixes:
+    <p>This reminder is intentional. Guide 3 applies the same three levels to a
+new kind of structure.
 </p>
-    <ul>
-     <li>
-      the reading text;
-     </li>
-     <li>
-      its witness support;
-     </li>
-     <li>
-      its possible printed presentation.
-     </li>
-    </ul>
-    <p>Correct:
+    <p><b>How to read this diagram.</b> Syntactic correctness, TEI conformance,
+and scholarly correctness answer different questions. A file can pass the
+first two levels while still assigning the wrong reading to a witness.
 </p>
-    <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>The separation is:
-</p>
-    <pre>reading text:       soul
-witness reference:  #ms-B
-printed siglum:     B
-</pre>
-    <h3>
-     <span class="mw-headline" id="8.2._Referring_to_an_undeclared_witness">
-      8.2. Referring to an undeclared witness
-     </span>
-    </h3>
-    <p>Incorrect:
-</p>
-    <pre>&lt;rdg wit="#ms-D"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>when no declaration contains:
-</p>
-    <pre>xml:id="ms-D"
-</pre>
-    <p>The reference has no target.
-</p>
-    <p>Correct either by using an existing witness:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>or by declaring the new witness before referring to it.
+    <p>For this guide, concentrate on apparatus-specific checks.
 </p>
     <h3>
-     <span class="mw-headline" id="8.3._Adding_the_number_sign_to_xml:id">
-      8.3. Adding the number sign to
-      <code>xml:id</code>
+     <span class="mw-headline" id="13.1._Basic_checklist">
+      13.1. Basic checklist
      </span>
     </h3>
-    <p>Incorrect declaration:
-</p>
-    <pre>&lt;witness xml:id="#ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>Correct declaration:
-</p>
-    <pre>&lt;witness xml:id="ms-A" n="A"&gt;
-  The principal manuscript.
-&lt;/witness&gt;
-</pre>
-    <p>Correct reference:
-</p>
-    <pre>wit="#ms-A"
-</pre>
-    <p>The relation is:
-</p>
-    <pre>declaration:  xml:id="ms-A"
-reference:    #ms-A
-</pre>
-    <h3>
-     <span id="8.4._Using_commas_inside_@wit">
-     </span>
-     <span class="mw-headline" id="8.4._Using_commas_inside_.40wit">
-      8.4. Using commas inside
-      <code>@wit</code>
-     </span>
-    </h3>
-    <p>Incorrect:
-</p>
-    <pre>&lt;lem wit="#ms-A, #ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>Correct:
-</p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <h3>
-     <span id="8.5._Repeating_@wit">
-     </span>
-     <span class="mw-headline" id="8.5._Repeating_.40wit">
-      8.5. Repeating
-      <code>@wit</code>
-     </span>
-    </h3>
-    <p>Incorrect:
-</p>
-    <pre>&lt;lem wit="#ms-A" wit="#ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>An XML element cannot contain the same attribute twice.
-</p>
-    <p>Correct:
-</p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <h3>
-     <span class="mw-headline" id="8.6._Leaving_the_reading_outside_the_apparatus_entry">
-      8.6. Leaving the reading outside the apparatus entry
-     </span>
-    </h3>
-    <p>Incorrect:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-&lt;/app&gt;
-
-&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>The reading is no longer grouped with the lemma.
-</p>
-    <p>Correct:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-&lt;/app&gt;
-</pre>
-    <h3>
-     <span class="mw-headline" id="8.7._Storing_the_lemma_separator_in_the_TEI_source">
-      8.7. Storing the lemma separator in the TEI source
-     </span>
-    </h3>
-    <p>Avoid:
-</p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind]&lt;/lem&gt;
-</pre>
-    <p>The bracket belongs to the printed apparatus convention, not to the lemma.
-</p>
-    <p>Prefer:
-</p>
-    <pre>&lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>ConTeXt can later add:
-</p>
-    <pre>]
-</pre>
-    <p>during rendering.
-</p>
-    <h3>
-     <span class="mw-headline" id="8.8._Encoding_a_preformatted_apparatus_string">
-      8.8. Encoding a preformatted apparatus string
-     </span>
-    </h3>
-    <p>Avoid storing:
-</p>
-    <pre>&lt;app&gt;mind] soul B&lt;/app&gt;
-</pre>
-    <p>This does not identify:
-</p>
-    <ul>
-     <li>
-      the lemma;
-     </li>
-     <li>
-      the reading;
-     </li>
-     <li>
-      the witness;
-     </li>
-     <li>
-      the relation between them.
-     </li>
-    </ul>
-    <p>Use:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-&lt;/app&gt;
-</pre>
-    <h2>
-     <span class="mw-headline" id="9._Structural_and_editorial_checks">
-      9. Structural and editorial checks
-     </span>
-    </h2>
-    <h3>
-     <span class="mw-headline" id="9.1._Structural_checks">
-      9.1. Structural checks
-     </span>
-    </h3>
-    <p>A basic apparatus entry should satisfy several rules.
-</p>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -2437,177 +1967,232 @@ reference:    #ms-A
        </th>
       </tr>
       <tr>
+       <td>Variant method
+</td>
+       <td><code>&lt;variantEncoding method="parallel-segmentation" location="internal"/&gt;</code>
+</td>
+      </tr>
+      <tr>
        <td>Apparatus grouping
 </td>
-       <td>Every lemma and its readings belong to one <code>&lt;app&gt;</code>
+       <td>Competing forms at one location belong to one <code>&lt;app&gt;</code>
 </td>
       </tr>
       <tr>
-       <td>Lemma
+       <td>Tutorial lemma convention
 </td>
-       <td>The entry contains one lemma in the model used by this guide
-</td>
-      </tr>
-      <tr>
-       <td>Reading
-</td>
-       <td>The entry contains at least one alternative reading
+       <td>One <code>&lt;lem&gt;</code> in each simple entry
 </td>
       </tr>
       <tr>
-       <td>Witness references
+       <td>Alternative reading
 </td>
-       <td>Every <code>@wit</code> value points to declared witnesses
+       <td>At least one <code>&lt;rdg&gt;</code> in the tutorial examples
 </td>
       </tr>
       <tr>
-       <td>Reference syntax
+       <td>Witness support
 </td>
-       <td>Several references are separated by spaces
+       <td>Every <code>@wit</code> target corresponds to a declared witness
+</td>
+      </tr>
+      <tr>
+       <td>Multiple references
+</td>
+       <td>Space-separated
 </td>
       </tr>
       <tr>
        <td>Reading text
 </td>
-       <td>Witness sigla are not embedded in the textual content
+       <td>Contains no printed witness sigla
 </td>
       </tr>
       <tr>
-       <td>Typographical punctuation
+       <td>Apparatus punctuation
 </td>
-       <td>Lemma separators and reading separators are not stored as reading text
+       <td>Not embedded in lemma or reading content
 </td>
       </tr>
       <tr>
-       <td>XML structure
+       <td>Editorial attribution
 </td>
-       <td>All elements are properly nested and closed
+       <td>Encoded witness support matches the actual evidence
 </td>
       </tr>
      </tbody>
     </table>
     <h3>
-     <span class="mw-headline" id="9.2._Editorial_correctness">
-      9.2. Editorial correctness
+     <span class="mw-headline" id="13.2._Undeclared_witness">
+      13.2. Undeclared witness
      </span>
     </h3>
-    <p>A structurally correct entry may still contain an editorial error.
+    <p>Incorrect:
 </p>
-    <p>For example:
+    <pre>&lt;rdg wit="#ms-D"&gt;soul&lt;/rdg&gt;
+</pre>
+    <p>if the header contains no witness with:
+</p>
+    <pre>xml:id="ms-D"
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.3._Number_sign_in_the_wrong_place">
+      13.3. Number sign in the wrong place
+     </span>
+    </h3>
+    <p>Incorrect declaration:
+</p>
+    <pre>xml:id="#ms-A"
+</pre>
+    <p>Correct declaration:
+</p>
+    <pre>xml:id="ms-A"
+</pre>
+    <p>Correct local reference:
+</p>
+    <pre>wit="#ms-A"
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.4._Reading_outside_its_apparatus_entry">
+      13.4. Reading outside its apparatus entry
+     </span>
+    </h3>
+    <p>Incorrect:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
+&lt;/app&gt;
+
+&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+</pre>
+    <p>Correct for the simple parallel-segmentation model used here:
+</p>
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
+  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
+&lt;/app&gt;
+</pre>
+    <h3>
+     <span class="mw-headline" id="13.5._Structurally_correct_can_still_be_editorially_wrong">
+      13.5. Structurally correct can still be editorially wrong
+     </span>
+    </h3>
+    <p>This may be valid XML and structurally acceptable TEI:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>may be valid TEI but inaccurate if witness B actually reads
-<code>mind</code>.
+    <p>but it remains wrong if witness B actually reads:
 </p>
-    <h3>
-     <span class="mw-headline" id="9.3._Three_levels_of_verification">
-      9.3. Three levels of verification
-     </span>
-    </h3>
-    <p><b>Three levels remain distinct:</b>
+    <pre>mind
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Validation has limits.</b> Technical validation can establish structural
+consistency. It cannot determine whether the editor has correctly
+transcribed or assigned a reading to a witness.
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Level
-       </th>
-       <th>
-        Question
-       </th>
-      </tr>
-      <tr>
-       <td>Well-formed XML
-</td>
-       <td>Are the tags and attributes syntactically correct?
-</td>
-      </tr>
-      <tr>
-       <td>Valid TEI
-</td>
-       <td>Is the apparatus structure permitted by the selected TEI model?
-</td>
-      </tr>
-      <tr>
-       <td>Editorial correctness
-</td>
-       <td>Does the entry represent the witnesses accurately?
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>Validation has limits.</b> A file can be well-formed XML and valid TEI while still assigning the wrong reading to a witness. Technical validation cannot replace editorial verification.
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the general distinction between XML well-formedness, TEI validation,
+and editorial correctness, return to
+<a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">Guide 1</a>.
+</p>
+     <p>For the TEI apparatus model and the constraints associated with the
+chosen method, consult the P5
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>
+chapter.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> The basic apparatus now has explicit structural and
+editorial checks, including a declaration of the parallel-segmentation
+method used by the tutorial.
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="10._Inspecting_the_basic_apparatus_with_ConTeXt">
-      10. Inspecting the basic apparatus with ConTeXt
+     <span class="mw-headline" id="14._Inspect_the_apparatus_with_ConTeXt">
+      14. Inspect the apparatus with ConTeXt
      </span>
     </h2>
-    <h3>
-     <span class="mw-headline" id="10.1._Purpose_of_the_inspection_test">
-      10.1. Purpose of the inspection test
-     </span>
-    </h3>
-    <p>The final construction of a compact critical apparatus belongs to Guide 6.
+    <p>The final construction of a continuous critical apparatus belongs to
+Guide 6.
 </p>
-    <p>The purpose of this small ConTeXt test is more limited. It verifies that
-ConTeXt can:
+    <p>Here the goal is smaller:
 </p>
-    <ul>
-     <li>
-      load the TEI document;
-     </li>
-     <li>
-      ignore the TEI header;
-     </li>
-     <li>
-      print each lemma in the edited text;
-     </li>
-     <li>
-      place the corresponding variant reading in a footnote;
-     </li>
-     <li>
-      retrieve and display the raw witness reference stored in
-     </li>
-    </ul>
-    <pre> <code>@wit</code>.
+    <pre>Can ConTeXt
+
+load the TEI source
+        &darr;
+find each app
+        &darr;
+select its lemma
+        &darr;
+print that lemma in the edited text
+        &darr;
+place alternative readings in notes
+        &darr;
+show the raw witness references?
 </pre>
     <h3>
-     <span class="mw-headline" id="10.2._Why_the_raw_witness_identifier_is_retained">
-      10.2. Why the raw witness identifier is retained
+     <span class="mw-headline" id="14.1._Processing_map_before_the_code">
+      14.1. Processing map before the code
      </span>
     </h3>
-    <p>At this stage, the raw XML reference is deliberately retained:
-</p>
-    <pre>#ms-B
+    <pre>                 paragraph
+                    &boxv;
+          +---------+---------+
+          &boxv;                   &boxv;
+          ▼                   ▼
+        app 1               app 2
+          &boxv;                   &boxv;
+      +---+---+           +---+---+
+      &boxv;       &boxv;           &boxv;       &boxv;
+      ▼       ▼           ▼       ▼
+     lem     rdg          lem     rdg
+     mind    soul         seeks   desires
+      &boxv;       &boxv;           &boxv;       &boxv;
+      ▼       ▼           ▼       ▼
+ main text   note      main text  note
 </pre>
-    <p>The conversion of this identifier into the display siglum:
+    <p><b>How to read this diagram.</b> ConTeXt follows the XML structure rather
+than parsing a preformatted apparatus string. Each
+<code>&lt;app&gt;</code> supplies the lemma used in the running text and
+the readings used by this inspection test in notes.
 </p>
-    <pre>B
+    <p>The processing model is:
+</p>
+    <pre>TEI XML
+   &boxv;
+   ▼
+ConTeXt XML setups
+   &boxv;
+   &boxvr;&boxh;&boxh; lem &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► edited text
+   &boxv;
+   &boxvr;&boxh;&boxh; rdg &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► note
+   &boxv;
+   &boxur;&boxh;&boxh; @wit &boxh;&boxh;&boxh;&boxh;&boxh;► raw witness reference
 </pre>
-    <p>will be treated systematically in Guide 5.
-</p>
-    <div style="margin: 1em 0; padding: 0.7em 1em; border-left: 4px solid #6fa8dc; background: #eef6fc;">
-     <p><b>Practical note.</b> Save <code>tei-guide-03.xml</code> and <code>tei-guide-03.tex</code> in the same directory. This allows <code>\xmlprocessfile</code> to locate the XML source without an additional path.
-</p>
-    </div>
     <h3>
-     <span class="mw-headline" id="10.3._ConTeXt_source_file">
-      10.3. ConTeXt source file
+     <span class="mw-headline" id="14.2._Local_two-file_test">
+      14.2. Local two-file test
      </span>
     </h3>
-    <p>Save the ConTeXt file as:
+    <p>Keep:
 </p>
-    <pre>tei-guide-03.tex
+    <pre>tei-guide-03.xml
+tei-guide-03.tex
 </pre>
+    <p>in the same directory.
+</p>
+    <p>Save the following as <code>tei-guide-03.tex</code>:
+</p>
     <pre>\xmlregisterns
   {tei}
   {http://www.tei-c.org/ns/1.0}
 
 \startxmlsetups xml:tei:document
+
   \xmlsetsetup
     {#1}
     {tei:TEI|tei:text|tei:body}
@@ -2637,6 +2222,7 @@ ConTeXt can:
     {#1}
     {tei:rdg}
     {xml:tei:reading}
+
 \stopxmlsetups
 
 \xmlregistersetup{xml:tei:document}
@@ -2684,31 +2270,20 @@ ConTeXt can:
 
 \stoptext
 </pre>
-    <h3>
-     <span class="mw-headline" id="10.4._Compilation">
-      10.4. Compilation
-     </span>
-    </h3>
     <p>Compile with:
 </p>
     <pre>context tei-guide-03.tex
 </pre>
-    <p>This MWE was tested successfully with ConTeXt LMTX.
-</p>
-    <h3>
-     <span class="mw-headline" id="10.5._Expected_output">
-      10.5. Expected output
-     </span>
-    </h3>
-    <p>The edited text is:
+    <p>The intended edited text is:
 </p>
     <pre>Basic TEI apparatus
 
 The mind&sup1; seeks&sup2; unity.
 </pre>
-    <p>The corresponding footnotes contain:
+    <p>The notes contain:
 </p>
     <pre>1. mind] soul #ms-B
+
 2. seeks] desires #ed-C
 </pre>
     <div class="center">
@@ -2722,254 +2297,299 @@ The mind&sup1; seeks&sup2; unity.
          <a class="internal" href="File:tei-guide-03-output-tight.png" title="Enlarge">
          </a>
         </div>
-        Output produced by the ConTeXt LMTX MWE for a basic TEI critical apparatus.
+        Output produced by the ConTeXt LMTX inspection MWE for a basic TEI critical apparatus.
        </div>
       </div>
      </div>
     </div>
     <h3>
-     <span class="mw-headline" id="10.6._Processing_path">
-      10.6. Processing path
+     <span class="mw-headline" id="14.3._Follow_the_processing_path">
+      14.3. Follow the processing path
      </span>
     </h3>
-    <p>The processing path is:
-</p>
     <pre>tei-guide-03.xml
-        &darr;
+        &boxv;
+        ▼
 ConTeXt loads the TEI tree
-        &darr;
-the TEI header is ignored
-        &darr;
-the paragraph is processed
-        &darr;
-each &lt;app&gt; selects its &lt;lem&gt;
-        &darr;
-the lemma is printed in the edited text
-        &darr;
-each &lt;rdg&gt; is placed in a footnote
-        &darr;
-the raw @wit reference is displayed
+        &boxv;
+        ▼
+teiHeader is ignored for this output
+        &boxv;
+        ▼
+paragraph is processed
+        &boxv;
+        ▼
+each app is encountered
+        &boxv;
+        ▼
+lemma is selected
+        &boxv;
+        &boxvr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► edited text
+        &boxv;
+        ▼
+rdg elements are selected
+        &boxv;
+        &boxvr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► footnote
+        &boxv;
+        ▼
+raw @wit value is retrieved
+        &boxv;
+        ▼
+#ms-B / #ed-C
 </pre>
+    <p><b>How to read this diagram.</b> The inspection intentionally stops before
+full witness resolution. It demonstrates that the apparatus structure can
+already be traversed and routed to different ConTeXt functions.
+</p>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> This inspection test deliberately displays raw
+identifiers such as <code>#ms-B</code>. Resolving those references to
+reader-facing sigla such as <code>B</code> belongs to the later processing
+stage.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="10.7._Deliberate_limitations_of_the_test">
-      10.7. Deliberate limitations of the test
+     <span class="mw-headline" id="14.4._Deliberate_limitations">
+      14.4. Deliberate limitations
      </span>
     </h3>
-    <p>This deliberately limited inspection test does not yet:
+    <p>This test does not yet:
 </p>
     <ul>
      <li>
-      resolve
-      <code>#ms-B</code>
-      to
-      <code>B</code>
-      ;
+      resolve witness identifiers to reader-facing sigla;
      </li>
      <li>
-      sort several witnesses;
+      sort witness support;
      </li>
      <li>
       generate a continuous apparatus paragraph;
      </li>
      <li>
-      produce positive and negative apparatus variants;
+      switch automatically between positive and negative apparatus styles;
      </li>
      <li>
-      manage apparatus location labels;
+      manage complex location labels;
      </li>
      <li>
       apply final siglum typography;
      </li>
      <li>
-      handle omissions or more complex readings.
+      handle omissions, transpositions, conjectures, or other complex variants.
      </li>
     </ul>
-    <p>Its purpose is to verify the basic path:
+    <p>Its purpose is only to verify:
 </p>
-    <pre>TEI apparatus entry
-        &darr;
-lemma in the edited text
-        &darr;
-variant reading in a footnote
-        &darr;
-raw witness reference displayed
+    <pre>TEI apparatus
+      &boxv;
+      ▼
+lemma in text
+      &boxv;
+      ▼
+reading in note
+      &boxv;
+      ▼
+raw witness reference
 </pre>
     <h3>
-     <span class="mw-headline" id="10.8._A_simpler_fallback_inspection_test">
-      10.8. A simpler fallback inspection test
+     <span class="mw-headline" id="14.5._Garden_source-and-result_demonstration">
+      14.5. Garden source-and-result demonstration
      </span>
     </h3>
-    <p>If the previous setup requires adaptation to the ConTeXt version being used,
-the apparatus can first be inspected without notes.
+    <p>The local two-file test keeps TEI data and ConTeXt processing in separate
+files. For Garden, the same basic structure can be embedded in a buffer so
+that source and result are shown together:
 </p>
-    <p>Replace the apparatus setup with:
-</p>
-    <pre>\startxmlsetups xml:tei:apparatus
-  \bgroup
-  [
-  \xmlfirst{#1}{tei:lem}
-  \space
-  :
-  \space
-  \xmlall{#1}{tei:rdg}
-  ]
-  \egroup
-\stopxmlsetups
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>apparatus<span class="brx">]</span>
+<tei class="brx" xmlns<span>="http://www.tei-c.org/ns/1.0"&gt;
+  <teiheader>
+    <filedesc>
+      <titlestmt>
+        <title>A basic TEI critical apparatus</title>
+      </titlestmt>
+      <publicationstmt>
+        <p>Unpublished teaching example.</p>
+      </publicationstmt>
+      <sourcedesc>
+        <listwit>
+          <witness class="brx" xml:id<span>="ms-A" n<span class="brx">=</span>"A"&gt;The principal manuscript.</witness>
+          <witness class="brx" xml:id<span>="ms-B" n<span class="brx">=</span>"B"&gt;A later manuscript.</witness>
+          <witness class="brx" xml:id<span>="ed-C" n<span class="brx">=</span>"C"&gt;An early printed edition.</witness>
+        </listwit>
+      </sourcedesc>
+    </filedesc>
+    <encodingdesc>
+      <variantencoding class="brx" method<span>="parallel-segmentation"
+        location<span class="brx">=</span>"internal"/&gt;
+    </variantencoding></encodingdesc>
+  </teiheader>
+  <text>
+    
+      <p class="brx" xml:id<span>="p1"&gt;The <app><lem class="brx" wit<span>="<span class="brx">#</span>ms-A <span class="brx">#</span>ed-C"&gt;mind</lem><rdg class="brx" wit<span>="<span class="brx">#</span>ms-B"&gt;soul</rdg></app> <app><lem class="brx" wit<span>="<span class="brx">#</span>ms-A <span class="brx">#</span>ms-B"&gt;seeks</lem><rdg class="brx" wit<span>="<span class="brx">#</span>ed-C"&gt;desires</rdg></app> unity.</p>
+    
+  </text>
+</tei>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="stylecs">\xmlregisterns</span></span>
+  <span class="br">{</span>tei<span class="br">}</span>
+  <span class="br">{</span>http://www.tei-c.org/ns/1.0<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:document
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:TEI|tei:text|tei:body<span class="br">}</span><span class="br">{</span>xml:tei:flush<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:teiHeader<span class="br">}</span><span class="br">{</span>xml:tei:ignore<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:p<span class="br">}</span><span class="br">{</span>xml:tei:paragraph<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:app<span class="br">}</span><span class="br">{</span>xml:tei:apparatus<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span><span class="br">{</span>xml:tei:lemma<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:rdg<span class="br">}</span><span class="br">{</span>xml:tei:reading<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:tei:document<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:flush
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:ignore
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:paragraph
+  <span class="cs">\par</span>
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+  <span class="cs">\par</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:lemma
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:reading
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\space</span></span>
+  <span class="cs">\ttx</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>wit<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:apparatus
+  <span class="cs"><span class="stylecs">\xmlfirst</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\footnote</span></span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\xmlfirst</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="stylecs">\xmlall</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:rdg<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Basic TEI apparatus<span class="br">}</span>
+<span class="cs"><span class="stylecs">\xmlprocessbuffer</span></span><span class="br">{</span>tei<span class="br">}</span><span class="br">{</span>apparatus<span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
-    <p>The paragraph will then display an inspection form similar to:
-</p>
-    <pre>The [mind&nbsp;: soul #ms-B] [seeks&nbsp;: desires #ed-C] unity.
-</pre>
-    <p>This is not intended as final typography.
-</p>
-    <p>It makes the encoded structure visible while testing the XML selectors.
-</p>
-    <h3>
-     <span class="mw-headline" id="10.9._The_role_of_each_ConTeXt_setup">
-      10.9. The role of each ConTeXt setup
-     </span>
-    </h3>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Setup
-       </th>
-       <th>
-        Function
-       </th>
-      </tr>
-      <tr>
-       <td><code>xml:tei:document</code>
-</td>
-       <td>Associates TEI elements with processing setups
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:flush</code>
-</td>
-       <td>Continues processing child content
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:ignore</code>
-</td>
-       <td>Suppresses the TEI header from the visible output
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:paragraph</code>
-</td>
-       <td>Typesets a TEI paragraph
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:apparatus</code>
-</td>
-       <td>Selects the lemma and creates the note
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:lemma</code>
-</td>
-       <td>Flushes the lemma text
-</td>
-      </tr>
-      <tr>
-       <td><code>xml:tei:reading</code>
-</td>
-       <td>Flushes a reading and displays its witness reference
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The ConTeXt test separates:
-</p>
-    <pre>source structures
-        &darr;
-selection rules
-        &darr;
-typographical output
-</pre>
-    <h3>
-     <span class="mw-headline" id="10.10._Source_data_and_presentation_remain_separate">
-      10.10. Source data and presentation remain separate
-     </span>
-    </h3>
-    <p>The TEI source stores:
-</p>
-    <pre>&lt;app&gt;
-  &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
-  &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
-&lt;/app&gt;
-</pre>
-    <p>The ConTeXt setup decides:
-</p>
-    <ul>
-     <li>
-      that the lemma is printed in the text;
      </li>
-     <li>
-      that the reading appears in a note;
-     </li>
-     <li>
-      that a closing bracket separates lemma and reading;
-     </li>
-     <li>
-      that the witness reference is shown in typewriter style.
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/2a254951b593f9ae1c52995c17f4f1ad.webp" width="874">
      </li>
     </ul>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        TEI XML
-       </th>
-       <th>
-        ConTeXt
-       </th>
-      </tr>
-      <tr>
-       <td>Stores the apparatus entry
-</td>
-       <td>Selects and processes the entry
-</td>
-      </tr>
-      <tr>
-       <td>Stores the lemma
-</td>
-       <td>Prints the lemma in the edited text
-</td>
-      </tr>
-      <tr>
-       <td>Stores the readings
-</td>
-       <td>Places them in notes
-</td>
-      </tr>
-      <tr>
-       <td>Stores witness references
-</td>
-       <td>Determines how references are displayed
-</td>
-      </tr>
-      <tr>
-       <td>Does not store the lemma separator
-</td>
-       <td>Adds the closing bracket
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>A later change from footnotes to a compact apparatus paragraph does not
-require the TEI entries to be rewritten.
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> The local and Garden examples demonstrate the same
+architecture. The local version processes an external XML file with
+<code>\xmlprocessfile</code>; the Garden version uses
+<code>\xmlprocessbuffer</code> only so that source and result can appear on
+one wiki page.
 </p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For ConTeXt XML setups, selectors, attribute access, and flushing, see
+<a href="Input_and_compilation/XML_source/XML_setup_commands.html" title="Input and compilation/XML source/XML setup commands">XML setup commands</a>.
+</p>
+     <p>For the broader TEI &rarr; ConTeXt workflow, see <a href="TEI_xml.html" title="TEI xml">TEI XML</a>.
+</p>
+     <p>Guide 3 uses only the commands needed to traverse the basic apparatus
+structure. Systematic reference resolution and record processing belong
+to Guide 5.
+</p>
+    </div>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b> The TEI source describes the scholarly structure.
+The processing layer decides how that structure becomes a particular
+edition.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b> ConTeXt can now reach the basic apparatus structure,
+use lemmas in the running text, place readings in notes, and expose the raw
+witness references for inspection.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="11._A_practical_apparatus_checklist">
-      11. A practical apparatus checklist
+     <span class="mw-headline" id="15._What_you_have_built">
+      15. What you have built
      </span>
     </h2>
-    <p>Before moving to Guide 4, verify the following.
+    <p>The cumulative progression of Guide 3 is:
+</p>
+    <pre>STEP 1
+start from the witness registry
+        &boxv;
+        ▼
+STEP 2
+identify one variable location
+        &boxv;
+        ▼
+STEP 3
+add app / lem / rdg
+        &boxv;
+        ▼
+STEP 4
+connect readings with @wit
+        &boxv;
+        ▼
+STEP 5
+declare parallel segmentation
+        &boxv;
+        ▼
+STEP 6
+insert the apparatus inline
+        &boxv;
+        ▼
+STEP 7
+add a second apparatus entry
+        &boxv;
+        ▼
+STEP 8
+derive edited and witness-oriented views
+        &boxv;
+        ▼
+STEP 9
+inspect the structure with ConTeXt
+</pre>
+    <p><b>How to read this diagram.</b> Guide 3 moves from documentary identities
+to structured textual relations. Every later operation depends on
+preserving the distinction between textual evidence, witness identity, and
+typographical output.
+</p>
+    <p>The conceptual result is:
+</p>
+    <pre>WITNESSES
+    +
+TEXTUAL LOCATIONS
+    +
+READINGS
+    +
+REFERENCES
+    +
+VARIANT-ENCODING METHOD
+    &boxv;
+    ▼
+STRUCTURED BASIC CRITICAL APPARATUS
+</pre>
+    <h3>
+     <span class="mw-headline" id="15.1._Final_checklist">
+      15.1. Final checklist
+     </span>
+    </h3>
+    <p>Before moving to Guide 4, verify:
 </p>
     <table class="wikitable">
      <tbody>
@@ -2982,15 +2602,21 @@ require the TEI entries to be rewritten.
        </th>
       </tr>
       <tr>
-       <td>Witness declarations
+       <td>Witness registry
 </td>
-       <td>A, B, and C remain declared in <code>&lt;listWit&gt;</code>
+       <td>A, B, and C remain declared
+</td>
+      </tr>
+      <tr>
+       <td>Variant encoding
+</td>
+       <td>Parallel segmentation, internal apparatus
 </td>
       </tr>
       <tr>
        <td>Paragraph
 </td>
-       <td>One paragraph contains two inline apparatus entries
+       <td>Contains two inline apparatus entries
 </td>
       </tr>
       <tr>
@@ -3000,9 +2626,21 @@ require the TEI entries to be rewritten.
 </td>
       </tr>
       <tr>
-       <td>First variant
+       <td>First reading
 </td>
        <td><code>soul</code>
+</td>
+      </tr>
+      <tr>
+       <td>First lemma support
+</td>
+       <td>A C
+</td>
+      </tr>
+      <tr>
+       <td>First reading support
+</td>
+       <td>B
 </td>
       </tr>
       <tr>
@@ -3012,154 +2650,203 @@ require the TEI entries to be rewritten.
 </td>
       </tr>
       <tr>
-       <td>Second variant
+       <td>Second reading
 </td>
        <td><code>desires</code>
 </td>
       </tr>
       <tr>
-       <td>Lemma support
+       <td>Second lemma support
 </td>
-       <td><code>mind</code>: A C; <code>seeks</code>: A B
+       <td>A B
 </td>
       </tr>
       <tr>
-       <td>Variant support
+       <td>Second reading support
 </td>
-       <td><code>soul</code>: B; <code>desires</code>: C
+       <td>C
 </td>
       </tr>
       <tr>
        <td>References
 </td>
-       <td>Every <code>@wit</code> value resolves to a declared witness
+       <td>All targets correspond to declared witnesses
 </td>
       </tr>
       <tr>
        <td>Reading content
 </td>
-       <td>No witness siglum or apparatus punctuation is embedded in the readings
+       <td>Contains no display sigla or apparatus punctuation
 </td>
       </tr>
       <tr>
        <td>Edited text
 </td>
-       <td>The lemmas produce &ldquo;The mind seeks unity.&rdquo;
+       <td>Produces &ldquo;The mind seeks unity.&rdquo;
+</td>
+      </tr>
+      <tr>
+       <td>Witness-oriented views
+</td>
+       <td>A, B, and C can be distinguished from the encoded support
 </td>
       </tr>
       <tr>
        <td>ConTeXt inspection
 </td>
-       <td>The lemmas and readings can be reached from the XML tree
+       <td>Lemmas, readings, and raw <code>@wit</code> values can be reached
 </td>
       </tr>
      </tbody>
     </table>
-    <p>The expected apparatus tree is:
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guide 3 complete.</b> The TEI source can now represent straightforward
+textual substitutions. Each apparatus entry identifies a variable
+location, distinguishes the tutorial's lemma from alternative readings,
+and connects those forms to declared witnesses.
 </p>
-    <pre>paragraph
-&boxvr;&boxh;&boxh; text: The
-&boxvr;&boxh;&boxh; apparatus entry 1
-&boxv;   &boxvr;&boxh;&boxh; lemma: mind
-&boxv;   &boxv;   &boxur;&boxh;&boxh; witnesses: A C
-&boxv;   &boxur;&boxh;&boxh; reading: soul
-&boxv;       &boxur;&boxh;&boxh; witness: B
-&boxvr;&boxh;&boxh; apparatus entry 2
-&boxv;   &boxvr;&boxh;&boxh; lemma: seeks
-&boxv;   &boxv;   &boxur;&boxh;&boxh; witnesses: A B
-&boxv;   &boxur;&boxh;&boxh; reading: desires
-&boxv;       &boxur;&boxh;&boxh; witness: C
-&boxur;&boxh;&boxh; text: unity.
-</pre>
+    </div>
     <h2>
-     <span class="mw-headline" id="12._What_this_guide_has_established">
-      12. What this guide has established
+     <span class="mw-headline" id="16._Continue_with_Guide_4">
+      16. Continue with Guide 4
      </span>
     </h2>
+    <p>The same TEI document has grown progressively.
+</p>
     <h3>
-     <span class="mw-headline" id="12.1._The_completed_progression">
-      12.1. The completed progression
+     <span id="Guide_1_&mdash;_build_the_container">
+     </span>
+     <span class="mw-headline" id="Guide_1_.E2.80.94_build_the_container">
+      Guide 1 &mdash; build the container
      </span>
     </h3>
-    <p>This guide has moved from declared witnesses to structured records of textual
-variation:
-</p>
-    <pre>witness declarations
-        &darr;
-apparatus locations
-        &darr;
-&lt;app&gt;
-        &boxvr;&boxh;&boxh; &lt;lem&gt;
-        &boxur;&boxh;&boxh; &lt;rdg&gt;
-        &darr;
-@wit references
-        &darr;
-reusable editorial data
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
 </pre>
     <h3>
-     <span class="mw-headline" id="12.2._The_essential_distinction">
-      12.2. The essential distinction
+     <span id="Guide_2_&mdash;_add_witnesses">
+     </span>
+     <span class="mw-headline" id="Guide_2_.E2.80.94_add_witnesses">
+      Guide 2 &mdash; add witnesses
      </span>
     </h3>
-    <p>The essential distinction is between <i>encoded evidence</i> and <i>printed</i>
-notation<i>. TEI records lemmas, readings, and witness support as separate</i>
-objects. ConTeXt may later compress those objects into a negative apparatus,
-expand them into a positive apparatus, or use them to reconstruct the text of
-a selected witness.
-</p>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; A
+&boxv;           &boxvr;&boxh;&boxh; B
+&boxv;           &boxur;&boxh;&boxh; C
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+</pre>
     <h3>
-     <span class="mw-headline" id="12.3._Skills_acquired">
-      12.3. Skills acquired
+     <span id="Guide_3_&mdash;_add_basic_textual_variation">
+     </span>
+     <span class="mw-headline" id="Guide_3_.E2.80.94_add_basic_textual_variation">
+      Guide 3 &mdash; add basic textual variation
      </span>
     </h3>
-    <p>The reader should now be able to:
-</p>
-    <ul>
-     <li>
-      group a lemma and its readings inside one
-      <code>&lt;app&gt;</code>
-      ;
-     </li>
-     <li>
-      associate each textual form with declared witnesses through
-      <code>@wit</code>
-      ;
-     </li>
-     <li>
-      encode several readings or several supporting witnesses without duplication;
-     </li>
-     <li>
-      place apparatus entries directly at the locations of variation;
-     </li>
-     <li>
-      keep textual data separate from sigla, separators, and other output conventions.
-     </li>
-    </ul>
-    <h2>
-     <span class="mw-headline" id="13._Next_guide">
-      13. Next guide
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxvr;&boxh;&boxh; sourceDesc
+&boxv;   &boxv;   &boxur;&boxh;&boxh; listWit
+&boxv;   &boxv;       &boxvr;&boxh;&boxh; A
+&boxv;   &boxv;       &boxvr;&boxh;&boxh; B
+&boxv;   &boxv;       &boxur;&boxh;&boxh; C
+&boxv;   &boxur;&boxh;&boxh; encodingDesc
+&boxv;       &boxur;&boxh;&boxh; variantEncoding
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+            &boxvr;&boxh;&boxh; app
+            &boxv;   &boxvr;&boxh;&boxh; lem
+            &boxv;   &boxur;&boxh;&boxh; rdg
+            &boxv;
+            &boxur;&boxh;&boxh; app
+                &boxvr;&boxh;&boxh; lem
+                &boxur;&boxh;&boxh; rdg
+</pre>
+    <h3>
+     <span id="Guide_4_&mdash;_next_expansion">
      </span>
-    </h2>
-    <p>The model developed here handles straightforward substitutions. Guide 4 extends
-it to omissions, additions, corrections, conjectures, uncertainty, grouped
-readings, transposed order, and variants of unequal extent.
+     <span class="mw-headline" id="Guide_4_.E2.80.94_next_expansion">
+      Guide 4 &mdash; next expansion
+     </span>
+    </h3>
+    <p>Guide 4 keeps the same basic architecture but adds more complex textual
+relations:
 </p>
+    <pre>basic apparatus entries
+        &boxv;
+        ▼
+complex textual variation
+        &boxvr;&boxh;&boxh; omissions
+        &boxvr;&boxh;&boxh; additions
+        &boxvr;&boxh;&boxh; corrections
+        &boxvr;&boxh;&boxh; conjectures
+        &boxvr;&boxh;&boxh; uncertainty
+        &boxvr;&boxh;&boxh; grouped readings
+        &boxvr;&boxh;&boxh; transpositions
+        &boxur;&boxh;&boxh; unequal textual spans
+</pre>
+    <p><b>How to read these diagrams.</b> The repetition is mnemonic and
+comparative. Guide 1 supplies the container; Guide 2 gives textual sources
+stable identities; Guide 3 connects readings with those identities; Guide
+4 keeps that model but extends the kinds of textual relation it can
+represent.
+</p>
+    <p>The six-guide route is now:
+</p>
+    <pre>STRUCTURE
+   &boxv;
+   ▼
+IDENTITIES
+   &boxv;
+   ▼
+BASIC RELATIONS                         &larr; GUIDE 3 COMPLETE
+   &boxv;
+   ▼
+COMPLEX RELATIONS                       &larr; NEXT
+   &boxv;
+   ▼
+PROCESSING
+   &boxv;
+   ▼
+TYPOGRAPHY
+</pre>
+    <dl>
+     <dd>
+      <b>
+       Next: Guide 4 &mdash;
+      </b>
+      <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">
+       Encoding complex textual variation in TEI
+      </a>
+     </dd>
+    </dl>
     <hr>
-    <div style="margin: 1.5em 0 1em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+    <div style="margin:1.5em 0 1em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
      <p><b>Guide 3 of 6 &mdash; Encoding a basic critical apparatus in TEI</b>
 </p>
-     <p><b>Previous:</b> <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">Declaring witnesses in TEI critical editions</a>
+     <p><b>Previous: Guide 2 &mdash;</b> <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">Declaring witnesses in TEI critical editions</a>
 &nbsp;&middot;&nbsp;
 <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
 &nbsp;&middot;&nbsp;
 <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
 &nbsp;&middot;&nbsp;
-<b>Next:</b> <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">Encoding complex textual variation in TEI</a>
+<b>Next: Guide 4 &mdash;</b> <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">Encoding complex textual variation in TEI</a>
 </p>
     </div>
     <h2>
-     <span class="mw-headline" id="14._Related_pages">
-      14. Related pages
+     <span class="mw-headline" id="Related_pages">
+      Related pages
      </span>
     </h2>
     <ul>
@@ -3169,8 +2856,18 @@ readings, transposed order, and variants of unequal extent.
       </a>
      </li>
      <li>
+      <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">
+       Understanding TEI documents for critical editions
+      </a>
+     </li>
+     <li>
       <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">
        Declaring witnesses in TEI critical editions
+      </a>
+     </li>
+     <li>
+      <a href="Encoding_complex_textual_variation_in_TEI.html" title="Encoding complex textual variation in TEI">
+       Encoding complex textual variation in TEI
       </a>
      </li>
      <li>
@@ -3194,6 +2891,11 @@ readings, transposed order, and variants of unequal extent.
       </a>
      </li>
      <li>
+      <a href="Input_and_compilation/XML_source/XML_setup_commands.html" title="Input and compilation/XML source/XML setup commands">
+       XML setup commands
+      </a>
+     </li>
+     <li>
       <a href="ConTeXt_and_Lua_programming.html" title="ConTeXt and Lua programming">
        ConTeXt and Lua programming
       </a>
@@ -3201,6 +2903,11 @@ readings, transposed order, and variants of unequal extent.
      <li>
       <a href="ConTeXt_and_Lua_programming/Processing_XML_with_Lua.html" title="ConTeXt and Lua programming/Processing XML with Lua">
        Processing XML with Lua
+      </a>
+     </li>
+     <li>
+      <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">
+       Typesetting a TEI critical apparatus with ConTeXt
       </a>
      </li>
     </ul>
@@ -3214,7 +2921,7 @@ readings, transposed order, and variants of unequal extent.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-29
+     Mirrored on 2026-08-31
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

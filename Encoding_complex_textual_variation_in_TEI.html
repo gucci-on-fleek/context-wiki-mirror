@@ -18,25 +18,66 @@
     Encoding complex textual variation in TEI
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7542&diff=43621">2026-07-30</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7542&diff=43825">2026-08-30</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <div style="margin: 0 0 1.2em 0; padding: 0.75em 1em; border: 1px solid #d6b656; background: #fff4cc; text-align: center;">
-     <p><b>🚧 Documentation under construction &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to correct, expand, and </b>improve<b> them.</b>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.75em 0.95em; margin:1em 0;">
+     <p><span style="font-size:1.15em; margin-right:0.35em;">🚧</span>
+<b>Under construction</b> &mdash; This page and its subpages are currently being revised. Contributions are welcome: feel free to edit and <b>improve</b> them.
 </p>
     </div>
-    <div style="margin: 0 0 1.5em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
+    <div style="margin:0 0 1.5em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
      <p><b>Guide 4 of 6 &mdash; Encoding complex textual variation in TEI</b>
 </p>
-     <p><b>Previous:</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
+     <p><b>Previous: Guide 3 &mdash;</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
 &nbsp;&middot;&nbsp;
 <a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
 &nbsp;&middot;&nbsp;
 <a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
 &nbsp;&middot;&nbsp;
-<b>Next:</b> <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">Processing TEI critical apparatus data with Lua</a>
+<b>Next: Guide 5 &mdash;</b> <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">Processing TEI critical apparatus data with Lua</a>
+</p>
+    </div>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.9em 1.1em; margin:1.2em 0;">
+     <p><b>What you will build in this guide</b>
+</p>
+     <p>Guide 3 established a basic apparatus relation:
+</p>
+     <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxur;&boxh;&boxh; @wit
+&boxur;&boxh;&boxh; rdg
+    &boxur;&boxh;&boxh; @wit
+</pre>
+     <p>Guide 4 keeps that structure and learns to distinguish several kinds of
+complexity:
+</p>
+     <pre>complex apparatus
+&boxvr;&boxh;&boxh; presence / absence
+&boxv;   &boxvr;&boxh;&boxh; empty lemma
+&boxv;   &boxur;&boxh;&boxh; empty reading
+&boxvr;&boxh;&boxh; documentary alteration
+&boxv;   &boxur;&boxh;&boxh; subst
+&boxv;       &boxvr;&boxh;&boxh; del
+&boxv;       &boxur;&boxh;&boxh; add
+&boxvr;&boxh;&boxh; editorial intervention
+&boxv;   &boxur;&boxh;&boxh; @resp
+&boxvr;&boxh;&boxh; uncertainty
+&boxv;   &boxvr;&boxh;&boxh; @cert
+&boxv;   &boxur;&boxh;&boxh; unclear
+&boxvr;&boxh;&boxh; relationships between readings
+&boxv;   &boxur;&boxh;&boxh; rdgGrp
+&boxvr;&boxh;&boxh; local variation in word order
+&boxur;&boxh;&boxh; unequal textual extent
+</pre>
+     <p>The working file will combine eight teaching examples in one TEI document.
+It will retain the <code>variantEncoding</code> declaration introduced in
+Guide 3 and will end with a ConTeXt inspection test.
+</p>
+     <p>The goal is not to make the XML more elaborate. It is to preserve
+distinctions that matter to the scholarly model.
 </p>
     </div>
     <div class="toc" id="toc">
@@ -52,723 +93,1108 @@
      </div>
      <ul>
       <li class="toclevel-1 tocsection-1">
-       <a href="#1._Where_this_guide_fits_in_the_collection">
+       <a href="#Encoding_complex_textual_variation_in_TEI">
         <span class="tocnumber">
          1
         </span>
         <span class="toctext">
-         1. Where this guide fits in the collection
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-2">
-       <a href="#2._Why_simple_substitution_is_not_enough">
-        <span class="tocnumber">
-         2
-        </span>
-        <span class="toctext">
-         2. Why simple substitution is not enough
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-3">
-       <a href="#3._Encoding_absence_and_presence">
-        <span class="tocnumber">
-         3
-        </span>
-        <span class="toctext">
-         3. Encoding absence and presence
+         Encoding complex textual variation in TEI
         </span>
        </a>
        <ul>
-        <li class="toclevel-2 tocsection-4">
-         <a href="#3.1._Absence_is_not_a_single_phenomenon">
+        <li class="toclevel-2 tocsection-2">
+         <a href="#Part_I_.E2.80.94_Extend_the_basic_apparatus_model">
           <span class="tocnumber">
-           3.1
+           1.1
           </span>
           <span class="toctext">
-           3.1. Absence is not a single phenomenon
+           Part I &mdash; Extend the basic apparatus model
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-3">
+           <a href="#1._Where_this_guide_fits_in_the_collection">
+            <span class="tocnumber">
+             1.1.1
+            </span>
+            <span class="toctext">
+             1. Where this guide fits in the collection
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-4">
+             <a href="#Guide_1_.E2.80.94_document_structure">
+              <span class="tocnumber">
+               1.1.1.1
+              </span>
+              <span class="toctext">
+               Guide 1 &mdash; document structure
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-5">
+             <a href="#Guide_2_.E2.80.94_witness_identities">
+              <span class="tocnumber">
+               1.1.1.2
+              </span>
+              <span class="toctext">
+               Guide 2 &mdash; witness identities
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-6">
+             <a href="#Guide_3_.E2.80.94_basic_textual_relations">
+              <span class="tocnumber">
+               1.1.1.3
+              </span>
+              <span class="toctext">
+               Guide 3 &mdash; basic textual relations
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-7">
+             <a href="#Guide_4_.E2.80.94_enrich_those_relations">
+              <span class="tocnumber">
+               1.1.1.4
+              </span>
+              <span class="toctext">
+               Guide 4 &mdash; enrich those relations
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-8">
+           <a href="#2._Start_from_the_simple_apparatus_model">
+            <span class="tocnumber">
+             1.1.2
+            </span>
+            <span class="toctext">
+             2. Start from the simple apparatus model
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-9">
+           <a href="#3._Presence_and_absence">
+            <span class="tocnumber">
+             1.1.3
+            </span>
+            <span class="toctext">
+             3. Presence and absence
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-10">
+             <a href="#3.1._Not_every_absence_means_the_same_thing">
+              <span class="tocnumber">
+               1.1.3.1
+              </span>
+              <span class="toctext">
+               3.1. Not every absence means the same thing
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-11">
+             <a href="#3.2._Add_an_omission_to_the_existing_apparatus_model">
+              <span class="tocnumber">
+               1.1.3.2
+              </span>
+              <span class="toctext">
+               3.2. Add an omission to the existing apparatus model
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-12">
+             <a href="#3.3._Printed_omission_is_a_rendering_decision">
+              <span class="tocnumber">
+               1.1.3.3
+              </span>
+              <span class="toctext">
+               3.3. Printed omission is a rendering decision
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-13">
+             <a href="#3.4._Add_the_complementary_case:_additional_text">
+              <span class="tocnumber">
+               1.1.3.4
+              </span>
+              <span class="toctext">
+               3.4. Add the complementary case: additional text
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-14">
+             <a href="#3.5._Omission_and_addition_depend_partly_on_editorial_perspective">
+              <span class="tocnumber">
+               1.1.3.5
+              </span>
+              <span class="toctext">
+               3.5. Omission and addition depend partly on editorial perspective
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-15">
+             <a href="#3.6._Empty_content_is_not_missing_markup">
+              <span class="tocnumber">
+               1.1.3.6
+              </span>
+              <span class="toctext">
+               3.6. Empty content is not missing markup
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-5">
-         <a href="#3.2._Encoding_an_omission">
-          <span class="tocnumber">
-           3.2
-          </span>
-          <span class="toctext">
-           3.2. Encoding an omission
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-6">
-         <a href="#3.3._Encoding_an_addition">
-          <span class="tocnumber">
-           3.3
-          </span>
-          <span class="toctext">
-           3.3. Encoding an addition
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-7">
-         <a href="#3.4._Omission_and_addition_are_relative_descriptions">
-          <span class="tocnumber">
-           3.4
-          </span>
-          <span class="toctext">
-           3.4. Omission and addition are relative descriptions
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-8">
-         <a href="#3.5._Empty_content_and_missing_markup">
-          <span class="tocnumber">
-           3.5
-          </span>
-          <span class="toctext">
-           3.5. Empty content and missing markup
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-9">
-       <a href="#4._Encoding_corrections_and_documentary_alterations">
-        <span class="tocnumber">
-         4
-        </span>
-        <span class="toctext">
-         4. Encoding corrections and documentary alterations
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-10">
-         <a href="#4.1._Corrections_and_alterations_in_witnesses">
-          <span class="tocnumber">
-           4.1
-          </span>
-          <span class="toctext">
-           4.1. Corrections and alterations in witnesses
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-11">
-         <a href="#4.2._The_.3Cdel.3E_element">
-          <span class="tocnumber">
-           4.2
-          </span>
-          <span class="toctext">
-           4.2. The &lt;del&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-12">
-         <a href="#4.3._The_.3Cadd.3E_element">
-          <span class="tocnumber">
-           4.3
-          </span>
-          <span class="toctext">
-           4.3. The &lt;add&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-13">
-         <a href="#4.4._The_.3Csubst.3E_element">
-          <span class="tocnumber">
-           4.4
-          </span>
-          <span class="toctext">
-           4.4. The &lt;subst&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-14">
-         <a href="#4.5._Textual_variation_and_documentary_alteration">
-          <span class="tocnumber">
-           4.5
-          </span>
-          <span class="toctext">
-           4.5. Textual variation and documentary alteration
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-15">
-       <a href="#5._Encoding_editorial_responsibility_and_uncertainty">
-        <span class="tocnumber">
-         5
-        </span>
-        <span class="toctext">
-         5. Encoding editorial responsibility and uncertainty
-        </span>
-       </a>
-       <ul>
         <li class="toclevel-2 tocsection-16">
-         <a href="#5.1._Editorial_conjectures">
+         <a href="#Part_II_.E2.80.94_Distinguish_evidence_from_intervention">
           <span class="tocnumber">
-           5.1
+           1.2
           </span>
           <span class="toctext">
-           5.1. Editorial conjectures
+           Part II &mdash; Distinguish evidence from intervention
           </span>
          </a>
+         <ul>
+          <li class="toclevel-3 tocsection-17">
+           <a href="#4._Documentary_alterations">
+            <span class="tocnumber">
+             1.2.1
+            </span>
+            <span class="toctext">
+             4. Documentary alterations
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-18">
+             <a href="#4.1._Minimal_textual_encoding">
+              <span class="tocnumber">
+               1.2.1.1
+              </span>
+              <span class="toctext">
+               4.1. Minimal textual encoding
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-19">
+             <a href="#4.2._Preserve_the_documentary_intervention">
+              <span class="tocnumber">
+               1.2.1.2
+              </span>
+              <span class="toctext">
+               4.2. Preserve the documentary intervention
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-20">
+             <a href="#4.3._Deletion_is_not_omission">
+              <span class="tocnumber">
+               1.2.1.3
+              </span>
+              <span class="toctext">
+               4.3. Deletion is not omission
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-21">
+             <a href="#4.4._The_.3Cadd.3E_element">
+              <span class="tocnumber">
+               1.2.1.4
+              </span>
+              <span class="toctext">
+               4.4. The &lt;add&gt; element
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-22">
+             <a href="#4.5._The_.3Csubst.3E_element">
+              <span class="tocnumber">
+               1.2.1.5
+              </span>
+              <span class="toctext">
+               4.5. The &lt;subst&gt; element
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-23">
+             <a href="#4.6._Apparatus_and_documentary_transcription_answer_different_questions">
+              <span class="tocnumber">
+               1.2.1.6
+              </span>
+              <span class="toctext">
+               4.6. Apparatus and documentary transcription answer different questions
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-24">
+           <a href="#5._Editorial_conjecture_and_responsibility">
+            <span class="tocnumber">
+             1.2.2
+            </span>
+            <span class="toctext">
+             5. Editorial conjecture and responsibility
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-25">
+             <a href="#5.1._Conjectural_reading">
+              <span class="tocnumber">
+               1.2.2.1
+              </span>
+              <span class="toctext">
+               5.1. Conjectural reading
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-26">
+             <a href="#5.2._Add_responsibility_to_the_declaration_branch">
+              <span class="tocnumber">
+               1.2.2.2
+              </span>
+              <span class="toctext">
+               5.2. Add responsibility to the declaration branch
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-27">
+             <a href="#5.3._Witness_support_and_responsibility_are_different_relations">
+              <span class="tocnumber">
+               1.2.2.3
+              </span>
+              <span class="toctext">
+               5.3. Witness support and responsibility are different relations
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-28">
+           <a href="#6._Uncertainty_and_unclear_text">
+            <span class="tocnumber">
+             1.2.3
+            </span>
+            <span class="toctext">
+             6. Uncertainty and unclear text
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-29">
+             <a href="#6.1._Whole-reading_uncertainty">
+              <span class="tocnumber">
+               1.2.3.1
+              </span>
+              <span class="toctext">
+               6.1. Whole-reading uncertainty
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-30">
+             <a href="#6.2._Local_uncertainty">
+              <span class="tocnumber">
+               1.2.3.2
+              </span>
+              <span class="toctext">
+               6.2. Local uncertainty
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-31">
+             <a href="#6.3._Whole_reading_versus_local_uncertainty">
+              <span class="tocnumber">
+               1.2.3.3
+              </span>
+              <span class="toctext">
+               6.3. Whole reading versus local uncertainty
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-32">
+             <a href="#6.4._Uncertain_is_not_empty">
+              <span class="tocnumber">
+               1.2.3.4
+              </span>
+              <span class="toctext">
+               6.4. Uncertain is not empty
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+         </ul>
         </li>
-        <li class="toclevel-2 tocsection-17">
-         <a href="#5.2._Declaring_editorial_responsibility">
-          <span class="tocnumber">
-           5.2
-          </span>
-          <span class="toctext">
-           5.2. Declaring editorial responsibility
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-18">
-         <a href="#5.3._Witness_support_and_editorial_responsibility">
-          <span class="tocnumber">
-           5.3
-          </span>
-          <span class="toctext">
-           5.3. Witness support and editorial responsibility
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-19">
-         <a href="#5.4._Uncertain_readings">
-          <span class="tocnumber">
-           5.4
-          </span>
-          <span class="toctext">
-           5.4. Uncertain readings
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-20">
-         <a href="#5.5._The_.3Cunclear.3E_element">
-          <span class="tocnumber">
-           5.5
-          </span>
-          <span class="toctext">
-           5.5. The &lt;unclear&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-21">
-         <a href="#5.6._Uncertain_is_not_empty">
-          <span class="tocnumber">
-           5.6
-          </span>
-          <span class="toctext">
-           5.6. Uncertain is not empty
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-22">
-       <a href="#6._Encoding_relationships_between_readings">
-        <span class="tocnumber">
-         6
-        </span>
-        <span class="toctext">
-         6. Encoding relationships between readings
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-23">
-         <a href="#6.1._Grouping_related_readings">
-          <span class="tocnumber">
-           6.1
-          </span>
-          <span class="toctext">
-           6.1. Grouping related readings
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-24">
-         <a href="#6.2._The_.3CrdgGrp.3E_element">
-          <span class="tocnumber">
-           6.2
-          </span>
-          <span class="toctext">
-           6.2. The &lt;rdgGrp&gt; element
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-25">
-         <a href="#6.3._Grouping_is_an_editorial_claim">
-          <span class="tocnumber">
-           6.3
-          </span>
-          <span class="toctext">
-           6.3. Grouping is an editorial claim
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-26">
-         <a href="#6.4._Transposed_word_order">
-          <span class="tocnumber">
-           6.4
-          </span>
-          <span class="toctext">
-           6.4. Transposed word order
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-27">
-         <a href="#6.5._Textual_order_and_documentary_transposition">
-          <span class="tocnumber">
-           6.5
-          </span>
-          <span class="toctext">
-           6.5. Textual order and documentary transposition
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-28">
-         <a href="#6.6._Variants_of_unequal_extent">
-          <span class="tocnumber">
-           6.6
-          </span>
-          <span class="toctext">
-           6.6. Variants of unequal extent
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-29">
-         <a href="#6.7._Choosing_apparatus_boundaries">
-          <span class="tocnumber">
-           6.7
-          </span>
-          <span class="toctext">
-           6.7. Choosing apparatus boundaries
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-30">
-         <a href="#6.8._Combining_several_complex_phenomena">
-          <span class="tocnumber">
-           6.8
-          </span>
-          <span class="toctext">
-           6.8. Combining several complex phenomena
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-31">
-       <a href="#7._A_model_collection_of_complex_cases">
-        <span class="tocnumber">
-         7
-        </span>
-        <span class="toctext">
-         7. A model collection of complex cases
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-32">
-       <a href="#8._Complete_TEI_MWE">
-        <span class="tocnumber">
-         8
-        </span>
-        <span class="toctext">
-         8. Complete TEI MWE
-        </span>
-       </a>
-       <ul>
         <li class="toclevel-2 tocsection-33">
-         <a href="#8.1._Reading_the_complete_document_as_a_tree">
+         <a href="#Part_III_.E2.80.94_Describe_relations_of_greater_complexity">
           <span class="tocnumber">
-           8.1
+           1.3
           </span>
           <span class="toctext">
-           8.1. Reading the complete document as a tree
+           Part III &mdash; Describe relations of greater complexity
           </span>
          </a>
-        </li>
-        <li class="toclevel-2 tocsection-34">
-         <a href="#8.2._Editorial_relations_in_the_complete_MWE">
-          <span class="tocnumber">
-           8.2
-          </span>
-          <span class="toctext">
-           8.2. Editorial relations in the complete MWE
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-35">
-       <a href="#9._Common_encoding_errors">
-        <span class="tocnumber">
-         9
-        </span>
-        <span class="toctext">
-         9. Common encoding errors
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-36">
-         <a href="#9.1._Writing_an_omission_abbreviation_as_textual_content">
-          <span class="tocnumber">
-           9.1
-          </span>
-          <span class="toctext">
-           9.1. Writing an omission abbreviation as textual content
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-37">
-         <a href="#9.2._Treating_an_uncertain_reading_as_an_omission">
-          <span class="tocnumber">
-           9.2
-          </span>
-          <span class="toctext">
-           9.2. Treating an uncertain reading as an omission
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-38">
-         <a href="#9.3._Assigning_a_conjecture_to_a_witness">
-          <span class="tocnumber">
-           9.3
-          </span>
-          <span class="toctext">
-           9.3. Assigning a conjecture to a witness
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-39">
-         <a href="#9.4._Using_.40resp_without_a_declared_target">
-          <span class="tocnumber">
-           9.4
-          </span>
-          <span class="toctext">
-           9.4. Using @resp without a declared target
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-40">
-         <a href="#9.5._Confusing_deletion_with_omission">
-          <span class="tocnumber">
-           9.5
-          </span>
-          <span class="toctext">
-           9.5. Confusing deletion with omission
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-41">
-         <a href="#9.6._Flattening_a_substitution_into_an_unexplained_string">
-          <span class="tocnumber">
-           9.6
-          </span>
-          <span class="toctext">
-           9.6. Flattening a substitution into an unexplained string
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-42">
-         <a href="#9.7._Grouping_readings_without_explaining_the_group">
-          <span class="tocnumber">
-           9.7
-          </span>
-          <span class="toctext">
-           9.7. Grouping readings without explaining the group
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-43">
-         <a href="#9.8._Encoding_printed_punctuation_inside_readings">
-          <span class="tocnumber">
-           9.8
-          </span>
-          <span class="toctext">
-           9.8. Encoding printed punctuation inside readings
-          </span>
-         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-34">
+           <a href="#7._Related_readings">
+            <span class="tocnumber">
+             1.3.1
+            </span>
+            <span class="toctext">
+             7. Related readings
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-35">
+             <a href="#7.1._A_group_of_readings">
+              <span class="tocnumber">
+               1.3.1.1
+              </span>
+              <span class="toctext">
+               7.1. A group of readings
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-36">
+             <a href="#7.2._Grouping_is_an_editorial_claim">
+              <span class="tocnumber">
+               1.3.1.2
+              </span>
+              <span class="toctext">
+               7.2. Grouping is an editorial claim
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-37">
+           <a href="#8._Local_variation_in_word_order">
+            <span class="tocnumber">
+             1.3.2
+            </span>
+            <span class="toctext">
+             8. Local variation in word order
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-38">
+             <a href="#8.1._Local_word-order_variation_versus_documentary_or_multi-location_transposition">
+              <span class="tocnumber">
+               1.3.2.1
+              </span>
+              <span class="toctext">
+               8.1. Local word-order variation versus documentary or multi-location transposition
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-39">
+           <a href="#9._Variants_of_unequal_extent">
+            <span class="tocnumber">
+             1.3.3
+            </span>
+            <span class="toctext">
+             9. Variants of unequal extent
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-40">
+             <a href="#9.1._Apparatus_boundaries_are_editorial_decisions">
+              <span class="tocnumber">
+               1.3.3.1
+              </span>
+              <span class="toctext">
+               9.1. Apparatus boundaries are editorial decisions
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-41">
+           <a href="#10._Combining_several_kinds_of_complexity">
+            <span class="tocnumber">
+             1.3.4
+            </span>
+            <span class="toctext">
+             10. Combining several kinds of complexity
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-42">
+             <a href="#10.1._Conjecture_plus_uncertainty">
+              <span class="tocnumber">
+               1.3.4.1
+              </span>
+              <span class="toctext">
+               10.1. Conjecture plus uncertainty
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-43">
+             <a href="#10.2._Reading_plus_documentary_substitution">
+              <span class="tocnumber">
+               1.3.4.2
+              </span>
+              <span class="toctext">
+               10.2. Reading plus documentary substitution
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+         </ul>
         </li>
         <li class="toclevel-2 tocsection-44">
-         <a href="#9.9._Fragmenting_one_meaningful_variation_arbitrarily">
+         <a href="#Part_IV_.E2.80.94_Complete.2C_check.2C_and_inspect_the_model">
           <span class="tocnumber">
-           9.9
+           1.4
           </span>
           <span class="toctext">
-           9.9. Fragmenting one meaningful variation arbitrarily
+           Part IV &mdash; Complete, check, and inspect the model
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-45">
+           <a href="#11._The_cumulative_mental_model">
+            <span class="tocnumber">
+             1.4.1
+            </span>
+            <span class="toctext">
+             11. The cumulative mental model
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-46">
+             <a href="#11.1._Compact_reference_to_the_structures_introduced">
+              <span class="tocnumber">
+               1.4.1.1
+              </span>
+              <span class="toctext">
+               11.1. Compact reference to the structures introduced
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-47">
+           <a href="#12._Build_the_complete_Guide_4_TEI_document">
+            <span class="tocnumber">
+             1.4.2
+            </span>
+            <span class="toctext">
+             12. Build the complete Guide 4 TEI document
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-48">
+             <a href="#12.1._Eight_examples.2C_one_progressively_enriched_model">
+              <span class="tocnumber">
+               1.4.2.1
+              </span>
+              <span class="toctext">
+               12.1. Eight examples, one progressively enriched model
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-49">
+             <a href="#12.2._Read_the_complete_TEI_tree">
+              <span class="tocnumber">
+               1.4.2.2
+              </span>
+              <span class="toctext">
+               12.2. Read the complete TEI tree
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-50">
+             <a href="#12.3._The_same_tree_as_editorial_relations">
+              <span class="tocnumber">
+               1.4.2.3
+              </span>
+              <span class="toctext">
+               12.3. The same tree as editorial relations
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-51">
+           <a href="#13._Check_the_model">
+            <span class="tocnumber">
+             1.4.3
+            </span>
+            <span class="toctext">
+             13. Check the model
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-52">
+             <a href="#13.1._Common_conceptual_and_encoding_errors">
+              <span class="tocnumber">
+               1.4.3.1
+              </span>
+              <span class="toctext">
+               13.1. Common conceptual and encoding errors
+              </span>
+             </a>
+             <ul>
+              <li class="toclevel-5 tocsection-53">
+               <a href="#Apparatus_abbreviation_stored_as_text">
+                <span class="tocnumber">
+                 1.4.3.1.1
+                </span>
+                <span class="toctext">
+                 Apparatus abbreviation stored as text
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-54">
+               <a href="#Uncertainty_encoded_as_absence">
+                <span class="tocnumber">
+                 1.4.3.1.2
+                </span>
+                <span class="toctext">
+                 Uncertainty encoded as absence
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-55">
+               <a href="#Conjecture_assigned_to_a_witness">
+                <span class="tocnumber">
+                 1.4.3.1.3
+                </span>
+                <span class="toctext">
+                 Conjecture assigned to a witness
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-56">
+               <a href="#Undeclared_responsibility_target">
+                <span class="tocnumber">
+                 1.4.3.1.4
+                </span>
+                <span class="toctext">
+                 Undeclared responsibility target
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-57">
+               <a href="#Deletion_confused_with_omission">
+                <span class="tocnumber">
+                 1.4.3.1.5
+                </span>
+                <span class="toctext">
+                 Deletion confused with omission
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-58">
+               <a href="#Flattening_a_substitution">
+                <span class="tocnumber">
+                 1.4.3.1.6
+                </span>
+                <span class="toctext">
+                 Flattening a substitution
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-59">
+               <a href="#Undocumented_reading_groups">
+                <span class="tocnumber">
+                 1.4.3.1.7
+                </span>
+                <span class="toctext">
+                 Undocumented reading groups
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-60">
+               <a href="#Printed_punctuation_stored_as_reading_content">
+                <span class="tocnumber">
+                 1.4.3.1.8
+                </span>
+                <span class="toctext">
+                 Printed punctuation stored as reading content
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-61">
+               <a href="#Arbitrary_segmentation">
+                <span class="tocnumber">
+                 1.4.3.1.9
+                </span>
+                <span class="toctext">
+                 Arbitrary segmentation
+                </span>
+               </a>
+              </li>
+             </ul>
+            </li>
+            <li class="toclevel-4 tocsection-62">
+             <a href="#13.2._Check_the_model_at_several_levels">
+              <span class="tocnumber">
+               1.4.3.2
+              </span>
+              <span class="toctext">
+               13.2. Check the model at several levels
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-63">
+           <a href="#14._Inspect_complex_variants_with_ConTeXt">
+            <span class="tocnumber">
+             1.4.4
+            </span>
+            <span class="toctext">
+             14. Inspect complex variants with ConTeXt
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-64">
+             <a href="#14.1._What_the_inspection_should_reveal">
+              <span class="tocnumber">
+               1.4.4.1
+              </span>
+              <span class="toctext">
+               14.1. What the inspection should reveal
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-65">
+             <a href="#14.2._Save_both_files_together">
+              <span class="tocnumber">
+               1.4.4.2
+              </span>
+              <span class="toctext">
+               14.2. Save both files together
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-66">
+             <a href="#14.3._ConTeXt_inspection_source">
+              <span class="tocnumber">
+               1.4.4.3
+              </span>
+              <span class="toctext">
+               14.3. ConTeXt inspection source
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-67">
+             <a href="#14.4._What_the_test_demonstrates">
+              <span class="tocnumber">
+               1.4.4.4
+              </span>
+              <span class="toctext">
+               14.4. What the test demonstrates
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-68">
+             <a href="#14.5._Processing_path">
+              <span class="tocnumber">
+               1.4.4.5
+              </span>
+              <span class="toctext">
+               14.5. Processing path
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-69">
+             <a href="#14.6._Deliberate_limitations">
+              <span class="tocnumber">
+               1.4.4.6
+              </span>
+              <span class="toctext">
+               14.6. Deliberate limitations
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-70">
+             <a href="#14.7._Garden_source-and-result_demonstration">
+              <span class="tocnumber">
+               1.4.4.7
+              </span>
+              <span class="toctext">
+               14.7. Garden source-and-result demonstration
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-71">
+           <a href="#15._What_you_have_built">
+            <span class="tocnumber">
+             1.4.5
+            </span>
+            <span class="toctext">
+             15. What you have built
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-72">
+             <a href="#15.1._Guide_4_checklist">
+              <span class="tocnumber">
+               1.4.5.1
+              </span>
+              <span class="toctext">
+               15.1. Guide 4 checklist
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-73">
+             <a href="#15.2._What_Guides_1.E2.80.934_have_built">
+              <span class="tocnumber">
+               1.4.5.2
+              </span>
+              <span class="toctext">
+               15.2. What Guides 1&ndash;4 have built
+              </span>
+             </a>
+             <ul>
+              <li class="toclevel-5 tocsection-74">
+               <a href="#Guide_1_.E2.80.94_structure">
+                <span class="tocnumber">
+                 1.4.5.2.1
+                </span>
+                <span class="toctext">
+                 Guide 1 &mdash; structure
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-75">
+               <a href="#Guide_2_.E2.80.94_identities">
+                <span class="tocnumber">
+                 1.4.5.2.2
+                </span>
+                <span class="toctext">
+                 Guide 2 &mdash; identities
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-76">
+               <a href="#Guide_3_.E2.80.94_simple_relations">
+                <span class="tocnumber">
+                 1.4.5.2.3
+                </span>
+                <span class="toctext">
+                 Guide 3 &mdash; simple relations
+                </span>
+               </a>
+              </li>
+              <li class="toclevel-5 tocsection-77">
+               <a href="#Guide_4_.E2.80.94_complex_relations">
+                <span class="tocnumber">
+                 1.4.5.2.4
+                </span>
+                <span class="toctext">
+                 Guide 4 &mdash; complex relations
+                </span>
+               </a>
+              </li>
+             </ul>
+            </li>
+           </ul>
+          </li>
+          <li class="toclevel-3 tocsection-78">
+           <a href="#16._Continue_with_Guide_5">
+            <span class="tocnumber">
+             1.4.6
+            </span>
+            <span class="toctext">
+             16. Continue with Guide 5
+            </span>
+           </a>
+           <ul>
+            <li class="toclevel-4 tocsection-79">
+             <a href="#16.1._Why_Guide_5_is_the_next_step">
+              <span class="tocnumber">
+               1.4.6.1
+              </span>
+              <span class="toctext">
+               16.1. Why Guide 5 is the next step
+              </span>
+             </a>
+            </li>
+            <li class="toclevel-4 tocsection-80">
+             <a href="#16.2._Next_guide">
+              <span class="tocnumber">
+               1.4.6.2
+              </span>
+              <span class="toctext">
+               16.2. Next guide
+              </span>
+             </a>
+            </li>
+           </ul>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-81">
+         <a href="#Related_pages">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           Related pages
           </span>
          </a>
         </li>
        </ul>
-      </li>
-      <li class="toclevel-1 tocsection-45">
-       <a href="#10._Structural_and_editorial_checks">
-        <span class="tocnumber">
-         10
-        </span>
-        <span class="toctext">
-         10. Structural and editorial checks
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-46">
-       <a href="#11._Inspecting_complex_variants_with_ConTeXt">
-        <span class="tocnumber">
-         11
-        </span>
-        <span class="toctext">
-         11. Inspecting complex variants with ConTeXt
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-47">
-       <a href="#12._A_practical_complex-variation_checklist">
-        <span class="tocnumber">
-         12
-        </span>
-        <span class="toctext">
-         12. A practical complex-variation checklist
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-48">
-       <a href="#13._What_this_guide_has_established">
-        <span class="tocnumber">
-         13
-        </span>
-        <span class="toctext">
-         13. What this guide has established
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-49">
-       <a href="#14._Next_guide">
-        <span class="tocnumber">
-         14
-        </span>
-        <span class="toctext">
-         14. Next guide
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-50">
-       <a href="#Related_pages">
-        <span class="tocnumber">
-         15
-        </span>
-        <span class="toctext">
-         Related pages
-        </span>
-       </a>
       </li>
      </ul>
     </div>
-    <p><br>
-Guide 3 introduced the basic TEI apparatus entry:
+    <p>Guide 3 established the basic apparatus model and declared the
+parallel-segmentation method used by the teaching files. Guide 4 preserves
+both choices while extending the kinds of variation that can be represented.
+</p>
+    <p>The basic apparatus model is:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
   &lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>This model records a simple substitution:
+    <p>Conceptually:
+</p>
+    <pre>apparatus entry
+&boxvr;&boxh;&boxh; lemma: mind
+&boxv;   &boxur;&boxh;&boxh; witness A
+&boxur;&boxh;&boxh; reading: soul
+    &boxur;&boxh;&boxh; witness B
+</pre>
+    <p>This works well for a straightforward substitution:
 </p>
     <pre>mind
   &varr;
 soul
 </pre>
-    <p>Real critical editions also contain variations that cannot be reduced to
-one complete word replacing another.
+    <p>Real textual traditions contain more complicated relations.
 </p>
     <p>A witness may:
 </p>
     <ul>
      <li>
-      omit words preserved elsewhere;
+      omit text transmitted by other witnesses;
      </li>
      <li>
-      add words absent from other witnesses;
+      contain additional text;
      </li>
      <li>
-      contain a deletion, addition, or substitution made by a copyist;
+      preserve a correction or substitution;
      </li>
      <li>
-      preserve an uncertain or partly illegible reading;
+      contain writing that is difficult to decipher;
      </li>
      <li>
-      support a reading proposed only conjecturally by an editor;
+      preserve a reading whose interpretation is uncertain;
      </li>
      <li>
-      transpose words or passages;
+      transmit the same words in another order;
      </li>
      <li>
-      agree with other witnesses only at a broader level;
+      belong to a meaningful group of related readings;
      </li>
      <li>
-      preserve a variant whose extent differs from that of the lemma.
+      transmit a passage of different extent;
+     </li>
+     <li>
+      differ from an editorial conjecture not transmitted by any witness.
      </li>
     </ul>
-    <p>This guide extends the basic apparatus model:
+    <p>Guide 4 therefore grows the model from:
 </p>
-    <pre>simple substitution
-        &darr;
-complex textual variation
-        &boxvr;&boxh;&boxh; omission
-        &boxvr;&boxh;&boxh; addition
-        &boxvr;&boxh;&boxh; correction
-        &boxvr;&boxh;&boxh; conjecture
-        &boxvr;&boxh;&boxh; uncertainty
-        &boxvr;&boxh;&boxh; grouped readings
-        &boxvr;&boxh;&boxh; transposed order
-        &boxur;&boxh;&boxh; unequal textual extent
+    <pre>SIMPLE VARIATION
+      &boxv;
+      ▼
+app
+&boxvr;&boxh;&boxh; lem
+&boxur;&boxh;&boxh; rdg
 </pre>
-    <p>The objective is not to create final apparatus typography.
+    <p>into:
 </p>
-    <p>The objective is to record the editorial relations clearly enough that later
-processing can inspect, validate, select, and typeset them.
+    <pre>COMPLEX TEXTUAL VARIATION
+      &boxv;
+      &boxvr;&boxh;&boxh; absence / presence
+      &boxv;     &boxvr;&boxh;&boxh; omission
+      &boxv;     &boxur;&boxh;&boxh; addition
+      &boxv;
+      &boxvr;&boxh;&boxh; documentary alteration
+      &boxv;     &boxvr;&boxh;&boxh; del
+      &boxv;     &boxvr;&boxh;&boxh; add
+      &boxv;     &boxur;&boxh;&boxh; subst
+      &boxv;
+      &boxvr;&boxh;&boxh; editorial interpretation
+      &boxv;     &boxvr;&boxh;&boxh; conjecture
+      &boxv;     &boxur;&boxh;&boxh; responsibility
+      &boxv;
+      &boxvr;&boxh;&boxh; uncertainty
+      &boxv;     &boxvr;&boxh;&boxh; cert
+      &boxv;     &boxur;&boxh;&boxh; unclear
+      &boxv;
+      &boxvr;&boxh;&boxh; relationships between readings
+      &boxv;     &boxur;&boxh;&boxh; rdgGrp
+      &boxv;
+      &boxvr;&boxh;&boxh; changed order
+      &boxv;
+      &boxur;&boxh;&boxh; unequal textual extent
+</pre>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guiding principle.</b>
 </p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Guiding principle.</b> TEI should record the <i>editorial relation</i>, not imitate the abbreviations or punctuation of a printed apparatus. Rendering decisions belong to later processing and typesetting.
+     <p>Complex TEI encoding should make the <i>editorial distinction</i> clearer,
+not merely make the XML more elaborate.
+</p>
+     <p>Add structure only when it represents information that the edition
+actually needs to preserve.
 </p>
     </div>
     <h2>
+     <span id="Part_I_&mdash;_Extend_the_basic_apparatus_model">
+     </span>
+     <span class="mw-headline" id="Part_I_.E2.80.94_Extend_the_basic_apparatus_model">
+      Part I &mdash; Extend the basic apparatus model
+     </span>
+    </h2>
+    <h3>
      <span class="mw-headline" id="1._Where_this_guide_fits_in_the_collection">
       1. Where this guide fits in the collection
      </span>
-    </h2>
-    <p>The collection now follows this progression:
+    </h3>
+    <p>The document has been growing step by step.
 </p>
-    <pre>TEI document
-      &darr;
-witness declarations
-      &darr;
-basic apparatus entries
-      &darr;
-[COMPLEX TEXTUAL VARIATION]     &larr; Guide 4
-      &darr;
-Lua processing
-      &darr;
-ConTeXt typesetting
-</pre>
-    <p>Guide 1 introduced the TEI document.
-</p>
-    <p>Guide 2 declared the witnesses.
-</p>
-    <p>Guide 3 encoded simple substitutions with:
-</p>
-    <ul>
-     <li>
-      <code>&lt;app&gt;</code>
-      ;
-     </li>
-     <li>
-      <code>&lt;lem&gt;</code>
-      ;
-     </li>
-     <li>
-      <code>&lt;rdg&gt;</code>
-      ;
-     </li>
-     <li>
-      <code>@wit</code>
-      .
-     </li>
-    </ul>
-    <p>This guide introduces:
-</p>
-    <ul>
-     <li>
-      empty lemmas and readings;
-     </li>
-     <li>
-      omissions and additions;
-     </li>
-     <li>
-      documentary alterations;
-     </li>
-     <li>
-      <code>&lt;del&gt;</code>
-      ,
-      <code>&lt;add&gt;</code>
-      , and
-      <code>&lt;subst&gt;</code>
-      ;
-     </li>
-     <li>
-      editorial conjectures;
-     </li>
-     <li>
-      <code>@resp</code>
-      ;
-     </li>
-     <li>
-      uncertain readings;
-     </li>
-     <li>
-      <code>@cert</code>
-      and
-      <code>&lt;unclear&gt;</code>
-      ;
-     </li>
-     <li>
-      grouped readings;
-     </li>
-     <li>
-      <code>&lt;rdgGrp&gt;</code>
-      ;
-     </li>
-     <li>
-      transposed order;
-     </li>
-     <li>
-      apparatus entries whose members have unequal extent;
-     </li>
-     <li>
-      combinations of several phenomena.
-     </li>
-    </ul>
-    <p>This guide does not yet develop:
-</p>
-    <ul>
-     <li>
-      Lua tables;
-     </li>
-     <li>
-      global witness-reference resolution;
-     </li>
-     <li>
-      automated validation reports;
-     </li>
-     <li>
-      sorting and filtering;
-     </li>
-     <li>
-      extraction of all apparatus entries;
-     </li>
-     <li>
-      conversion of XML identifiers into printed sigla;
-     </li>
-     <li>
-      final critical-apparatus typography.
-     </li>
-    </ul>
-    <p>Those subjects belong to Guides 5 and 6.
-</p>
-    <h2>
-     <span class="mw-headline" id="2._Why_simple_substitution_is_not_enough">
-      2. Why simple substitution is not enough
+    <h4>
+     <span id="Guide_1_&mdash;_document_structure">
      </span>
-    </h2>
-    <p>A simple apparatus entry assumes that every witness preserves some textual
-content at the same location:
-</p>
-    <pre>A  mind
-B  soul
-C  understanding
+     <span class="mw-headline" id="Guide_1_.E2.80.94_document_structure">
+      Guide 1 &mdash; document structure
+     </span>
+    </h4>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
 </pre>
-    <p>This can be encoded as:
+    <h4>
+     <span id="Guide_2_&mdash;_witness_identities">
+     </span>
+     <span class="mw-headline" id="Guide_2_.E2.80.94_witness_identities">
+      Guide 2 &mdash; witness identities
+     </span>
+    </h4>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; A
+&boxv;           &boxvr;&boxh;&boxh; B
+&boxv;           &boxur;&boxh;&boxh; C
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+</pre>
+    <h4>
+     <span id="Guide_3_&mdash;_basic_textual_relations">
+     </span>
+     <span class="mw-headline" id="Guide_3_.E2.80.94_basic_textual_relations">
+      Guide 3 &mdash; basic textual relations
+     </span>
+    </h4>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; sourceDesc
+&boxv;       &boxur;&boxh;&boxh; listWit
+&boxv;           &boxvr;&boxh;&boxh; A
+&boxv;           &boxvr;&boxh;&boxh; B
+&boxv;           &boxur;&boxh;&boxh; C
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; p
+            &boxur;&boxh;&boxh; app
+                &boxvr;&boxh;&boxh; lem
+                &boxv;   &boxur;&boxh;&boxh; @wit
+                &boxur;&boxh;&boxh; rdg
+                    &boxur;&boxh;&boxh; @wit
+</pre>
+    <h4>
+     <span id="Guide_4_&mdash;_enrich_those_relations">
+     </span>
+     <span class="mw-headline" id="Guide_4_.E2.80.94_enrich_those_relations">
+      Guide 4 &mdash; enrich those relations
+     </span>
+    </h4>
+    <p>We now keep that structure and enlarge what an apparatus entry can say:
+</p>
+    <pre>TEI
+&boxvr;&boxh;&boxh; declarations
+&boxv;   &boxvr;&boxh;&boxh; witnesses
+&boxv;   &boxur;&boxh;&boxh; editorial responsibility       &larr; NEW
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; body
+        &boxur;&boxh;&boxh; apparatus entries
+            &boxvr;&boxh;&boxh; ordinary readings
+            &boxvr;&boxh;&boxh; empty readings          &larr; NEW
+            &boxvr;&boxh;&boxh; documentary changes     &larr; NEW
+            &boxvr;&boxh;&boxh; conjectures             &larr; NEW
+            &boxvr;&boxh;&boxh; uncertainty             &larr; NEW
+            &boxvr;&boxh;&boxh; grouped readings        &larr; NEW
+            &boxvr;&boxh;&boxh; local word-order variants      &larr; NEW
+            &boxur;&boxh;&boxh; unequal textual spans   &larr; NEW
+</pre>
+    <p><br>
+The six-guide progression is:
+</p>
+    <pre>Guide 1   STRUCTURE
+             &boxv;
+             ▼
+Guide 2   IDENTITIES
+             &boxv;
+             ▼
+Guide 3   BASIC RELATIONS
+             &boxv;
+             ▼
+Guide 4   COMPLEX RELATIONS       &larr; YOU ARE HERE
+             &boxv;
+             ▼
+Guide 5   PROCESSING
+             &boxv;
+             ▼
+Guide 6   TYPOGRAPHY
+</pre>
+    <p><b>How to read this diagram.</b> Guides 1&ndash;3 established the document,
+witness identities, and basic reading relations. Guide 4 keeps all three
+layers and refines the meaning of variation. Guides 5 and 6 will process
+and typeset the same accumulated data.
+</p>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>We already know how to encode a simple substitution.
+</p>
+     <p>Guide 4 does not replace that model. It extends it when the evidence
+requires more precise distinctions.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="2._Start_from_the_simple_apparatus_model">
+      2. Start from the simple apparatus model
+     </span>
+    </h3>
+    <p>Suppose:
+</p>
+    <pre>A   mind
+B   soul
+C   understanding
+</pre>
+    <p>A simple entry can represent all three textual forms:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
@@ -776,53 +1202,115 @@ C  understanding
   &lt;rdg wit="#ed-C"&gt;understanding&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>But consider these cases:
+    <p>Tree:
 </p>
-    <pre>Case 1
-A  divine reason
-B  &mdash;
-C  divine reason
-
-Case 2
-A  reason
-B  eternal reason
-C  reason
-
-Case 3
-A  reason and freedom
-B  freedom and reason
-C  reason and freedom
+    <pre>app
+&boxvr;&boxh;&boxh; lem: mind
+&boxv;   &boxur;&boxh;&boxh; A
+&boxvr;&boxh;&boxh; rdg: soul
+&boxv;   &boxur;&boxh;&boxh; B
+&boxur;&boxh;&boxh; rdg: understanding
+    &boxur;&boxh;&boxh; C
 </pre>
-    <p>These relations involve:
+    <p>Here every witness transmits some text.
 </p>
-    <pre>Case 1  absence
-Case 2  additional text
-Case 3  changed order
+    <p>Now compare:
+</p>
+    <pre>CASE 1
+
+A   divine reason
+B   reason
+C   divine reason
+
+
+CASE 2
+
+A   reason
+B   eternal reason
+C   reason
+
+
+CASE 3
+
+A   reason and freedom
+B   freedom and reason
+C   reason and freedom
 </pre>
-    <p>The TEI source must preserve those distinctions without reducing every
-phenomenon to an artificial replacement string.
+    <p>These involve different relations:
 </p>
-    <h2>
-     <span class="mw-headline" id="3._Encoding_absence_and_presence">
-      3. Encoding absence and presence
-     </span>
-    </h2>
+    <pre>Case 1   absence
+Case 2   additional text
+Case 3   changed order
+</pre>
+    <p>The basic apparatus remains our container:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxur;&boxh;&boxh; rdg
+</pre>
+    <p>but the meanings of its contents become richer.
+</p>
+    <p>Later examples also use values such as:
+</p>
+    <pre>type="omission"
+type="addition"
+type="correction"
+type="conjecture"
+type="uncertain-reading"
+type="grouped-readings"
+type="local-word-order"
+type="unequal-extent"
+</pre>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> These <code>@type</code> values are the
+classification vocabulary used by this tutorial. TEI permits
+<code>@type</code> to classify apparatus entries, but it does not impose
+this particular list. A real project should document the values it adopts,
+especially when processing rules depend on them.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="3.1._Absence_is_not_a_single_phenomenon">
-      3.1. Absence is not a single phenomenon
+     <span class="mw-headline" id="3._Presence_and_absence">
+      3. Presence and absence
      </span>
     </h3>
-    <p>Several situations may produce no readable text in an edition:
+    <h4>
+     <span class="mw-headline" id="3.1._Not_every_absence_means_the_same_thing">
+      3.1. Not every absence means the same thing
+     </span>
+    </h4>
+    <p>Before introducing an empty reading, distinguish several situations:
 </p>
-    <pre>no text at this location
-        &boxvr;&boxh;&boxh; genuine omission
-        &boxvr;&boxh;&boxh; physical loss
-        &boxvr;&boxh;&boxh; illegible writing
-        &boxvr;&boxh;&boxh; erased text
-        &boxvr;&boxh;&boxh; editorial suppression
-        &boxur;&boxh;&boxh; missing or unknown data
+    <pre>NO READABLE TEXT AT THIS POINT
+          &boxv;
+          &boxvr;&boxh;&boxh; genuine omission
+          &boxv;
+          &boxvr;&boxh;&boxh; physical loss
+          &boxv;
+          &boxvr;&boxh;&boxh; illegible writing
+          &boxv;
+          &boxvr;&boxh;&boxh; deleted text
+          &boxv;
+          &boxvr;&boxh;&boxh; editorial suppression
+          &boxv;
+          &boxur;&boxh;&boxh; unknown / unrecorded data
 </pre>
-    <p>These situations must not be treated as synonyms.
+    <p>These are not interchangeable.
+</p>
+    <p>The crucial distinction is:
+</p>
+    <pre>EMPTY READING
+     &ne;
+UNKNOWN READING
+     &ne;
+ILLEGIBLE READING
+     &ne;
+DELETED TEXT
+</pre>
+    <p><b>How to read this diagram.</b> These four states may all produce an
+apparatus that looks incomplete or difficult to read, but they make
+different scholarly claims. Guide 4 encodes the distinction rather than
+collapsing them into the same empty value.
 </p>
     <table class="wikitable">
      <tbody>
@@ -831,26 +1319,26 @@ phenomenon to an artificial replacement string.
         Situation
        </th>
        <th>
-        Editorial meaning
+        Meaning
        </th>
        <th>
-        Possible TEI strategy
+        Strategy introduced here
        </th>
       </tr>
       <tr>
        <td>Omission
 </td>
-       <td>The witness does not transmit the passage
+       <td>The witness transmits no text at this location
 </td>
-       <td>Empty <code>&lt;rdg/&gt;</code>
+       <td>Explicitly empty <code>&lt;rdg/&gt;</code>
 </td>
       </tr>
       <tr>
        <td>Addition
 </td>
-       <td>One witness transmits text absent from the others
+       <td>One witness contains text absent from others
 </td>
-       <td>Empty lemma or empty reading for the witnesses without the text
+       <td>Empty lemma or reading for the witnesses without the text
 </td>
       </tr>
       <tr>
@@ -858,21 +1346,13 @@ phenomenon to an artificial replacement string.
 </td>
        <td>Writing exists but cannot be read securely
 </td>
-       <td><code>&lt;unclear&gt;</code> or a more detailed source description
-</td>
-      </tr>
-      <tr>
-       <td>Physical loss
-</td>
-       <td>The material support is damaged or missing
-</td>
-       <td>Elements from the primary-source transcription model
+       <td><code>&lt;unclear&gt;</code> or more detailed transcription
 </td>
       </tr>
       <tr>
        <td>Deleted text
 </td>
-       <td>Text was written and then cancelled
+       <td>Text existed and was cancelled
 </td>
        <td><code>&lt;del&gt;</code>
 </td>
@@ -880,284 +1360,344 @@ phenomenon to an artificial replacement string.
       <tr>
        <td>Unknown data
 </td>
-       <td>The encoder has not established the reading
+       <td>The reading has not been established
 </td>
-       <td>Must not be silently represented as an omission
+       <td>Must not silently become an omission
 </td>
       </tr>
      </tbody>
     </table>
-    <p>The <b>central rule</b> is:
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Do not infer absence too quickly.</b>
 </p>
-    <pre>empty reading
-        &ne;
-unknown reading
-        &ne;
-illegible reading
-        &ne;
-deleted reading
-</pre>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>Do not infer absence too quickly.</b> An empty reading is an explicit editorial statement. Missing markup, unreadable writing, physical loss, and deleted text require different encodings.
+     <p>An empty reading is a positive editorial statement: the witness is being
+said to support an empty textual value at this location.
+</p>
+     <p>It is not a substitute for missing information, illegibility, damage,
+or deletion.
 </p>
     </div>
-    <h3>
-     <span class="mw-headline" id="3.2._Encoding_an_omission">
-      3.2. Encoding an omission
+    <h4>
+     <span class="mw-headline" id="3.2._Add_an_omission_to_the_existing_apparatus_model">
+      3.2. Add an omission to the existing apparatus model
      </span>
-    </h3>
-    <p>Suppose that the witnesses read:
+    </h4>
+    <p>Suppose:
 </p>
-    <pre>A  The divine reason governs all.
-B  The reason governs all.
-C  The divine reason governs all.
+    <pre>A   The divine reason governs all.
+B   The reason governs all.
+C   The divine reason governs all.
 </pre>
-    <p>The words <code>divine</code> are omitted by B.
+    <p>At the variable point:
 </p>
-    <p>At the variable location:
-</p>
-    <pre>A  divine
-B  &mdash;
-C  divine
+    <pre>divine
+&boxvr;&boxh;&boxh; A
+&boxur;&boxh;&boxh; C
+
+empty
+&boxur;&boxh;&boxh; B
 </pre>
-    <p>The TEI entry may be encoded as:
+    <p>The apparatus tree from Guide 3 is still present:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxur;&boxh;&boxh; rdg
+</pre>
+    <p>We now allow one branch to contain no textual content:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxvr;&boxh;&boxh; text: divine
+&boxv;   &boxur;&boxh;&boxh; witnesses: A C
+&boxv;
+&boxur;&boxh;&boxh; rdg
+    &boxvr;&boxh;&boxh; text: EMPTY              &larr; NEW
+    &boxur;&boxh;&boxh; witness: B
+</pre>
+    <p>TEI:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;divine&lt;/lem&gt;
   &lt;rdg wit="#ms-B"/&gt;
 &lt;/app&gt;
 </pre>
-    <p>The empty element:
+    <p>The empty reading:
 </p>
     <pre>&lt;rdg wit="#ms-B"/&gt;
 </pre>
     <p>does not contain an invisible word.
 </p>
-    <p>It records that witness B supports an empty textual reading at this
-apparatus location.
+    <p>It explicitly records an empty textual value.
 </p>
-    <p>The structure is:
-</p>
-    <pre>app
-&boxvr;&boxh;&boxh; lem
-&boxv;   &boxvr;&boxh;&boxh; text: divine
-&boxv;   &boxur;&boxh;&boxh; witnesses: A C
-&boxur;&boxh;&boxh; rdg
-    &boxvr;&boxh;&boxh; text: empty
-    &boxur;&boxh;&boxh; witness: B
-</pre>
-    <p>A possible printed apparatus is:
-</p>
-    <pre>divine] om. B
-</pre>
-    <p>The abbreviation:
-</p>
-    <pre>om.
-</pre>
-    <p>belongs to the output convention.
-</p>
-    <p>It is not stored as the content of the reading.
-</p>
-    <p>Avoid:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;om.&lt;/rdg&gt;
-</pre>
-    <p>Prefer:
+    <h4>
+     <span class="mw-headline" id="3.3._Printed_omission_is_a_rendering_decision">
+      3.3. Printed omission is a rendering decision
+     </span>
+    </h4>
+    <p>The TEI source contains:
 </p>
     <pre>&lt;rdg wit="#ms-B"/&gt;
 </pre>
-    <p>The relation remains:
+    <p>A printed apparatus might produce:
 </p>
-    <pre>TEI data
-    empty reading
-
-ConTeXt output
-    om.
+    <pre>divine] om. B
 </pre>
-    <h3>
-     <span class="mw-headline" id="3.3._Encoding_an_addition">
-      3.3. Encoding an addition
-     </span>
-    </h3>
-    <p>Now suppose that B contains a word absent from A and C:
+    <p>Thus:
 </p>
-    <pre>A  Reason governs all.
-B  Eternal reason governs all.
-C  Reason governs all.
+    <pre>TEI DATA                       PRINTED OUTPUT
+
+empty reading   &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►   om.
+</pre>
+    <p>Do not encode:
+</p>
+    <pre>&lt;rdg wit="#ms-B"&gt;om.&lt;/rdg&gt;
+</pre>
+    <p>because <code>om.</code> is apparatus notation, not the transmitted
+text.
+</p>
+    <h4>
+     <span class="mw-headline" id="3.4._Add_the_complementary_case:_additional_text">
+      3.4. Add the complementary case: additional text
+     </span>
+    </h4>
+    <p>Suppose:
+</p>
+    <pre>A   Reason governs all.
+B   Eternal reason governs all.
+C   Reason governs all.
 </pre>
     <p>At the variable location:
 </p>
-    <pre>A  &mdash;
-B  eternal
-C  &mdash;
+    <pre>empty
+&boxvr;&boxh;&boxh; A
+&boxur;&boxh;&boxh; C
+
+eternal
+&boxur;&boxh;&boxh; B
 </pre>
-    <p>One possible inline apparatus entry is:
+    <p>Our model becomes:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxvr;&boxh;&boxh; text: EMPTY             &larr; NEW
+&boxv;   &boxur;&boxh;&boxh; witnesses: A C
+&boxv;
+&boxur;&boxh;&boxh; rdg
+    &boxvr;&boxh;&boxh; text: eternal
+    &boxur;&boxh;&boxh; witness: B
+</pre>
+    <p>TEI:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"/&gt;
   &lt;rdg wit="#ms-B"&gt;eternal&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The structure is:
-</p>
-    <pre>app
-&boxvr;&boxh;&boxh; lem
-&boxv;   &boxvr;&boxh;&boxh; text: empty
-&boxv;   &boxur;&boxh;&boxh; witnesses: A C
-&boxur;&boxh;&boxh; rdg
-    &boxvr;&boxh;&boxh; text: eternal
-    &boxur;&boxh;&boxh; witness: B
-</pre>
-    <p>A printed apparatus could show:
-</p>
-    <pre>ante reason add. eternal B
-</pre>
-    <p>or:
+    <p>A possible printed form might be:
 </p>
     <pre>eternal add. B
 </pre>
-    <p>depending on the project&rsquo;s conventions.
+    <p>but again:
 </p>
-    <p>Again, the abbreviation and location formula belong to rendering.
+    <pre>add.
+</pre>
+    <p>belongs to rendering.
 </p>
-    <p>They are not part of the reading text.
-</p>
-    <h3>
-     <span class="mw-headline" id="3.4._Omission_and_addition_are_relative_descriptions">
-      3.4. Omission and addition are relative descriptions
+    <h4>
+     <span class="mw-headline" id="3.5._Omission_and_addition_depend_partly_on_editorial_perspective">
+      3.5. Omission and addition depend partly on editorial perspective
      </span>
-    </h3>
-    <p>The same textual relation may be described differently depending on the
-edited text.
+    </h4>
+    <p>Consider the same evidence:
 </p>
-    <p>Suppose:
-</p>
-    <pre>A  reason
-B  eternal reason
-C  reason
+    <pre>A   reason
+B   eternal reason
+C   reason
 </pre>
-    <p>If the edited text follows A and C:
+    <p>If the edited text reads:
 </p>
-    <pre>Reason governs all.
+    <pre>reason
 </pre>
-    <p>B may be described as adding <code>eternal</code>.
+    <p>the relation may be described as:
 </p>
-    <p>If the edited text follows B:
-</p>
-    <pre>Eternal reason governs all.
+    <pre>B adds "eternal"
 </pre>
-    <p>A and C may be described as omitting <code>eternal</code>.
+    <p>If the edited text reads:
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Edited text
-       </th>
-       <th>
-        Lemma
-       </th>
-       <th>
-        Alternative reading
-       </th>
-       <th>
-        Printed interpretation
-       </th>
-      </tr>
-      <tr>
-       <td><code>reason</code>
-</td>
-       <td>Empty
-</td>
-       <td><code>eternal</code> B
-</td>
-       <td>Addition in B
-</td>
-      </tr>
-      <tr>
-       <td><code>eternal reason</code>
-</td>
-       <td><code>eternal</code> B
-</td>
-       <td>Empty A C
-</td>
-       <td>Omission in A and C
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <p>The documentary evidence has not changed.
+    <pre>eternal reason
+</pre>
+    <p>the same evidence may be described as:
 </p>
-    <p>The lemma and the printed description depend partly on the editorial text.
+    <pre>A and C omit "eternal"
+</pre>
+    <p>The documentary evidence has not changed:
 </p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Editorial perspective matters.</b> &ldquo;Omission&rdquo; and &ldquo;addition&rdquo; describe a relation to the text selected as the lemma; they are not always intrinsic labels attached permanently to one witness.
+    <pre>             SAME EVIDENCE
+                  &boxv;
+          +-------+-------+
+          &boxv;               &boxv;
+          ▼               ▼
+lemma without         lemma with
+"eternal"             "eternal"
+          &boxv;               &boxv;
+          ▼               ▼
+addition in B         omission in A C
+</pre>
+    <p><b>How to read this diagram.</b> The documentary evidence is unchanged.
+What changes is the relation between that evidence and the selected lemma.
+&ldquo;Omission&rdquo; and &ldquo;addition&rdquo; therefore describe an editorial comparison, not
+always an intrinsic property of one witness.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Editorial perspective matters.</b>
+</p>
+     <p>&ldquo;Omission&rdquo; and &ldquo;addition&rdquo; describe a relationship between textual forms
+and the selected lemma.
+</p>
+     <p>They are not always permanent intrinsic properties of a witness.
 </p>
     </div>
-    <h3>
-     <span class="mw-headline" id="3.5._Empty_content_and_missing_markup">
-      3.5. Empty content and missing markup
+    <h4>
+     <span class="mw-headline" id="3.6._Empty_content_is_not_missing_markup">
+      3.6. Empty content is not missing markup
      </span>
-    </h3>
-    <p>These two fragments are not equivalent.
-</p>
+    </h4>
     <p>Explicit empty reading:
 </p>
-    <pre>&lt;rdg wit="#ms-B"/&gt;
+    <pre>&lt;app&gt;
+  &lt;lem wit="#ms-A #ed-C"&gt;divine&lt;/lem&gt;
+  &lt;rdg wit="#ms-B"/&gt;
+&lt;/app&gt;
 </pre>
-    <p>No reading element:
+    <p>means:
+</p>
+    <pre>B supports an empty reading
+</pre>
+    <p>while:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;divine&lt;/lem&gt;
 &lt;/app&gt;
 </pre>
-    <p>The first states:
-</p>
-    <pre>B supports an empty reading
-</pre>
-    <p>The second states only:
+    <p>means only:
 </p>
     <pre>no alternative reading has been encoded here
 </pre>
-    <p>The absence of an element does not automatically communicate the same
-information as an explicitly empty element.
+    <p>The two structures make different claims.
 </p>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the editorial vocabulary of <i>omission</i>, <i>addition</i>, <i>reading</i>,
+and <i>apparatus lemma</i>, see the
+<a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>.
+</p>
+     <p>For empty lemmas and readings in a critical apparatus, consult the TEI P5
+chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>.
+The examples in this guide continue to use the parallel-segmentation method
+declared in Guide 3.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>Our apparatus model can now distinguish textual presence from explicit
+textual absence.
+</p>
+     <p>The next step distinguishes absence from text that was physically
+written and then changed.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="4._Encoding_corrections_and_documentary_alterations">
-      4. Encoding corrections and documentary alterations
+     <span id="Part_II_&mdash;_Distinguish_evidence_from_intervention">
+     </span>
+     <span class="mw-headline" id="Part_II_.E2.80.94_Distinguish_evidence_from_intervention">
+      Part II &mdash; Distinguish evidence from intervention
      </span>
     </h2>
     <h3>
-     <span class="mw-headline" id="4.1._Corrections_and_alterations_in_witnesses">
-      4.1. Corrections and alterations in witnesses
+     <span class="mw-headline" id="4._Documentary_alterations">
+      4. Documentary alterations
      </span>
     </h3>
-    <p>A manuscript may preserve several stages of writing.
+    <p>A witness may preserve not merely a different reading, but visible
+evidence of revision.
 </p>
-    <p>For example, a copyist may first write:
+    <p>Suppose a copyist first wrote:
 </p>
     <pre>soul
 </pre>
-    <p>and then replace it with:
+    <p>and then replaced it with:
 </p>
     <pre>mind
 </pre>
-    <p>This involves two related but distinct questions:
+    <p>Two questions now appear:
 </p>
-    <pre>What reading should be associated with the witness?
-        &darr;
-mind
+    <pre>TEXTUAL QUESTION
+What reading should the edition associate with B?
+        &boxv;
+        ▼
+       mind
 
-What physical intervention is visible in the witness?
-        &darr;
+
+DOCUMENTARY QUESTION
+What happened on the manuscript page?
+        &boxv;
+        ▼
+soul written
+        &boxv;
+        ▼
 soul deleted
+        &boxv;
+        ▼
 mind added
 </pre>
-    <p>A simple critical apparatus may record only the resulting reading:
+    <p>These questions are related but not identical.
+</p>
+    <pre>                   TEXTUAL EVIDENCE
+                         &boxv;
+              +----------+----------+
+              &boxv;                     &boxv;
+              ▼                     ▼
+     CRITICAL RELATION       DOCUMENTARY HISTORY
+              &boxv;                     &boxv;
+        app / lem / rdg       del / add / subst
+              &boxv;                     &boxv;
+              +----------+----------+
+                         &boxv;
+                         ▼
+                    TEI SOURCE
+</pre>
+    <p><b>How to read this diagram.</b> The critical apparatus asks which textual
+forms are transmitted and how they relate. Documentary markup can preserve
+what physically happened in a particular witness. Guide 4 combines the two
+only when the editorial purpose requires both kinds of information.
+</p>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Two complementary levels.</b> A critical apparatus models textual
+relationships. Documentary transcription can additionally model the
+physical history of a witness. Do not add documentary detail unless it
+serves the scholarly purpose of the edition.
+</p>
+    </div>
+    <h4>
+     <span class="mw-headline" id="4.1._Minimal_textual_encoding">
+      4.1. Minimal textual encoding
+     </span>
+    </h4>
+    <p>If the edition needs only the resulting textual state:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;mind&lt;/rdg&gt;
 </pre>
-    <p>A more detailed transcription may preserve the alteration:
+    <p>may be sufficient.
+</p>
+    <h4>
+     <span class="mw-headline" id="4.2._Preserve_the_documentary_intervention">
+      4.2. Preserve the documentary intervention
+     </span>
+    </h4>
+    <p>If the alteration itself matters:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;
   &lt;subst&gt;
@@ -1166,110 +1706,75 @@ mind added
   &lt;/subst&gt;
 &lt;/rdg&gt;
 </pre>
-    <p>The choice depends on the purpose of the edition.
+    <p>The cumulative apparatus tree grows:
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Editorial purpose
-       </th>
-       <th>
-        Possible encoding
-       </th>
-      </tr>
-      <tr>
-       <td>Record only the resulting textual state
-</td>
-       <td><code>&lt;rdg&gt;mind&lt;/rdg&gt;</code>
-</td>
-      </tr>
-      <tr>
-       <td>Preserve the visible intervention
-</td>
-       <td><code>&lt;subst&gt;</code> containing <code>&lt;del&gt;</code> and <code>&lt;add&gt;</code>
-</td>
-      </tr>
-      <tr>
-       <td>Describe several hands or stages
-</td>
-       <td>Add hand, responsibility, or documentary information
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <h3>
-     <span id="4.2._The_&lt;del&gt;_element">
-     </span>
-     <span class="mw-headline" id="4.2._The_.3Cdel.3E_element">
-      4.2. The
-      <code>&lt;del&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>The element <code>&lt;del&gt;</code> identifies text that has been deleted.
-</p>
-    <p>For example:
-</p>
-    <pre>&lt;del&gt;soul&lt;/del&gt;
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;
+&boxur;&boxh;&boxh; rdg
+    &boxvr;&boxh;&boxh; witness: B
+    &boxv;
+    &boxur;&boxh;&boxh; subst                    &larr; NEW
+        &boxvr;&boxh;&boxh; del                  &larr; NEW
+        &boxv;   &boxur;&boxh;&boxh; soul
+        &boxur;&boxh;&boxh; add                  &larr; NEW
+            &boxur;&boxh;&boxh; mind
 </pre>
-    <p>It says that the word was present in the source and was subsequently
+    <h4>
+     <span class="mw-headline" id="4.3._Deletion_is_not_omission">
+      4.3. Deletion is not omission
+     </span>
+    </h4>
+    <p>A deletion says:
+</p>
+    <pre>text existed
+    &boxv;
+    ▼
+it was cancelled
+</pre>
+    <p>An omission says:
+</p>
+    <pre>no textual content is transmitted
+at this apparatus location
+</pre>
+    <p>Compare:
+</p>
+    <pre>DELETION
+
+&lt;del&gt;soul&lt;/del&gt;
+
+
+OMISSION
+
+&lt;rdg wit="#ms-B"/&gt;
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Deletion is not omission.</b>
+</p>
+     <p>Deleted text is documentary evidence that writing existed and was
 cancelled.
 </p>
-    <p>This differs from an omission:
+     <p>An empty reading represents textual absence at the collated location.
 </p>
-    <pre>omission
-    no corresponding transmitted text at this location
-
-deletion
-    text was written and then cancelled
-</pre>
-    <p>A deletion may be represented within a reading:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;
-  &lt;del&gt;soul&lt;/del&gt;
-&lt;/rdg&gt;
-</pre>
-    <p>Whether deleted text counts as the textual reading used for collation
-depends on the editorial model.
-</p>
-    <h3>
-     <span id="4.3._The_&lt;add&gt;_element">
+    </div>
+    <h4>
+     <span id="4.4._The_&lt;add&gt;_element">
      </span>
-     <span class="mw-headline" id="4.3._The_.3Cadd.3E_element">
-      4.3. The
+     <span class="mw-headline" id="4.4._The_.3Cadd.3E_element">
+      4.4. The
       <code>&lt;add&gt;</code>
       element
      </span>
-    </h3>
-    <p>The element <code>&lt;add&gt;</code> identifies text added to the source:
+    </h4>
+    <p>Added material may be represented as:
 </p>
     <pre>&lt;add&gt;mind&lt;/add&gt;
 </pre>
-    <p>It may represent:
+    <p>In a fuller documentary project, additional metadata might describe:
 </p>
     <ul>
      <li>
-      an interlinear addition;
-     </li>
-     <li>
-      a marginal addition;
-     </li>
-     <li>
-      text inserted above or below the line;
-     </li>
-     <li>
-      a later correction;
-     </li>
-     <li>
-      material supplied by another hand.
-     </li>
-    </ul>
-    <p>A detailed project may add further attributes describing:
-</p>
-    <ul>
-     <li>
-      place;
+      position;
      </li>
      <li>
       hand;
@@ -1278,31 +1783,25 @@ depends on the editorial model.
       responsibility;
      </li>
      <li>
-      sequence.
+      sequence;
+     </li>
+     <li>
+      other physical circumstances.
      </li>
     </ul>
-    <p>This guide retains only the basic structure:
+    <p>This guide retains the basic structural distinction.
 </p>
-    <pre>&lt;add&gt;mind&lt;/add&gt;
-</pre>
-    <h3>
-     <span id="4.4._The_&lt;subst&gt;_element">
+    <h4>
+     <span id="4.5._The_&lt;subst&gt;_element">
      </span>
-     <span class="mw-headline" id="4.4._The_.3Csubst.3E_element">
-      4.4. The
+     <span class="mw-headline" id="4.5._The_.3Csubst.3E_element">
+      4.5. The
       <code>&lt;subst&gt;</code>
       element
      </span>
-    </h3>
-    <p>A substitution groups a deletion and an addition belonging to the same
-intervention:
-</p>
-    <pre>&lt;subst&gt;
-  &lt;del&gt;soul&lt;/del&gt;
-  &lt;add&gt;mind&lt;/add&gt;
-&lt;/subst&gt;
-</pre>
-    <p>The tree is:
+    </h4>
+    <p>A substitution connects a deletion and an addition belonging to the
+same intervention:
 </p>
     <pre>subst
 &boxvr;&boxh;&boxh; del
@@ -1310,38 +1809,28 @@ intervention:
 &boxur;&boxh;&boxh; add
     &boxur;&boxh;&boxh; mind
 </pre>
-    <p>Inside a reading:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;
-  &lt;subst&gt;
-    &lt;del&gt;soul&lt;/del&gt;
-    &lt;add&gt;mind&lt;/add&gt;
-  &lt;/subst&gt;
-&lt;/rdg&gt;
-</pre>
-    <p>This records more than:
+    <p>That structure preserves more information than:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;mind&lt;/rdg&gt;
 </pre>
-    <p>The expanded structure states:
+    <p>because it records a process:
 </p>
-    <pre>original written form
-        &darr;
-soul
-        &darr;
+    <pre>soul
+ &boxv;
+ ▼
 deleted
-        &darr;
-replacement
-        &darr;
+ &boxv;
+ ▼
 mind
+ &boxv;
+ ▼
+added as replacement
 </pre>
-    <h3>
-     <span class="mw-headline" id="4.5._Textual_variation_and_documentary_alteration">
-      4.5. Textual variation and documentary alteration
+    <h4>
+     <span class="mw-headline" id="4.6._Apparatus_and_documentary_transcription_answer_different_questions">
+      4.6. Apparatus and documentary transcription answer different questions
      </span>
-    </h3>
-    <p>The apparatus and the source transcription answer different questions.
-</p>
+    </h4>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -1353,7 +1842,7 @@ mind
        </th>
       </tr>
       <tr>
-       <td>Which reading is supported by B?
+       <td>Which reading does B support?
 </td>
        <td>What was written first?
 </td>
@@ -1361,92 +1850,139 @@ mind
       <tr>
        <td>How does B differ from A?
 </td>
-       <td>Was the word deleted, erased, or overwritten?
+       <td>Was material deleted or overwritten?
 </td>
       </tr>
       <tr>
        <td>Which form appears in the edited text?
 </td>
-       <td>Where was the correction placed?
+       <td>Where was a correction placed?
 </td>
       </tr>
       <tr>
-       <td>Which siglum should be printed?
+       <td>Which witness siglum should appear?
 </td>
-       <td>Which hand made the intervention?
+       <td>Which hand made the change?
 </td>
       </tr>
      </tbody>
     </table>
-    <p>A project may combine the two levels, but it should not confuse them.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Two complementary levels.</b>
 </p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Two complementary questions.</b> A critical apparatus identifies competing textual readings; a documentary transcription records what happened materially on the page. Use the simplest encoding that preserves the evidence needed by the edition.
+     <p>A critical apparatus models textual relationships.
+</p>
+     <p>A documentary transcription can additionally model the physical history
+of a witness.
+</p>
+     <p>Encode only the level of detail required by the editorial purpose.
 </p>
     </div>
-    <h2>
-     <span class="mw-headline" id="5._Encoding_editorial_responsibility_and_uncertainty">
-      5. Encoding editorial responsibility and uncertainty
-     </span>
-    </h2>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For documentary additions, deletions, substitutions, and other physical
+interventions in primary sources, see the TEI P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html" rel="nofollow"><i>Representation of Primary Sources</i></a>
+and the reference pages for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-del.html" rel="nofollow"><code>&lt;del&gt;</code></a>,
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-add.html" rel="nofollow"><code>&lt;add&gt;</code></a>,
+and
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-subst.html" rel="nofollow"><code>&lt;subst&gt;</code></a>.
+</p>
+     <p>These structures document interventions in a source; they should not be
+used merely as typographical synonyms for apparatus abbreviations.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>Our apparatus can now distinguish:
+</p>
+     <pre>absence
+    &ne;
+written then deleted
+    &ne;
+replacement by another form
+</pre>
+    </div>
     <h3>
-     <span class="mw-headline" id="5.1._Editorial_conjectures">
-      5.1. Editorial conjectures
+     <span class="mw-headline" id="5._Editorial_conjecture_and_responsibility">
+      5. Editorial conjecture and responsibility
      </span>
     </h3>
-    <p>Sometimes the editor adopts a reading not directly transmitted by any
-witness.
+    <p>So far, readings have been associated with textual witnesses.
 </p>
-    <p>Suppose the witnesses read:
+    <p>But an editor may propose a reading transmitted by no witness.
 </p>
-    <pre>A  mild
-B  mild
-C  mild
+    <h4>
+     <span class="mw-headline" id="5.1._Conjectural_reading">
+      5.1. Conjectural reading
+     </span>
+    </h4>
+    <p>Suppose all witnesses read:
+</p>
+    <pre>A   mild
+B   mild
+C   mild
 </pre>
-    <p>but the editor argues that the original text was:
+    <p>but the editor argues that the text should read:
 </p>
     <pre>mind
 </pre>
-    <p>The conjectural lemma may be encoded with responsibility:
+    <p>This creates a different relationship:
+</p>
+    <pre>                   apparatus entry
+                         &boxv;
+            +------------+------------+
+            &boxv;                         &boxv;
+            ▼                         ▼
+      editorial lemma          transmitted reading
+           mind                      mild
+            &boxv;                         &boxv;
+            ▼                         ▼
+      editor responsible          A B C
+</pre>
+    <p>It would be false to write:
+</p>
+    <pre>&lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
+</pre>
+    <p>if A actually reads <code>mild</code>.
+</p>
+    <p>Instead:
 </p>
     <pre>&lt;app&gt;
   &lt;lem resp="#editor"&gt;mind&lt;/lem&gt;
   &lt;rdg wit="#ms-A #ms-B #ed-C"&gt;mild&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The <b>key distinction</b> is:
-</p>
-    <pre>wit="#ms-A"
-    support attributed to a textual witness
-
-resp="#editor"
-    responsibility attributed to an editor
-</pre>
-    <p>A conjectural reading must not be assigned to a manuscript that does not
-contain it.
-</p>
-    <p>Avoid:
-</p>
-    <pre>&lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>when A actually reads <code>mild</code>.
-</p>
-    <p>Prefer:
-</p>
-    <pre>&lt;lem resp="#editor"&gt;mind&lt;/lem&gt;
-</pre>
-    <p>with the transmitted reading encoded separately.
-</p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #d6b656; background: #fff4cc;">
-     <p><b>Never manufacture witness support.</b> A conjecture belongs to the editor&rsquo;s responsibility, even when it is adopted as the lemma. The transmitted readings must remain attributed to the witnesses that actually contain them.
-</p>
-    </div>
-    <h3>
-     <span class="mw-headline" id="5.2._Declaring_editorial_responsibility">
-      5.2. Declaring editorial responsibility
+    <h4>
+     <span class="mw-headline" id="5.2._Add_responsibility_to_the_declaration_branch">
+      5.2. Add responsibility to the declaration branch
      </span>
-    </h3>
-    <p>A minimal header can identify the responsible editor:
+    </h4>
+    <p>Until now the header contained witness identities:
+</p>
+    <pre>teiHeader
+&boxur;&boxh;&boxh; sourceDesc
+    &boxur;&boxh;&boxh; listWit
+        &boxvr;&boxh;&boxh; A
+        &boxvr;&boxh;&boxh; B
+        &boxur;&boxh;&boxh; C
+</pre>
+    <p>Guide 4 now adds another kind of identifiable object:
+</p>
+    <pre>teiHeader
+&boxvr;&boxh;&boxh; titleStmt
+&boxv;   &boxur;&boxh;&boxh; respStmt [xml:id="editor"]       &larr; NEW
+&boxv;
+&boxur;&boxh;&boxh; sourceDesc
+    &boxur;&boxh;&boxh; listWit
+        &boxvr;&boxh;&boxh; A
+        &boxvr;&boxh;&boxh; B
+        &boxur;&boxh;&boxh; C
+</pre>
+    <p>For example:
 </p>
     <pre>&lt;titleStmt&gt;
   &lt;title&gt;A teaching example of complex textual variation&lt;/title&gt;
@@ -1457,46 +1993,34 @@ contain it.
   &lt;/respStmt&gt;
 &lt;/titleStmt&gt;
 </pre>
-    <p>The apparatus can then refer to:
+    <p><br>
+The conjecture can refer to it:
 </p>
     <pre>resp="#editor"
-</pre>
-    <p>The relation is:
-</p>
-    <pre>resp="#editor"
-        &darr;
+       &boxv;
+       ▼
 find xml:id="editor"
-        &darr;
-retrieve the responsibility statement
-        &darr;
-identify the responsible editor
+       &boxv;
+       ▼
+responsibility statement
+       &boxv;
+       ▼
+Example Editor
 </pre>
-    <p>As with witness references, the XML identifier is a machine-readable
-target.
-</p>
-    <p>The printed output may use:
-</p>
-    <ul>
-     <li>
-      the editor&rsquo;s surname;
-     </li>
-     <li>
-      an abbreviation;
-     </li>
-     <li>
-      a symbol;
-     </li>
-     <li>
-      no explicit responsibility label.
-     </li>
-    </ul>
-    <h3>
-     <span class="mw-headline" id="5.3._Witness_support_and_editorial_responsibility">
-      5.3. Witness support and editorial responsibility
+    <h4>
+     <span class="mw-headline" id="5.3._Witness_support_and_responsibility_are_different_relations">
+      5.3. Witness support and responsibility are different relations
      </span>
-    </h3>
-    <p>These attributes should remain <i>conceptually distinct</i>.
-</p>
+    </h4>
+    <pre>@wit
+ &boxv;
+ &boxur;&boxh;&boxh; Which textual witnesses support this reading?
+
+
+@resp
+ &boxv;
+ &boxur;&boxh;&boxh; Who is responsible for this editorial claim?
+</pre>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -1504,7 +2028,7 @@ target.
         Attribute
        </th>
        <th>
-        Answers
+        Question
        </th>
        <th>
         Example
@@ -1513,7 +2037,7 @@ target.
       <tr>
        <td><code>@wit</code>
 </td>
-       <td>Which witnesses support this reading?
+       <td>Which witnesses support the reading?
 </td>
        <td><code>wit="#ms-A #ms-B"</code>
 </td>
@@ -1521,183 +2045,231 @@ target.
       <tr>
        <td><code>@resp</code>
 </td>
-       <td>Who is responsible for this editorial claim or intervention?
+       <td>Who is responsible for an editorial intervention?
 </td>
        <td><code>resp="#editor"</code>
 </td>
       </tr>
      </tbody>
     </table>
-    <p>A reading may sometimes carry both kinds of information, but they do not
-mean the same thing.
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Never manufacture witness support.</b>
 </p>
+     <p>A conjecture may be adopted as the lemma without being transmitted by
+any manuscript.
+</p>
+     <p>Its editorial responsibility must not be represented as fictitious
+witness support.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For responsibility and the use of <code>@resp</code>, see the TEI P5
+chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html" rel="nofollow"><i>Certainty, Precision, and Responsibility</i></a>
+and the reference for
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-att.global.responsibility.html" rel="nofollow"><code>att.global.responsibility</code></a>.
+</p>
+     <p>The tutorial points <code>@resp</code> to a declared
+<code>&lt;respStmt&gt;</code>, keeping editorial responsibility distinct
+from witness support.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="5.4._Uncertain_readings">
-      5.4. Uncertain readings
+     <span class="mw-headline" id="6._Uncertainty_and_unclear_text">
+      6. Uncertainty and unclear text
      </span>
     </h3>
-    <p>Uncertainty may concern several different things:
+    <p>A text may be uncertain for several reasons.
 </p>
-    <pre>uncertainty
-&boxvr;&boxh;&boxh; uncertain decipherment
-&boxvr;&boxh;&boxh; uncertain witness attribution
-&boxvr;&boxh;&boxh; uncertain editorial reconstruction
-&boxvr;&boxh;&boxh; uncertain grouping
-&boxur;&boxh;&boxh; uncertain degree of confidence
+    <p>Before choosing markup, identify what is uncertain:
+</p>
+    <pre>UNCERTAINTY
+    &boxv;
+    &boxvr;&boxh;&boxh; decipherment
+    &boxvr;&boxh;&boxh; whole-reading interpretation
+    &boxvr;&boxh;&boxh; witness attribution
+    &boxvr;&boxh;&boxh; editorial reconstruction
+    &boxvr;&boxh;&boxh; classification
+    &boxur;&boxh;&boxh; degree of confidence
 </pre>
-    <p>A project should state what its uncertainty markup means.
-</p>
-    <p>A low-confidence reading may be encoded as:
+    <h4>
+     <span class="mw-headline" id="6.1._Whole-reading_uncertainty">
+      6.1. Whole-reading uncertainty
+     </span>
+    </h4>
+    <p>For example:
 </p>
     <pre>&lt;rdg wit="#ms-B" cert="low"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>This records a reading whose interpretation is assigned low certainty.
+    <p>Tree:
 </p>
-    <p>The relation is:
-</p>
-    <pre>reading
-    soul
-
-witness
-    B
-
-certainty
-    low
+    <pre>rdg
+&boxvr;&boxh;&boxh; text: soul
+&boxvr;&boxh;&boxh; witness: B
+&boxur;&boxh;&boxh; certainty: low               &larr; NEW
 </pre>
-    <p>The attribute does not itself explain why the reading is uncertain.
+    <p>The reading still exists.
 </p>
-    <p>That explanation may require:
+    <p>The editor merely assigns a low degree of confidence to it.
 </p>
-    <ul>
-     <li>
-      a note;
-     </li>
-     <li>
-      a description of damage;
-     </li>
-     <li>
-      an
-      <code>&lt;unclear&gt;</code>
-      element;
-     </li>
-     <li>
-      a project-specific annotation.
-     </li>
-    </ul>
-    <h3>
-     <span id="5.5._The_&lt;unclear&gt;_element">
+    <h4>
+     <span class="mw-headline" id="6.2._Local_uncertainty">
+      6.2. Local uncertainty
      </span>
-     <span class="mw-headline" id="5.5._The_.3Cunclear.3E_element">
-      5.5. The
-      <code>&lt;unclear&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>When writing is present but difficult to decipher, the uncertain portion
-may be marked directly:
+    </h4>
+    <p>If only part of the word is difficult to read:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;
   s&lt;unclear&gt;ou&lt;/unclear&gt;l
 &lt;/rdg&gt;
 </pre>
-    <p>The structure is:
+    <p>Tree:
 </p>
     <pre>rdg
 &boxvr;&boxh;&boxh; text: s
-&boxvr;&boxh;&boxh; unclear
+&boxvr;&boxh;&boxh; unclear                      &larr; NEW
 &boxv;   &boxur;&boxh;&boxh; ou
 &boxur;&boxh;&boxh; text: l
 </pre>
-    <p>This is more precise than assigning uncertainty to the whole reading when
-only part of the word is doubtful.
+    <p>This is more precise than making the entire reading uncertain.
 </p>
-    <p>Compare:
-</p>
-    <pre>&lt;rdg wit="#ms-B" cert="low"&gt;soul&lt;/rdg&gt;
-</pre>
-    <p>with:
-</p>
-    <pre>&lt;rdg wit="#ms-B"&gt;
-  s&lt;unclear&gt;ou&lt;/unclear&gt;l
-&lt;/rdg&gt;
-</pre>
+    <h4>
+     <span class="mw-headline" id="6.3._Whole_reading_versus_local_uncertainty">
+      6.3. Whole reading versus local uncertainty
+     </span>
+    </h4>
     <table class="wikitable">
      <tbody>
       <tr>
        <th>
-        Encoding
+        Structure
        </th>
        <th>
-        Scope of uncertainty
+        Scope
        </th>
       </tr>
       <tr>
        <td><code>cert="low"</code> on <code>&lt;rdg&gt;</code>
 </td>
-       <td>The reading as a whole
+       <td>Reading as a whole
 </td>
       </tr>
       <tr>
-       <td><code>&lt;unclear&gt;</code> around part of the text
+       <td><code>&lt;unclear&gt;</code>
 </td>
-       <td>The marked characters or words
+       <td>Only the marked textual portion
 </td>
       </tr>
      </tbody>
     </table>
-    <h3>
-     <span class="mw-headline" id="5.6._Uncertain_is_not_empty">
-      5.6. Uncertain is not empty
+    <h4>
+     <span class="mw-headline" id="6.4._Uncertain_is_not_empty">
+      6.4. Uncertain is not empty
      </span>
-    </h3>
-    <p>Do not replace an uncertain reading with an empty element merely because
-the editor cannot read it confidently.
+    </h4>
+    <p>Compare:
 </p>
-    <p>Empty reading:
-</p>
-    <pre>&lt;rdg wit="#ms-B"/&gt;
+    <pre>EMPTY
+
+&lt;rdg wit="#ms-B"/&gt;
 </pre>
-    <p>Uncertain reading:
+    <p>with:
 </p>
-    <pre>&lt;rdg wit="#ms-B" cert="low"&gt;soul&lt;/rdg&gt;
+    <pre>UNCERTAIN
+
+&lt;rdg wit="#ms-B" cert="low"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>Partly unclear reading:
+    <p>and:
 </p>
-    <pre>&lt;rdg wit="#ms-B"&gt;
+    <pre>PARTLY UNCLEAR
+
+&lt;rdg wit="#ms-B"&gt;
   s&lt;unclear&gt;ou&lt;/unclear&gt;l
 &lt;/rdg&gt;
 </pre>
-    <p>These encode <b>three different editorial claims</b>.
+    <p>They express three different claims:
 </p>
+    <pre>no text
+     &ne;
+text interpreted with low certainty
+     &ne;
+text partly difficult to decipher
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Uncertainty is information, not absence.</b>
+</p>
+     <p>Do not convert a doubtful or partly illegible reading into an empty
+reading merely because its interpretation is difficult.
+</p>
+    </div>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>The apparatus can now state not only <i>what</i> a witness appears to read,
+but also the scope and degree of uncertainty in that interpretation.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For uncertainty attached to an intervention or interpretation, see the TEI
+P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/CE.html" rel="nofollow"><i>Certainty, Precision, and Responsibility</i></a>.
+</p>
+     <p>For locally difficult transcription, see
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-unclear.html" rel="nofollow"><code>&lt;unclear&gt;</code></a>.
+The symbolic values used by <code>@cert</code> include
+<code>high</code>, <code>medium</code>, <code>low</code>, and
+<code>unknown</code>.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="6._Encoding_relationships_between_readings">
-      6. Encoding relationships between readings
+     <span id="Part_III_&mdash;_Describe_relations_of_greater_complexity">
+     </span>
+     <span class="mw-headline" id="Part_III_.E2.80.94_Describe_relations_of_greater_complexity">
+      Part III &mdash; Describe relations of greater complexity
      </span>
     </h2>
     <h3>
-     <span class="mw-headline" id="6.1._Grouping_related_readings">
-      6.1. Grouping related readings
+     <span class="mw-headline" id="7._Related_readings">
+      7. Related readings
      </span>
     </h3>
-    <p>Several readings may belong to a meaningful family.
+    <p>So far, alternative readings have been siblings:
 </p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxvr;&boxh;&boxh; rdg
+&boxvr;&boxh;&boxh; rdg
+&boxur;&boxh;&boxh; rdg
+</pre>
+    <p>Sometimes the editor wants to state that some of those readings form a
+meaningful subgroup.
+</p>
+    <h4>
+     <span class="mw-headline" id="7.1._A_group_of_readings">
+      7.1. A group of readings
+     </span>
+    </h4>
     <p>Suppose:
 </p>
-    <pre>A  mind
-B  soul
-C  understanding
-D  intellect
+    <pre>A   mind
+B   soul
+C   understanding
+D   intellect
 </pre>
-    <p>The editor may distinguish:
+    <p>The editor analyses:
 </p>
     <pre>substantive alternatives
 &boxvr;&boxh;&boxh; soul
 &boxur;&boxh;&boxh; understanding
 
-lexically related form
+another reading
 &boxur;&boxh;&boxh; intellect
 </pre>
-    <p>A reading group can make the classification explicit:
+    <p>TEI can make this classification explicit:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
@@ -1710,145 +2282,153 @@ lexically related form
   &lt;rdg wit="#ms-D"&gt;intellect&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The structure becomes:
+    <p>Our tree grows again:
 </p>
     <pre>app
 &boxvr;&boxh;&boxh; lem
 &boxv;   &boxur;&boxh;&boxh; mind
-&boxvr;&boxh;&boxh; rdgGrp [type="substantive"]
+&boxv;
+&boxvr;&boxh;&boxh; rdgGrp [type="substantive"]       &larr; NEW
 &boxv;   &boxvr;&boxh;&boxh; rdg
 &boxv;   &boxv;   &boxur;&boxh;&boxh; soul
 &boxv;   &boxur;&boxh;&boxh; rdg
 &boxv;       &boxur;&boxh;&boxh; understanding
+&boxv;
 &boxur;&boxh;&boxh; rdg
     &boxur;&boxh;&boxh; intellect
 </pre>
-    <h3>
-     <span id="6.2._The_&lt;rdgGrp&gt;_element">
+    <h4>
+     <span class="mw-headline" id="7.2._Grouping_is_an_editorial_claim">
+      7.2. Grouping is an editorial claim
      </span>
-     <span class="mw-headline" id="6.2._The_.3CrdgGrp.3E_element">
-      6.2. The
-      <code>&lt;rdgGrp&gt;</code>
-      element
-     </span>
-    </h3>
-    <p>The element <code>&lt;rdgGrp&gt;</code> groups related readings within an
-apparatus entry.
-</p>
-    <p>A simple example is:
-</p>
-    <pre>&lt;rdgGrp type="orthographic"&gt;
-  &lt;rdg wit="#ms-B"&gt;colour&lt;/rdg&gt;
-  &lt;rdg wit="#ed-C"&gt;color&lt;/rdg&gt;
-&lt;/rdgGrp&gt;
-</pre>
-    <p>The group may represent a project-specific classification such as:
-</p>
-    <ul>
-     <li>
-      orthographic;
-     </li>
-     <li>
-      grammatical;
-     </li>
-     <li>
-      substantive;
-     </li>
-     <li>
-      genealogical;
-     </li>
-     <li>
-      corrected;
-     </li>
-     <li>
-      secondary.
-     </li>
-    </ul>
-    <p>The value of <code>@type</code> should be documented by the project.
-</p>
-    <p>The group does not automatically assert that the readings are identical.
-</p>
-    <p>It states that the encoder has chosen to treat them as belonging together
-for a declared purpose.
-</p>
-    <h3>
-     <span class="mw-headline" id="6.3._Grouping_is_an_editorial_claim">
-      6.3. Grouping is an editorial claim
-     </span>
-    </h3>
-    <p>Consider:
+    </h4>
+    <p>For example:
 </p>
     <pre>&lt;rdgGrp type="orthographic"&gt;
   &lt;rdg wit="#ms-B"&gt;honour&lt;/rdg&gt;
   &lt;rdg wit="#ed-C"&gt;honor&lt;/rdg&gt;
 &lt;/rdgGrp&gt;
 </pre>
-    <p>The grouping asserts:
+    <p>means:
 </p>
     <pre>honour
-and
+   \
+    +&boxh;&boxh; treated as orthographically related
+   /
 honor
-        &darr;
-treated as orthographically related
 </pre>
-    <p>A different project might preserve them as entirely independent readings.
+    <p>Another project might choose not to group them.
 </p>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Classification is not automatically grouping.</b> Two readings may both
+be classified as substantive or orthographic without necessarily forming a
+meaningful <code>&lt;rdgGrp&gt;</code>. The group should express an
+editorially significant affinity between the readings.
+</p>
+    </div>
     <p>Therefore:
 </p>
-    <pre>grouping
-        &ne;
-neutral formatting convenience
+    <pre>GROUPING
+   &ne;
+VISUAL CONVENIENCE
 </pre>
-    <p>It is structured editorial interpretation.
+    <p>It is part of the project's analytical model.
 </p>
-    <div style="margin: 1.2em 0; padding: 0.8em 1em; border-left: 4px solid #4f81bd; background: #eef6fc;">
-     <p><b>Grouping is data.</b> A reading group should express a documented analytical category, not merely provide a convenient visual arrangement.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Grouping is data.</b>
+</p>
+     <p>A <code>&lt;rdgGrp&gt;</code> should express a documented editorial or
+analytical relationship between readings, not merely make the XML or
+printed output look tidier.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b>
+</p>
+     <p>Values such as <code>orthographic</code> or <code>substantive</code>
+should belong to a documented project vocabulary. The grouping category
+is part of the encoding policy.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For groups of related readings, see
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/ref-rdgGrp.html" rel="nofollow"><code>&lt;rdgGrp&gt;</code></a>
+and the TEI P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>.
+</p>
+     <p>A reading group should represent a meaningful analytical or genetic
+affinity, not merely a convenient visual grouping.
 </p>
     </div>
     <h3>
-     <span class="mw-headline" id="6.4._Transposed_word_order">
-      6.4. Transposed word order
+     <span class="mw-headline" id="8._Local_variation_in_word_order">
+      8. Local variation in word order
      </span>
     </h3>
-    <p>Suppose that the witnesses read:
+    <p>Suppose:
 </p>
-    <pre>A  reason and freedom
-B  freedom and reason
-C  reason and freedom
+    <pre>A   reason and freedom
+B   freedom and reason
+C   reason and freedom
 </pre>
-    <p>For a basic critical apparatus, the divergent order can be encoded as a
-complete reading:
+    <p>The variation is not simply one word replacing another.
+</p>
+    <p>It concerns sequence:
+</p>
+    <pre>A C
+reason &rarr; and &rarr; freedom
+
+B
+freedom &rarr; and &rarr; reason
+</pre>
+    <p>For a basic critical apparatus, the complete sequences can remain
+readings:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;reason and freedom&lt;/lem&gt;
   &lt;rdg wit="#ms-B"&gt;freedom and reason&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The tree is:
+    <p>Tree:
 </p>
     <pre>app
 &boxvr;&boxh;&boxh; lem
 &boxv;   &boxvr;&boxh;&boxh; reason and freedom
-&boxv;   &boxur;&boxh;&boxh; witnesses: A C
+&boxv;   &boxur;&boxh;&boxh; A C
 &boxur;&boxh;&boxh; rdg
     &boxvr;&boxh;&boxh; freedom and reason
-    &boxur;&boxh;&boxh; witness: B
+    &boxur;&boxh;&boxh; B
 </pre>
-    <p>A possible printed apparatus is:
+    <p>The model established in Guide 3 still works.
 </p>
-    <pre>reason and freedom] freedom and reason B
-</pre>
-    <p>This encoding records the textual result.
+    <p>What changed is the extent and internal order of the textual forms.
 </p>
-    <p>It does not describe physical transposition marks in the manuscript.
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Local word-order variation is not every kind of transposition.</b> The
+example above compares two complete local sequences inside one apparatus
+entry. A transposition distributed across several textual locations, or
+one physically marked in a manuscript, may require a more elaborate
+encoding model.
 </p>
-    <h3>
-     <span class="mw-headline" id="6.5._Textual_order_and_documentary_transposition">
-      6.5. Textual order and documentary transposition
+    </div>
+    <h4>
+     <span class="mw-headline" id="8.1._Local_word-order_variation_versus_documentary_or_multi-location_transposition">
+      8.1. Local word-order variation versus documentary or multi-location transposition
      </span>
-    </h3>
-    <p>Two different phenomena must be distinguished.
+    </h4>
+    <p>Distinguish:
 </p>
+    <pre>TEXTUAL VARIATION
+"What sequence does B transmit?"
+
+           versus
+
+DOCUMENTARY TRANSPOSTION
+"What marks or interventions on the physical page
+indicate that text should be reordered?"
+</pre>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -1859,7 +2439,7 @@ complete reading:
         Question
        </th>
        <th>
-        Strategy used here
+        Strategy here
        </th>
       </tr>
       <tr>
@@ -1867,44 +2447,46 @@ complete reading:
 </td>
        <td>What sequence does the witness transmit?
 </td>
-       <td>Encode the sequence as a complete <code>&lt;rdg&gt;</code>
+       <td>Encode the complete sequence in <code>&lt;rdg&gt;</code>
 </td>
       </tr>
       <tr>
-       <td>Physical transposition marks
+       <td>Documentary transposition
 </td>
-       <td>How does the document instruct the reader to reorder written segments?
+       <td>What physical signs instruct reordering?
 </td>
-       <td>Use detailed primary-source transcription structures
+       <td>Requires more detailed primary-source transcription
 </td>
       </tr>
      </tbody>
     </table>
-    <p>A detailed documentary transcription may identify segments and describe
-their intended reordered sequence with pointers.
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
 </p>
-    <p>That additional model is not required merely to record:
+     <p>For more complex transpositions involving several locations, consult the
+TEI P5 chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>.
+For physically marked reordering in primary-source transcription, see the
+TEI mechanisms around <code>&lt;metamark&gt;</code>,
+<code>&lt;listTranspose&gt;</code>, and
+<code>&lt;transpose&gt;</code> in
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/PH.html" rel="nofollow"><i>Representation of Primary Sources</i></a>.
 </p>
-    <pre>reason and freedom
-        versus
-freedom and reason
-</pre>
-    <p>in a basic textual apparatus.
-</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="6.6._Variants_of_unequal_extent">
-      6.6. Variants of unequal extent
+     <span class="mw-headline" id="9._Variants_of_unequal_extent">
+      9. Variants of unequal extent
      </span>
     </h3>
-    <p>A lemma and its reading need not contain the same number of words.
+    <p>A lemma and reading need not contain the same number of words.
 </p>
     <p>Suppose:
 </p>
-    <pre>A  divine and eternal reason
-B  reason
-C  divine reason
+    <pre>A   divine and eternal reason
+B   reason
+C   divine reason
 </pre>
-    <p>One apparatus entry may encode:
+    <p>The apparatus can simply record competing spans:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;divine and eternal reason&lt;/lem&gt;
@@ -1912,33 +2494,36 @@ C  divine reason
   &lt;rdg wit="#ed-C"&gt;divine reason&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>The structure is:
+    <p>Tree:
 </p>
     <pre>app
-&boxvr;&boxh;&boxh; lemma
+&boxvr;&boxh;&boxh; lem
 &boxv;   &boxur;&boxh;&boxh; divine and eternal reason
-&boxvr;&boxh;&boxh; reading
+&boxvr;&boxh;&boxh; rdg
 &boxv;   &boxur;&boxh;&boxh; reason
-&boxur;&boxh;&boxh; reading
+&boxur;&boxh;&boxh; rdg
     &boxur;&boxh;&boxh; divine reason
 </pre>
-    <p>The entry records competing textual spans rather than word-by-word
-alignment.
+    <p>The relation is not:
 </p>
-    <h3>
-     <span class="mw-headline" id="6.7._Choosing_apparatus_boundaries">
-      6.7. Choosing apparatus boundaries
-     </span>
-    </h3>
-    <p>The editor must decide how much text belongs to one apparatus entry.
-</p>
-    <p>Consider:
-</p>
-    <pre>A  divine and eternal reason
-B  reason
-C  divine reason
+    <pre>word 1 &harr; word 1
+word 2 &harr; word 2
+word 3 &harr; word 3
 </pre>
-    <p>One broad entry is:
+    <p>It is:
+</p>
+    <pre>COMPETING TEXTUAL SPANS
+       &boxv;
+       &boxvr;&boxh;&boxh; divine and eternal reason
+       &boxvr;&boxh;&boxh; reason
+       &boxur;&boxh;&boxh; divine reason
+</pre>
+    <h4>
+     <span class="mw-headline" id="9.1._Apparatus_boundaries_are_editorial_decisions">
+      9.1. Apparatus boundaries are editorial decisions
+     </span>
+    </h4>
+    <p>The same evidence could be encoded broadly:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A"&gt;divine and eternal reason&lt;/lem&gt;
@@ -1946,7 +2531,7 @@ C  divine reason
   &lt;rdg wit="#ed-C"&gt;divine reason&lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>A more analytical encoding might divide the variation:
+    <p>or analysed into narrower locations:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;divine&lt;/lem&gt;
@@ -1960,8 +2545,23 @@ C  divine reason
 
 reason
 </pre>
-    <p>These encodings are not interchangeable editorially.
+    <p>These are not merely two formatting choices.
 </p>
+    <p>They express different analyses:
+</p>
+    <pre>BROAD SEGMENTATION
+
+[ divine and eternal reason ]
+              &boxv;
+              &boxur;&boxh;&boxh; one variation unit
+
+
+NARROW SEGMENTATION
+
+[ divine ] [ and eternal ] reason
+    &boxv;             &boxv;
+    &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhu;&boxh;&boxh; separate variation units
+</pre>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -1973,42 +2573,61 @@ reason
        </th>
       </tr>
       <tr>
-       <td>Preserves the larger phrase as one variant unit
+       <td>Preserves phrase as one variation unit
 </td>
-       <td>Separates individual differences
-</td>
-      </tr>
-      <tr>
-       <td>Easier to read as a phrase-level relation
-</td>
-       <td>Easier to analyse component by component
+       <td>Analyses component differences separately
 </td>
       </tr>
       <tr>
-       <td>May conceal internal agreements
+       <td>Easier to understand as a larger relation
 </td>
-       <td>May fragment a meaningful variant
+       <td>Easier to inspect component by component
 </td>
       </tr>
       <tr>
-       <td>Produces one apparatus entry
+       <td>May conceal internal agreement
 </td>
-       <td>Produces several apparatus entries
+       <td>May fragment a meaningful variation
 </td>
       </tr>
      </tbody>
     </table>
-    <p>There is no universally correct boundary independent of <i>editorial purpose</i>.
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Segmentation is interpretation.</b>
 </p>
-    <p>The project should apply a consistent segmentation policy.
+     <p>There is no universally correct apparatus boundary independent of
+editorial purpose.
 </p>
+     <p>A project should adopt a consistent segmentation policy and document it.
+</p>
+    </div>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For the relation between apparatus entries and textual locations, including
+parallel segmentation and alternative linking methods, see the TEI P5
+chapter
+<a class="external text" href="https://www.tei-c.org/release/doc/tei-p5-doc/en/html/TC.html" rel="nofollow"><i>Critical Apparatus</i></a>.
+</p>
+     <p>The examples here use one project-level segmentation policy; another
+edition may choose broader or narrower variation units for scholarly
+reasons.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="6.8._Combining_several_complex_phenomena">
-      6.8. Combining several complex phenomena
+     <span class="mw-headline" id="10._Combining_several_kinds_of_complexity">
+      10. Combining several kinds of complexity
      </span>
     </h3>
-    <p>One apparatus entry may combine more than one feature.
+    <p>The categories introduced above are not mutually exclusive.
 </p>
+    <p>One apparatus entry can contain several kinds of information.
+</p>
+    <h4>
+     <span class="mw-headline" id="10.1._Conjecture_plus_uncertainty">
+      10.1. Conjecture plus uncertainty
+     </span>
+    </h4>
     <p>For example:
 </p>
     <pre>&lt;app&gt;
@@ -2021,23 +2640,32 @@ reason
   &lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>This records:
+    <p>The tree now contains several layers:
 </p>
-    <pre>lemma
-&boxvr;&boxh;&boxh; text: mind
-&boxur;&boxh;&boxh; responsibility: editor
-
-reading 1
-&boxvr;&boxh;&boxh; text: mild
-&boxur;&boxh;&boxh; witnesses: A C
-
-reading 2
-&boxvr;&boxh;&boxh; text: mild
-&boxvr;&boxh;&boxh; uncertain internal characters
-&boxvr;&boxh;&boxh; witness: B
-&boxur;&boxh;&boxh; overall certainty: low
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxvr;&boxh;&boxh; text: mind
+&boxv;   &boxur;&boxh;&boxh; responsibility: editor
+&boxv;
+&boxvr;&boxh;&boxh; rdg
+&boxv;   &boxvr;&boxh;&boxh; text: mild
+&boxv;   &boxur;&boxh;&boxh; witnesses: A C
+&boxv;
+&boxur;&boxh;&boxh; rdg
+    &boxvr;&boxh;&boxh; witness: B
+    &boxvr;&boxh;&boxh; certainty: low
+    &boxur;&boxh;&boxh; text
+        &boxvr;&boxh;&boxh; m
+        &boxvr;&boxh;&boxh; unclear
+        &boxv;   &boxur;&boxh;&boxh; il
+        &boxur;&boxh;&boxh; d
 </pre>
-    <p>Another example may preserve a correction:
+    <h4>
+     <span class="mw-headline" id="10.2._Reading_plus_documentary_substitution">
+      10.2. Reading plus documentary substitution
+     </span>
+    </h4>
+    <p>Another entry may contain:
 </p>
     <pre>&lt;app&gt;
   &lt;lem wit="#ms-A #ed-C"&gt;mind&lt;/lem&gt;
@@ -2050,17 +2678,113 @@ reading 2
   &lt;/rdg&gt;
 &lt;/app&gt;
 </pre>
-    <p>Complexity should be introduced only when it represents information the
-edition actually needs.
+    <p>Tree:
 </p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem: mind
+&boxv;   &boxur;&boxh;&boxh; A C
+&boxv;
+&boxur;&boxh;&boxh; rdg
+    &boxvr;&boxh;&boxh; B
+    &boxur;&boxh;&boxh; subst
+        &boxvr;&boxh;&boxh; del: soul
+        &boxur;&boxh;&boxh; add: mind
+</pre>
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Complexity is not a goal in itself.</b>
+</p>
+     <p>Do not add nested structures merely because TEI permits them.
+</p>
+     <p>Use them when they preserve distinctions that matter to the scholarly
+purpose of the edition.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="7._A_model_collection_of_complex_cases">
-      7. A model collection of complex cases
+     <span id="Part_IV_&mdash;_Complete,_check,_and_inspect_the_model">
+     </span>
+     <span class="mw-headline" id="Part_IV_.E2.80.94_Complete.2C_check.2C_and_inspect_the_model">
+      Part IV &mdash; Complete, check, and inspect the model
      </span>
     </h2>
-    <p>The following examples summarise the principal structures introduced in
-this guide.
+    <h3>
+     <span class="mw-headline" id="11._The_cumulative_mental_model">
+      11. The cumulative mental model
+     </span>
+    </h3>
+    <p>We can now place all additions to the Guide 3 apparatus model on one
+map.
 </p>
+    <pre>BASIC APPARATUS
+Guide 3
+
+app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxur;&boxh;&boxh; @wit
+&boxur;&boxh;&boxh; rdg
+    &boxur;&boxh;&boxh; @wit
+
+        &boxv;
+        &boxv; Guide 4 adds
+        ▼
+
+COMPLEX APPARATUS
+
+app
+&boxvr;&boxh;&boxh; lem
+&boxv;   &boxvr;&boxh;&boxh; text or empty
+&boxv;   &boxvr;&boxh;&boxh; @wit
+&boxv;   &boxur;&boxh;&boxh; @resp
+&boxv;
+&boxvr;&boxh;&boxh; rdg
+&boxv;   &boxvr;&boxh;&boxh; text or empty
+&boxv;   &boxvr;&boxh;&boxh; @wit
+&boxv;   &boxvr;&boxh;&boxh; @resp
+&boxv;   &boxvr;&boxh;&boxh; @cert
+&boxv;   &boxvr;&boxh;&boxh; unclear
+&boxv;   &boxur;&boxh;&boxh; subst
+&boxv;       &boxvr;&boxh;&boxh; del
+&boxv;       &boxur;&boxh;&boxh; add
+&boxv;
+&boxur;&boxh;&boxh; rdgGrp
+    &boxur;&boxh;&boxh; related rdg elements
+</pre>
+    <p>At the level of editorial questions:
+</p>
+    <pre>WHAT EXISTS?
+     &boxv;
+     &boxur;&boxh;&boxh; witnesses                     Guide 2
+             &boxv;
+             ▼
+WHAT DIFFERS?
+     &boxv;
+     &boxur;&boxh;&boxh; lem / rdg                     Guide 3
+             &boxv;
+             ▼
+HOW DOES IT DIFFER?
+     &boxv;
+     &boxvr;&boxh;&boxh; empty / non-empty             Guide 4
+     &boxvr;&boxh;&boxh; deleted / added
+     &boxvr;&boxh;&boxh; conjectured
+     &boxvr;&boxh;&boxh; uncertain
+     &boxvr;&boxh;&boxh; grouped
+     &boxvr;&boxh;&boxh; reordered
+     &boxur;&boxh;&boxh; different extent
+</pre>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>The document no longer records merely that witnesses differ.
+</p>
+     <p>It can now record <i>how</i> they differ and which parts of that description
+come from documentary evidence, witness support, or editorial
+interpretation.
+</p>
+    </div>
+    <h4>
+     <span class="mw-headline" id="11.1._Compact_reference_to_the_structures_introduced">
+      11.1. Compact reference to the structures introduced
+     </span>
+    </h4>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -2068,7 +2792,7 @@ this guide.
         Phenomenon
        </th>
        <th>
-        Basic TEI form
+        Basic TEI structure
        </th>
       </tr>
       <tr>
@@ -2080,17 +2804,17 @@ this guide.
       <tr>
        <td>Addition
 </td>
-       <td>Empty lemma plus a non-empty reading
+       <td>Empty lemma plus non-empty reading
 </td>
       </tr>
       <tr>
-       <td>Deletion
+       <td>Deleted text
 </td>
        <td><code>&lt;del&gt;...&lt;/del&gt;</code>
 </td>
       </tr>
       <tr>
-       <td>Addition to a source
+       <td>Added documentary text
 </td>
        <td><code>&lt;add&gt;...&lt;/add&gt;</code>
 </td>
@@ -2098,19 +2822,19 @@ this guide.
       <tr>
        <td>Substitution
 </td>
-       <td><code>&lt;subst&gt;&lt;del&gt;...&lt;/del&gt;&lt;add&gt;...&lt;/add&gt;&lt;/subst&gt;</code>
+       <td><code>&lt;subst&gt;</code> containing <code>&lt;del&gt;</code> and <code>&lt;add&gt;</code>
 </td>
       </tr>
       <tr>
        <td>Conjecture
 </td>
-       <td>Lemma or reading with <code>@resp</code>
+       <td>Reading or lemma with <code>@resp</code>
 </td>
       </tr>
       <tr>
        <td>Low certainty
 </td>
-       <td>Reading with <code>cert="low"</code>
+       <td><code>cert="low"</code>
 </td>
       </tr>
       <tr>
@@ -2120,31 +2844,33 @@ this guide.
 </td>
       </tr>
       <tr>
-       <td>Reading group
+       <td>Related readings
 </td>
        <td><code>&lt;rdgGrp&gt;...&lt;/rdgGrp&gt;</code>
 </td>
       </tr>
       <tr>
-       <td>Transposed order
+       <td>Changed word order
 </td>
-       <td>Complete reordered text inside <code>&lt;rdg&gt;</code>
+       <td>Complete reordered text in <code>&lt;rdg&gt;</code>
 </td>
       </tr>
       <tr>
        <td>Unequal extent
 </td>
-       <td>Lemma and readings containing spans of different lengths
+       <td>Complete competing textual spans
 </td>
       </tr>
      </tbody>
     </table>
-    <h2>
-     <span class="mw-headline" id="8._Complete_TEI_MWE">
-      8. Complete TEI MWE
+    <h3>
+     <span class="mw-headline" id="12._Build_the_complete_Guide_4_TEI_document">
+      12. Build the complete Guide 4 TEI document
      </span>
-    </h2>
-    <p>Save the following file as:
+    </h3>
+    <p>The teaching file combines the phenomena introduced above.
+</p>
+    <p>Save it as:
 </p>
     <pre>tei-guide-04.xml
 </pre>
@@ -2153,6 +2879,7 @@ this guide.
 &lt;TEI xmlns="http://www.tei-c.org/ns/1.0"&gt;
   &lt;teiHeader&gt;
     &lt;fileDesc&gt;
+
       &lt;titleStmt&gt;
         &lt;title&gt;Complex textual variation in TEI&lt;/title&gt;
 
@@ -2168,6 +2895,7 @@ this guide.
 
       &lt;sourceDesc&gt;
         &lt;listWit&gt;
+
           &lt;witness xml:id="ms-A" n="A"&gt;
             The principal manuscript.
           &lt;/witness&gt;
@@ -2183,13 +2911,24 @@ this guide.
           &lt;witness xml:id="ms-D" n="D"&gt;
             A manuscript containing several secondary readings.
           &lt;/witness&gt;
+
         &lt;/listWit&gt;
       &lt;/sourceDesc&gt;
+
     &lt;/fileDesc&gt;
+
+    &lt;encodingDesc&gt;
+      &lt;variantEncoding
+        method="parallel-segmentation"
+        location="internal"/&gt;
+    &lt;/encodingDesc&gt;
+
   &lt;/teiHeader&gt;
+
 
   &lt;text&gt;
     &lt;body&gt;
+
       &lt;p xml:id="p1"&gt;The
         &lt;app type="omission"&gt;
           &lt;lem wit="#ms-A #ed-C #ms-D"&gt;divine&lt;/lem&gt;
@@ -2198,22 +2937,27 @@ this guide.
         reason governs all.
       &lt;/p&gt;
 
-&lt;p xml:id="p2"&gt;&lt;app type="addition"&gt;&lt;lem
-wit="#ms-A #ed-C #ms-D"/&gt;&lt;rdg
-wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
+
+      &lt;p xml:id="p2"&gt;&lt;app type="addition"&gt;&lt;lem
+      wit="#ms-A #ed-C #ms-D"/&gt;&lt;rdg
+      wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
+
 
       &lt;p xml:id="p3"&gt;The
         &lt;app type="correction"&gt;
           &lt;lem wit="#ms-A #ed-C #ms-D"&gt;mind&lt;/lem&gt;
+
           &lt;rdg wit="#ms-B"&gt;
             &lt;subst&gt;
               &lt;del&gt;soul&lt;/del&gt;
               &lt;add&gt;mind&lt;/add&gt;
             &lt;/subst&gt;
           &lt;/rdg&gt;
+
         &lt;/app&gt;
         seeks unity.
       &lt;/p&gt;
+
 
       &lt;p xml:id="p4"&gt;The
         &lt;app type="conjecture"&gt;
@@ -2223,15 +2967,19 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
         seeks unity.
       &lt;/p&gt;
 
+
       &lt;p xml:id="p5"&gt;The
         &lt;app type="uncertain-reading"&gt;
           &lt;lem wit="#ms-A #ed-C #ms-D"&gt;mind&lt;/lem&gt;
+
           &lt;rdg wit="#ms-B" cert="low"&gt;
             s&lt;unclear&gt;ou&lt;/unclear&gt;l
           &lt;/rdg&gt;
+
         &lt;/app&gt;
         seeks unity.
       &lt;/p&gt;
+
 
       &lt;p xml:id="p6"&gt;The
         &lt;app type="grouped-readings"&gt;
@@ -2247,13 +2995,15 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
         seeks unity.
       &lt;/p&gt;
 
+
       &lt;p xml:id="p7"&gt;
-        &lt;app type="transposed-order"&gt;
+        &lt;app type="local-word-order"&gt;
           &lt;lem wit="#ms-A #ed-C #ms-D"&gt;reason and freedom&lt;/lem&gt;
           &lt;rdg wit="#ms-B"&gt;freedom and reason&lt;/rdg&gt;
         &lt;/app&gt;
         belong together.
       &lt;/p&gt;
+
 
       &lt;p xml:id="p8"&gt;
         &lt;app type="unequal-extent"&gt;
@@ -2263,12 +3013,19 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
         &lt;/app&gt;
         governs all.
       &lt;/p&gt;
+
     &lt;/body&gt;
   &lt;/text&gt;
+
 &lt;/TEI&gt;
 </pre>
-    <p>This teaching document contains eight apparatus entries:
-</p>
+    <h4>
+     <span id="12.1._Eight_examples,_one_progressively_enriched_model">
+     </span>
+     <span class="mw-headline" id="12.1._Eight_examples.2C_one_progressively_enriched_model">
+      12.1. Eight examples, one progressively enriched model
+     </span>
+    </h4>
     <table class="wikitable">
      <tbody>
       <tr>
@@ -2317,7 +3074,7 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
       <tr>
        <td><code>p5</code>
 </td>
-       <td>Uncertain reading
+       <td>Uncertainty
 </td>
        <td><code>@cert</code> and <code>&lt;unclear&gt;</code>
 </td>
@@ -2333,9 +3090,9 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
       <tr>
        <td><code>p7</code>
 </td>
-       <td>Transposed order
+       <td>Local word-order variation
 </td>
-       <td>Reordered reading text
+       <td>Complete reordered reading
 </td>
       </tr>
       <tr>
@@ -2343,39 +3100,50 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
 </td>
        <td>Unequal extent
 </td>
-       <td>Textual spans of different lengths
+       <td>Competing spans of different lengths
 </td>
       </tr>
      </tbody>
     </table>
-    <h3>
-     <span class="mw-headline" id="8.1._Reading_the_complete_document_as_a_tree">
-      8.1. Reading the complete document as a tree
+    <h4>
+     <span class="mw-headline" id="12.2._Read_the_complete_TEI_tree">
+      12.2. Read the complete TEI tree
      </span>
-    </h3>
+    </h4>
     <pre>TEI
 &boxvr;&boxh;&boxh; teiHeader
 &boxv;   &boxur;&boxh;&boxh; fileDesc
 &boxv;       &boxvr;&boxh;&boxh; titleStmt
 &boxv;       &boxv;   &boxvr;&boxh;&boxh; title
 &boxv;       &boxv;   &boxur;&boxh;&boxh; respStmt [xml:id="editor"]
+&boxv;       &boxv;
 &boxv;       &boxvr;&boxh;&boxh; publicationStmt
+&boxv;       &boxv;
 &boxv;       &boxur;&boxh;&boxh; sourceDesc
 &boxv;           &boxur;&boxh;&boxh; listWit
 &boxv;               &boxvr;&boxh;&boxh; witness A
 &boxv;               &boxvr;&boxh;&boxh; witness B
 &boxv;               &boxvr;&boxh;&boxh; witness C
 &boxv;               &boxur;&boxh;&boxh; witness D
+&boxv;
+&boxv;   &boxur;&boxh;&boxh; encodingDesc
+&boxv;       &boxur;&boxh;&boxh; variantEncoding
+&boxv;           &boxvr;&boxh;&boxh; method="parallel-segmentation"
+&boxv;           &boxur;&boxh;&boxh; location="internal"
+&boxv;
 &boxur;&boxh;&boxh; text
     &boxur;&boxh;&boxh; body
+        &boxv;
         &boxvr;&boxh;&boxh; p1
         &boxv;   &boxur;&boxh;&boxh; app [omission]
         &boxv;       &boxvr;&boxh;&boxh; lem: divine
-        &boxv;       &boxur;&boxh;&boxh; rdg: empty
+        &boxv;       &boxur;&boxh;&boxh; rdg: EMPTY
+        &boxv;
         &boxvr;&boxh;&boxh; p2
         &boxv;   &boxur;&boxh;&boxh; app [addition]
-        &boxv;       &boxvr;&boxh;&boxh; lem: empty
+        &boxv;       &boxvr;&boxh;&boxh; lem: EMPTY
         &boxv;       &boxur;&boxh;&boxh; rdg: Eternal
+        &boxv;
         &boxvr;&boxh;&boxh; p3
         &boxv;   &boxur;&boxh;&boxh; app [correction]
         &boxv;       &boxvr;&boxh;&boxh; lem: mind
@@ -2383,17 +3151,20 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
         &boxv;           &boxur;&boxh;&boxh; subst
         &boxv;               &boxvr;&boxh;&boxh; del: soul
         &boxv;               &boxur;&boxh;&boxh; add: mind
+        &boxv;
         &boxvr;&boxh;&boxh; p4
         &boxv;   &boxur;&boxh;&boxh; app [conjecture]
         &boxv;       &boxvr;&boxh;&boxh; lem: mind
         &boxv;       &boxv;   &boxur;&boxh;&boxh; resp: #editor
         &boxv;       &boxur;&boxh;&boxh; rdg: mild
+        &boxv;
         &boxvr;&boxh;&boxh; p5
         &boxv;   &boxur;&boxh;&boxh; app [uncertain-reading]
         &boxv;       &boxvr;&boxh;&boxh; lem: mind
         &boxv;       &boxur;&boxh;&boxh; rdg
         &boxv;           &boxvr;&boxh;&boxh; cert: low
         &boxv;           &boxur;&boxh;&boxh; unclear: ou
+        &boxv;
         &boxvr;&boxh;&boxh; p6
         &boxv;   &boxur;&boxh;&boxh; app [grouped-readings]
         &boxv;       &boxvr;&boxh;&boxh; lem: mind
@@ -2401,68 +3172,128 @@ wit="#ms-B"&gt;Eternal&lt;/rdg&gt;&lt;/app&gt; reason seeks unity.&lt;/p&gt;
         &boxv;       &boxv;   &boxvr;&boxh;&boxh; rdg: soul
         &boxv;       &boxv;   &boxur;&boxh;&boxh; rdg: understanding
         &boxv;       &boxur;&boxh;&boxh; rdg: intellect
+        &boxv;
         &boxvr;&boxh;&boxh; p7
-        &boxv;   &boxur;&boxh;&boxh; app [transposed-order]
+        &boxv;   &boxur;&boxh;&boxh; app [local-word-order]
         &boxv;       &boxvr;&boxh;&boxh; lem: reason and freedom
         &boxv;       &boxur;&boxh;&boxh; rdg: freedom and reason
+        &boxv;
         &boxur;&boxh;&boxh; p8
             &boxur;&boxh;&boxh; app [unequal-extent]
                 &boxvr;&boxh;&boxh; lem: Divine and eternal reason
                 &boxvr;&boxh;&boxh; rdg: Reason
                 &boxur;&boxh;&boxh; rdg: Divine reason
 </pre>
-    <h3>
-     <span class="mw-headline" id="8.2._Editorial_relations_in_the_complete_MWE">
-      8.2. Editorial relations in the complete MWE
-     </span>
-    </h3>
-    <p>The apparatus entries can be summarised as:
+    <p><b>How to read this diagram.</b> The complete document now combines four
+layers accumulated across the series: witness declarations, a declared
+variant-encoding method, textual apparatus entries, and additional
+structures for documentary or editorial interpretation. The complexity is
+distributed according to function rather than collapsed into one
+preformatted apparatus string.
 </p>
+    <h4>
+     <span class="mw-headline" id="12.3._The_same_tree_as_editorial_relations">
+      12.3. The same tree as editorial relations
+     </span>
+    </h4>
     <pre>p1
-divine A C D
-omission B
+divine
+&boxvr;&boxh;&boxh; A C D
+&boxur;&boxh;&boxh; EMPTY B
+
 
 p2
-absence A C D
-Eternal B
+EMPTY
+&boxvr;&boxh;&boxh; A C D
+&boxur;&boxh;&boxh; Eternal B
+
 
 p3
-mind A C D
-soul deleted and mind added B
+mind
+&boxvr;&boxh;&boxh; A C D
+&boxur;&boxh;&boxh; B:
+    soul
+      &darr; deleted
+    mind
+      &uarr; added
+
 
 p4
-mind conjectured by the editor
-mild A B C D
+mind
+&boxur;&boxh;&boxh; conjecture: editor
+
+mild
+&boxur;&boxh;&boxh; A B C D
+
 
 p5
-mind A C D
-partly uncertain soul B
+mind
+&boxur;&boxh;&boxh; A C D
+
+soul
+&boxur;&boxh;&boxh; B
+    &boxvr;&boxh;&boxh; cert: low
+    &boxur;&boxh;&boxh; "ou" unclear
+
 
 p6
-mind A
-soul B
-understanding C
-intellect D
+mind
+&boxur;&boxh;&boxh; A
+
+substantive group
+&boxvr;&boxh;&boxh; soul B
+&boxur;&boxh;&boxh; understanding C
+
+intellect
+&boxur;&boxh;&boxh; D
+
 
 p7
-reason and freedom A C D
-freedom and reason B
+reason and freedom
+&boxur;&boxh;&boxh; A C D
+
+freedom and reason
+&boxur;&boxh;&boxh; B
+
 
 p8
-Divine and eternal reason A
-Reason B
-Divine reason C D
+Divine and eternal reason
+&boxur;&boxh;&boxh; A
+
+Reason
+&boxur;&boxh;&boxh; B
+
+Divine reason
+&boxur;&boxh;&boxh; C D
 </pre>
-    <h2>
-     <span class="mw-headline" id="9._Common_encoding_errors">
-      9. Common encoding errors
-     </span>
-    </h2>
+    <p><b>How to read this diagram.</b> This second view removes most XML syntax and
+shows the scholarly claims directly. Comparing it with the preceding tree
+is a useful check: every encoded structure should correspond to an
+editorial distinction that can be stated clearly in ordinary language.
+</p>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Stage reached.</b>
+</p>
+     <p>The TEI source can now distinguish several kinds of textual and
+editorial complexity without converting them into preformatted
+apparatus notation.
+</p>
+    </div>
     <h3>
-     <span class="mw-headline" id="9.1._Writing_an_omission_abbreviation_as_textual_content">
-      9.1. Writing an omission abbreviation as textual content
+     <span class="mw-headline" id="13._Check_the_model">
+      13. Check the model
      </span>
     </h3>
+    <h4>
+     <span class="mw-headline" id="13.1._Common_conceptual_and_encoding_errors">
+      13.1. Common conceptual and encoding errors
+     </span>
+    </h4>
+    <h5>
+     <span class="mw-headline" id="Apparatus_abbreviation_stored_as_text">
+      Apparatus abbreviation stored as text
+     </span>
+    </h5>
     <p>Avoid:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;om.&lt;/rdg&gt;
@@ -2471,20 +3302,14 @@ Divine reason C D
 </p>
     <pre>&lt;rdg wit="#ms-B"/&gt;
 </pre>
-    <p>The processor can generate <code>om.</code>.
-</p>
-    <h3>
-     <span class="mw-headline" id="9.2._Treating_an_uncertain_reading_as_an_omission">
-      9.2. Treating an uncertain reading as an omission
+    <h5>
+     <span class="mw-headline" id="Uncertainty_encoded_as_absence">
+      Uncertainty encoded as absence
      </span>
-    </h3>
-    <p>Avoid:
+    </h5>
+    <p>Avoid an empty reading when writing exists but is uncertain.
 </p>
-    <pre>&lt;rdg wit="#ms-B"/&gt;
-</pre>
-    <p>when writing exists but is difficult to read.
-</p>
-    <p>Use an uncertainty structure such as:
+    <p>Use, as appropriate:
 </p>
     <pre>&lt;rdg wit="#ms-B" cert="low"&gt;soul&lt;/rdg&gt;
 </pre>
@@ -2494,70 +3319,61 @@ Divine reason C D
   s&lt;unclear&gt;ou&lt;/unclear&gt;l
 &lt;/rdg&gt;
 </pre>
-    <h3>
-     <span class="mw-headline" id="9.3._Assigning_a_conjecture_to_a_witness">
-      9.3. Assigning a conjecture to a witness
+    <h5>
+     <span class="mw-headline" id="Conjecture_assigned_to_a_witness">
+      Conjecture assigned to a witness
      </span>
-    </h3>
+    </h5>
     <p>Avoid:
 </p>
     <pre>&lt;lem wit="#ms-A"&gt;mind&lt;/lem&gt;
 </pre>
-    <p>when A does not contain <code>mind</code>.
+    <p>when A does not contain that reading.
 </p>
-    <p>Prefer:
+    <p>Use:
 </p>
     <pre>&lt;lem resp="#editor"&gt;mind&lt;/lem&gt;
 </pre>
-    <p>and encode the transmitted reading separately.
-</p>
-    <h3>
-     <span id="9.4._Using_@resp_without_a_declared_target">
+    <h5>
+     <span class="mw-headline" id="Undeclared_responsibility_target">
+      Undeclared responsibility target
      </span>
-     <span class="mw-headline" id="9.4._Using_.40resp_without_a_declared_target">
-      9.4. Using
-      <code>@resp</code>
-      without a declared target
-     </span>
-    </h3>
+    </h5>
     <p>Avoid:
 </p>
-    <pre>&lt;lem resp="#unknown-editor"&gt;mind&lt;/lem&gt;
+    <pre>resp="#unknown-editor"
 </pre>
-    <p>when no object has:
+    <p>unless:
 </p>
     <pre>xml:id="unknown-editor"
 </pre>
-    <p>Declare the responsible party or responsibility statement in the header.
+    <p>has actually been declared.
 </p>
-    <h3>
-     <span class="mw-headline" id="9.5._Confusing_deletion_with_omission">
-      9.5. Confusing deletion with omission
+    <h5>
+     <span class="mw-headline" id="Deletion_confused_with_omission">
+      Deletion confused with omission
      </span>
-    </h3>
-    <p>Deletion:
-</p>
-    <pre>&lt;del&gt;soul&lt;/del&gt;
+    </h5>
+    <pre>DELETION
+
+&lt;del&gt;soul&lt;/del&gt;
+
+
+OMISSION
+
+&lt;rdg wit="#ms-B"/&gt;
 </pre>
-    <p>Omission:
+    <p>They represent different evidence.
 </p>
-    <pre>&lt;rdg wit="#ms-B"/&gt;
-</pre>
-    <p>The first records cancelled writing.
-</p>
-    <p>The second records an empty textual reading at the apparatus location.
-</p>
-    <h3>
-     <span class="mw-headline" id="9.6._Flattening_a_substitution_into_an_unexplained_string">
-      9.6. Flattening a substitution into an unexplained string
+    <h5>
+     <span class="mw-headline" id="Flattening_a_substitution">
+      Flattening a substitution
      </span>
-    </h3>
+    </h5>
     <p>Avoid:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;soul &rarr; mind&lt;/rdg&gt;
 </pre>
-    <p>This stores explanatory notation as textual content.
-</p>
     <p>Use:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;
@@ -2567,168 +3383,219 @@ Divine reason C D
   &lt;/subst&gt;
 &lt;/rdg&gt;
 </pre>
-    <h3>
-     <span class="mw-headline" id="9.7._Grouping_readings_without_explaining_the_group">
-      9.7. Grouping readings without explaining the group
+    <h5>
+     <span class="mw-headline" id="Undocumented_reading_groups">
+      Undocumented reading groups
      </span>
-    </h3>
-    <p>Avoid an undocumented classification:
+    </h5>
+    <p>Avoid an opaque category such as:
 </p>
     <pre>&lt;rdgGrp type="group-1"&gt;
 </pre>
-    <p>Prefer a meaningful and documented value:
+    <p>Prefer a documented analytical value where appropriate, and use a
+<code>&lt;rdgGrp&gt;</code> only when the grouped readings actually have a
+meaningful editorial affinity.
+</p>
+    <p>For example:
 </p>
     <pre>&lt;rdgGrp type="orthographic"&gt;
 </pre>
-    <p>or:
+    <p>or, where the project's analysis warrants the group:
 </p>
     <pre>&lt;rdgGrp type="substantive"&gt;
 </pre>
-    <h3>
-     <span class="mw-headline" id="9.8._Encoding_printed_punctuation_inside_readings">
-      9.8. Encoding printed punctuation inside readings
+    <p>The <code>@type</code> vocabulary itself should be documented at project
+level.
+</p>
+    <h5>
+     <span class="mw-headline" id="Printed_punctuation_stored_as_reading_content">
+      Printed punctuation stored as reading content
      </span>
-    </h3>
+    </h5>
     <p>Avoid:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;soul B;&lt;/rdg&gt;
 </pre>
-    <p>Prefer:
+    <p>Use:
 </p>
     <pre>&lt;rdg wit="#ms-B"&gt;soul&lt;/rdg&gt;
 </pre>
-    <p>The semicolon and siglum belong to output processing.
-</p>
-    <h3>
-     <span class="mw-headline" id="9.9._Fragmenting_one_meaningful_variation_arbitrarily">
-      9.9. Fragmenting one meaningful variation arbitrarily
+    <h5>
+     <span class="mw-headline" id="Arbitrary_segmentation">
+      Arbitrary segmentation
      </span>
-    </h3>
-    <p>Several apparatus entries may be syntactically possible but editorially
-misleading.
+    </h5>
+    <p>A series of syntactically valid apparatus entries may nevertheless
+misrepresent the editor's understanding of the variant.
 </p>
-    <p>The apparatus boundaries should reflect a declared segmentation policy.
+    <p>Apparatus boundaries are part of the editorial model.
 </p>
-    <h2>
-     <span class="mw-headline" id="10._Structural_and_editorial_checks">
-      10. Structural and editorial checks
+    <h4>
+     <span class="mw-headline" id="13.2._Check_the_model_at_several_levels">
+      13.2. Check the model at several levels
      </span>
-    </h2>
-    <p>A complex apparatus entry should be checked at several levels.
+    </h4>
+    <p>The familiar validation model from Guides 1&ndash;3 now needs two additional
+questions.
 </p>
-    <table class="wikitable">
-     <tbody>
-      <tr>
-       <th>
-        Level
-       </th>
-       <th>
-        Question
-       </th>
-      </tr>
-      <tr>
-       <td>XML syntax
-</td>
-       <td>Are all elements and attributes well formed?
-</td>
-      </tr>
-      <tr>
-       <td>TEI structure
-</td>
-       <td>Are the elements permitted in the selected TEI model?
-</td>
-      </tr>
-      <tr>
-       <td>Reference integrity
-</td>
-       <td>Do <code>@wit</code> and <code>@resp</code> point to declared targets?
-</td>
-      </tr>
-      <tr>
-       <td>Phenomenon
-</td>
-       <td>Does the markup distinguish omission, uncertainty, and deletion correctly?
-</td>
-      </tr>
-      <tr>
-       <td>Witness accuracy
-</td>
-       <td>Does every witness actually support the reading assigned to it?
-</td>
-      </tr>
-      <tr>
-       <td>Editorial responsibility
-</td>
-       <td>Are conjectures and interventions attributed correctly?
-</td>
-      </tr>
-      <tr>
-       <td>Segmentation
-</td>
-       <td>Do the apparatus boundaries represent meaningful variation units?
-</td>
-      </tr>
-      <tr>
-       <td>Project consistency
-</td>
-       <td>Are similar phenomena encoded in the same way?
-</td>
-      </tr>
-     </tbody>
-    </table>
-    <h2>
-     <span class="mw-headline" id="11._Inspecting_complex_variants_with_ConTeXt">
-      11. Inspecting complex variants with ConTeXt
-     </span>
-    </h2>
-    <p>This ConTeXt MWE is an inspection tool rather than a final critical
-apparatus.
+    <pre>complex apparatus entry
+        &boxv;
+        ▼
++---------------------------+
+| 1. XML WELL-FORMEDNESS    |
+| Are elements and          |
+| attributes syntactically  |
+| coherent?                 |
++---------------------------+
+        &boxv;
+        ▼
++---------------------------+
+| 2. TEI VALIDATION         |
+| Is the structure allowed  |
+| by the selected model?    |
++---------------------------+
+        &boxv;
+        ▼
++---------------------------+
+| 3. REFERENCE INTEGRITY    |
+| Do @wit and @resp point   |
+| to declared objects?      |
++---------------------------+
+        &boxv;
+        ▼
++---------------------------+
+| 4. PHENOMENON MODEL       |
+| Have omission, deletion,  |
+| uncertainty, etc. been    |
+| distinguished correctly?  |
++---------------------------+
+        &boxv;
+        ▼
++---------------------------+
+| 5. EDITORIAL CORRECTNESS  |
+| Does this encoding        |
+| represent the evidence?   |
++---------------------------+
+</pre>
+    <p><b>How to read this diagram.</b> The first two levels concern XML and TEI.
+The third checks whether references resolve. The fourth asks whether the
+chosen TEI structure models the right phenomenon. Only the fifth asks
+whether the scholarly claim itself is correct.
 </p>
-    <p>Its purpose is to:
+    <p>Further project-level questions include:
 </p>
     <ul>
      <li>
-      load the complete TEI document;
+      Are similar phenomena treated consistently?
      </li>
      <li>
-      ignore the header;
+      Are apparatus boundaries meaningful?
      </li>
      <li>
-      select every paragraph;
+      Is responsibility correctly attributed?
      </li>
      <li>
-      print the lemma in the edited text;
+      Are grouping categories documented?
      </li>
      <li>
-      place the readings in footnotes;
-     </li>
-     <li>
-      render an empty reading as
-      <code>om.</code>
-      ;
-     </li>
-     <li>
-      represent an empty lemma with the mathematical empty-set symbol;
-     </li>
-     <li>
-      make deletions, additions, uncertainty, and witness references visible.
+      Are witness assignments accurate?
      </li>
     </ul>
-    <p>This MWE was tested successfully with ConTeXt LMTX.
+    <div style="background:#fff8d6; border:1px solid #d6b84a; border-left:5px solid #c49a00; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Validation cannot choose the editorial model for you.</b>
 </p>
-    <div style="margin: 1em 0; padding: 0.7em 1em; border-left: 4px solid #6fa8dc; background: #eef6fc;">
-     <p><b>Practical note.</b> Save the XML source file and the ConTeXt file in the same directory. This allows the command <code>\xmlprocessfile</code> to find the XML file directly, without requiring an absolute or relative path.
+     <p>A structure may be legal TEI and still represent the evidence poorly.
+</p>
+     <p>The distinction between omission, deletion, conjecture, uncertainty,
+and grouping remains an editorial responsibility.
 </p>
     </div>
-    <p>Save the ConTeXt file as:
+    <h3>
+     <span class="mw-headline" id="14._Inspect_complex_variants_with_ConTeXt">
+      14. Inspect complex variants with ConTeXt
+     </span>
+    </h3>
+    <p>The following ConTeXt MWE is an inspection tool.
+</p>
+    <p>It is not intended to produce the final critical apparatus.
+</p>
+    <h4>
+     <span class="mw-headline" id="14.1._What_the_inspection_should_reveal">
+      14.1. What the inspection should reveal
+     </span>
+    </h4>
+    <p>Before reading the code, the processing can be mapped as:
+</p>
+    <pre>                    TEI SOURCE
+                         &boxv;
+                         ▼
+                  apparatus entry
+                         &boxv;
+            +------------+------------+
+            &boxv;                         &boxv;
+            ▼                         ▼
+           lem                       rdg
+            &boxv;                         &boxv;
+            ▼                         ▼
+       edited text                footnote
+                                      &boxv;
+                         +------------+------------+
+                         &boxv;            &boxv;            &boxv;
+                         ▼            ▼            ▼
+                       empty        subst       uncertainty
+                         &boxv;            &boxv;            &boxv;
+                         ▼            ▼            ▼
+                        om.        del/add       visible mark
+</pre>
+    <p>For addition:
+</p>
+    <pre>empty lemma
+     &boxv;
+     ▼
+inspection representation
+     &boxv;
+     ▼
+     &empty;
+</pre>
+    <p>For raw witness support:
+</p>
+    <pre>@wit
+  &boxv;
+  ▼
+#ms-B
+</pre>
+    <p>Guide 5 will later resolve that identity systematically.
+</p>
+    <h4>
+     <span class="mw-headline" id="14.2._Save_both_files_together">
+      14.2. Save both files together
+     </span>
+    </h4>
+    <p>Use:
+</p>
+    <pre>tei-guide-04.xml
+tei-guide-04.tex
+</pre>
+    <p>in the same directory.
+</p>
+    <h4>
+     <span class="mw-headline" id="14.3._ConTeXt_inspection_source">
+      14.3. ConTeXt inspection source
+     </span>
+    </h4>
+    <p>Save:
 </p>
     <pre>tei-guide-04.tex
 </pre>
+    <p>with:
+</p>
     <pre>\xmlregisterns
   {tei}
   {http://www.tei-c.org/ns/1.0}
 
+
 \startxmlsetups xml:tei:document
+
   \xmlsetsetup
     {#1}
     {tei:TEI|tei:text|tei:body}
@@ -2783,17 +3650,22 @@ apparatus.
     {#1}
     {tei:unclear}
     {xml:tei:unclear}
+
 \stopxmlsetups
 
+
 \xmlregistersetup{xml:tei:document}
+
 
 \startxmlsetups xml:tei:flush
   \xmlflush{#1}
 \stopxmlsetups
 
+
 \startxmlsetups xml:tei:ignore
   % The TEI header is not typeset in this inspection test.
 \stopxmlsetups
+
 
 \startxmlsetups xml:tei:paragraph
   \par
@@ -2802,9 +3674,11 @@ apparatus.
   \par
 \stopxmlsetups
 
+
 \startxmlsetups xml:tei:lemma
   \xmlflush{#1}
 \stopxmlsetups
+
 
 \startxmlsetups xml:tei:reading
   \doifelse
@@ -2824,27 +3698,33 @@ apparatus.
   \quad
 \stopxmlsetups
 
+
 \startxmlsetups xml:tei:reading-group
   \xmlflush{#1}
 \stopxmlsetups
 
+
 \startxmlsetups xml:tei:substitution
   \xmlflush{#1}
 \stopxmlsetups
+
 
 \startxmlsetups xml:tei:deletion
   \overstrike{\xmlflush{#1}}
   \space
 \stopxmlsetups
 
+
 \startxmlsetups xml:tei:addition
   \underbar{\xmlflush{#1}}
 \stopxmlsetups
+
 
 \startxmlsetups xml:tei:unclear
   \underbar{\xmlflush{#1}}
   \high{?}
 \stopxmlsetups
+
 
 \startxmlsetups xml:tei:apparatus
   \xmlfirst{#1}{tei:lem}
@@ -2859,6 +3739,7 @@ apparatus.
      \xmlall{#1}{tei:rdg}}
 \stopxmlsetups
 
+
 \starttext
 
 \subject{Complex TEI apparatus}
@@ -2870,37 +3751,25 @@ apparatus.
 
 \stoptext
 </pre>
-    <p>Compile with:
+    <p><br>
+Compile with:
 </p>
     <pre>context tei-guide-04.tex
 </pre>
-    <p>The resulting PDF contains the following edited text:
+    <h4>
+     <span class="mw-headline" id="14.4._What_the_test_demonstrates">
+      14.4. What the test demonstrates
+     </span>
+    </h4>
+    <p>The edited text contains the lemmas selected from the apparatus entries.
 </p>
-    <pre>Complex TEI apparatus
-
-The divine&sup1; reason governs all.
-
-&sup2; reason seeks unity.
-
-The mind&sup3; seeks unity.
-
-The mind⁴ seeks unity.
-
-The mind⁵ seeks unity.
-
-The mind⁶ seeks unity.
-
-Reason and freedom⁷ belong together.
-
-Divine and eternal reason⁸ governs all.
-</pre>
-    <p>The corresponding footnotes contain information equivalent to:
+    <p>The notes expose the underlying structures sufficiently to inspect them:
 </p>
     <pre>1. divine] om. #ms-B
 
 2. &empty;] Eternal #ms-B
 
-3. mind] soul mind #ms-B
+3. mind] [deleted soul] [added mind] #ms-B
 
 4. mind] mild #ms-A #ms-B #ed-C #ms-D
 
@@ -2915,7 +3784,8 @@ Divine and eternal reason⁸ governs all.
 8. Divine and eternal reason] Reason #ms-B;
                                Divine reason #ed-C #ms-D
 </pre>
-    <p>The text above does not accurately reflect the result obtained with the PDF output after compilation. This result can be seen in the image below.
+    <p>The plain-text transcription above cannot reproduce every visual
+distinction produced by ConTeXt.
 </p>
     <div class="center">
      <div class="thumb tnone">
@@ -2933,58 +3803,87 @@ Divine and eternal reason⁸ governs all.
       </div>
      </div>
     </div>
-    <p>In the actual output:
+    <p><br>
+In the rendered result:
 </p>
     <ul>
      <li>
-      the deleted word
-      <code>soul</code>
-      in note 3 is struck through;
+      deleted text is struck through;
      </li>
      <li>
-      the added word
-      <code>mind</code>
-      in note 3 is underlined;
+      added text is underlined;
      </li>
      <li>
-      the uncertain characters in note 5 are underlined and marked with a raised question mark;
+      uncertain characters are marked visibly;
      </li>
      <li>
-      the empty lemma in note 2 is represented by the mathematical empty-set symbol;
+      an empty lemma is represented by an empty-set symbol;
      </li>
      <li>
-      the XML witness references are displayed in a monospaced typeface.
+      raw witness identifiers are shown in a monospaced form.
      </li>
     </ul>
-    <p>The processing path is:
-</p>
+    <h4>
+     <span class="mw-headline" id="14.5._Processing_path">
+      14.5. Processing path
+     </span>
+    </h4>
     <pre>tei-guide-04.xml
-        &darr;
+        &boxv;
+        ▼
 ConTeXt loads the TEI tree
-        &darr;
-the TEI header is ignored
-        &darr;
+        &boxv;
+        ▼
+teiHeader is ignored
+        &boxv;
+        ▼
 each paragraph is processed
-        &darr;
-each apparatus entry selects its lemma
-        &darr;
-the lemma is printed in the edited text
-        &darr;
-readings are collected in a footnote
-        &darr;
-empty readings become &ldquo;om.&rdquo;
-        &darr;
-an empty lemma becomes &ldquo;&empty;&rdquo;
-        &darr;
-documentary and uncertainty markup is made visible
-        &darr;
-raw witness references are printed
+        &boxv;
+        ▼
+each app selects its lemma
+        &boxv;
+        &boxvr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► edited text
+        &boxv;
+        ▼
+readings are processed
+        &boxv;
+        &boxvr;&boxh;&boxh; empty &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► om.
+        &boxv;
+        &boxvr;&boxh;&boxh; subst &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► del / add visible
+        &boxv;
+        &boxvr;&boxh;&boxh; unclear &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► uncertainty visible
+        &boxv;
+        &boxur;&boxh;&boxh; @wit &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► raw identifiers
+        &boxv;
+        ▼
+inspection notes
 </pre>
-    <p>This inspection test does not yet:
+    <p><b>How to read this diagram.</b> ConTeXt is still being used as an
+inspection layer rather than as the final apparatus compositor. It follows
+the TEI structures far enough to expose empty readings, documentary
+substitution, uncertainty, and raw witness identifiers; systematic
+resolution and normalization are deliberately deferred to Guide 5.
+</p>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b>
+</p>
+     <p>The symbols and typography used in this MWE are inspection devices.
+</p>
+     <p>For example, <code>om.</code>, the empty-set symbol, underlining, and
+overstriking make the encoded distinctions visible; they are not yet a
+recommended final apparatus design.
+</p>
+    </div>
+    <h4>
+     <span class="mw-headline" id="14.6._Deliberate_limitations">
+      14.6. Deliberate limitations
+     </span>
+    </h4>
+    <p>The inspection test does not yet:
 </p>
     <ul>
      <li>
-      resolve XML witness identifiers into sigla;
+      resolve XML witness identifiers into printed sigla;
      </li>
      <li>
       resolve editorial responsibility;
@@ -2993,29 +3892,188 @@ raw witness references are printed
       construct location references;
      </li>
      <li>
-      suppress redundant lemma support;
+      sort witnesses or readings;
      </li>
      <li>
-      choose between positive and negative apparatus styles;
+      suppress redundant information;
      </li>
      <li>
-      sort readings or witnesses;
+      choose automatically between positive and negative apparatus styles;
      </li>
      <li>
-      validate the apparatus globally;
+      perform global validation;
      </li>
      <li>
-      create the final compact apparatus.
+      produce the final compact apparatus.
      </li>
     </ul>
-    <p>Those functions belong to Guides 5 and 6.
+    <p>Those tasks belong to Guides 5 and 6.
 </p>
-    <h2>
-     <span class="mw-headline" id="12._A_practical_complex-variation_checklist">
-      12. A practical complex-variation checklist
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Further reference.</b>
+</p>
+     <p>For ConTeXt XML setups, element selection, attribute access, and flushing,
+see
+<a href="Input_and_compilation/XML_source/XML_setup_commands.html" title="Input and compilation/XML source/XML setup commands">XML setup commands</a>.
+</p>
+     <p>For the broader TEI &rarr; ConTeXt workflow, see <a href="TEI_xml.html" title="TEI xml">TEI XML</a>.
+</p>
+     <p>Guide 4 still uses ConTeXt primarily as an inspection layer. Systematic
+collection, normalization, and reference resolution begin in Guide 5.
+</p>
+    </div>
+    <h4>
+     <span class="mw-headline" id="14.7._Garden_source-and-result_demonstration">
+      14.7. Garden source-and-result demonstration
      </span>
-    </h2>
-    <p>Before moving to Guide 5, verify the following.
+    </h4>
+    <p>For Garden, a reduced set of complex variants can be embedded in a buffer
+so that source and result are displayed together. The local two-file MWE
+above remains the fuller test.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>complexvariants<span class="brx">]</span>
+<tei class="brx" xmlns<span>="http://www.tei-c.org/ns/1.0"&gt;
+  <teiheader>
+    <filedesc>
+      <titlestmt>
+        <title>Complex textual variation</title>
+        <respstmt class="brx" xml:id<span>="editor"&gt;
+          <resp>Editorial conjecture</resp>
+          <name>Example Editor</name>
+        </respstmt>
+      </titlestmt>
+      <publicationstmt>
+        <p>Teaching example.</p>
+      </publicationstmt>
+      <sourcedesc>
+        <listwit>
+          <witness class="brx" xml:id<span>="ms-A" n<span class="brx">=</span>"A"&gt;Principal manuscript.</witness>
+          <witness class="brx" xml:id<span>="ms-B" n<span class="brx">=</span>"B"&gt;Variant manuscript.</witness>
+          <witness class="brx" xml:id<span>="ed-C" n<span class="brx">=</span>"C"&gt;Printed edition.</witness>
+        </listwit>
+      </sourcedesc>
+    </filedesc>
+    <encodingdesc>
+      <variantencoding class="brx" method<span>="parallel-segmentation"
+        location<span class="brx">=</span>"internal"/&gt;
+    </variantencoding></encodingdesc>
+  </teiheader>
+  <text>
+    
+      <p>The <app class="brx" type<span>="omission"&gt;<lem class="brx" wit<span>="<span class="brx">#</span>ms-A <span class="brx">#</span>ed-C"&gt;divine</lem><rdg class="brx" wit<span>="<span class="brx">#</span>ms-B"/&gt;</rdg></app> reason governs.</p>
+      <p>The <app class="brx" type<span>="correction"&gt;<lem class="brx" wit<span>="<span class="brx">#</span>ms-A <span class="brx">#</span>ed-C"&gt;mind</lem><rdg class="brx" wit<span>="<span class="brx">#</span>ms-B"&gt;<subst><del>soul</del><add>mind</add></subst></rdg></app> seeks unity.</p>
+      <p>The <app class="brx" type<span>="uncertain-reading"&gt;<lem class="brx" wit<span>="<span class="brx">#</span>ms-A <span class="brx">#</span>ed-C"&gt;mind</lem><rdg class="brx" wit<span>="<span class="brx">#</span>ms-B" cert<span class="brx">=</span>"low"&gt;s<unclear>ou</unclear>l</rdg></app> seeks unity.</p>
+    
+  </text>
+</tei>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="stylecs">\xmlregisterns</span></span>
+  <span class="br">{</span>tei<span class="br">}</span>
+  <span class="br">{</span>http://www.tei-c.org/ns/1.0<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:document
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:TEI|tei:text|tei:body<span class="br">}</span><span class="br">{</span>xml:tei:flush<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:teiHeader<span class="br">}</span><span class="br">{</span>xml:tei:ignore<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:p<span class="br">}</span><span class="br">{</span>xml:tei:paragraph<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:app<span class="br">}</span><span class="br">{</span>xml:tei:apparatus<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span><span class="br">{</span>xml:tei:lemma<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:rdg<span class="br">}</span><span class="br">{</span>xml:tei:reading<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:subst<span class="br">}</span><span class="br">{</span>xml:tei:substitution<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:del<span class="br">}</span><span class="br">{</span>xml:tei:deletion<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:add<span class="br">}</span><span class="br">{</span>xml:tei:addition<span class="br">}</span>
+  <span class="cs"><span class="stylecs">\xmlsetsetup</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:unclear<span class="br">}</span><span class="br">{</span>xml:tei:unclear<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs">\xmlregistersetup</span><span class="br">{</span>xml:tei:document<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:flush
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:ignore
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:paragraph
+  <span class="cs">\par</span>
+  <span class="cs"><span class="stylecs">\dontleavehmode</span></span>
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+  <span class="cs">\par</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:lemma
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:reading
+  <span class="cs"><span class="systemcs">\doifelse</span></span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\xmltext</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+    <span class="br">{</span><span class="br">}</span>
+    <span class="br">{</span>om.<span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="stylecs">\space</span></span>
+  <span class="cs">\ttx</span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>wit<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="systemcs">\doifsomething</span></span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>cert<span class="br">}</span><span class="br">}</span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\space</span></span><span class="cs">\itx</span><span class="br">{</span>cert<span class="brx">=</span><span class="cs"><span class="stylecs">\xmlatt</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>cert<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:substitution
+  <span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:deletion
+  <span class="cs"><span class="documentcs">\overstrike</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="stylecs">\space</span></span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:addition
+  <span class="cs"><span class="documentcs">\underbar</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:unclear
+  <span class="cs"><span class="documentcs">\underbar</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\xmlflush</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">}</span>
+  <span class="cs"><span class="documentcs">\high</span></span><span class="br">{</span>?<span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="stylecs">\startxmlsetups</span></span> xml:tei:apparatus
+  <span class="cs"><span class="stylecs">\xmlfirst</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span>
+  <span class="cs"><span class="documentcs">\footnote</span></span>
+    <span class="br">{</span><span class="cs"><span class="stylecs">\xmlfirst</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:lem<span class="br">}</span><span class="brx">]</span>
+     <span class="cs"><span class="stylecs">\space</span></span>
+     <span class="cs"><span class="stylecs">\xmlall</span></span><span class="br">{</span><span class="brx">#</span>1<span class="br">}</span><span class="br">{</span>tei:rdg<span class="br">}</span><span class="br">}</span>
+<span class="cs"><span class="stylecs">\stopxmlsetups</span></span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+<span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Complex TEI apparatus<span class="br">}</span>
+<span class="cs"><span class="stylecs">\xmlprocessbuffer</span></span><span class="br">{</span>tei<span class="br">}</span><span class="br">{</span>complexvariants<span class="br">}</span><span class="br">{</span><span class="br">}</span>
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="wikiteximage/145e110c96e149461ed513442f4bdd42.webp" width="874">
+     </li>
+    </ul>
+    <div style="background:#f4f4f4; border:1px solid #c8c8c8; border-left:5px solid #8a8a8a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Technical note.</b> The Garden example is deliberately smaller than the
+complete eight-case XML file. Its purpose is to demonstrate, in one
+self-contained block, that empty readings, documentary substitution, and
+local uncertainty can all be reached through ConTeXt XML setups.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="15._What_you_have_built">
+      15. What you have built
+     </span>
+    </h3>
+    <h4>
+     <span class="mw-headline" id="15.1._Guide_4_checklist">
+      15.1. Guide 4 checklist
+     </span>
+    </h4>
+    <p>Before moving to Guide 5, verify:
 </p>
     <table class="wikitable">
      <tbody>
@@ -3028,147 +4086,354 @@ raw witness references are printed
        </th>
       </tr>
       <tr>
+       <td>Variant encoding
+</td>
+       <td><code>parallel-segmentation</code>, <code>internal</code>
+</td>
+      </tr>
+      <tr>
+       <td>Project <code>@type</code> vocabulary
+</td>
+       <td>Values are documented and used consistently
+</td>
+      </tr>
+      <tr>
        <td>Omission
 </td>
-       <td>Represented by an explicitly empty reading
+       <td>Explicit empty reading
 </td>
       </tr>
       <tr>
        <td>Addition
 </td>
-       <td>Absence and added text are represented separately
+       <td>Absence and added text represented separately
 </td>
       </tr>
       <tr>
        <td>Deleted text
 </td>
-       <td>Not confused with an omission
+       <td>Not confused with omission
 </td>
       </tr>
       <tr>
        <td>Substitution
 </td>
-       <td>Deletion and addition remain structurally distinct
+       <td>Deletion and addition remain distinct
 </td>
       </tr>
       <tr>
        <td>Conjecture
 </td>
-       <td>Responsibility is recorded with <code>@resp</code>
+       <td>Responsibility recorded with <code>@resp</code>
 </td>
       </tr>
       <tr>
        <td>Responsibility target
 </td>
-       <td>The referenced editor or responsibility statement is declared
+       <td>Referenced object is declared
 </td>
       </tr>
       <tr>
        <td>Uncertain reading
 </td>
-       <td>Not represented as empty merely because it is doubtful
+       <td>Not encoded as empty
 </td>
       </tr>
       <tr>
        <td>Partial uncertainty
 </td>
-       <td>The uncertain characters or words are marked locally
+       <td>Marked locally
 </td>
       </tr>
       <tr>
        <td>Reading groups
 </td>
-       <td>Grouping criteria are meaningful and documented
+       <td>Grouping criterion is meaningful and documented
 </td>
       </tr>
       <tr>
-       <td>Transposed order
+       <td>Local word-order variation
 </td>
-       <td>The witness&rsquo;s actual textual sequence is preserved
+       <td>Actual textual sequence is preserved
 </td>
       </tr>
       <tr>
        <td>Unequal extent
 </td>
-       <td>Lemma and readings contain the complete competing spans
+       <td>Complete competing spans are represented
 </td>
       </tr>
       <tr>
        <td>Witness references
 </td>
-       <td>Every <code>@wit</code> value points to a declared witness
+       <td>Every <code>@wit</code> resolves to a declaration
 </td>
       </tr>
       <tr>
        <td>Apparatus punctuation
 </td>
-       <td>Not embedded in the reading text
+       <td>Not embedded in reading text
 </td>
       </tr>
       <tr>
        <td>Segmentation
 </td>
-       <td>Similar variations follow a consistent boundary policy
+       <td>Similar phenomena follow a consistent policy
 </td>
       </tr>
      </tbody>
     </table>
-    <h2>
-     <span class="mw-headline" id="13._What_this_guide_has_established">
-      13. What this guide has established
+    <h4>
+     <span id="15.2._What_Guides_1&ndash;4_have_built">
      </span>
-    </h2>
-    <p>This guide has extended the simple substitution model introduced in Guide 3:
+     <span class="mw-headline" id="15.2._What_Guides_1.E2.80.934_have_built">
+      15.2. What Guides 1&ndash;4 have built
+     </span>
+    </h4>
+    <p>The same document has grown cumulatively.
 </p>
-    <pre>simple substitution
-        &darr;
-omission and addition
-        &darr;
-documentary alteration
-        &darr;
-conjecture and responsibility
-        &darr;
-uncertainty and unclear text
-        &darr;
-grouped readings
-        &darr;
-transposed order and unequal extent
-</pre>
-    <p>The central lesson is that apparently similar absences or changes may encode
-different editorial claims. An omission is not a deletion; uncertain text is
-not empty text; a conjecture is not witness evidence; and a reading group is
-not merely a formatting device.
-</p>
-    <p>The TEI source can now preserve both the textual alternatives and the
-information needed to interpret them:
-</p>
+    <h5>
+     <span id="Guide_1_&mdash;_structure">
+     </span>
+     <span class="mw-headline" id="Guide_1_.E2.80.94_structure">
+      Guide 1 &mdash; structure
+     </span>
+    </h5>
     <pre>TEI
-&boxvr;&boxh;&boxh; declarations
-&boxv;   &boxvr;&boxh;&boxh; witnesses
-&boxv;   &boxur;&boxh;&boxh; editorial responsibility
+&boxvr;&boxh;&boxh; teiHeader
 &boxur;&boxh;&boxh; text
-    &boxur;&boxh;&boxh; complex apparatus entries
-        &boxvr;&boxh;&boxh; empty lemmas and readings
-        &boxvr;&boxh;&boxh; documentary alterations
-        &boxvr;&boxh;&boxh; conjectures
-        &boxvr;&boxh;&boxh; uncertainty
-        &boxvr;&boxh;&boxh; reading groups
-        &boxvr;&boxh;&boxh; reordered readings
+    &boxur;&boxh;&boxh; p
+</pre>
+    <h5>
+     <span id="Guide_2_&mdash;_identities">
+     </span>
+     <span class="mw-headline" id="Guide_2_.E2.80.94_identities">
+      Guide 2 &mdash; identities
+     </span>
+    </h5>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; listWit
+&boxv;       &boxvr;&boxh;&boxh; A
+&boxv;       &boxvr;&boxh;&boxh; B
+&boxv;       &boxur;&boxh;&boxh; C
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; p
+</pre>
+    <h5>
+     <span id="Guide_3_&mdash;_simple_relations">
+     </span>
+     <span class="mw-headline" id="Guide_3_.E2.80.94_simple_relations">
+      Guide 3 &mdash; simple relations
+     </span>
+    </h5>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxur;&boxh;&boxh; listWit
+&boxv;       &boxvr;&boxh;&boxh; A
+&boxv;       &boxvr;&boxh;&boxh; B
+&boxv;       &boxur;&boxh;&boxh; C
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; p
+        &boxur;&boxh;&boxh; app
+            &boxvr;&boxh;&boxh; lem
+            &boxv;   &boxur;&boxh;&boxh; @wit
+            &boxur;&boxh;&boxh; rdg
+                &boxur;&boxh;&boxh; @wit
+</pre>
+    <h5>
+     <span id="Guide_4_&mdash;_complex_relations">
+     </span>
+     <span class="mw-headline" id="Guide_4_.E2.80.94_complex_relations">
+      Guide 4 &mdash; complex relations
+     </span>
+    </h5>
+    <pre>TEI
+&boxvr;&boxh;&boxh; teiHeader
+&boxv;   &boxvr;&boxh;&boxh; responsibility
+&boxv;   &boxvr;&boxh;&boxh; witnesses
+&boxv;   &boxur;&boxh;&boxh; variantEncoding
+&boxv;       &boxur;&boxh;&boxh; parallel-segmentation / internal
+&boxv;
+&boxur;&boxh;&boxh; text
+    &boxur;&boxh;&boxh; complex apparatus
+        &boxv;
+        &boxvr;&boxh;&boxh; empty lemma / reading
+        &boxv;
+        &boxvr;&boxh;&boxh; subst
+        &boxv;   &boxvr;&boxh;&boxh; del
+        &boxv;   &boxur;&boxh;&boxh; add
+        &boxv;
+        &boxvr;&boxh;&boxh; @resp
+        &boxv;
+        &boxvr;&boxh;&boxh; @cert
+        &boxvr;&boxh;&boxh; unclear
+        &boxv;
+        &boxvr;&boxh;&boxh; rdgGrp
+        &boxv;
+        &boxvr;&boxh;&boxh; local word-order variants
+        &boxv;
         &boxur;&boxh;&boxh; unequal textual spans
 </pre>
-    <p>The next step is not to add more isolated TEI elements, but to process these
+    <p><br>
+The intellectual progression can now be summarized as:
+</p>
+    <pre>DOCUMENT
+   &boxv;
+   ▼
+identify witnesses
+   &boxv;
+   ▼
+record differences
+   &boxv;
+   ▼
+classify those differences
+   &boxv;
+   ▼
+preserve editorial interpretation
+</pre>
+    <div style="background:#eef7ee; border:1px solid #a8c7a8; border-left:5px solid #5b8a5a; padding:0.8em 1em; margin:1em 0;">
+     <p><b>Guide 4 complete.</b>
+</p>
+     <p>The TEI document can now represent a useful range of complex textual
+phenomena while preserving the distinctions between witness evidence,
+documentary alteration, uncertainty, and editorial interpretation.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="16._Continue_with_Guide_5">
+      16. Continue with Guide 5
+     </span>
+    </h3>
+    <h4>
+     <span class="mw-headline" id="16.1._Why_Guide_5_is_the_next_step">
+      16.1. Why Guide 5 is the next step
+     </span>
+    </h4>
+    <p>Up to this point, we have mainly been adding structure to the TEI
+document.
+</p>
+    <p>That phase is now sufficiently developed.
+</p>
+    <p>The document may contain many entries such as:
+</p>
+    <pre>app
+&boxvr;&boxh;&boxh; lem
+&boxvr;&boxh;&boxh; rdg
+&boxvr;&boxh;&boxh; @wit
+&boxvr;&boxh;&boxh; @resp
+&boxvr;&boxh;&boxh; @cert
+&boxvr;&boxh;&boxh; subst
+&boxvr;&boxh;&boxh; unclear
+&boxur;&boxh;&boxh; rdgGrp
+</pre>
+    <p>The next problem is no longer:
+</p>
+    <pre>How do I encode one more kind of variant?
+</pre>
+    <p>It is:
+</p>
+    <pre>How do I process all these structures consistently?
+</pre>
+    <p>The transition is therefore:
+</p>
+    <pre>GUIDES 1&ndash;4
+BUILD STRUCTURED TEI DATA
+        &boxv;
+        ▼
+GUIDE 5
+COLLECT + NORMALIZE + RESOLVE + VALIDATE
+        &boxv;
+        ▼
+GUIDE 6
+TYPESET THE RESULT
+</pre>
+    <p><b>How to read this diagram.</b> Guides 1&ndash;4 primarily construct and refine
+the scholarly data model. Guide 5 changes the nature of the task: instead
+of adding one more encoding distinction, it begins processing the existing
 structures consistently across the document.
 </p>
-    <h2>
-     <span class="mw-headline" id="14._Next_guide">
-      14. Next guide
-     </span>
-    </h2>
-    <p>The TEI document now contains enough structured information to require
-systematic processing. Guide 5 shows how Lua can collect apparatus entries,
-normalize their fields, resolve references, validate the resulting records,
-and prepare reliable editorial data for ConTeXt.
+    <p><br>
+Guide 5 will use Lua to move from XML structures to reusable processing
+records:
 </p>
+    <pre>TEI apparatus entries
+        &boxv;
+        ▼
+collect
+        &boxv;
+        ▼
+normalize
+        &boxv;
+        ▼
+resolve references
+        &boxv;
+        ▼
+validate
+        &boxv;
+        ▼
+editorial data ready for ConTeXt
+</pre>
+    <div style="background:#eef5fb; border:1px solid #9bbbd4; border-left:6px solid #4f81a8; padding:0.8em 1em; margin:1em 0;">
+     <p><b>The next conceptual shift.</b>
+</p>
+     <p>Guides 1&ndash;4 primarily construct the scholarly data model.
+</p>
+     <p>Guide 5 begins systematic processing of that model.
+</p>
+    </div>
+    <h4>
+     <span class="mw-headline" id="16.2._Next_guide">
+      16.2. Next guide
+     </span>
+    </h4>
+    <p>The TEI source now contains enough structured information that
+consistent processing becomes necessary.
+</p>
+    <p>Guide 5 shows how Lua can:
+</p>
+    <ul>
+     <li>
+      collect apparatus entries;
+     </li>
+     <li>
+      normalize their contents;
+     </li>
+     <li>
+      resolve witness and responsibility references;
+     </li>
+     <li>
+      validate the resulting records;
+     </li>
+     <li>
+      prepare structured editorial information for later ConTeXt typesetting.
+     </li>
+    </ul>
+    <dl>
+     <dd>
+      <b>
+       Next: Guide 5 &mdash;
+      </b>
+      <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">
+       Processing TEI critical apparatus data with Lua
+      </a>
+     </dd>
+    </dl>
+    <hr>
+    <div style="margin:1.5em 0 1em 0; padding:0.7em 1em; border:1px solid #a7c7e7; background:#eef6fc;">
+     <p><b>Guide 4 of 6 &mdash; Encoding complex textual variation in TEI</b>
+</p>
+     <p><b>Previous: Guide 3 &mdash;</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
+&nbsp;&middot;&nbsp;
+<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
+&nbsp;&middot;&nbsp;
+<a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
+&nbsp;&middot;&nbsp;
+<b>Next: Guide 5 &mdash;</b> <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">Processing TEI critical apparatus data with Lua</a>
+</p>
+    </div>
     <h2>
      <span class="mw-headline" id="Related_pages">
       Related pages
@@ -3181,6 +4446,11 @@ and prepare reliable editorial data for ConTeXt.
       </a>
      </li>
      <li>
+      <a href="Understanding_TEI_documents_for_critical_editions.html" title="Understanding TEI documents for critical editions">
+       Understanding TEI documents for critical editions
+      </a>
+     </li>
+     <li>
       <a href="Declaring_witnesses_in_TEI_critical_editions.html" title="Declaring witnesses in TEI critical editions">
        Declaring witnesses in TEI critical editions
       </a>
@@ -3188,6 +4458,11 @@ and prepare reliable editorial data for ConTeXt.
      <li>
       <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">
        Encoding a basic critical apparatus in TEI
+      </a>
+     </li>
+     <li>
+      <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">
+       Processing TEI critical apparatus data with Lua
       </a>
      </li>
      <li>
@@ -3215,20 +4490,12 @@ and prepare reliable editorial data for ConTeXt.
        Processing XML with Lua
       </a>
      </li>
+     <li>
+      <a href="Typesetting_a_TEI_critical_apparatus_with_ConTeXt.html" title="Typesetting a TEI critical apparatus with ConTeXt">
+       Typesetting a TEI critical apparatus with ConTeXt
+      </a>
+     </li>
     </ul>
-    <hr>
-    <div style="margin: 1.5em 0 1em 0; padding: 0.7em 1em; border: 1px solid #a7c7e7; background: #eef6fc;">
-     <p><b>Guide 4 of 6 &mdash; Encoding complex textual variation in TEI</b>
-</p>
-     <p><b>Previous:</b> <a href="Encoding_a_basic_critical_apparatus_in_TEI.html" title="Encoding a basic critical apparatus in TEI">Encoding a basic critical apparatus in TEI</a>
-&nbsp;&middot;&nbsp;
-<a href="Building_critical_editions_from_TEI_XML.html" title="Building critical editions from TEI XML">Collection overview</a>
-&nbsp;&middot;&nbsp;
-<a href="Glossary_of_terms_used_in_the_TEI_XML_critical_edition_guides.html" title="Glossary of terms used in the TEI XML critical edition guides">Glossary</a>
-&nbsp;&middot;&nbsp;
-<b>Next:</b> <a href="Processing_TEI_critical_apparatus_data_with_Lua.html" title="Processing TEI critical apparatus data with Lua">Processing TEI critical apparatus data with Lua</a>
-</p>
-    </div>
    </div>
   </article>
   <footer>
@@ -3239,7 +4506,7 @@ and prepare reliable editorial data for ConTeXt.
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-29
+     Mirrored on 2026-08-31
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">

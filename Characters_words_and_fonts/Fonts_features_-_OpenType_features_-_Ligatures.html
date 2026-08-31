@@ -18,19 +18,24 @@
     Characters words and fonts/Fonts features - OpenType features - Ligatures
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4673&diff=42070">2025-02-02</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4673&diff=43779">2026-08-29</a>
         </p>
   </header>
   <article>
    <div class="mw-parser-output">
-    <p><a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/LuaTeX.html" title="ConTeXt and Lua programming/ConTeXt Development/LuaTeX">LuaTeX</a> and <a href="../ConTeXt_and_Lua_programming/ConTeXt_Development/Mark_IV.html" title="ConTeXt and Lua programming/ConTeXt Development/Mark IV">Mark IV</a> allow advanced usage and manipulation of <a class="new" href="../index.php?title=Open_Type&action=edit&redlink=1" title="Open Type (page does not exist)">Open Type</a> <i>open-type features</i>. Some features, such as <i>onum</i> (oldstyle) and <i>smcp</i> (smallcaps) are known to most users of Open Type fonts, and virtually every open type font has default features for kerning (<i>kern</i>) and ligatures (<i>liga</i>). More advanced OT fonts can have lots more, including the Stylistic Set feature <i>ss&lt;nn&gt;</i> (where <i>nn</i> stands for any numeral between 01 and 99). 
+    <div style="margin:0 0 1.5em 0; padding:0.85em 1em; border:1px solid #d6a34a; border-left:6px solid #d6a34a; background:#fff8e8;">
+     <p><b>This page has recently been revised and reorganized.</b>
 </p>
+     <p>Further corrections, additions, and improvements are welcome.
+Please feel free to edit or modify this page to improve it.
+</p>
+    </div>
     <div class="toc" id="toc">
      <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
      <div class="toctitle" dir="ltr" lang="en">
-      <h3>
+      <h2>
        Contents
-      </h3>
+      </h2>
       <span class="toctogglespan">
        <label class="toctogglelabel" for="toctogglecheckbox">
        </label>
@@ -38,831 +43,1259 @@
      </div>
      <ul>
       <li class="toclevel-1 tocsection-1">
-       <a href="#Features_in_general">
+       <a href="#OpenType_features_in_ConTeXt">
         <span class="tocnumber">
          1
         </span>
         <span class="toctext">
-         Features in general
+         OpenType features in ConTeXt
         </span>
        </a>
        <ul>
         <li class="toclevel-2 tocsection-2">
-         <a href="#Open-type_features">
+         <a href="#1._OpenType_feature_and_ConTeXt_feature_set">
           <span class="tocnumber">
            1.1
           </span>
           <span class="toctext">
-           Open-type features
+           1. OpenType feature and ConTeXt feature set
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2._Defining_a_feature_set">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           2. Defining a feature set
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-4">
+         <a href="#3._Applying_a_feature_locally">
+          <span class="tocnumber">
+           1.3
+          </span>
+          <span class="toctext">
+           3. Applying a feature locally
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#4._Combining_several_features">
+          <span class="tocnumber">
+           1.4
+          </span>
+          <span class="toctext">
+           4. Combining several features
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#5._Modifying_the_active_feature_set">
+          <span class="tocnumber">
+           1.5
+          </span>
+          <span class="toctext">
+           5. Modifying the active feature set
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#6._Script_and_language_information">
+          <span class="tocnumber">
+           1.6
+          </span>
+          <span class="toctext">
+           6. Script and language information
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-8">
+         <a href="#7._Inspecting_and_debugging_OpenType_processing">
+          <span class="tocnumber">
+           1.7
+          </span>
+          <span class="toctext">
+           7. Inspecting and debugging OpenType processing
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#8._Common_OpenType_feature_tags">
+          <span class="tocnumber">
+           1.8
+          </span>
+          <span class="toctext">
+           8. Common OpenType feature tags
           </span>
          </a>
          <ul>
-          <li class="toclevel-3 tocsection-3">
-           <a href="#Adding_features_on_the_fly">
+          <li class="toclevel-3 tocsection-10">
+           <a href="#8.1_Ligatures_and_contextual_forms">
             <span class="tocnumber">
-             1.1.1
+             1.8.1
             </span>
             <span class="toctext">
-             Adding features on the fly
+             8.1 Ligatures and contextual forms
             </span>
            </a>
           </li>
-          <li class="toclevel-3 tocsection-4">
-           <a href="#Debugging_features">
+          <li class="toclevel-3 tocsection-11">
+           <a href="#8.2_Letter_forms">
             <span class="tocnumber">
-             1.1.2
+             1.8.2
             </span>
             <span class="toctext">
-             Debugging features
+             8.2 Letter forms
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-12">
+           <a href="#8.3_Figures">
+            <span class="tocnumber">
+             1.8.3
+            </span>
+            <span class="toctext">
+             8.3 Figures
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-13">
+           <a href="#8.4_Stylistic_sets">
+            <span class="tocnumber">
+             1.8.4
+            </span>
+            <span class="toctext">
+             8.4 Stylistic sets
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-14">
+           <a href="#8.5_East_Asian_OpenType_features">
+            <span class="tocnumber">
+             1.8.5
+            </span>
+            <span class="toctext">
+             8.5 East Asian OpenType features
             </span>
            </a>
           </li>
          </ul>
         </li>
-        <li class="toclevel-2 tocsection-5">
-         <a href="#Featuresets">
-          <span class="tocnumber">
-           1.2
-          </span>
-          <span class="toctext">
-           Featuresets
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-6">
-       <a href="#Sample_file_with_examples">
-        <span class="tocnumber">
-         2
-        </span>
-        <span class="toctext">
-         Sample file with examples
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-7">
-         <a href="#Note">
-          <span class="tocnumber">
-           2.1
-          </span>
-          <span class="toctext">
-           Note
-          </span>
-         </a>
-        </li>
-       </ul>
-      </li>
-      <li class="toclevel-1 tocsection-8">
-       <a href="#List_of_syntax_for_OpenType_features">
-        <span class="tocnumber">
-         3
-        </span>
-        <span class="toctext">
-         List of syntax for OpenType features
-        </span>
-       </a>
-      </li>
-      <li class="toclevel-1 tocsection-9">
-       <a href="#Ligatures">
-        <span class="tocnumber">
-         4
-        </span>
-        <span class="toctext">
-         Ligatures
-        </span>
-       </a>
-       <ul>
-        <li class="toclevel-2 tocsection-10">
-         <a href="#Introduction">
-          <span class="tocnumber">
-           4.1
-          </span>
-          <span class="toctext">
-           Introduction
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-11">
-         <a href="#Traditional_TeX_methods_to_break_ligatures">
-          <span class="tocnumber">
-           4.2
-          </span>
-          <span class="toctext">
-           Traditional TeX methods to break ligatures
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-12">
-         <a href="#Enabling_Ligatures_in_fonts">
-          <span class="tocnumber">
-           4.3
-          </span>
-          <span class="toctext">
-           Enabling Ligatures in fonts
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-13">
-         <a href="#Single_places">
-          <span class="tocnumber">
-           4.4
-          </span>
-          <span class="toctext">
-           Single places
-          </span>
-         </a>
-        </li>
-        <li class="toclevel-2 tocsection-14">
-         <a href="#Replacements">
-          <span class="tocnumber">
-           4.5
-          </span>
-          <span class="toctext">
-           Replacements
-          </span>
-         </a>
-        </li>
         <li class="toclevel-2 tocsection-15">
-         <a href="#Blocking">
+         <a href="#9._Ligatures">
           <span class="tocnumber">
-           4.6
+           1.9
           </span>
           <span class="toctext">
-           Blocking
+           9. Ligatures
           </span>
          </a>
         </li>
         <li class="toclevel-2 tocsection-16">
-         <a href="#Word_suppression">
+         <a href="#10._Advanced:_adding_OpenType_behaviour">
           <span class="tocnumber">
-           4.7
+           1.10
           </span>
           <span class="toctext">
-           Word suppression
+           10. Advanced: adding OpenType behaviour
+          </span>
+         </a>
+         <ul>
+          <li class="toclevel-3 tocsection-17">
+           <a href="#10.1_Lua-defined_features">
+            <span class="tocnumber">
+             1.10.1
+            </span>
+            <span class="toctext">
+             10.1 Lua-defined features
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-18">
+           <a href="#10.2_Font_goodies">
+            <span class="tocnumber">
+             1.10.2
+            </span>
+            <span class="toctext">
+             10.2 Font goodies
+            </span>
+           </a>
+          </li>
+          <li class="toclevel-3 tocsection-19">
+           <a href="#10.3_OpenType_feature_files">
+            <span class="tocnumber">
+             1.10.3
+            </span>
+            <span class="toctext">
+             10.3 OpenType feature files
+            </span>
+           </a>
+          </li>
+         </ul>
+        </li>
+        <li class="toclevel-2 tocsection-20">
+         <a href="#11._Historical_syntax">
+          <span class="tocnumber">
+           1.11
+          </span>
+          <span class="toctext">
+           11. Historical syntax
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-21">
+         <a href="#12._Troubleshooting">
+          <span class="tocnumber">
+           1.12
+          </span>
+          <span class="toctext">
+           12. Troubleshooting
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-22">
+         <a href="#13._Related_pages">
+          <span class="tocnumber">
+           1.13
+          </span>
+          <span class="toctext">
+           13. Related pages
           </span>
          </a>
         </li>
        </ul>
       </li>
-      <li class="toclevel-1 tocsection-17">
-       <a href="#See_also">
-        <span class="tocnumber">
-         5
-        </span>
-        <span class="toctext">
-         See also
-        </span>
-       </a>
-      </li>
      </ul>
     </div>
-    <h2>
-     <span class="mw-headline" id="Features_in_general">
-      Features in general
-     </span>
-    </h2>
-    <p>In MkIV there are two kinds of font feature directly visible to the user: <i>featureset</i> and <i>open-type feature</i>. 
+    <p>Modern OpenType fonts can contain much more than a collection of glyphs.
+They may also contain instructions for selecting or positioning glyphs in
+particular contexts.
 </p>
-    <h3>
-     <span class="mw-headline" id="Open-type_features">
-      Open-type features
-     </span>
-    </h3>
-    <p>The open-type features are specified in the font and are composed of individual "lookups" which specify each substitution and positioning action to be performed in the processing. These open-type features are plugged in and out of the "stack" of lookups to be processed in the MkIV open type handler. These features are represented by a 4-character name (<i>onum</i>, <i>smcp</i>, etc.) and in MkIV are associated with a keyval that turns it on ("yes") or off ("no"). For example, '[onum=yes]' turns on the lookup substitutions in the font which replace a line numeral with an oldstyle one. Here the key 'yes' means "include open-type feature <i>onum</i> into the processed stack"; the key 'no' means "do not include open-type feature <i>onum</i> in the processed stack".
+    <p>Examples include:
 </p>
-    <h4>
-     <span class="mw-headline" id="Adding_features_on_the_fly">
-      Adding features on the fly
-     </span>
-    </h4>
-    <p>Sometimes you want to provisionally add OpenType features to a font.  There are at least three ways to do this.
-</p>
-    <ol>
+    <ul>
      <li>
-      Use a low-level
-      <code>font.handlers.otf.addfeature</code>
-      callback function to define new OTF features.  See Section 8.14 of
-      <a class="external text" href="https://www.pragma-ade.nl/general/manuals/fonts-mkiv.pdf" rel="nofollow">
-       fonts-mkiv manual
-      </a>
-      for details of the syntax, or refer to the examples
-      <a class="external text" href="http://minimals.metatex.org/current/context/test/doc/context/tests/mkiv/fonts/extensions-001.tex" rel="nofollow">
-       here
-      </a>
-      .
+      standard ligatures such as
+      <code>fi</code>
+      and
+      <code>fl</code>
+      ;
      </li>
      <li>
-      Define the new features in an
-      <code>lfg</code>
-      "goodies" file and load it with the
-      <code>goodies</code>
-      key.  See
-      <a class="external text" href="http://minimals.metatex.org/current/context/test/doc/context/tests/mkiv/fonts/greek-001.tex" rel="nofollow">
-       this example
-      </a>
-      with the corresponding
-      <a class="external text" href="http://minimals.metatex.org/current/context/test/doc/context/tests/mkiv/fonts/oxoniensis.lfg" rel="nofollow">
-       lfg
-      </a>
-      file.
+      small capitals;
      </li>
      <li>
-      Use a feature file (in the
-      <code>fea</code>
-      format) and load it with the
-      <code>featurefile</code>
-      key. See
-      <a href="../Fontfeaturefiles.html" title="Fontfeaturefiles">
-       Fontfeaturefiles
-      </a>
-      .
+      oldstyle or lining figures;
      </li>
-    </ol>
-    <h4>
-     <span class="mw-headline" id="Debugging_features">
-      Debugging features
-     </span>
-    </h4>
-    <p>For an OpenType to work properly, all the relevant glyphs must come from the same font (either the original font or one of the fallbacks).  For example, the font <a class="external text" href="https://github.com/aminabedi68/Mikhak/tree/master/Font/ttf" rel="nofollow">Mikhak</a> now misses glyphs for en dash and em dash, hence the <code>tlig</code> feature does not work to automatically change double or triple dashes to en and em dashes.  This would not work even if we added fallbacks for those two characters.  However, if we also create a fallback for the dash character, then this will work.
+     <li>
+      proportional or tabular figures;
+     </li>
+     <li>
+      discretionary ligatures;
+     </li>
+     <li>
+      stylistic alternates;
+     </li>
+     <li>
+      stylistic sets;
+     </li>
+     <li>
+      script- and language-specific substitutions.
+     </li>
+    </ul>
+    <p>ConTeXt can activate these OpenType features and combine them into named
+sets that can be applied globally or locally.
 </p>
-    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
-
-<span class="cs"><span class="stylecs">\definefontfallback</span></span><span class="brx">[</span>myfallback<span class="brx">]</span><span class="brx">[</span>dejavuserif*default<span class="brx">]</span><span class="brx">[</span>0x02d,0x2013,0x2014<span class="brx">]</span><span class="brx">[</span>check<span class="brx">=</span>yes,force<span class="brx">=</span>yes<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definefontsynonym</span></span><span class="brx">[</span>mytestfont<span class="brx">]</span><span class="brx">[</span>file:Mikhak-Medium.ttf<span class="brx">]</span><span class="brx">[</span>fallbacks<span class="brx">=</span>myfallback<span class="brx">]</span>
-      <span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>mytestfont*arabic<span class="brx">]</span>
-      foo--ofo---oof <span class="brx">[</span><span class="cs">\char</span>"002D<span class="brx">]</span> <span class="brx">[</span><span class="cs">\char</span>"2013<span class="brx">]</span> <span class="brx">[</span><span class="cs">\char</span>"2014<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\stoptext</span></span>
-</pre>
-    <p><br>
-OpenType features can be complicated to understand or debug.  One useful command to see how they are working is <tt><a class="new" href="../index.php?title=Command/showotfcomposition&action=edit&redlink=1.html" title="Command/showotfcomposition (page does not exist)">\showotfcomposition</a></tt>.
+    <p>This page explains the distinction between an OpenType feature and a
+ConTeXt feature set, shows the basic commands used to control them, and
+provides a reference to common OpenType feature tags.
 </p>
-    <pre class="tex"><span class="cs"><span class="documentcs">\starttext</span></span>
-<span class="comment">% -1 for the second argument means RTL.  Leave it out for LTR text.</span>
-<span class="cs"><span class="documentcs">\showotfcomposition</span></span><span class="br">{</span>mikhak-medium*arabic<span class="br">}</span><span class="br">{</span>-1<span class="br">}</span><span class="br">{</span>سلام علیکم<span class="br">}</span>
-<span class="cs"><span class="documentcs">\stoptext</span></span>
-</pre>
-    <h3>
-     <span class="mw-headline" id="Featuresets">
-      Featuresets
-     </span>
-    </h3>
-    <p>A featureset is a composed of a set of open-type features. Featuresets are specified using <tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt>. For each given body font in the typeface we specify the <i>global</i> default set of <i>open-type</i> features to be used for that font. This is usually done in the preamble to our document, an environment file, or a typescript file, or the like. 
-</p>
-    <p>For example, using TeX-Gyre Schola we can specify the following default, global set open-type features in the preamble:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
-  <span class="brx">[</span>schola-preset<span class="brx">]</span>
-  <span class="brx">[</span>mode<span class="brx">=</span>node,script<span class="brx">=</span>latn,language<span class="brx">=</span>dflt,kern<span class="brx">=</span>yes,liga<span class="brx">=</span>yes,lnum<span class="brx">=</span>yes<span class="brx">]</span>   
-</pre>
-    <p><tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt>
-</p>
-    <p>All other open-type features in the font are not included in the processing.
-</p>
-    <p>Now when we want to change the default, we use <tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt> to specify local featuresets. The command <tt><a href="../Command/feature.html" title="Command/feature">\feature</a></tt> and its siblings is then used to control the action of those featuresets. Here are the commands:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\addfeature</span></span>        <span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span> <span class="brx">[</span>more<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\subtractfeature</span></span>   <span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span> <span class="brx">[</span>less<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>-<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\replacefeature</span></span>    <span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span>  <span class="brx">[</span>new<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span><span class="brx">=</span><span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\resetandaddfeature</span></span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>local<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>!<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\revivefeature</span></span>     <span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span>  <span class="brx">[</span>old<span class="brx">]</span><span class="brx">[</span>f:mine<span class="brx">]</span>  <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>&gt;<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\resetfeature</span></span>                <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>reset<span class="brx">]</span>          <span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>&lt;<span class="brx">]</span>
-</pre>
-    <p>There are actually only six commands: Each row includes a set of three synonyms for one command.
+    <p>For general font selection and configuration, see
+<a class="new" href="../index.php?title=Use_any_font_you_want&action=edit&redlink=1" title="Use any font you want (page does not exist)">Use any font you want</a>.
 </p>
     <h2>
-     <span class="mw-headline" id="Sample_file_with_examples">
-      Sample file with examples
+     <span class="mw-headline" id="1._OpenType_feature_and_ConTeXt_feature_set">
+      1. OpenType feature and ConTeXt feature set
      </span>
     </h2>
-    <p>Let us now go through a complete sample file with examples. Let us first define our global default featureset and activate it with a typescript:
+    <p>There are two related but distinct concepts.
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
-  <span class="brx">[</span>schola-preset<span class="brx">]</span>
-  <span class="brx">[</span>mode<span class="brx">=</span>node,script<span class="brx">=</span>latn,language<span class="brx">=</span>dflt,kern<span class="brx">=</span>yes,liga<span class="brx">=</span>yes,lnum<span class="brx">=</span>yes<span class="brx">]</span>   
-
-
-<span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span> <span class="brx">[</span>name:texgyreschola-regular.otf<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span>schola-preset<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\stoptypescript</span></span>
-
- <span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>size<span class="brx">]</span>
-    <span class="cs"><span class="stylecs">\definebodyfont</span></span>
-     <span class="brx">[</span>35.8pt,29.8pt,24.8pt,20.7pt,17.3pt,14.4pt,12pt,11pt,10pt,9pt,8pt<span class="brx">]</span>
-     <span class="brx">[</span>rm<span class="brx">]</span>
-     <span class="brx">[</span>tf<span class="brx">=</span>Serif sa 1<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\stoptypescript</span></span>
-
- <span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>schola-default<span class="brx">]</span> 
- <span class="cs"><span class="stylecs">\definebodyfontenvironment</span></span>
-  <span class="brx">[</span>schola-default<span class="brx">]</span>
-  <span class="brx">[</span>default<span class="brx">]</span>
-  <span class="brx">[</span>interlinespace<span class="brx">=</span>2.7ex<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>schola-default<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="comment">% [default]</span>
- <span class="cs"><span class="stylecs">\stoptypescript</span></span>
- 
- <span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>schola-default<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>schola-default,12pt<span class="brx">]</span>
-</pre>
-    <p>In the above note that we start with just a global, default feature set of kerns, ligatures, and line numerals.
-</p>
-    <p>Now when we want to change the default, we use <tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt> to specify featuresets. The command <tt><a href="../Command/feature.html" title="Command/feature">\feature</a></tt> and its siblings is then used to control the action of those featuresets.
-</p>
-    <p>At this stage which open-type feature is being plugged into or unplugged from the stack is invisible to the user. We just speak in terms of featuresets. TeX-Gyre Schola has a decent set of open-type features. Using a few of them, let us set up a few featuresets:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:smallcaps<span class="brx">]</span>   		<span class="brx">[</span>smcp<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:thinimacron<span class="brx">]</span> 		<span class="brx">[</span>ss04<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:upsidedown<span class="brx">]</span> 		<span class="brx">[</span>dlig<span class="brx">=</span>yes<span class="brx">]</span>
-</pre>
-    <p>Above, all of our featuresets are mapped to open-type features that plug into the stack.
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstyle<span class="brx">]</span>			<span class="brx">[</span>onum<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:nocaps<span class="brx">]</span>       		<span class="brx">[</span>smcp<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:wideimacron<span class="brx">]</span>  		<span class="brx">[</span>ss04<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:rightsideup<span class="brx">]</span> 		<span class="brx">[</span>dlig<span class="brx">=</span>no<span class="brx">]</span>
-</pre>
-    <p>We can also be redundant to the default open-type feature set:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:ligatures<span class="brx">]</span> 		<span class="brx">[</span>liga<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:noligatures<span class="brx">]</span> 		<span class="brx">[</span>liga<span class="brx">=</span>no<span class="brx">]</span>
-</pre>
-    <p>Of course, a featureset set can include more than one open-type feature. In advanced applications this will be the norm:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstyle<span class="brx">]</span>			<span class="brx">[</span>onum<span class="brx">=</span>yes,lnum<span class="brx">=</span>no<span class="brx">]</span>
-</pre>
-    <p>NOTE: In this case we have to specify 'lnum=no' because it is already defined in our default feature set in the preamble etc. The order of lookups in the font itself could conceivably have an impact as well.
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstyleupsidedown<span class="brx">]</span>	<span class="brx">[</span>onum<span class="brx">=</span>yes,dlig<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstylerightsideup<span class="brx">]</span>	<span class="brx">[</span>onum<span class="brx">=</span>no,dlig<span class="brx">=</span>no<span class="brx">]</span>
-</pre>
-    <p>Above, each featureset is mapped to an open-type feature set that plugs into or unplugs from the stack. But we can mix things up:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstylewmacron<span class="brx">]</span>	<span class="brx">[</span>ss04<span class="brx">=</span>no,onum<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstylesmallcaps<span class="brx">]</span>	<span class="brx">[</span>smcp<span class="brx">=</span>yes,onum<span class="brx">=</span>no<span class="brx">]</span>
-</pre>
-    <p>The above two illustrate the point that featuresets hide from the user which actual open-type features are being plugged into or unplugged from the stack. 
-</p>
-    <p>Now let's put some of the above featuresets in action. Note the use of synonyms in both the activated code and in the comments:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
-  <span class="brx">[</span>schola-preset<span class="brx">]</span>
-  <span class="brx">[</span>mode<span class="brx">=</span>node,script<span class="brx">=</span>latn,language<span class="brx">=</span>dflt,kern<span class="brx">=</span>yes,liga<span class="brx">=</span>yes,lnum<span class="brx">=</span>yes<span class="brx">]</span>
-
- <span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>name<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\definefontsynonym</span></span> <span class="brx">[</span>Serif<span class="brx">]</span> <span class="brx">[</span>name:texgyreschola-regular.otf<span class="brx">]</span><span class="brx">[</span>features<span class="brx">=</span>schola-preset<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\stoptypescript</span></span>
-
- <span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>size<span class="brx">]</span>
-    <span class="cs"><span class="stylecs">\definebodyfont</span></span>
-     <span class="brx">[</span>35.8pt,29.8pt,24.8pt,20.7pt,17.3pt,14.4pt,12pt,11pt,10pt,9pt,8pt<span class="brx">]</span>
-     <span class="brx">[</span>rm<span class="brx">]</span>
-     <span class="brx">[</span>tf<span class="brx">=</span>Serif sa 1<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\stoptypescript</span></span>
-
- <span class="cs"><span class="stylecs">\starttypescript</span></span> <span class="brx">[</span>schola-default<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\definebodyfontenvironment</span></span>
-  <span class="brx">[</span>schola-default<span class="brx">]</span>
-  <span class="brx">[</span>default<span class="brx">]</span>
-  <span class="brx">[</span>interlinespace<span class="brx">=</span>2.7ex<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definetypeface</span></span> <span class="brx">[</span>schola-default<span class="brx">]</span> <span class="brx">[</span>rm<span class="brx">]</span> <span class="brx">[</span>serif<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="brx">[</span>schola-preset<span class="brx">]</span> <span class="comment">% [default]</span>
- <span class="cs"><span class="stylecs">\stoptypescript</span></span>
-
- <span class="cs"><span class="stylecs">\usetypescript</span></span><span class="brx">[</span>schola-default<span class="brx">]</span>
- <span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>schola-default,12pt<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:smallcaps<span class="brx">]</span>                 <span class="brx">[</span>smcp<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:thinimacron<span class="brx">]</span>               <span class="brx">[</span>ss04<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:upsidedown<span class="brx">]</span>                <span class="brx">[</span>dlig<span class="brx">=</span>yes<span class="brx">]</span>
-
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstyle<span class="brx">]</span>                  <span class="brx">[</span>onum<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:nocaps<span class="brx">]</span>                    <span class="brx">[</span>smcp<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:wideimacron<span class="brx">]</span>               <span class="brx">[</span>ss04<span class="brx">=</span>no<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:rightsideup<span class="brx">]</span>               <span class="brx">[</span>dlig<span class="brx">=</span>no<span class="brx">]</span>
-
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:ligatures<span class="brx">]</span>                 <span class="brx">[</span>liga<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:noligatures<span class="brx">]</span>               <span class="brx">[</span>liga<span class="brx">=</span>no<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstyle<span class="brx">]</span>                  <span class="brx">[</span>onum<span class="brx">=</span>yes,lnum<span class="brx">=</span>no<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstyleupsidedown<span class="brx">]</span>        <span class="brx">[</span>onum<span class="brx">=</span>yes,dlig<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstylerightsideup<span class="brx">]</span>       <span class="brx">[</span>onum<span class="brx">=</span>no,dlig<span class="brx">=</span>no<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:oldstylewmacron<span class="brx">]</span>   <span class="brx">[</span>ss04<span class="brx">=</span>no,onum<span class="brx">=</span>yes<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>f:newstylesmallcaps<span class="brx">]</span> <span class="brx">[</span>smcp<span class="brx">=</span>yes,onum<span class="brx">=</span>no<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\defineparagraphs</span></span><span class="brx">[</span>X<span class="brx">]</span><span class="brx">[</span>n<span class="brx">=</span>2, rule<span class="brx">=</span>on, width<span class="brx">=</span>10cm<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\startTEXpage</span></span><span class="brx">[</span>offset<span class="brx">=</span>10pt<span class="brx">]</span>
-
-<span class="cs"><span class="systemcs">\define</span></span><span class="cs">\SAMPLE</span><span class="br">{</span>123 Idr&imacr;s&nbsp;?`&nbsp;!` VA fi<span class="br">}</span>
-
-<span class="cs">\startX</span>
-                                     A<span class="brx">)</span> <span class="cs">\SAMPLE</span><span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>f:oldstyle<span class="brx">]</span>              B<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>more<span class="brx">]</span><span class="brx">[</span>f:thinimacron<span class="brx">]</span>        C<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-<span class="cs"><span class="stylecs">\addfeature</span></span><span class="brx">[</span>f:upsidedown<span class="brx">]</span>            D<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>f:smallcaps<span class="brx">]</span>             E<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-<span class="cs">\nextX</span>
-<span class="cs"><span class="stylecs">\addfeature</span></span><span class="brx">[</span>f:wideimacron<span class="brx">]</span>           F<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>-<span class="brx">]</span><span class="brx">[</span>f:upsidedown<span class="brx">]</span>            G<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span><span class="brx">=</span><span class="brx">]</span><span class="brx">[</span>f:oldstyleupsidedown<span class="brx">]</span>    H<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>!<span class="brx">]</span><span class="brx">[</span>f:smallcaps<span class="brx">]</span>             I<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-
-<span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>&lt;<span class="brx">]</span>                          J<span class="brx">)</span> <span class="cs">\SAMPLE</span> <span class="cs"><span class="documentcs">\blank</span></span>
-<span class="cs">\stopX</span>
-<span class="cs"><span class="documentcs">\stopTEXpage</span></span>
-</pre>
-    <p>Now let us review the results:
-</p>
-    <p><a class="image" href="../File:Adding-featuresets.png"><img alt="Adding-featuresets.png" decoding="async" height="233" src="../images/6/69/Adding-featuresets.webp" width="422"></a>
-</p>
-    <p>Finally, we can mix featuresets using comma-separated lists. Here is an example:
+    <dl>
+     <dt>
+      OpenType feature
+     </dt>
+     <dd>
+      A capability provided by the font itself and identified by a standard tag such as
+      <code>liga</code>
+      ,
+      <code>smcp</code>
+      ,
+      <code>onum</code>
+      , or
+      <code>ss01</code>
+      .
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      ConTeXt feature set
+     </dt>
+     <dd>
+      A named collection of one or more OpenType features, defined with
+      <tt>
+       <a href="../Command/definefontfeature.html" title="Command/definefontfeature">
+        \definefontfeature
+       </a>
+      </tt>
+      .
+     </dd>
+    </dl>
+    <p>For example:
 </p>
     <ul class="demo">
      <li class="code">
       <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
- 
-test 123 <span class="br">{</span><span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>smallcaps,oldstyle<span class="brx">]</span> test 123<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>myoldstyle<span class="brx">]</span>
+  <span class="brx">[</span>onum<span class="brx">=</span>yes,
+   lnum<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Default figures: 1234567890
+
+<span class="br">{</span><span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>myoldstyle<span class="brx">]</span>
+Oldstyle figures: 1234567890<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
 </pre>
      </li>
      <li class="rendering">
-      <img height="18" src="../wikiteximage/5d404d3c8e21587a5c01cb08d9f2e229.webp" width="122">
+      <img height="1240" src="../wikiteximage/71f1bb70152b6922e6ce275723d78806.webp" width="874">
      </li>
     </ul>
-    <p>You will also note that context already has some common featuresets predefined.
+    <p>Here:
 </p>
-    <h3>
-     <span class="mw-headline" id="Note">
-      Note
-     </span>
-    </h3>
-    <p>An earlier version of this functionality was contained in the commands 
-</p>
-    <pre class="tex"><span class="cs">\addff</span><span class="br">{</span>featureset<span class="br">}</span> <span class="comment">% Add absolute font-feature set -- replaces default set</span>
-<span class="cs">\subff</span><span class="br">{</span>featureset<span class="br">}</span> <span class="comment">% Subtract absolute font-feature set -- replaces default set</span>
-<span class="cs">\addfs</span><span class="br">{</span>featureset<span class="br">}</span> <span class="comment">% Add font-feature set on top of current stack</span>
-<span class="cs">\subfs</span><span class="br">{</span>featureset<span class="br">}</span> <span class="comment">% Subtract font-feature set from current stack</span>
-</pre>
-    <p>These have now been deprecated and, presumably, will eventually disappear.
-</p>
-    <h2>
-     <span class="mw-headline" id="List_of_syntax_for_OpenType_features">
-      List of syntax for OpenType features
-     </span>
-    </h2>
     <ul>
      <li>
-      Ligatures
-      <ul>
-       <li>
-        Common/standard ligatures
-        <code>liga</code>
-       </li>
-       <li>
-        Contextual alternates
-        <code>calt</code>
-       </li>
-       <li>
-        Discretionary ligatures
-        <code>dlig</code>
-       </li>
-      </ul>
+      <code>onum</code>
+      and
+      <code>lnum</code>
+      are OpenType feature tags;
      </li>
      <li>
-      Letters
-      <ul>
-       <li>
-        Small caps
-        <code>smcp</code>
-       </li>
-       <li>
-        Capitals to small caps
-        <code>c2sc</code>
-       </li>
-       <li>
-        Swashes
-        <code>swsh</code>
-       </li>
-       <li>
-        Stylistic alternates
-        <code>salt</code>
-       </li>
-      </ul>
-     </li>
-     <li>
-      Numbers
-      <ul>
-       <li>
-        Lining figures
-        <code>lnum</code>
-       </li>
-       <li>
-        Oldstyle figures
-        <code>onum</code>
-       </li>
-       <li>
-        Proportional figures
-        <code>pnum</code>
-       </li>
-       <li>
-        Tabular figures
-        <code>tnum</code>
-       </li>
-       <li>
-        Fractions
-        <code>frac</code>
-       </li>
-       <li>
-        Ordinals
-        <code>ordn</code>
-       </li>
-      </ul>
-     </li>
-     <li>
-      Stylistic sets
-      <ul>
-       <li>
-        Stylistic sets 01&ndash;20
-        <code>ss##</code>
-       </li>
-      </ul>
-     </li>
-     <li>
-      East Asian script
-      <ul>
-       <li>
-        Width variants
-        <ul>
-         <li>
-          Proportional Widths
-          <code>pwid</code>
-         </li>
-         <li>
-          Proportional Alternate Widths
-          <code>palt</code>
-         </li>
-         <li>
-          Proportional Kana
-          <code>pkna</code>
-         </li>
-         <li>
-          Full Widths
-          <code>fwid</code>
-         </li>
-         <li>
-          Half Widths
-          <code>hwid</code>
-         </li>
-         <li>
-          Alternate Half Widths
-          <code>halt</code>
-         </li>
-         <li>
-          Third Widths
-          <code>twid</code>
-         </li>
-         <li>
-          Quarter Widths
-          <code>qwid</code>
-         </li>
-        </ul>
-       </li>
-       <li>
-        Cultural variants
-        <ul>
-         <li>
-          JIS78 Forms
-          <code>jp78</code>
-         </li>
-         <li>
-          JIS83 Forms
-          <code>jp83</code>
-         </li>
-         <li>
-          JIS90 Forms
-          <code>jp90</code>
-         </li>
-         <li>
-          JIS2004 Forms
-          <code>jp04</code>
-         </li>
-         <li>
-          Traditional Forms
-          <code>trad</code>
-         </li>
-         <li>
-          Ruby Notation Forms
-          <code>ruby</code>
-         </li>
-         <li>
-          Horizontal Kana Alternates
-          <code>hkna</code>
-         </li>
-         <li>
-          NLC Kanji Forms
-          <code>nlck</code>
-         </li>
-         <li>
-          Alternate Annotation Forms
-          <code>nalt</code>
-         </li>
-         <li>
-          Italics
-          <code>ital</code>
-         </li>
-        </ul>
-       </li>
-       <li>
-        Vertical features
-        <ul>
-         <li>
-          Vertical Kerning
-          <code>vkrn</code>
-         </li>
-         <li>
-          Vertical Alternates
-          <code>vert</code>
-         </li>
-         <li>
-          Proportional Alternate Vertical Metrics
-          <code>vpal</code>
-         </li>
-         <li>
-          Alternate Vertical Half Metrics
-          <code>vhal</code>
-         </li>
-         <li>
-          Vertical Kana Alternates
-          <code>vkna</code>
-         </li>
-        </ul>
-       </li>
-      </ul>
+      <code>myoldstyle</code>
+      is the name of a ConTeXt feature set.
      </li>
     </ul>
+    <div style="margin:1em 0; padding:0.8em 1em; border-left:5px solid #4a78a8; background:#eef5fb;">
+     <p><b>Important.</b>
+</p>
+     <p>A ConTeXt feature set does not create capabilities that are absent from
+the font. For example, <code>smcp=yes</code> can activate real small
+capitals only if the font provides the corresponding OpenType feature
+and glyphs.
+</p>
+    </div>
     <h2>
-     <span class="mw-headline" id="Ligatures">
-      Ligatures
+     <span class="mw-headline" id="2._Defining_a_feature_set">
+      2. Defining a feature set
      </span>
     </h2>
-    <p>A wiki page is dedicated to <a href="Fonts_features_-_OpenType_features_-_Ligatures/Ligatures.html" title="Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures">Ligatures</a>
+    <p>A feature set is defined with <tt><a href="../Command/definefontfeature.html" title="Command/definefontfeature">\definefontfeature</a></tt>.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>mysmallcaps<span class="brx">]</span>
+  <span class="brx">[</span>smcp<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p>A feature set may contain more than one OpenType feature:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>bookfigures<span class="brx">]</span>
+  <span class="brx">[</span>onum<span class="brx">=</span>yes,
+   pnum<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p>This makes it possible to give a meaningful name to a typographical
+configuration and reuse it later.
+</p>
+    <h2>
+     <span class="mw-headline" id="3._Applying_a_feature_locally">
+      3. Applying a feature locally
+     </span>
+    </h2>
+    <p>A defined feature set can be added locally with <tt><a href="../Command/feature.html" title="Command/feature">\feature</a></tt>.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>mysmallcaps<span class="brx">]</span>
+  <span class="brx">[</span>smcp<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Normal text.
+
+<span class="br">{</span><span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>mysmallcaps<span class="brx">]</span>
+Text with the small-cap feature enabled.<span class="br">}</span>
+
+Normal text again.
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/00f8fb90198f7f4a9a28c940d423dbfd.webp" width="874">
+     </li>
+    </ul>
+    <p>The feature change is local when it is placed inside a group.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Combining_several_features">
+      4. Combining several features
+     </span>
+    </h2>
+    <p>A feature set can contain several OpenType features:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>pagella<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>bookstyle<span class="brx">]</span>
+  <span class="brx">[</span>onum<span class="brx">=</span>yes,
+   lnum<span class="brx">=</span>no,
+   pnum<span class="brx">=</span>yes<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+Default: 1234567890
+
+<span class="br">{</span><span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>bookstyle<span class="brx">]</span>
+Book style: 1234567890<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="1240" src="../wikiteximage/53a63235a102ddc0a748fd82d3bac324.webp" width="874">
+     </li>
+    </ul>
+    <p>Several named feature sets may also be combined where appropriate.
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\feature</span></span><span class="brx">[</span>+<span class="brx">]</span><span class="brx">[</span>smallcaps,oldstyle<span class="brx">]</span>
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border-left:5px solid #d6a34a; background:#fff8e8;">
+     <p><b>Note.</b>
+</p>
+     <p>The result depends on the features actually provided by the selected
+font. Not every OpenType font contains every feature listed on this page.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._Modifying_the_active_feature_set">
+      5. Modifying the active feature set
+     </span>
+    </h2>
+    <p>ConTeXt provides several commands for changing the current set of font
+features.
+</p>
+    <p>The following forms are equivalent ways of expressing the same
+operations:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Action
+       </th>
+       <th>
+        Command
+       </th>
+       <th>
+        <tt>
+         <a href="../Command/feature.html" title="Command/feature">
+          \feature
+         </a>
+        </tt>
+        form
+       </th>
+       <th>
+        Short form
+       </th>
+      </tr>
+      <tr>
+       <td>Add
+</td>
+       <td><code>\addfeature[f:mine]</code>
+</td>
+       <td><code>\feature[more][f:mine]</code>
+</td>
+       <td><code>\feature[+][f:mine]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Subtract
+</td>
+       <td><code>\subtractfeature[f:mine]</code>
+</td>
+       <td><code>\feature[less][f:mine]</code>
+</td>
+       <td><code>\feature[-][f:mine]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Replace
+</td>
+       <td><code>\replacefeature[f:mine]</code>
+</td>
+       <td><code>\feature[new][f:mine]</code>
+</td>
+       <td><code>\feature[=][f:mine]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Reset and add
+</td>
+       <td><code>\resetandaddfeature[f:mine]</code>
+</td>
+       <td><code>\feature[local][f:mine]</code>
+</td>
+       <td><code>\feature[!][f:mine]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Restore
+</td>
+       <td><code>\revivefeature[f:mine]</code>
+</td>
+       <td><code>\feature[old][f:mine]</code>
+</td>
+       <td><code>\feature[&gt;]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Reset
+</td>
+       <td><code>\resetfeature</code>
+</td>
+       <td><code>\feature[reset]</code>
+</td>
+       <td><code>\feature[&lt;]</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Retest all long and short forms in a current LMTX installation and
+<p>confirm their recommended use before removing this note. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</p>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="6._Script_and_language_information">
+      6. Script and language information
+     </span>
+    </h2>
+    <p>Some OpenType processing depends on the script or language for which a
+font is being used.
+</p>
+    <p>Older examples often contain definitions such as:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span>
+  <span class="brx">[</span>example<span class="brx">]</span>
+  <span class="brx">[</span>mode<span class="brx">=</span>node,
+   script<span class="brx">=</span>latn,
+   language<span class="brx">=</span>dflt,
+   kern<span class="brx">=</span>yes,
+   liga<span class="brx">=</span>yes<span class="brx">]</span>
+</pre>
+    <p>The <code>script</code> and <code>language</code> keys describe the
+OpenType script and language system used while processing the font.
+</p>
+    <p>They should not be confused with ConTeXt document-language settings such
+as <tt><a href="../Command/mainlanguage.html" title="Command/mainlanguage">\mainlanguage</a></tt> or <tt><a href="../Command/language.html" title="Command/language">\language</a></tt>.
+</p>
+    <p>For the distinction between document language, script, font, and writing
+direction, see:
+</p>
+    <ul>
+     <li>
+      <a href="../Input_and_compilation/Languages.html" title="Input and compilation/Languages">
+       Languages
+      </a>
+     </li>
+     <li>
+      <a href="../Input_and_compilation/Languages/Mixed_languages.html" title="Input and compilation/Languages/Mixed languages">
+       Mixed languages
+      </a>
+     </li>
+     <li>
+      <a href="Use_any_fonts_you_want.html" title="Characters words and fonts/Use any fonts you want">
+       Use any font you want
+      </a>
+     </li>
+    </ul>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> {{{1}}} <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="7._Inspecting_and_debugging_OpenType_processing">
+      7. Inspecting and debugging OpenType processing
+     </span>
+    </h2>
+    <p>OpenType processing can become difficult to understand when several
+features, scripts, fallbacks, or substitutions interact.
+</p>
+    <p>One useful diagnostic command is <tt><a class="new" href="../index.php?title=Command/showotfcomposition&action=edit&redlink=1.html" title="Command/showotfcomposition (page does not exist)">\showotfcomposition</a></tt>.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\showotfcomposition</span></span>
+  <span class="br">{</span>mikhak-medium*arabic<span class="br">}</span>
+  <span class="br">{</span>-1<span class="br">}</span>
+  <span class="br">{</span>سلام علیکم<span class="br">}</span>
+</pre>
+    <p>The second argument can be used to indicate direction; the example above
+is for right-to-left text.
+</p>
+    <p>For general right-to-left and bidirectional typesetting, see the
+dedicated RTL/BiDi documentation.
+</p>
+    <p>A feature may also fail to behave as expected when some of the relevant
+glyphs come from a fallback font rather than from the font whose OpenType
+lookups are being applied.
 </p>
     <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
      <tbody>
       <tr>
        <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
 </td>
-       <td style="padding:0.5em 0.5em;"><b>TODO:</b> check consistency and duplicates between here and <a href="Fonts_features_-_OpenType_features_-_Ligatures/Ligatures.html" title="Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures">Ligatures</a> <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Retest the existing Mikhak fallback example with current LMTX and
+<p>decide whether it belongs here as an advanced debugging example or on a
+separate fallback page. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</p>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="8._Common_OpenType_feature_tags">
+      8. Common OpenType feature tags
+     </span>
+    </h2>
+    <p>OpenType features are identified by four-character tags.
+</p>
+    <p>The following table lists some common examples.
+</p>
+    <p>These features are <b>not</b> guaranteed to exist in every font.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.1_Ligatures_and_contextual_forms">
+      8.1 Ligatures and contextual forms
+     </span>
+    </h3>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Feature
+       </th>
+       <th>
+        Tag
+       </th>
+      </tr>
+      <tr>
+       <td>Standard ligatures
+</td>
+       <td><code>liga</code>
+</td>
+      </tr>
+      <tr>
+       <td>Contextual alternates
+</td>
+       <td><code>calt</code>
+</td>
+      </tr>
+      <tr>
+       <td>Discretionary ligatures
+</td>
+       <td><code>dlig</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>For more detailed control of ligatures, see
+<a href="Fonts_features_-_OpenType_features_-_Ligatures/Ligatures.html" title="Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures">Ligatures</a>.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.2_Letter_forms">
+      8.2 Letter forms
+     </span>
+    </h3>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Feature
+       </th>
+       <th>
+        Tag
+       </th>
+      </tr>
+      <tr>
+       <td>Small capitals
+</td>
+       <td><code>smcp</code>
+</td>
+      </tr>
+      <tr>
+       <td>Capitals to small capitals
+</td>
+       <td><code>c2sc</code>
+</td>
+      </tr>
+      <tr>
+       <td>Swashes
+</td>
+       <td><code>swsh</code>
+</td>
+      </tr>
+      <tr>
+       <td>Stylistic alternates
+</td>
+       <td><code>salt</code>
 </td>
       </tr>
      </tbody>
     </table>
     <h3>
-     <span class="mw-headline" id="Introduction">
-      Introduction
+     <span class="mw-headline" id="8.3_Figures">
+      8.3 Figures
      </span>
     </h3>
-    <p>Ligatures are combinations of letters that use different glyph shapes to avoid clashing of parts like i-dots and f-arcs. Many fonts contain at least fi and fl ligatures, well-furnished fonts have also ft, ffl, ffi, fft, fb, ffb, fh, ffh and maybe some traditional ones like st, sp, ct, ch and combinations with long s &ndash; German &szlig; was originally a long-s + end-s ligature (even if it looks like s+z and is called szlig).
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Feature
+       </th>
+       <th>
+        Tag
+       </th>
+      </tr>
+      <tr>
+       <td>Lining figures
+</td>
+       <td><code>lnum</code>
+</td>
+      </tr>
+      <tr>
+       <td>Oldstyle figures
+</td>
+       <td><code>onum</code>
+</td>
+      </tr>
+      <tr>
+       <td>Proportional figures
+</td>
+       <td><code>pnum</code>
+</td>
+      </tr>
+      <tr>
+       <td>Tabular figures
+</td>
+       <td><code>tnum</code>
+</td>
+      </tr>
+      <tr>
+       <td>Fractions
+</td>
+       <td><code>frac</code>
+</td>
+      </tr>
+      <tr>
+       <td>Ordinals
+</td>
+       <td><code>ordn</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="8.4_Stylistic_sets">
+      8.4 Stylistic sets
+     </span>
+    </h3>
+    <p>OpenType defines stylistic-set tags from:
 </p>
-    <p>While the use of ligatures is a feature of good typography, there are places where they don&rsquo;t belong, namely at syllable seams where hyphenation can or should take place.
+    <p><code>ss01</code> through <code>ss20</code>.
 </p>
-    <p>Some typical German examples are Auf-lage, auf-laden, auf-fallen, Zupf-instrument, Schiff-fahrt. English examples would be chief-ly, shelf-ful, elf-like, wolf-trap, clothes-pin.
+    <p>A font may provide none, some, or all of these sets.
+</p>
+    <p>The visual meaning of a particular stylistic set is defined by the font
+designer and therefore varies from font to font.
 </p>
     <h3>
-     <span class="mw-headline" id="Traditional_TeX_methods_to_break_ligatures">
-      Traditional TeX methods to break ligatures
+     <span class="mw-headline" id="8.5_East_Asian_OpenType_features">
+      8.5 East Asian OpenType features
      </span>
     </h3>
-    <ul>
-     <li>
-      Auf\/lage &ndash; breaks the ligature, but also kills hyphenation and kerning
-     </li>
-     <li>
-      Auf{}lage &ndash; worked in pdfTeX (MkII), but not in modern TeX engines
-     </li>
-     <li>
-      For LaTeX, there&rsquo;s the
-      <a class="external text" href="https://www.ctan.org/pkg/selnolig" rel="nofollow">
-       selnolig
-      </a>
-      package (English and German).
-     </li>
-    </ul>
-    <h3>
-     <span class="mw-headline" id="Enabling_Ligatures_in_fonts">
-      Enabling Ligatures in fonts
-     </span>
-    </h3>
-    <p>Ligatures in OpenType fonts are defined via "features" that you can/must enable. Usual ligature features are liga and tlig, but some fonts my have others for more/exotic ligatures.
-Here&rsquo;s an example for a good set of default features:
+    <p>OpenType also defines features for East Asian typography.
 </p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span>
-  <span class="brx">[</span>mode<span class="brx">=</span>node,kern<span class="brx">=</span>yes,
-  liga<span class="brx">=</span>yes,tlig<span class="brx">=</span>yes,
-  ccmp<span class="brx">=</span>yes,language<span class="brx">=</span>dflt,
-  protrusion<span class="brx">=</span>quality,
-  expansion<span class="brx">=</span>quality<span class="brx">]</span>
-</pre>
-    <p>The other way round &ndash; if you don&rsquo;t enable ligatures in your font features, you won&rsquo;t get any; this might be desirable for mono width (typewriter) fonts.
+    <p>Common examples include:
 </p>
-    <h3>
-     <span class="mw-headline" id="Single_places">
-      Single places
-     </span>
-    </h3>
-    <p>If you only want to fix a few occurrences, you can use <tt><a class="new" href="../index.php?title=Command/noligature&action=edit&redlink=1.html" title="Command/noligature (page does not exist)">\noligature</a></tt>. Compare:
-</p>
-    <pre class="tex">Auflage Zupfinstrument
-Au<span class="cs">\noligature</span><span class="br">{</span>fl<span class="br">}</span>age Zup<span class="cs">\noligature</span><span class="br">{</span>fi<span class="br">}</span>nstrument
-</pre>
-    <h3>
-     <span class="mw-headline" id="Replacements">
-      Replacements
-     </span>
-    </h3>
-    <p>ConTeXt has a method of replacing words that you can use for ligature exception dictionaries:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>de<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default<span class="brx">]</span>
-<span class="brx">[</span>mode<span class="brx">=</span>node,liga<span class="brx">=</span>yes,kern<span class="brx">=</span>yes,tlig<span class="brx">=</span>yes,
-ccmp<span class="brx">=</span>yes,language<span class="brx">=</span>dflt,
-protrusion<span class="brx">=</span>quality,
-expansion<span class="brx">=</span>quality<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\replaceword</span></span><span class="brx">[</span>eg<span class="brx">]</span><span class="brx">[</span>Auflage<span class="brx">]</span><span class="brx">[</span>Au<span class="br">{</span>fl<span class="br">}</span>age<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\replaceword</span></span><span class="brx">[</span>eg<span class="brx">]</span><span class="brx">[</span>Zupfinstrument<span class="brx">]</span><span class="brx">[</span>Zup<span class="br">{</span>fi<span class="br">}</span>nstrument<span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\starttext</span></span>
-Auflage Zupfinstrument
-
-<span class="cs"><span class="stylecs">\setreplacements</span></span><span class="brx">[</span>eg<span class="brx">]</span>
-Auflage Zupfinstrument
-<span class="cs"><span class="documentcs">\stoptext</span></span>
-</pre>
-    <p>Much better.
-The first parameter os <tt><a href="../Command/replaceword.html" title="Command/replaceword">\replaceword</a></tt> is a set (collection) keycode, i.e. you can define different sets of replacements and activate them with <tt><a class="new" href="../index.php?title=Command/setreplacements&action=edit&redlink=1.html" title="Command/setreplacements (page does not exist)">\setreplacements</a></tt>.
-</p>
-    <p><a class="external text" href="http://wiki.contextgarden.net/images/b/be/nolig-german-wordlist.tex" rel="nofollow">Here&rsquo;s</a> a list of German ligature exceptions, derived from <a class="external text" href="https://www.ctan.org/pkg/selnolig" rel="nofollow">selnolig</a> LaTeX package. Just <tt><a href="../Command/input.html" title="Command/input">\input</a></tt> it in your environment.
-</p>
-    <p>In current versions (after 2017-09-28) you may also define several exceptions at once, like
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\replaceword</span></span> <span class="brx">[</span>eg<span class="brx">]</span> <span class="brx">[</span>Au<span class="br">{</span>fl<span class="br">}</span>age Schiff<span class="br">{</span>f<span class="br">}</span>ahrt Zup<span class="br">{</span>fi<span class="br">}</span>nstrument<span class="brx">]</span>
-</pre>
-    <p>Find more details in the source: <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/lang-rep.mkiv" rel="nofollow">lang-rep.mkiv</a> 
-</p>
-    <h3>
-     <span class="mw-headline" id="Blocking">
-      Blocking
-     </span>
-    </h3>
-    <p>You can also define blocking of ligatures as a font feature:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>fi,ff<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>fl<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\blockligatures</span></span><span class="brx">[</span>au:fl:age<span class="brx">]</span>
-<span class="cs"><span class="stylecs">\definefontfeature</span></span><span class="brx">[</span>default:nolig<span class="brx">]</span><span class="brx">[</span>default<span class="brx">]</span><span class="brx">[</span>blockligatures<span class="brx">=</span>yes<span class="brx">]</span>
-
-<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>Serif*default:nolig<span class="brx">]</span> <span class="comment">% no ligatures</span>
-fi ff fl Auflage Zupfinstrument
-
-<span class="cs"><span class="stylecs">\definedfont</span></span><span class="brx">[</span>Serif*default<span class="brx">]</span> <span class="comment">% yes ligatures</span>
-fi ff fl Auflage Zupfinstrument
-</pre>
-    <p>While general blocking (<tt><a class="new" href="../index.php?title=Command/blockligatures&action=edit&redlink=1.html" title="Command/blockligatures (page does not exist)">\blockligatures</a></tt>[fi,fl]) works, the exception handling (<tt><a class="new" href="../index.php?title=Command/blockligatures&action=edit&redlink=1.html" title="Command/blockligatures (page does not exist)">\blockligatures</a></tt>[au:fl:age]) might depend on a version unpublished as of this writing (i.e. after 2017-09-28).
-</p>
-    <h3>
-     <span class="mw-headline" id="Word_suppression">
-      Word suppression
-     </span>
-    </h3>
-    <p>In English, one principle suggests not using specific ligatures in certain words because <em>ligatures should not cross morpheme boundaries</em>. For instance, the <em>fi</em> ligature in wolfish is to be suppressed because the <em>f</em> and <em>i</em> belong to distinct morphemes (<em>wolf</em> and <em>ish</em>, in contrast to <em>fish</em>, where <em>fi</em> is a single morpheme). The following code shows how to apply this rule to prevent unwanted ligatures:
-</p>
-    <pre class="tex"><span class="cs"><span class="stylecs">\setuplanguage</span></span><span class="brx">[</span>en<span class="brx">]</span><span class="brx">[</span>goodies<span class="brx">=</span><span class="br">{</span>lang-en.llg<span class="br">}</span><span class="brx">]</span>
-
-<span class="cs"><span class="documentcs">\starttext</span></span>
-  wolfish huffily puffily
-<span class="cs"><span class="documentcs">\stoptext</span></span>
-</pre>
-    <p>Other languages will need a corresponding ligature suppression word list.
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Area
+       </th>
+       <th>
+        Feature
+       </th>
+       <th>
+        Tag
+       </th>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Proportional widths
+</td>
+       <td><code>pwid</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Proportional alternate widths
+</td>
+       <td><code>palt</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Proportional kana
+</td>
+       <td><code>pkna</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Full widths
+</td>
+       <td><code>fwid</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Half widths
+</td>
+       <td><code>hwid</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Alternate half widths
+</td>
+       <td><code>halt</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Third widths
+</td>
+       <td><code>twid</code>
+</td>
+      </tr>
+      <tr>
+       <td>Width
+</td>
+       <td>Quarter widths
+</td>
+       <td><code>qwid</code>
+</td>
+      </tr>
+      <tr>
+       <td>Japanese forms
+</td>
+       <td>JIS78 forms
+</td>
+       <td><code>jp78</code>
+</td>
+      </tr>
+      <tr>
+       <td>Japanese forms
+</td>
+       <td>JIS83 forms
+</td>
+       <td><code>jp83</code>
+</td>
+      </tr>
+      <tr>
+       <td>Japanese forms
+</td>
+       <td>JIS90 forms
+</td>
+       <td><code>jp90</code>
+</td>
+      </tr>
+      <tr>
+       <td>Japanese forms
+</td>
+       <td>JIS2004 forms
+</td>
+       <td><code>jp04</code>
+</td>
+      </tr>
+      <tr>
+       <td>Cultural variants
+</td>
+       <td>Traditional forms
+</td>
+       <td><code>trad</code>
+</td>
+      </tr>
+      <tr>
+       <td>Cultural variants
+</td>
+       <td>Ruby notation forms
+</td>
+       <td><code>ruby</code>
+</td>
+      </tr>
+      <tr>
+       <td>Cultural variants
+</td>
+       <td>Horizontal kana alternates
+</td>
+       <td><code>hkna</code>
+</td>
+      </tr>
+      <tr>
+       <td>Cultural variants
+</td>
+       <td>NLC kanji forms
+</td>
+       <td><code>nlck</code>
+</td>
+      </tr>
+      <tr>
+       <td>Cultural variants
+</td>
+       <td>Alternate annotation forms
+</td>
+       <td><code>nalt</code>
+</td>
+      </tr>
+      <tr>
+       <td>Vertical
+</td>
+       <td>Vertical kerning
+</td>
+       <td><code>vkrn</code>
+</td>
+      </tr>
+      <tr>
+       <td>Vertical
+</td>
+       <td>Vertical alternates
+</td>
+       <td><code>vert</code>
+</td>
+      </tr>
+      <tr>
+       <td>Vertical
+</td>
+       <td>Proportional alternate vertical metrics
+</td>
+       <td><code>vpal</code>
+</td>
+      </tr>
+      <tr>
+       <td>Vertical
+</td>
+       <td>Alternate vertical half metrics
+</td>
+       <td><code>vhal</code>
+</td>
+      </tr>
+      <tr>
+       <td>Vertical
+</td>
+       <td>Vertical kana alternates
+</td>
+       <td><code>vkna</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>For CJK font selection and multilingual documents, see the relevant
+language and font guides.
 </p>
     <h2>
-     <span class="mw-headline" id="See_also">
-      See also
+     <span class="mw-headline" id="9._Ligatures">
+      9. Ligatures
+     </span>
+    </h2>
+    <p>Ligatures are one application of OpenType features.
+</p>
+    <p>Standard and discretionary ligatures are commonly controlled through
+features such as:
+</p>
+    <pre class="tex">liga<span class="brx">=</span>yes
+dlig<span class="brx">=</span>yes
+</pre>
+    <p>Detailed questions such as:
+</p>
+    <ul>
+     <li>
+      breaking a ligature at a particular position;
+     </li>
+     <li>
+      language-specific ligature suppression;
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/noligature&action=edit&redlink=1.html" title="Command/noligature (page does not exist)">
+        \noligature
+       </a>
+      </tt>
+      ;
+     </li>
+     <li>
+      word-replacement dictionaries;
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/blockligatures&action=edit&redlink=1.html" title="Command/blockligatures (page does not exist)">
+        \blockligatures
+       </a>
+      </tt>
+      ;
+     </li>
+    </ul>
+    <p>belong to the dedicated page:
+</p>
+    <p><a href="Fonts_features_-_OpenType_features_-_Ligatures/Ligatures.html" title="Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures">Ligatures</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="10._Advanced:_adding_OpenType_behaviour">
+      10. Advanced: adding OpenType behaviour
+     </span>
+    </h2>
+    <p>In advanced applications it is possible to add or modify OpenType
+behaviour beyond the ordinary activation of features already defined in
+a font.
+</p>
+    <p>Several mechanisms have been used in ConTeXt.
+</p>
+    <h3>
+     <span class="mw-headline" id="10.1_Lua-defined_features">
+      10.1 Lua-defined features
+     </span>
+    </h3>
+    <p>Low-level Lua interfaces can define additional OpenType features.
+</p>
+    <p>Older examples use functions such as:
+</p>
+    <p><code>font.handlers.otf.addfeature</code>
+</p>
+    <p>This is an advanced mechanism and normally is not needed merely to
+activate an existing OpenType feature.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Verify the current LMTX interface and documentation for defining
+<p>OpenType features from Lua. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</p>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="10.2_Font_goodies">
+      10.2 Font goodies
+     </span>
+    </h3>
+    <p>Font-specific settings and additional behaviour can be stored in a
+ConTeXt font-goodies file, normally using the <code>.lfg</code>
+extension.
+</p>
+    <p>Such a file can be associated with a font through its goodies settings.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Check the current font-goodies documentation and replace historical
+<p>MkIV links with current examples where available. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</p>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="10.3_OpenType_feature_files">
+      10.3 OpenType feature files
+     </span>
+    </h3>
+    <p>External OpenType feature files in <code>.fea</code> format can also be
+used in appropriate workflows.
+</p>
+    <p>See <a href="../Fontfeaturefiles.html" title="Fontfeaturefiles">Fontfeaturefiles</a>.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Verify the current LMTX syntax for loading feature files. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="11._Historical_syntax">
+      11. Historical syntax
+     </span>
+    </h2>
+    <p>Older MkIV documents may contain commands such as:
+</p>
+    <pre class="tex"><span class="cs">\addff</span><span class="br">{</span>featureset<span class="br">}</span>
+<span class="cs">\subff</span><span class="br">{</span>featureset<span class="br">}</span>
+<span class="cs">\addfs</span><span class="br">{</span>featureset<span class="br">}</span>
+<span class="cs">\subfs</span><span class="br">{</span>featureset<span class="br">}</span>
+</pre>
+    <p>These belong to an earlier version of the font-feature interface and
+should not be used as the starting point for new LMTX documents.
+</p>
+    <p>They are mentioned here only to make older source files easier to read.
+</p>
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> Confirm the present status of these commands in LMTX and whether
+<p>they should remain documented here or be moved to a historical note. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</p>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="12._Troubleshooting">
+      12. Troubleshooting
+     </span>
+    </h2>
+    <p>If an OpenType feature does not produce the expected result, check the
+following points.
+</p>
+    <dl>
+     <dt>
+      Does the font actually provide the feature?
+     </dt>
+     <dd>
+      Not every font contains small caps, oldstyle figures, stylistic sets, discretionary ligatures, or other optional features.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      Are the required glyphs in the same font?
+     </dt>
+     <dd>
+      Some OpenType lookups depend on glyphs belonging to the font whose feature processing is active. Fallback fonts can therefore affect the result.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      Is the correct script being processed?
+     </dt>
+     <dd>
+      Some OpenType features are script-specific.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      Is the language relevant?
+     </dt>
+     <dd>
+      Certain fonts contain language-specific substitutions.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      Is another feature overriding the requested feature?
+     </dt>
+     <dd>
+      For example, lining and oldstyle figure settings may interact.
+     </dd>
+    </dl>
+    <dl>
+     <dt>
+      Is the example inherited from an older MkIV setup?
+     </dt>
+     <dd>
+      Historical recipes may contain settings that are unnecessary or no longer recommended in current LMTX.
+     </dd>
+    </dl>
+    <p>For general font problems, see <a href="Use_any_fonts_you_want.html" title="Characters words and fonts/Use any fonts you want">Use any font you want</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="13._Related_pages">
+      13. Related pages
      </span>
     </h2>
     <ul>
      <li>
-      <a href="Fonts_in_LuaTeX.html" title="Characters words and fonts/Fonts in LuaTeX">
-       Characters words and fonts/Fonts in LuaTeX
+      <a href="Use_any_fonts_you_want.html" title="Characters words and fonts/Use any fonts you want">
+       Use any font you want
+      </a>
+     </li>
+     <li>
+      <a href="../Characters_words_and_fonts.html" title="Characters words and fonts">
+       Characters words and fonts
+      </a>
+     </li>
+     <li>
+      <a href="../Category:Command/Fonts.html" title="Category:Command/Fonts">
+       Font commands
+      </a>
+     </li>
+     <li>
+      <a href="ConTeXt_distribution's_Fonts.html" title="Characters words and fonts/ConTeXt distribution's Fonts">
+       ConTeXt distribution's fonts
       </a>
      </li>
      <li>
@@ -871,8 +1304,38 @@ fi ff fl Auflage Zupfinstrument
       </a>
      </li>
      <li>
+      <a href="Fonts_features_-_OpenType_features_-_Ligatures/Ligatures.html" title="Characters words and fonts/Fonts features - OpenType features - Ligatures/Ligatures">
+       Ligatures
+      </a>
+     </li>
+     <li>
+      <a href="Fonts_in_LuaTeX.html" title="Characters words and fonts/Fonts in LuaTeX">
+       Characters words and fonts/Fonts in LuaTeX
+      </a>
+     </li>
+     <li>
+      <a href="../Fontfeaturefiles.html" title="Fontfeaturefiles">
+       Fontfeaturefiles
+      </a>
+     </li>
+     <li>
+      <a href="../Input_and_compilation/Languages.html" title="Input and compilation/Languages">
+       Languages
+      </a>
+     </li>
+     <li>
+      <a href="../Input_and_compilation/Languages/Mixed_languages.html" title="Input and compilation/Languages/Mixed languages">
+       Mixed languages
+      </a>
+     </li>
+     <li>
+      <a href="../Mathematics/Fonts.html" title="Mathematics/Fonts">
+       Mathematics fonts
+      </a>
+     </li>
+     <li>
       <a class="external text" href="https://en.wikipedia.org/wiki/List_of_typographic_features" rel="nofollow">
-       en.wikipedia.org List of typographic features
+       List of typographic features
       </a>
      </li>
     </ul>
@@ -886,7 +1349,7 @@ fi ff fl Auflage Zupfinstrument
      </a>
     </li>
     <li>
-     Mirrored on 2026-08-29
+     Mirrored on 2026-08-31
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
