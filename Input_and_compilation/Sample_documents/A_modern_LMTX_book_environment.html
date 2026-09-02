@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../../style.css" rel="stylesheet">
+  <link href="../../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Input and compilation/Sample documents/A modern LMTX book environment&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/A_modern_LMTX_book_environment" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Input and compilation/Sample documents/A modern LMTX book environment
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7672&diff=43860">2026-09-01</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page presents a current LMTX model for organising a book. Please test the representative files with a recent ConTeXt LMTX installation and improve or correct the page where useful. <i>(See: <a href="../../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #b8c7d9; border-left:5px solid #4f78a8; background:#f6f9fc;">
+     <p><b>Current LMTX sample &mdash; organising a book as a project</b>
+</p>
+     <p>This page presents a compact model for organising a book with current
+ConTeXt LMTX. It is intended as a modern companion to the historical
+<a href="Theory_book_style.html" title="Input and compilation/Sample documents/Theory book style">Theory book style</a>
+example.
+</p>
+     <p>A short document can perfectly well be written in a single ConTeXt source
+file. For a substantial book, however, it is usually clearer to separate
+the publication into a <b>project</b>, one or more <b>products</b>, reusable
+<b>environments</b>, and individual <b>components</b>.
+</p>
+     <pre>project
+   &boxv;
+   &boxvr;&boxh;&boxh; environment(s)
+   &boxv;      &boxur;&boxh;&boxh; shared setup and document design
+   &boxv;
+   &boxur;&boxh;&boxh; product(s)
+          &boxur;&boxh;&boxh; publication assembled from components
+                 &boxv;
+                 &boxvr;&boxh;&boxh; front matter
+                 &boxvr;&boxh;&boxh; chapters
+                 &boxvr;&boxh;&boxh; appendices
+                 &boxur;&boxh;&boxh; back matter
+</pre>
+     <p>This page therefore does <b>not</b> try to print the source of an entire
+real book with many fully developed chapters. Instead, it combines
+directory-tree diagrams with short representative files so that the
+architecture remains visible.
+</p>
+     <p>A very small bibliography may occasionally be shown in a ConTeXt
+<b>buffer</b> on this page. This is only a wiki demonstration device: it
+keeps a bibliographic example self-contained and avoids requiring an
+additional file merely to test a few lines of code. In a real book
+project, the bibliography would normally live in a separate
+<code>.bib</code> file, as shown in the project tree below.
+</p>
+    </div>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Use this example with current ConTeXt LMTX</b>
+</p>
+     <p>The examples on this page use native UTF-8 input, OpenType fonts, the
+current <code>btx</code> bibliography mechanism, and the current
+project/product/component interfaces.
+</p>
+     <p>They are not intended as compatibility examples for MkII or for older
+ConTeXt installations. In particular, a new LMTX project normally does
+not need older input-encoding commands such as
+<code>\enableregime</code> or <code>\setupencoding</code>, and it
+should not be based on the former <code>bib</code> module.
+</p>
+     <p>For a project-sized example, local compilation is more useful than the
+compact wiki renderer because file relationships, section blocks,
+references, bookmarks, bibliography data, and the index all depend on
+document-wide state.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._What_the_example_demonstrates">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. What the example demonstrates
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._A_possible_project_structure">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. A possible project structure
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-3">
+       <a href="#3._Project.2C_product.2C_environment.2C_and_component">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Project, product, environment, and component
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#4._The_project_file">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. The project file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#5._The_environment_file">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. The environment file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#6._The_product_file">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. The product file
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#7._A_chapter_component">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. A chapter component
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#8._Front_matter_and_appendices">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Front matter and appendices
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#9._Bibliography_data:_real_project_and_wiki_buffer">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Bibliography data: real project and wiki buffer
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#10._The_index">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. The index
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#11._Draft_and_production_settings">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Draft and production settings
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#12._How_the_whole_project_fits_together">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. How the whole project fits together
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#13._Turning_the_model_into_a_local_project">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Turning the model into a local project
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#14._Why_this_differs_from_the_historical_example">
+        <span class="tocnumber">
+         14
+        </span>
+        <span class="toctext">
+         14. Why this differs from the historical example
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#15._Where_to_go_next">
+        <span class="tocnumber">
+         15
+        </span>
+        <span class="toctext">
+         15. Where to go next
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._What_the_example_demonstrates">
+      1. What the example demonstrates
+     </span>
+    </h2>
+    <p>The model brings together:
+</p>
+    <ul>
+     <li>
+      a project, a product, an environment, and components;
+     </li>
+     <li>
+      native UTF-8 input and a current OpenType font setup;
+     </li>
+     <li>
+      a simple double-sided book layout;
+     </li>
+     <li>
+      front matter, body matter, appendices, and back matter;
+     </li>
+     <li>
+      chapters and sections;
+     </li>
+     <li>
+      a table of contents;
+     </li>
+     <li>
+      running chapter titles and page numbers;
+     </li>
+     <li>
+      cross-references;
+     </li>
+     <li>
+      a current
+      <code>btx</code>
+      bibliography;
+     </li>
+     <li>
+      an index;
+     </li>
+     <li>
+      a simple draft mode for inspecting the page layout.
+     </li>
+    </ul>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #c8c8c8; border-left:5px solid #808080; background:#f7f7f7;">
+     <p><b>This is a model of organisation, not a universal book template</b>
+</p>
+     <p>The project/product/component model is useful for substantial documents
+because it separates responsibilities. It is not mandatory for every
+book, and the exact directory layout is not prescribed by ConTeXt.
+</p>
+     <p>Real publications may use more environments, several products, custom
+fonts, specialised front matter, multiple bibliographies or registers,
+graphics directories, language-specific components, or publisher-specific
+production settings.
+</p>
+     <p>The purpose here is to show a clean starting architecture before those
+additional layers are introduced.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._A_possible_project_structure">
+      2. A possible project structure
+     </span>
+    </h2>
+    <p>A small but realistic book project could be organised like this:
+</p>
+    <pre>modern-book/
+&boxv;
+&boxvr;&boxh;&boxh; project-modern-book.tex
+&boxvr;&boxh;&boxh; environment-modern-book.tex
+&boxvr;&boxh;&boxh; product-modern-book.tex
+&boxv;
+&boxvr;&boxh;&boxh; frontmatter/
+&boxv;   &boxvr;&boxh;&boxh; titlepage.tex
+&boxv;   &boxur;&boxh;&boxh; preface.tex
+&boxv;
+&boxvr;&boxh;&boxh; chapters/
+&boxv;   &boxvr;&boxh;&boxh; chapter-01.tex
+&boxv;   &boxur;&boxh;&boxh; chapter-02.tex
+&boxv;
+&boxvr;&boxh;&boxh; appendices/
+&boxv;   &boxur;&boxh;&boxh; appendix-a.tex
+&boxv;
+&boxvr;&boxh;&boxh; backmatter/
+&boxv;   &boxvr;&boxh;&boxh; references.tex
+&boxv;   &boxur;&boxh;&boxh; index.tex
+&boxv;
+&boxur;&boxh;&boxh; bibliography/
+    &boxur;&boxh;&boxh; references.bib
+</pre>
+    <p>The directories are only an organisational choice. The important
+distinction is the role of the files:
+</p>
+    <pre>project-modern-book.tex
+        &boxv;
+        &boxvr;&boxh;&boxh; loads shared environment(s)
+        &boxv;
+        &boxur;&boxh;&boxh; identifies product(s)
+                    &boxv;
+                    ▼
+product-modern-book.tex
+        &boxv;
+        &boxur;&boxh;&boxh; assembles components in publication order
+                    &boxv;
+          &boxdr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxvh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;
+          ▼         ▼               ▼
+     front matter  body matter   appendices
+          &boxv;         &boxv;               &boxv;
+          &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhu;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhd;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxul;
+                            ▼
+                        back matter
+                            &boxv;
+                            ▼
+                    final publication
+
+
+environment-modern-book.tex
+        &boxv;
+        &boxvr;&boxh;&boxh; language and fonts
+        &boxvr;&boxh;&boxh; paper and layout
+        &boxvr;&boxh;&boxh; section heads
+        &boxvr;&boxh;&boxh; headers and footers
+        &boxvr;&boxh;&boxh; bibliography setup
+        &boxvr;&boxh;&boxh; registers
+        &boxur;&boxh;&boxh; draft/production settings
+</pre>
+    <p>The same architecture can support a very small book or a much larger one.
+Adding twenty more chapter components does not require the basic design to
+be rewritten.
+</p>
+    <h2>
+     <span id="3._Project,_product,_environment,_and_component">
+     </span>
+     <span class="mw-headline" id="3._Project.2C_product.2C_environment.2C_and_component">
+      3. Project, product, environment, and component
+     </span>
+    </h2>
+    <p>A useful working distinction is:
+</p>
+    <pre>PROJECT
+   &boxv;
+   &boxur;&boxh;&boxh; defines the publication family
+          &boxv;
+          &boxvr;&boxh;&boxh; ENVIRONMENT
+          &boxv;      shared configuration
+          &boxv;
+          &boxur;&boxh;&boxh; PRODUCT
+                 one publication
+                    &boxv;
+                    &boxur;&boxh;&boxh; COMPONENTS
+                           individual content units
+</pre>
+    <p>The boundaries are organisational rather than typographical. A component
+may contain a chapter, an appendix, a preface, or another coherent unit of
+content. The structural commands inside the component still determine what
+that material is in the document hierarchy.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #c8c8c8; border-left:5px solid #808080; background:#f7f7f7;">
+     <p><b>Source organisation is not document structure</b>
+</p>
+     <p>A file called <code>chapter-01.tex</code> is not a chapter merely because
+of its filename or because it is a component.
+</p>
+     <p>It becomes a chapter when its content uses a structural command such as
+<code>\startchapter ... \stopchapter</code>.
+</p>
+     <p>Keep these two questions separate:
+</p>
+     <pre>How is the source organised?      project / product / component
+How is the document structured?  chapter / section / subsection / ...
+</pre>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._The_project_file">
+      4. The project file
+     </span>
+    </h2>
+    <p>The project is the top-level description of the publication family. A
+minimal project file may load one shared environment and identify one
+product.
+</p>
+    <pre class="tex"><span class="comment">% project-modern-book.tex</span>
+
+<span class="cs"><span class="documentcs">\startproject</span></span> project-modern-book
+
+  <span class="cs"><span class="documentcs">\environment</span></span> environment-modern-book
+
+  <span class="cs"><span class="documentcs">\product</span></span> product-modern-book
+
+<span class="cs"><span class="documentcs">\stopproject</span></span>
+</pre>
+    <p>A larger project may have several environments or products. For example,
+the same project could eventually produce a print edition, a teaching
+edition, or different language products while sharing part of the same
+configuration.
+</p>
+    <h2>
+     <span class="mw-headline" id="5._The_environment_file">
+      5. The environment file
+     </span>
+    </h2>
+    <p>The environment collects settings that should be reusable throughout the
+book.
+</p>
+    <pre class="tex"><span class="comment">% environment-modern-book.tex</span>
+
+<span class="cs"><span class="documentcs">\startenvironment</span></span> environment-modern-book
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% LANGUAGE AND FONT</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\mainlanguage</span></span><span class="brx">[</span>en<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span>
+  <span class="brx">[</span>libertinus,10pt<span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% PAPER AND LAYOUT</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A5<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuplayout</span></span>
+  <span class="brx">[</span>backspace<span class="brx">=</span>18mm,
+   topspace<span class="brx">=</span>15mm,
+   header<span class="brx">=</span>8mm,
+   headerdistance<span class="brx">=</span>4mm,
+   footer<span class="brx">=</span>8mm,
+   footerdistance<span class="brx">=</span>4mm,
+   width<span class="brx">=</span>middle,
+   height<span class="brx">=</span>middle<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span>
+  <span class="brx">[</span>alternative<span class="brx">=</span>doublesided,
+   location<span class="brx">=</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% PDF INTERACTION</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setupinteraction</span></span>
+  <span class="brx">[</span>state<span class="brx">=</span>start,
+   title<span class="brx">=</span><span class="br">{</span>A Modern LMTX Book<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Example Author<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% HEADERS AND FOOTERS</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setupheadertexts</span></span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\getmarking</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupfootertexts</span></span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\pagenumber</span></span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% SECTION HEADS</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>yes,
+   header<span class="brx">=</span>empty,
+   style<span class="brx">=</span><span class="cs">\tfc</span>,
+   align<span class="brx">=</span>middle,
+   before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>2*big<span class="brx">]</span><span class="br">}</span>,
+   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>3*big<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>style<span class="brx">=</span><span class="cs">\tfa</span>,
+   before<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>big<span class="brx">]</span><span class="br">}</span>,
+   after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>medium<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% TABLE OF CONTENTS</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% BIBLIOGRAPHY</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="stylecs">\usebtxdefinitions</span></span>
+  <span class="brx">[</span>apa<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definebtxdataset</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\usebtxdataset</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+  <span class="brx">[</span>bibliography/references.bib<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definebtxrendering</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+  <span class="brx">[</span>dataset<span class="brx">=</span>main,
+   criterium<span class="brx">=</span>text,
+   specification<span class="brx">=</span>apa<span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% OPTIONAL DRAFT MODE</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="comment">% Enable from the command line or temporarily uncomment:</span>
+<span class="comment">% \enablemode[draft]</span>
+
+<span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>draft<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+
+<span class="cs"><span class="documentcs">\stopenvironment</span></span>
+</pre>
+    <p>This file contains no chapter text. Its job is to describe the common
+typesetting environment in which the components will be processed.
+</p>
+    <h2>
+     <span class="mw-headline" id="6._The_product_file">
+      6. The product file
+     </span>
+    </h2>
+    <p>The product assembles the content in publication order.
+</p>
+    <pre class="tex"><span class="comment">% product-modern-book.tex</span>
+
+<span class="cs"><span class="documentcs">\startproduct</span></span> product-modern-book
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\startdocument</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A Modern LMTX Book<span class="br">}</span>,
+   author<span class="brx">=</span><span class="br">{</span>Example Author<span class="br">}</span><span class="brx">]</span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% FRONT MATTER</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="documentcs">\startfrontmatter</span></span>
+
+  <span class="cs"><span class="documentcs">\component</span></span> frontmatter/titlepage
+  <span class="cs"><span class="documentcs">\component</span></span> frontmatter/preface
+
+<span class="cs"><span class="documentcs">\stopfrontmatter</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% BODY MATTER</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="documentcs">\startbodymatter</span></span>
+
+  <span class="cs"><span class="documentcs">\component</span></span> chapters/chapter-01
+  <span class="cs"><span class="documentcs">\component</span></span> chapters/chapter-02
+
+<span class="cs"><span class="documentcs">\stopbodymatter</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% APPENDICES</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="documentcs">\startappendices</span></span>
+
+  <span class="cs"><span class="documentcs">\component</span></span> appendices/appendix-a
+
+<span class="cs"><span class="documentcs">\stopappendices</span></span>
+
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span class="comment">% BACK MATTER</span>
+<span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+
+<span class="cs"><span class="documentcs">\startbackmatter</span></span>
+
+  <span class="cs"><span class="documentcs">\component</span></span> backmatter/references
+  <span class="cs"><span class="documentcs">\component</span></span> backmatter/index
+
+<span class="cs"><span class="documentcs">\stopbackmatter</span></span>
+
+<span class="cs"><span class="documentcs">\stopdocument</span></span>
+
+<span class="cs"><span class="documentcs">\stopproduct</span></span>
+</pre>
+    <p>The product file contains very little prose. Its main job is to state the
+sequence in which the publication is assembled.
+</p>
+    <p>The distinction can be visualised as:
+</p>
+    <pre>PRODUCT FILE                         COMPONENT FILES
+
+\startfrontmatter      &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  titlepage.tex
+                      &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  preface.tex
+
+\startbodymatter       &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  chapter-01.tex
+                      &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  chapter-02.tex
+
+\startappendices       &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  appendix-a.tex
+
+\startbackmatter       &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  references.tex
+                      &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;►  index.tex
+</pre>
+    <h2>
+     <span class="mw-headline" id="7._A_chapter_component">
+      7. A chapter component
+     </span>
+    </h2>
+    <p>A component contains an actual unit of content. For example:
+</p>
+    <pre class="tex"><span class="comment">% chapters/chapter-01.tex</span>
+
+<span class="cs"><span class="documentcs">\startcomponent</span></span> chapter-01
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Structure before appearance<span class="br">}</span>,
+   marking<span class="brx">=</span><span class="br">{</span>Structure<span class="br">}</span>,
+   reference<span class="brx">=</span>ch:structure<span class="brx">]</span>
+
+A book is easier to maintain when its logical structure is expressed
+explicitly. This paragraph also creates an index entry for
+document structure.<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>document structure<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A structural section<span class="br">}</span>,
+   reference<span class="brx">=</span>sec:structure<span class="brx">]</span>
+
+This is a numbered section inside a numbered chapter. Its identity as a
+section is independent of the way its head is typeset.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Presentation can change<span class="br">}</span><span class="brx">]</span>
+
+The appearance of chapter and section heads is controlled separately
+with <span class="cs"><span class="documentcs">\type</span></span><span class="br">{</span><span class="cs"><span class="stylecs">\setuphead</span></span><span class="br">}</span>. Changing their font, spacing, or alignment does
+not redefine the document hierarchy.<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>section heads<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <p>A second chapter could refer back to the structural reference:
+</p>
+    <pre class="tex">section <span class="cs"><span class="documentcs">\in</span></span><span class="brx">[</span>sec:structure<span class="brx">]</span>
+</pre>
+    <p>The reference belongs to the document structure, even though the source
+and target live in different component files.
+</p>
+    <h2>
+     <span class="mw-headline" id="8._Front_matter_and_appendices">
+      8. Front matter and appendices
+     </span>
+    </h2>
+    <p>The same component mechanism can be used for other parts of the book.
+</p>
+    <p>A preface component might contain:
+</p>
+    <pre class="tex"><span class="comment">% frontmatter/preface.tex</span>
+
+<span class="cs"><span class="documentcs">\startcomponent</span></span> preface
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Preface<span class="br">}</span><span class="brx">]</span>
+
+This book is organised as a ConTeXt project.
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <p>Because this component is included between
+<code>\startfrontmatter</code> and <code>\stopfrontmatter</code> in the
+product, the section block supplies the front-matter context.
+</p>
+    <p>Likewise, an appendix component can contain an ordinary chapter structure:
+</p>
+    <pre class="tex"><span class="comment">% appendices/appendix-a.tex</span>
+
+<span class="cs"><span class="documentcs">\startcomponent</span></span> appendix-a
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A small appendix<span class="br">}</span>,
+   reference<span class="brx">=</span>app:sample<span class="brx">]</span>
+
+This remains a chapter structurally, but it occurs in the appendices.
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <p>With the standard section-block setup, the appendix context can change the
+representation of chapter numbering without changing the structural level
+of the chapter.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Bibliography_data:_real_project_and_wiki_buffer">
+      9. Bibliography data: real project and wiki buffer
+     </span>
+    </h2>
+    <p>In the project tree, bibliographic data lives in:
+</p>
+    <pre>bibliography/
+&boxur;&boxh;&boxh; references.bib
+</pre>
+    <p>A minimal file could contain:
+</p>
+    <pre class="tex">@book<span class="br">{</span>beiser1987,
+  author    <span class="brx">=</span> <span class="br">{</span>Beiser, Frederick C.<span class="br">}</span>,
+  title     <span class="brx">=</span> <span class="br">{</span>The Fate of Reason<span class="br">}</span>,
+  subtitle  <span class="brx">=</span> <span class="br">{</span>German Philosophy from Kant to Fichte<span class="br">}</span>,
+  year      <span class="brx">=</span> <span class="br">{</span>1987<span class="br">}</span>,
+  publisher <span class="brx">=</span> <span class="br">{</span>Harvard University Press<span class="br">}</span>,
+  address   <span class="brx">=</span> <span class="br">{</span>Cambridge, MA<span class="br">}</span>,
+<span class="br">}</span>
+</pre>
+    <p>The environment loads that dataset with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\usebtxdataset</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+  <span class="brx">[</span>bibliography/references.bib<span class="brx">]</span>
+</pre>
+    <p>A chapter can then cite it:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\cite</span></span><span class="brx">[</span>authoryears<span class="brx">]</span><span class="brx">[</span>main::beiser1987<span class="brx">]</span>
+</pre>
+    <p>and the back-matter component can place the bibliography:
+</p>
+    <pre class="tex"><span class="comment">% backmatter/references.tex</span>
+
+<span class="cs"><span class="documentcs">\startcomponent</span></span> references
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>References<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\placebtxrendering</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Why a buffer may appear in a wiki example</b>
+</p>
+     <p>A tiny bibliography can instead be embedded temporarily in a buffer:
+</p>
+     <pre class="tex"><span class="cs"><span class="documentcs">\startbuffer</span></span><span class="brx">[</span>references<span class="brx">]</span>
+@book<span class="br">{</span>example,
+  author    <span class="brx">=</span> <span class="br">{</span>Author, Example<span class="br">}</span>,
+  title     <span class="brx">=</span> <span class="br">{</span>An Example Book<span class="br">}</span>,
+  year      <span class="brx">=</span> <span class="br">{</span>2026<span class="br">}</span>,
+  publisher <span class="brx">=</span> <span class="br">{</span>Example Press<span class="br">}</span>,
+<span class="br">}</span>
+<span class="cs"><span class="documentcs">\stopbuffer</span></span>
+
+<span class="cs"><span class="stylecs">\usebtxdataset</span></span>
+  <span class="brx">[</span>main<span class="brx">]</span>
+  <span class="brx">[</span>references.buffer<span class="brx">]</span>
+</pre>
+     <p>This is convenient for a self-contained Garden demonstration because the
+reader can copy one block of source without first creating a separate
+<code>.bib</code> file.
+</p>
+     <p>It should not be confused with the project architecture described on this
+page. In a real book project, keeping bibliographic data in a separate
+<code>.bib</code> file is normally clearer and easier to maintain.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._The_index">
+      10. The index
+     </span>
+    </h2>
+    <p>Index entries may be placed in any component:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>document structure<span class="br">}</span>
+<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>section heads<span class="br">}</span>
+<span class="cs"><span class="documentcs">\index</span></span><span class="br">{</span>bibliography<span class="br">}</span>
+</pre>
+    <p>The back matter can then contain a small index component:
+</p>
+    <pre class="tex"><span class="comment">% backmatter/index.tex</span>
+
+<span class="cs"><span class="documentcs">\startcomponent</span></span> index
+
+<span class="cs"><span class="documentcs">\project</span></span> project-modern-book
+
+<span class="cs"><span class="documentcs">\completeindex</span></span>
+
+<span class="cs"><span class="documentcs">\stopcomponent</span></span>
+</pre>
+    <p>The index therefore belongs to the publication as a whole even though its
+entries originate in many different component files.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Draft_and_production_settings">
+      11. Draft and production settings
+     </span>
+    </h2>
+    <p>Project organisation also makes it easier to keep temporary production
+settings out of chapter content.
+</p>
+    <p>The environment above contains:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startmode</span></span><span class="brx">[</span>draft<span class="brx">]</span>
+  <span class="cs"><span class="documentcs">\showframe</span></span>
+<span class="cs"><span class="stylecs">\stopmode</span></span>
+</pre>
+    <p>A draft can therefore be produced without editing every component.
+</p>
+    <p>For a temporary local test, one may uncomment:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\enablemode</span></span><span class="brx">[</span>draft<span class="brx">]</span>
+</pre>
+    <p>in the environment. For an established project, modes can instead be
+enabled from the compilation workflow.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #c8c8c8; border-left:5px solid #808080; background:#f7f7f7;">
+     <p><b>Keep production aids out of content files</b>
+</p>
+     <p>Frames, debugging aids, temporary line numbering, alternate layouts, and
+similar production settings normally belong in an environment or a mode,
+not scattered through chapter components.
+</p>
+     <p>This keeps the textual components focused on document content and
+structure.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="12._How_the_whole_project_fits_together">
+      12. How the whole project fits together
+     </span>
+    </h2>
+    <p>The complete flow can now be represented as:
+</p>
+    <pre>                    PROJECT
+                       &boxv;
+          &boxdr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhu;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;
+          &boxv;                         &boxv;
+          ▼                         ▼
+     ENVIRONMENT                  PRODUCT
+          &boxv;                         &boxv;
+  common configuration              &boxv;
+          &boxv;                         &boxv;
+          &boxv;              &boxdr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxvh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;
+          &boxv;              &boxv;          &boxv;           &boxv;
+          &boxv;              ▼          ▼           ▼
+          &boxv;        FRONT MATTER  BODY MATTER  APPENDICES
+          &boxv;              &boxv;          &boxv;           &boxv;
+          &boxv;              ▼          ▼           ▼
+          &boxv;          components  components   components
+          &boxv;              &boxv;          &boxv;           &boxv;
+          &boxv;              &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxvh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxul;
+          &boxv;                         &boxv;
+          &boxv;                         ▼
+          &boxv;                    BACK MATTER
+          &boxv;                         &boxv;
+          &boxv;                  bibliography
+          &boxv;                     + index
+          &boxv;                         &boxv;
+          &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhd;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxul;
+                         ▼
+                  FINAL PUBLICATION
+</pre>
+    <p>Another way to read the same architecture is:
+</p>
+    <pre>configuration &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► environment
+publication order &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► product
+content units &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► components
+bibliographic data &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► .bib dataset
+structural hierarchy &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► chapter / section / ...
+large document regions &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► frontmatter / bodymatter /
+                               appendices / backmatter
+</pre>
+    <p>These layers interact, but they solve different problems.
+</p>
+    <h2>
+     <span class="mw-headline" id="13._Turning_the_model_into_a_local_project">
+      13. Turning the model into a local project
+     </span>
+    </h2>
+    <p>The source fragments on this page are deliberately representative rather
+than a complete book download. The directory tree contains more component
+files than are printed in full here, because repeating nearly identical
+chapter files would hide the architecture the page is intended to explain.
+</p>
+    <p>To make a local test project, create the tree shown above, copy the
+representative files, and add small placeholder components for any files
+that are present in the product but not reproduced in full on this page.
+For example, <code>chapters/chapter-02.tex</code> can initially contain a
+single short chapter.
+</p>
+    <p>Once all referenced components exist, compile the product from the project
+directory:
+</p>
+    <pre>context product-modern-book.tex
+</pre>
+    <p>When testing a component on its own, keep its
+<code>\project project-modern-book</code> line so that it can inherit the
+shared project environment.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>If a representative file does not compile</b>
+</p>
+     <p>First check that the complete directory tree has been created and that file
+names and relative paths match the examples.
+</p>
+     <p>Also check that you are using a recent ConTeXt LMTX installation.
+</p>
+     <p>This page is intended to document current practice. If an example requires
+correction for a current LMTX release, please correct the example rather
+than adding obsolete compatibility code to it.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="14._Why_this_differs_from_the_historical_example">
+      14. Why this differs from the historical example
+     </span>
+    </h2>
+    <p>The historical
+<a href="Theory_book_style.html" title="Input and compilation/Sample documents/Theory book style">Theory book style</a>
+page is valuable because it preserves a real production environment from
+an earlier generation of ConTeXt.
+</p>
+    <p>The present page has a different purpose:
+</p>
+    <pre>HISTORICAL EXAMPLE                 CURRENT LMTX MODEL
+
+real 2006&ndash;2007 environment         pedagogical 2026 architecture
+        &boxv;                                  &boxv;
+older encoding model                  native UTF-8
+older font setup                      OpenType fonts
+former bib system                     current btx system
+large single environment              project organisation
+project-specific dependencies         minimal representative files
+        &boxv;                                  &boxv;
+preserve as documentation            use as a starting model
+</pre>
+    <p>The editorial problems are recognisably similar: page design, section
+heads, references, bibliography, indexes, and production settings still
+have to cooperate. What has changed is the appropriate technical
+organisation and the interfaces used to solve them.
+</p>
+    <h2>
+     <span class="mw-headline" id="15._Where_to_go_next">
+      15. Where to go next
+     </span>
+    </h2>
+    <p>For the concepts behind chapters, sections, section blocks, lists,
+markings, and reference targets, see
+<a href="../../Document_structure_and_headlines/Understanding_document_structure_and_section_heads.html" title="Document structure and headlines/Understanding document structure and section heads">
+Understanding document structure and section heads</a>.
+</p>
+    <p>For practical customisation, see:
+</p>
+    <ul>
+     <li>
+      <a href="../../Document_structure_and_headlines/Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">
+       Headlines formatting
+      </a>
+     </li>
+     <li>
+      <a href="../../Document_structure_and_headlines/Section_numbering.html" title="Document structure and headlines/Section numbering">
+       Section numbering
+      </a>
+     </li>
+     <li>
+      <a href="../../Document_structure_and_headlines/Table_of_contents.html" title="Document structure and headlines/Table of contents">
+       Table of contents
+      </a>
+     </li>
+     <li>
+      <a href="../../References_notes_and_floats/Bibliography_and_citations.html" title="References notes and floats/Bibliography and citations">
+       Bibliography and citations
+      </a>
+     </li>
+     <li>
+      <a href="../../References_notes_and_floats/Registers_and_index.html" title="References notes and floats/Registers and index">
+       Registers and index
+      </a>
+     </li>
+    </ul>
+    <p>To develop the project structure introduced on this page, continue with
+<a href="../Project_and_file_management.html" title="Input and compilation/Project and file management">Project and file management</a>.
+That page explains how projects, products, environments, and components fit
+together and how they can be organised in a larger source tree.
+</p>
+    <p>For larger projects, the important next step is not to add more code to a
+single file, but to decide:
+</p>
+    <pre>shared configuration  &boxh;&boxh;&boxh;► environment
+publication assembly  &boxh;&boxh;&boxh;► product
+content units         &boxh;&boxh;&boxh;► components
+overall organisation  &boxh;&boxh;&boxh;► project
+</pre>
+    <p>This makes it possible to extend the small sample shown here into a real
+book project without changing its basic architecture.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-09-02
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Input_and_compilation/Sample_documents/A_modern_LMTX_book_environment">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>
