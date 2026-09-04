@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Create specialised tables of contents&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Create_specialised_tables_of_contents" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Create specialised tables of contents
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7673&diff=43898">2026-09-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page is under construction as part of the renewal of the "Document structure and headlines" documentation area. Feel free to improve, correct, or extend it where useful. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="margin:1em 0; padding:0.9em 1em; border:1px solid #b8c7d9; border-left:5px solid #4f78a8; background:#f6f9fc;">
+     <p><b>HOW-TO &mdash; Creating specialised tables of contents</b>
+</p>
+     <p>This page develops advanced table-of-contents techniques for cases where
+the ordinary <code>\completecontent</code>, <code>\placecontent</code>,
+and <code>\setuplist</code> mechanisms are not sufficient.
+</p>
+     <p>For ordinary ToC configuration, selection, and formatting, start with
+<a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">Table of contents</a>.
+</p>
+     <p>The examples below concentrate on current ConTeXt LMTX mechanisms.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._When_to_use_a_specialised_ToC">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. When to use a specialised ToC
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Replace_the_complete_entry_with_alternative.3Dcommand">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Replace the complete entry with alternative=command
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2.1._Example:_put_the_page_number_before_the_title">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Example: put the page number before the title
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#3._Build_a_hierarchical_ToC_by_nesting_lists">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Build a hierarchical ToC by nesting lists
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#4._Add_structural_metadata_to_ToC_entries">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Add structural metadata to ToC entries
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#4.1._Add_metadata_with_textcommand">
+          <span class="tocnumber">
+           4.1
+          </span>
+          <span class="toctext">
+           4.1. Add metadata with textcommand
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#4.2._Avoid_empty_metadata_fields">
+          <span class="tocnumber">
+           4.2
+          </span>
+          <span class="toctext">
+           4.2. Avoid empty metadata fields
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#5._Insert_a_manual_list_entry_with_.5Cwritetolist">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Insert a manual list entry with \writetolist
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#6._Insert_material_between_list_entries_with_.5Cwritebetweenlist">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Insert material between list entries with \writebetweenlist
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#7._Define_a_reusable_combined_list">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Define a reusable combined list
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#8._Historical_specialised_layouts">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Historical specialised layouts
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#8.1._Custom_list_alternatives">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           8.1. Custom list alternatives
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#9._Related_pages">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#9.1._Command_reference">
+          <span class="tocnumber">
+           9.1
+          </span>
+          <span class="toctext">
+           9.1. Command reference
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#10._Attribution_and_validation">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Attribution and validation
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._When_to_use_a_specialised_ToC">
+      1. When to use a specialised ToC
+     </span>
+    </h2>
+    <p>The standard table of contents is usually sufficient when the required
+result consists of:
+</p>
+    <pre>number        title ........................ page
+</pre>
+    <p>with ordinary variations in style, spacing, indentation, and selection.
+</p>
+    <p>A specialised ToC becomes useful when an entry must contain additional
+information or when the organisation of the list itself must change.
+</p>
+    <p>Typical cases include:
+</p>
+    <ul>
+     <li>
+      changing the complete layout of each entry;
+     </li>
+     <li>
+      adding an author, subtitle, or other metadata;
+     </li>
+     <li>
+      nesting one list inside another;
+     </li>
+     <li>
+      inserting list material that does not correspond to a structural head;
+     </li>
+     <li>
+      creating a reusable combined list different from
+      <code>content</code>
+      ;
+     </li>
+     <li>
+      horizontal or multi-column layouts.
+     </li>
+    </ul>
+    <p>The underlying model remains the same:
+</p>
+    <pre>STRUCTURAL DATA
+      &boxv;
+      ▼
+SELECTION
+      &boxv;
+      ▼
+LIST ENTRIES
+      &boxv;
+      ▼
+CUSTOM RENDERING
+</pre>
+    <p>A specialised table of contents should therefore normally reuse document
+structure rather than create a parallel hierarchy solely for presentation.
+</p>
+    <h2>
+     <span id="2._Replace_the_complete_entry_with_alternative=command">
+     </span>
+     <span class="mw-headline" id="2._Replace_the_complete_entry_with_alternative.3Dcommand">
+      2. Replace the complete entry with alternative=command
+     </span>
+    </h2>
+    <p>For complete control over the rendering of an ordinary list entry, use
+<code>alternative=command</code>.
+</p>
+    <p>The rendering command receives three arguments:
+</p>
+    <pre>#1  structural number
+#2  title
+#3  page number
+</pre>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\MyListEntry</span>
+  <span class="br">{</span><span class="brx">#</span>1<span class="cs"><span class="stylecs">\quad</span></span> <span class="brx">#</span>2<span class="cs">\hfill</span> <span class="brx">#</span>3<span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>alternative<span class="brx">=</span>command,
+   command<span class="brx">=</span><span class="cs">\MyListEntry</span><span class="brx">]</span>
+</pre>
+    <p>This makes the complete entry available to one renderer rather than
+formatting the number, text, and page components separately.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>The three arguments &mdash; number, title, and page &mdash; were checked with
+ConTeXt LMTX 2026.07.29.
+</p>
+     <p>Use <code>alternative=command</code> when the complete entry arrangement
+must be redesigned rather than merely styled.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="2.1._Example:_put_the_page_number_before_the_title">
+      2.1. Example: put the page number before the title
+     </span>
+    </h3>
+    <p>A renderer can change the normal component order.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>3<span class="brx">]</span><span class="cs">\SectionListEntry</span>
+  <span class="br">{</span><span class="cs">\par</span>
+   <span class="brx">#</span>3<span class="cs"><span class="stylecs">\quad</span></span> <span class="brx">#</span>2
+   <span class="cs">\par</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>alternative<span class="brx">=</span>command,
+   command<span class="brx">=</span><span class="cs">\SectionListEntry</span><span class="brx">]</span>
+</pre>
+    <p>Here the page number (<code>#3</code>) is placed before the title
+(<code>#2</code>).
+</p>
+    <p>More elaborate typography can of course be added inside the rendering
+command.
+</p>
+    <h2>
+     <span class="mw-headline" id="3._Build_a_hierarchical_ToC_by_nesting_lists">
+      3. Build a hierarchical ToC by nesting lists
+     </span>
+    </h2>
+    <p>A list can be placed while another list entry is being rendered.
+</p>
+    <p>A compact pattern is:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\placelist</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>after<span class="brx">=</span><span class="br">{</span><span class="cs"><span class="documentcs">\placelist</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="brx">[</span>criterium<span class="brx">=</span>local<span class="brx">]</span><span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Conceptually:
+</p>
+    <pre>Chapter One
+   &boxvr;&boxh;&boxh; Alpha
+   &boxur;&boxh;&boxh; Beta
+
+Chapter Two
+   &boxvr;&boxh;&boxh; First
+   &boxur;&boxh;&boxh; Second
+</pre>
+    <p>In this context, <code>criterium=local</code> has a specialised
+nested-list behaviour.
+</p>
+    <p>While an outer chapter entry is being rendered, that chapter supplies the
+structural context for the nested section list:
+</p>
+    <pre>outer list entry
+      &boxv;
+      ▼
+current outer chapter
+      &boxv;
+      ▼
+\placelist[section][criterium=local]
+      &boxv;
+      ▼
+sections belonging to that chapter
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>This nested chapter/section pattern was tested with ConTeXt LMTX
+2026.07.29. The chapter/section hierarchy, numbering, ordering, and page
+references were preserved correctly.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Add_structural_metadata_to_ToC_entries">
+      4. Add structural metadata to ToC entries
+     </span>
+    </h2>
+    <p>A structural head can carry user data in its second optional argument.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startsection</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A section with metadata<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>author<span class="brx">=</span><span class="br">{</span>A. Uthor<span class="br">}</span>,
+   subtitle<span class="brx">=</span><span class="br">{</span>A subtitle<span class="br">}</span><span class="brx">]</span>
+
+Text.
+
+<span class="cs"><span class="documentcs">\stopsection</span></span>
+</pre>
+    <p>These values belong to the structural record.
+</p>
+    <p>When that record is rendered in a list, they can be accessed with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span>
+<span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>subtitle<span class="br">}</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="4.1._Add_metadata_with_textcommand">
+      4.1. Add metadata with textcommand
+     </span>
+    </h3>
+    <p>A custom title renderer can combine the stored metadata with the normal
+title:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\SectionTocEntry</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span><span class="cs"><span class="stylecs">\space</span></span>
+   --<span class="cs"><span class="stylecs">\space</span></span>
+   <span class="brx">#</span>1
+   <span class="cs"><span class="stylecs">\space</span></span>
+   <span class="brx">(</span><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>subtitle<span class="br">}</span><span class="brx">)</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuplist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>textcommand<span class="brx">=</span><span class="cs">\SectionTocEntry</span><span class="brx">]</span>
+</pre>
+    <p>This changes the list representation only.
+</p>
+    <p>The printed section head can remain:
+</p>
+    <pre>1 A section with metadata
+</pre>
+    <p>while the ToC entry becomes, for example:
+</p>
+    <pre>1 A. Uthor &ndash; A section with metadata (A subtitle)
+</pre>
+    <h3>
+     <span class="mw-headline" id="4.2._Avoid_empty_metadata_fields">
+      4.2. Avoid empty metadata fields
+     </span>
+    </h3>
+    <p>Not every structural item necessarily supplies the same user variables.
+</p>
+    <p>Use the raw accessor when the value must first be tested:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\rawstructurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span>
+</pre>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>1<span class="brx">]</span><span class="cs">\SectionTocEntry</span>
+  <span class="br">{</span><span class="cs"><span class="systemcs">\doifnot</span></span>
+     <span class="br">{</span><span class="cs"><span class="systemcs">\rawstructurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span><span class="br">}</span>
+     <span class="br">{</span><span class="br">}</span>
+     <span class="br">{</span><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>author<span class="br">}</span><span class="cs"><span class="stylecs">\space</span></span>--<span class="cs"><span class="stylecs">\space</span></span><span class="br">}</span><span class="comment">%</span>
+   <span class="brx">#</span>1<span class="comment">%</span>
+   <span class="cs"><span class="systemcs">\doifnot</span></span>
+     <span class="br">{</span><span class="cs"><span class="systemcs">\rawstructurelistuservariable</span></span><span class="br">{</span>subtitle<span class="br">}</span><span class="br">}</span>
+     <span class="br">{</span><span class="br">}</span>
+     <span class="br">{</span><span class="cs"><span class="stylecs">\space</span></span><span class="brx">(</span><span class="cs"><span class="stylecs">\structurelistuservariable</span></span><span class="br">{</span>subtitle<span class="br">}</span><span class="brx">)</span><span class="br">}</span><span class="br">}</span>
+</pre>
+    <p>This prevents separators or parentheses from appearing when the associated
+metadata is absent.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Metadata belongs to the structural record</b>
+</p>
+     <p>The title, list title, bookmark, marking, reference, and user variables can
+all be different representations or associated data of the same structural
+item.
+</p>
+     <p>Using list user variables enriches the ToC representation without creating
+a parallel document structure.
+</p>
+    </div>
+    <p>This behaviour was validated with current LMTX: metadata supplied for one
+section appeared in that section's ToC entry and did not leak into the
+following section without metadata.
+</p>
+    <h2>
+     <span id="5._Insert_a_manual_list_entry_with_\writetolist">
+     </span>
+     <span class="mw-headline" id="5._Insert_a_manual_list_entry_with_.5Cwritetolist">
+      5. Insert a manual list entry with \writetolist
+     </span>
+    </h2>
+    <p>Most ToC entries should originate from structural heads.
+</p>
+    <p>Sometimes, however, a list needs an entry that is deliberately not a new
+structural division.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\subject</span></span><span class="br">{</span>Bibliography<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\writetolist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>here<span class="brx">]</span>
+  <span class="br">{</span><span class="br">}</span>
+  <span class="br">{</span>Bibliography<span class="br">}</span>
+</pre>
+    <p>The two final arguments provide the simple list entry's number and title
+fields.
+</p>
+    <p>Here the first field is empty, so no manual number is supplied.
+</p>
+    <p>Current LMTX also accepts the shorter form:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writetolist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="br">{</span><span class="br">}</span>
+  <span class="br">{</span>Bibliography<span class="br">}</span>
+</pre>
+    <p>because <code>location=here</code> is the ordinary current-location case.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d8c28a; border-left:5px solid #c9962f; background:#fff9e8;">
+     <p><b>A manual list entry is not a structural head</b>
+</p>
+     <p><code>\writetolist</code> inserts a list record associated with a
+location.
+</p>
+     <p>It does not create a chapter, section, subject, structural counter event,
+or new document hierarchy.
+</p>
+     <p>If the item is conceptually a document division, prefer an appropriate
+structural head and configure its list behaviour instead.
+</p>
+    </div>
+    <h2>
+     <span id="6._Insert_material_between_list_entries_with_\writebetweenlist">
+     </span>
+     <span class="mw-headline" id="6._Insert_material_between_list_entries_with_.5Cwritebetweenlist">
+      6. Insert material between list entries with \writebetweenlist
+     </span>
+    </h2>
+    <p><code>\writebetweenlist</code> stores a command in the list stream rather
+than creating a numbered/title entry.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writebetweenlist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>can insert spacing at the corresponding logical point when the list is
+later rendered.
+</p>
+    <p>An explicit location can also be supplied:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writebetweenlist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>here<span class="brx">]</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span><span class="br">}</span>
+</pre>
+    <p>A manual entry and inserted spacing can therefore be combined:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writebetweenlist</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\writetolist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>here<span class="brx">]</span>
+  <span class="br">{</span><span class="br">}</span>
+  <span class="br">{</span>Section under construction<span class="br">}</span>
+
+<span class="cs"><span class="documentcs">\writebetweenlist</span></span><span class="brx">[</span>section<span class="brx">]</span><span class="br">{</span><span class="cs"><span class="documentcs">\blank</span></span><span class="br">}</span>
+</pre>
+    <p>Use these lower-level commands when direct manipulation of the list stream
+is genuinely required.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Define_a_reusable_combined_list">
+      7. Define a reusable combined list
+     </span>
+    </h2>
+    <p>The standard <code>content</code> list is already defined by ConTeXt and
+should normally be configured with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>...<span class="brx">]</span>
+</pre>
+    <p>When another reusable combination is required, define a new combined list.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definecombinedlist</span></span>
+  <span class="brx">[</span>summary<span class="brx">]</span>
+  <span class="brx">[</span>chapter,section<span class="brx">]</span>
+</pre>
+    <p>The new list can then be configured independently:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>summary<span class="brx">]</span>
+  <span class="brx">[</span>criterium<span class="brx">=</span>all,
+   list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>and placed with its generated placement command:
+</p>
+    <pre class="tex"><span class="cs">\placesummary</span>
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Do not redefine content</b>
+</p>
+     <p>Use <code>\definecombinedlist</code> for a genuinely new reusable combined
+list.
+</p>
+     <p>Use <code>\setupcombinedlist[content]</code> to configure the standard
+table of contents.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="8._Historical_specialised_layouts">
+      8. Historical specialised layouts
+     </span>
+    </h2>
+    <p>The ConTeXt Garden already contains specialised ToC examples that remain
+useful as sources of ideas:
+</p>
+    <ul>
+     <li>
+      <a href="Table_of_contents/Horizontal_table_of_contents.html" title="Document structure and headlines/Table of contents/Horizontal table of contents">
+       Horizontal table of contents
+      </a>
+     </li>
+     <li>
+      <a href="Table_of_contents/Table_of_contents_with_fake_columns.html" title="Document structure and headlines/Table of contents/Table of contents with fake columns">
+       Table of contents with fake columns
+      </a>
+     </li>
+    </ul>
+    <p>They illustrate layouts beyond the ordinary vertical number&ndash;title&ndash;page
+model.
+</p>
+    <p>Their implementations originate in older stages of ConTeXt documentation,
+so individual mechanisms should be checked against current LMTX before
+being reused unchanged.
+</p>
+    <h3>
+     <span class="mw-headline" id="8.1._Custom_list_alternatives">
+      8.1. Custom list alternatives
+     </span>
+    </h3>
+    <p>For layouts that cannot conveniently be expressed with the ordinary
+alternatives or with a simple <code>alternative=command</code> renderer,
+ConTeXt also provides custom list alternatives.
+</p>
+    <p>The general mechanism uses:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definelistalternative</span></span>
+  <span class="brx">[</span>myalternative<span class="brx">]</span>
+  <span class="brx">[</span>renderingsetup<span class="brx">=</span>list:myalternative<span class="brx">]</span>
+</pre>
+    <p>together with a rendering setup:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startsetups</span></span> <span class="brx">[</span>list:myalternative<span class="brx">]</span>
+  <span class="comment">% custom rendering of the current list entry</span>
+<span class="cs"><span class="stylecs">\stopsetups</span></span>
+</pre>
+    <p>and then:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuplist</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>alternative<span class="brx">=</span>myalternative<span class="brx">]</span>
+</pre>
+    <p>This is an advanced interface. A custom alternative should normally be
+used only when the simpler list-rendering mechanisms do not provide enough
+control.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Related_pages">
+      9. Related pages
+     </span>
+    </h2>
+    <p>For ordinary table-of-contents work:
+</p>
+    <ul>
+     <li>
+      <a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">
+       Table of contents
+      </a>
+     </li>
+    </ul>
+    <p>For controlling whether structural heads participate in the ToC:
+</p>
+    <ul>
+     <li>
+      <a href="Include_or_exclude_heads_from_the_ToC.html" title="Document structure and headlines/Include or exclude heads from the ToC">
+       Include or exclude heads from the ToC
+      </a>
+     </li>
+    </ul>
+    <p>For the underlying structural model:
+</p>
+    <ul>
+     <li>
+      <a href="Understanding_document_structure_and_section_heads.html" title="Document structure and headlines/Understanding document structure and section heads">
+       Understanding document structure and section heads
+      </a>
+     </li>
+    </ul>
+    <p>For section-number representation:
+</p>
+    <ul>
+     <li>
+      <a href="Section_numbering.html" title="Document structure and headlines/Section numbering">
+       Section numbering
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="9.1._Command_reference">
+      9.1. Command reference
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/setuplist.html" title="Command/setuplist">
+        \setuplist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/placelist.html" title="Command/placelist">
+        \placelist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/definecombinedlist.html" title="Command/definecombinedlist">
+        \definecombinedlist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupcombinedlist.html" title="Command/setupcombinedlist">
+        \setupcombinedlist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/writetolist.html" title="Command/writetolist">
+        \writetolist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/writebetweenlist.html" title="Command/writebetweenlist">
+        \writebetweenlist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/structurelistuservariable&action=edit&redlink=1.html" title="Command/structurelistuservariable (page does not exist)">
+        \structurelistuservariable
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/rawstructurelistuservariable&action=edit&redlink=1.html" title="Command/rawstructurelistuservariable (page does not exist)">
+        \rawstructurelistuservariable
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="10._Attribution_and_validation">
+      10. Attribution and validation
+     </span>
+    </h2>
+    <p>This page collects advanced table-of-contents material that was separated
+from the general
+<a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">Table of contents</a>
+HOW-TO during the renewal of the "Document structure and headlines"
+documentation area.
+</p>
+    <p>The following mechanisms were specifically validated with ConTeXt LMTX
+2026.07.29:
+</p>
+    <ul>
+     <li>
+      complete-entry rendering with
+      <code>alternative=command</code>
+      ;
+     </li>
+     <li>
+      structural userdata used in individual list entries;
+     </li>
+     <li>
+      nested chapter/section lists using
+      <code>criterium=local</code>
+      .
+     </li>
+    </ul>
+    <p>Manual list manipulation and older specialised layouts are documented
+separately so that their lower-level or historical character remains
+visible.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-09-04
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Create_specialised_tables_of_contents">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

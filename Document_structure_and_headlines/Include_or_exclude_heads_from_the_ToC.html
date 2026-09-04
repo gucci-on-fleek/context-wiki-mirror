@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Include or exclude heads from the ToC&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Include_or_exclude_heads_from_the_ToC" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Include or exclude heads from the ToC
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7674&diff=43902">2026-09-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page is under construction as part of the renewal of the "Document structure and headlines" documentation area. Feel free to improve, correct, or extend it where useful. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="margin:1em 0; padding:0.9em 1em; border:1px solid #b8c7d9; border-left:5px solid #4f78a8; background:#f6f9fc;">
+     <p><b>HOW-TO &mdash; Including or excluding heads from the table of contents</b>
+</p>
+     <p>This page explains how to control whether chapter, section, unnumbered,
+and custom heads participate in a table of contents.
+</p>
+     <p>For general ToC creation, selection, and formatting, see
+<a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">Table of contents</a>.
+</p>
+     <p>For custom renderers, manually inserted entries, metadata, and nested
+lists, see
+<a href="Create_specialised_tables_of_contents.html" title="Document structure and headlines/Create specialised tables of contents">Create specialised tables of contents</a>.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._What_controls_whether_a_head_appears.3F">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. What controls whether a head appears?
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Include_or_exclude_complete_head_types">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Include or exclude complete head types
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2.1._Exclude_a_complete_head_type">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Exclude a complete head type
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#3._True_unnumbered_heads_are_not_ordinary_ToC_entries_by_default">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. True unnumbered heads are not ordinary ToC entries by default
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#4._Include_an_unnumbered_head_without_advancing_the_ordinary_counter">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Include an unnumbered head without advancing the ordinary counter
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-6">
+       <a href="#5._A_front-matter_chapter_is_a_different_case">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. A front-matter chapter is a different case
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#6._Do_not_confuse_number.3Dno_with_list_exclusion">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Do not confuse number=no with list exclusion
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#7._Exclude_one_otherwise_numbered_head">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Exclude one otherwise numbered head
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-9">
+       <a href="#8._Do_not_use_list.3D_to_mean_.E2.80.9Cexclude_this_entry.E2.80.9D">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Do not use list= to mean &ldquo;exclude this entry&rdquo;
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-10">
+       <a href="#9._Prefer_a_dedicated_head_to_changing_title_globally">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. Prefer a dedicated head to changing title globally
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#10._Manual_inclusion_is_a_different_mechanism">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Manual inclusion is a different mechanism
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-12">
+       <a href="#11._Quick_recipes">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Quick recipes
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#12._Related_pages">
+        <span class="tocnumber">
+         12
+        </span>
+        <span class="toctext">
+         12. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-14">
+         <a href="#12.1._Command_reference">
+          <span class="tocnumber">
+           12.1
+          </span>
+          <span class="toctext">
+           12.1. Command reference
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-15">
+       <a href="#13._Attribution_and_validation">
+        <span class="tocnumber">
+         13
+        </span>
+        <span class="toctext">
+         13. Attribution and validation
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span id="1._What_controls_whether_a_head_appears?">
+     </span>
+     <span class="mw-headline" id="1._What_controls_whether_a_head_appears.3F">
+      1. What controls whether a head appears?
+     </span>
+    </h2>
+    <p>A structural head does not appear in a table of contents merely because
+it exists in the document.
+</p>
+    <p>For an ordinary structural entry to appear, several conditions must be
+satisfied:
+</p>
+    <pre>STRUCTURAL HEAD
+      &boxv;
+      ▼
+was it saved as a listable entry?
+      &boxv;
+      &boxvr;&boxh;&boxh; no &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► absent
+      &boxv;
+      ▼ yes
+is its list name requested?
+      &boxv;
+      &boxvr;&boxh;&boxh; no &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► absent
+      &boxv;
+      ▼ yes
+does it pass the current selection?
+      &boxv;
+      &boxvr;&boxh;&boxh; no &boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;► absent
+      &boxv;
+      ▼ yes
+     ToC
+</pre>
+    <p>The three questions correspond broadly to different mechanisms:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Question
+       </th>
+       <th>
+        Main mechanism
+       </th>
+      </tr>
+      <tr>
+       <td>Is the structural item saved as listable?
+</td>
+       <td>head setup, especially <code>incrementnumber=</code> and, in specialised cases, <code>saveinlist=</code>
+</td>
+      </tr>
+      <tr>
+       <td>Is this kind of entry represented by the ToC?
+</td>
+       <td><code>\setupcombinedlist[content][list={...}]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Is the saved entry selected in this structural context?
+</td>
+       <td><code>criterium=...</code> and <code>levels=...</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Structure, numbering, and ToC participation are different properties</b>
+</p>
+     <p>A head can exist structurally without being printed in the ToC.
+</p>
+     <p>Likewise, hiding a visible number does not by itself determine whether the
+head participates in a list.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Include_or_exclude_complete_head_types">
+      2. Include or exclude complete head types
+     </span>
+    </h2>
+    <p>The standard <code>content</code> combined list can be configured with an
+explicit list of entry names.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>means that chapter and section entries can participate in this ToC.
+</p>
+    <p>Subsections remain part of the document structure but are not represented
+by this combined list.
+</p>
+    <p>To include them:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>chapter,section,subsection<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <h3>
+     <span class="mw-headline" id="2.1._Exclude_a_complete_head_type">
+      2.1. Exclude a complete head type
+     </span>
+    </h3>
+    <p>To exclude a complete structural level from the ToC, leave its list name
+out of the composition.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>excludes <code>subsection</code> entries from <code>content</code> even
+though subsections may still exist and be numbered normally in the
+document.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>This does not alter document structure</b>
+</p>
+     <p>Changing:
+</p>
+     <pre class="tex">list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span>
+</pre>
+     <p>to:
+</p>
+     <pre class="tex">list<span class="brx">=</span><span class="br">{</span>chapter,section,subsection<span class="br">}</span>
+</pre>
+     <p>changes the composition of the ToC, not the hierarchy of the document.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._True_unnumbered_heads_are_not_ordinary_ToC_entries_by_default">
+      3. True unnumbered heads are not ordinary ToC entries by default
+     </span>
+    </h2>
+    <p>ConTeXt provides corresponding numbered and unnumbered head families:
+</p>
+    <pre>chapter       &harr; title
+section       &harr; subject
+subsection    &harr; subsubject
+...
+</pre>
+    <p>The unnumbered form is a distinct head type.
+</p>
+    <p>For example, a <code>subject</code> is not simply a section whose printed
+number has been hidden.
+</p>
+    <p>By default, true unnumbered heads such as <code>title</code>,
+<code>subject</code>, and <code>subsubject</code> are not ordinary
+entries of the standard <code>content</code> list.
+</p>
+    <p>Two conditions are involved:
+</p>
+    <pre>Is subject saved as a listable item?
+        &boxv;
+        &boxur;&boxh;&boxh; normally no
+
+Is subject requested by content?
+        &boxv;
+        &boxur;&boxh;&boxh; normally no
+</pre>
+    <p>Merely adding <code>subject</code> to <code>list={...}</code> is therefore
+not sufficient if the structural item itself has not been saved as a list
+entry.
+</p>
+    <h2>
+     <span class="mw-headline" id="4._Include_an_unnumbered_head_without_advancing_the_ordinary_counter">
+      4. Include an unnumbered head without advancing the ordinary counter
+     </span>
+    </h2>
+    <p>When an unnumbered head should appear in the ToC but should not consume
+the next ordinary chapter or section number, use:
+</p>
+    <pre class="tex">incrementnumber<span class="brx">=</span>list
+</pre>
+    <p>The three relevant states are:
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Setting
+       </th>
+       <th>
+        Increment ordinary structural counter?
+       </th>
+       <th>
+        Save as listable?
+       </th>
+      </tr>
+      <tr>
+       <td><code>incrementnumber=yes</code>
+</td>
+       <td>yes
+</td>
+       <td>yes
+</td>
+      </tr>
+      <tr>
+       <td><code>incrementnumber=no</code>
+</td>
+       <td>no
+</td>
+       <td>no
+</td>
+      </tr>
+      <tr>
+       <td><code>incrementnumber=list</code>
+</td>
+       <td>no
+</td>
+       <td>yes
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <p>For a special-purpose head, it is usually safer to define a dedicated head
+type.
+</p>
+    <p>For example:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter,title<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definehead</span></span>
+  <span class="brx">[</span>fronttitle<span class="brx">]</span>
+  <span class="brx">[</span>title<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>fronttitle<span class="brx">]</span>
+  <span class="brx">[</span>incrementnumber<span class="brx">=</span>list,
+   number<span class="brx">=</span>no,
+   page<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>fronttitle,chapter<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\completecontent</span></span>
+
+<span class="cs">\startfronttitle</span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Preface<span class="br">}</span><span class="brx">]</span>
+Text.
+<span class="cs">\stopfronttitle</span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First chapter<span class="br">}</span><span class="brx">]</span>
+Text.
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/d63c39285251bdbc3519ff522f221542.webp" width="620">
+     </li>
+    </ul>
+    <p>The result is conceptually:
+</p>
+    <pre>Contents
+
+Preface
+1 First chapter
+</pre>
+    <p>The Preface is listable but does not consume chapter number 1.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>The dedicated-head pattern with <code>incrementnumber=list</code> was
+validated with ConTeXt LMTX 2026.07.29.
+</p>
+     <p>The special head appears in the ToC while the first ordinary chapter
+remains Chapter 1.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="5._A_front-matter_chapter_is_a_different_case">
+      5. A front-matter chapter is a different case
+     </span>
+    </h2>
+    <p>A chapter used inside <code>frontmatter</code> remains structurally a
+<code>chapter</code>.
+</p>
+    <p>For example:
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7,landscape<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setuppagenumbering</span></span><span class="brx">[</span>state<span class="brx">=</span>stop<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span><span class="brx">[</span>chapter<span class="brx">]</span><span class="brx">[</span>page<span class="brx">=</span>no<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\placecontent</span></span>
+
+<span class="cs"><span class="documentcs">\startfrontmatter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Introduction<span class="br">}</span><span class="brx">]</span>
+Text.
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopfrontmatter</span></span>
+
+<span class="cs"><span class="documentcs">\startbodymatter</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span><span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First numbered chapter<span class="br">}</span><span class="brx">]</span>
+Text.
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stopbodymatter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="438" src="../wikiteximage/67ff9eddd9a35c559dc9a6952e18b1eb.webp" width="620">
+     </li>
+    </ul>
+    <p>The front-matter chapter has no visible chapter number, but it remains a
+chapter and can participate normally in the chapter list.
+</p>
+    <p>This is different from using:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\title</span></span><span class="br">{</span>Introduction<span class="br">}</span>
+</pre>
+    <p>Conceptually:
+</p>
+    <pre>front-matter chapter
+    structural name = chapter
+    visible number  = suppressed
+    list participation = retained
+
+true title head
+    structural name = title
+    ordinary list participation = off by default
+</pre>
+    <h2>
+     <span id="6._Do_not_confuse_number=no_with_list_exclusion">
+     </span>
+     <span class="mw-headline" id="6._Do_not_confuse_number.3Dno_with_list_exclusion">
+      6. Do not confuse number=no with list exclusion
+     </span>
+    </h2>
+    <p>The setting:
+</p>
+    <pre class="tex">number<span class="brx">=</span>no
+</pre>
+    <p>controls whether the structural number is displayed.
+</p>
+    <p>It does not mean &ldquo;exclude this head from the ToC&rdquo;.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>incrementnumber<span class="brx">=</span>yes,
+   number<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <p>can hide the printed chapter number while the structural counter continues
+to advance.
+</p>
+    <p>Therefore:
+</p>
+    <pre>number=no
+        &rarr; hide the visible number
+
+incrementnumber=no
+        &rarr; do not increment and do not save as an ordinary list entry
+
+incrementnumber=list
+        &rarr; do not increment, but save as a list entry
+</pre>
+    <p>Use the setting that corresponds to the structural behaviour required,
+rather than treating visible numbering and ToC participation as the same
+problem.
+</p>
+    <h2>
+     <span class="mw-headline" id="7._Exclude_one_otherwise_numbered_head">
+      7. Exclude one otherwise numbered head
+     </span>
+    </h2>
+    <p>Current ConTeXt exposes the structural setting:
+</p>
+    <pre class="tex">saveinlist<span class="brx">=</span>no
+</pre>
+    <p>for suppressing the list record of an individual structural item.
+</p>
+    <p>The intended form is, for example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>Chapter not in the ToC<span class="br">}</span>,
+   saveinlist<span class="brx">=</span>no<span class="brx">]</span>
+
+Text.
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+</pre>
+    <p>This is conceptually different from:
+</p>
+    <pre class="tex">incrementnumber<span class="brx">=</span>no
+</pre>
+    <p>because the intention is to keep the structural item and its ordinary
+counter behaviour while suppressing only its list entry.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d8c28a; border-left:5px solid #c9962f; background:#fff9e8;">
+     <p><b>Requires validation with the current LMTX version</b>
+</p>
+     <p><code>saveinlist=no</code> is part of the current structural interface, but
+a 2026 mailing-list report showed unexpected displayed chapter numbering
+when it was applied to an individual chapter.
+</p>
+     <p>This specific use has not yet been included in the MWE validation series
+for LMTX 2026.07.29.
+</p>
+     <p>Until that test is completed, treat <code>saveinlist=no</code> as a
+current but implementation-sensitive mechanism rather than as a fully
+validated recipe.
+</p>
+    </div>
+    <h2>
+     <span id="8._Do_not_use_list=_to_mean_&ldquo;exclude_this_entry&rdquo;">
+     </span>
+     <span class="mw-headline" id="8._Do_not_use_list.3D_to_mean_.E2.80.9Cexclude_this_entry.E2.80.9D">
+      8. Do not use list= to mean &ldquo;exclude this entry&rdquo;
+     </span>
+    </h2>
+    <p>The <code>list=</code> key of a structural head supplies the text to be
+used in list representations.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A deliberately long chapter title<span class="br">}</span>,
+   list<span class="brx">=</span><span class="br">{</span>Short chapter title<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>means:
+</p>
+    <pre>printed head &rarr; A deliberately long chapter title
+ToC entry    &rarr; Short chapter title
+</pre>
+    <p>It does not mean that the chapter is excluded.
+</p>
+    <p>Likewise, the <code>list={...}</code> setting in
+<code>\setupcombinedlist</code> has another purpose:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupcombinedlist</span></span>
+  <span class="brx">[</span>content<span class="brx">]</span>
+  <span class="brx">[</span>list<span class="brx">=</span><span class="br">{</span>chapter,section<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>Here it specifies the names of the entry types represented by the combined
+list.
+</p>
+    <p>These two uses of <code>list</code> should not be confused.
+</p>
+    <h2>
+     <span class="mw-headline" id="9._Prefer_a_dedicated_head_to_changing_title_globally">
+      9. Prefer a dedicated head to changing title globally
+     </span>
+    </h2>
+    <p>Avoid making the standard <code>title</code> head globally listable merely
+to create one special ToC entry.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>title<span class="brx">]</span>
+  <span class="brx">[</span>incrementnumber<span class="brx">=</span>list,
+   number<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+    <p>affects every <code>title</code> head.
+</p>
+    <p>This matters because <code>\completecontent</code> itself creates a
+structural <code>title</code> head for <i>Contents</i>.
+</p>
+    <p>If <code>title</code> is also included in the <code>content</code>
+composition, the ToC can therefore acquire an entry for its own
+<i>Contents</i> heading.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d8c28a; border-left:5px solid #c9962f; background:#fff9e8;">
+     <p><b>Prefer a dedicated head</b>
+</p>
+     <p>For one special unnumbered listable division, prefer:
+</p>
+     <pre class="tex"><span class="cs"><span class="stylecs">\definehead</span></span>
+  <span class="brx">[</span>fronttitle<span class="brx">]</span>
+  <span class="brx">[</span>title<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>fronttitle<span class="brx">]</span>
+  <span class="brx">[</span>incrementnumber<span class="brx">=</span>list,
+   number<span class="brx">=</span>no<span class="brx">]</span>
+</pre>
+     <p>and explicitly include <code>fronttitle</code> in the desired combined
+list.
+</p>
+     <p>This avoids changing the behaviour of every ordinary <code>title</code>.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="10._Manual_inclusion_is_a_different_mechanism">
+      10. Manual inclusion is a different mechanism
+     </span>
+    </h2>
+    <p>When an item is not a structural division but nevertheless needs a manual
+list record, ConTeXt provides:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writetolist</span></span>
+</pre>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\writetolist</span></span>
+  <span class="brx">[</span>section<span class="brx">]</span>
+  <span class="brx">[</span>location<span class="brx">=</span>here<span class="brx">]</span>
+  <span class="br">{</span><span class="br">}</span>
+  <span class="br">{</span>Bibliography<span class="br">}</span>
+</pre>
+    <p>This injects a list record.
+</p>
+    <p>It does not create a section.
+</p>
+    <p>Therefore, use a structural head plus the appropriate list settings when
+the item is genuinely part of the document hierarchy.
+</p>
+    <p>Use <code>\writetolist</code> only when a manual list record is
+deliberately required.
+</p>
+    <p>For detailed examples, see
+<a href="Create_specialised_tables_of_contents.html" title="Document structure and headlines/Create specialised tables of contents">Create specialised tables of contents</a>.
+</p>
+    <h2>
+     <span class="mw-headline" id="11._Quick_recipes">
+      11. Quick recipes
+     </span>
+    </h2>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Task
+       </th>
+       <th>
+        Recommended mechanism
+       </th>
+      </tr>
+      <tr>
+       <td>Include chapters and sections, but not subsections
+</td>
+       <td><code>\setupcombinedlist[content][list={chapter,section}]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Include subsections too
+</td>
+       <td><code>\setupcombinedlist[content][list={chapter,section,subsection}]</code>
+</td>
+      </tr>
+      <tr>
+       <td>Create an unnumbered head that appears in the ToC without consuming the ordinary counter
+</td>
+       <td>dedicated head + <code>incrementnumber=list</code>
+</td>
+      </tr>
+      <tr>
+       <td>Hide a printed number
+</td>
+       <td><code>number=no</code>
+</td>
+      </tr>
+      <tr>
+       <td>Make an unnumbered head non-listable
+</td>
+       <td><code>incrementnumber=no</code>
+</td>
+      </tr>
+      <tr>
+       <td>Use a shorter ToC title
+</td>
+       <td>head key <code>list={Short title}</code>
+</td>
+      </tr>
+      <tr>
+       <td>Keep an ordinary front-matter chapter listable without a visible number
+</td>
+       <td>use <code>chapter</code> inside <code>frontmatter</code>
+</td>
+      </tr>
+      <tr>
+       <td>Suppress one otherwise numbered structural item from the list
+</td>
+       <td><code>saveinlist=no</code> &mdash; implementation-sensitive; validate before relying on it
+</td>
+      </tr>
+      <tr>
+       <td>Insert a manual non-structural list record
+</td>
+       <td><code>\writetolist</code>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h2>
+     <span class="mw-headline" id="12._Related_pages">
+      12. Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Document_structure_and_headlines.html" title="Document structure and headlines">
+       Document structure and headlines
+      </a>
+     </li>
+     <li>
+      <a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">
+       Table of contents
+      </a>
+     </li>
+     <li>
+      <a href="Create_specialised_tables_of_contents.html" title="Document structure and headlines/Create specialised tables of contents">
+       Create specialised tables of contents
+      </a>
+     </li>
+     <li>
+      <a href="Understanding_document_structure_and_section_heads.html" title="Document structure and headlines/Understanding document structure and section heads">
+       Understanding document structure and section heads
+      </a>
+     </li>
+     <li>
+      <a href="Section_numbering.html" title="Document structure and headlines/Section numbering">
+       Section numbering
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="12.1._Command_reference">
+      12.1. Command reference
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/setuphead.html" title="Command/setuphead">
+        \setuphead
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/definehead.html" title="Command/definehead">
+        \definehead
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupcombinedlist.html" title="Command/setupcombinedlist">
+        \setupcombinedlist
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="mw-redirect" href="../Command/_placecombinedlist.html" title="Command/placecontent">
+        \placecontent
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="mw-redirect" href="../Command/_completecombinedlist.html" title="Command/completecontent">
+        \completecontent
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/writetolist.html" title="Command/writetolist">
+        \writetolist
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="13._Attribution_and_validation">
+      13. Attribution and validation
+     </span>
+    </h2>
+    <p>This page separates head inclusion and exclusion from the broader topics
+of ToC selection and rendering.
+</p>
+    <p>The following mechanisms were specifically validated with ConTeXt LMTX
+2026.07.29 during the renewal of the "Document structure and headlines"
+documentation area:
+</p>
+    <ul>
+     <li>
+      exclusion of a structural head type through the combined-list composition;
+     </li>
+     <li>
+      the default non-participation of true unnumbered head families;
+     </li>
+     <li>
+      front-matter chapters remaining listable although their visible number is suppressed;
+     </li>
+     <li>
+      <code>incrementnumber=list</code>
+      for a dedicated unnumbered listable head;
+     </li>
+     <li>
+      the risk of changing the standard
+      <code>title</code>
+      head globally.
+     </li>
+    </ul>
+    <p>The individual <code>saveinlist=no</code> case remains to be checked separately before it is promoted from implementation-sensitive material to a validated user-level recipe.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-09-04
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Include_or_exclude_heads_from_the_ToC">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>

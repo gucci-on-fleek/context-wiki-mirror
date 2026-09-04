@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="utf-8">
+  <link href="../style.css" rel="stylesheet">
+  <link href="../favicon.ico" rel="icon" sizes="32x32">
+  <title>
+   Document structure and headlines/Create specialised chapter pages&mdash;ConTeXt Wiki Mirror
+  </title>
+  <link href="https://wiki.contextgarden.net/Document_structure_and_headlines/Create_specialised_chapter_pages" rel="canonical">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="#241504" name="theme-color">
+  <meta content="light dark" name="color-scheme">
+ </head>
+ <body>
+  <header>
+   <h1 id="page-title">
+    Document structure and headlines/Create specialised chapter pages
+   </h1>
+   <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=7675&diff=43925">2026-09-03</a>
+        </p>
+  </header>
+  <article>
+   <div class="mw-parser-output">
+    <table style="background-color:#ddddee;color:#000000;border:1px solid #606060;margin:1em 5% 1em 5%;">
+     <tbody>
+      <tr>
+       <td style="padding:0.5em 0.5em;"><ul class="demo"><li class="rendering"><img height="48" src="../wikiteximage/d8db8740e408c0191e8d08a98e7da5fa.webp" width="31"></li></ul><br>
+</td>
+       <td style="padding:0.5em 0.5em;"><b>TODO:</b> This page is under construction as part of the renewal of the "Document structure and headlines" documentation area. Several historical examples still require validation against current ConTeXt LMTX. <i>(See: <a href="../Category:ToDo.html" title="Category:ToDo">To-Do List</a>)</i>
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validation status</b>
+</p>
+     <p>The current examples presented on this page have been tested with
+ConTeXt LMTX 2026.07.29.
+</p>
+     <p>Recipes explicitly identified as historical or implementation-sensitive
+have been preserved for reference but should not be assumed to represent
+the recommended current interface.
+</p>
+    </div>
+    <div style="margin:1em 0; padding:0.9em 1em; border:1px solid #b8c7d9; border-left:5px solid #4f78a8; background:#f6f9fc;">
+     <p><b>HOW-TO &mdash; Creating specialised chapter pages</b>
+</p>
+     <p>This page explains how to turn a chapter opening into a specialised page
+design while keeping the chapter itself part of the normal document
+structure.
+</p>
+     <p>For ordinary headline formatting, see
+<a href="Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">Headlines formatting</a>.
+</p>
+     <p>For the underlying distinction between structure and presentation, see
+<a href="Understanding_document_structure_and_section_heads.html" title="Document structure and headlines/Understanding document structure and section heads">Understanding document structure and section heads</a>.
+</p>
+    </div>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#1._When_a_chapter_opening_becomes_a_page_design">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         1. When a chapter opening becomes a page design
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-2">
+       <a href="#2._Start_with_a_custom_chapter_command">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         2. Start with a custom chapter command
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#2.1._Reserve_a_fixed_vertical_area_for_the_chapter_head">
+          <span class="tocnumber">
+           2.1
+          </span>
+          <span class="toctext">
+           2.1. Reserve a fixed vertical area for the chapter head
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#3._Control_the_page_break_before_a_chapter">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         3. Control the page break before a chapter
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-5">
+         <a href="#3.1._Empty_headers_and_footers_on_an_inserted_page">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           3.1. Empty headers and footers on an inserted page
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#3.2._Section_blocks_can_add_their_own_page_transitions">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           3.2. Section blocks can add their own page transitions
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-7">
+       <a href="#4._Combine_a_custom_head_with_graphical_decoration">
+        <span class="tocnumber">
+         4
+        </span>
+        <span class="toctext">
+         4. Combine a custom head with graphical decoration
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-8">
+       <a href="#5._Use_structural_user_data_for_chapter-specific_designs">
+        <span class="tocnumber">
+         5
+        </span>
+        <span class="toctext">
+         5. Use structural user data for chapter-specific designs
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-9">
+         <a href="#5.1._Drive_a_page_background_from_chapter_userdata">
+          <span class="tocnumber">
+           5.1
+          </span>
+          <span class="toctext">
+           5.1. Drive a page background from chapter userdata
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-10">
+         <a href="#5.2._Restrict_the_special_background_to_the_chapter-opening_page">
+          <span class="tocnumber">
+           5.2
+          </span>
+          <span class="toctext">
+           5.2. Restrict the special background to the chapter-opening page
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-11">
+       <a href="#6._Select_graphical_material_from_the_structural_chapter_number">
+        <span class="tocnumber">
+         6
+        </span>
+        <span class="toctext">
+         6. Select graphical material from the structural chapter number
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-12">
+         <a href="#6.1._Historical_MkII_and_MkIV_variants">
+          <span class="tocnumber">
+           6.1
+          </span>
+          <span class="toctext">
+           6.1. Historical MkII and MkIV variants
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-13">
+       <a href="#7._Decorative_text_effects_belong_to_the_renderer">
+        <span class="tocnumber">
+         7
+        </span>
+        <span class="toctext">
+         7. Decorative text effects belong to the renderer
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-14">
+       <a href="#8._Historical_and_advanced_recipes:_validation_status">
+        <span class="tocnumber">
+         8
+        </span>
+        <span class="toctext">
+         8. Historical and advanced recipes: validation status
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-15">
+         <a href="#8.1._The_last-line-width_recipe_is_implementation-sensitive">
+          <span class="tocnumber">
+           8.1
+          </span>
+          <span class="toctext">
+           8.1. The last-line-width recipe is implementation-sensitive
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-16">
+       <a href="#9._What_remains_on_Headlines_formatting">
+        <span class="tocnumber">
+         9
+        </span>
+        <span class="toctext">
+         9. What remains on Headlines formatting
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-17">
+       <a href="#10._Related_pages">
+        <span class="tocnumber">
+         10
+        </span>
+        <span class="toctext">
+         10. Related pages
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-18">
+         <a href="#10.1._Command_reference">
+          <span class="tocnumber">
+           10.1
+          </span>
+          <span class="toctext">
+           10.1. Command reference
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-19">
+       <a href="#11._Attribution_and_validation_status">
+        <span class="tocnumber">
+         11
+        </span>
+        <span class="toctext">
+         11. Attribution and validation status
+        </span>
+       </a>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="1._When_a_chapter_opening_becomes_a_page_design">
+      1. When a chapter opening becomes a page design
+     </span>
+    </h2>
+    <p>Ordinary chapter heads can usually be configured with
+<code>\setuphead</code>.
+</p>
+    <p>A specialised chapter page is useful when the opening must also control
+such things as:
+</p>
+    <ul>
+     <li>
+      the complete arrangement of the number and title;
+     </li>
+     <li>
+      a fixed vertical area for the chapter head;
+     </li>
+     <li>
+      a graphic or image;
+     </li>
+     <li>
+      a page background;
+     </li>
+     <li>
+      MetaPost decoration;
+     </li>
+     <li>
+      chapter-specific structural metadata;
+     </li>
+     <li>
+      the state of headers and footers;
+     </li>
+     <li>
+      the page break before the chapter.
+     </li>
+    </ul>
+    <p>The important principle is that the visual design should remain attached
+to an ordinary structural chapter.
+</p>
+    <pre>STRUCTURAL CHAPTER
+       &boxv;
+       &boxvr;&boxh;&boxh; number
+       &boxvr;&boxh;&boxh; title
+       &boxvr;&boxh;&boxh; list entry
+       &boxvr;&boxh;&boxh; bookmark
+       &boxvr;&boxh;&boxh; marking
+       &boxur;&boxh;&boxh; reference target
+              &boxv;
+              ▼
+       PRESENTATION LAYER
+              &boxv;
+       &boxdr;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxvh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxdl;
+       &boxv;      &boxv;           &boxv;
+     command  graphic   background
+       &boxv;      &boxv;           &boxv;
+       &boxur;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxhu;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxh;&boxul;
+              &boxv;
+              ▼
+       chapter opening page
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Keep the chapter structural</b>
+</p>
+     <p>Do not replace a chapter with an unrelated page construction merely
+because the chapter opening has an unusual design.
+</p>
+     <p>A specialised chapter opening should still behave as a chapter in the
+table of contents, references, bookmarks, markings, and structural
+numbering.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="2._Start_with_a_custom_chapter_command">
+      2. Start with a custom chapter command
+     </span>
+    </h2>
+    <p>The <code>command=</code> interface of <code>\setuphead</code> can hand
+the visible number and title to a user-defined command.
+</p>
+    <p>The general pattern is:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapter</span>
+  <span class="br">{</span><span class="comment">%</span>
+   <span class="comment">% #1 = number</span>
+   <span class="comment">% #2 = title</span>
+  <span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MyChapter</span><span class="brx">]</span>
+</pre>
+    <p>This is the same basic mechanism used for simpler custom heads.
+</p>
+    <p>Use it when the number and title must be recomposed rather than merely
+restyled.
+</p>
+    <h3>
+     <span class="mw-headline" id="2.1._Reserve_a_fixed_vertical_area_for_the_chapter_head">
+      2.1. Reserve a fixed vertical area for the chapter head
+     </span>
+    </h3>
+    <p>For example, the body text can always begin below a fixed-height chapter
+area even when the title itself occupies several lines:
+</p>
+    <ul class="demosbs">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A7<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapterCommand</span>
+  <span class="br">{</span><span class="cs">\vbox</span> to 4cm<span class="cs">\bgroup</span>
+     <span class="brx">#</span>1<span class="cs">\hskip</span>.75em <span class="brx">#</span>2
+     <span class="cs">\vss</span>
+   <span class="cs">\egroup</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>header<span class="brx">=</span>nomarking,
+   command<span class="brx">=</span><span class="cs">\MyChapterCommand</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>A chapter title that may occupy more than one line<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\input</span></span> tufte
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="620" src="../wikiteximage/6109ca007f8c86c9ac7c7904ddb3062c.webp" width="438">
+     </li>
+    </ul>
+    <p>The head occupies a four-centimetre vertical box. The following text
+therefore begins at a predictable position.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>This fixed-height chapter-head pattern was tested with ConTeXt LMTX
+2026.07.29.
+</p>
+     <p>A custom <code>command=</code> renderer receives the chapter number and
+title while preserving ordinary structural chapter numbering.
+</p>
+     <p>A fixed-height <code>\vbox</code> also keeps the beginning of the body
+text at the same vertical position for both short and multiline chapter
+titles.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="3._Control_the_page_break_before_a_chapter">
+      3. Control the page break before a chapter
+     </span>
+    </h2>
+    <p>In doublesided documents, chapters are often required to begin on a
+right-hand page.
+</p>
+    <p>A named page-break rule can be associated with the chapter head:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepagebreak</span></span>
+  <span class="brx">[</span>mychapterpagebreak<span class="brx">]</span>
+  <span class="brx">[</span>yes,header,right<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>mychapterpagebreak<span class="brx">]</span>
+</pre>
+    <p>The chapter remains an ordinary structural chapter; the
+<code>page=</code> setting controls how the new chapter page is reached.
+</p>
+    <h3>
+     <span class="mw-headline" id="3.1._Empty_headers_and_footers_on_an_inserted_page">
+      3.1. Empty headers and footers on an inserted page
+     </span>
+    </h3>
+    <p>In a doublesided document, reaching the next right-hand chapter page can
+require an intervening verso page.
+</p>
+    <p>A named page-break rule can make that inserted page completely blank:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definepagebreak</span></span>
+  <span class="brx">[</span>mychapterpagebreak<span class="brx">]</span>
+  <span class="brx">[</span>yes,header,footer,right<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>page<span class="brx">=</span>mychapterpagebreak<span class="brx">]</span>
+</pre>
+    <p>In the tested case, a first chapter ending on page 1 was followed by:
+</p>
+    <pre>page 1   Chapter 1
+page 2   completely blank
+page 3   Chapter 2
+</pre>
+    <p>The inserted page contained no running header, footer, or page number.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>This page-break pattern was tested with ConTeXt LMTX 2026.07.29
+(MWE 24b).
+</p>
+     <p>With doublesided page numbering, the rule inserted a completely blank
+verso when necessary and placed the following chapter on the next
+right-hand page.
+</p>
+     <p>Ordinary chapter numbering was preserved.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="3.2._Section_blocks_can_add_their_own_page_transitions">
+      3.2. Section blocks can add their own page transitions
+     </span>
+    </h3>
+    <p>When <code>frontmatter</code>, <code>bodymatter</code>,
+<code>appendices</code>, or <code>backmatter</code> are used, the section
+blocks themselves can introduce page transitions.
+</p>
+    <p>The former Garden recipe disabled those transitions with:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setupsectionblock</span></span> <span class="brx">[</span>frontpart<span class="brx">]</span> <span class="brx">[</span>page<span class="brx">=</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupsectionblock</span></span> <span class="brx">[</span>bodypart<span class="brx">]</span>  <span class="brx">[</span>page<span class="brx">=</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupsectionblock</span></span> <span class="brx">[</span>backpart<span class="brx">]</span>  <span class="brx">[</span>page<span class="brx">=</span><span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupsectionblock</span></span> <span class="brx">[</span>appendix<span class="brx">]</span>  <span class="brx">[</span>page<span class="brx">=</span><span class="brx">]</span>
+</pre>
+    <p>before assigning a custom page-break rule to the chapter head.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d8c28a; border-left:5px solid #c9962f; background:#fff9e8;">
+     <p><b>Requires separate validation</b>
+</p>
+     <p>The chapter page-break rule itself has been validated, but its interaction
+with explicit section-block page settings has not yet been included in the
+current MWE series.
+</p>
+     <p>Test the complete frontmatter/bodymatter/appendix/backmatter sequence
+before relying on the historical combination unchanged.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="4._Combine_a_custom_head_with_graphical_decoration">
+      4. Combine a custom head with graphical decoration
+     </span>
+    </h2>
+    <p>A chapter renderer can combine the structural number and title with
+frames, overlays, or MetaPost graphics.
+</p>
+    <p>The general pattern remains:
+</p>
+    <pre>chapter data
+     &boxv;
+     ▼
+command=\MyChapter
+     &boxv;
+     &boxvr;&boxh;&boxh; number
+     &boxvr;&boxh;&boxh; title
+     &boxur;&boxh;&boxh; graphical material
+             &boxv;
+             ▼
+       chapter opening
+</pre>
+    <p>One earlier Garden example combined a custom chapter renderer with a
+MetaPost overlay.
+</p>
+    <p>Its essential structure was:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>HeaderDeco<span class="br">}</span>
+  <span class="comment">% MetaPost decoration</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>HeaderDeco<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\uniqueMPgraphic</span></span><span class="br">{</span>HeaderDeco<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapter</span>
+  <span class="br">{</span><span class="cs"><span class="documentcs">\framedtext</span></span>
+     <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>foreground,HeaderDeco<span class="br">}</span>,
+      frame<span class="brx">=</span>off,
+      align<span class="brx">=</span>middle<span class="brx">]</span>
+     <span class="br">{</span><span class="cs"><span class="stylecs">\headtext</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="cs"><span class="stylecs">\space</span></span> <span class="brx">#</span>1
+      <span class="cs"><span class="documentcs">\blank</span></span><span class="brx">[</span>small<span class="brx">]</span>
+      <span class="brx">#</span>2<span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MyChapter</span><span class="brx">]</span>
+</pre>
+    <p>This separates the two jobs cleanly:
+</p>
+    <pre>\setuphead       &rarr; connect the design to the structural chapter
+\MyChapter       &rarr; compose the visible head
+HeaderDeco       &rarr; provide the graphical decoration
+</pre>
+    <h2>
+     <span class="mw-headline" id="5._Use_structural_user_data_for_chapter-specific_designs">
+      5. Use structural user data for chapter-specific designs
+     </span>
+    </h2>
+    <p>A chapter can carry additional structural data in its second optional
+argument.
+</p>
+    <p>For example:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First chapter<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>mycolor<span class="brx">=</span>one<span class="brx">]</span>
+
+...
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+</pre>
+    <p>The value belongs to the structural chapter record.
+</p>
+    <p>A specialised page design can retrieve it with:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\namedstructureuservariable</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="br">{</span>mycolor<span class="br">}</span>
+</pre>
+    <p>This makes it possible to associate different presentation data with
+different chapters without defining a separate chapter command for every
+case.
+</p>
+    <p>Conceptually:
+</p>
+    <pre>chapter
+   &boxv;
+   &boxvr;&boxh;&boxh; title = First chapter
+   &boxvr;&boxh;&boxh; number = 1
+   &boxur;&boxh;&boxh; mycolor = one
+          &boxv;
+          ▼
+chapter-page renderer
+          &boxv;
+          ▼
+use colour scheme "one"
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>Structural user data attached to a chapter were tested with ConTeXt LMTX
+2026.07.29 (MWE 26).
+</p>
+     <p>Values stored in the second optional argument of
+<code>\startchapter</code> were successfully retrieved with
+<code>\namedstructureuservariable{chapter}{...}</code> both inside a
+custom chapter-head renderer and later in the chapter body.
+</p>
+     <p>The chapter structure and ordinary numbering were preserved.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="5.1._Drive_a_page_background_from_chapter_userdata">
+      5.1. Drive a page background from chapter userdata
+     </span>
+    </h3>
+    <p>Structural user data can also be used to control the appearance of a page.
+</p>
+    <p>In this example, each chapter stores a value in <code>mycolor</code>.
+The page-background graphic retrieves that value with
+<code>\namedstructureuservariable</code> and uses it to select the
+corresponding colour.
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs"><span class="stylecs">\setuppapersize</span></span><span class="brx">[</span>A6<span class="brx">]</span>
+<span class="cs"><span class="stylecs">\setupbodyfont</span></span><span class="brx">[</span>8pt<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>chaptercolor:one<span class="brx">]</span>
+  <span class="brx">[</span>r<span class="brx">=</span>.85,g<span class="brx">=</span>.90,b<span class="brx">=</span>.95<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>chapterbackground<span class="br">}</span>
+  StartPage&nbsp;;
+
+    fill Page
+      withcolor
+        <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>chaptercolor:<span class="cs"><span class="systemcs">\namedstructureuservariable</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="br">{</span>mycolor<span class="br">}</span><span class="br">}</span>&nbsp;;
+
+  StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>chapterbackground<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>chapterbackground<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span>chapterbackground<span class="brx">]</span>
+
+<span class="cs"><span class="documentcs">\starttext</span></span>
+
+<span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First chapter<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>mycolor<span class="brx">=</span>one<span class="brx">]</span>
+
+This chapter-opening page uses a background selected from structural
+userdata.
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+
+<span class="cs"><span class="documentcs">\stoptext</span></span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="874" src="../wikiteximage/6be4d337bcc7367edff815b2064e27b2.webp" width="620">
+     </li>
+    </ul>
+    <p>The important point is that the presentation choice remains attached to
+the structural chapter:
+</p>
+    <pre>chapter
+   &boxv;
+   &boxur;&boxh;&boxh; mycolor=one
+            &boxv;
+            ▼
+\namedstructureuservariable
+            &boxv;
+            ▼
+chaptercolor:one
+            &boxv;
+            ▼
+     page background
+</pre>
+    <p>This is preferable to deriving the design from the visible chapter title
+or maintaining a separate mapping between chapter titles and page
+designs.
+</p>
+    <p>The pattern above applies a presentation value derived from the current
+chapter userdata.
+</p>
+    <p>When the special background should appear only on the opening page of a
+chapter, the background renderer can also keep track of whether that
+chapter opening has already been processed.
+</p>
+    <h3>
+     <span class="mw-headline" id="5.2._Restrict_the_special_background_to_the_chapter-opening_page">
+      5.2. Restrict the special background to the chapter-opening page
+     </span>
+    </h3>
+    <p>A chapter-specific background does not necessarily have to remain active
+throughout the whole chapter.
+</p>
+    <p>MetaPost can keep a small amount of state and apply the special background
+only the first time it encounters a given structural chapter number.
+</p>
+    <p>First define an ordinary page background and the chapter-specific colours:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>normalpage<span class="brx">]</span>
+  <span class="brx">[</span>s<span class="brx">=</span>.95<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>chaptercolor:one<span class="brx">]</span>
+  <span class="brx">[</span>r<span class="brx">=</span>.85,g<span class="brx">=</span>.90,b<span class="brx">=</span>.95<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definecolor</span></span>
+  <span class="brx">[</span>chaptercolor:two<span class="brx">]</span>
+  <span class="brx">[</span>r<span class="brx">=</span>.95,g<span class="brx">=</span>.90,b<span class="brx">=</span>.80<span class="brx">]</span>
+</pre>
+    <p>A MetaPost variable can record which chapter openings have already been
+processed:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startMPinclusions</span></span>
+  numeric ChapterOpeningDone<span class="brx">[</span><span class="brx">]</span>&nbsp;;
+<span class="cs"><span class="stylecs">\stopMPinclusions</span></span>
+</pre>
+    <p>Define the ordinary page background:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>normalbackground<span class="br">}</span>
+  StartPage&nbsp;;
+    fill Page withcolor <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>normalpage<span class="br">}</span>&nbsp;;
+  StopPage&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+</pre>
+    <p>The chapter-opening graphic tests the current structural chapter number:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>chapterbackground<span class="br">}</span>
+  if unknown ChapterOpeningDone.<span class="cs"><span class="systemcs">\namedheadnumber</span></span><span class="br">{</span>chapter<span class="br">}</span>&nbsp;:
+
+    StartPage&nbsp;;
+
+      fill Page
+        withcolor
+          <span class="cs"><span class="stylecs">\MPcolor</span></span><span class="br">{</span>chaptercolor:<span class="cs"><span class="systemcs">\namedstructureuservariable</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="br">{</span>mycolor<span class="br">}</span><span class="br">}</span>&nbsp;;
+
+    StopPage&nbsp;;
+
+    ChapterOpeningDone.<span class="cs"><span class="systemcs">\namedheadnumber</span></span><span class="br">{</span>chapter<span class="br">}</span>&nbsp;:<span class="brx">=</span> 1&nbsp;;
+
+  fi&nbsp;;
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+</pre>
+    <p>Install both overlays:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>normalbackground<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>normalbackground<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\defineoverlay</span></span>
+  <span class="brx">[</span>chapterbackground<span class="brx">]</span>
+  <span class="brx">[</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>chapterbackground<span class="br">}</span><span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\setupbackgrounds</span></span>
+  <span class="brx">[</span>page<span class="brx">]</span>
+  <span class="brx">[</span>background<span class="brx">=</span><span class="br">{</span>normalbackground,chapterbackground<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The chapter itself supplies the presentation value:
+</p>
+    <pre class="tex"><span class="cs"><span class="documentcs">\startchapter</span></span>
+  <span class="brx">[</span>title<span class="brx">=</span><span class="br">{</span>First chapter<span class="br">}</span><span class="brx">]</span>
+  <span class="brx">[</span>mycolor<span class="brx">=</span>one<span class="brx">]</span>
+
+...
+
+<span class="cs"><span class="documentcs">\stopchapter</span></span>
+</pre>
+    <p>On the first page of the chapter,
+<code>ChapterOpeningDone.&lt;number&gt;</code> is still unknown, so the
+chapter-specific background is drawn and the corresponding state is set.
+</p>
+    <p>On subsequent pages of the same chapter, that state is already known and
+the chapter-specific overlay draws nothing. The ordinary background
+therefore remains visible.
+</p>
+    <p>The sequence is consequently:
+</p>
+    <pre>Chapter 1, opening page    &rarr; chapter-specific background
+Chapter 1, following page  &rarr; ordinary background
+
+Chapter 2, opening page    &rarr; chapter-specific background
+Chapter 2, following page  &rarr; ordinary background
+</pre>
+    <p>This pattern keeps three concerns separate:
+</p>
+    <ul>
+     <li>
+      the chapter remains an ordinary structural chapter;
+     </li>
+     <li>
+      structural userdata selects the chapter-specific presentation;
+     </li>
+     <li>
+      MetaPost state limits that presentation to the opening page.
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="6._Select_graphical_material_from_the_structural_chapter_number">
+      6. Select graphical material from the structural chapter number
+     </span>
+    </h2>
+    <p>A custom head command can replace the ordinary visible number and title
+with graphical material while the chapter itself remains structurally
+unchanged.
+</p>
+    <p>For example, graphical resources can be associated with chapter numbers:
+</p>
+    <pre>chapter:1
+chapter:2
+chapter:3
+...
+</pre>
+    <p>The current structural chapter number is available through:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\namedheadnumber</span></span><span class="br">{</span>chapter<span class="br">}</span>
+</pre>
+    <p>It can therefore be used directly when selecting the graphical resource.
+</p>
+    <p>A tested pattern is:
+</p>
+    <pre class="tex"><span class="cs"><span class="systemcs">\define</span></span><span class="brx">[</span>2<span class="brx">]</span><span class="cs">\MyChapterCommand</span>
+  <span class="br">{</span><span class="cs"><span class="stylecs">\useMPgraphic</span></span><span class="br">{</span>chapter:<span class="cs"><span class="systemcs">\namedheadnumber</span></span><span class="br">{</span>chapter<span class="br">}</span><span class="br">}</span><span class="br">}</span>
+
+<span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>command<span class="brx">=</span><span class="cs">\MyChapterCommand</span><span class="brx">]</span>
+</pre>
+    <p>With graphical definitions such as:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>chapter:1<span class="br">}</span>
+  <span class="comment">% graphic for Chapter 1</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+
+<span class="cs"><span class="stylecs">\startuseMPgraphic</span></span><span class="br">{</span>chapter:2<span class="br">}</span>
+  <span class="comment">% graphic for Chapter 2</span>
+<span class="cs"><span class="stylecs">\stopuseMPgraphic</span></span>
+</pre>
+    <p>the structural number selects the corresponding graphical representation:
+</p>
+    <pre>structural chapter 1
+        &boxv;
+        &boxur;&boxh;&boxh; \namedheadnumber{chapter} &rarr; 1
+                                      &boxv;
+                                      ▼
+                                  chapter:1
+
+structural chapter 2
+        &boxv;
+        &boxur;&boxh;&boxh; \namedheadnumber{chapter} &rarr; 2
+                                      &boxv;
+                                      ▼
+                                  chapter:2
+</pre>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d6c7a3; border-left:5px solid #a47b22; background:#fffaf0;">
+     <p><b>Validated with current LMTX</b>
+</p>
+     <p>This pattern was tested with ConTeXt LMTX 2026.07.29 (MWE 25).
+</p>
+     <p>A custom <code>command=</code> renderer successfully used
+<code>\namedheadnumber{chapter}</code> to select different MetaPost
+graphics for Chapters 1 and 2.
+</p>
+     <p>The ordinary visible chapter heads were replaced by the graphics, while
+the chapters retained their structural numbers and titles.
+</p>
+    </div>
+    <h3>
+     <span class="mw-headline" id="6.1._Historical_MkII_and_MkIV_variants">
+      6.1. Historical MkII and MkIV variants
+     </span>
+    </h3>
+    <p>The former documentation contained older solutions for replacing chapter
+heads with images.
+</p>
+    <p>The MkII version used <code>deeptextcommand</code>,
+<code>deepnumbercommand</code>, and <code>\currentheadnumber</code>.
+A later MkIV variant used <code>\namedheadnumber{chapter}</code>.
+</p>
+    <p>Those historical implementations are useful documentation history, but
+they are no longer required for the ordinary current-LMTX pattern shown
+above.
+</p>
+    <p>The current tested mechanism keeps the distinction simple:
+</p>
+    <pre>chapter structure
+      &boxv;
+      &boxvr;&boxh;&boxh; number
+      &boxvr;&boxh;&boxh; title
+      &boxvr;&boxh;&boxh; ToC entry
+      &boxur;&boxh;&boxh; references
+             &boxv;
+             ▼
+        command= renderer
+             &boxv;
+             ▼
+       graphical head
+</pre>
+    <h2>
+     <span class="mw-headline" id="7._Decorative_text_effects_belong_to_the_renderer">
+      7. Decorative text effects belong to the renderer
+     </span>
+    </h2>
+    <p>An earlier example produced an enlarged shadow behind the chapter title by
+drawing the title twice with different fonts and colours.
+</p>
+    <p>Its structural connection was simply:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\setuphead</span></span>
+  <span class="brx">[</span>chapter<span class="brx">]</span>
+  <span class="brx">[</span>textcommand<span class="brx">=</span><span class="cs">\MyChapterText</span><span class="brx">]</span>
+</pre>
+    <p>with the visual effect contained in:
+</p>
+    <pre class="tex"><span class="cs">\def</span><span class="cs">\MyChapterText</span><span class="brx">#</span>1
+  <span class="br">{</span><span class="cs"><span class="systemcs">\rlap</span></span><span class="br">{</span>...<span class="brx">#</span>1<span class="br">}</span>...<span class="brx">#</span>1<span class="br">}</span>
+</pre>
+    <p>The reusable principle is still useful:
+</p>
+    <pre>STRUCTURE
+   &boxv;
+   ▼
+textcommand=
+   &boxv;
+   ▼
+visual transformation of title text
+</pre>
+    <p>The particular 2004 font definitions and colour recipe are historical,
+however, and should not be copied as a current font-setup example.
+</p>
+    <h2>
+     <span class="mw-headline" id="8._Historical_and_advanced_recipes:_validation_status">
+      8. Historical and advanced recipes: validation status
+     </span>
+    </h2>
+    <p>The former <i>Collections of tips and tricks</i> page accumulated techniques
+from several generations of ConTeXt.
+</p>
+    <p>Some of these techniques remain useful with current LMTX, while others
+come from MkII or early MkIV implementations and still require
+revalidation.
+</p>
+    <p>The table below therefore distinguishes validated current mechanisms from
+historical or implementation-sensitive recipes.
+</p>
+    <table class="wikitable">
+     <tbody>
+      <tr>
+       <th>
+        Recipe
+       </th>
+       <th>
+        Original character
+       </th>
+       <th>
+        Current documentation status
+       </th>
+      </tr>
+      <tr>
+       <td>Enlarged shadow behind a chapter title
+</td>
+       <td>solution attributed to Hans, 2004
+</td>
+       <td>historical example; preserve the technique, but modernise and test the font setup before reuse
+</td>
+      </tr>
+      <tr>
+       <td>Replace number and title with an image
+</td>
+       <td>MkII and MkIV variants, 2005&ndash;2010
+</td>
+       <td>historical variants should remain separate; test the current <code>command=</code> form
+</td>
+      </tr>
+      <tr>
+       <td>MetaPost-decorated chapter head
+</td>
+       <td>advanced custom renderer
+</td>
+       <td>useful pattern; compile under current LMTX before marking as validated
+</td>
+      </tr>
+      <tr>
+       <td>Chapter-specific opening-page background
+</td>
+       <td>structural userdata + MetaPost page state
+</td>
+       <td>current mechanism validated; the special background can be restricted to the first page of each chapter
+</td>
+      </tr>
+      <tr>
+       <td>Fixed vertical position for following text
+</td>
+       <td>custom <code>command=</code> with a fixed-height box
+</td>
+       <td><i>validated with LMTX 2026.07.29</i>
+</td>
+      </tr>
+      <tr>
+       <td>Rule matching the last line of a multiline head
+</td>
+       <td>internal box and line-width techniques
+</td>
+       <td>historical / implementation-sensitive; requires current-LMTX validation
+</td>
+      </tr>
+     </tbody>
+    </table>
+    <h3>
+     <span class="mw-headline" id="8.1._The_last-line-width_recipe_is_implementation-sensitive">
+      8.1. The last-line-width recipe is implementation-sensitive
+     </span>
+    </h3>
+    <p>The former page contained elaborate code for measuring the last line of a
+multiline head and drawing a rule of the corresponding width.
+</p>
+    <p>It also mentioned the shorter low-level form:
+</p>
+    <pre class="tex"><span class="cs">\optimizedisplayspacingtrue</span>
+<span class="cs">\setlastlinewidth</span>
+<span class="cs">\global</span><span class="cs">\advance</span><span class="cs"><span class="systemcs">\lastlinewidth</span></span>-<span class="cs">\hangindent</span>
+<span class="cs">\par</span>
+<span class="cs"><span class="documentcs">\blackrule</span></span><span class="brx">[</span>width<span class="brx">=</span><span class="cs"><span class="systemcs">\lastlinewidth</span></span>,height<span class="brx">=</span>1pt<span class="brx">]</span>
+</pre>
+    <p>The original comment explicitly described part of this mechanism as a
+core macro.
+</p>
+    <div style="margin:1em 0; padding:0.8em 1em; border:1px solid #d8c28a; border-left:5px solid #c9962f; background:#fff9e8;">
+     <p><b>Historical / implementation-sensitive</b>
+</p>
+     <p>Do not teach this recipe as an ordinary current interface until it has
+been checked against current LMTX.
+</p>
+     <p>The design requirement is useful; the historical implementation may not
+be the interface that should be recommended today.
+</p>
+    </div>
+    <h2>
+     <span class="mw-headline" id="9._What_remains_on_Headlines_formatting">
+      9. What remains on Headlines formatting
+     </span>
+    </h2>
+    <p>This page is for chapter-opening designs that become page compositions.
+</p>
+    <p>Ordinary head formatting remains on: <a href="Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">Headlines formatting</a>.
+</p>
+    <p>That includes:
+</p>
+    <ul>
+     <li>
+      font and colour changes;
+     </li>
+     <li>
+      alignment and hyphenation;
+     </li>
+     <li>
+      spacing;
+     </li>
+     <li>
+      number placement;
+     </li>
+     <li>
+      number or complete headline in the margin;
+     </li>
+     <li>
+      ordinary page-breaking behaviour;
+     </li>
+     <li>
+      simple number/title recomposition;
+     </li>
+     <li>
+      labels such as
+      <i>
+       Chapter
+      </i>
+      or
+      <i>
+       Section
+      </i>
+      ;
+     </li>
+     <li>
+      hiding the printed head while retaining structural data.
+     </li>
+    </ul>
+    <p>A useful boundary is:
+</p>
+    <pre>ordinary head formatting
+        &boxv;
+        &boxur;&boxh;&boxh; Headlines formatting
+
+head becomes a page composition
+        &boxv;
+        &boxur;&boxh;&boxh; Create specialised chapter pages
+</pre>
+    <h2>
+     <span class="mw-headline" id="10._Related_pages">
+      10. Related pages
+     </span>
+    </h2>
+    <ul>
+     <li>
+      <a href="../Document_structure_and_headlines.html" title="Document structure and headlines">
+       Document structure and headlines
+      </a>
+     </li>
+     <li>
+      <a href="Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">
+       Headlines formatting
+      </a>
+     </li>
+     <li>
+      <a href="Section_numbering.html" title="Document structure and headlines/Section numbering">
+       Section numbering
+      </a>
+     </li>
+     <li>
+      <a href="Table_of_contents.html" title="Document structure and headlines/Table of contents">
+       Table of contents
+      </a>
+     </li>
+     <li>
+      <a href="Understanding_document_structure_and_section_heads.html" title="Document structure and headlines/Understanding document structure and section heads">
+       Understanding document structure and section heads
+      </a>
+     </li>
+     <li>
+      <a href="Create_specialised_tables_of_contents.html" title="Document structure and headlines/Create specialised tables of contents">
+       Create specialised tables of contents
+      </a>
+     </li>
+    </ul>
+    <p>For related page-oriented mechanisms, see:
+</p>
+    <ul>
+     <li>
+      <a href="../Document_layout_and_layers/Makeup.html" title="Document layout and layers/Makeup">
+       Makeup
+      </a>
+     </li>
+     <li>
+      <a href="../Input_and_compilation/Setups.html" title="Input and compilation/Setups">
+       Setups
+      </a>
+     </li>
+    </ul>
+    <h3>
+     <span class="mw-headline" id="10.1._Command_reference">
+      10.1. Command reference
+     </span>
+    </h3>
+    <ul>
+     <li>
+      <tt>
+       <a href="../Command/setuphead.html" title="Command/setuphead">
+        \setuphead
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/definepagebreak.html" title="Command/definepagebreak">
+        \definepagebreak
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupsectionblock.html" title="Command/setupsectionblock">
+        \setupsectionblock
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/defineoverlay.html" title="Command/defineoverlay">
+        \defineoverlay
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/setupbackgrounds.html" title="Command/setupbackgrounds">
+        \setupbackgrounds
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a href="../Command/startuseMPgraphic.html" title="Command/startuseMPgraphic">
+        \startuseMPgraphic
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/namedheadnumber&action=edit&redlink=1.html" title="Command/namedheadnumber (page does not exist)">
+        \namedheadnumber
+       </a>
+      </tt>
+     </li>
+     <li>
+      <tt>
+       <a class="new" href="../index.php?title=Command/namedstructureuservariable&action=edit&redlink=1.html" title="Command/namedstructureuservariable (page does not exist)">
+        \namedstructureuservariable
+       </a>
+      </tt>
+     </li>
+    </ul>
+    <h2>
+     <span class="mw-headline" id="11._Attribution_and_validation_status">
+      11. Attribution and validation status
+     </span>
+    </h2>
+    <p>This page reorganises specialised chapter-opening recipes formerly kept in
+<i>Collections of tips and tricks</i> and in the advanced part of
+<a href="Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">Headlines formatting</a>.
+</p>
+    <p>The historical source material includes:
+</p>
+    <ul>
+     <li>
+      a 2004 enlarged-shadow solution attributed to Hans Hagen;
+     </li>
+     <li>
+      a 2005 MkII image-head recipe;
+     </li>
+     <li>
+      a 2010 MkIV follow-up;
+     </li>
+     <li>
+      examples combining custom head commands, MetaPost, overlays, backgrounds, and structural userdata.
+     </li>
+    </ul>
+    <p>The structural principles and current interfaces are separated here from
+historical implementation details.
+</p>
+    <p>Before the remaining advanced examples are labelled as validated LMTX
+recipes, they should be compiled in a dedicated current-LMTX MWE series.
+</p>
+    <p>Earlier material remains available through the history of
+<a href="Collections_of_tips_and_tricks.html" title="Document structure and headlines/Collections of tips and tricks">Collections of tips and tricks</a>
+and
+<a href="Headlines_formatting.html" title="Document structure and headlines/Headlines formatting">Headlines formatting</a>.
+</p>
+   </div>
+  </article>
+  <footer>
+   <ul role="list">
+    <li>
+     <a href="../index.html">
+      Home
+     </a>
+    </li>
+    <li>
+     Mirrored on 2026-09-04
+    </li>
+    <li>
+     <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
+      GFDL 1.2
+     </a>
+    </li>
+    <li>
+     <a href="https://wiki.contextgarden.net/Document_structure_and_headlines/Create_specialised_chapter_pages">
+      Original page
+     </a>
+    </li>
+   </ul>
+  </footer>
+ </body>
+</html>
