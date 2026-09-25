@@ -18,7 +18,7 @@
     ConTeXt and Lua programming/Processing XML with Lua
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4686&diff=40559">2025-01-14</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=4686&diff=43967">2026-09-23</a>
         </p>
   </header>
   <article>
@@ -102,7 +102,7 @@
       General
      </span>
     </h2>
-    <p>If you process xml with ConTeXt Mkiv, you have the power of the Lua language at your fingertips. All <code>\xml...</code> commands have their Lua counterparts. Unfortunately, this is not yet fully documented, so this wiki page is a place-holder until Hans finishes this section in the <a class="external text" href="http://pragma-ade.nl/show-man-43.htm" rel="nofollow">Mkiv manual</a>.
+    <p>If you process xml with ConTeXt Mkiv, you have the power of the Lua language at your fingertips. All <code>\xml...</code> commands have their Lua counterparts. Unfortunately, this is not yet fully documented, so this wiki page is a place-holder until Hans finishes this section in the <a class="external text" href="https://pragma-ade.com/documents/general/manuals/mkiv/xml-mkiv.pdf" rel="nofollow">Mkiv manual</a>.
 </p>
     <p>A few general observations to help you getting started:
 </p>
@@ -147,7 +147,7 @@
       The ConTeXt style file
      </span>
     </h2>
-    <p>Next, we write the environment file <tt>prices-style.tex</tt> which we will use to process our list; on the command line, you use <tt>context --environment=prices-style prices.xml</tt>. As an exercise, we will use Lua for all xml elements (though this doesn't make sense in most cases). If you have already read the <a class="external text" href="http://pragma-ade.nl/show-man-43.htm" rel="nofollow">manual</a>, most of this will be familiar. The first line connects our environment with the Lua file where all the Lua code will go. The last lines set up a ConTeXt table, since this is how we want to display the information:
+    <p>Next, we write the environment file <tt>prices-style.tex</tt> which we will use to process our list; on the command line, you use <tt>context --environment=prices-style prices.xml</tt>. As an exercise, we will use Lua for all xml elements (though this doesn't make sense in most cases). If you have already read the <a class="external text" href="https://www.pragma-ade.com/documents/general/manuals/mkiv/xml-mkiv.pdf" rel="nofollow">xml-mkiv manual</a>, most of this will be familiar. The first line connects our environment with the Lua file where all the Lua code will go. The last lines set up a ConTeXt table, since this is how we want to display the information:
 </p>
     <pre class="tex"><span class="cs"><span class="systemcs">\registerctxluafile</span></span><span class="br">{</span>l-prices<span class="br">}</span><span class="br">{</span>1.001<span class="br">}</span>
 
@@ -233,7 +233,7 @@ function xml.functions.price(t)
  context.eTD()
 end
 </pre></code>
-    <p>What does this do? As you can see, we mostly use the <code>context...</code> commands which are described in the <a class="external text" href="http://www.pragma-ade.nl/general/manuals/cld-mkiv.pdf" rel="nofollow">cld manual</a>. They are Lua functions which print to ConTeXt. With the <code>list</code> function, we start a ConTeXt table and typeset a first row with the meta information for our list. The functions for <code>item</code> and <code>model</code> do nothing more than print the argument of the connected elements as table rows and as the first table column. Things get a bit more interesting for the <code>price</code> function: this is where we use the power of Lua to do some easy calculations and convert the Euros to other currencies. First, we extract the content of the <code>&lt;price&gt;</code> element. We need to tell Lua that this content is not a string, but a number, hence the use of the <code>tonumber</code> function. Within a ConTeXt environment, we would use <code>\xmltext{#1}{./}</code>. The Lua equivalent is <code>xml.text(t, "./")</code>. Now that we have this content as a number, we can perform all kinds of arithmetic operations on it. Likewise, if it were a string, we could use Lua string manipulations on it &ndash; that's the good thing about using Lua, you have the full power of the language at your disposal. And finally, we typeset the results of our arithmetic operations in table cells.
+    <p>What does this do? As you can see, we mostly use the <code>context...</code> commands which are described in the <a class="external text" href="https://www.pragma-ade.com/documents/general/manuals/mkiv/cld-mkiv.pdf" rel="nofollow">cld manual</a>. They are Lua functions which print to ConTeXt. With the <code>list</code> function, we start a ConTeXt table and typeset a first row with the meta information for our list. The functions for <code>item</code> and <code>model</code> do nothing more than print the argument of the connected elements as table rows and as the first table column. Things get a bit more interesting for the <code>price</code> function: this is where we use the power of Lua to do some easy calculations and convert the Euros to other currencies. First, we extract the content of the <code>&lt;price&gt;</code> element. We need to tell Lua that this content is not a string, but a number, hence the use of the <code>tonumber</code> function. Within a ConTeXt environment, we would use <code>\xmltext{#1}{./}</code>. The Lua equivalent is <code>xml.text(t, "./")</code>. Now that we have this content as a number, we can perform all kinds of arithmetic operations on it. Likewise, if it were a string, we could use Lua string manipulations on it &ndash; that's the good thing about using Lua, you have the full power of the language at your disposal. And finally, we typeset the results of our arithmetic operations in table cells.
 </p>
     <p>This is just one example of what you can do with Lua. Here are a few more suggestions for things which are easier to do in Lua than in pure ConTeXt:
 </p>
@@ -315,7 +315,7 @@ end
      </a>
     </li>
     <li>
-     Mirrored on 2026-09-22
+     Mirrored on 2026-09-25
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
