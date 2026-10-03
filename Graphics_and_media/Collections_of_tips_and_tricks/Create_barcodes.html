@@ -18,7 +18,7 @@
     Graphics and media/Collections of tips and tricks/Create barcodes
    </h1>
    <p>Unofficial <a href="https://wiki.contextgarden.net/">ConTeXt Wiki</a> mirror</p>
-   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6435&diff=41380">2025-01-18</a>
+   <p>Last modified: <a href="https://wiki.contextgarden.net/index.php?curid=6435&diff=44029">2026-10-02</a>
         </p>
   </header>
   <article>
@@ -27,6 +27,191 @@
 </p>
     <p>How to create barcodes from within ConTeXt (MkIV/LMTX)?
 </p>
+    <div class="toc" id="toc">
+     <input class="toctogglecheckbox" id="toctogglecheckbox" role="button" style="display:none" type="checkbox">
+     <div class="toctitle" dir="ltr" lang="en">
+      <h3>
+       Contents
+      </h3>
+      <span class="toctogglespan">
+       <label class="toctogglelabel" for="toctogglecheckbox">
+       </label>
+      </span>
+     </div>
+     <ul>
+      <li class="toclevel-1 tocsection-1">
+       <a href="#Native_commands">
+        <span class="tocnumber">
+         1
+        </span>
+        <span class="toctext">
+         Native commands
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-2">
+         <a href="#QR_codes">
+          <span class="tocnumber">
+           1.1
+          </span>
+          <span class="toctext">
+           QR codes
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-3">
+         <a href="#Code_128_and_EAN.2FGTIN">
+          <span class="tocnumber">
+           1.2
+          </span>
+          <span class="toctext">
+           Code 128 and EAN/GTIN
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+      <li class="toclevel-1 tocsection-4">
+       <a href="#Zint_module">
+        <span class="tocnumber">
+         2
+        </span>
+        <span class="toctext">
+         Zint module
+        </span>
+       </a>
+      </li>
+      <li class="toclevel-1 tocsection-5">
+       <a href="#Deprecated_solutions">
+        <span class="tocnumber">
+         3
+        </span>
+        <span class="toctext">
+         Deprecated solutions
+        </span>
+       </a>
+       <ul>
+        <li class="toclevel-2 tocsection-6">
+         <a href="#Barcodes_module">
+          <span class="tocnumber">
+           3.1
+          </span>
+          <span class="toctext">
+           Barcodes module
+          </span>
+         </a>
+        </li>
+        <li class="toclevel-2 tocsection-7">
+         <a href="#barcode.lua">
+          <span class="tocnumber">
+           3.2
+          </span>
+          <span class="toctext">
+           barcode.lua
+          </span>
+         </a>
+        </li>
+       </ul>
+      </li>
+     </ul>
+    </div>
+    <h2>
+     <span class="mw-headline" id="Native_commands">
+      Native commands
+     </span>
+    </h2>
+    <h3>
+     <span class="mw-headline" id="QR_codes">
+      QR codes
+     </span>
+    </h3>
+    <p>ConTeXt LMTX can generate QR codes natively. 
+</p>
+    <ul class="demo">
+     <li class="code">
+      <pre class="tex"><span class="cs">\qrcode</span><span class="brx">[</span>text<span class="brx">=</span><span class="br">{</span>https://contextgarden.net<span class="br">}</span>,color<span class="brx">=</span>orange,width<span class="brx">=</span>2cm<span class="brx">]</span>
+</pre>
+     </li>
+     <li class="rendering">
+      <img height="13" src="../../wikiteximage/8b8997cb0781771a3871f16aa012956e.webp" width="55">
+     </li>
+    </ul>
+    <p>(ConTeXt version on the wiki is too old for this.)
+</p>
+    <p>Color is optional.
+</p>
+    <p>The Lua function behind that looks like:
+<code>figures.qrcode("<a class="external free" href="https://pragma-ade.com" rel="nofollow">https://pragma-ade.com</a>","blue",tex.sp("2cm"))</code>
+</p>
+    <p>The images get generated as bytemaps and become somewhat blurry, but they&rsquo;re scannable without problems.
+If you prefer crisp codes, use Zint.
+</p>
+    <h3>
+     <span id="Code_128_and_EAN/GTIN">
+     </span>
+     <span class="mw-headline" id="Code_128_and_EAN.2FGTIN">
+      Code 128 and EAN/GTIN
+     </span>
+    </h3>
+    <p>ConTeXt LMTX can also generate the most common barcodes, Code 128 and EAN/GTIN 13 (e.g. ISBN), with a MetaPost function:
+</p>
+    <pre class="tex"><span class="cs"><span class="stylecs">\useMPlibrary</span></span><span class="brx">[</span>barcodes<span class="brx">]</span>
+
+<span class="cs"><span class="stylecs">\definefont</span></span><span class="brx">[</span>EANfont<span class="brx">]</span><span class="brx">[</span>OCRB at 10bp<span class="brx">]</span>
+
+<span class="cs">\barcode</span><span class="brx">[</span>code<span class="brx">=</span>ean13,
+  text<span class="brx">=</span><span class="br">{</span>978396543604<span class="br">}</span>,
+  width<span class="brx">=</span>37.29mm,
+  height<span class="brx">=</span>22.85mm<span class="brx">]</span>
+</pre>
+    <ul>
+     <li>
+      Valid values for
+      <code>code</code>
+      are
+      <code>code128</code>
+      (default),
+      <code>ean13</code>
+      and
+      <code>gtin13</code>
+      , while the latter two only differ in a
+      <code>&gt;</code>
+      added after the number in
+      <code>gtin13</code>
+      . (That protects the right &ldquo;quiet zone&rdquo; as common with EAN 8.)
+     </li>
+     <li>
+      You must only give 12 digits, since the checksum in the 13th digit is autogenerated.
+     </li>
+     <li>
+      The defined font
+      <code>EANfont</code>
+      ist used for the number below the barcode.
+     </li>
+    </ul>
+    <p>EAN 13 can have an extension of 2 or 5 digits, it is used for the periodical issue number with ISSNs and the book price with ISBN. You can attach the numbers after a dash:
+</p>
+    <pre class="tex"><span class="cs">\barcode</span><span class="brx">[</span>code<span class="brx">=</span>ean13,text<span class="brx">=</span><span class="br">{</span>978396543604-03995<span class="br">}</span><span class="brx">]</span>
+</pre>
+    <p>The <tt><a class="new" href="../../index.php?title=Command/barcode&action=edit&redlink=1.html" title="Command/barcode (page does not exist)">\barcode</a></tt> macro calls the MetaPost function <code>mfun_barcode</code>:
+<code>mfun_barcode("code128", "0123456789", 3cm, 2cm)</code>
+or <code>mp.barcode</code> in Lua.
+</p>
+    <ul>
+     <li>
+      Suggested barcode sizes: see
+      <a class="external text" href="https://de.wikipedia.org/wiki/European_Article_Number" rel="nofollow">
+       German Wikipedia
+      </a>
+      (English Wikipedia has different information).
+     </li>
+     <li>
+      Dokumentation:
+      <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/meta-imp-barcodes.mkxl" rel="nofollow">
+       meta-imp-barcodes.mkxl
+      </a>
+     </li>
+    </ul>
     <h2>
      <span class="mw-headline" id="Zint_module">
       Zint module
@@ -106,17 +291,22 @@
     <p>Zint can produce about 40 different code types (&ldquo;alternatives&ldquo;). Try the <a class="external text" href="https://www.zint.org.uk/manual/chapter/4" rel="nofollow">name</a> (but lowercase with spaces) or look into the <a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/libs-imp-zint.lua" rel="nofollow">source</a>
 </p>
     <h2>
+     <span class="mw-headline" id="Deprecated_solutions">
+      Deprecated solutions
+     </span>
+    </h2>
+    <h3>
      <span class="mw-headline" id="Barcodes_module">
       Barcodes module
      </span>
-    </h2>
-    <p>The old module uses PStricks and is deprecated. (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/m-barcodes.mkiv" rel="nofollow">Source</a>)
+    </h3>
+    <p>The old MkII module uses PStricks and is deprecated. (<a class="external text" href="https://source.contextgarden.net/tex/context/base/mkiv/m-barcodes.mkiv" rel="nofollow">Source</a>)
 </p>
-    <h2>
+    <h3>
      <span class="mw-headline" id="barcode.lua">
       barcode.lua
      </span>
-    </h2>
+    </h3>
     <p>In 2012, <a href="../../User:Patrick_Gundlach.html" title="User:Patrick Gundlach">Patrick</a> published a small LuaTeX library on <a class="external text" href="https://tex.stackexchange.com/questions/50707/how-to-generate-ean-barcodes-with-tikz-or-metapost#50751" rel="nofollow">Stack Exchange</a>. It can only create EAN codes, but it has no dependencies and doesn&rsquo;t even use MetaPost.
 </p>
     <pre class="tex"><span class="cs"><span class="systemcs">\loadluafile</span></span><span class="brx">[</span>barcode<span class="brx">]</span>
@@ -134,7 +324,7 @@
      </a>
     </li>
     <li>
-     Mirrored on 2026-10-02
+     Mirrored on 2026-10-03
     </li>
     <li>
      <a href="http://www.gnu.org/copyleft/fdl.html" rel="license">
